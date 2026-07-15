@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=75", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vision-learnable-memory"
+version = "0.1.0"
+description = "Differentiable visual state experiments with DreamLite and Qwen3-VL"
+requires-python = ">=3.10,<3.14"
+readme = "README.md"
+license = { text = "Research code; third-party weights retain their own licenses" }
+authors = [{ name = "Vision Learnable Memory research project" }]
+
+# Install the CUDA-matched torch/torchvision pair before installing runtime-pinned.txt.
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+  "pytest==9.1.1",
+  "ruff==0.14.10",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+

@@ -1,0 +1,226 @@
+from __future__ import annotations
+
+import argparse
+import json
+import sys
+from pathlib import Path
+
+import torch
+from PIL import Image
+
+
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "src"))
+
+from vision_memory.dreamlite import (  # noqa: E402
+    DifferentiableDreamLiteMobileSampler,
+    decode_model_latents_raw,
+    freeze_module,
+)
+from vision_memory.dreamlite.conditioning import encode_latent_path_condition  # noqa: E402
+from vision_memory.reader import qwen3vl_target_only_ce  # noqa: E402
+
+
+def parameter_grad_stats(parameters) -> tuple[float, int, int]:
+    total = 0.0
+    tensors_with_grad = 0
+    nonfinite = 0
+    for parameter in parameters:
+        if parameter.grad is not None:
+            gradient = parameter.grad.detach().float()
+            tensors_with_grad += 1
+            nonfinite += int((~torch.isfinite(gradient)).sum().item())
+            total += gradient.nan_to_num().square().sum().item()
+    return total**0.5, tensors_with_grad, nonfinite
+
+
+def cuda_compute_dtype(device: torch.device) -> torch.dtype:
+    if device.type != "cuda":
+        raise ValueError(f"Expected a CUDA device, got {device}.")
+    major, _minor = torch.cuda.get_device_capability(device)
+    return torch.bfloat16 if major >= 8 else torch.float16
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description="One/two-event DreamLite -> VAE -> Qwen CE gradient probe")
+    parser.add_argument("--dreamlite", type=Path, default=ROOT / "models" / "DreamLite-mobile")
+    parser.add_argument("--reader", type=Path, default=ROOT / "models" / "Qwen3-VL-4B-Instruct")
+    parser.add_argument("--source-image", type=Path, required=True)
+    parser.add_argument("--event", action="append", required=True, help="Repeat once or twice")
+    parser.add_argument("--query", required=True)
+    parser.add_argument("--target", required=True)
+    parser.add_argument("--resolution", type=int, default=1024)
+    parser.add_argument("--seed", type=int, default=0)
+    parser.add_argument("--lora-rank", type=int, default=4)
+    parser.add_argument(
+        "--checkpoint-unet",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Use non-reentrant U-Net activation checkpointing (enabled by default).",
+    )
+    parser.add_argument("--detach-between-events", action="store_true")
+    parser.add_argument("--dreamlite-device", default="cuda:0")
+    parser.add_argument("--reader-device", default=None)
+    args = parser.parse_args()
+
+    if len(args.event) not in (1, 2):
+        raise SystemExit("This gated probe deliberately supports exactly one or two events.")
+    if not torch.cuda.is_available():
+        raise SystemExit("CUDA is required for the real end-to-end probe.")
+
+    from diffusers import DreamLiteMobilePipeline
+    from peft import LoraConfig, get_peft_model
+    from transformers import AutoProcessor, Qwen3VLForConditionalGeneration
+
+    updater_device = torch.device(args.dreamlite_device)
+    reader_device = torch.device(args.reader_device or args.dreamlite_device)
+    updater_dtype = cuda_compute_dtype(updater_device)
+    reader_dtype = cuda_compute_dtype(reader_device)
+
+    pipe = DreamLiteMobilePipeline.from_pretrained(
+        args.dreamlite,
+        local_files_only=True,
+        torch_dtype=updater_dtype,
+    ).to(updater_device)
+    freeze_module(pipe.vae)
+    freeze_module(pipe.text_encoder)
+    pipe.unet.requires_grad_(False)
+    pipe.unet = get_peft_model(
+        pipe.unet,
+        LoraConfig(
+            r=args.lora_rank,
+            lora_alpha=args.lora_rank,
+            lora_dropout=0.0,
+            target_modules=["to_q", "to_k", "to_v", "to_out.0"],
+        ),
+    )
+    lora_parameters = [parameter for parameter in pipe.unet.parameters() if parameter.requires_grad]
+    if not lora_parameters:
+        raise RuntimeError("LoRA injection produced no trainable parameters.")
+
+    processor = AutoProcessor.from_pretrained(
+        args.reader,
+        local_files_only=True,
+        use_fast=True,
+        min_pixels=256 * 256,
+        max_pixels=256 * 256,
+    )
+    processor_name = type(processor.image_processor).__name__
+    if "Fast" not in processor_name:
+        raise RuntimeError(f"Expected a fast tensor image processor, got {processor_name}")
+    reader = Qwen3VLForConditionalGeneration.from_pretrained(
+        args.reader,
+        local_files_only=True,
+        torch_dtype=reader_dtype,
+        attn_implementation="sdpa",
+    ).to(reader_device)
+    freeze_module(reader)
+    reader.config.use_cache = False
+
+    source_pil = Image.open(args.source_image).convert("RGB")
+    source_image = pipe.image_processor.preprocess(
+        source_pil,
+        height=args.resolution,
+        width=args.resolution,
+    )
+    with torch.no_grad():
+        state = pipe.prepare_image_latents(source_image, dtype=updater_dtype, device=updater_device)
+
+    sampler = DifferentiableDreamLiteMobileSampler.from_pipeline(
+        pipe,
+        checkpoint_unet=args.checkpoint_unet,
+    )
+    intermediate_states = []
+    for index, event in enumerate(args.event):
+        condition = encode_latent_path_condition(pipe, state, event)
+        source_for_update = state.detach() if index > 0 and args.detach_between_events else state
+        generator = torch.Generator(device=updater_device).manual_seed(args.seed + index)
+        noise = torch.randn(
+            source_for_update.shape,
+            generator=generator,
+            device=updater_device,
+            dtype=updater_dtype,
+        )
+        state = sampler(
+            source_latents=source_for_update,
+            noise_latents=noise,
+            prompt_embeds=condition.prompt_embeds,
+            prompt_attention_mask=condition.attention_mask,
+        ).latents
+        if index < len(args.event) - 1:
+            state.retain_grad()
+            intermediate_states.append(state)
+
+    decoded_raw = decode_model_latents_raw(pipe.vae, state)
+    unclamped_image = decoded_raw * 0.5 + 0.5
+    unclamped_image.retain_grad()
+    out_of_range_fraction = ((unclamped_image < 0.0) | (unclamped_image > 1.0)).float().mean().item()
+    image = unclamped_image.clamp(0.0, 1.0)
+    reader_result = qwen3vl_target_only_ce(
+        model=reader,
+        processor=processor,
+        image=image[0].to(reader_device),
+        query=args.query,
+        target=args.target,
+        device=reader_device,
+    )
+    if not torch.isfinite(reader_result.loss):
+        raise RuntimeError("The Qwen target CE is NaN or Inf.")
+    reader_result.loss.backward()
+
+    lora_norm, lora_tensors_with_grad, lora_nonfinite = parameter_grad_stats(lora_parameters)
+    intermediate_stats = []
+    for item in intermediate_states:
+        gradient = item.grad
+        intermediate_stats.append(
+            {
+                "norm": None if gradient is None else gradient.detach().float().nan_to_num().norm().item(),
+                "nonfinite_elements": None
+                if gradient is None
+                else int((~torch.isfinite(gradient.detach())).sum().item()),
+            }
+        )
+    image_gradient = unclamped_image.grad
+    if image_gradient is None or not torch.isfinite(image_gradient).all() or image_gradient.norm().item() == 0:
+        raise RuntimeError("Qwen CE did not produce a finite, non-zero gradient through the VAE decode.")
+    zero_image_grad_fraction = (image_gradient == 0).float().mean().item()
+    if lora_tensors_with_grad == 0 or lora_norm == 0 or lora_nonfinite:
+        raise RuntimeError(
+            "Qwen CE produced absent, zero, or non-finite DreamLite LoRA gradients: "
+            f"tensors={lora_tensors_with_grad}, norm={lora_norm}, nonfinite={lora_nonfinite}."
+        )
+    if not args.detach_between_events and any(
+        value["norm"] is None or value["norm"] == 0 or value["nonfinite_elements"]
+        for value in intermediate_stats
+    ):
+        raise RuntimeError(
+            "Latent-path BPTT with stop-gradient conditioning did not produce a finite, non-zero "
+            "intermediate-state gradient."
+        )
+    if args.detach_between_events and any(value["norm"] is not None for value in intermediate_stats):
+        raise RuntimeError("Detach negative control unexpectedly preserved an intermediate-state gradient.")
+
+    report = {
+        "events": len(args.event),
+        "detach_between_events": args.detach_between_events,
+        "loss": reader_result.loss.item(),
+        "final_state_shape": list(state.shape),
+        "intermediate_gradients": intermediate_stats,
+        "lora_grad_norm": lora_norm,
+        "lora_tensors_with_grad": lora_tensors_with_grad,
+        "lora_nonfinite_elements": lora_nonfinite,
+        "trainable_lora_parameters": sum(parameter.numel() for parameter in lora_parameters),
+        "unclamped_out_of_range_fraction": out_of_range_fraction,
+        "unclamped_zero_grad_fraction": zero_image_grad_fraction,
+        "updater_device": str(updater_device),
+        "reader_device": str(reader_device),
+        "updater_dtype": str(updater_dtype),
+        "reader_dtype": str(reader_dtype),
+        "reader_processor": processor_name,
+    }
+    print(json.dumps(report, indent=2))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

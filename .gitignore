@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+.venv-*/
+
+# Models and runtime caches
+/models/*
+!/models/README.md
+/checkpoints/
+/.cache/
+/outputs/
+/runs/
+/wandb/
+
+# Local configuration and credentials
+.env
+*.local.json
+*.local.yaml
+*.local.yml
+
+# Existing/nested repositories are intentionally unmanaged by the root repo.
+/PrefEval-GPT56/
+/third_party/DreamLite/
+
+# Editors / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
