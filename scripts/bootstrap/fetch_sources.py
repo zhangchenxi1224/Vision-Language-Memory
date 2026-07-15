@@ -42,7 +42,12 @@ def main() -> int:
     current = git(destination, "rev-parse", "HEAD", check=False)
     if current.returncode != 0 or current.stdout.strip() != revision:
         git(destination, "fetch", "origin", revision)
-    if created or current.returncode != 0 or current.stdout.strip() != revision:
+    if created:
+        # A --no-checkout clone reports every tracked path as deleted until the
+        # worktree is explicitly populated. This directory was created above,
+        # so forcing the locked revision is safe and deterministic.
+        git(destination, "checkout", "--force", "--detach", revision)
+    elif current.returncode != 0 or current.stdout.strip() != revision:
         git(destination, "checkout", "--detach", revision)
 
     actual = git(destination, "rev-parse", "HEAD").stdout.strip()
