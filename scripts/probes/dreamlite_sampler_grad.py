@@ -1,12 +1,10 @@
 from __future__ import annotations
 
 import argparse
-import json
 import sys
 from pathlib import Path
 
 import torch
-from PIL import Image
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -14,6 +12,16 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from vision_memory.dreamlite import DifferentiableDreamLiteMobileSampler, freeze_module  # noqa: E402
 from vision_memory.dreamlite.conditioning import official_mobile_edit_prompt  # noqa: E402
+from vision_memory.repro import (  # noqa: E402
+    assert_no_frozen_parameter_grads,
+    cuda_peak_memory_report,
+    emit_json_report,
+    load_source_image,
+    lora_trainable_parameters,
+    probe_provenance,
+    reset_cuda_peak_memory,
+    seed_adapter_initialization,
+)
 
 
 def grad_stats(parameters) -> tuple[float, int, int]:
@@ -32,13 +40,19 @@ def grad_stats(parameters) -> tuple[float, int, int]:
 def main() -> int:
     parser = argparse.ArgumentParser(description="DreamLite-mobile 4-step sampler/LoRA gradient probe")
     parser.add_argument("--model", type=Path, default=ROOT / "models" / "DreamLite-mobile")
-    parser.add_argument("--source-image", type=Path, required=True)
+    parser.add_argument(
+        "--source-image",
+        type=Path,
+        help="Optional RGB input; omitted uses the versioned deterministic fixture.",
+    )
     parser.add_argument("--event", default="the background is a quiet blue room")
     parser.add_argument("--resolution", type=int, default=1024)
-    parser.add_argument("--seed", type=int, default=0)
+    parser.add_argument("--adapter-seed", type=int, default=0)
+    parser.add_argument("--noise-seed", "--seed", dest="noise_seed", type=int, default=0)
     parser.add_argument("--lora-rank", type=int, default=4)
     parser.add_argument("--checkpoint-unet", action="store_true")
     parser.add_argument("--allow-small-gpu", action="store_true")
+    parser.add_argument("--output-json", type=Path)
     args = parser.parse_args()
 
     if not torch.cuda.is_available():
@@ -52,6 +66,7 @@ def main() -> int:
 
     device = torch.device("cuda:0")
     dtype = torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16
+    reset_cuda_peak_memory([device])
     pipe = DreamLiteMobilePipeline.from_pretrained(
         args.model,
         local_files_only=True,
@@ -67,12 +82,12 @@ def main() -> int:
         lora_dropout=0.0,
         target_modules=["to_q", "to_k", "to_v", "to_out.0"],
     )
+    seed_adapter_initialization(args.adapter_seed)
     pipe.unet = get_peft_model(pipe.unet, lora_config)
-    trainable = [parameter for parameter in pipe.unet.parameters() if parameter.requires_grad]
-    if not trainable:
-        raise RuntimeError("LoRA injection produced no trainable parameters.")
+    pipe.unet.eval()
+    trainable = lora_trainable_parameters(pipe.unet)
 
-    source_pil = Image.open(args.source_image).convert("RGB")
+    source_pil, source_metadata = load_source_image(args.source_image, resolution=args.resolution)
     image_tensor = pipe.image_processor.preprocess(
         source_pil,
         height=args.resolution,
@@ -88,7 +103,7 @@ def main() -> int:
             dtype=dtype,
         )
     source_latents = source_latents.detach().requires_grad_(True)
-    generator = torch.Generator(device=device).manual_seed(args.seed)
+    generator = torch.Generator(device=device).manual_seed(args.noise_seed)
     noise_latents = torch.randn(
         source_latents.shape,
         generator=generator,
@@ -121,23 +136,40 @@ def main() -> int:
             "The sampler surrogate loss produced absent, zero, or non-finite LoRA gradients: "
             f"tensors={lora_tensors_with_grad}, norm={lora_norm}, nonfinite={lora_nonfinite}."
         )
-
-    print(
-        json.dumps(
-            {
-                "loss": loss.item(),
-                "source_latent_shape": list(source_latents.shape),
-                "source_grad_norm": source_grad.norm().item(),
-                "lora_grad_norm": lora_norm,
-                "lora_tensors_with_grad": lora_tensors_with_grad,
-                "lora_nonfinite_elements": lora_nonfinite,
-                "trainable_lora_parameters": sum(parameter.numel() for parameter in trainable),
-                "trajectory_length": len(output.trajectory or ()),
-                "peak_vram_gib": torch.cuda.max_memory_allocated(device) / 2**30,
-            },
-            indent=2,
-        )
+    trajectory_length = len(output.trajectory or ())
+    if trajectory_length != 5:
+        raise RuntimeError(f"Expected initial state plus four denoising states, got {trajectory_length}.")
+    frozen_gradients = assert_no_frozen_parameter_grads(
+        {
+            "base_unet": pipe.unet,
+            "vae": pipe.vae,
+            "internal_qwen": pipe.text_encoder,
+        },
+        fully_frozen={"vae", "internal_qwen"},
     )
+
+    report = {
+        "probe": "dreamlite_sampler_grad",
+        "loss": loss.item(),
+        "source_latent_shape": list(source_latents.shape),
+        "source_grad_norm": source_grad.norm().item(),
+        "lora_grad_norm": lora_norm,
+        "lora_tensors_with_grad": lora_tensors_with_grad,
+        "lora_nonfinite_elements": lora_nonfinite,
+        "trainable_lora_parameters": sum(parameter.numel() for parameter in trainable),
+        "trajectory_length": trajectory_length,
+        "adapter_seed": args.adapter_seed,
+        "event_noise_seeds": [args.noise_seed],
+        "frozen_gradients": frozen_gradients,
+        "cuda_peak_memory": cuda_peak_memory_report([device]),
+        "provenance": probe_provenance(
+            root=ROOT,
+            arguments=args,
+            models={"dreamlite": args.model},
+            source_image=source_metadata,
+        ),
+    }
+    emit_json_report(report, args.output_json)
     return 0
 
 

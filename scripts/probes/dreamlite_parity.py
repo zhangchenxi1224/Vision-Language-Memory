@@ -1,29 +1,40 @@
 from __future__ import annotations
 
 import argparse
-import json
 import sys
 from pathlib import Path
 
 import torch
-from PIL import Image
 
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "src"))
 
-from vision_memory.dreamlite import DifferentiableDreamLiteMobileSampler  # noqa: E402
+from vision_memory.dreamlite import DifferentiableDreamLiteMobileSampler, freeze_module  # noqa: E402
+from vision_memory.repro import (  # noqa: E402
+    assert_no_frozen_parameter_grads,
+    cuda_peak_memory_report,
+    emit_json_report,
+    load_source_image,
+    probe_provenance,
+    reset_cuda_peak_memory,
+)
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Official DreamLite-mobile vs differentiable sampler trajectory")
     parser.add_argument("--model", type=Path, default=ROOT / "models" / "DreamLite-mobile")
-    parser.add_argument("--source-image", type=Path, required=True)
+    parser.add_argument(
+        "--source-image",
+        type=Path,
+        help="Optional RGB input; omitted uses the versioned deterministic fixture.",
+    )
     parser.add_argument("--event", default="the background is a quiet blue room")
     parser.add_argument("--resolution", type=int, default=1024)
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--atol", type=float, default=1e-3)
     parser.add_argument("--rtol", type=float, default=1e-3)
+    parser.add_argument("--output-json", type=Path)
     args = parser.parse_args()
 
     if not torch.cuda.is_available():
@@ -33,15 +44,16 @@ def main() -> int:
 
     device = torch.device("cuda:0")
     dtype = torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16
+    reset_cuda_peak_memory([device])
     pipe = DreamLiteMobilePipeline.from_pretrained(
         args.model,
         local_files_only=True,
         torch_dtype=dtype,
     ).to(device)
-    pipe.unet.eval()
-    pipe.vae.eval()
-    pipe.text_encoder.eval()
-    image = Image.open(args.source_image).convert("RGB")
+    freeze_module(pipe.unet)
+    freeze_module(pipe.vae)
+    freeze_module(pipe.text_encoder)
+    image, source_metadata = load_source_image(args.source_image, resolution=args.resolution)
 
     captured: dict[str, object] = {"steps": []}
     original_prepare_latents = pipe.prepare_latents
@@ -127,7 +139,12 @@ def main() -> int:
         )
 
     final_difference = (official.float() - custom.latents.float()).abs()
+    frozen_gradients = assert_no_frozen_parameter_grads(
+        {"base_unet": pipe.unet, "vae": pipe.vae, "internal_qwen": pipe.text_encoder},
+        fully_frozen={"base_unet", "vae", "internal_qwen"},
+    )
     report = {
+        "probe": "dreamlite_parity",
         "allclose": all_close,
         "atol": args.atol,
         "rtol": args.rtol,
@@ -135,8 +152,16 @@ def main() -> int:
         "shape": list(custom.latents.shape),
         "final_max_abs": final_difference.max().item(),
         "steps": per_step,
+        "frozen_gradients": frozen_gradients,
+        "cuda_peak_memory": cuda_peak_memory_report([device]),
+        "provenance": probe_provenance(
+            root=ROOT,
+            arguments=args,
+            models={"dreamlite": args.model},
+            source_image=source_metadata,
+        ),
     }
-    print(json.dumps(report, indent=2))
+    emit_json_report(report, args.output_json)
     return 0 if all_close else 3
 
 

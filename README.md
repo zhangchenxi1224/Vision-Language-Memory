@@ -158,6 +158,91 @@ Only the final paired two-event runs establish the initial **direct-latent recur
 technical closure. They do not yet establish training usefulness, full-conditioning BPTT,
 or equivalence to repeated public DreamLite edits.
 
+## Mechanism-v1 experiment implementation
+
+The preregistered defaults live in `configs/experiments/mechanism_v1.yaml`. The v1 oracle
+episode contract has three turn types:
+
+- `event`: call the updater and do not compute a Reader loss;
+- `query`: read the current state without calling the updater;
+- `mixed`: apply only the annotated event span, then answer the annotated query from the
+  resulting state.
+
+Event subtypes are `set`, `overwrite`, `clear`, and `noop`. A distractor is intentionally
+an updater call labelled `noop`; a pure query is a strict read-only control-flow branch.
+The strict JSON schema recursively rejects hidden-ledger fields, and the Reader-facing
+interface receives only the image, query, and candidate choices.
+
+Generate and validate the fixed synthetic corpus:
+
+```bash
+python scripts/data/generate_synthetic.py --output-dir data/synthetic_v1 --seed 2026
+python scripts/data/validate_synthetic.py data/synthetic_v1
+```
+
+This creates 5,000 train, 500 dev, 1,000 test-ID, and 1,000 test-OOD episodes plus a
+content-addressed manifest. The OOD split is evenly divided among held-out entities,
+topics, paraphrase templates, and 9-16-turn length extrapolation.
+
+The lightweight implementation is a hashed event encoder, one-layer BiGRU, 64-channel
+64x64 FiLM-ConvGRU state, and differentiable RGB head. `lightweight_overfit.py` uses a
+fixed local surrogate only for CPU/API smoke tests. The scientific 64-episode gate uses
+the real frozen Qwen Reader:
+
+```bash
+python scripts/train/lightweight_qwen_overfit.py \
+  --dataset data/synthetic_v1/train.jsonl \
+  --reader "$READER" --output-dir runs/lightweight-qwen
+```
+
+The formal DreamLite trainer supports whole-episode BPTT, direct-latent and differentiable
+decode/re-encode recurrence, deterministic per-event noise, LoRA-only parameter
+whitelisting, non-reentrant checkpointing, exact checkpoint/resume, and two-device
+DreamLite/Reader placement. It refuses dirty source trees, reused fresh-run directories,
+invalid hyperparameters, unexpected trainable base weights, frozen gradients, and zero or
+non-finite trainable gradients.
+
+## PrefEval adapter and evaluation
+
+`data.lock.json` pins the independent official PrefEval checkout. Fetch it without touching
+the existing `PrefEval-GPT56` worktree:
+
+```bash
+python scripts/bootstrap/fetch_datasets.py --data-root data/external
+python scripts/eval/prepare_prefeval.py \
+  --prefeval-root data/external/PrefEval \
+  --output runs/prefeval/all.jsonl --protocol all
+```
+
+The adapter uses a fixed 20-topic manifest, binds all three forms by base pair, rejects
+privileged implicit-preference fields from model input, implements `oracle-sparse` and
+`forced-write` k=0/2/5/10, and creates the deterministic seed-2026 16-topic/4-topic split.
+Use `--max-base-pairs-per-topic 10` for the preregistered 200-pair forced-write subset.
+
+Prediction scoring includes topic-by-form macro accuracy, dynamic-state diagnostics,
+10,000-draw paired hierarchical bootstrap confidence intervals, and Holm correction:
+
+```bash
+python scripts/eval/score_prefeval.py --predictions predictions.jsonl --output scores.json
+python scripts/eval/score_synthetic.py --predictions predictions.jsonl --output scores.json
+```
+
+## Strict Fudan probe submission
+
+After committing and synchronizing an identical clean checkout on the cluster, first
+generate a dry run:
+
+```bash
+python scripts/cluster/submit_probe_gates.py --through G6 --dry-run
+```
+
+Run the same command without `--dry-run` to submit G1-G6. Each job is single-node, has an
+explicit GPU/time/memory request, runs strict preflight, and is chained with Slurm
+`afterok`. Logs and result JSON are written outside the repository. G6 validates that the
+two-event positive and detach reports have identical forward metadata/loss within the
+fixed tolerance and opposite intermediate-gradient behavior. The submission manifest is
+updated atomically after every sbatch, so partial submissions remain auditable.
+
 ## Repository boundaries
 
 - `third_party/DreamLite` remains clean, detached at the locked commit, and is ignored by

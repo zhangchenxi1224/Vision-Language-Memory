@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import argparse
-import json
 import sys
 from pathlib import Path
 
@@ -13,6 +12,13 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from vision_memory.dreamlite import freeze_module  # noqa: E402
 from vision_memory.reader import qwen3vl_target_only_ce  # noqa: E402
+from vision_memory.repro import (  # noqa: E402
+    assert_no_frozen_parameter_grads,
+    cuda_peak_memory_report,
+    emit_json_report,
+    probe_provenance,
+    reset_cuda_peak_memory,
+)
 
 
 def main() -> int:
@@ -22,6 +28,7 @@ def main() -> int:
     parser.add_argument("--target", default="red")
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--allow-small-gpu", action="store_true")
+    parser.add_argument("--output-json", type=Path)
     args = parser.parse_args()
 
     if not torch.cuda.is_available():
@@ -32,9 +39,9 @@ def main() -> int:
 
     from transformers import AutoProcessor, Qwen3VLForConditionalGeneration
 
-    torch.manual_seed(args.seed)
     device = torch.device("cuda:0")
     dtype = torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16
+    reset_cuda_peak_memory([device])
     processor = AutoProcessor.from_pretrained(
         args.model,
         local_files_only=True,
@@ -55,8 +62,16 @@ def main() -> int:
     freeze_module(model)
     model.config.use_cache = False
 
-    image = torch.rand(3, 256, 256, device=device, dtype=torch.float32, requires_grad=True)
-    torch.cuda.reset_peak_memory_stats(device)
+    generator = torch.Generator(device=device).manual_seed(args.seed)
+    image = torch.rand(
+        3,
+        256,
+        256,
+        generator=generator,
+        device=device,
+        dtype=torch.float32,
+        requires_grad=True,
+    )
     result = qwen3vl_target_only_ce(
         model=model,
         processor=processor,
@@ -69,25 +84,29 @@ def main() -> int:
         raise RuntimeError("The Qwen target CE is NaN or Inf.")
     result.loss.backward()
 
-    parameter_grads = sum(parameter.grad is not None for parameter in model.parameters())
     if image.grad is None or not torch.isfinite(image.grad).all() or image.grad.norm().item() == 0:
         raise RuntimeError("Reader image gradient is absent, non-finite, or zero.")
-    if parameter_grads:
-        raise RuntimeError(f"Frozen Reader unexpectedly accumulated gradients for {parameter_grads} parameters.")
-
-    print(
-        json.dumps(
-            {
-                "loss": result.loss.item(),
-                "image_grad_norm": image.grad.norm().item(),
-                "pixel_values_shape": list(result.pixel_values.shape),
-                "processor": processor_name,
-                "dtype": str(dtype),
-                "peak_vram_gib": torch.cuda.max_memory_allocated(device) / 2**30,
-            },
-            indent=2,
-        )
+    frozen_gradients = assert_no_frozen_parameter_grads(
+        {"reader": model},
+        fully_frozen={"reader"},
     )
+
+    report = {
+        "probe": "reader_pixel_grad",
+        "loss": result.loss.item(),
+        "image_grad_norm": image.grad.norm().item(),
+        "pixel_values_shape": list(result.pixel_values.shape),
+        "processor": processor_name,
+        "dtype": str(dtype),
+        "frozen_gradients": frozen_gradients,
+        "cuda_peak_memory": cuda_peak_memory_report([device]),
+        "provenance": probe_provenance(
+            root=ROOT,
+            arguments=args,
+            models={"reader": args.model},
+        ),
+    }
+    emit_json_report(report, args.output_json)
     return 0
 
 

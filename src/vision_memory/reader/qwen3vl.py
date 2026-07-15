@@ -18,6 +18,12 @@ class ReaderLossOutput:
     target_logits: Tensor
 
 
+@dataclass(frozen=True)
+class ChoiceScoreOutput:
+    mean_nll: tuple[float, ...]
+    predicted_index: int
+
+
 def _hidden_states(output: Any) -> Tensor:
     if hasattr(output, "last_hidden_state"):
         return output.last_hidden_state
@@ -34,6 +40,7 @@ def qwen3vl_target_only_ce(
     query: str,
     target: str,
     device: torch.device,
+    require_image_grad: bool = True,
 ) -> ReaderLossOutput:
     """Compute teacher-forced CE while retaining image-to-loss autograd.
 
@@ -59,7 +66,7 @@ def qwen3vl_target_only_ce(
     ).to(device)
 
     pixel_values = batch["pixel_values"]
-    if not pixel_values.requires_grad or pixel_values.grad_fn is None:
+    if require_image_grad and (not pixel_values.requires_grad or pixel_values.grad_fn is None):
         raise RuntimeError(
             "Qwen processor detached the image. Require the fast tensor processor or add a tensor-native adapter."
         )
@@ -102,3 +109,32 @@ def qwen3vl_target_only_ce(
     loss = F.cross_entropy(logits.float().reshape(-1, logits.shape[-1]), target_ids.reshape(-1))
     return ReaderLossOutput(loss=loss, pixel_values=pixel_values, target_ids=target_ids, target_logits=logits)
 
+
+def qwen3vl_choice_nll(
+    *,
+    model: Any,
+    processor: Any,
+    image: Tensor,
+    query: str,
+    choices: list[str] | tuple[str, ...],
+    device: torch.device,
+) -> ChoiceScoreOutput:
+    """Score MCQ option texts by teacher-forced mean NLL for evaluation."""
+
+    if len(choices) < 2:
+        raise ValueError("Choice scoring requires at least two options.")
+    scores: list[float] = []
+    with torch.no_grad():
+        for choice in choices:
+            output = qwen3vl_target_only_ce(
+                model=model,
+                processor=processor,
+                image=image,
+                query=query,
+                target=choice,
+                device=device,
+                require_image_grad=False,
+            )
+            scores.append(float(output.loss.item()))
+    predicted_index = min(range(len(scores)), key=scores.__getitem__)
+    return ChoiceScoreOutput(mean_nll=tuple(scores), predicted_index=predicted_index)

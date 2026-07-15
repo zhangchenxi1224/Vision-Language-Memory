@@ -1,0 +1,73 @@
+schema_version: 1
+name: vision-language-memory-mechanism-v1
+research_scope:
+  state: direct_latent
+  conditioning_gradient: stop_gradient
+  router: oracle
+  task: mcq_classification
+  deferred: [automatic_router, open_generation, full_conditioning]
+
+models:
+  dreamlite_source_revision: a6e20c8cc94027f37dd7c5a81b0b3b472aa18409
+  dreamlite_mobile_revision: 6695c3f4be230f0493fa5dbf78be3bc4d3bb2ab4
+  reader_revision: ebb281ec70b05090aa6165b016eac8ec08e71b17
+  prefeval_revision: 50795054b5ff5f418d2b768a331d71e480f93331
+
+synthetic_data:
+  seed: 2026
+  sizes: {train: 5000, dev: 500, test_id: 1000, test_ood: 1000}
+  ood_groups: [heldout_entity, heldout_topic, heldout_paraphrase, heldout_length]
+  oracle_text_min_accuracy: 0.95
+  query_only_max_accuracy: 0.30
+
+lightweight_gate:
+  episodes: 64
+  max_steps: 2000
+  min_train_accuracy: 0.90
+  reader: qwen3_vl_4b_instruct
+
+dreamlite_training:
+  denoising_steps: 4
+  precision: bfloat16
+  lora_rank: 4
+  batch_episodes: 1
+  gradient_accumulation: 8
+  weight_decay: 0.01
+  gradient_clip: 1.0
+  checkpoint_every_optimizer_steps: 100
+  eval_every_optimizer_steps: 250
+  early_stopping_patience: 3
+  max_epochs: 2
+  pilot:
+    episodes: 1000
+    seed: 0
+    learning_rates: [0.00003, 0.0001, 0.0003]
+    min_gain_pp_over_blank_and_frozen: 10
+    min_reset_or_shuffle_drop_pp: 10
+  final:
+    episodes: 5000
+    seeds: [0, 1, 2]
+
+ablations:
+  three_seed:
+    - bptt_vs_detach
+    - direct_latent_vs_decode_reencode
+    - trained_vs_frozen_lora
+    - forced_distractor_vs_skip
+    - set_only_vs_full_transitions
+  pilot_seed_zero: [rank4_vs_rank8, blank_vs_learned_initial_state]
+
+prefeval:
+  main_form: explicit
+  appendix_forms: [implicit_choice, implicit_persona]
+  protocols:
+    oracle_sparse: {forced_write_k: 0}
+    forced_write: {forced_write_k: [0, 2, 5, 10], stratified_base_pairs: 200}
+  adaptation: {seed: 2026, train_topics: 16, ood_topics: 4, dev_fraction: 0.10}
+
+statistics:
+  bootstrap_iterations: 10000
+  bootstrap_seed: 2026
+  confidence: 0.95
+  multiple_testing: holm
+  noise_robustness: {episodes: 200, alternative_seeds: 5}

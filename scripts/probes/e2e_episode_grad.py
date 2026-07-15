@@ -1,12 +1,10 @@
 from __future__ import annotations
 
 import argparse
-import json
 import sys
 from pathlib import Path
 
 import torch
-from PIL import Image
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -19,6 +17,17 @@ from vision_memory.dreamlite import (  # noqa: E402
 )
 from vision_memory.dreamlite.conditioning import encode_latent_path_condition  # noqa: E402
 from vision_memory.reader import qwen3vl_target_only_ce  # noqa: E402
+from vision_memory.repro import (  # noqa: E402
+    assert_no_frozen_parameter_grads,
+    canonical_json_sha256,
+    cuda_peak_memory_report,
+    emit_json_report,
+    load_source_image,
+    lora_trainable_parameters,
+    probe_provenance,
+    reset_cuda_peak_memory,
+    seed_adapter_initialization,
+)
 
 
 def parameter_grad_stats(parameters) -> tuple[float, int, int]:
@@ -45,12 +54,17 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="One/two-event DreamLite -> VAE -> Qwen CE gradient probe")
     parser.add_argument("--dreamlite", type=Path, default=ROOT / "models" / "DreamLite-mobile")
     parser.add_argument("--reader", type=Path, default=ROOT / "models" / "Qwen3-VL-4B-Instruct")
-    parser.add_argument("--source-image", type=Path, required=True)
+    parser.add_argument(
+        "--source-image",
+        type=Path,
+        help="Optional RGB input; omitted uses the versioned deterministic fixture.",
+    )
     parser.add_argument("--event", action="append", required=True, help="Repeat once or twice")
     parser.add_argument("--query", required=True)
     parser.add_argument("--target", required=True)
     parser.add_argument("--resolution", type=int, default=1024)
-    parser.add_argument("--seed", type=int, default=0)
+    parser.add_argument("--adapter-seed", type=int, default=0)
+    parser.add_argument("--noise-seed", "--seed", dest="noise_seed", type=int, default=0)
     parser.add_argument("--lora-rank", type=int, default=4)
     parser.add_argument(
         "--checkpoint-unet",
@@ -61,6 +75,7 @@ def main() -> int:
     parser.add_argument("--detach-between-events", action="store_true")
     parser.add_argument("--dreamlite-device", default="cuda:0")
     parser.add_argument("--reader-device", default=None)
+    parser.add_argument("--output-json", type=Path)
     args = parser.parse_args()
 
     if len(args.event) not in (1, 2):
@@ -76,6 +91,7 @@ def main() -> int:
     reader_device = torch.device(args.reader_device or args.dreamlite_device)
     updater_dtype = cuda_compute_dtype(updater_device)
     reader_dtype = cuda_compute_dtype(reader_device)
+    reset_cuda_peak_memory([updater_device, reader_device])
 
     pipe = DreamLiteMobilePipeline.from_pretrained(
         args.dreamlite,
@@ -85,6 +101,7 @@ def main() -> int:
     freeze_module(pipe.vae)
     freeze_module(pipe.text_encoder)
     pipe.unet.requires_grad_(False)
+    seed_adapter_initialization(args.adapter_seed)
     pipe.unet = get_peft_model(
         pipe.unet,
         LoraConfig(
@@ -94,9 +111,8 @@ def main() -> int:
             target_modules=["to_q", "to_k", "to_v", "to_out.0"],
         ),
     )
-    lora_parameters = [parameter for parameter in pipe.unet.parameters() if parameter.requires_grad]
-    if not lora_parameters:
-        raise RuntimeError("LoRA injection produced no trainable parameters.")
+    pipe.unet.eval()
+    lora_parameters = lora_trainable_parameters(pipe.unet)
 
     processor = AutoProcessor.from_pretrained(
         args.reader,
@@ -117,7 +133,7 @@ def main() -> int:
     freeze_module(reader)
     reader.config.use_cache = False
 
-    source_pil = Image.open(args.source_image).convert("RGB")
+    source_pil, source_metadata = load_source_image(args.source_image, resolution=args.resolution)
     source_image = pipe.image_processor.preprocess(
         source_pil,
         height=args.resolution,
@@ -131,10 +147,11 @@ def main() -> int:
         checkpoint_unet=args.checkpoint_unet,
     )
     intermediate_states = []
+    event_noise_seeds = [args.noise_seed + index for index in range(len(args.event))]
     for index, event in enumerate(args.event):
         condition = encode_latent_path_condition(pipe, state, event)
         source_for_update = state.detach() if index > 0 and args.detach_between_events else state
-        generator = torch.Generator(device=updater_device).manual_seed(args.seed + index)
+        generator = torch.Generator(device=updater_device).manual_seed(event_noise_seeds[index])
         noise = torch.randn(
             source_for_update.shape,
             generator=generator,
@@ -200,9 +217,46 @@ def main() -> int:
     if args.detach_between_events and any(value["norm"] is not None for value in intermediate_stats):
         raise RuntimeError("Detach negative control unexpectedly preserved an intermediate-state gradient.")
 
+    frozen_gradients = assert_no_frozen_parameter_grads(
+        {
+            "base_unet": pipe.unet,
+            "vae": pipe.vae,
+            "internal_qwen": pipe.text_encoder,
+            "reader": reader,
+        },
+        fully_frozen={"vae", "internal_qwen", "reader"},
+    )
+    provenance = probe_provenance(
+        root=ROOT,
+        arguments=args,
+        models={"dreamlite": args.dreamlite, "reader": args.reader},
+        source_image=source_metadata,
+    )
+    pair_metadata = {
+        "schema_version": 1,
+        "git": provenance["git"],
+        "models": provenance["models"],
+        "source_image": source_metadata,
+        "event": list(args.event),
+        "query": args.query,
+        "target": args.target,
+        "resolution": args.resolution,
+        "adapter_seed": args.adapter_seed,
+        "event_noise_seeds": event_noise_seeds,
+        "lora_rank": args.lora_rank,
+        "checkpoint_unet": args.checkpoint_unet,
+        "dreamlite_device": str(updater_device),
+        "reader_device": str(reader_device),
+        "updater_dtype": str(updater_dtype),
+        "reader_dtype": str(reader_dtype),
+    }
+
     report = {
+        "probe": "e2e_episode_grad",
         "events": len(args.event),
         "detach_between_events": args.detach_between_events,
+        "pair_id": canonical_json_sha256(pair_metadata),
+        "pair_metadata": pair_metadata,
         "loss": reader_result.loss.item(),
         "final_state_shape": list(state.shape),
         "intermediate_gradients": intermediate_stats,
@@ -212,13 +266,19 @@ def main() -> int:
         "trainable_lora_parameters": sum(parameter.numel() for parameter in lora_parameters),
         "unclamped_out_of_range_fraction": out_of_range_fraction,
         "unclamped_zero_grad_fraction": zero_image_grad_fraction,
+        "unclamped_image_grad_norm": image_gradient.detach().float().norm().item(),
+        "adapter_seed": args.adapter_seed,
+        "event_noise_seeds": event_noise_seeds,
         "updater_device": str(updater_device),
         "reader_device": str(reader_device),
         "updater_dtype": str(updater_dtype),
         "reader_dtype": str(reader_dtype),
         "reader_processor": processor_name,
+        "frozen_gradients": frozen_gradients,
+        "cuda_peak_memory": cuda_peak_memory_report([updater_device, reader_device]),
+        "provenance": provenance,
     }
-    print(json.dumps(report, indent=2))
+    emit_json_report(report, args.output_json)
     return 0
 
 
