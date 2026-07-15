@@ -23,6 +23,7 @@ def main() -> int:
     destination = ROOT / spec["local_dir"]
     revision = spec["revision"]
 
+    created = False
     if destination.exists():
         inside = git(destination, "rev-parse", "--is-inside-work-tree", check=False)
         if inside.returncode != 0 or inside.stdout.strip() != "true":
@@ -31,6 +32,7 @@ def main() -> int:
         if status:
             raise SystemExit(f"Refusing to change dirty DreamLite checkout:\n{status}")
     else:
+        created = True
         destination.parent.mkdir(parents=True, exist_ok=True)
         subprocess.run(
             ["git", "clone", "--filter=blob:none", "--no-checkout", spec["url"], str(destination)],
@@ -40,6 +42,7 @@ def main() -> int:
     current = git(destination, "rev-parse", "HEAD", check=False)
     if current.returncode != 0 or current.stdout.strip() != revision:
         git(destination, "fetch", "origin", revision)
+    if created or current.returncode != 0 or current.stdout.strip() != revision:
         git(destination, "checkout", "--detach", revision)
 
     actual = git(destination, "rev-parse", "HEAD").stdout.strip()
