@@ -3,7 +3,7 @@
 set -euo pipefail
 
 CODE_ROOT="${VLM_CODE_ROOT:-/remote-home1/cxzhang/codex_runs/vision-language-memory}"
-VENV_ROOT="${VLM_VENV_ROOT:-/remote-home1/cxzhang/codex_envs/vision_memory_py310_cu118}"
+VENV_ROOT="${VLM_VENV_ROOT:-/remote-home1/cxzhang/codex_envs/vision_memory_py310_cu118_torch271}"
 MODEL_ROOT="${VLM_MODEL_ROOT:-/remote-home1/cxzhang/codex_models/vision-language-memory}"
 HF_CACHE_ROOT="${HF_HOME:-/remote-home1/cxzhang/codex_models/.hf-cache}"
 
@@ -90,15 +90,15 @@ print("environment_pip", pip.__version__)
 PY
 "$PYTHON" -m pip install --upgrade "pip<26" setuptools wheel
 "$PYTHON" -m pip install \
-  "torch==2.4.1" \
-  "torchvision==0.19.1" \
+  "torch==2.7.1" \
+  "torchvision==0.22.1" \
   --index-url https://download.pytorch.org/whl/cu118
 "$PYTHON" - <<'PY'
 import torch
 import torchvision
 
-assert torch.__version__ == "2.4.1+cu118", torch.__version__
-assert torchvision.__version__ == "0.19.1+cu118", torchvision.__version__
+assert torch.__version__ == "2.7.1+cu118", torch.__version__
+assert torchvision.__version__ == "0.22.1+cu118", torchvision.__version__
 assert torch.version.cuda == "11.8", torch.version.cuda
 print("torch_profile_ok", torch.__version__, torchvision.__version__, torch.version.cuda)
 PY

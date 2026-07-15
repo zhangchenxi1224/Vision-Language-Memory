@@ -27,6 +27,23 @@ FORBIDDEN_MODEL_KEYS = frozenset({"preference", "explanation", "aligned_op"})
 Protocol = Literal["oracle-sparse", "forced-write"]
 
 
+def prefeval_noise_episode_key(base_pair_id: str, form: str) -> str:
+    """Return a label-free event-noise identity shared across protocol/k variants.
+
+    ``sample_id`` intentionally distinguishes oracle-sparse from every forced-write
+    condition.  It therefore cannot be used for paired diffusion noise: doing so would
+    change the initial SET noise before any distractor is introduced.  The underlying
+    base pair and preference form are stable across those interventions and contain no
+    target label, so they define the paired noise identity instead.
+    """
+
+    if not isinstance(base_pair_id, str) or not base_pair_id.strip():
+        raise ValueError("base_pair_id must be a non-empty string")
+    if form not in FORMS:
+        raise ValueError(f"Unsupported PrefEval form for noise pairing: {form!r}")
+    return f"prefeval-noise-v1:{base_pair_id.strip()}:{form}"
+
+
 def _read_json(path: Path) -> Any:
     try:
         with path.open("r", encoding="utf-8") as handle:
@@ -313,6 +330,15 @@ class PrefEvalAdapter:
             "adaptation_seed": self.adaptation_seed,
             "option_shuffle_seed": self.option_seed,
             "distractor_seed": self.distractor_seed,
+            "input_protocol": {
+                "explicit": "raw preference disclosure",
+                "implicit_choice": "raw query/options/user-selection exchange",
+                "implicit_persona": (
+                    "oracle preprocessing: hidden preference is used only to locate one raw user span; "
+                    "the hidden field and its text are never emitted to model_input"
+                ),
+                "claim_limit": "persona extraction is not automatic or unsupervised",
+            },
             "source_sha256": dict(sorted(self._source_hashes.items())),
         }
 
@@ -336,10 +362,17 @@ class PrefEvalAdapter:
         raise ValueError(f"Unsupported PrefEval form: {form}")
 
     def _sample_distractors(self, base_pair_id: str, form: str, count: int) -> list[str]:
-        if count > len(self._distractors):
-            raise ValueError(f"Requested {count} distractors but only {len(self._distractors)} are available")
+        maximum_count = max(FORCED_WRITE_COUNTS)
+        if maximum_count > len(self._distractors):
+            raise ValueError(
+                f"Need {maximum_count} distractors for nested forced-write prefixes but only "
+                f"{len(self._distractors)} are available"
+            )
         rng = random.Random(_stable_seed(self.distractor_seed, f"{base_pair_id}:{form}"))
-        return rng.sample(self._distractors, count)
+        # Draw the preregistered maximum once and take prefixes.  Calling
+        # random.sample(..., count) independently is not guaranteed to be nested when
+        # Python switches sampling algorithms for different k/population sizes.
+        return rng.sample(self._distractors, maximum_count)[:count]
 
     def iter_episodes(
         self,
@@ -429,4 +462,5 @@ __all__ = [
     "PrefEvalEpisode",
     "PrefEvalTurn",
     "Protocol",
+    "prefeval_noise_episode_key",
 ]

@@ -27,6 +27,16 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
+def locked_revision(path: Path) -> str:
+    marker = path / ".locked_revision"
+    if not marker.is_file():
+        raise RuntimeError(f"Reader snapshot is missing required revision marker: {marker}")
+    revision = marker.read_text(encoding="utf-8").strip()
+    if not revision:
+        raise RuntimeError(f"Reader snapshot has an empty revision marker: {marker}")
+    return revision
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Frozen-Qwen oracle-text and query-only synthetic-data gates")
     parser.add_argument("--dataset", type=Path, required=True)
@@ -42,6 +52,7 @@ def main() -> int:
         raise SystemExit("Qwen data sanity requires CUDA.")
     device = torch.device(args.device)
     dtype = torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16
+    reader_revision = locked_revision(args.reader)
     episodes = read_jsonl(args.dataset)[: args.limit]
     from transformers import AutoProcessor, Qwen3VLForConditionalGeneration
 
@@ -100,6 +111,7 @@ def main() -> int:
         "episodes": len(episodes),
         "queries": query_count,
         "dataset_sha256": sha256_file(args.dataset),
+        "reader_revision": reader_revision,
         "oracle_text_accuracy": oracle_accuracy,
         "oracle_threshold": args.oracle_threshold,
         "query_only_blank_accuracy": query_only_accuracy,

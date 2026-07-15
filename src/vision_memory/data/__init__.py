@@ -2,7 +2,17 @@
 
 from .episode import ChoiceReader, EpisodeRunOutput, EpisodeUpdater, ReaderOutput, run_episode
 from .generator import DatasetSizes, generate_dataset
-from .schema import EventKind, Episode, QuerySpec, Turn, TurnType, read_jsonl, write_jsonl
+from .schema import (
+    DistractorVariant,
+    EventKind,
+    Episode,
+    QuerySpec,
+    Turn,
+    TurnType,
+    read_jsonl,
+    surface_template_signatures,
+    write_jsonl,
+)
 from .validation import DatasetValidationError, ValidationReport, validate_dataset
 
 __all__ = [
@@ -12,6 +22,7 @@ __all__ = [
     "Episode",
     "EpisodeRunOutput",
     "EpisodeUpdater",
+    "DistractorVariant",
     "EventKind",
     "QuerySpec",
     "ReaderOutput",
@@ -21,6 +32,7 @@ __all__ = [
     "generate_dataset",
     "run_episode",
     "read_jsonl",
+    "surface_template_signatures",
     "validate_dataset",
     "write_jsonl",
 ]

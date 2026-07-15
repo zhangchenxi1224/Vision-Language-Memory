@@ -22,12 +22,15 @@ sys.path.insert(0, str(ROOT / "src"))
 from vision_memory.dreamlite import assert_no_frozen_parameter_grads, freeze_module  # noqa: E402
 from vision_memory.data import read_jsonl as read_episode_jsonl  # noqa: E402
 from vision_memory.reader import qwen3vl_target_only_ce  # noqa: E402
-from vision_memory.repro import load_source_image  # noqa: E402
+from vision_memory.repro import load_initial_image  # noqa: E402
 from vision_memory.training import (  # noqa: E402
     DreamLiteEpisodeModel,
     load_training_checkpoint,
+    read_prefeval_adapted_jsonl,
+    read_prefeval_supervised_jsonl,
     run_episode,
     save_training_checkpoint,
+    select_curriculum_episodes,
 )
 
 
@@ -35,9 +38,21 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Episode-level DreamLite latent-memory training")
     parser.add_argument("--train", type=Path, required=True)
     parser.add_argument("--dev", type=Path, required=True)
+    parser.add_argument(
+        "--dataset-format",
+        choices=("synthetic", "prefeval-export", "prefeval-supervised"),
+        default="synthetic",
+        help="PrefEval export means the separated model_input/label JSONL from prepare_prefeval.py.",
+    )
     parser.add_argument("--dreamlite", type=Path, required=True)
     parser.add_argument("--reader", type=Path, required=True)
-    parser.add_argument("--source-image", type=Path, help="Omit to use the locked deterministic 1024 RGB fixture")
+    parser.add_argument(
+        "--initial-state-mode",
+        choices=("blank", "fixture", "file"),
+        default="blank",
+        help="Formal default is a uniform neutral-gray blank; fixture is probe-only and file requires --source-image.",
+    )
+    parser.add_argument("--source-image", type=Path, help="Accepted only with --initial-state-mode file")
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--resolution", type=int, default=1024)
     parser.add_argument("--seed", type=int, default=0, help="Episode order and per-event noise seed")
@@ -55,6 +70,18 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--max-train-episodes", type=int, default=None)
     parser.add_argument("--recurrence-mode", choices=["direct_latent", "decode_reencode"], default="direct_latent")
     parser.add_argument("--detach-between-events", action="store_true")
+    parser.add_argument(
+        "--noop-policy",
+        choices=("update", "skip"),
+        default="update",
+        help="Whether labeled noop/distractor events call the updater; recorded in the manifest and route trace.",
+    )
+    parser.add_argument(
+        "--curriculum",
+        choices=("full", "set-only"),
+        default="full",
+        help="set-only selects whole training episodes containing only set/noop updater labels.",
+    )
     parser.add_argument("--learn-initial-state", action="store_true")
     parser.add_argument("--checkpoint-unet", action=argparse.BooleanOptionalAction, default=True)
     parser.add_argument("--dreamlite-device", default="cuda:0")
@@ -86,7 +113,12 @@ def git_value(*arguments: str) -> str:
 
 def locked_revision(path: Path) -> str:
     marker = path / ".locked_revision"
-    return marker.read_text(encoding="utf-8").strip() if marker.exists() else "unknown"
+    if not marker.is_file():
+        raise RuntimeError(f"Model snapshot is missing required revision marker: {marker}")
+    revision = marker.read_text(encoding="utf-8").strip()
+    if not revision:
+        raise RuntimeError(f"Model snapshot has an empty revision marker: {marker}")
+    return revision
 
 
 def compute_dtype(device: torch.device) -> torch.dtype:
@@ -124,7 +156,11 @@ def make_manifest(args: argparse.Namespace) -> dict[str, Any]:
         "reader_revision": locked_revision(args.reader),
         "train_sha256": sha256_file(args.train),
         "dev_sha256": sha256_file(args.dev),
-        "source_image": load_source_image(args.source_image, resolution=args.resolution)[1],
+        "initial_image": load_initial_image(
+            args.initial_state_mode,
+            args.source_image,
+            resolution=args.resolution,
+        )[1],
         "arguments": compatibility_args,
         "environment": {
             "python": platform.python_version(),
@@ -163,7 +199,7 @@ def reader_callable(*, reader: Any, processor: Any, reader_device: torch.device,
     return call
 
 
-def episode_order(records: list[dict[str, Any]], seed: int, epoch: int) -> list[int]:
+def episode_order(records: list[Any], seed: int, epoch: int) -> list[int]:
     order = list(range(len(records)))
     random.Random((seed << 16) ^ epoch).shuffle(order)
     return order
@@ -175,6 +211,7 @@ def evaluate_dev(
     records: Iterable[dict[str, Any]],
     recurrence_mode: str,
     detach_between_events: bool,
+    noop_policy: str,
     reader_loss_fn,
 ) -> float:
     losses: list[float] = []
@@ -191,6 +228,7 @@ def evaluate_dev(
                 recurrence_mode=recurrence_mode,
                 detach_between_events=detach_between_events,
                 collect_states=False,
+                noop_policy=noop_policy,
             )
             losses.append(float(result.loss.item()))
     return sum(losses) / len(losses)
@@ -247,6 +285,10 @@ def main() -> int:
         raise SystemExit(f"Training arguments must be positive: {invalid}")
     if args.max_train_episodes is not None and args.max_train_episodes <= 0:
         raise SystemExit("--max-train-episodes must be positive when supplied.")
+    if args.initial_state_mode == "file" and args.source_image is None:
+        raise SystemExit("--initial-state-mode file requires --source-image.")
+    if args.initial_state_mode != "file" and args.source_image is not None:
+        raise SystemExit("--source-image is accepted only with --initial-state-mode file.")
     if torch.device(args.dreamlite_device) == torch.device(args.reader_device):
         raise SystemExit("DreamLite and Reader must use distinct CUDA devices for the formal run.")
 
@@ -262,12 +304,33 @@ def main() -> int:
     )
     (args.output_dir / "environment.txt").write_text("\n".join(installed) + "\n", encoding="utf-8")
 
-    train_records = read_episode_jsonl(args.train)
-    dev_records = read_episode_jsonl(args.dev)[: args.eval_limit]
+    if args.dataset_format == "synthetic":
+        raw_train_records: list[Any] = read_episode_jsonl(args.train)
+        dev_records: list[Any] = read_episode_jsonl(args.dev)[: args.eval_limit]
+    elif args.dataset_format == "prefeval-export":
+        raw_train_records = read_prefeval_adapted_jsonl(args.train, allowed_splits={"adapt_train"})
+        dev_records = read_prefeval_adapted_jsonl(args.dev, allowed_splits={"adapt_dev"})[: args.eval_limit]
+    else:
+        raw_train_records = read_prefeval_supervised_jsonl(args.train, allowed_splits={"adapt_train"})
+        dev_records = read_prefeval_supervised_jsonl(args.dev, allowed_splits={"adapt_dev"})[: args.eval_limit]
+    train_records, curriculum_audit = select_curriculum_episodes(
+        raw_train_records,
+        curriculum=args.curriculum,
+    )
     if args.max_train_episodes is not None:
         train_records = train_records[: args.max_train_episodes]
     if not train_records or not dev_records:
         raise SystemExit("Train and dev datasets must remain non-empty after limits are applied.")
+    curriculum_record = {
+        **curriculum_audit.to_dict(),
+        "selected_after_max_train_episodes": len(train_records),
+        "selection_scope": "training_only",
+        "turns_rewritten": False,
+    }
+    (args.output_dir / "curriculum.json").write_text(
+        json.dumps(curriculum_record, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
 
     updater_device = torch.device(args.dreamlite_device)
     reader_device = torch.device(args.reader_device)
@@ -317,7 +380,11 @@ def main() -> int:
     freeze_module(reader)
     reader.config.use_cache = False
 
-    source_pil, _source_metadata = load_source_image(args.source_image, resolution=args.resolution)
+    source_pil, _source_metadata = load_initial_image(
+        args.initial_state_mode,
+        args.source_image,
+        resolution=args.resolution,
+    )
     source_image = pipe.image_processor.preprocess(source_pil, height=args.resolution, width=args.resolution)
     with torch.no_grad():
         initial_state = pipe.prepare_image_latents(source_image, dtype=updater_dtype, device=updater_device)
@@ -378,6 +445,7 @@ def main() -> int:
         order = episode_order(train_records, args.seed, epoch)
         cursor = start_cursor if epoch == start_epoch else 0
         accumulation_count = 0
+        accumulation_loss_sum = 0.0
         for position in range(cursor, len(order)):
             final_cursor = position + 1
             episode = train_records[order[position]]
@@ -392,20 +460,33 @@ def main() -> int:
                 recurrence_mode=args.recurrence_mode,
                 detach_between_events=args.detach_between_events,
                 collect_states=False,
+                noop_policy=args.noop_policy,
             )
             (result.loss / args.gradient_accumulation).backward()
             assert_frozen_contract(pipe, reader)
             accumulation_count += 1
+            accumulation_loss_sum += float(result.loss.detach().item())
 
             is_last = position + 1 == len(order)
             if accumulation_count == args.gradient_accumulation or is_last:
+                # Every optimizer step represents the mean of its actual episode group.
+                # A final partial group was divided by the nominal accumulation size
+                # above, so restore the correct 1/actual_count scale before clipping.
+                accumulation_rescale = args.gradient_accumulation / accumulation_count
+                if accumulation_rescale != 1.0:
+                    for parameter in trainable:
+                        if parameter.grad is not None:
+                            parameter.grad.mul_(accumulation_rescale)
                 gradient_norm = torch.nn.utils.clip_grad_norm_(trainable, args.gradient_clip)
                 if not torch.isfinite(gradient_norm) or gradient_norm.item() <= 0:
                     raise RuntimeError(f"Invalid trainable gradient norm: {gradient_norm.item()}")
                 optimizer.step()
                 optimizer.zero_grad(set_to_none=True)
                 optimizer_step += 1
+                group_episode_count = accumulation_count
+                group_mean_loss = accumulation_loss_sum / group_episode_count
                 accumulation_count = 0
+                accumulation_loss_sum = 0.0
                 append_jsonl(
                     metrics_path,
                     {
@@ -413,7 +494,8 @@ def main() -> int:
                         "epoch": epoch,
                         "episode_cursor": position + 1,
                         "optimizer_step": optimizer_step,
-                        "loss": float(result.loss.item()),
+                        "loss": group_mean_loss,
+                        "group_episode_count": group_episode_count,
                         "gradient_norm": float(gradient_norm.item()),
                         "elapsed_seconds": prior_elapsed + time.monotonic() - started,
                     },
@@ -426,6 +508,7 @@ def main() -> int:
                         records=dev_records,
                         recurrence_mode=args.recurrence_mode,
                         detach_between_events=args.detach_between_events,
+                        noop_policy=args.noop_policy,
                         reader_loss_fn=eval_reader,
                     )
                     append_jsonl(metrics_path, {"kind": "dev", "optimizer_step": optimizer_step, "loss": dev_loss})

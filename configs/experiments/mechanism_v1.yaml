@@ -1,5 +1,10 @@
-schema_version: 1
+schema_version: 2
 name: vision-language-memory-mechanism-v1
+runtime:
+  python: "3.10"
+  torch: 2.7.1+cu118
+  torchvision: 0.22.1+cu118
+  cuda_module: "11.8"
 research_scope:
   state: direct_latent
   conditioning_gradient: stop_gradient
@@ -14,8 +19,12 @@ models:
   prefeval_revision: 50795054b5ff5f418d2b768a331d71e480f93331
 
 synthetic_data:
+  schema_version: 2
   seed: 2026
   sizes: {train: 5000, dev: 500, test_id: 1000, test_ood: 1000}
+  transition_profiles:
+    main: full
+    set_only_ablation: independently_generated_set_only
   ood_groups: [heldout_entity, heldout_topic, heldout_paraphrase, heldout_length]
   oracle_text_min_accuracy: 0.95
   query_only_max_accuracy: 0.30
@@ -30,6 +39,10 @@ dreamlite_training:
   denoising_steps: 4
   precision: bfloat16
   lora_rank: 4
+  initial_state:
+    default: blank_neutral_gray_rgb_127
+    learned_ablation: trainable_blank_latent
+    probe_fixture_is_not_formal_initial_state: true
   batch_episodes: 1
   gradient_accumulation: 8
   weight_decay: 0.01
@@ -41,6 +54,8 @@ dreamlite_training:
   pilot:
     episodes: 1000
     seed: 0
+    selection_split: dev
+    test_id_first_used_after_learning_rate_freeze: true
     learning_rates: [0.00003, 0.0001, 0.0003]
     min_gain_pp_over_blank_and_frozen: 10
     min_reset_or_shuffle_drop_pp: 10
@@ -71,3 +86,11 @@ statistics:
   confidence: 0.95
   multiple_testing: holm
   noise_robustness: {episodes: 200, alternative_seeds: 5}
+
+cluster_resource_ceilings:
+  partition_max_time: 3-12:00:00
+  qwen_1gpu: "36:00:00"
+  pilot_2gpu: "36:00:00"
+  full_training_2gpu: "3-00:00:00"
+  evaluation_2gpu: "36:00:00"
+  accounting: sacct_elapsed_gpu_hours_and_failure_ledger

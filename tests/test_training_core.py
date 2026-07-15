@@ -79,6 +79,32 @@ class EpisodeRunnerTest(unittest.TestCase):
         self.assertEqual(result.query_count, 2)
         self.assertEqual(result.target_token_count, 4)
 
+    def test_loss_is_normalized_per_target_token_then_per_query(self):
+        episode = {
+            "episode_id": "normalization",
+            "turns": [
+                {"kind": "event", "event_text": "set red"},
+                {"kind": "query", "query_text": "q1", "target_text": "short"},
+                {"kind": "query", "query_text": "q2", "target_text": "long"},
+            ],
+        }
+
+        def controlled_reader(_image, _query, target):
+            if target == "short":
+                return SimpleNamespace(loss=torch.tensor(1.0), target_ids=torch.ones(1, 1))
+            return SimpleNamespace(loss=torch.tensor(3.0), target_ids=torch.ones(1, 4))
+
+        result = run_episode(
+            episode=episode,
+            initial_state=torch.zeros(1, 1, 2, 2),
+            update_fn=lambda state, *_: state,
+            decode_fn=lambda state: state,
+            reader_loss_fn=controlled_reader,
+        )
+        self.assertEqual(result.query_count, 2)
+        self.assertEqual(result.target_token_count, 5)
+        self.assertEqual(float(result.loss), 2.0)
+
     def test_detach_control_breaks_first_state_gradient(self):
         episode = {
             "episode_id": "grad",

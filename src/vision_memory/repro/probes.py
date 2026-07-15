@@ -19,6 +19,8 @@ from torch import nn
 
 DETERMINISTIC_FIXTURE_ID = "vision-memory-rgb-blocks-v1"
 DETERMINISTIC_FIXTURE_RGB_SHA256_1024 = "c44093f3ad73d6a3d62b5bf9b8ad226f65e65afd7841d5ef3ed80bc7d14a841a"
+BLANK_FIXTURE_ID = "vision-memory-neutral-gray-v1"
+BLANK_RGB_VALUE = 127
 
 
 def _jsonable(value: Any) -> Any:
@@ -83,6 +85,18 @@ def _deterministic_fixture(resolution: int) -> Image.Image:
     return image
 
 
+def _blank_fixture(resolution: int) -> Image.Image:
+    """Return the content-free initial image used by formal state-memory runs."""
+
+    if resolution <= 0:
+        raise ValueError("Blank fixture resolution must be positive.")
+    return Image.new(
+        "RGB",
+        (resolution, resolution),
+        color=(BLANK_RGB_VALUE, BLANK_RGB_VALUE, BLANK_RGB_VALUE),
+    )
+
+
 def load_source_image(path: Path | None, *, resolution: int = 1024) -> tuple[Image.Image, dict[str, Any]]:
     """Load a user image or return the versioned deterministic RGB fixture.
 
@@ -118,6 +132,47 @@ def load_source_image(path: Path | None, *, resolution: int = 1024) -> tuple[Ima
     if path is None and resolution == 1024 and metadata["rgb_sha256"] != DETERMINISTIC_FIXTURE_RGB_SHA256_1024:
         raise RuntimeError("The deterministic 1024 RGB fixture no longer matches its locked SHA256.")
     return image, metadata
+
+
+def load_initial_image(
+    mode: str,
+    path: Path | None = None,
+    *,
+    resolution: int = 1024,
+) -> tuple[Image.Image, dict[str, Any]]:
+    """Load a fail-closed, auditable initial image for episode training/evaluation.
+
+    ``blank`` is the formal default: a spatially uniform neutral-gray RGB image. The
+    colorful deterministic fixture is retained only for numerical probes and explicit
+    fixture controls. A user path is accepted only under ``file`` so an omitted flag can
+    never silently change the scientific initialization protocol.
+    """
+
+    normalized = mode.strip().lower().replace("-", "_")
+    if normalized not in {"blank", "fixture", "file"}:
+        raise ValueError("Initial image mode must be one of: blank, fixture, file.")
+    if normalized == "file":
+        if path is None:
+            raise ValueError("Initial image mode 'file' requires a source image path.")
+        image, metadata = load_source_image(path, resolution=resolution)
+    else:
+        if path is not None:
+            raise ValueError(f"Initial image mode {normalized!r} does not accept a source image path.")
+        if normalized == "blank":
+            image = _blank_fixture(resolution)
+            metadata = {
+                "origin": "blank_fixture",
+                "fixture_id": f"{BLANK_FIXTURE_ID}-{resolution}",
+                "path": None,
+                "file_sha256": None,
+                "blank_rgb_value": BLANK_RGB_VALUE,
+                "mode": "RGB",
+                "size": [image.width, image.height],
+                "rgb_sha256": _rgb_sha256(image),
+            }
+        else:
+            image, metadata = load_source_image(None, resolution=resolution)
+    return image, {"initial_state_mode": normalized, **metadata}
 
 
 def _run_git(root: Path, *arguments: str) -> str | None:

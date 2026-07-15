@@ -6,16 +6,22 @@ import tempfile
 import unittest
 from pathlib import Path
 
+import torch
+
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
+sys.path.insert(0, str(ROOT / "scripts" / "eval"))
 
+from dreamlite_mcq import collect_prefeval  # noqa: E402
+from vision_memory.event_noise import event_seed  # noqa: E402
 from vision_memory.prefeval import (  # noqa: E402
     FORBIDDEN_MODEL_KEYS,
     TOPICS,
     PrefEvalAdapter,
     adaptation_topic_split,
     assign_base_pair_splits,
+    prefeval_noise_episode_key,
 )
 
 
@@ -168,6 +174,87 @@ class PrefEvalAdapterTest(unittest.TestCase):
         self.assertEqual(len(first.turns), 12)
         self.assertEqual([turn.event_type for turn in first.turns[1:11]], ["noop"] * 10)
         self.assertEqual(first.turns[-1].type, "query")
+
+    def test_forced_write_noise_and_distractors_are_nested_across_k(self):
+        oracle = next(self.adapter.iter_episodes(forms=("explicit",), protocol="oracle-sparse"))
+        forced = {
+            count: next(
+                self.adapter.iter_episodes(
+                    forms=("explicit",),
+                    protocol="forced-write",
+                    forced_write_k=count,
+                )
+            )
+            for count in (0, 2, 5, 10)
+        }
+        noise_key = prefeval_noise_episode_key(oracle.base_pair_id, oracle.form)
+        self.assertEqual(
+            event_seed(7, noise_key, 0),
+            event_seed(
+                7,
+                prefeval_noise_episode_key(forced[0].base_pair_id, forced[0].form),
+                0,
+            ),
+        )
+
+        distractor_texts = {
+            count: [turn.text for turn in episode.turns[1:-1]]
+            for count, episode in forced.items()
+        }
+        self.assertEqual(distractor_texts[2], distractor_texts[5][:2])
+        self.assertEqual(distractor_texts[5], distractor_texts[10][:5])
+
+        event_seeds = {
+            count: [event_seed(7, noise_key, turn_index) for turn_index in range(1, count + 1)]
+            for count in (0, 2, 5, 10)
+        }
+        self.assertEqual(event_seeds[2], event_seeds[5][:2])
+        self.assertEqual(event_seeds[5], event_seeds[10][:5])
+
+    def test_collect_prefeval_uses_paired_noise_key_not_protocol_sample_id(self):
+        episodes = [
+            next(self.adapter.iter_episodes(forms=("explicit",), protocol="oracle-sparse")),
+            next(
+                self.adapter.iter_episodes(
+                    forms=("explicit",), protocol="forced-write", forced_write_k=2
+                )
+            ),
+        ]
+        path = Path(self.temporary.name) / "paired.jsonl"
+        path.write_text(
+            "".join(json.dumps(episode.to_record()) + "\n" for episode in episodes),
+            encoding="utf-8",
+        )
+
+        class RecordingUpdater:
+            def __init__(self):
+                self.calls = []
+
+            def __call__(self, state, text, episode_id, turn_id):
+                self.calls.append((text, episode_id, turn_id))
+                return state
+
+        class RecordingModel:
+            def __init__(self):
+                self.updater = RecordingUpdater()
+
+            @staticmethod
+            def reset_state():
+                return torch.zeros(1)
+
+        model = RecordingModel()
+        queries = collect_prefeval(
+            model,
+            path,
+            limit=None,
+            recurrence_mode="direct_latent",
+            skip_noop=False,
+        )
+        expected_key = prefeval_noise_episode_key(episodes[0].base_pair_id, episodes[0].form)
+        set_calls = [call for call in model.updater.calls if call[2] == 0]
+        self.assertEqual(len(set_calls), 2)
+        self.assertEqual({call[1] for call in set_calls}, {expected_key})
+        self.assertEqual({query.metadata["noise_episode_key"] for query in queries}, {expected_key})
 
     def test_seed_2026_topic_and_pair_splits_are_group_safe(self):
         topic_split = adaptation_topic_split(2026)

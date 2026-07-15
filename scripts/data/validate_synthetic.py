@@ -15,6 +15,7 @@ from vision_memory.data import validate_dataset  # noqa: E402
 def main() -> int:
     parser = argparse.ArgumentParser(description="Validate stateful-memory episode JSONL")
     parser.add_argument("dataset", type=Path)
+    parser.add_argument("--output", type=Path)
     parser.add_argument("--balance-tolerance", type=float, default=0.02)
     parser.add_argument("--skip-manifest-hashes", action="store_true")
     args = parser.parse_args()
@@ -23,7 +24,13 @@ def main() -> int:
         balance_tolerance=args.balance_tolerance,
         verify_manifest_hashes=not args.skip_manifest_hashes,
     )
-    print(json.dumps(report.to_dict(), indent=2, sort_keys=True))
+    rendered = json.dumps(report.to_dict(), indent=2, sort_keys=True) + "\n"
+    if args.output is not None:
+        args.output.parent.mkdir(parents=True, exist_ok=True)
+        temporary = args.output.with_suffix(args.output.suffix + ".tmp")
+        temporary.write_text(rendered, encoding="utf-8")
+        temporary.replace(args.output)
+    print(rendered, end="")
     return 0
 
 

@@ -2,18 +2,28 @@
 
 from .io import read_records, write_jsonl
 from .metrics import compute_prefeval_metrics, correctness, diagnostic_metrics, topic_form_metrics
-from .statistics import DEFAULT_PAIR_FIELDS, holm_correction, paired_hierarchical_bootstrap
+from .statistics import (
+    DEFAULT_PAIR_FIELDS,
+    DEFAULT_STRATA_FIELDS,
+    filter_preregistered_records,
+    holm_correction,
+    paired_hierarchical_bootstrap,
+    seeded_stratified_accuracy,
+)
 from .synthetic import compute_synthetic_metrics
 
 __all__ = [
     "DEFAULT_PAIR_FIELDS",
+    "DEFAULT_STRATA_FIELDS",
     "compute_prefeval_metrics",
     "compute_synthetic_metrics",
     "correctness",
     "diagnostic_metrics",
+    "filter_preregistered_records",
     "holm_correction",
     "paired_hierarchical_bootstrap",
     "read_records",
+    "seeded_stratified_accuracy",
     "topic_form_metrics",
     "write_jsonl",
 ]

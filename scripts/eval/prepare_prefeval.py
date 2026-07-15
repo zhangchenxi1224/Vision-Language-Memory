@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
+import subprocess
 import sys
 from pathlib import Path
 
@@ -11,6 +13,32 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from vision_memory.eval import write_jsonl  # noqa: E402
 from vision_memory.prefeval import FORCED_WRITE_COUNTS, FORMS, PrefEvalAdapter  # noqa: E402
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for block in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def git_snapshot(path: Path) -> tuple[str, bool]:
+    commit = subprocess.run(
+        ["git", "-C", str(path), "rev-parse", "HEAD"],
+        check=True,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    ).stdout.strip()
+    status = subprocess.run(
+        ["git", "-C", str(path), "status", "--porcelain"],
+        check=True,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    ).stdout.strip()
+    return commit, not bool(status)
 
 
 def main() -> int:
@@ -39,6 +67,8 @@ def main() -> int:
     parser.add_argument("--adaptation-seed", type=int, default=2026)
     parser.add_argument("--option-seed", type=int, default=41)
     parser.add_argument("--distractor-seed", type=int, default=2026)
+    parser.add_argument("--expected-base-pairs", type=int)
+    parser.add_argument("--expected-records", type=int)
     parser.add_argument(
         "--max-base-pairs-per-topic",
         type=int,
@@ -77,9 +107,28 @@ def main() -> int:
     manifest_path = args.manifest_output or args.output.with_suffix(args.output.suffix + ".manifest.json")
     manifest_path.parent.mkdir(parents=True, exist_ok=True)
     export_manifest = adapter.manifest()
+    if args.expected_base_pairs is not None and export_manifest["base_pair_count"] != args.expected_base_pairs:
+        raise RuntimeError(
+            f"PrefEval base-pair count mismatch: {export_manifest['base_pair_count']} != {args.expected_base_pairs}"
+        )
+    if args.expected_records is not None and count != args.expected_records:
+        raise RuntimeError(f"PrefEval export count mismatch: {count} != {args.expected_records}")
+    git_revision, git_clean = git_snapshot(args.prefeval_root)
+    if not git_clean:
+        raise RuntimeError("PrefEval export refuses a dirty official snapshot.")
+    locked_revision = json.loads((ROOT / "data.lock.json").read_text(encoding="utf-8"))["datasets"][
+        "prefeval"
+    ]["revision"]
+    if git_revision != locked_revision:
+        raise RuntimeError(f"PrefEval revision mismatch: {git_revision} != {locked_revision}")
     export_manifest["export"] = {
         "output": str(args.output.resolve()),
         "records": count,
+        "output_sha256": sha256_file(args.output),
+        "prefeval_git_revision": git_revision,
+        "prefeval_git_clean": git_clean,
+        "expected_base_pairs": args.expected_base_pairs,
+        "expected_records": args.expected_records,
         "forms": list(args.forms),
         "protocols": [{"protocol": protocol, "forced_write_k": k} for protocol, k in protocols],
         "subset": args.subset,

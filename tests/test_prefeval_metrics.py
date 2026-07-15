@@ -10,6 +10,7 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from vision_memory.eval import (  # noqa: E402
     compute_prefeval_metrics,
+    filter_preregistered_records,
     holm_correction,
     paired_hierarchical_bootstrap,
     topic_form_metrics,
@@ -44,6 +45,20 @@ def row(
 
 
 class PrefEvalMetricsTest(unittest.TestCase):
+    def test_forced_write_headline_selects_one_k(self):
+        records = [
+            row("p", "t", "explicit", 0, protocol="forced-write", forced_write_k=0),
+            row("p", "t", "explicit", 1, protocol="forced-write", forced_write_k=2),
+        ]
+        selected = filter_preregistered_records(
+            records,
+            protocol="forced-write",
+            form="explicit",
+            forced_write_k=2,
+        )
+        self.assertEqual(len(selected), 1)
+        self.assertEqual(selected[0]["forced_write_k"], 2)
+
     def test_topic_form_macro_equal_weights_cells(self):
         records = [
             row("a0", "a", "explicit", 0),
@@ -57,11 +72,43 @@ class PrefEvalMetricsTest(unittest.TestCase):
 
     def test_diagnostics_cover_stale_distractor_reset_shuffle_and_swap(self):
         records = [
-            row("p", "t", "explicit", 0, stale_target_index=1),
-            row("p", "t", "explicit", 1, condition="reset"),
-            row("p", "t", "explicit", 1, condition="shuffle"),
-            row("p", "t", "explicit", 1, condition="state_swap", donor_target_index=1),
-            row("p", "t", "explicit", 1, protocol="forced-write", forced_write_k=5),
+            row("p", "t", "explicit", 0, stale_target_index=1, query_id="p:oracle-sparse:k0:q0"),
+            row("p", "t", "explicit", 1, condition="reset", query_id="p:oracle-sparse:k0:q0"),
+            row("p", "t", "explicit", 1, condition="shuffle", query_id="p:oracle-sparse:k0:q0"),
+            row(
+                "p",
+                "t",
+                "explicit",
+                1,
+                condition="state_swap",
+                donor_target_index=1,
+                query_id="p:oracle-sparse:k0:q0",
+            ),
+            row(
+                "p",
+                "t",
+                "explicit",
+                1,
+                protocol="forced-write",
+                forced_write_k=5,
+                query_id="p:forced-write:k5:q0",
+            ),
+            row(
+                "noop",
+                "t",
+                "explicit",
+                1,
+                noop_policy="keep",
+                noop_intervention_pair_id="noop:q0",
+            ),
+            row(
+                "noop",
+                "t",
+                "explicit",
+                0,
+                noop_policy="skip",
+                noop_intervention_pair_id="noop:q0",
+            ),
         ]
         result = compute_prefeval_metrics(records)["diagnostics"]
         self.assertEqual(result["reset"]["accuracy_drop"], 1.0)
@@ -69,6 +116,7 @@ class PrefEvalMetricsTest(unittest.TestCase):
         self.assertEqual(result["state_swap"]["accuracy_drop"], 1.0)
         self.assertEqual(result["state_swap_donor_answer"]["rate"], 1.0)
         self.assertEqual(result["distractor_damage_by_k"]["5"]["accuracy_damage"], 1.0)
+        self.assertEqual(result["noop_filter_effect"]["skip_minus_keep_accuracy"], 1.0)
         self.assertEqual(result["stale_answer_error"]["rate"], 0.0)
 
     def test_paired_hierarchical_bootstrap_is_deterministic(self):

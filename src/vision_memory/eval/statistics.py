@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import math
 import random
+import statistics
 from collections import defaultdict
 from collections.abc import Iterable, Mapping, Sequence
 from typing import Any
@@ -19,6 +20,110 @@ DEFAULT_PAIR_FIELDS = (
     "forced_write_k",
     "seed",
 )
+
+DEFAULT_STRATA_FIELDS = ("split", "condition", "protocol", "form")
+
+
+def filter_preregistered_records(
+    records: Iterable[Mapping[str, Any]],
+    *,
+    condition: str = "standard",
+    protocol: str | None = None,
+    forced_write_k: int | None = None,
+    form: str | None = None,
+    split: str | None = None,
+    counterfactual_variant: str | None = None,
+    distractor_variant: str | None = None,
+    noop_policy: str | None = None,
+    diffusion_seed: int | None = None,
+    recurrence_mode: str | None = None,
+) -> list[Mapping[str, Any]]:
+    """Select one preregistered headline slice without pooling interventions."""
+
+    selected: list[Mapping[str, Any]] = []
+    for row in records:
+        if str(row.get("condition", "standard")) != condition:
+            continue
+        if protocol is not None and row.get("protocol") != protocol:
+            continue
+        if forced_write_k is not None and row.get("forced_write_k") != forced_write_k:
+            continue
+        if form is not None and row.get("form") != form:
+            continue
+        if split is not None and row.get("split") != split:
+            continue
+        if counterfactual_variant is not None and row.get("counterfactual_variant") != counterfactual_variant:
+            continue
+        if distractor_variant is not None and row.get("distractor_variant") != distractor_variant:
+            continue
+        if noop_policy is not None and row.get("noop_policy") != noop_policy:
+            continue
+        if diffusion_seed is not None and row.get("diffusion_seed") != diffusion_seed:
+            continue
+        if recurrence_mode is not None and row.get("recurrence_mode") != recurrence_mode:
+            continue
+        selected.append(row)
+    if not selected:
+        filters = {
+            "condition": condition,
+            "protocol": protocol,
+            "forced_write_k": forced_write_k,
+            "form": form,
+            "split": split,
+            "counterfactual_variant": counterfactual_variant,
+            "distractor_variant": distractor_variant,
+            "noop_policy": noop_policy,
+            "diffusion_seed": diffusion_seed,
+            "recurrence_mode": recurrence_mode,
+        }
+        raise ValueError(f"No records match the preregistered headline slice: {filters}")
+    return selected
+
+
+def seeded_stratified_accuracy(
+    records: Iterable[Mapping[str, Any]],
+    *,
+    strata_fields: Sequence[str] = DEFAULT_STRATA_FIELDS,
+    method_field: str = "method",
+    seed_field: str = "seed",
+) -> dict[str, Any]:
+    """Report accuracy per seed and mean+sample-SD for every exact stratum."""
+
+    grouped: dict[tuple[Any, ...], dict[Any, list[float]]] = defaultdict(lambda: defaultdict(list))
+    for row in records:
+        method = row.get(method_field)
+        if method is None:
+            raise ValueError(f"Every stratified record requires {method_field!r}")
+        if seed_field not in row:
+            raise ValueError(f"Every stratified record requires {seed_field!r}")
+        key = (method, *(row.get(field) for field in strata_fields))
+        grouped[key][row[seed_field]].append(correctness(row))
+    if not grouped:
+        raise ValueError("No records were provided for stratified accuracy")
+
+    cells: list[dict[str, Any]] = []
+    for key in sorted(grouped, key=repr):
+        method, *strata = key
+        per_seed = [
+            {
+                "seed": seed,
+                "n": len(scores),
+                "accuracy": sum(scores) / len(scores),
+            }
+            for seed, scores in sorted(grouped[key].items(), key=lambda item: repr(item[0]))
+        ]
+        seed_accuracies = [float(value["accuracy"]) for value in per_seed]
+        cells.append(
+            {
+                method_field: method,
+                **dict(zip(strata_fields, strata, strict=True)),
+                "per_seed": per_seed,
+                "n_seeds": len(per_seed),
+                "seed_mean_accuracy": statistics.fmean(seed_accuracies),
+                "seed_sd_accuracy": statistics.stdev(seed_accuracies) if len(seed_accuracies) > 1 else 0.0,
+            }
+        )
+    return {"strata_fields": list(strata_fields), "cells": cells}
 
 
 def _percentile(sorted_values: Sequence[float], probability: float) -> float:
@@ -188,4 +293,11 @@ def holm_correction(p_values: Mapping[str, float], *, alpha: float = 0.05) -> di
     }
 
 
-__all__ = ["DEFAULT_PAIR_FIELDS", "holm_correction", "paired_hierarchical_bootstrap"]
+__all__ = [
+    "DEFAULT_PAIR_FIELDS",
+    "DEFAULT_STRATA_FIELDS",
+    "filter_preregistered_records",
+    "holm_correction",
+    "paired_hierarchical_bootstrap",
+    "seeded_stratified_accuracy",
+]

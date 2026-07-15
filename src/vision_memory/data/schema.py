@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
@@ -20,6 +21,19 @@ class EventKind(str, Enum):
     OVERWRITE = "overwrite"
     CLEAR = "clear"
     NOOP = "noop"
+
+
+class DistractorVariant(str, Enum):
+    """Whether a generated stream is the clean or distractor member of a pair.
+
+    ``UNPAIRED`` is used only for the two-episode residue when a preregistered
+    split stratum is not divisible by four.  Such episodes remain valid
+    counterfactual pairs but are excluded from matched distractor metrics.
+    """
+
+    CLEAN = "clean"
+    DISTRACTOR = "distractor"
+    UNPAIRED = "unpaired"
 
 
 FORBIDDEN_LEDGER_KEYS = frozenset(
@@ -51,6 +65,7 @@ class QuerySpec:
     choices: tuple[str, str, str, str]
     target_index: int
     target_token_count: int = 1
+    comparison_id: str | None = None
 
     def __post_init__(self) -> None:
         if not self.text.strip():
@@ -63,6 +78,8 @@ class QuerySpec:
             raise ValueError("query.target_index must be in [0, 3]")
         if self.target_token_count < 1:
             raise ValueError("query.target_token_count must be positive")
+        if self.comparison_id is not None and not self.comparison_id.strip():
+            raise ValueError("query.comparison_id must be non-empty when provided")
 
     @property
     def target(self) -> str:
@@ -74,11 +91,12 @@ class QuerySpec:
             "choices": list(self.choices),
             "target_index": self.target_index,
             "target_token_count": self.target_token_count,
+            **({"comparison_id": self.comparison_id} if self.comparison_id is not None else {}),
         }
 
     @classmethod
     def from_dict(cls, value: Mapping[str, Any]) -> "QuerySpec":
-        allowed = {"text", "choices", "target_index", "target_token_count"}
+        allowed = {"text", "choices", "target_index", "target_token_count", "comparison_id"}
         unknown = set(value) - allowed
         if unknown:
             raise ValueError(f"Unknown query fields: {sorted(unknown)}")
@@ -94,6 +112,9 @@ class QuerySpec:
             choices=choices,  # type: ignore[arg-type]
             target_index=int(value["target_index"]),
             target_token_count=int(value.get("target_token_count", 1)),
+            comparison_id=(
+                str(value["comparison_id"]) if value.get("comparison_id") is not None else None
+            ),
         )
 
 
@@ -166,6 +187,11 @@ class Episode:
     counterfactual_episode_id: str
     topic: str
     ood_group: str | None = None
+    entity_surface: str | None = None
+    template_family: str | None = None
+    distractor_variant: DistractorVariant | None = None
+    distractor_pair_id: str | None = None
+    distractor_episode_id: str | None = None
 
     def __post_init__(self) -> None:
         for name in (
@@ -181,6 +207,18 @@ class Episode:
                 raise ValueError(f"{name} must be non-empty")
         if self.counterfactual_episode_id == self.episode_id:
             raise ValueError("counterfactual_episode_id must refer to another episode")
+        if self.entity_surface is not None and not self.entity_surface.strip():
+            raise ValueError("entity_surface must be non-empty when provided")
+        if self.template_family is not None and not self.template_family.strip():
+            raise ValueError("template_family must be non-empty when provided")
+        distractor_links = (self.distractor_pair_id, self.distractor_episode_id)
+        if self.distractor_variant in {DistractorVariant.CLEAN, DistractorVariant.DISTRACTOR}:
+            if any(value is None or not value.strip() for value in distractor_links):
+                raise ValueError("paired clean/distractor episodes require both distractor link fields")
+            if self.distractor_episode_id == self.episode_id:
+                raise ValueError("distractor_episode_id must refer to another episode")
+        elif any(value is not None for value in distractor_links):
+            raise ValueError("unpaired episodes must not contain distractor link fields")
         if not 4 <= len(self.turns) <= 16:
             raise ValueError("episodes must contain between 4 and 16 turns")
         if not any(turn.calls_reader for turn in self.turns):
@@ -193,6 +231,24 @@ class Episode:
     @property
     def query_count(self) -> int:
         return sum(turn.calls_reader for turn in self.turns)
+
+    @property
+    def mixed_query_count(self) -> int:
+        return sum(turn.type is TurnType.MIXED for turn in self.turns)
+
+    @property
+    def distractor_turn_indices(self) -> tuple[int, ...]:
+        return tuple(
+            index
+            for index, turn in enumerate(self.turns)
+            if turn.calls_updater and turn.event_kind is EventKind.NOOP
+        )
+
+    @property
+    def query_comparison_ids(self) -> tuple[str | None, ...]:
+        """Stable, answer-agnostic IDs for clean/distractor query matching."""
+
+        return tuple(turn.query.comparison_id for turn in self.turns if turn.query is not None)
 
     def to_dict(self) -> dict[str, Any]:
         value: dict[str, Any] = {
@@ -208,6 +264,16 @@ class Episode:
         }
         if self.ood_group is not None:
             value["ood_group"] = self.ood_group
+        if self.entity_surface is not None:
+            value["entity_surface"] = self.entity_surface
+        if self.template_family is not None:
+            value["template_family"] = self.template_family
+        if self.distractor_variant is not None:
+            value["distractor_variant"] = self.distractor_variant.value
+        if self.distractor_pair_id is not None:
+            value["distractor_pair_id"] = self.distractor_pair_id
+        if self.distractor_episode_id is not None:
+            value["distractor_episode_id"] = self.distractor_episode_id
         return value
 
     @classmethod
@@ -224,11 +290,26 @@ class Episode:
             "topic",
             "turns",
             "ood_group",
+            "entity_surface",
+            "template_family",
+            "distractor_variant",
+            "distractor_pair_id",
+            "distractor_episode_id",
         }
         unknown = set(value) - allowed
         if unknown:
             raise ValueError(f"Unknown episode fields: {sorted(unknown)}")
-        required = allowed - {"ood_group"}
+        required = {
+            "episode_id",
+            "split",
+            "seed",
+            "entity_id",
+            "template_id",
+            "pair_id",
+            "counterfactual_episode_id",
+            "topic",
+            "turns",
+        }
         missing = required - set(value)
         if missing:
             raise ValueError(f"Missing episode fields: {sorted(missing)}")
@@ -243,7 +324,70 @@ class Episode:
             topic=str(value["topic"]),
             turns=tuple(Turn.from_dict(item) for item in value["turns"]),
             ood_group=str(value["ood_group"]) if value.get("ood_group") is not None else None,
+            entity_surface=(
+                str(value["entity_surface"]) if value.get("entity_surface") is not None else None
+            ),
+            template_family=(
+                str(value["template_family"]) if value.get("template_family") is not None else None
+            ),
+            distractor_variant=(
+                DistractorVariant(str(value["distractor_variant"]))
+                if value.get("distractor_variant") is not None
+                else None
+            ),
+            distractor_pair_id=(
+                str(value["distractor_pair_id"])
+                if value.get("distractor_pair_id") is not None
+                else None
+            ),
+            distractor_episode_id=(
+                str(value["distractor_episode_id"])
+                if value.get("distractor_episode_id") is not None
+                else None
+            ),
         )
+
+
+def normalize_surface_template(text: str, episode: Episode) -> str:
+    """Replace episode-specific semantic spans while retaining visible phrasing.
+
+    The resulting signature is suitable for checking that a split did not get a
+    renamed metadata ID for a template whose model-visible wording is shared with
+    another split.
+    """
+
+    normalized = text.casefold()
+    replacements: list[tuple[str, str]] = []
+    if episode.entity_surface:
+        replacements.append((episode.entity_surface.casefold(), "{entity}"))
+    if episode.topic:
+        replacements.append((episode.topic.casefold(), "{topic}"))
+    choices = {
+        choice.casefold()
+        for turn in episode.turns
+        if turn.query is not None
+        for choice in turn.query.choices
+    }
+    replacements.extend((choice, "{value}") for choice in choices)
+    for source, target in sorted(replacements, key=lambda item: len(item[0]), reverse=True):
+        normalized = normalized.replace(source, target)
+    return re.sub(r"\s+", " ", normalized).strip()
+
+
+def surface_template_signatures(episode: Episode) -> frozenset[str]:
+    """Return model-visible event/query skeletons with semantic spans masked."""
+
+    signatures: set[str] = set()
+    for turn in episode.turns:
+        if turn.calls_updater and turn.event_text is not None:
+            kind = turn.event_kind.value if turn.event_kind is not None else "unknown"
+            template = normalize_surface_template(turn.event_text, episode)
+            signatures.add(f"{turn.type.value}:event:{kind}|{template}")
+        if turn.calls_reader and turn.query is not None:
+            signatures.add(
+                f"{turn.type.value}:query|{normalize_surface_template(turn.query.text, episode)}"
+            )
+    return frozenset(signatures)
 
 
 def read_jsonl(path: Path) -> list[Episode]:

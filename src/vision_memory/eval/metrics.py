@@ -75,11 +75,17 @@ def topic_form_metrics(records: Iterable[Mapping[str, Any]]) -> dict[str, Any]:
 def _pair_key(row: Mapping[str, Any], *, omit: set[str]) -> tuple[Any, ...]:
     fields = (
         "base_pair_id",
+        "query_id",
         "form",
+        "split",
         "method",
         "seed",
+        "diffusion_seed",
         "protocol",
         "forced_write_k",
+        "recurrence_mode",
+        "counterfactual_variant",
+        "noop_policy",
     )
     return tuple(row.get(field) for field in fields if field not in omit)
 
@@ -118,7 +124,21 @@ def _distractor_damage(rows: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
         if str(row.get("condition", "standard")) != "standard":
             continue
         protocol = row.get("protocol")
-        key = _pair_key(row, omit={"protocol", "forced_write_k"})
+        # PrefEval sample/query IDs intentionally encode protocol and k, so they
+        # cannot pair oracle-sparse with forced-write. Match the same underlying
+        # base pair/form and experimental seed while excluding protocol-specific IDs.
+        key = (
+            row.get("base_pair_id"),
+            row.get("form"),
+            row.get("split"),
+            row.get("method"),
+            row.get("seed"),
+            row.get("diffusion_seed"),
+            row.get("recurrence_mode"),
+            row.get("counterfactual_variant"),
+            row.get("noop_policy"),
+            row.get("condition", "standard"),
+        )
         if protocol == "oracle-sparse":
             if key in baseline:
                 raise ValueError(f"Duplicate oracle-sparse record for key {key}")
@@ -142,6 +162,32 @@ def _distractor_damage(rows: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
     return result
 
 
+def _noop_filter_effect(rows: Sequence[Mapping[str, Any]]) -> dict[str, Any] | None:
+    by_policy: dict[str, dict[tuple[Any, ...], float]] = {"keep": {}, "skip": {}}
+    for row in rows:
+        policy = row.get("noop_policy")
+        intervention_pair_id = row.get("noop_intervention_pair_id")
+        if policy not in by_policy or intervention_pair_id is None:
+            continue
+        key = (intervention_pair_id, *_pair_key(row, omit={"noop_policy"}))
+        if key in by_policy[policy]:
+            raise ValueError(f"Duplicate no-op {policy!r} intervention record for key {key}")
+        by_policy[policy][key] = correctness(row)
+    common = sorted(set(by_policy["keep"]) & set(by_policy["skip"]), key=repr)
+    if not common:
+        return None
+    keep = [by_policy["keep"][key] for key in common]
+    skip = [by_policy["skip"][key] for key in common]
+    return {
+        "n_pairs": len(common),
+        "keep_accuracy": _mean(keep),
+        "skip_accuracy": _mean(skip),
+        "skip_minus_keep_accuracy": _mean(
+            [skip_score - keep_score for keep_score, skip_score in zip(keep, skip, strict=True)]
+        ),
+    }
+
+
 def diagnostic_metrics(
     records: Iterable[Mapping[str, Any]],
     *,
@@ -159,12 +205,15 @@ def diagnostic_metrics(
         "shuffle": _paired_condition_drop(rows, "shuffle"),
         "state_swap": _paired_condition_drop(rows, "state_swap"),
         "distractor_damage_by_k": _distractor_damage(rows),
+        "noop_filter_effect": _noop_filter_effect(rows),
     }
 
     stale_values: list[float] = []
     donor_values: list[float] = []
     for row in rows:
-        if row.get("stale_target_index") is not None or row.get("stale_target_choice") is not None:
+        if str(row.get("condition", "standard")) == "standard" and (
+            row.get("stale_target_index") is not None or row.get("stale_target_choice") is not None
+        ):
             stale = _index(row, "stale_target")
             prediction = _index(row, "prediction")
             target = _index(row, "target")

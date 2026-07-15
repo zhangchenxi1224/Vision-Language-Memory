@@ -15,6 +15,7 @@ from vision_memory.repro import (  # noqa: E402
     DETERMINISTIC_FIXTURE_RGB_SHA256_1024,
     assert_no_frozen_parameter_grads,
     canonical_json_sha256,
+    load_initial_image,
     load_source_image,
     lora_trainable_parameters,
     seed_adapter_initialization,
@@ -62,6 +63,19 @@ class ReproProbeContractTest(unittest.TestCase):
         self.assertEqual(first.tobytes(), second.tobytes())
         self.assertEqual(first_metadata, second_metadata)
         self.assertEqual(first_metadata["rgb_sha256"], DETERMINISTIC_FIXTURE_RGB_SHA256_1024)
+
+    def test_formal_blank_initial_image_is_uniform_and_fail_closed(self):
+        first, first_metadata = load_initial_image("blank", resolution=64)
+        second, second_metadata = load_initial_image("blank", resolution=64)
+
+        self.assertEqual(first.tobytes(), second.tobytes())
+        self.assertEqual(first_metadata, second_metadata)
+        self.assertEqual(first_metadata["initial_state_mode"], "blank")
+        self.assertEqual(first.getextrema(), ((127, 127), (127, 127), (127, 127)))
+        with self.assertRaisesRegex(ValueError, "does not accept"):
+            load_initial_image("blank", Path("unexpected.png"), resolution=64)
+        with self.assertRaisesRegex(ValueError, "requires"):
+            load_initial_image("file", resolution=64)
 
     def test_adapter_seed_is_repeatable_and_explicit(self):
         seed_adapter_initialization(37)

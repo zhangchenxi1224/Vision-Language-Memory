@@ -8,7 +8,14 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from vision_memory.data.schema import EventKind, Episode, QuerySpec, Turn, TurnType  # noqa: E402
+from vision_memory.data.schema import (  # noqa: E402
+    DistractorVariant,
+    EventKind,
+    Episode,
+    QuerySpec,
+    Turn,
+    TurnType,
+)
 
 
 def make_episode() -> Episode:
@@ -56,6 +63,32 @@ class EpisodeSchemaTest(unittest.TestCase):
         value["answer_hint"] = "b"
         with self.assertRaisesRegex(ValueError, "Unknown episode fields"):
             Episode.from_dict(value)
+
+    def test_pairing_metadata_is_structural_and_answer_agnostic(self):
+        episode = Episode(
+            **{
+                **make_episode().__dict__,
+                "entity_surface": "mug 4af2",
+                "template_family": "memory memo",
+                "distractor_variant": DistractorVariant.CLEAN,
+                "distractor_pair_id": "stream-0",
+                "distractor_episode_id": "train-2",
+            }
+        )
+        value = episode.to_dict()
+        self.assertEqual(value["distractor_variant"], "clean")
+        self.assertEqual(value["distractor_pair_id"], "stream-0")
+        self.assertNotIn("target", value)
+        self.assertEqual(Episode.from_dict(value), episode)
+
+    def test_paired_variant_requires_reciprocal_link_fields(self):
+        with self.assertRaisesRegex(ValueError, "require both distractor link fields"):
+            Episode(
+                **{
+                    **make_episode().__dict__,
+                    "distractor_variant": DistractorVariant.DISTRACTOR,
+                }
+            )
 
 
 if __name__ == "__main__":

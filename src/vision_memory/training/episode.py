@@ -23,6 +23,7 @@ class EpisodeLossOutput:
     query_count: int
     target_token_count: int
     route_trace: tuple[str, ...]
+    updater_trace: tuple[str, ...]
 
 
 def format_mcq_query(query: str, choices: Sequence[str] | None) -> str:
@@ -40,6 +41,18 @@ def _required_text(turn: Mapping[str, Any] | Any, key: str) -> str:
     if not isinstance(value, str) or not value.strip():
         raise ValueError(f"Turn requires a non-empty {key!r} string.")
     return value.strip()
+
+
+def _event_kind(turn: Mapping[str, Any] | Any) -> str | None:
+    if isinstance(turn, Mapping):
+        value = turn.get("event_kind", turn.get("transition"))
+    else:
+        value = getattr(turn, "event_kind", None)
+    value = getattr(value, "value", value)
+    if value is None:
+        return None
+    normalized = str(value).strip().lower()
+    return normalized or None
 
 
 def _query_payload(turn: Mapping[str, Any] | Any) -> tuple[str, str]:
@@ -99,6 +112,7 @@ def run_episode(
     reencode_decode_fn: DecodeFn | None = None,
     detach_between_events: bool = False,
     collect_states: bool = True,
+    noop_policy: str = "update",
 ) -> EpisodeLossOutput:
     """Execute one oracle-routed episode and return token-normalized delayed query CE.
 
@@ -108,6 +122,8 @@ def run_episode(
 
     if recurrence_mode not in {"direct_latent", "decode_reencode"}:
         raise ValueError(f"Unsupported recurrence_mode: {recurrence_mode}")
+    if noop_policy not in {"update", "skip"}:
+        raise ValueError("noop_policy must be 'update' or 'skip'.")
     if recurrence_mode == "decode_reencode" and reencode_fn is None:
         raise ValueError("decode_reencode recurrence requires reencode_fn.")
 
@@ -121,7 +137,8 @@ def run_episode(
     state = initial_state
     states: list[Tensor] = []
     route_trace: list[str] = []
-    weighted_losses: list[Tensor] = []
+    updater_trace: list[str] = []
+    query_losses: list[Tensor] = []
     target_token_count = 0
     query_count = 0
     event_count = 0
@@ -139,16 +156,26 @@ def run_episode(
 
         if kind in {"event", "mixed"}:
             event_text = _required_text(raw_turn, "event_text")
-            source = state.detach() if detach_between_events and event_count > 0 else state
-            state = update_fn(source, event_text, episode_id, turn_id)
-            if recurrence_mode == "decode_reencode":
-                assert reencode_fn is not None
-                bottleneck_decode = reencode_decode_fn or decode_fn
-                state = reencode_fn(bottleneck_decode(state))
-            if collect_states:
-                states.append(state)
-            route_trace.append(f"{turn_id}:update")
-            event_count += 1
+            event_kind = _event_kind(raw_turn)
+            if noop_policy == "skip" and event_kind is None:
+                raise ValueError(
+                    f"Turn {turn_id} is missing event_kind/transition; skip-noop routing must fail closed."
+                )
+            if noop_policy == "skip" and event_kind == "noop":
+                route_trace.append(f"{turn_id}:skip-noop")
+                updater_trace.append(f"{turn_id}:noop:skip")
+            else:
+                source = state.detach() if detach_between_events and event_count > 0 else state
+                state = update_fn(source, event_text, episode_id, turn_id)
+                if recurrence_mode == "decode_reencode":
+                    assert reencode_fn is not None
+                    bottleneck_decode = reencode_decode_fn or decode_fn
+                    state = reencode_fn(bottleneck_decode(state))
+                if collect_states:
+                    states.append(state)
+                route_trace.append(f"{turn_id}:update")
+                updater_trace.append(f"{turn_id}:{event_kind or 'unknown'}:update")
+                event_count += 1
 
         if kind in {"query", "mixed"}:
             query, target = _query_payload(raw_turn)
@@ -157,14 +184,17 @@ def run_episode(
             loss, token_count = _loss_and_tokens(result)
             if not torch.isfinite(loss):
                 raise RuntimeError(f"Non-finite reader loss at turn {turn_id}.")
-            weighted_losses.append(loss * token_count)
+            # qwen3vl_target_only_ce already averages CE over this query's target
+            # tokens. Average those per-query means here so episodes with several
+            # reads do not overweight either long answer strings or extra queries.
+            query_losses.append(loss)
             target_token_count += token_count
             query_count += 1
             route_trace.append(f"{turn_id}:read")
 
-    if not weighted_losses or target_token_count == 0:
+    if not query_losses or target_token_count == 0:
         raise ValueError("Episode contains no supervised query.")
-    total_loss = torch.stack(weighted_losses).sum() / target_token_count
+    total_loss = torch.stack(query_losses).mean()
     return EpisodeLossOutput(
         loss=total_loss,
         final_state=state,
@@ -172,4 +202,5 @@ def run_episode(
         query_count=query_count,
         target_token_count=target_token_count,
         route_trace=tuple(route_trace),
+        updater_trace=tuple(updater_trace),
     )

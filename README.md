@@ -68,9 +68,10 @@ python scripts\bootstrap\fetch_models.py --metadata-only
 
 ## Cluster bootstrap
 
-Select and pin the CUDA-matched `torch`/`torchvision` pair only after inspecting the target
-node. Copy `configs/cluster.env.example` to an untracked local file, set the shared model
-root, HF cache, and exact installed Torch version, then run:
+The verified Fudan A800 environment is Python 3.10, CUDA module 11.8,
+`torch==2.7.1+cu118`, and `torchvision==0.22.1+cu118`. The earlier Torch 2.4.1
+environment is incompatible with Diffusers 0.39.0's custom attention-op annotations and
+must not be used. The executable bootstrap is `scripts/cluster/setup_fudan_a800.sh`.
 
 ```bash
 python -m pip install -r requirements/runtime-pinned.txt
@@ -176,23 +177,30 @@ interface receives only the image, query, and candidate choices.
 Generate and validate the fixed synthetic corpus:
 
 ```bash
-python scripts/data/generate_synthetic.py --output-dir data/synthetic_v1 --seed 2026
-python scripts/data/validate_synthetic.py data/synthetic_v1
+python scripts/data/generate_synthetic.py --output-dir data/synthetic_v2 --seed 2026
+python scripts/data/validate_synthetic.py data/synthetic_v2
+python scripts/data/generate_synthetic.py \
+  --output-dir data/synthetic_v2_set_only --seed 2026 --transition-profile set-only
+python scripts/data/validate_synthetic.py data/synthetic_v2_set_only
 ```
 
-This creates 5,000 train, 500 dev, 1,000 test-ID, and 1,000 test-OOD episodes plus a
-content-addressed manifest. The OOD split is evenly divided among held-out entities,
-topics, paraphrase templates, and 9-16-turn length extrapolation.
+Each command creates 5,000 train, 500 dev, 1,000 test-ID, and 1,000 test-OOD episodes plus
+a content-addressed schema-v2 manifest. The OOD split is evenly divided among held-out
+entities, topics, paraphrase templates, and 9-16-turn length extrapolation. The set-only
+corpus is independently generated; it is never made by deleting turns from full episodes.
 
 The lightweight implementation is a hashed event encoder, one-layer BiGRU, 64-channel
 64x64 FiLM-ConvGRU state, and differentiable RGB head. `lightweight_overfit.py` uses a
 fixed local surrogate only for CPU/API smoke tests. The scientific 64-episode gate uses
-the real frozen Qwen Reader:
+the real frozen Qwen Reader and fails closed unless it reaches 90% training MCQ accuracy
+within 2,000 optimizer steps:
 
 ```bash
-python scripts/train/lightweight_qwen_overfit.py \
-  --dataset data/synthetic_v1/train.jsonl \
-  --reader "$READER" --output-dir runs/lightweight-qwen
+python scripts/train/lightweight_episode.py \
+  --train data/synthetic_v2/train.jsonl --dev data/synthetic_v2/dev.jsonl \
+  --reader "$READER" --output-dir runs/lightweight-qwen \
+  --method recurrent --overfit-gate --overfit-episodes 64 \
+  --max-optimizer-steps 2000 --overfit-threshold 0.90
 ```
 
 The formal DreamLite trainer supports whole-episode BPTT, direct-latent and differentiable
@@ -201,6 +209,12 @@ whitelisting, non-reentrant checkpointing, exact checkpoint/resume, and two-devi
 DreamLite/Reader placement. It refuses dirty source trees, reused fresh-run directories,
 invalid hyperparameters, unexpected trainable base weights, frozen gradients, and zero or
 non-finite trainable gradients.
+
+Formal DreamLite runs start from a deterministic uniform neutral-gray blank image encoded
+once into the TinyVAE latent space. The colorful deterministic image remains a numerical
+probe fixture only. `--learn-initial-state` turns the blank-derived latent into a trainable
+parameter for the preregistered initialization ablation; checkpoint evaluation infers and
+verifies this protocol from the manifest.
 
 ## PrefEval adapter and evaluation
 
@@ -218,6 +232,9 @@ The adapter uses a fixed 20-topic manifest, binds all three forms by base pair, 
 privileged implicit-preference fields from model input, implements `oracle-sparse` and
 `forced-write` k=0/2/5/10, and creates the deterministic seed-2026 16-topic/4-topic split.
 Use `--max-base-pairs-per-topic 10` for the preregistered 200-pair forced-write subset.
+The forced-write export uses nested distractor prefixes and a stable base-pair/form noise key,
+so oracle-sparse and every k variant share the same initial SET noise and corresponding event
+noise. Protocol labels and k therefore cannot change the diffusion draw being compared.
 
 Prediction scoring includes topic-by-form macro accuracy, dynamic-state diagnostics,
 10,000-draw paired hierarchical bootstrap confidence intervals, and Holm correction:
@@ -242,6 +259,20 @@ explicit GPU/time/memory request, runs strict preflight, and is chained with Slu
 two-event positive and detach reports have identical forward metadata/loss within the
 fixed tolerance and opposite intermediate-gradient behavior. The submission manifest is
 updated atomically after every sbatch, so partial submissions remain auditable.
+
+After the final clean commit re-passes G1--G6, the post-gate orchestrator builds the entire
+stop-gated formal matrix. It defaults to a dry run; real submission additionally requires
+`--submit` and the exact expected commit:
+
+```bash
+python scripts/cluster/submit_experiment_dag.py \
+  --expected-commit "$(git rev-parse HEAD)" --through eval \
+  --fetch-prefeval --include-ablations --include-prefeval-adaptation
+```
+
+Pilot learning-rate selection, its two baseline gains, and reset/shuffle checks use only the
+dev split. Test-ID is first evaluated after the selected learning rate is frozen. Failed data,
+sanity, lightweight, pilot, or resume gates cancel all dependent Slurm jobs.
 
 ## Repository boundaries
 

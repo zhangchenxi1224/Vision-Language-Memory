@@ -333,7 +333,7 @@ def main() -> int:
     parser.add_argument(
         "--environment",
         type=Path,
-        default=Path("/remote-home1/cxzhang/codex_envs/vision_memory_py310_cu118"),
+        default=Path("/remote-home1/cxzhang/codex_envs/vision_memory_py310_cu118_torch271"),
     )
     parser.add_argument(
         "--runs-root",
@@ -341,7 +341,7 @@ def main() -> int:
         default=Path("/remote-home1/cxzhang/codex_runs/vision-language-memory-runs"),
     )
     parser.add_argument("--expected-commit")
-    parser.add_argument("--expected-torch", default="2.4.1+cu118")
+    parser.add_argument("--expected-torch", default="2.7.1+cu118")
     parser.add_argument("--through", choices=[f"G{index}" for index in range(1, 7)], default="G6")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
