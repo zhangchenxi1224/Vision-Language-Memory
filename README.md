@@ -43,8 +43,8 @@ decode/re-encode, and stop-gradient versus differentiable conditioning.
 
 ## Local development
 
-Use any supported Python 3.10-3.13 environment for lightweight work; Python 3.11 is the
-cluster target. Create and activate the environment, install a suitable CPU/CUDA PyTorch
+Use any supported Python 3.10-3.13 environment for lightweight work; Python 3.10 is the
+verified Fudan A800 cluster target. Create and activate the environment, install a suitable CPU/CUDA PyTorch
 build **inside it**, then install the pinned application dependencies:
 
 ```powershell
