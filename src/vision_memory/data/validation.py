@@ -37,6 +37,11 @@ class SplitValidation:
     entity_surface_count: int
     template_family_count: int
     surface_template_signature_count: int
+    canonical_payloads: int
+    canonical_target_share_reference: float
+    canonical_balance_enforced: bool
+    max_canonical_target_share_deviation: float
+    max_canonical_order_variants: int
 
 
 @dataclass(frozen=True)
@@ -96,8 +101,7 @@ def _validate_visible_metadata(episode: Episode) -> None:
             text = (turn.event_text or "").casefold()
             if family not in text:
                 _fail(
-                    f"{episode.episode_id} turn {turn_index} does not expose its actual "
-                    "template_family in event_text"
+                    f"{episode.episode_id} turn {turn_index} does not expose its actual template_family in event_text"
                 )
             if turn.event_kind is not EventKind.NOOP and entity not in text:
                 _fail(
@@ -110,14 +114,10 @@ def _validate_visible_metadata(episode: Episode) -> None:
             text = turn.query.text.casefold()
             if family not in text:
                 _fail(
-                    f"{episode.episode_id} turn {turn_index} does not expose its actual "
-                    "template_family in query text"
+                    f"{episode.episode_id} turn {turn_index} does not expose its actual template_family in query text"
                 )
             if entity not in text:
-                _fail(
-                    f"{episode.episode_id} turn {turn_index} does not contain entity_surface "
-                    "in query text"
-                )
+                _fail(f"{episode.episode_id} turn {turn_index} does not contain entity_surface in query text")
             if turn.query.comparison_id is None:
                 _fail(f"{episode.episode_id} turn {turn_index} is missing query.comparison_id")
 
@@ -157,11 +157,7 @@ def _validate_distractor_pair(episode: Episode, by_id: Mapping[str, Episode]) ->
     if episode.distractor_episode_id not in by_id:
         _fail(f"{episode.episode_id} points outside its split for distractor mate")
     mate = by_id[episode.distractor_episode_id]
-    expected = (
-        DistractorVariant.DISTRACTOR
-        if variant is DistractorVariant.CLEAN
-        else DistractorVariant.CLEAN
-    )
+    expected = DistractorVariant.DISTRACTOR if variant is DistractorVariant.CLEAN else DistractorVariant.CLEAN
     if (
         mate.distractor_variant is not expected
         or mate.distractor_episode_id != episode.episode_id
@@ -204,6 +200,7 @@ def _validate_split(
     *,
     balance_tolerance: float,
     expected_event_kinds: frozenset[EventKind],
+    enforce_canonical_payload_balance: bool,
 ) -> SplitValidation:
     if not episodes:
         _fail(f"{split} is empty")
@@ -215,6 +212,8 @@ def _validate_split(
     event_counts: Counter[str] = Counter()
     variant_counts: Counter[str] = Counter()
     comparison_members: dict[str, list[Episode]] = defaultdict(list)
+    canonical_targets: dict[tuple[str, tuple[str, ...]], Counter[str]] = defaultdict(Counter)
+    canonical_orders: dict[tuple[str, tuple[str, ...]], set[tuple[str, str, str, str]]] = defaultdict(set)
     entity_id_to_surface: dict[str, str] = {}
     surface_to_entity_id: dict[str, str] = {}
     template_id_to_family: dict[str, str] = {}
@@ -266,6 +265,9 @@ def _validate_split(
                 event_counts[turn.event_kind.value] += 1
             if turn.query is not None:
                 position_counts[turn.query.target_index] += 1
+                canonical_key = (turn.query.text, tuple(sorted(turn.query.choices)))
+                canonical_targets[canonical_key][turn.query.target] += 1
+                canonical_orders[canonical_key].add(turn.query.choices)
 
     for comparison_id, members in comparison_members.items():
         variants = {episode.distractor_variant for episode in members}
@@ -276,6 +278,28 @@ def _validate_split(
             _fail(f"comparison_id {comparison_id} has invalid distractor membership")
 
     expected_fraction = 0.25
+    canonical_deviations: list[float] = []
+    for canonical_key, target_counts in canonical_targets.items():
+        _, candidates = canonical_key
+        member_count = sum(target_counts.values())
+        shares = {candidate: target_counts[candidate] / member_count for candidate in candidates}
+        canonical_deviations.extend(abs(share - expected_fraction) for share in shares.values())
+        if enforce_canonical_payload_balance and any(
+            target_counts[candidate] * 4 != member_count for candidate in candidates
+        ):
+            _fail(
+                "Full-profile canonical payload target shares must each equal 0.25: "
+                f"text={canonical_key[0]!r}, choices={candidates!r}, "
+                f"counts={dict(target_counts)}"
+            )
+        order_variants = len(canonical_orders[canonical_key])
+        if enforce_canonical_payload_balance and order_variants != 1:
+            _fail(
+                "Full-profile canonical payload must have exactly one ordered choices tuple: "
+                f"text={canonical_key[0]!r}, choices={candidates!r}, "
+                f"ordered_variants={order_variants}"
+            )
+
     deviations = [abs(position_counts[index] / queries - expected_fraction) for index in range(4)]
     max_deviation = max(deviations)
     if max_deviation > balance_tolerance:
@@ -294,12 +318,8 @@ def _validate_split(
 
     entities = {episode.entity_surface for episode in episodes if episode.entity_surface is not None}
     families = {episode.template_family for episode in episodes if episode.template_family is not None}
-    signatures = {
-        signature for episode in episodes for signature in surface_template_signatures(episode)
-    }
-    matched_pairs = sum(
-        episode.distractor_variant is DistractorVariant.CLEAN for episode in episodes
-    )
+    signatures = {signature for episode in episodes for signature in surface_template_signatures(episode)}
+    matched_pairs = sum(episode.distractor_variant is DistractorVariant.CLEAN for episode in episodes)
     return SplitValidation(
         episodes=len(episodes),
         queries=queries,
@@ -313,6 +333,14 @@ def _validate_split(
         entity_surface_count=len(entities),
         template_family_count=len(families),
         surface_template_signature_count=len(signatures),
+        canonical_payloads=len(canonical_targets),
+        canonical_target_share_reference=expected_fraction,
+        canonical_balance_enforced=enforce_canonical_payload_balance,
+        max_canonical_target_share_deviation=max(canonical_deviations, default=0.0),
+        max_canonical_order_variants=max(
+            (len(orders) for orders in canonical_orders.values()),
+            default=0,
+        ),
     )
 
 
@@ -324,16 +352,10 @@ def _validate_surface_partitions(
     surface_sets: dict[str, dict[str, set[str]]] = {}
     for split, episodes in split_episodes.items():
         surface_sets[split] = {
-            "entity_surface": {
-                episode.entity_surface for episode in episodes if episode.entity_surface is not None
-            },
-            "template_family": {
-                episode.template_family for episode in episodes if episode.template_family is not None
-            },
+            "entity_surface": {episode.entity_surface for episode in episodes if episode.entity_surface is not None},
+            "template_family": {episode.template_family for episode in episodes if episode.template_family is not None},
             "surface_template_signature": {
-                signature
-                for episode in episodes
-                for signature in surface_template_signatures(episode)
+                signature for episode in episodes for signature in surface_template_signatures(episode)
             },
         }
 
@@ -342,10 +364,7 @@ def _validate_surface_partitions(
             for label, left_values in surface_sets[left].items():
                 overlap = left_values & surface_sets[right][label]
                 if overlap:
-                    _fail(
-                        f"Model-visible {label} leakage between {left} and {right}: "
-                        f"{sorted(overlap)[:3]}"
-                    )
+                    _fail(f"Model-visible {label} leakage between {left} and {right}: {sorted(overlap)[:3]}")
 
     if manifest is None:
         return
@@ -419,9 +438,7 @@ def validate_dataset(
         left_templates = {episode.template_id for episode in split_episodes[left]}
         for right in split_names[index + 1 :]:
             entity_overlap = left_entities & {episode.entity_id for episode in split_episodes[right]}
-            template_overlap = left_templates & {
-                episode.template_id for episode in split_episodes[right]
-            }
+            template_overlap = left_templates & {episode.template_id for episode in split_episodes[right]}
             if entity_overlap:
                 _fail(f"Entity ID leakage between {left} and {right}: {sorted(entity_overlap)[:3]}")
             if template_overlap:
@@ -441,6 +458,7 @@ def validate_dataset(
             episodes,
             balance_tolerance=balance_tolerance,
             expected_event_kinds=expected_event_kinds,
+            enforce_canonical_payload_balance=transition_profile == "full",
         )
         for split, episodes in split_episodes.items()
     }

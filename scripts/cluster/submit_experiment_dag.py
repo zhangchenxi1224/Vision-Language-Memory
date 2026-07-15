@@ -269,7 +269,10 @@ def add_data_jobs(
     *,
     fetch_prefeval: bool,
     generate_set_only: bool,
+    explicit_set_only_root: Path | None,
 ) -> None:
+    if generate_set_only and explicit_set_only_root is not None:
+        raise ValueError("Generated and explicit set-only datasets are mutually exclusive")
     commands: list[str] = []
     if fetch_prefeval:
         commands.append(
@@ -388,6 +391,16 @@ def add_data_jobs(
                 ),
             ]
         )
+    elif explicit_set_only_root is not None:
+        commands.append(
+            python_command(
+                paths,
+                "scripts/data/validate_synthetic.py",
+                explicit_set_only_root,
+                "--output",
+                paths.results / "synthetic_set_only_explicit_validation.json",
+            )
+        )
     # The locked PrefEval snapshot has unequal topic sizes.  Seed-2026 selects
     # 188 base pairs in four held-out topics; the remaining 812 pairs split
     # into 730 train and 82 dev base pairs under the per-topic 90/10 rule.
@@ -419,32 +432,77 @@ def add_data_jobs(
     jobs.append(Job("D0_data", "data", "cpu", tuple(commands)))
 
 
-def add_gate_jobs(jobs: list[Job], paths: Paths) -> None:
+def add_gate_jobs(
+    jobs: list[Job],
+    paths: Paths,
+    *,
+    set_only_dev: Path | None,
+) -> None:
+    sanity_commands = [
+        python_command(
+            paths,
+            "scripts/data/qwen_sanity.py",
+            "--dataset",
+            paths.synthetic / "dev.jsonl",
+            "--reader",
+            paths.reader,
+            "--output-json",
+            paths.results / "qwen_sanity.json",
+            "--predictions-jsonl",
+            paths.results / "qwen_sanity_predictions.jsonl",
+            "--limit",
+            "500",
+            "--expected-raw-queries",
+            "1000",
+            "--expected-comparison-queries",
+            "500",
+            "--expected-target-position-count",
+            "125",
+            "--expected-model-inputs",
+            "125",
+            "--oracle-threshold",
+            "0.95",
+            "--query-only-ceiling",
+            "0.30",
+            "--device",
+            "cuda:0",
+        )
+    ]
+    if set_only_dev is not None:
+        sanity_commands.append(
+            python_command(
+                paths,
+                "scripts/data/qwen_sanity.py",
+                "--dataset",
+                set_only_dev,
+                "--reader",
+                paths.reader,
+                "--output-json",
+                paths.results / "qwen_sanity_set_only.json",
+                "--predictions-jsonl",
+                paths.results / "qwen_sanity_set_only_predictions.jsonl",
+                "--limit",
+                "500",
+                "--expected-raw-queries",
+                "1000",
+                "--expected-comparison-queries",
+                "500",
+                "--expected-target-position-count",
+                "125",
+                "--oracle-threshold",
+                "0.95",
+                "--query-only-ceiling",
+                "0.30",
+                "--device",
+                "cuda:0",
+            )
+        )
     jobs.append(
         Job(
             "D1_qwen_sanity",
             "sanity",
             "qwen",
-            (
-                python_command(
-                    paths,
-                    "scripts/data/qwen_sanity.py",
-                    "--dataset",
-                    paths.synthetic / "dev.jsonl",
-                    "--reader",
-                    paths.reader,
-                    "--output-json",
-                    paths.results / "qwen_sanity.json",
-                    "--limit",
-                    "200",
-                    "--oracle-threshold",
-                    "0.95",
-                    "--query-only-ceiling",
-                    "0.30",
-                    "--device",
-                    "cuda:0",
-                ),
-            ),
+            tuple(sanity_commands),
             ("D0_data",),
         )
     )
@@ -1513,17 +1571,31 @@ def build_jobs(
     jobs: list[Job] = []
     selected_env = paths.run_root / "config" / "selected_pilot.env"
     candidate_specification = paths.run_root / "config" / "pilot_candidates.json"
+    if (set_only_train is None) != (set_only_dev is None):
+        raise ValueError("set_only_train and set_only_dev must be supplied together")
+    if not include_ablations and set_only_train is not None:
+        raise ValueError("Explicit set-only paths require include_ablations=True")
     generate_set_only = include_ablations and set_only_train is None and set_only_dev is None
+    explicit_set_only_root: Path | None = None
     if generate_set_only:
         set_only_train = paths.synthetic_set_only / "train.jsonl"
         set_only_dev = paths.synthetic_set_only / "dev.jsonl"
+    elif set_only_train is not None and set_only_dev is not None:
+        if set_only_train.name != "train.jsonl" or set_only_dev.name != "dev.jsonl":
+            raise ValueError(
+                "Explicit set-only paths must be standard train.jsonl/dev.jsonl files"
+            )
+        if set_only_train.parent != set_only_dev.parent:
+            raise ValueError("Explicit set-only train/dev must share one dataset root")
+        explicit_set_only_root = set_only_train.parent
     add_data_jobs(
         jobs,
         paths,
         fetch_prefeval=fetch_prefeval,
         generate_set_only=generate_set_only,
+        explicit_set_only_root=explicit_set_only_root,
     )
-    add_gate_jobs(jobs, paths)
+    add_gate_jobs(jobs, paths, set_only_dev=set_only_dev if include_ablations else None)
     add_pilot_jobs(jobs, paths, candidate_specification, selected_env)
     add_full_jobs(
         jobs,

@@ -45,6 +45,14 @@ class ExperimentDagTest(unittest.TestCase):
         by_name = {job.name: job for job in jobs}
         self.assertEqual(by_name["D1_qwen_sanity"].dependencies, ("D0_data",))
         self.assertEqual(by_name["D2_lightweight_overfit"].dependencies, ("D1_qwen_sanity",))
+        sanity_command = "\n".join(by_name["D1_qwen_sanity"].commands).replace("\\", "/")
+        self.assertIn("--predictions-jsonl", sanity_command)
+        self.assertIn("qwen_sanity_predictions.jsonl", sanity_command)
+        self.assertIn("--limit 500", sanity_command)
+        self.assertIn("--expected-raw-queries 1000", sanity_command)
+        self.assertIn("--expected-comparison-queries 500", sanity_command)
+        self.assertIn("--expected-target-position-count 125", sanity_command)
+        self.assertIn("--expected-model-inputs 125", sanity_command)
         overfit_command = "\n".join(by_name["D2_lightweight_overfit"].commands)
         self.assertIn("lightweight_episode.py", overfit_command)
         self.assertIn("--overfit-gate", overfit_command)
@@ -103,6 +111,10 @@ class ExperimentDagTest(unittest.TestCase):
         self.assertIn("--expected-records 2190", data_commands)
         self.assertIn("--expected-records 246", data_commands)
         self.assertIn("--expected-records 564", data_commands)
+        sanity_commands = "\n".join(by_name["D1_qwen_sanity"].commands).replace("\\", "/")
+        self.assertIn("synthetic_set_only_v2/dev.jsonl", sanity_commands)
+        self.assertIn("qwen_sanity_set_only_predictions.jsonl", sanity_commands)
+        self.assertEqual(sanity_commands.count("scripts/data/qwen_sanity.py"), 2)
         self.assertIn("A_set_only_seed_0", by_name)
         self.assertIn("A_rank4_blank_1k_seed_0", by_name)
         self.assertIn("E_score_ablations", by_name)
@@ -118,6 +130,45 @@ class ExperimentDagTest(unittest.TestCase):
         self.assertIn("noise_robustness_summary.json", "\n".join(by_name["E_score_noise"].commands))
         adapted_commands = "\n".join(by_name["E_prefeval_adapted_seed_0"].commands)
         self.assertIn("PrefEval adapted state-streaming protocol", adapted_commands)
+
+    def test_explicit_set_only_dataset_is_fully_validated_in_data_gate(self):
+        root = Path("/external/set_only_v2")
+        jobs, _ = build_jobs(
+            self.paths(),
+            fetch_prefeval=False,
+            include_ablations=True,
+            set_only_train=root / "train.jsonl",
+            set_only_dev=root / "dev.jsonl",
+            include_prefeval_adaptation=False,
+        )
+        by_name = {job.name: job for job in jobs}
+        data_commands = "\n".join(by_name["D0_data"].commands).replace("\\", "/")
+        self.assertIn("scripts/data/validate_synthetic.py", data_commands)
+        self.assertIn("/external/set_only_v2", data_commands)
+        self.assertIn("synthetic_set_only_explicit_validation.json", data_commands)
+        self.assertNotIn("--transition-profile set-only", data_commands)
+        sanity_commands = "\n".join(by_name["D1_qwen_sanity"].commands).replace("\\", "/")
+        self.assertIn("/external/set_only_v2/dev.jsonl", sanity_commands)
+
+    def test_explicit_set_only_paths_fail_closed_on_nonstandard_layout(self):
+        with self.assertRaisesRegex(ValueError, "standard train.jsonl/dev.jsonl"):
+            build_jobs(
+                self.paths(),
+                fetch_prefeval=False,
+                include_ablations=True,
+                set_only_train=Path("/external/train-custom.jsonl"),
+                set_only_dev=Path("/external/dev.jsonl"),
+                include_prefeval_adaptation=False,
+            )
+        with self.assertRaisesRegex(ValueError, "share one dataset root"):
+            build_jobs(
+                self.paths(),
+                fetch_prefeval=False,
+                include_ablations=True,
+                set_only_train=Path("/external/a/train.jsonl"),
+                set_only_dev=Path("/external/b/dev.jsonl"),
+                include_prefeval_adaptation=False,
+            )
 
     def test_every_sbatch_is_single_node_and_pins_runtime(self):
         paths = self.paths()

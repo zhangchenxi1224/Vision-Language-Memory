@@ -39,6 +39,14 @@ Every dependency uses `afterok` plus `--kill-on-invalid-dep=yes`; a failed scien
 therefore prevents and cancels its descendants. Every task declares `--nodes=1`, validates
 the clean commit, activates the torch-2.7.1 environment, and checks the exact torch version.
 
+The Qwen sanity gate requires exactly 500 dev episodes, then deduplicates byte-identical
+clean/distractor queries by `comparison_id` to 500 comparison reads. In the full profile these
+collapse to 125 exact model-visible blank-image prompts, each paired once with all four target
+positions. It fails closed unless the raw/comparison inventories are 1,000/500, the four target
+positions each occur 125 times, and the 125-payload counterfactual certificate holds. Both
+blank and oracle-text choice NLLs are saved per comparison read; the 95% oracle floor and 30%
+query-only ceiling are never relaxed to bypass a data-construction leak.
+
 The selected pilot must be the minimum-dev-loss candidate and must improve by at least ten
 percentage points over both blank and frozen DreamLite while reset or shuffle loses at least
 ten points. All three checks use **dev predictions only**; test-ID remains untouched until the
@@ -51,9 +59,16 @@ Resource and command overrides can be supplied through `--config-json`. Formal a
 opt-in with `--include-ablations`. Because the full-transition corpus has no eligible set-only
 episodes, this mode generates a separate `synthetic_set_only_v2` corpus. Supplying both
 `--set-only-train` and `--set-only-dev` replaces that generated corpus with an explicit
-independent dataset; supplying only one path fails closed. The evaluation stage also persists
+independent dataset. Explicit paths must be sibling `train.jsonl`/`dev.jsonl` files under one
+standard dataset root; D0 validates the complete manifest, all split hashes and the set-only
+transition profile before D1. Supplying only one path or nonstandard paths fails closed. The
+evaluation stage also persists
 test-OOD predictions, per-form/per-k PrefEval scores, the adapted state-streaming score, and
 merged ablation/noise-robustness summaries.
+Because this independently generated curriculum changes conditional label support in addition
+to transition types, it is reported as a curriculum-transfer comparison, not as a strict
+single-factor transition ablation. When enabled, D1 also runs a separate exhaustive Qwen sanity
+gate over its dev split; either full or set-only sanity failure stops D2 and all descendants.
 
 PrefEval topic sizes are not uniform in the locked snapshot. The seed-2026 four-topic holdout
 contains 188 base pairs; the remaining 16 topics produce 730 train and 82 dev pairs after the

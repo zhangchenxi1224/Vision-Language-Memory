@@ -26,6 +26,20 @@ synthetic_data:
     main: full
     set_only_ablation: independently_generated_set_only
   ood_groups: [heldout_entity, heldout_topic, heldout_paraphrase, heldout_length]
+  canonical_query_payloads:
+    target_share_per_choice: 0.25
+    ordered_choice_variants: 1
+    applies_to: full_transition_profile
+  qwen_sanity:
+    dev_episodes: 500
+    deduplicate_by: comparison_id
+    expected_raw_queries: 1000
+    expected_comparison_queries: 500
+    expected_unique_model_inputs: 125
+    expected_queries_per_target_position: 125
+    require_exact_episode_count: true
+    set_only_curriculum_empirical_gate: true
+    save_per_query_choice_nll: true
   oracle_text_min_accuracy: 0.95
   query_only_max_accuracy: 0.30
 
@@ -69,7 +83,7 @@ ablations:
     - direct_latent_vs_decode_reencode
     - trained_vs_frozen_lora
     - forced_distractor_vs_skip
-    - set_only_vs_full_transitions
+    - set_only_curriculum_transfer_vs_full_transitions
   pilot_seed_zero: [rank4_vs_rank8, blank_vs_learned_initial_state]
 
 prefeval:

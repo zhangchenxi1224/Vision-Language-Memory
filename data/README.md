@@ -27,6 +27,19 @@ Synthetic schema v2 records both metadata IDs and the actual controlled surfaces
   analysis fields or `target_index`.
 
 Each semantic counterfactual is crossed with clean/distractor variants in groups of four.
+For the full transition profile, all four semantic counterfactual reads that share a visible
+query and candidate set also share one deterministic ordered choice tuple. Each candidate is
+the target exactly once before the clean/distractor duplication. This makes the target share
+conditional on the complete query-only payload exactly 25%, including groups that contain
+`no active preference`; the validator fails closed if either the order or target balance drifts.
+The formal Qwen sanity gate scores the complete 500-episode dev split after deduplicating
+clean/distractor copies by `comparison_id`. For the full profile this produces 500 comparison
+reads but only 125 exact model-visible payloads; each payload is paired with all four targets.
+The gate saves every comparison read and all four choice NLLs for audit. The independently
+generated set-only curriculum does not have that single-factor counterfactual certificate, so
+it is explicitly treated as a curriculum-transfer experiment and must pass its own empirical
+oracle/query-only Qwen sanity gate before training.
+
 Because each 250-example OOD stratum leaves a two-example residue, those eight episodes are
 marked `unpaired` and excluded from matched distractor damage while remaining valid semantic
 counterfactual pairs. Length-OOD clean streams use target-consistent overwrite reaffirmations
