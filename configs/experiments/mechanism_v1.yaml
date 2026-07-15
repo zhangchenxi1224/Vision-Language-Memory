@@ -78,7 +78,13 @@ prefeval:
   protocols:
     oracle_sparse: {forced_write_k: 0}
     forced_write: {forced_write_k: [0, 2, 5, 10], stratified_base_pairs: 200}
-  adaptation: {seed: 2026, train_topics: 16, ood_topics: 4, dev_fraction: 0.10}
+  adaptation:
+    seed: 2026
+    train_topics: 16
+    ood_topics: 4
+    dev_fraction_within_train_topics: 0.10
+    locked_snapshot_base_pairs: {train: 730, dev: 82, ood: 188}
+    locked_snapshot_records_all_three_forms: {train: 2190, dev: 246, ood: 564}
 
 statistics:
   bootstrap_iterations: 10000

@@ -55,6 +55,11 @@ independent dataset; supplying only one path fails closed. The evaluation stage 
 test-OOD predictions, per-form/per-k PrefEval scores, the adapted state-streaming score, and
 merged ablation/noise-robustness summaries.
 
+PrefEval topic sizes are not uniform in the locked snapshot. The seed-2026 four-topic holdout
+contains 188 base pairs; the remaining 16 topics produce 730 train and 82 dev pairs after the
+per-topic 90/10 split. The data gate therefore locks all-form export counts to 2,190/246/564,
+instead of assuming 50 pairs per topic.
+
 Default walltimes are conservative ceilings calibrated below the A800 partition's advertised
 `MaxTime=3-12:00:00`: 36 hours for one-GPU Qwen, pilot, and evaluation jobs, and 72 hours for
 full two-GPU training. This explicitly accounts for four teacher-forced Reader forwards per

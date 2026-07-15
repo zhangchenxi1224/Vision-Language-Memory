@@ -388,7 +388,11 @@ def add_data_jobs(
                 ),
             ]
         )
-    expected_adapt_records = {"adapt_train": 2160, "adapt_dev": 240, "adapt_ood": 600}
+    # The locked PrefEval snapshot has unequal topic sizes.  Seed-2026 selects
+    # 188 base pairs in four held-out topics; the remaining 812 pairs split
+    # into 730 train and 82 dev base pairs under the per-topic 90/10 rule.
+    # Each base pair is exported in all three forms.
+    expected_adapt_records = {"adapt_train": 2190, "adapt_dev": 246, "adapt_ood": 564}
     for split in ("adapt_train", "adapt_dev", "adapt_ood"):
         commands.append(
             python_command(
