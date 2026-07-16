@@ -24,9 +24,13 @@ from vision_memory.training import (  # noqa: E402
     run_episode,
     select_curriculum_episodes,
 )
+from vision_memory.lightweight import ConvGRUCell, LightweightVisualUpdater  # noqa: E402
 from scripts.train.lightweight_episode import (  # noqa: E402
+    LightweightDynamicsDiagnostics,
     PairwiseTensorDiagnostics,
+    clip_gradients_with_diagnostics,
     evaluate_accuracy,
+    gradient_norms_before_clip,
     overfit_evaluation_paths,
     tensor_spatial_diagnostics,
     training_subset_audit,
@@ -306,6 +310,129 @@ class LightweightAuditHelperTest(unittest.TestCase):
             diagnostics,
             Path("run/overfit_evaluations/step_0000250_diagnostics.json"),
         )
+
+    def test_dynamics_aggregator_reports_inputs_gates_and_cell_output(self):
+        cell = ConvGRUCell(input_channels=1, hidden_channels=1, kernel_size=1)
+        with torch.no_grad():
+            cell.gates.weight.zero_()
+            cell.gates.bias.copy_(torch.tensor([-10.0, 10.0]))
+            cell.candidate.weight.zero_()
+            cell.candidate.bias.zero_()
+        diagnostics = LightweightDynamicsDiagnostics()
+        conditioned_input = torch.ones(1, 1, 2, 2)
+        hidden = torch.ones_like(conditioned_input)
+        with diagnostics.capture(cell):
+            cell(conditioned_input, hidden)
+        summary = diagnostics.summary()
+
+        self.assertEqual(summary["updater_calls"], 1)
+        self.assertEqual(summary["conditioned_cell_input"]["rms"]["mean"], 1.0)
+        self.assertEqual(summary["conditioned_cell_input"]["absolute_max"]["mean"], 1.0)
+        self.assertEqual(summary["reset_gate_saturation"]["below_0_01_fraction"], 1.0)
+        self.assertEqual(summary["update_gate_saturation"]["above_0_99_fraction"], 1.0)
+        self.assertEqual(summary["cell_output"]["outside_nominal_fraction"], 0.0)
+        self.assertFalse(cell._forward_hooks)
+
+    def test_module_gradient_norms_are_disjoint_and_clip_fields_are_json_ready(self):
+        model = LightweightVisualUpdater(
+            state_channels=2,
+            state_size=5,
+            output_size=5,
+            vocabulary_size=32,
+            embedding_dim=4,
+            text_hidden_dim=3,
+        )
+        state = model.initial_state(batch_size=1, device=torch.device("cpu"), dtype=torch.float32)
+        image = model.render(model.update(state, "remember violet"))
+        weights = torch.linspace(0.1, 1.0, image.numel()).reshape_as(image)
+        (image * weights).sum().backward()
+
+        expected_names = {
+            "event_encoder",
+            "event_projection",
+            "event_spatial_projection",
+            "film",
+            "cell",
+            "rgb_head",
+        }
+        module_norms = gradient_norms_before_clip(model)
+        self.assertEqual(set(module_norms), expected_names)
+        self.assertTrue(all(math.isfinite(value) and value > 0.0 for value in module_norms.values()))
+        direct_global_norm = math.sqrt(sum(value * value for value in module_norms.values()))
+        parameters = [parameter for parameter in model.parameters() if parameter.requires_grad]
+        diagnostics = clip_gradients_with_diagnostics(model=model, parameters=parameters, max_norm=0.25)
+
+        self.assertAlmostEqual(diagnostics["gradient_norm_before_clip"], direct_global_norm, places=5)
+        self.assertAlmostEqual(
+            diagnostics["gradient_clipping_factor"],
+            min(
+                1.0,
+                0.25
+                / (
+                    diagnostics["gradient_norm_before_clip"]
+                    + diagnostics["gradient_clipping_epsilon"]
+                ),
+            ),
+        )
+        self.assertEqual(diagnostics["module_gradient_norms_before_clip"], module_norms)
+        self.assertIsInstance(json.dumps(diagnostics, sort_keys=True), str)
+
+    def test_recurrent_evaluation_writes_dynamics_and_removes_hook_on_error(self):
+        model = LightweightVisualUpdater(
+            state_channels=2,
+            state_size=5,
+            output_size=5,
+            vocabulary_size=32,
+            embedding_dim=4,
+            text_hidden_dim=3,
+        )
+        episode = {
+            "episode_id": "dynamics",
+            "turns": [
+                {"kind": "event", "event_kind": "set", "event_text": "remember violet"},
+                {
+                    "kind": "query",
+                    "query_text": "Which?",
+                    "choices": ["a", "b", "c", "d"],
+                    "target_index": 0,
+                },
+            ],
+        }
+        score = SimpleNamespace(predicted_index=0, mean_nll=(0.0, 1.0, 2.0, 3.0))
+        with tempfile.TemporaryDirectory() as directory:
+            diagnostics_path = Path(directory) / "diagnostics.json"
+            with patch("scripts.train.lightweight_episode.qwen3vl_choice_nll", return_value=score):
+                evaluate_accuracy(
+                    episodes=[episode],
+                    model=model,
+                    reader=object(),
+                    processor=object(),
+                    device=torch.device("cpu"),
+                    noop_policy="update",
+                    diagnostics_path=diagnostics_path,
+                    method="recurrent",
+                    seed=0,
+                )
+            written = json.loads(diagnostics_path.read_text(encoding="utf-8"))
+        self.assertEqual(written["lightweight_dynamics"]["updater_calls"], 1)
+        self.assertFalse(model.cell._forward_hooks)
+
+        with (
+            patch("scripts.train.lightweight_episode.qwen3vl_choice_nll", side_effect=RuntimeError("reader failed")),
+            self.assertRaisesRegex(RuntimeError, "reader failed"),
+        ):
+            evaluate_accuracy(
+                episodes=[episode],
+                model=model,
+                reader=object(),
+                processor=object(),
+                device=torch.device("cpu"),
+                noop_policy="update",
+                diagnostics_path=Path("unused.json"),
+                method="recurrent",
+                seed=0,
+            )
+        self.assertFalse(model.cell._forward_hooks)
 
 
 class LightweightOverfitGateTest(unittest.TestCase):

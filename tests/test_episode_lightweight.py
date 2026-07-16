@@ -133,6 +133,70 @@ class LightweightUpdaterTest(unittest.TestCase):
         ).abs()
         self.assertGreater((similarities < 0.99).float().mean().item(), 0.5)
 
+    def test_update_gate_bias_is_initialized_to_negative_two(self):
+        torch.manual_seed(31)
+        updater = self.make_updater()
+        reset_bias, update_bias = updater.cell.gates.bias.chunk(2)
+
+        torch.testing.assert_close(update_bias, torch.full_like(update_bias, -2.0), rtol=0, atol=0)
+        self.assertFalse(torch.equal(reset_bias, torch.full_like(reset_bias, -2.0)))
+
+    def test_cell_event_input_is_bounded_and_initial_gates_are_not_saturated(self):
+        torch.manual_seed(37)
+        updater = self.make_updater()
+        captured_inputs = []
+        captured_gate_logits = []
+
+        def capture_cell_inputs(_module, inputs):
+            captured_inputs.append(inputs[0].detach())
+
+        def capture_gate_logits(_module, _inputs, output):
+            captured_gate_logits.append(output.detach())
+
+        cell_handle = updater.cell.register_forward_pre_hook(capture_cell_inputs)
+        gate_handle = updater.cell.gates.register_forward_hook(capture_gate_logits)
+        try:
+            state = updater.initial_state(batch_size=4, device=torch.device("cpu"), dtype=torch.float32)
+            updater.update(
+                state,
+                [
+                    "The preferred color is red.",
+                    "The preferred destination is Kyoto.",
+                    "Clear the saved restaurant preference.",
+                    "A clock ticked in another room.",
+                ],
+            )
+        finally:
+            cell_handle.remove()
+            gate_handle.remove()
+
+        self.assertEqual(len(captured_inputs), 1)
+        event_map = captured_inputs[0]
+        self.assertTrue(torch.isfinite(event_map).all())
+        self.assertLessEqual(event_map.abs().max().item(), 1.0)
+
+        self.assertEqual(len(captured_gate_logits), 1)
+        gate_values = torch.sigmoid(captured_gate_logits[0])
+        saturation_ratio = ((gate_values < 0.01) | (gate_values > 0.99)).float().mean().item()
+        self.assertLess(saturation_ratio, 0.01)
+
+    def test_random_multi_turn_states_remain_finite_and_strictly_bounded(self):
+        torch.manual_seed(41)
+        updater = self.make_updater()
+        state = updater.initial_state(batch_size=3, device=torch.device("cpu"), dtype=torch.float32)
+        events = (
+            ["Remember red.", "Remember Kyoto.", "Remember jazz."],
+            ["Overwrite with blue.", "Overwrite with Oslo.", "Overwrite with folk."],
+            ["A bird flew past.", "A train arrived.", "A clock ticked."],
+            ["Clear the color.", "Clear the city.", "Clear the music."],
+        )
+
+        for _ in range(8):
+            for batch_events in events:
+                state = updater.update(state, batch_events)
+                self.assertTrue(torch.isfinite(state).all())
+                self.assertLess(state.abs().max().item(), 1.0)
+
 
 if __name__ == "__main__":
     unittest.main()

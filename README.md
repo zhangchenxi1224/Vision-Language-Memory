@@ -191,7 +191,11 @@ corpus is independently generated; it is never made by deleting turns from full 
 
 The lightweight implementation is a hashed event encoder, one-layer BiGRU, an
 event-conditioned 16-mode orthogonal DCT-II writer, a 64-channel 64x64 FiLM-ConvGRU
-state, and a differentiable RGB head. The fixed zero initial state remains non-trainable.
+state, and a differentiable RGB head. The spatial writer and pre-GRU FiLM map are bounded;
+the update-gate bias starts at -2 so a fresh model favors state retention. The fixed zero
+initial state remains non-trainable. Formal training logs per-module gradient norms,
+the actual clipping factor, conditioned-input magnitude, gate saturation, and hidden-state
+bounds.
 `lightweight_overfit.py` uses a fixed local surrogate only for CPU/API smoke tests. The
 scientific 64-episode gate uses the real frozen Qwen Reader and fails closed unless it
 reaches 90% training MCQ accuracy within 2,000 optimizer steps:
@@ -208,6 +212,15 @@ python scripts/train/lightweight_episode.py \
 diagnostic: the answer position selects one of four learned images. It tests whether the
 frozen Reader can be controlled through its visual channel, but it is not a memory method,
 baseline, or ablation and must never be reported as one.
+
+`scripts/probes/qwen_renderer_control_upper_bound.py` applies the same leaked-label
+selection to four trainable hidden-state codes and passes them through the production RGB
+head. It isolates renderer-manifold reachability and has the same diagnostic-only status.
+`scripts/probes/qwen_event_prefix_semantic_upper_bound.py` is stricter: its code selector
+hashes only the ordered visible event-text prefix, while disjoint even/odd candidate
+permutations test whether one state image carries answer semantics across answer positions.
+That probe is transductive and still is not an updater, baseline, ablation, or generalization
+result.
 
 The formal DreamLite trainer supports whole-episode BPTT, direct-latent and differentiable
 decode/re-encode recurrence, deterministic per-event noise, LoRA-only parameter

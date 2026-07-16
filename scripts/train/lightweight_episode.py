@@ -11,8 +11,9 @@ import re
 import subprocess
 import sys
 import time
+from contextlib import contextmanager, nullcontext
 from pathlib import Path
-from typing import Any, Mapping, Sequence
+from typing import Any, Iterator, Mapping, Sequence
 
 import torch
 
@@ -332,6 +333,220 @@ class PairwiseTensorDiagnostics:
         }
 
 
+class _ScalarMoments:
+    """Streaming scalar min/mean/max used by lightweight dynamics diagnostics."""
+
+    def __init__(self) -> None:
+        self.count = 0
+        self.total = 0.0
+        self.minimum = math.inf
+        self.maximum = -math.inf
+
+    def add(self, value: float) -> None:
+        value = float(value)
+        if not math.isfinite(value):
+            raise RuntimeError(f"Non-finite lightweight dynamics statistic: {value}")
+        self.count += 1
+        self.total += value
+        self.minimum = min(self.minimum, value)
+        self.maximum = max(self.maximum, value)
+
+    def summary(self) -> dict[str, float | int | None]:
+        if self.count == 0:
+            return {"count": 0, "min": None, "mean": None, "max": None}
+        return {
+            "count": self.count,
+            "min": self.minimum,
+            "mean": self.total / self.count,
+            "max": self.maximum,
+        }
+
+
+class LightweightDynamicsDiagnostics:
+    """Aggregate ConvGRU input, gate, and output health without retaining tensors."""
+
+    def __init__(self) -> None:
+        self.updater_calls = 0
+        self.conditioned_input_rms = _ScalarMoments()
+        self.conditioned_input_absolute_max = _ScalarMoments()
+        self.cell_output_absolute_max = _ScalarMoments()
+        self.reset_elements = 0
+        self.reset_below = 0
+        self.reset_above = 0
+        self.update_elements = 0
+        self.update_below = 0
+        self.update_above = 0
+        self.cell_output_elements = 0
+        self.cell_output_outside_nominal = 0
+
+    @staticmethod
+    def _gate_saturation_summary(*, elements: int, below: int, above: int) -> dict[str, float | int | None]:
+        if elements == 0:
+            return {
+                "element_count": 0,
+                "below_0_01_fraction": None,
+                "above_0_99_fraction": None,
+                "saturated_fraction": None,
+            }
+        return {
+            "element_count": elements,
+            "below_0_01_fraction": below / elements,
+            "above_0_99_fraction": above / elements,
+            "saturated_fraction": (below + above) / elements,
+        }
+
+    def _capture_cell(self, module: torch.nn.Module, inputs: tuple[Any, ...], output: Any) -> None:
+        if len(inputs) != 2 or not all(isinstance(value, torch.Tensor) for value in inputs):
+            raise RuntimeError("ConvGRU dynamics hook expected conditioned input and hidden tensors.")
+        if not isinstance(output, torch.Tensor):
+            raise RuntimeError("ConvGRU dynamics hook expected a tensor output.")
+        conditioned_input, hidden = inputs
+        gates = getattr(module, "gates", None)
+        hidden_channels = getattr(module, "hidden_channels", None)
+        if not isinstance(gates, torch.nn.Module) or not isinstance(hidden_channels, int):
+            raise RuntimeError("ConvGRU dynamics hook requires gates and hidden_channels attributes.")
+
+        with torch.no_grad():
+            conditioned = conditioned_input.detach().to(dtype=torch.float32)
+            cell_output = output.detach().to(dtype=torch.float32)
+            gate_logits = gates(torch.cat([conditioned_input.detach(), hidden.detach()], dim=1))
+            reset, update = gate_logits.split(hidden_channels, dim=1)
+            reset = torch.sigmoid(reset).to(dtype=torch.float32)
+            update = torch.sigmoid(update).to(dtype=torch.float32)
+
+            self.conditioned_input_rms.add(float(conditioned.square().mean().sqrt().item()))
+            self.conditioned_input_absolute_max.add(float(conditioned.abs().max().item()))
+            self.cell_output_absolute_max.add(float(cell_output.abs().max().item()))
+            self.reset_elements += reset.numel()
+            self.reset_below += int((reset < 0.01).sum().item())
+            self.reset_above += int((reset > 0.99).sum().item())
+            self.update_elements += update.numel()
+            self.update_below += int((update < 0.01).sum().item())
+            self.update_above += int((update > 0.99).sum().item())
+            self.cell_output_elements += cell_output.numel()
+            self.cell_output_outside_nominal += int(((cell_output < -0.98) | (cell_output > 0.98)).sum().item())
+            self.updater_calls += 1
+
+    @contextmanager
+    def capture(self, cell: torch.nn.Module) -> Iterator[None]:
+        """Install one temporary hook and guarantee removal, including on evaluation errors."""
+
+        handle = cell.register_forward_hook(self._capture_cell)
+        try:
+            yield
+        finally:
+            handle.remove()
+
+    def summary(self) -> dict[str, Any]:
+        outside_fraction = (
+            self.cell_output_outside_nominal / self.cell_output_elements if self.cell_output_elements else None
+        )
+        return {
+            "schema_version": "vision_memory.lightweight.dynamics.v1",
+            "definitions": {
+                "conditioned_cell_input": "the FiLM-conditioned event map passed as the first ConvGRU cell input",
+                "rms": "per-updater-call root mean square over every conditioned-input element",
+                "absolute_max": "per-updater-call maximum absolute tensor value",
+                "gate_saturation": "element-weighted fractions strictly below 0.01 or strictly above 0.99",
+                "cell_output_outside_nominal": "element-weighted fraction outside the closed interval [-0.98, 0.98]",
+            },
+            "updater_calls": self.updater_calls,
+            "conditioned_cell_input": {
+                "rms": self.conditioned_input_rms.summary(),
+                "absolute_max": self.conditioned_input_absolute_max.summary(),
+            },
+            "reset_gate_saturation": self._gate_saturation_summary(
+                elements=self.reset_elements,
+                below=self.reset_below,
+                above=self.reset_above,
+            ),
+            "update_gate_saturation": self._gate_saturation_summary(
+                elements=self.update_elements,
+                below=self.update_below,
+                above=self.update_above,
+            ),
+            "cell_output": {
+                "absolute_max": self.cell_output_absolute_max.summary(),
+                "element_count": self.cell_output_elements,
+                "outside_nominal_fraction": outside_fraction,
+            },
+        }
+
+
+def _parameter_gradient_norm(parameters: Sequence[torch.nn.Parameter]) -> float:
+    component_norms: list[torch.Tensor] = []
+    for parameter in parameters:
+        if parameter.grad is None:
+            continue
+        gradient = parameter.grad.detach()
+        if gradient.is_sparse:
+            gradient = gradient.coalesce().values()
+        component_norms.append(torch.linalg.vector_norm(gradient.to(dtype=torch.float32)))
+    if not component_norms:
+        return 0.0
+    return float(torch.linalg.vector_norm(torch.stack(component_norms)).item())
+
+
+def gradient_norms_before_clip(model: torch.nn.Module) -> dict[str, float]:
+    """Return disjoint pre-clip L2 gradient norms for auditable updater modules."""
+
+    if not isinstance(model, LightweightVisualUpdater):
+        parameters = tuple(parameter for parameter in model.parameters() if parameter.requires_grad)
+        return {"model": _parameter_gradient_norm(parameters)}
+
+    grouped_modules = (
+        ("event_encoder", model.event_encoder),
+        ("event_projection", model.event_projection),
+        ("event_spatial_projection", model.event_spatial_projection),
+        ("film", model.film),
+        ("cell", model.cell),
+        ("rgb_head", model.rgb_head),
+    )
+    norms: dict[str, float] = {}
+    assigned_parameter_ids: set[int] = set()
+    for name, module in grouped_modules:
+        parameters = tuple(parameter for parameter in module.parameters() if parameter.requires_grad)
+        parameter_ids = {id(parameter) for parameter in parameters}
+        overlap = assigned_parameter_ids.intersection(parameter_ids)
+        if overlap:
+            raise RuntimeError(f"Gradient diagnostic module groups overlap at {name!r}.")
+        assigned_parameter_ids.update(parameter_ids)
+        norms[name] = _parameter_gradient_norm(parameters)
+
+    residual = tuple(
+        parameter
+        for parameter in model.parameters()
+        if parameter.requires_grad and id(parameter) not in assigned_parameter_ids
+    )
+    if residual:
+        norms["other_trainable_parameters"] = _parameter_gradient_norm(residual)
+    return norms
+
+
+def clip_gradients_with_diagnostics(
+    *,
+    model: torch.nn.Module,
+    parameters: Sequence[torch.nn.Parameter],
+    max_norm: float,
+    epsilon: float = 1e-6,
+) -> dict[str, Any]:
+    """Clip gradients once and return the exact JSON-ready pre-clip audit fields."""
+
+    if max_norm <= 0 or epsilon <= 0:
+        raise ValueError("max_norm and epsilon must be positive.")
+    module_norms = gradient_norms_before_clip(model)
+    global_norm = torch.nn.utils.clip_grad_norm_(parameters, max_norm)
+    global_norm_value = float(global_norm.item())
+    if not math.isfinite(global_norm_value) or global_norm_value <= 0:
+        raise RuntimeError(f"Invalid lightweight gradient norm: {global_norm_value}")
+    return {
+        "gradient_norm_before_clip": global_norm_value,
+        "module_gradient_norms_before_clip": module_norms,
+        "gradient_clipping_factor": min(1.0, max_norm / (global_norm_value + epsilon)),
+        "gradient_clipping_epsilon": epsilon,
+    }
+
+
 def _grouped_accuracy(records: Sequence[Mapping[str, Any]], key: str) -> dict[str, Any]:
     groups: dict[str, list[int]] = {}
     for record in records:
@@ -541,9 +756,15 @@ def evaluate_accuracy(
     collect_diagnostics = diagnostics_path is not None
     state_pairwise = PairwiseTensorDiagnostics()
     image_pairwise = PairwiseTensorDiagnostics()
+    dynamics = (
+        LightweightDynamicsDiagnostics()
+        if collect_diagnostics and isinstance(model, LightweightVisualUpdater)
+        else None
+    )
+    dynamics_context = dynamics.capture(model.cell) if dynamics is not None else nullcontext()
     correct = 0
     total = 0
-    with torch.no_grad():
+    with dynamics_context, torch.no_grad():
         for episode in episodes:
             state = model.initial_state(batch_size=1, device=device, dtype=torch.float32)
             turns = episode_value(episode, "turns")
@@ -668,6 +889,8 @@ def evaluate_accuracy(
             state_pairwise=state_pairwise,
             image_pairwise=image_pairwise,
         )
+        if dynamics is not None:
+            diagnostics["lightweight_dynamics"] = dynamics.summary()
         diagnostics_path.write_text(
             json.dumps(diagnostics, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
             encoding="utf-8",
@@ -892,9 +1115,11 @@ def main() -> int:
                 assert_no_frozen_parameter_grads(reader, "Qwen Reader")
                 group_losses.append(float(result.loss.item()))
                 episodes_processed += 1
-            gradient_norm = torch.nn.utils.clip_grad_norm_(trainable, args.gradient_clip)
-            if not torch.isfinite(gradient_norm) or gradient_norm.item() <= 0:
-                raise RuntimeError(f"Invalid lightweight gradient norm: {gradient_norm.item()}")
+            gradient_diagnostics = clip_gradients_with_diagnostics(
+                model=model,
+                parameters=trainable,
+                max_norm=args.gradient_clip,
+            )
             optimizer.step()
             optimizer_step += 1
             with (args.output_dir / "metrics.jsonl").open("a", encoding="utf-8") as handle:
@@ -905,7 +1130,7 @@ def main() -> int:
                             "epoch": epoch,
                             "optimizer_step": optimizer_step,
                             "loss": sum(group_losses) / len(group_losses),
-                            "gradient_norm_before_clip": float(gradient_norm.item()),
+                            **gradient_diagnostics,
                             "accumulated_episodes": len(group),
                             "episodes_processed": episodes_processed,
                         }

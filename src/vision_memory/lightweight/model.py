@@ -122,6 +122,11 @@ class ConvGRUCell(nn.Module):
         combined_channels = input_channels + hidden_channels
         self.gates = nn.Conv2d(combined_channels, hidden_channels * 2, kernel_size, padding=padding)
         self.candidate = nn.Conv2d(combined_channels, hidden_channels, kernel_size, padding=padding)
+        # Bias the update gate toward retention so an event does not overwrite half
+        # of a fresh memory state before the model has learned event semantics.
+        if self.gates.bias is not None:
+            with torch.no_grad():
+                self.gates.bias[hidden_channels:].fill_(-2.0)
 
     def forward(self, inputs: Tensor, hidden: Tensor) -> Tensor:
         if inputs.ndim != 4 or hidden.ndim != 4:
@@ -213,12 +218,16 @@ class LightweightVisualUpdater(nn.Module):
         )
         spatial_basis = self.spatial_basis.to(device=state.device, dtype=state.dtype)
         spatial_event_map = torch.einsum("bck,khw->bchw", spatial_coefficients, spatial_basis)
-        event_map = event_map + spatial_event_map / math.sqrt(self._SPATIAL_BASIS_COUNT)
-        updated = self.cell(event_map, state)
+        event_map = torch.tanh(event_map + spatial_event_map / math.sqrt(self._SPATIAL_BASIS_COUNT))
         gamma, beta = self.film(features).chunk(2, dim=-1)
         gamma = gamma.unsqueeze(-1).unsqueeze(-1)
-        beta = beta.unsqueeze(-1).unsqueeze(-1)
-        return (1.0 + 0.1 * torch.tanh(gamma)) * updated + 0.1 * beta
+        beta = torch.tanh(beta).unsqueeze(-1).unsqueeze(-1)
+        # FiLM acts before the GRU and is bounded with the spatial writer. The cell
+        # can therefore preserve its convex-combination hidden-state invariant.
+        conditioned_event_map = torch.tanh(
+            (1.0 + 0.1 * torch.tanh(gamma)) * event_map + 0.1 * beta
+        )
+        return self.cell(conditioned_event_map, state)
 
     def render(self, state: Tensor) -> Tensor:
         image = self.rgb_head(state)
