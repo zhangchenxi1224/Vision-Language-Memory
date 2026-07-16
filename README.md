@@ -241,6 +241,43 @@ python scripts/probes/run_lightweight_determinism_pair.py \
   --output-dir runs/d2r-exact64-pair --steps 2000 --device cuda:0
 ```
 
+`target-only` above is retained solely for the historical R1/D2R record. The prospective
+R2/D2L protocol aligns training with four-choice evaluation: each choice is scored by its
+negative mean target-token NLL, then the query loss is a temperature-1 FP32 listwise CE.
+The token CE used inside every choice forward is the deterministic FP32
+logsumexp-minus-target-token-score formula. All four choice forwards retain autograd to the
+same updater image. R2a fails unless every optimizer step has finite, positive gradients at
+both that image and the updater parameters.
+
+Advance the listwise protocol strictly through 1, 100, and 2,000 steps:
+
+```bash
+# R2a: autograd + bitwise reproducibility smoke.
+python scripts/probes/run_lightweight_determinism_pair.py \
+  --train data/synthetic_v2/train.jsonl --reader "$READER" \
+  --output-dir runs/r2a-listwise-pair --steps 1 --device cuda:0 \
+  --reader-loss-mode listwise-choice
+
+# R2b: short paired reproducibility audit; run only after R2a passes.
+python scripts/probes/run_lightweight_determinism_pair.py \
+  --train data/synthetic_v2/train.jsonl --reader "$READER" \
+  --output-dir runs/r2b-listwise-pair --steps 100 --device cuda:0 \
+  --reader-loss-mode listwise-choice
+
+# R2c/D2L: exact-64 scientific gate; run only after R2b passes.
+python scripts/probes/run_lightweight_determinism_pair.py \
+  --train data/synthetic_v2/train.jsonl --reader "$READER" \
+  --output-dir runs/r2c-listwise-exact64-pair --steps 2000 --device cuda:0 \
+  --reader-loss-mode listwise-choice
+```
+
+R2c requires both fresh replicas to match bitwise and, in each replica, at least 116/128
+correct in the canonical and left-rotate-one views, at least 28/32 for every target position
+in both views, at least 20/24 canonical mixed queries, and at least 60/64 clean/distractor
+prediction-text agreements. A clean/distractor pair is valid only when its ordered choices
+and target text are identical. The wrapper independently reconstructs all gate semantics;
+a self-reported but incomplete or inconsistent child gate cannot pass.
+
 `scripts/probes/qwen_visual_control_upper_bound.py` is a deliberately target-supervised
 diagnostic: the answer position selects one of four learned images. It tests whether the
 frozen Reader can be controlled through its visual channel, but it is not a memory method,

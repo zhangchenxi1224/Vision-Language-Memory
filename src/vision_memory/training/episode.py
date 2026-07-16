@@ -13,6 +13,15 @@ UpdateFn = Callable[[Tensor, str, str, str | int], Tensor]
 DecodeFn = Callable[[Tensor], Tensor]
 EncodeFn = Callable[[Tensor], Tensor]
 ReaderLossFn = Callable[[Tensor, str, str], Any]
+ChoiceReaderLossFn = Callable[[Tensor, str, tuple[str, ...], int], Any]
+
+
+@dataclass(frozen=True)
+class _QueryPayload:
+    formatted_query: str
+    target_text: str
+    choices: tuple[str, ...] | None
+    target_index: int | None
 
 
 @dataclass(frozen=True)
@@ -55,7 +64,7 @@ def _event_kind(turn: Mapping[str, Any] | Any) -> str | None:
     return normalized or None
 
 
-def _query_payload(turn: Mapping[str, Any] | Any) -> tuple[str, str]:
+def _query_payload(turn: Mapping[str, Any] | Any) -> _QueryPayload:
     nested = turn.get("query") if isinstance(turn, Mapping) else getattr(turn, "query", None)
     if nested is not None:
         query = _required_text(nested, "text")
@@ -71,20 +80,27 @@ def _query_payload(turn: Mapping[str, Any] | Any) -> tuple[str, str]:
             turn.get("target_index") if isinstance(turn, Mapping) else getattr(turn, "target_index", None)
         )
         raw_target_text = turn.get("target_text") if isinstance(turn, Mapping) else None
-    choices: list[str] | None = None
+    choices: tuple[str, ...] | None = None
     if raw_choices is not None:
         if not isinstance(raw_choices, Sequence) or isinstance(raw_choices, (str, bytes)):
             raise ValueError("choices must be a sequence of strings.")
-        choices = [str(item) for item in raw_choices]
+        choices = tuple(str(item) for item in raw_choices)
 
+    target_index = (
+        raw_target_index if isinstance(raw_target_index, int) and not isinstance(raw_target_index, bool) else None
+    )
     if raw_target_text is not None:
         target = str(raw_target_text).strip()
     else:
-        target_index = raw_target_index
         if choices is None or not isinstance(target_index, int) or not 0 <= target_index < len(choices):
             raise ValueError("Query requires target_text or a valid target_index into choices.")
         target = choices[target_index]
-    return format_mcq_query(query, choices), target
+    return _QueryPayload(
+        formatted_query=format_mcq_query(query, choices),
+        target_text=target,
+        choices=choices,
+        target_index=target_index,
+    )
 
 
 def _loss_and_tokens(result: Any) -> tuple[Tensor, int]:
@@ -106,7 +122,9 @@ def run_episode(
     initial_state: Tensor,
     update_fn: UpdateFn,
     decode_fn: DecodeFn,
-    reader_loss_fn: ReaderLossFn,
+    reader_loss_fn: ReaderLossFn | None = None,
+    reader_loss_mode: str = "target-only",
+    choice_reader_loss_fn: ChoiceReaderLossFn | None = None,
     recurrence_mode: str = "direct_latent",
     reencode_fn: EncodeFn | None = None,
     reencode_decode_fn: DecodeFn | None = None,
@@ -120,6 +138,18 @@ def run_episode(
     hidden ledger, if present in the record for auditing, are never forwarded.
     """
 
+    if reader_loss_mode not in {"target-only", "listwise-choice"}:
+        raise ValueError("reader_loss_mode must be 'target-only' or 'listwise-choice'.")
+    if reader_loss_mode == "target-only":
+        if reader_loss_fn is None:
+            raise ValueError("target-only reader loss mode requires reader_loss_fn.")
+        if choice_reader_loss_fn is not None:
+            raise ValueError("target-only reader loss mode does not accept choice_reader_loss_fn.")
+    else:
+        if choice_reader_loss_fn is None:
+            raise ValueError("listwise-choice reader loss mode requires choice_reader_loss_fn.")
+        if reader_loss_fn is not None:
+            raise ValueError("listwise-choice reader loss mode does not accept reader_loss_fn.")
     if recurrence_mode not in {"direct_latent", "decode_reencode"}:
         raise ValueError(f"Unsupported recurrence_mode: {recurrence_mode}")
     if noop_policy not in {"update", "skip"}:
@@ -127,7 +157,9 @@ def run_episode(
     if recurrence_mode == "decode_reencode" and reencode_fn is None:
         raise ValueError("decode_reencode recurrence requires reencode_fn.")
 
-    episode_id = str(episode.get("episode_id", "") if isinstance(episode, Mapping) else getattr(episode, "episode_id", ""))
+    episode_id = str(
+        episode.get("episode_id", "") if isinstance(episode, Mapping) else getattr(episode, "episode_id", "")
+    )
     if not episode_id:
         raise ValueError("episode_id is required.")
     turns = episode.get("turns") if isinstance(episode, Mapping) else getattr(episode, "turns", None)
@@ -178,9 +210,27 @@ def run_episode(
                 event_count += 1
 
         if kind in {"query", "mixed"}:
-            query, target = _query_payload(raw_turn)
+            query_payload = _query_payload(raw_turn)
             image = decode_fn(state)
-            result = reader_loss_fn(image, query, target)
+            if reader_loss_mode == "target-only":
+                assert reader_loss_fn is not None
+                result = reader_loss_fn(image, query_payload.formatted_query, query_payload.target_text)
+            else:
+                assert choice_reader_loss_fn is not None
+                if query_payload.choices is None or query_payload.target_index is None:
+                    raise ValueError(
+                        "listwise-choice reader loss requires ordered choices and an explicit target_index."
+                    )
+                if not 0 <= query_payload.target_index < len(query_payload.choices):
+                    raise ValueError("listwise-choice target_index is outside the ordered choices.")
+                if query_payload.target_text != query_payload.choices[query_payload.target_index]:
+                    raise ValueError("listwise-choice target_text and target_index are inconsistent.")
+                result = choice_reader_loss_fn(
+                    image,
+                    query_payload.formatted_query,
+                    query_payload.choices,
+                    query_payload.target_index,
+                )
             loss, token_count = _loss_and_tokens(result)
             if not torch.isfinite(loss):
                 raise RuntimeError(f"Non-finite reader loss at turn {turn_id}.")

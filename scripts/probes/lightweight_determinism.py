@@ -31,7 +31,11 @@ from scripts.train.lightweight_episode import (  # noqa: E402
 from vision_memory.data import read_jsonl  # noqa: E402
 from vision_memory.dreamlite import assert_no_frozen_parameter_grads, freeze_module  # noqa: E402
 from vision_memory.lightweight import LightweightVisualUpdater  # noqa: E402
-from vision_memory.reader import qwen3vl_choice_nll, qwen3vl_target_only_ce  # noqa: E402
+from vision_memory.reader import (  # noqa: E402
+    qwen3vl_choice_nll,
+    qwen3vl_listwise_choice_ce,
+    qwen3vl_target_only_ce,
+)
 from vision_memory.repro import (  # noqa: E402
     canonical_object_sha256,
     canonical_tensor_sha256,
@@ -53,6 +57,15 @@ REACHABILITY_STEP_BUDGET = 2000
 REACHABILITY_PREDICTION_COUNT = 128
 REACHABILITY_MINIMUM_CORRECT = 116
 REACHABILITY_MILESTONE_STEPS = (1, 2, 10, 100, 500, 1000, 1500, 1900, 2000)
+READER_LOSS_MODES = ("target-only", "listwise-choice")
+R2_CANONICAL_MINIMUM_CORRECT = 116
+R2_ROTATED_MINIMUM_CORRECT = 116
+R2_TARGET_POSITION_MINIMUM_CORRECT = 28
+R2_TARGET_POSITION_EXPECTED_COUNT = 32
+R2_MIXED_MINIMUM_CORRECT = 20
+R2_MIXED_EXPECTED_COUNT = 24
+R2_DISTRACTOR_PAIR_EXPECTED_COUNT = 64
+R2_DISTRACTOR_AGREEMENT_MINIMUM = 60
 EXPECTED_QWEN_IMAGE_GRID = {
     "patch_size": 16,
     "temporal_patch_size": 2,
@@ -71,7 +84,51 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--steps", type=int, choices=ALLOWED_STEP_COUNTS, required=True)
     parser.add_argument("--device", default="cuda:0")
+    parser.add_argument(
+        "--reader-loss-mode",
+        choices=READER_LOSS_MODES,
+        default="target-only",
+        help="Training objective; target-only preserves the historical R1/D2R protocol.",
+    )
     return parser.parse_args()
+
+
+def reader_objective_contract(reader_loss_mode: str) -> dict[str, Any]:
+    """Return the fixed, canonical objective semantics for one protocol mode."""
+
+    if reader_loss_mode == "target-only":
+        return {
+            "mode": "target-only",
+            "historical_scope": "R1/D2R-only",
+            "token_ce": "fp32-logsumexp-minus-target-token-score",
+            "choice_ce": None,
+            "query_loss": "mean-target-token-nll",
+            "query_aggregation": "unweighted-mean-within-episode",
+            "choice_training_scores": None,
+            "choice_logit_temperature_float_hex": None,
+            "evaluation_views": ["canonical"],
+        }
+    if reader_loss_mode == "listwise-choice":
+        return {
+            "mode": "listwise-choice",
+            "historical_scope": "prospective-R2/D2L-only",
+            "token_ce": "fp32-logsumexp-minus-target-token-score",
+            "choice_ce": "fp32-logsumexp-minus-target-choice-logit",
+            "query_loss": "fp32-logsumexp-minus-target-choice-logit",
+            "query_aggregation": "unweighted-mean-within-episode",
+            "choice_count": 4,
+            "choice_forward_order": "stored-choice-order",
+            "choice_token_reduction": "mean",
+            "choice_training_scores": "negative-mean-token-nll",
+            "choice_logit_temperature_float_hex": float(1.0).hex(),
+            "evaluation_views": ["canonical", "left-rotate-one"],
+        }
+    raise ValueError(f"Unsupported reader_loss_mode: {reader_loss_mode!r}")
+
+
+def evaluation_views_for_reader_loss_mode(reader_loss_mode: str) -> tuple[str, ...]:
+    reader_objective_contract(reader_loss_mode)
+    return ("canonical", "left-rotate-one") if reader_loss_mode == "listwise-choice" else ("canonical",)
 
 
 def sha256_file(path: Path) -> str:
@@ -152,9 +209,13 @@ def normalized_categorical_label(value: Any) -> str | None:
     return None if value is None else str(value)
 
 
-def grouped_prediction_summary(predictions: list[dict[str, Any]]) -> dict[str, dict[str, dict[str, Any]]]:
+def grouped_prediction_summary(
+    predictions: list[dict[str, Any]],
+    *,
+    event_kind_field: str = "event_kind",
+) -> dict[str, dict[str, dict[str, Any]]]:
     summary: dict[str, dict[str, dict[str, Any]]] = {}
-    for field in ("target_index", "event_kind", "distractor_variant", "turn_type", "topic"):
+    for field in ("target_index", event_kind_field, "distractor_variant", "turn_type", "topic"):
         groups: dict[str, dict[str, int]] = {}
         for prediction in predictions:
             key = str(prediction[field])
@@ -178,8 +239,11 @@ def reachability_gate_summary(
     predictions: list[dict[str, Any]],
     positive_gradient_steps: int,
     clipped_steps: int,
+    reader_loss_mode: str = "target-only",
 ) -> dict[str, Any]:
-    applicable = steps == REACHABILITY_STEP_BUDGET
+    if reader_loss_mode not in READER_LOSS_MODES:
+        raise ValueError(f"Unsupported reader_loss_mode: {reader_loss_mode!r}")
+    applicable = reader_loss_mode == "target-only" and steps == REACHABILITY_STEP_BUDGET
     final_prediction_count = len(predictions)
     if final_prediction_count == 0:
         raise RuntimeError("Reachability evaluation produced no predictions.")
@@ -200,6 +264,8 @@ def reachability_gate_summary(
     return {
         "applicable": applicable,
         "passed": passed,
+        "reader_loss_mode": reader_loss_mode,
+        "historical_scope": "R1/D2R target-only only",
         "step_budget": REACHABILITY_STEP_BUDGET,
         "optimizer_steps_completed": optimizer_steps_completed,
         "reached_step_budget": reached_step_budget,
@@ -217,6 +283,389 @@ def reachability_gate_summary(
         "trace_values_finite": True,
         "reader_frozen_parameter_gradients": 0,
         "grouped_predictions": grouped_prediction_summary(predictions),
+    }
+
+
+def rotate_choices_left_one(
+    choices: tuple[str, ...],
+    target_index: int,
+) -> tuple[tuple[str, ...], int]:
+    if len(choices) != 4:
+        raise ValueError("The left-rotate-one R2 view requires exactly four choices.")
+    if isinstance(target_index, bool) or not isinstance(target_index, int) or not 0 <= target_index < 4:
+        raise ValueError("target_index must be an integer in [0, 3].")
+    return choices[1:] + choices[:1], (target_index - 1) % 4
+
+
+def _prediction_view_identity(record: dict[str, Any]) -> tuple[Any, ...]:
+    return (
+        record.get("episode_id"),
+        record.get("turn_id"),
+        record.get("query_ordinal"),
+        record.get("comparison_id"),
+    )
+
+
+def _prediction_view_alignment_summary(
+    canonical_predictions: list[dict[str, Any]],
+    rotated_predictions: list[dict[str, Any]],
+) -> dict[str, Any]:
+    def indexed(records: list[dict[str, Any]]) -> tuple[dict[tuple[Any, ...], dict[str, Any]], list[str]]:
+        result: dict[tuple[Any, ...], dict[str, Any]] = {}
+        duplicates: list[str] = []
+        for record in records:
+            identity = _prediction_view_identity(record)
+            if identity in result:
+                duplicates.append(repr(identity))
+            else:
+                result[identity] = record
+        return result, sorted(duplicates)
+
+    canonical_by_identity, canonical_duplicates = indexed(canonical_predictions)
+    rotated_by_identity, rotated_duplicates = indexed(rotated_predictions)
+    canonical_identities = set(canonical_by_identity)
+    rotated_identities = set(rotated_by_identity)
+    missing_rotated = sorted(repr(value) for value in canonical_identities - rotated_identities)
+    unexpected_rotated = sorted(repr(value) for value in rotated_identities - canonical_identities)
+    invalid: list[dict[str, Any]] = []
+    matched_count = 0
+    for identity in sorted(canonical_identities & rotated_identities, key=repr):
+        canonical = canonical_by_identity[identity]
+        rotated = rotated_by_identity[identity]
+        reasons: list[str] = []
+        canonical_choices = canonical.get("choices")
+        rotated_choices = rotated.get("choices")
+        canonical_target = canonical.get("target_index")
+        rotated_target = rotated.get("target_index")
+        canonical_predicted = canonical.get("predicted_index")
+        rotated_predicted = rotated.get("predicted_index")
+        if canonical.get("view") != "canonical":
+            reasons.append("canonical-view-label")
+        if rotated.get("view") != "left-rotate-one":
+            reasons.append("rotated-view-label")
+        if not isinstance(canonical_choices, list) or len(canonical_choices) != 4:
+            reasons.append("canonical-choices")
+        if not isinstance(rotated_choices, list) or len(rotated_choices) != 4:
+            reasons.append("rotated-choices")
+        if (
+            isinstance(canonical_choices, list)
+            and len(canonical_choices) == 4
+            and isinstance(rotated_choices, list)
+            and rotated_choices != canonical_choices[1:] + canonical_choices[:1]
+        ):
+            reasons.append("choices-not-left-rotated")
+        if isinstance(canonical_target, bool) or not isinstance(canonical_target, int) or not 0 <= canonical_target < 4:
+            reasons.append("canonical-target-index")
+        elif rotated_target != (canonical_target - 1) % 4:
+            reasons.append("target-index-not-synchronized")
+        if canonical.get("target_text") != rotated.get("target_text"):
+            reasons.append("target-text-changed")
+        if isinstance(canonical_choices, list) and isinstance(canonical_target, int) and 0 <= canonical_target < 4:
+            if canonical.get("target_text") != canonical_choices[canonical_target]:
+                reasons.append("canonical-target-text-choice-mismatch")
+        if isinstance(rotated_choices, list) and isinstance(rotated_target, int) and 0 <= rotated_target < 4:
+            if rotated.get("target_text") != rotated_choices[rotated_target]:
+                reasons.append("rotated-target-text-choice-mismatch")
+        for label, record, predicted, choices in (
+            ("canonical", canonical, canonical_predicted, canonical_choices),
+            ("rotated", rotated, rotated_predicted, rotated_choices),
+        ):
+            if isinstance(predicted, bool) or not isinstance(predicted, int) or not 0 <= predicted < 4:
+                reasons.append(f"{label}-predicted-index")
+            elif isinstance(choices, list) and len(choices) == 4:
+                if record.get("predicted_text") != choices[predicted]:
+                    reasons.append(f"{label}-predicted-text-choice-mismatch")
+            target = record.get("target_index")
+            if isinstance(predicted, int) and isinstance(target, int):
+                if record.get("correct") is not (predicted == target):
+                    reasons.append(f"{label}-correct-flag-mismatch")
+        for field in ("distractor_variant", "turn_type", "topic", "state_event_kind"):
+            if canonical.get(field) != rotated.get(field):
+                reasons.append(f"{field}-changed")
+        if reasons:
+            invalid.append({"identity": repr(identity), "reasons": sorted(set(reasons))})
+        else:
+            matched_count += 1
+    expected_count = REACHABILITY_PREDICTION_COUNT
+    passed = (
+        len(canonical_predictions) == expected_count
+        and len(rotated_predictions) == expected_count
+        and not canonical_duplicates
+        and not rotated_duplicates
+        and not missing_rotated
+        and not unexpected_rotated
+        and not invalid
+        and matched_count == expected_count
+    )
+    return {
+        "expected_prediction_count": expected_count,
+        "canonical_prediction_count": len(canonical_predictions),
+        "rotated_prediction_count": len(rotated_predictions),
+        "matched_prediction_count": matched_count,
+        "canonical_duplicate_identities": canonical_duplicates,
+        "rotated_duplicate_identities": rotated_duplicates,
+        "missing_rotated_identities": missing_rotated,
+        "unexpected_rotated_identities": unexpected_rotated,
+        "invalid_pair_count": len(invalid),
+        "invalid_pairs": invalid,
+        "passed": passed,
+    }
+
+
+def _position_gate_summary(predictions: list[dict[str, Any]]) -> dict[str, Any]:
+    groups = grouped_prediction_summary(predictions)["target_index"]
+    positions: dict[str, dict[str, Any]] = {}
+    for index in range(4):
+        value = groups.get(str(index), {"count": 0, "correct": 0})
+        count = int(value["count"])
+        correct = int(value["correct"])
+        positions[str(index)] = {
+            "count": count,
+            "correct": correct,
+            "expected_count": R2_TARGET_POSITION_EXPECTED_COUNT,
+            "minimum_correct": R2_TARGET_POSITION_MINIMUM_CORRECT,
+            "passed": count == R2_TARGET_POSITION_EXPECTED_COUNT and correct >= R2_TARGET_POSITION_MINIMUM_CORRECT,
+        }
+    return {
+        "positions": positions,
+        "passed": all(value["passed"] for value in positions.values()),
+    }
+
+
+def _distractor_prediction_agreement(predictions: list[dict[str, Any]]) -> dict[str, Any]:
+    groups: dict[str, list[dict[str, Any]]] = {}
+    missing_comparison_ids = 0
+    for prediction in predictions:
+        comparison_id = prediction.get("comparison_id")
+        if not isinstance(comparison_id, str) or not comparison_id:
+            missing_comparison_ids += 1
+            continue
+        groups.setdefault(comparison_id, []).append(prediction)
+
+    valid_pairs = 0
+    predicted_text_agreements = 0
+    invalid_pair_ids: list[str] = []
+    for comparison_id in sorted(groups):
+        members = groups[comparison_id]
+        variants = {member.get("distractor_variant") for member in members}
+        target_texts = {member.get("target_text") for member in members}
+        choice_orders = {
+            tuple(member["choices"])
+            if isinstance(member.get("choices"), list) and len(member["choices"]) == 4
+            else None
+            for member in members
+        }
+        if (
+            len(members) != 2
+            or variants != {"clean", "distractor"}
+            or len(target_texts) != 1
+            or None in choice_orders
+            or len(choice_orders) != 1
+        ):
+            invalid_pair_ids.append(comparison_id)
+            continue
+        valid_pairs += 1
+        predicted_text_agreements += int(members[0].get("predicted_text") == members[1].get("predicted_text"))
+    return {
+        "expected_pair_count": R2_DISTRACTOR_PAIR_EXPECTED_COUNT,
+        "valid_pair_count": valid_pairs,
+        "invalid_pair_count": len(invalid_pair_ids),
+        "invalid_pair_ids": invalid_pair_ids,
+        "missing_comparison_id_count": missing_comparison_ids,
+        "minimum_predicted_text_agreements": R2_DISTRACTOR_AGREEMENT_MINIMUM,
+        "predicted_text_agreements": predicted_text_agreements,
+        "passed": valid_pairs == R2_DISTRACTOR_PAIR_EXPECTED_COUNT
+        and not invalid_pair_ids
+        and missing_comparison_ids == 0
+        and predicted_text_agreements >= R2_DISTRACTOR_AGREEMENT_MINIMUM,
+    }
+
+
+def listwise_gradient_trace_summary(trace: list[dict[str, Any]]) -> dict[str, Any]:
+    query_record_count = 0
+    finite_query_record_count = 0
+    positive_image_gradient_query_count = 0
+    steps_with_positive_image_gradient = 0
+    steps_with_query_records = 0
+    positive_updater_gradient_steps = 0
+    for step in trace:
+        updater_grad_norm = step.get("gradient_norm_before_clip_float_hex")
+        try:
+            updater_grad_value = float.fromhex(updater_grad_norm) if isinstance(updater_grad_norm, str) else math.nan
+        except ValueError:
+            updater_grad_value = math.nan
+        positive_updater_gradient_steps += int(math.isfinite(updater_grad_value) and updater_grad_value > 0.0)
+        records = step.get("listwise_queries", [])
+        if not isinstance(records, list):
+            records = []
+        steps_with_query_records += int(bool(records))
+        step_has_positive_image_gradient = False
+        for record in records:
+            query_record_count += 1
+            finite = bool(record.get("all_values_finite"))
+            finite_query_record_count += int(finite)
+            image_grad_norm = record.get("image_gradient_norm_float_hex")
+            try:
+                image_grad_value = float.fromhex(image_grad_norm) if isinstance(image_grad_norm, str) else math.nan
+            except ValueError:
+                image_grad_value = math.nan
+            positive = math.isfinite(image_grad_value) and image_grad_value > 0.0
+            positive_image_gradient_query_count += int(positive)
+            step_has_positive_image_gradient = step_has_positive_image_gradient or positive
+        steps_with_positive_image_gradient += int(step_has_positive_image_gradient)
+    all_records_finite = query_record_count > 0 and finite_query_record_count == query_record_count
+    return {
+        "optimizer_step_count": len(trace),
+        "steps_with_query_records": steps_with_query_records,
+        "query_record_count": query_record_count,
+        "finite_query_record_count": finite_query_record_count,
+        "all_records_finite": all_records_finite,
+        "positive_image_gradient_query_count": positive_image_gradient_query_count,
+        "all_query_image_gradients_positive": query_record_count > 0
+        and positive_image_gradient_query_count == query_record_count,
+        "steps_with_positive_image_gradient": steps_with_positive_image_gradient,
+        "every_step_has_positive_image_gradient": bool(trace) and steps_with_positive_image_gradient == len(trace),
+        "positive_updater_gradient_steps": positive_updater_gradient_steps,
+        "every_step_has_positive_updater_gradient": bool(trace)
+        and positive_updater_gradient_steps == len(trace),
+    }
+
+
+def r2a_autograd_diagnostic(reader_loss_mode: str, trace: list[dict[str, Any]]) -> dict[str, Any]:
+    if reader_loss_mode not in READER_LOSS_MODES:
+        raise ValueError(f"Unsupported reader_loss_mode: {reader_loss_mode!r}")
+    if reader_loss_mode == "target-only":
+        return {
+            "applicable": False,
+            "passed": None,
+            "scope": "R2a is prospective listwise-choice only; historical target-only is unchanged.",
+        }
+    summary = listwise_gradient_trace_summary(trace)
+    passed = (
+        summary["all_records_finite"]
+        and summary["steps_with_query_records"] == len(trace)
+        and summary["all_query_image_gradients_positive"]
+        and summary["every_step_has_positive_image_gradient"]
+        and summary["every_step_has_positive_updater_gradient"]
+    )
+    return {
+        "applicable": True,
+        "passed": passed,
+        "scope": "listwise per-query image and updater autograd diagnostic; not a 1/100-step scientific gate",
+        **summary,
+    }
+
+
+def r2_gate_summary(
+    *,
+    reader_loss_mode: str,
+    steps: int,
+    optimizer_steps_completed: int,
+    canonical_predictions: list[dict[str, Any]],
+    rotated_predictions: list[dict[str, Any]],
+    trace: list[dict[str, Any]],
+    positive_gradient_steps: int,
+    clipped_steps: int,
+) -> dict[str, Any]:
+    if reader_loss_mode not in READER_LOSS_MODES:
+        raise ValueError(f"Unsupported reader_loss_mode: {reader_loss_mode!r}")
+    if reader_loss_mode == "target-only":
+        return {
+            "applicable": False,
+            "passed": None,
+            "reader_loss_mode": reader_loss_mode,
+            "historical_scope": "R2/D2L is prospective listwise-choice only",
+            "step_budget": REACHABILITY_STEP_BUDGET,
+        }
+    applicable = reader_loss_mode == "listwise-choice" and steps == REACHABILITY_STEP_BUDGET
+    canonical_correct = sum(int(record["correct"]) for record in canonical_predictions)
+    rotated_correct = sum(int(record["correct"]) for record in rotated_predictions)
+    canonical_count = len(canonical_predictions)
+    rotated_count = len(rotated_predictions)
+    canonical_threshold_reached = (
+        canonical_count == REACHABILITY_PREDICTION_COUNT and canonical_correct >= R2_CANONICAL_MINIMUM_CORRECT
+    )
+    rotated_threshold_reached = (
+        rotated_count == REACHABILITY_PREDICTION_COUNT and rotated_correct >= R2_ROTATED_MINIMUM_CORRECT
+    )
+    canonical_positions = _position_gate_summary(canonical_predictions)
+    rotated_positions = _position_gate_summary(rotated_predictions)
+    view_alignment = _prediction_view_alignment_summary(canonical_predictions, rotated_predictions)
+    canonical_mixed = [record for record in canonical_predictions if record.get("turn_type") == "mixed"]
+    canonical_mixed_correct = sum(int(record["correct"]) for record in canonical_mixed)
+    canonical_mixed_passed = (
+        len(canonical_mixed) == R2_MIXED_EXPECTED_COUNT and canonical_mixed_correct >= R2_MIXED_MINIMUM_CORRECT
+    )
+    distractor_agreement = _distractor_prediction_agreement(canonical_predictions)
+    listwise_gradients = listwise_gradient_trace_summary(trace)
+    reached_step_budget = optimizer_steps_completed == steps == REACHABILITY_STEP_BUDGET
+    updater_gradient_chain_valid = positive_gradient_steps == optimizer_steps_completed == steps
+    listwise_gradient_evidence_valid = (
+        listwise_gradients["all_records_finite"]
+        and listwise_gradients["steps_with_query_records"] == optimizer_steps_completed
+        and listwise_gradients["every_step_has_positive_image_gradient"]
+        and listwise_gradients["every_step_has_positive_updater_gradient"]
+    )
+    passed = (
+        reached_step_budget
+        and updater_gradient_chain_valid
+        and listwise_gradient_evidence_valid
+        and canonical_threshold_reached
+        and rotated_threshold_reached
+        and canonical_positions["passed"]
+        and rotated_positions["passed"]
+        and view_alignment["passed"]
+        and canonical_mixed_passed
+        and distractor_agreement["passed"]
+        if applicable
+        else None
+    )
+    return {
+        "applicable": applicable,
+        "passed": passed,
+        "reader_loss_mode": reader_loss_mode,
+        "historical_scope": "prospective R2/D2L listwise-choice only",
+        "step_budget": REACHABILITY_STEP_BUDGET,
+        "optimizer_steps_completed": optimizer_steps_completed,
+        "reached_step_budget": reached_step_budget,
+        "positive_gradient_steps": positive_gradient_steps,
+        "updater_gradient_chain_valid": updater_gradient_chain_valid,
+        "clipped_steps": clipped_steps,
+        "view_alignment": view_alignment,
+        "canonical": {
+            "prediction_count": canonical_count,
+            "correct": canonical_correct,
+            "minimum_correct": R2_CANONICAL_MINIMUM_CORRECT,
+            "threshold_reached": canonical_threshold_reached,
+            "target_positions": canonical_positions,
+            "mixed": {
+                "count": len(canonical_mixed),
+                "correct": canonical_mixed_correct,
+                "expected_count": R2_MIXED_EXPECTED_COUNT,
+                "minimum_correct": R2_MIXED_MINIMUM_CORRECT,
+                "passed": canonical_mixed_passed,
+            },
+            "distractor_prediction_agreement": distractor_agreement,
+            "grouped_predictions": grouped_prediction_summary(
+                canonical_predictions,
+                event_kind_field="state_event_kind",
+            ),
+        },
+        "left_rotate_one": {
+            "prediction_count": rotated_count,
+            "correct": rotated_correct,
+            "minimum_correct": R2_ROTATED_MINIMUM_CORRECT,
+            "threshold_reached": rotated_threshold_reached,
+            "target_positions": rotated_positions,
+            "grouped_predictions": grouped_prediction_summary(
+                rotated_predictions,
+                event_kind_field="state_event_kind",
+            ),
+        },
+        "listwise_gradient_evidence": listwise_gradients,
+        "listwise_gradient_evidence_valid": listwise_gradient_evidence_valid,
+        "trace_values_finite": listwise_gradients["all_records_finite"],
+        "reader_frozen_parameter_gradients": 0,
     }
 
 
@@ -259,6 +708,70 @@ def module_gradient_norms(model: LightweightVisualUpdater) -> dict[str, str]:
         norm = torch.sqrt(torch.stack([gradient.square().sum() for gradient in gradients]).sum())
         result[name] = float_hex(norm)
     return result
+
+
+def listwise_query_trace_records(captures: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    records: list[dict[str, Any]] = []
+    for ordinal, capture in enumerate(captures):
+        output = capture["output"]
+        image = capture["image"]
+        target_index = int(capture["target_index"])
+        choices = tuple(capture["choices"])
+        if image.grad is None:
+            raise RuntimeError(f"Listwise query {ordinal} produced no retained updater-image gradient.")
+        choice_mean_nll = output.choice_mean_nll.detach().float()
+        choice_logits = output.choice_logits.detach().float()
+        if choice_mean_nll.shape != (4,) or choice_logits.shape != (4,):
+            raise RuntimeError(
+                "Listwise trace requires four scalar choice scores; "
+                f"got nll={tuple(choice_mean_nll.shape)}, logits={tuple(choice_logits.shape)}."
+            )
+        log_probabilities = torch.log_softmax(choice_logits, dim=0)
+        probabilities = torch.softmax(choice_logits, dim=0)
+        entropy = -(probabilities * log_probabilities).sum()
+        image_gradient_norm = image.grad.detach().float().norm()
+        target_nll = choice_mean_nll[target_index]
+        wrong_mask = torch.arange(4, device=choice_mean_nll.device) != target_index
+        best_wrong_nll = choice_mean_nll[wrong_mask].min()
+        margin = best_wrong_nll - target_nll
+        ranking = sorted(
+            range(4),
+            key=lambda index: (float(choice_mean_nll[index].item()), index),
+        )
+        finite_values = torch.cat(
+            [
+                choice_mean_nll.reshape(-1),
+                choice_logits.reshape(-1),
+                output.loss.detach().float().reshape(-1),
+                entropy.reshape(-1),
+                image_gradient_norm.reshape(-1),
+            ]
+        )
+        all_values_finite = bool(torch.isfinite(finite_values).all().item())
+        if not all_values_finite:
+            raise RuntimeError(f"Listwise query {ordinal} produced a non-finite trace value.")
+        records.append(
+            {
+                "query_ordinal": ordinal,
+                "choices": list(choices),
+                "target_index": target_index,
+                "target_text": choices[target_index],
+                "choice_token_counts": list(output.choice_token_counts),
+                "choice_mean_nll_tensor_sha256": canonical_tensor_sha256(choice_mean_nll),
+                "choice_mean_nll_float_hex": [float_hex(value) for value in choice_mean_nll],
+                "choice_logits_float_hex": [float_hex(value) for value in choice_logits],
+                "listwise_loss_float_hex": float_hex(output.loss),
+                "target_mean_nll_float_hex": float_hex(target_nll),
+                "best_wrong_mean_nll_float_hex": float_hex(best_wrong_nll),
+                "margin_float_hex": float_hex(margin),
+                "target_rank": ranking.index(target_index) + 1,
+                "choice_entropy_float_hex": float_hex(entropy),
+                "image_gradient_norm_float_hex": float_hex(image_gradient_norm),
+                "image_gradient_positive": bool(image_gradient_norm.item() > 0.0),
+                "all_values_finite": all_values_finite,
+            }
+        )
+    return records
 
 
 def runtime_metadata(device: torch.device, determinism: dict[str, Any]) -> dict[str, Any]:
@@ -310,7 +823,11 @@ def evaluate_canonical_predictions(
     reader: Any,
     processor: Any,
     device: torch.device,
+    view: str = "canonical",
+    include_r2_fields: bool = False,
 ) -> list[dict[str, Any]]:
+    if view not in {"canonical", "left-rotate-one"}:
+        raise ValueError("Prediction view must be 'canonical' or 'left-rotate-one'.")
     updater.eval()
     predictions: list[dict[str, Any]] = []
     with torch.no_grad():
@@ -318,13 +835,18 @@ def evaluate_canonical_predictions(
             state = updater.initial_state(batch_size=1, device=device, dtype=torch.float32)
             query_ordinal = 0
             last_event_kind: str | None = None
+            last_state_event_kind: str | None = None
             for turn_id, turn in enumerate(episode_value(episode, "turns")):
                 kind = turn_kind(turn)
                 if kind in {"event", "mixed"}:
                     event_text, last_event_kind = event_payload(turn)
+                    if last_event_kind in {"set", "overwrite", "clear"}:
+                        last_state_event_kind = last_event_kind
                     state = updater.update(state, event_text)
                 if kind in {"query", "mixed"}:
                     query, choices, target_index, comparison_id = query_payload(turn)
+                    if view == "left-rotate-one":
+                        choices, target_index = rotate_choices_left_one(choices, target_index)
                     image = updater.render_deterministic_repro(state, target_size=DETERMINISTIC_READER_SIZE)[0]
                     score = qwen3vl_choice_nll(
                         model=reader,
@@ -336,30 +858,51 @@ def evaluate_canonical_predictions(
                         do_resize=False,
                         deterministic_ce=True,
                     )
-                    predictions.append(
-                        {
-                            "episode_id": str(episode_value(episode, "episode_id")),
-                            "event_kind": last_event_kind,
-                            "distractor_variant": normalized_categorical_label(
-                                episode_value(episode, "distractor_variant")
-                            ),
-                            "topic": normalized_categorical_label(episode_value(episode, "topic")),
-                            "turn_id": turn_id,
-                            "turn_type": kind,
-                            "query_ordinal": query_ordinal,
-                            "comparison_id": comparison_id,
-                            "target_index": target_index,
-                            "predicted_index": score.predicted_index,
-                            "correct": score.predicted_index == target_index,
-                            "choice_mean_nll_float_hex": [float(value).hex() for value in score.mean_nll],
-                        }
-                    )
+                    choice_nll = tuple(float(value) for value in score.mean_nll)
+                    target_nll = choice_nll[target_index]
+                    best_wrong_nll = min(value for index, value in enumerate(choice_nll) if index != target_index)
+                    margin = best_wrong_nll - target_nll
+                    ranking = sorted(range(len(choice_nll)), key=lambda index: (choice_nll[index], index))
+                    predicted_index = score.predicted_index
+                    record = {
+                        "episode_id": str(episode_value(episode, "episode_id")),
+                        "event_kind": last_event_kind,
+                        "distractor_variant": normalized_categorical_label(
+                            episode_value(episode, "distractor_variant")
+                        ),
+                        "topic": normalized_categorical_label(episode_value(episode, "topic")),
+                        "turn_id": turn_id,
+                        "turn_type": kind,
+                        "query_ordinal": query_ordinal,
+                        "comparison_id": comparison_id,
+                        "target_index": target_index,
+                        "predicted_index": predicted_index,
+                        "correct": predicted_index == target_index,
+                        "choice_mean_nll_float_hex": [float_hex(value) for value in choice_nll],
+                    }
+                    if include_r2_fields:
+                        record.update(
+                            {
+                                "view": view,
+                                "state_event_kind": last_state_event_kind,
+                                "choices": list(choices),
+                                "target_text": choices[target_index],
+                                "predicted_text": choices[predicted_index],
+                                "target_rank": ranking.index(target_index) + 1,
+                                "target_mean_nll_float_hex": float_hex(target_nll),
+                                "best_wrong_mean_nll_float_hex": float_hex(best_wrong_nll),
+                                "margin_float_hex": float_hex(margin),
+                            }
+                        )
+                    predictions.append(record)
                     query_ordinal += 1
     updater.train()
     return predictions
 
 
 def run_probe(args: argparse.Namespace) -> dict[str, Any]:
+    reader_loss_mode = str(args.reader_loss_mode)
+    objective_contract = reader_objective_contract(reader_loss_mode)
     if not torch.cuda.is_available():
         raise RuntimeError("The bitwise lightweight reproducibility probe requires CUDA.")
     device = torch.device(args.device)
@@ -436,6 +979,39 @@ def run_probe(args: argparse.Namespace) -> dict[str, Any]:
             deterministic_ce=True,
         )
 
+    listwise_captures: list[dict[str, Any]] = []
+
+    def choice_reader_loss(
+        image: torch.Tensor,
+        query: str,
+        choices: tuple[str, ...],
+        target_index: int,
+    ):
+        if not image.requires_grad or image.grad_fn is None:
+            raise RuntimeError("Listwise Reader received an updater image without an autograd path.")
+        image.retain_grad()
+        output = qwen3vl_listwise_choice_ce(
+            model=reader,
+            processor=processor,
+            image=image[0],
+            query=query,
+            choices=choices,
+            target_index=target_index,
+            device=device,
+            require_image_grad=True,
+            do_resize=False,
+            deterministic_ce=True,
+        )
+        listwise_captures.append(
+            {
+                "output": output,
+                "image": image,
+                "choices": choices,
+                "target_index": target_index,
+            }
+        )
+        return output
+
     trace: list[dict[str, Any]] = []
     milestones: dict[str, Any] = {}
     step_one_gradients: dict[str, Any] | None = None
@@ -459,19 +1035,36 @@ def run_probe(args: argparse.Namespace) -> dict[str, Any]:
     ):
         episode = episodes[episode_index]
         optimizer.zero_grad(set_to_none=True)
+        listwise_captures.clear()
+        episode_kwargs: dict[str, Any] = {
+            "episode": episode,
+            "initial_state": updater.initial_state(batch_size=1, device=device, dtype=torch.float32),
+            "update_fn": update_fn,
+            "decode_fn": lambda state: updater.render_deterministic_repro(state, target_size=DETERMINISTIC_READER_SIZE),
+            "reader_loss_mode": reader_loss_mode,
+            "noop_policy": "update",
+            "collect_states": False,
+        }
+        if reader_loss_mode == "target-only":
+            episode_kwargs["reader_loss_fn"] = reader_loss
+        else:
+            episode_kwargs["choice_reader_loss_fn"] = choice_reader_loss
         result = run_episode(
-            episode=episode,
-            initial_state=updater.initial_state(batch_size=1, device=device, dtype=torch.float32),
-            update_fn=update_fn,
-            decode_fn=lambda state: updater.render_deterministic_repro(state, target_size=DETERMINISTIC_READER_SIZE),
-            reader_loss_fn=reader_loss,
-            noop_policy="update",
-            collect_states=False,
+            **episode_kwargs,
         )
         if not torch.isfinite(result.loss):
             raise RuntimeError(f"Non-finite loss at optimizer step {optimizer_step}.")
         result.loss.backward()
         assert_no_frozen_parameter_grads(reader, "Qwen Reader")
+        listwise_records = (
+            listwise_query_trace_records(listwise_captures) if reader_loss_mode == "listwise-choice" else []
+        )
+        if reader_loss_mode == "listwise-choice" and len(listwise_records) != result.query_count:
+            raise RuntimeError(
+                "Listwise closure/query count mismatch: "
+                f"captured {len(listwise_records)}, episode executed {result.query_count}."
+            )
+        listwise_captures.clear()
         raw_gradients = gradient_manifest(updater)
         raw_module_gradient_norms = module_gradient_norms(updater)
         norm_before_clip = torch.nn.utils.clip_grad_norm_(
@@ -492,22 +1085,24 @@ def run_probe(args: argparse.Namespace) -> dict[str, Any]:
                 "clipped": clipped_gradients,
             }
         optimizer.step()
-        trace.append(
-            {
-                "optimizer_step": optimizer_step,
-                "epoch": epoch,
-                "episode_index": episode_index,
-                "episode_id": str(episode_value(episode, "episode_id")),
-                "loss_tensor_sha256": canonical_tensor_sha256(result.loss.detach()),
-                "loss_float_hex": float_hex(result.loss),
-                "gradient_norm_before_clip_float_hex": float_hex(norm_before_clip),
-                "gradient_clipping_factor_float_hex": clipping_factor.hex(),
-                "raw_gradient_bundle_sha256": raw_gradients["bundle_sha256"],
-                "clipped_gradient_bundle_sha256": clipped_gradients["bundle_sha256"],
-                "raw_module_gradient_norms_float_hex": raw_module_gradient_norms,
-                "clipped_module_gradient_norms_float_hex": clipped_module_gradient_norms,
-            }
-        )
+        trace_record = {
+            "optimizer_step": optimizer_step,
+            "epoch": epoch,
+            "episode_index": episode_index,
+            "episode_id": str(episode_value(episode, "episode_id")),
+            "loss_tensor_sha256": canonical_tensor_sha256(result.loss.detach()),
+            "loss_float_hex": float_hex(result.loss),
+            "gradient_norm_before_clip_float_hex": float_hex(norm_before_clip),
+            "gradient_clipping_factor_float_hex": clipping_factor.hex(),
+            "raw_gradient_bundle_sha256": raw_gradients["bundle_sha256"],
+            "clipped_gradient_bundle_sha256": clipped_gradients["bundle_sha256"],
+            "raw_module_gradient_norms_float_hex": raw_module_gradient_norms,
+            "clipped_module_gradient_norms_float_hex": clipped_module_gradient_norms,
+        }
+        if reader_loss_mode == "listwise-choice":
+            trace_record["reader_loss_mode"] = reader_loss_mode
+            trace_record["listwise_queries"] = listwise_records
+        trace.append(trace_record)
         if optimizer_step in milestone_steps:
             milestones[str(optimizer_step)] = model_optimizer_rng_manifest(updater, optimizer)
 
@@ -522,12 +1117,31 @@ def run_probe(args: argparse.Namespace) -> dict[str, Any]:
         reader=reader,
         processor=processor,
         device=device,
+        view="canonical",
+        include_r2_fields=reader_loss_mode == "listwise-choice",
+    )
+    rotated_predictions = (
+        evaluate_canonical_predictions(
+            episodes=episodes,
+            updater=updater,
+            reader=reader,
+            processor=processor,
+            device=device,
+            view="left-rotate-one",
+            include_r2_fields=True,
+        )
+        if "left-rotate-one" in evaluation_views_for_reader_loss_mode(reader_loss_mode)
+        else []
     )
     assert_no_frozen_parameter_grads(reader, "Qwen Reader")
     trace_path = args.output_dir / "canonical_trace.jsonl"
     predictions_path = args.output_dir / "canonical_predictions.jsonl"
     write_jsonl(trace_path, trace)
     write_jsonl(predictions_path, predictions)
+    rotated_predictions_path: Path | None = None
+    if rotated_predictions:
+        rotated_predictions_path = args.output_dir / "left_rotate_one_predictions.jsonl"
+        write_jsonl(rotated_predictions_path, rotated_predictions)
     runtime = runtime_metadata(device, determinism)
     reachability_gate = reachability_gate_summary(
         steps=args.steps,
@@ -535,15 +1149,31 @@ def run_probe(args: argparse.Namespace) -> dict[str, Any]:
         predictions=predictions,
         positive_gradient_steps=positive_gradient_steps,
         clipped_steps=clipped_steps,
+        reader_loss_mode=reader_loss_mode,
+    )
+    r2a_diagnostic = r2a_autograd_diagnostic(reader_loss_mode, trace)
+    r2_gate = r2_gate_summary(
+        reader_loss_mode=reader_loss_mode,
+        steps=args.steps,
+        optimizer_steps_completed=len(trace),
+        canonical_predictions=predictions,
+        rotated_predictions=rotated_predictions,
+        trace=trace,
+        positive_gradient_steps=positive_gradient_steps,
+        clipped_steps=clipped_steps,
     )
 
+    if reachability_gate["applicable"]:
+        run_purpose = "strict-deterministic-exact64-reachability"
+    elif r2_gate["applicable"]:
+        run_purpose = "strict-deterministic-exact64-listwise-r2"
+    else:
+        run_purpose = "bitwise-reproducibility-audit"
     protocol = {
-        "schema_version": "vision_memory.lightweight_determinism_protocol.v3",
-        "run_purpose": (
-            "strict-deterministic-exact64-reachability"
-            if reachability_gate["applicable"]
-            else "bitwise-reproducibility-audit"
-        ),
+        "schema_version": "vision_memory.lightweight_determinism_protocol.v4",
+        "run_purpose": run_purpose,
+        "reader_loss_mode": reader_loss_mode,
+        "reader_objective": objective_contract,
         "episode_count": EPISODE_COUNT,
         "seed": SEED,
         "steps": args.steps,
@@ -554,7 +1184,11 @@ def run_probe(args: argparse.Namespace) -> dict[str, Any]:
         "renderer": "integer-repeat-without-crop",
         "qwen_do_resize": False,
         "qwen_image_grid": qwen_image_grid,
-        "reader_ce": "fp32-logsumexp-minus-target-score",
+        "reader_ce": (
+            "fp32-logsumexp-minus-target-score"
+            if reader_loss_mode == "target-only"
+            else "four-choice-mean-token-nll-plus-fp32-listwise-logsumexp"
+        ),
         "attention": "sdpa-math-only",
         "gradient_accumulation": GRADIENT_ACCUMULATION,
         "learning_rate_float_hex": LEARNING_RATE.hex(),
@@ -565,8 +1199,27 @@ def run_probe(args: argparse.Namespace) -> dict[str, Any]:
         "determinism": determinism,
         "milestone_steps": sorted(milestone_steps),
     }
+    prediction_views: dict[str, Any] = {
+        "canonical": {
+            "schema": "stored-choice-order",
+            "predictions_sha256": canonical_object_sha256(predictions),
+            "predictions_file_sha256": sha256_file(predictions_path),
+            "prediction_count": len(predictions),
+            "correct": sum(int(record["correct"]) for record in predictions),
+        }
+    }
+    if rotated_predictions_path is not None:
+        prediction_views["left_rotate_one"] = {
+            "schema": "choices-left-rotated-one-and-target-index-synchronized",
+            "predictions_sha256": canonical_object_sha256(rotated_predictions),
+            "predictions_file_sha256": sha256_file(rotated_predictions_path),
+            "prediction_count": len(rotated_predictions),
+            "correct": sum(int(record["correct"]) for record in rotated_predictions),
+        }
     comparison_payload = {
         "protocol": protocol,
+        "reader_loss_mode": reader_loss_mode,
+        "reader_objective": objective_contract,
         "git": {"commit": git_commit, "clean": True},
         "runtime_fingerprint": {
             key: runtime[key]
@@ -599,12 +1252,19 @@ def run_probe(args: argparse.Namespace) -> dict[str, Any]:
         "final_predictions_file_sha256": sha256_file(predictions_path),
         "final_prediction_count": len(predictions),
         "final_correct": sum(int(record["correct"]) for record in predictions),
+        "prediction_views": prediction_views,
+        "r2a_autograd_diagnostic": r2a_diagnostic,
         "reachability_gate": reachability_gate,
+        "r2_gate": r2_gate,
     }
     report = {
-        "schema_version": "vision_memory.lightweight_determinism_report.v2",
+        "schema_version": "vision_memory.lightweight_determinism_report.v3",
         "status": "complete",
+        "reader_loss_mode": reader_loss_mode,
+        "reader_objective": objective_contract,
+        "r2a_autograd_diagnostic": r2a_diagnostic,
         "reachability_gate": reachability_gate,
+        "r2_gate": r2_gate,
         "comparison_payload_sha256": canonical_object_sha256(comparison_payload),
         "comparison_payload": comparison_payload,
         "runtime": runtime,
@@ -629,8 +1289,9 @@ def main() -> int:
         if not refused_preexisting_output:
             args.output_dir.mkdir(parents=True, exist_ok=True)
             failure = {
-                "schema_version": "vision_memory.lightweight_determinism_report.v2",
+                "schema_version": "vision_memory.lightweight_determinism_report.v3",
                 "status": "failed",
+                "reader_loss_mode": getattr(args, "reader_loss_mode", None),
                 "error_type": type(error).__name__,
                 "error": str(error),
             }

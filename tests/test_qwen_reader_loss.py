@@ -13,7 +13,11 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from vision_memory.dreamlite import freeze_module  # noqa: E402
-from vision_memory.reader import qwen3vl_choice_nll, qwen3vl_target_only_ce  # noqa: E402
+from vision_memory.reader import (  # noqa: E402
+    qwen3vl_choice_nll,
+    qwen3vl_listwise_choice_ce,
+    qwen3vl_target_only_ce,
+)
 
 
 class MockBatch(dict):
@@ -23,8 +27,9 @@ class MockBatch(dict):
 
 class MockTokenizer:
     def __call__(self, text, add_special_tokens, return_tensors):
-        del text, add_special_tokens, return_tensors
-        return {"input_ids": torch.tensor([[2, 3]], dtype=torch.long)}
+        del add_special_tokens, return_tensors
+        ids = {"a": [2], "b": [3], "c": [4], "d": [5]}.get(text, [2, 3])
+        return {"input_ids": torch.tensor([ids], dtype=torch.long)}
 
 
 class MockProcessor:
@@ -32,6 +37,7 @@ class MockProcessor:
 
     def __init__(self):
         self.observed_do_resize = "not-passed"
+        self.observed_do_resize_calls: list[object] = []
 
     def apply_chat_template(self, messages, tokenize, add_generation_prompt):
         del messages, tokenize, add_generation_prompt
@@ -40,6 +46,7 @@ class MockProcessor:
     def __call__(self, *, text, images, return_tensors, do_rescale, do_resize="not-passed"):
         del text, return_tensors, do_rescale
         self.observed_do_resize = do_resize
+        self.observed_do_resize_calls.append(do_resize)
         image = images[0]
         return MockBatch(
             {
@@ -161,6 +168,84 @@ class ReaderLossContractTest(unittest.TestCase):
         deterministic.loss.backward()
         self.assertIsNotNone(deterministic_image.grad)
         self.assertGreater(deterministic_image.grad.norm().item(), 0.0)
+
+    def test_listwise_choice_ce_matches_explicit_formula_and_preserves_image_gradient(self):
+        torch.manual_seed(19)
+        model = freeze_module(MockQwen())
+        image = torch.rand(3, 8, 8, requires_grad=True)
+        result = qwen3vl_listwise_choice_ce(
+            model=model,
+            processor=MockProcessor(),
+            image=image,
+            query="question with A-D options",
+            choices=("a", "b", "c", "d"),
+            target_index=2,
+            device=torch.device("cpu"),
+        )
+
+        expected = torch.logsumexp(-result.choice_mean_nll, dim=0) + result.choice_mean_nll[2]
+        torch.testing.assert_close(result.loss, expected)
+        self.assertEqual(tuple(result.choice_mean_nll.shape), (4,))
+        self.assertEqual(result.choice_token_counts, (1, 1, 1, 1))
+        self.assertEqual(result.target_ids.tolist(), [[4]])
+
+        result.loss.backward()
+        self.assertIsNotNone(image.grad)
+        self.assertTrue(torch.isfinite(image.grad).all())
+        self.assertGreater(image.grad.norm().item(), 0.0)
+        self.assertTrue(all(parameter.grad is None for parameter in model.parameters()))
+
+    def test_deterministic_listwise_ce_matches_default_and_propagates_resize(self):
+        torch.manual_seed(23)
+        model = freeze_module(MockQwen())
+        ordinary_image = torch.rand(3, 8, 8, requires_grad=True)
+        deterministic_image = ordinary_image.detach().clone().requires_grad_(True)
+        ordinary_processor = MockProcessor()
+        deterministic_processor = MockProcessor()
+        ordinary = qwen3vl_listwise_choice_ce(
+            model=model,
+            processor=ordinary_processor,
+            image=ordinary_image,
+            query="question",
+            choices=("a", "b", "c", "d"),
+            target_index=1,
+            device=torch.device("cpu"),
+            do_resize=False,
+        )
+        deterministic = qwen3vl_listwise_choice_ce(
+            model=model,
+            processor=deterministic_processor,
+            image=deterministic_image,
+            query="question",
+            choices=("a", "b", "c", "d"),
+            target_index=1,
+            device=torch.device("cpu"),
+            do_resize=False,
+            deterministic_ce=True,
+        )
+
+        torch.testing.assert_close(deterministic.loss, ordinary.loss, rtol=1e-6, atol=1e-6)
+        deterministic.loss.backward()
+        self.assertIsNotNone(deterministic_image.grad)
+        self.assertGreater(deterministic_image.grad.norm().item(), 0.0)
+        self.assertEqual(ordinary_processor.observed_do_resize_calls, [False] * 4)
+        self.assertEqual(deterministic_processor.observed_do_resize_calls, [False] * 4)
+
+    def test_listwise_choice_ce_rejects_invalid_choices_and_target_index(self):
+        model = freeze_module(MockQwen())
+        common = {
+            "model": model,
+            "processor": MockProcessor(),
+            "image": torch.rand(3, 8, 8, requires_grad=True),
+            "query": "question",
+            "device": torch.device("cpu"),
+        }
+        with self.assertRaisesRegex(ValueError, "exactly four"):
+            qwen3vl_listwise_choice_ce(**common, choices=("a", "b", "c"), target_index=0)
+        with self.assertRaisesRegex(ValueError, "distinct"):
+            qwen3vl_listwise_choice_ce(**common, choices=("a", "b", "c", "c"), target_index=0)
+        with self.assertRaisesRegex(ValueError, "target_index"):
+            qwen3vl_listwise_choice_ce(**common, choices=("a", "b", "c", "d"), target_index=4)
 
 
 if __name__ == "__main__":

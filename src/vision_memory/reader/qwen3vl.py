@@ -24,6 +24,15 @@ class ChoiceScoreOutput:
     predicted_index: int
 
 
+@dataclass(frozen=True)
+class ListwiseChoiceLossOutput:
+    loss: Tensor
+    choice_mean_nll: Tensor
+    choice_logits: Tensor
+    target_ids: Tensor
+    choice_token_counts: tuple[int, ...]
+
+
 def _hidden_states(output: Any) -> Tensor:
     if hasattr(output, "last_hidden_state"):
         return output.last_hidden_state
@@ -125,6 +134,70 @@ def qwen3vl_target_only_ce(
     else:
         loss = F.cross_entropy(flat_logits, flat_targets)
     return ReaderLossOutput(loss=loss, pixel_values=pixel_values, target_ids=target_ids, target_logits=logits)
+
+
+def qwen3vl_listwise_choice_ce(
+    *,
+    model: Any,
+    processor: Any,
+    image: Tensor,
+    query: str,
+    choices: list[str] | tuple[str, ...],
+    target_index: int,
+    device: torch.device,
+    require_image_grad: bool = True,
+    do_resize: bool | None = None,
+    deterministic_ce: bool = False,
+) -> ListwiseChoiceLossOutput:
+    """Compute differentiable listwise CE over four teacher-forced option scores.
+
+    Each option score is the negative mean token NLL, matching ``qwen3vl_choice_nll``
+    evaluation. The target index is used only at the loss boundary and is never added to
+    the Reader prompt.
+    """
+
+    if len(choices) != 4:
+        raise ValueError("Listwise choice CE requires exactly four options.")
+    if any(not isinstance(choice, str) or not choice.strip() for choice in choices):
+        raise ValueError("Listwise choice CE requires four non-empty string options.")
+    if len(set(choices)) != 4:
+        raise ValueError("Listwise choice CE requires four distinct options.")
+    if isinstance(target_index, bool) or not isinstance(target_index, int) or not 0 <= target_index < 4:
+        raise ValueError("target_index must be an integer in [0, 3].")
+
+    option_outputs: list[ReaderLossOutput] = []
+    for choice in choices:
+        option_outputs.append(
+            qwen3vl_target_only_ce(
+                model=model,
+                processor=processor,
+                image=image,
+                query=query,
+                target=choice,
+                device=device,
+                require_image_grad=require_image_grad,
+                do_resize=do_resize,
+                deterministic_ce=deterministic_ce,
+            )
+        )
+
+    choice_mean_nll = torch.stack([output.loss for output in option_outputs]).float()
+    choice_logits = -choice_mean_nll
+    target = torch.tensor([target_index], device=choice_logits.device, dtype=torch.long)
+    if deterministic_ce:
+        # CUDA NLLLoss backward is disallowed under strict deterministic algorithms.
+        target_score = choice_logits.gather(dim=0, index=target).squeeze(0)
+        loss = torch.logsumexp(choice_logits, dim=0) - target_score
+    else:
+        loss = F.cross_entropy(choice_logits.unsqueeze(0), target)
+
+    return ListwiseChoiceLossOutput(
+        loss=loss,
+        choice_mean_nll=choice_mean_nll,
+        choice_logits=choice_logits,
+        target_ids=option_outputs[target_index].target_ids,
+        choice_token_counts=tuple(int(output.target_ids.numel()) for output in option_outputs),
+    )
 
 
 def qwen3vl_choice_nll(
