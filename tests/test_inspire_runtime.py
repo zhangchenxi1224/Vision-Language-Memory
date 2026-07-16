@@ -51,7 +51,7 @@ def passing_inventory() -> dict:
         "packages": {**EXPECTED_PACKAGES, "torch": "2.7.0a0+ecf3bae40a.nv25.02"},
         "torch": {
             "runtime_version": "2.7.0a0+ecf3bae40a.nv25.02",
-            "distribution_version": "2.7.0a0+ecf3bae40a.nv25.02",
+            "distribution_version": "2.7.0a0+ecf3bae40a.nv25.2",
             "file": "/usr/local/lib/python3.12/site-packages/torch/__init__.py",
             "venv_purelib": "/env/lib/python3.12/site-packages",
             "installed_inside_venv": False,

@@ -14,6 +14,8 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+from packaging.version import InvalidVersion, Version
+
 
 ROOT = Path(__file__).resolve().parents[2]
 EXPECTED_PACKAGES = {
@@ -67,6 +69,15 @@ def package_version(name: str) -> str | None:
         return importlib.metadata.version(name)
     except importlib.metadata.PackageNotFoundError:
         return None
+
+
+def distribution_version_matches(actual: str | None, expected_runtime: str) -> bool:
+    if actual is None:
+        return False
+    try:
+        return Version(actual) == Version(expected_runtime)
+    except InvalidVersion:
+        return actual == expected_runtime
 
 
 def run_git(repo: Path, *args: str) -> str | None:
@@ -280,7 +291,8 @@ def evaluate_inventory(
     add_check(
         checks,
         "torch_version",
-        torch_runtime.get("runtime_version") == expected_torch and torch_runtime.get("distribution_version") == expected_torch,
+        torch_runtime.get("runtime_version") == expected_torch
+        and distribution_version_matches(torch_runtime.get("distribution_version"), expected_torch),
         {
             "expected": expected_torch,
             "runtime": torch_runtime.get("runtime_version"),
