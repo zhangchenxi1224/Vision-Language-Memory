@@ -16,10 +16,11 @@ from vision_memory.dreamlite import (  # noqa: E402
     freeze_module,
 )
 from vision_memory.dreamlite.conditioning import encode_latent_path_condition  # noqa: E402
-from vision_memory.reader import qwen3vl_target_only_ce  # noqa: E402
+from vision_memory.reader import qwen3vl_listwise_choice_ce, qwen3vl_target_only_ce  # noqa: E402
 from vision_memory.repro import (  # noqa: E402
     assert_no_frozen_parameter_grads,
     canonical_json_sha256,
+    canonical_tensor_sha256,
     cuda_peak_memory_report,
     emit_json_report,
     load_source_image,
@@ -28,6 +29,7 @@ from vision_memory.repro import (  # noqa: E402
     reset_cuda_peak_memory,
     seed_adapter_initialization,
 )
+from vision_memory.training import format_mcq_query  # noqa: E402
 
 
 def parameter_grad_stats(parameters) -> tuple[float, int, int]:
@@ -61,7 +63,15 @@ def main() -> int:
     )
     parser.add_argument("--event", action="append", required=True, help="Repeat once or twice")
     parser.add_argument("--query", required=True)
-    parser.add_argument("--target", required=True)
+    parser.add_argument(
+        "--reader-loss-mode",
+        choices=("legacy-target-only", "listwise-choice"),
+        default="legacy-target-only",
+        help="R3 scientific gates require listwise-choice; legacy mode is retained for historical probes only.",
+    )
+    parser.add_argument("--target", help="Required only by legacy-target-only mode")
+    parser.add_argument("--choice", action="append", help="Repeat exactly four times for listwise-choice")
+    parser.add_argument("--target-index", type=int, help="Correct choice index for listwise-choice")
     parser.add_argument("--resolution", type=int, default=1024)
     parser.add_argument("--adapter-seed", type=int, default=0)
     parser.add_argument("--noise-seed", "--seed", dest="noise_seed", type=int, default=0)
@@ -80,6 +90,16 @@ def main() -> int:
 
     if len(args.event) not in (1, 2):
         raise SystemExit("This gated probe deliberately supports exactly one or two events.")
+    if args.reader_loss_mode == "legacy-target-only":
+        if not args.target or args.choice is not None or args.target_index is not None:
+            raise SystemExit("legacy-target-only requires --target and forbids --choice/--target-index.")
+    else:
+        if args.target is not None:
+            raise SystemExit("listwise-choice forbids --target; the label is selected only by --target-index.")
+        if args.choice is None or len(args.choice) != 4 or len(set(args.choice)) != 4:
+            raise SystemExit("listwise-choice requires exactly four distinct --choice values.")
+        if args.target_index is None or not 0 <= args.target_index < 4:
+            raise SystemExit("listwise-choice requires --target-index in [0, 3].")
     if not torch.cuda.is_available():
         raise SystemExit("CUDA is required for the real end-to-end probe.")
 
@@ -168,19 +188,34 @@ def main() -> int:
             state.retain_grad()
             intermediate_states.append(state)
 
+    state.retain_grad()
+    final_state_sha256 = canonical_tensor_sha256(state)
     decoded_raw = decode_model_latents_raw(pipe.vae, state)
     unclamped_image = decoded_raw * 0.5 + 0.5
     unclamped_image.retain_grad()
     out_of_range_fraction = ((unclamped_image < 0.0) | (unclamped_image > 1.0)).float().mean().item()
     image = unclamped_image.clamp(0.0, 1.0)
-    reader_result = qwen3vl_target_only_ce(
-        model=reader,
-        processor=processor,
-        image=image[0].to(reader_device),
-        query=args.query,
-        target=args.target,
-        device=reader_device,
-    )
+    if args.reader_loss_mode == "listwise-choice":
+        assert args.choice is not None and args.target_index is not None
+        reader_result = qwen3vl_listwise_choice_ce(
+            model=reader,
+            processor=processor,
+            image=image[0].to(reader_device),
+            query=format_mcq_query(args.query, args.choice),
+            choices=args.choice,
+            target_index=args.target_index,
+            device=reader_device,
+        )
+    else:
+        assert args.target is not None
+        reader_result = qwen3vl_target_only_ce(
+            model=reader,
+            processor=processor,
+            image=image[0].to(reader_device),
+            query=args.query,
+            target=args.target,
+            device=reader_device,
+        )
     if not torch.isfinite(reader_result.loss):
         raise RuntimeError("The Qwen target CE is NaN or Inf.")
     reader_result.loss.backward()
@@ -198,6 +233,13 @@ def main() -> int:
             }
         )
     image_gradient = unclamped_image.grad
+    final_state_gradient = state.grad
+    if (
+        final_state_gradient is None
+        or not torch.isfinite(final_state_gradient).all()
+        or final_state_gradient.norm().item() == 0
+    ):
+        raise RuntimeError("Qwen CE did not produce a finite, non-zero final latent gradient.")
     if image_gradient is None or not torch.isfinite(image_gradient).all() or image_gradient.norm().item() == 0:
         raise RuntimeError("Qwen CE did not produce a finite, non-zero gradient through the VAE decode.")
     zero_image_grad_fraction = (image_gradient == 0).float().mean().item()
@@ -239,7 +281,10 @@ def main() -> int:
         "source_image": source_metadata,
         "event": list(args.event),
         "query": args.query,
+        "reader_loss_mode": args.reader_loss_mode,
         "target": args.target,
+        "choices": args.choice,
+        "target_index": args.target_index,
         "resolution": args.resolution,
         "adapter_seed": args.adapter_seed,
         "event_noise_seeds": event_noise_seeds,
@@ -258,7 +303,18 @@ def main() -> int:
         "pair_id": canonical_json_sha256(pair_metadata),
         "pair_metadata": pair_metadata,
         "loss": reader_result.loss.item(),
+        "reader_loss_mode": args.reader_loss_mode,
+        "choice_mean_nll": (
+            None
+            if args.reader_loss_mode != "listwise-choice"
+            else [float(value) for value in reader_result.choice_mean_nll.detach().cpu().tolist()]
+        ),
         "final_state_shape": list(state.shape),
+        "final_state_sha256": final_state_sha256,
+        "final_state_gradient": {
+            "norm": final_state_gradient.detach().float().norm().item(),
+            "nonfinite_elements": int((~torch.isfinite(final_state_gradient.detach())).sum().item()),
+        },
         "intermediate_gradients": intermediate_stats,
         "lora_grad_norm": lora_norm,
         "lora_tensors_with_grad": lora_tensors_with_grad,

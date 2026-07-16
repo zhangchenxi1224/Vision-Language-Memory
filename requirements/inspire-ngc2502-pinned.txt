@@ -1,0 +1,19 @@
+# Non-Torch packages installed inside the Inspire NGC 25.02 overlay venv.
+#
+# The bootstrap always installs this file with --no-deps. This is deliberate:
+# torch/torchvision/torchaudio are supplied by the NGC image and must never be
+# resolved or overwritten by pip inside the overlay environment.
+diffusers==0.39.0
+transformers==4.57.3
+accelerate==1.12.0
+peft==0.18.1
+huggingface-hub==0.36.0
+safetensors==0.8.0
+tokenizers==0.22.1
+numpy==1.26.4
+Pillow==12.3.0
+PyYAML==6.0.2
+einops==0.8.1
+tqdm==4.67.1
+pytest==9.1.1
+ruff==0.14.10

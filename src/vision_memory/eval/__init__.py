@@ -2,6 +2,12 @@
 
 from .io import read_records, write_jsonl
 from .metrics import compute_prefeval_metrics, correctness, diagnostic_metrics, topic_form_metrics
+from .r3_micro import read_prediction_jsonl, score_r3_micro, score_set8, score_transition16
+from .r3_teacher_attribution import (
+    R3_TEACHER_ATTRIBUTION_SCHEMA,
+    TEACHER_CONTROLS,
+    score_r3_teacher_attribution,
+)
 from .statistics import (
     DEFAULT_PAIR_FIELDS,
     DEFAULT_STRATA_FIELDS,
@@ -15,6 +21,8 @@ from .synthetic import compute_synthetic_metrics
 __all__ = [
     "DEFAULT_PAIR_FIELDS",
     "DEFAULT_STRATA_FIELDS",
+    "R3_TEACHER_ATTRIBUTION_SCHEMA",
+    "TEACHER_CONTROLS",
     "compute_prefeval_metrics",
     "compute_synthetic_metrics",
     "correctness",
@@ -23,6 +31,11 @@ __all__ = [
     "holm_correction",
     "paired_hierarchical_bootstrap",
     "read_records",
+    "read_prediction_jsonl",
+    "score_r3_micro",
+    "score_r3_teacher_attribution",
+    "score_set8",
+    "score_transition16",
     "seeded_stratified_accuracy",
     "topic_form_metrics",
     "write_jsonl",

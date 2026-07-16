@@ -1,0 +1,218 @@
+{
+  "schema": "vision_memory.r3-preregistration.v1",
+  "decision_date": "2026-07-17",
+  "status": "prospective_no_r3_gpu_results",
+  "research_boundary": {
+    "r2c_disposition": "archived_reproducible_lightweight_performance_failure",
+    "lightweight_role": "data_router_loss_reader_diagnostic_only",
+    "qa_only_and_teacher_assisted_are_non_substitutable": true,
+    "teacher_lineage_can_never_be_renamed_qa_only": true,
+    "prefeval_locked_until_synthetic_formal_results": true
+  },
+  "models": {
+    "reader": {
+      "id": "Qwen3-VL-4B-Instruct",
+      "revision": "ebb281ec70b05090aa6165b016eac8ec08e71b17"
+    },
+    "updater": {
+      "id": "DreamLite-mobile",
+      "revision": "6695c3f4be230f0493fa5dbf78be3bc4d3bb2ab4",
+      "steps": 4,
+      "lora_rank": 4
+    }
+  },
+  "choice_protocol": {
+    "reader_loss_mode": "listwise-choice",
+    "joint_chat_continuation_tokenization": true,
+    "train_family": [[0, 1, 2, 3], [1, 2, 3, 0], [2, 3, 0, 1], [3, 0, 1, 2]],
+    "train_family_sha256": "e8de1292e94bf1de23011a605c4f9c96bfc4eceb80a14fbbd59f7651f892e2f1",
+    "gate_family": [[3, 2, 1, 0], [2, 1, 0, 3], [1, 0, 3, 2], [0, 3, 2, 1]],
+    "gate_family_sha256": "4cd725a443d8661dccccbff2d714876aee317c654ef2aa1bcb79aee307d64bbd",
+    "target_index_model_visibility": "outer_loss_boundary_only"
+  },
+  "micro_data": {
+    "generator_seed": 2026,
+    "set8": {
+      "suite_manifest_sha256": "5a05350003e16923ddb2e27f135cd69a826c768724a64b4a080572b601ed1dd5",
+      "train_sha256": "b0b8896c14ea597379271bc485f57011a0028b3a50eef08185817bdf3442deb6",
+      "gate_sha256": "2653c3b5a43c6b11d282397a27a14d94f1daf9e558aea943378bd40c307d94b1",
+      "raw_teacher_sidecar_sha256": "51bc74eb3a6579a6fd07b31a4d2e5b80e2b2f34cacc3d7048242249fe64be2bb",
+      "states": 8,
+      "gate_views": 32
+    },
+    "transition16": {
+      "suite_manifest_sha256": "0438dff0399a030903f6355ef1c8a2785b178c80577141ce8ce77627467c2b59",
+      "train_sha256": "879ff26cf638e87cea404ce5135e546b165f6a2a6da2a9415990b3e855651ae0",
+      "gate_sha256": "b9cb3218292e2ae91f54909e8d97436cc2664699dfdf6ca6280a024092a4790a",
+      "raw_teacher_sidecar_sha256": "745fc1f06fab76eb85819dcf8d98158c92a832f0756c1c9e0f8f68d5a30321ab",
+      "histories": 16,
+      "delayed_gate_views": 64,
+      "event_kinds": ["set", "overwrite", "clear", "noop"],
+      "read_forms": ["separate", "mixed"]
+    }
+  },
+  "synthetic_data": {
+    "schema": "vlm.r3.synthetic.v1",
+    "seed": 2026,
+    "split_before_expansion": true,
+    "pilot": {
+      "sizes": {"train": 1000, "dev": 500, "test_id": 1000, "test_ood": 1000},
+      "manifest_sha256": "f48ab8f9af47fb862e3afdd002bc4aa1c84fdbd6486b3fc483960579b310b5d6",
+      "train_sha256": "104e0ce9457a53b5291702f3dd2f671d03b8d19c656d3894c0738ac2a91099bc",
+      "dev_sha256": "0d89a6c7c04b10a23214b59b6603cbadcf256dc6c897f755c924e11e8b677d81",
+      "test_id_sha256": "6df3d4f98ae5996eb0f922ff69ff48e41474e7d9f284268958e543a82bcea3d6",
+      "test_ood_sha256": "cd55116a381e0b01c00f82ad4fa48ce6203290f4a18eef0f676cde8154592d81",
+      "train_teacher_sidecar_sha256": "230e8c8e4150aa47332b81cc917c028178e9ec5c8f24ee71c2ff08e83b8b1864"
+    },
+    "formal": {
+      "sizes": {"train": 5000, "dev": 500, "test_id": 1000, "test_ood": 1000},
+      "manifest_sha256": "089beefa00b9b78149b3d7f4bd40cf802dc2c92a3757c04f30d9534bbdc51215",
+      "train_sha256": "24327edc39e0d133df5150dc1aab4f55c6cf5b05ccfca9025ad90c5accc6d184",
+      "dev_sha256": "8b167df38022a631d4e631d3c0d66e9fca74171f4224fec436030d6650047303",
+      "test_id_sha256": "31e910ab878869faf9d6a032d8135eebe29f98d1509114e4fe04f9d95deaf4ff",
+      "test_ood_sha256": "40d80fffaaaee1f9bcdedb7e09c5e7782f577213e0d4187c156d15b590ba23cc",
+      "train_teacher_sidecar_sha256": "7bc7c69a28611ad91adf312a07bfd04b3a592d20b3ffea18992804dc205758cc"
+    },
+    "test_ood_groups": {"heldout_entity": 250, "heldout_topic": 250, "heldout_paraphrase": 250, "heldout_length": 250},
+    "dev_test_teacher_references_forbidden": true
+  },
+  "teacher_contract": {
+    "semantic_state_schema": "vlm.semantic_state.v1",
+    "font_path": "assets/fonts/DejaVuSans.ttf",
+    "font_sha256": "3fdf69cabf06049ea70a00b5919340e2ce1e6d02b0cc3c4b44fb6801bd1e0d22",
+    "pillow_version": "12.3.0",
+    "font_contract_sha256": "18e8e0724b9b454632f8a3677a35d860490891936068313fea4c456463539bb7",
+    "renderer_contract_sha256": "11890555e4317c546518632402ccc86285b571520059c7c64d9389550709878c",
+    "build_contract_sha256": "5a8dec081c53bd47265f20e8dc38836a65ea459ea0d291c3ab1118af604535c7",
+    "latent_normalization_epsilon": 0.000001,
+    "calibration_denominator_epsilon": 0.000001,
+    "cache_manifest_sha256": {"set8": null, "transition16": null},
+    "cache_lock_rule": "Deterministic GPU cache-build jobs assign both SHAs; no T0, teacher training, or scientific micro gate may run until the generated manifests and every tensor SHA are archived and these locks are amended prospectively."
+  },
+  "technical_gates": {
+    "order": ["R3-S0", "G4-L", "G5-L", "G6-L", "DL-S"],
+    "r3_s0": {"nll_rtol": 1e-6, "nll_atol": 1e-6, "repeat_exact": true},
+    "g4_l": "finite_positive_image_final_latent_lora_grads_and_zero_frozen_grads",
+    "g5_l": "finite_positive_first_intermediate_latent_grad",
+    "g6_l": {"forward_rtol": 1e-4, "forward_atol": 1e-5, "first_grad_absent": true},
+    "dl_s": {
+      "contract": "bitwise_exact_16_vs_shared8_resume8_weights_optimizer_rng_cursor_next_loss_gradient",
+      "strict_cuda_determinism": true,
+      "math_only_sdpa": true,
+      "environment": {
+        "PYTHONHASHSEED": "0",
+        "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+        "OMP_NUM_THREADS": "1",
+        "MKL_NUM_THREADS": "1",
+        "TOKENIZERS_PARALLELISM": "false"
+      }
+    }
+  },
+  "teacher_t0": {
+    "raw_card_macro_accuracy_min": 0.95,
+    "decoded_card_macro_accuracy_min": 0.95,
+    "heldout_template_accuracy_min": 0.90,
+    "per_position_correct_min": "15/16",
+    "predicted_text_rotation_agreement_min": 0.99,
+    "identity_mutation_invariance": 1.0,
+    "path_invariance": 1.0
+  },
+  "set8": {
+    "max_presentations_per_state": 512,
+    "evaluation_start": 64,
+    "evaluation_interval": 32,
+    "qa_gate": {
+      "correct_min": "30/32",
+      "per_position_correct_min": "7/8",
+      "per_state_correct_min": "3/4",
+      "rotation_consistent_states_min": "7/8",
+      "reset_drop_min": "8/32",
+      "shuffle_drop_min": "8/32"
+    },
+    "teacher_extra_gate": {
+      "composite_drop_min": 0.50,
+      "all_three_raw_components_must_drop": true,
+      "teacher_nearest_neighbor_min": "7/8",
+      "shuffled_and_random_controls_cannot_substitute": true
+    }
+  },
+  "transition16": {
+    "fresh_initialization": true,
+    "max_presentations_per_history": 512,
+    "correct_min": "58/64",
+    "per_position_correct_min": "14/16",
+    "per_event_kind_correct_min": "14/16",
+    "mixed_delayed_correct_min": "28/32",
+    "per_kind_read_form_cell_correct_min": "7/8",
+    "clean_noop_agreement_min": "15/16",
+    "reset_drop_min": "16/64",
+    "shuffle_drop_min": "16/64",
+    "state_swap_donor_min": "12/16",
+    "fresh_replica_payload_exact": true
+  },
+  "training": {
+    "qa_only": {"qa_presentations": 512, "teacher_inputs_forbidden": true},
+    "teacher_assisted": {
+      "distill_presentations": 256,
+      "qa_presentations": 256,
+      "losses_never_mixed": true,
+      "qa_stage_unloads_teacher": true,
+      "distill_components": ["latent", "decoded_image", "query_free_qwen_visual_feature"],
+      "aggregation": "equal_thirds_after_frozen_median_calibration"
+    },
+    "learning_rate": 0.0001,
+    "weight_decay": 0.01,
+    "gradient_clip": 1.0,
+    "gradient_accumulation": 8,
+    "bf16": true,
+    "checkpoint_unet": "non_reentrant",
+    "event_noise": "sha256(global_seed,episode_id,turn_id)",
+    "post_budget_extension_forbidden": true
+  },
+  "cluster": {
+    "platform": "Inspire",
+    "migration_decision_date": "2026-07-17",
+    "fudan_status": "abandoned_for_r3_no_further_submissions",
+    "workspace": "分布式训练空间",
+    "project": "前沿课题探索",
+    "compute_group": "开发区-H200-3号机房",
+    "instance": "vlm-r3-h200x2-live-20260717",
+    "instance_status_at_lock": "RUNNING",
+    "node": "qb-prod-gpu2007",
+    "image": "ngc-pytorch:25.02-cuda12.8.0-py3",
+    "nodes": 1,
+    "gpus_per_instance": 2,
+    "gpu_model": "H200",
+    "gpu_memory_mib_each": 143771,
+    "cpus": 40,
+    "memory_gib": 400,
+    "shm_gib": 128,
+    "priority": 10,
+    "auto_stop": false,
+    "runtime": {
+      "python": "3.12.3",
+      "torch": "2.7.0a0+ecf3bae40a.nv25.02",
+      "torch_cuda": "12.8",
+      "cuda_toolkit": "12.8.61",
+      "driver": "570.124.06",
+      "environment_strategy": "venv_with_system_site_packages_preserving_ngc_torch"
+    },
+    "network": {
+      "internal_pypi_reachable": true,
+      "github_from_gpu_instance": false,
+      "huggingface_from_gpu_instance": false,
+      "external_download_path": "CPU资源空间 preparation notebook to project-shared storage"
+    },
+    "paths": {
+      "repo": "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory",
+      "venv": "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502",
+      "runs": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r3",
+      "models": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory",
+      "hf_cache": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/cache/huggingface"
+    },
+    "scientific_jobs_require_clean_commit": true,
+    "h200_requires_fresh_technical_gate_evidence": true,
+    "historical_a800_gate_results_do_not_transfer": true,
+    "submission_state": "not_submitted"
+  }
+}

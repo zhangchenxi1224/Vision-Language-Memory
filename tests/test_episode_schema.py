@@ -33,6 +33,7 @@ def make_episode() -> Episode:
             Turn(TurnType.EVENT, EventKind.SET, "Remember b."),
             Turn(TurnType.QUERY, query=query),
             Turn(TurnType.MIXED, EventKind.NOOP, "Unrelated detail.", query),
+            Turn(TurnType.QUERY, query=query),
             Turn(TurnType.EVENT, EventKind.CLEAR, "Clear it."),
         ),
     )

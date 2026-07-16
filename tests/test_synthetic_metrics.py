@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import hashlib
 import sys
 import tempfile
 import unittest
+from dataclasses import replace
 from pathlib import Path
 
 import torch
@@ -16,10 +18,11 @@ from scripts.eval.dreamlite_mcq import (  # noqa: E402
     _target_index_in_choices,
     collect_synthetic,
     intervention_states,
+    semantic_group_report,
 )
 from scripts.eval.qwen_text_baselines import synthetic_queries  # noqa: E402
 from scripts.eval.score_synthetic import DEFAULT_MAIN_CONTRASTS  # noqa: E402
-from vision_memory.data import DatasetSizes, generate_dataset, read_jsonl  # noqa: E402
+from vision_memory.data import DatasetSizes, generate_dataset, read_jsonl, write_jsonl  # noqa: E402
 from vision_memory.eval import (  # noqa: E402
     compute_synthetic_metrics,
     filter_preregistered_records,
@@ -155,6 +158,51 @@ class SyntheticMetricTest(unittest.TestCase):
             skip_item.metadata["counterfactual_pair_id"],
         )
 
+    def test_dreamlite_predictions_and_report_preserve_semantic_group_provenance(self):
+        class Updater:
+            def __call__(self, state, _event, _episode_id, _turn_id):
+                return state + 1
+
+        class Model:
+            updater = Updater()
+
+            @staticmethod
+            def reset_state():
+                return torch.zeros(1)
+
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            generate_dataset(
+                root,
+                sizes=DatasetSizes(train=4, dev=4, test_id=4, test_ood=16),
+                seed=23,
+            )
+            path = root / "test_id.jsonl"
+            episode = replace(read_jsonl(path)[0], semantic_group_id="r3-semantic-000001")
+            write_jsonl(path, [episode])
+            item = collect_synthetic(
+                Model(), path, limit=None, recurrence_mode="direct_latent", skip_noop=False
+            )[0]
+
+        self.assertEqual(item.metadata["semantic_group_id"], "r3-semantic-000001")
+        report = semantic_group_report([item])
+        expected_sha = hashlib.sha256(b'["r3-semantic-000001"]').hexdigest()
+        self.assertEqual(report["semantic_group_count"], 1)
+        self.assertEqual(report["semantic_group_ids_sha256"], expected_sha)
+        self.assertTrue(report["semantic_group_metadata_complete"])
+        self.assertEqual(report["query_states_missing_semantic_group_id"], 0)
+
+        missing = QueryState(
+            metadata={},
+            query="q",
+            choices=("a", "b", "c", "d"),
+            target_index=0,
+            state=torch.zeros(1),
+        )
+        incomplete = semantic_group_report([item, missing])
+        self.assertFalse(incomplete["semantic_group_metadata_complete"])
+        self.assertEqual(incomplete["query_states_missing_semantic_group_id"], 1)
+
     def test_state_swap_maps_donor_semantics_into_recipient_choice_order(self):
         first = QueryState(
             metadata={
@@ -212,8 +260,14 @@ class SyntheticMetricTest(unittest.TestCase):
             initial_state=torch.full((1,), 2.0),
             seed=0,
         )
-        self.assertIn(float(shuffled[0].state.item()), {0.0, 1.0})
-        self.assertIn(float(shuffled[2].state.item()), {3.0, 4.0})
+        for source, shuffled_state in zip(
+            [first, donor, clean_first, clean_second],
+            shuffled,
+            strict=True,
+        ):
+            self.assertFalse(torch.equal(source.state, shuffled_state.state))
+        self.assertIn(float(shuffled[0].state.item()), {1.0, 4.0})
+        self.assertIn(float(shuffled[2].state.item()), {1.0, 4.0})
 
     def test_stale_target_uses_semantic_text_not_previous_position(self):
         choices = ("new", "other", "old", "none")

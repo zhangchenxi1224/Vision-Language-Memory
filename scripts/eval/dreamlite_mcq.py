@@ -16,7 +16,7 @@ import torch
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "src"))
 
-from vision_memory.data import read_jsonl as read_synthetic_jsonl  # noqa: E402
+from vision_memory.data import REVERSE_CYCLIC4, read_jsonl as read_synthetic_jsonl  # noqa: E402
 from vision_memory.dreamlite import freeze_module  # noqa: E402
 from vision_memory.prefeval import prefeval_noise_episode_key  # noqa: E402
 from vision_memory.reader import qwen3vl_choice_nll  # noqa: E402
@@ -38,6 +38,44 @@ class InterventionState:
     state: torch.Tensor
     donor_target_index: int | None = None
     donor_episode_id: str | None = None
+
+
+def expand_choice_views(items: list[QueryState], family: str) -> list[QueryState]:
+    """Expand Reader-only candidate views without rerunning the updater."""
+
+    if family == "stored":
+        expanded: list[QueryState] = []
+        for item in items:
+            metadata = {**item.metadata, "choice_view_family": "stored", "choice_view_index": 0}
+            expanded.append(
+                QueryState(metadata, item.query, item.choices, item.target_index, item.state)
+            )
+        return expanded
+    if family != "reverse-cyclic4":
+        raise ValueError(f"Unknown choice view family: {family}")
+    expanded = []
+    for item in items:
+        target_text = item.choices[item.target_index]
+        base_query_id = str(item.metadata["query_id"])
+        for view_index, permutation in enumerate(REVERSE_CYCLIC4):
+            choices = tuple(item.choices[index] for index in permutation)
+            metadata = {
+                **item.metadata,
+                "base_query_id": base_query_id,
+                "query_id": f"{base_query_id}:reverse{view_index}",
+                "choice_view_family": family,
+                "choice_view_index": view_index,
+            }
+            expanded.append(
+                QueryState(
+                    metadata=metadata,
+                    query=item.query,
+                    choices=choices,
+                    target_index=choices.index(target_text),
+                    state=item.state,
+                )
+            )
+    return expanded
 
 
 def _synchronize(device: torch.device) -> None:
@@ -70,6 +108,34 @@ def sha256_file(path: Path) -> str:
         for block in iter(lambda: handle.read(1024 * 1024), b""):
             digest.update(block)
     return digest.hexdigest()
+
+
+def semantic_group_report(items: list[QueryState]) -> dict[str, Any]:
+    """Summarize split-safe R3 group provenance without exposing group members."""
+
+    group_ids = sorted(
+        {
+            str(group_id)
+            for item in items
+            if (group_id := item.metadata.get("semantic_group_id")) is not None
+        }
+    )
+    missing = sum(item.metadata.get("semantic_group_id") is None for item in items)
+    digest = None
+    if group_ids:
+        payload = json.dumps(
+            group_ids,
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode("utf-8")
+        digest = hashlib.sha256(payload).hexdigest()
+    return {
+        "semantic_group_count": len(group_ids),
+        "semantic_group_ids_sha256": digest,
+        "semantic_group_metadata_complete": bool(items) and missing == 0,
+        "query_states_missing_semantic_group_id": missing,
+    }
 
 
 def locked_revision(path: Path) -> str:
@@ -164,13 +230,16 @@ def collect_synthetic(
                             else None
                         ),
                         "query_comparison_id": query.comparison_id,
+                        "semantic_group_id": episode.semantic_group_id,
                         "topic": episode.topic,
+                        "template_id": episode.template_id,
                         "subtype": last_transition,
                         "split": episode.split,
                         "ood_group": episode.ood_group,
                         "update_count": sum(item.calls_updater for item in episode.turns[: turn_index + 1]),
                         "route": "event_then_query" if turn.calls_updater else "query_read_only",
                         "query_turn_type": turn.type.value,
+                        "probe_role": "immediate" if turn.calls_updater else "delayed",
                         "event_latency_seconds": event_latency_since_query,
                         "updater_calls_since_query": updater_calls_since_query,
                         "noop_events_since_query": noop_events_since_query,
@@ -297,20 +366,41 @@ def intervention_states(
                 item.metadata.get("split"),
                 item.metadata.get("protocol", "synthetic"),
                 item.metadata.get("forced_write_k"),
-                item.metadata.get("form", item.metadata.get("subtype")),
                 item.metadata.get("query_ordinal", 0),
-                item.metadata.get("distractor_variant"),
+                item.metadata.get("probe_role", "delayed"),
+                item.metadata.get("choice_view_index", 0),
                 item.metadata.get("noop_policy"),
             )
             groups.setdefault(key, []).append(index)
         order = list(range(len(items)))
         for group_number, key in enumerate(sorted(groups, key=repr)):
             recipients = groups[key]
-            donors = recipients.copy()
-            random.Random(seed + group_number).shuffle(donors)
-            if len(donors) > 1 and donors == recipients:
-                donors = donors[1:] + donors[:1]
-            for recipient, donor in zip(recipients, donors, strict=True):
+            buckets: dict[str, list[int]] = {}
+            for recipient in recipients:
+                item = items[recipient]
+                target_text = item.choices[item.target_index]
+                buckets.setdefault(target_text, []).append(recipient)
+            maximum_bucket = max(map(len, buckets.values()))
+            if len(recipients) < 2 or maximum_bucket > len(recipients) // 2:
+                raise ValueError(
+                    "state shuffle requires a cross-episode, different-target derangement in every stratum; "
+                    f"stratum={key!r}, target_counts={dict(sorted((name, len(values)) for name, values in buckets.items()))}"
+                )
+            rng = random.Random(seed + group_number)
+            ordered: list[int] = []
+            for target_text in sorted(buckets, key=lambda name: (-len(buckets[name]), name)):
+                values = buckets[target_text]
+                rng.shuffle(values)
+                ordered.extend(values)
+            donors = ordered[maximum_bucket:] + ordered[:maximum_bucket]
+            if any(
+                recipient == donor
+                or items[recipient].choices[items[recipient].target_index]
+                == items[donor].choices[items[donor].target_index]
+                for recipient, donor in zip(ordered, donors, strict=True)
+            ):
+                raise RuntimeError("Internal state-shuffle derangement construction failed.")
+            for recipient, donor in zip(ordered, donors, strict=True):
                 order[recipient] = donor
         return [InterventionState(items[index].state) for index in order]
     if condition == "state_swap":
@@ -318,6 +408,7 @@ def intervention_states(
             (
                 item.metadata.get("episode_id"),
                 item.metadata.get("query_ordinal", 0),
+                item.metadata.get("choice_view_index", 0),
                 item.metadata.get("noop_policy"),
             ): item
             for item in items
@@ -327,6 +418,7 @@ def intervention_states(
             donor_key = (
                 item.metadata.get("counterfactual_episode_id"),
                 item.metadata.get("query_ordinal", 0),
+                item.metadata.get("choice_view_index", 0),
                 item.metadata.get("noop_policy"),
             )
             donor = by_episode_ordinal.get(donor_key)
@@ -360,6 +452,11 @@ def main() -> int:
     parser.add_argument("--dreamlite", type=Path, required=True)
     parser.add_argument("--reader", type=Path, required=True)
     parser.add_argument("--checkpoint", type=Path)
+    parser.add_argument(
+        "--expected-training-regime",
+        choices=("qa_only", "teacher_assisted"),
+        help="Required for R3 checkpoints; prevents teacher lineage from being labeled as QA-only.",
+    )
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--method", required=True)
     parser.add_argument("--conditions", nargs="+", choices=("standard", "reset", "shuffle", "state_swap"), default=["standard"])
@@ -382,6 +479,12 @@ def main() -> int:
     parser.add_argument("--initial-state-mode", choices=("blank", "fixture", "file"))
     parser.add_argument("--source-image", type=Path, help="Accepted only for the explicit file initialization mode")
     parser.add_argument("--limit", type=int)
+    parser.add_argument(
+        "--choice-view-family",
+        choices=("stored", "reverse-cyclic4"),
+        default="stored",
+        help="Expand candidate permutations after state construction; the updater never receives the view.",
+    )
     parser.add_argument("--dreamlite-device", default="cuda:0")
     parser.add_argument("--reader-device", default="cuda:1")
     args = parser.parse_args()
@@ -391,6 +494,19 @@ def main() -> int:
     if not torch.cuda.is_available() or torch.cuda.device_count() < 2:
         raise SystemExit("DreamLite MCQ evaluation requires two visible GPUs.")
     checkpoint_manifest = read_checkpoint_manifest(args.checkpoint)
+    checkpoint_lineage = (
+        checkpoint_manifest.get("training_lineage") if isinstance(checkpoint_manifest, dict) else None
+    )
+    if isinstance(checkpoint_lineage, dict) and int(checkpoint_lineage.get("schema_version", 0)) >= 2:
+        if args.expected_training_regime is None:
+            raise ValueError("R3 checkpoint evaluation requires --expected-training-regime.")
+        if checkpoint_lineage.get("training_regime") != args.expected_training_regime:
+            raise ValueError(
+                "Checkpoint training_regime conflicts with --expected-training-regime; "
+                "teacher lineage cannot be written into QA-only results."
+            )
+    elif args.expected_training_regime is not None and checkpoint_manifest is None:
+        raise ValueError("--expected-training-regime requires a checkpoint manifest.")
     manifest_args = None
     if checkpoint_manifest is not None:
         raw_manifest_args = checkpoint_manifest.get("arguments")
@@ -437,6 +553,7 @@ def main() -> int:
     elif source_image is not None:
         raise SystemExit("--source-image is accepted only with --initial-state-mode file.")
     learn_initial_state = bool(manifest_args.get("learn_initial_state", False)) if manifest_args else False
+    deterministic_ce = bool(manifest_args.get("strict_determinism", False)) if manifest_args else False
 
     dreamlite_revision = locked_revision(args.dreamlite)
     reader_revision = locked_revision(args.reader)
@@ -565,6 +682,7 @@ def main() -> int:
     if args.noop_policy == "both":
         for item in items:
             item.metadata["noop_intervention_pair_id"] = str(item.metadata["query_id"])
+    items = expand_choice_views(items, args.choice_view_family)
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
     with args.output.open("w", encoding="utf-8", newline="\n") as handle:
@@ -588,6 +706,7 @@ def main() -> int:
                         query=format_mcq_query(item.query, item.choices),
                         choices=item.choices,
                         device=reader_device,
+                        deterministic_ce=deterministic_ce,
                     )
                 _synchronize(reader_device)
                 reader_latency = time.monotonic() - reader_started
@@ -604,6 +723,9 @@ def main() -> int:
                     "condition": condition,
                     "prediction_index": result.predicted_index,
                     "target_index": item.target_index,
+                    "choices": list(item.choices),
+                    "prediction_text": item.choices[result.predicted_index],
+                    "target_text": item.choices[item.target_index],
                     "choice_mean_nll": list(result.mean_nll),
                     "decode_latency_seconds": decode_latency,
                     "reader_latency_seconds": reader_latency,
@@ -622,6 +744,18 @@ def main() -> int:
                     "donor_target_index": intervention.donor_target_index,
                     "donor_episode_id": intervention.donor_episode_id,
                     "checkpoint": None if args.checkpoint is None else str(args.checkpoint),
+                    "training_regime": (
+                        None if not isinstance(checkpoint_lineage, dict) else checkpoint_lineage.get("training_regime")
+                    ),
+                    "parent_checkpoint_regime": (
+                        None
+                        if not isinstance(checkpoint_lineage, dict)
+                        else checkpoint_lineage.get("parent_checkpoint_regime")
+                    ),
+                    "teacher_control": (
+                        None if not isinstance(checkpoint_lineage, dict) else checkpoint_lineage.get("teacher_control")
+                    ),
+                    "deterministic_ce": deterministic_ce,
                 }
                 handle.write(json.dumps(row, ensure_ascii=False, sort_keys=True) + "\n")
 
@@ -634,11 +768,14 @@ def main() -> int:
         "prediction_records": len(items) * len(args.conditions),
         "conditions": args.conditions,
         "noop_policy": args.noop_policy,
+        "choice_view_family": args.choice_view_family,
+        "deterministic_ce": deterministic_ce,
         "checkpoint_manifest": checkpoint_manifest,
         "dreamlite_revision": dreamlite_revision,
         "reader_revision": reader_revision,
         "initial_image": initial_image_metadata,
         "learn_initial_state": learn_initial_state,
+        **semantic_group_report(items),
         "peak_vram_gib": {
             str(updater_device): torch.cuda.max_memory_allocated(updater_device) / 2**30,
             str(reader_device): torch.cuda.max_memory_allocated(reader_device) / 2**30,

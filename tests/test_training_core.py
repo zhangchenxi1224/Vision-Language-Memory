@@ -44,7 +44,6 @@ class EpisodeRunnerTest(unittest.TestCase):
     def episode(self):
         return {
             "episode_id": "ep-1",
-            "hidden_ledger": {"must": "not leak"},
             "turns": [
                 {"turn_id": 0, "kind": "event", "event_text": "set red", "transition": "set"},
                 {
@@ -62,6 +61,13 @@ class EpisodeRunnerTest(unittest.TestCase):
                     "choices": ["red", "blue", "green", "yellow"],
                     "target_index": 0,
                 },
+                {
+                    "turn_id": 3,
+                    "kind": "query",
+                    "query_text": "Which color remains stored?",
+                    "choices": ["red", "blue", "green", "yellow"],
+                    "target_index": 0,
+                },
             ],
         }
 
@@ -75,9 +81,57 @@ class EpisodeRunnerTest(unittest.TestCase):
             reader_loss_fn=reader_loss,
         )
         self.assertEqual([call[0] for call in updater.calls], ["set red", "room wood"])
-        self.assertEqual(result.route_trace, ("0:update", "1:read", "2:update", "2:read"))
-        self.assertEqual(result.query_count, 2)
-        self.assertEqual(result.target_token_count, 4)
+        self.assertEqual(result.route_trace, ("0:update", "1:read", "2:update", "2:read", "3:read"))
+        self.assertEqual(result.query_count, 3)
+        self.assertEqual(result.target_token_count, 6)
+
+    def test_model_visible_hidden_ledger_fails_closed(self):
+        episode = self.episode()
+        episode["hidden_ledger"] = {"target_index": 0}
+        with self.assertRaisesRegex(ValueError, "Hidden ledger"):
+            run_episode(
+                episode=episode,
+                initial_state=torch.zeros(1, 1, 2, 2),
+                update_fn=ScalarUpdater(),
+                decode_fn=lambda state: state,
+                reader_loss_fn=reader_loss,
+            )
+
+    def test_formal_mixed_turn_without_delayed_probe_fails_closed(self):
+        episode = self.episode()
+        episode["turns"].pop()
+        with self.assertRaisesRegex(ValueError, "same-target"):
+            run_episode(
+                episode=episode,
+                initial_state=torch.zeros(1, 1, 2, 2),
+                update_fn=ScalarUpdater(),
+                decode_fn=lambda state: state,
+                reader_loss_fn=reader_loss,
+                require_mixed_delayed_probe=True,
+            )
+
+        # Historical R1/R2 diagnostics remain replayable unless the prospective
+        # R3 contract is explicitly selected.
+        run_episode(
+            episode=episode,
+            initial_state=torch.zeros(1, 1, 2, 2),
+            update_fn=ScalarUpdater(),
+            decode_fn=lambda state: state,
+            reader_loss_fn=reader_loss,
+        )
+
+    def test_formal_delayed_probe_must_match_target_and_choice_set(self):
+        episode = self.episode()
+        episode["turns"][-1]["target_index"] = 2
+        with self.assertRaisesRegex(ValueError, "same-target"):
+            run_episode(
+                episode=episode,
+                initial_state=torch.zeros(1, 1, 2, 2),
+                update_fn=ScalarUpdater(),
+                decode_fn=lambda state: state,
+                reader_loss_fn=reader_loss,
+                require_mixed_delayed_probe=True,
+            )
 
     def test_loss_is_normalized_per_target_token_then_per_query(self):
         episode = {
@@ -149,7 +203,6 @@ class EpisodeRunnerTest(unittest.TestCase):
 
         episode = {
             "episode_id": "listwise",
-            "hidden_ledger": {"target_index": 3},
             "turns": [
                 {"kind": "event", "event_text": "set red"},
                 {
@@ -175,11 +228,159 @@ class EpisodeRunnerTest(unittest.TestCase):
         self.assertEqual(choices, ("blue", "red", "green", "yellow"))
         self.assertEqual(target_index, 1)
         self.assertNotIn("target_index", query)
-        self.assertNotIn("hidden_ledger", query)
         self.assertEqual(
             query,
             "Which?\nA. blue\nB. red\nC. green\nD. yellow\nAnswer with the option text only.",
         )
+
+    def test_choice_view_rotates_prompt_and_synchronizes_target_only_at_loss_boundary(self):
+        observed: list[tuple[str, tuple[str, ...], int]] = []
+
+        def choice_reader(image, query, choices, target_index):
+            observed.append((query, choices, target_index))
+            return SimpleNamespace(loss=image.mean(), target_ids=torch.ones(1, 1, dtype=torch.long))
+
+        def left_rotate(_episode_id, _turn_id, choices, target_index):
+            return choices[1:] + choices[:1], (target_index - 1) % 4
+
+        episode = {
+            "episode_id": "rotated-listwise",
+            "turns": [
+                {"kind": "event", "event_text": "set red"},
+                {
+                    "kind": "query",
+                    "query_text": "Which?",
+                    "choices": ["blue", "red", "green", "yellow"],
+                    "target_index": 1,
+                },
+            ],
+        }
+        output = run_episode(
+            episode=episode,
+            initial_state=torch.zeros(1, 1, 2, 2),
+            update_fn=lambda state, *_: state + 1,
+            decode_fn=lambda state: state,
+            reader_loss_mode="listwise-choice",
+            choice_reader_loss_fn=choice_reader,
+            choice_view_fn=left_rotate,
+        )
+
+        self.assertEqual(output.training_regime, "qa_only")
+        self.assertIs(output.loss, output.qa_loss)
+        query, choices, target_index = observed[0]
+        self.assertEqual(choices, ("red", "green", "yellow", "blue"))
+        self.assertEqual(target_index, 0)
+        self.assertIn("A. red", query)
+
+    def test_choice_view_must_preserve_candidate_multiset_and_semantic_target(self):
+        episode = {
+            "episode_id": "invalid-view",
+            "turns": [
+                {
+                    "kind": "query",
+                    "query_text": "Which?",
+                    "choices": ["a", "b", "c", "d"],
+                    "target_index": 1,
+                }
+            ],
+        }
+
+        def choice_reader(image, query, choices, target_index):
+            del query, choices, target_index
+            return SimpleNamespace(loss=image.mean(), target_ids=torch.ones(1, 1))
+
+        common = {
+            "episode": episode,
+            "initial_state": torch.zeros(1, 1, 2, 2),
+            "update_fn": lambda state, *_: state,
+            "decode_fn": lambda state: state,
+            "reader_loss_mode": "listwise-choice",
+            "choice_reader_loss_fn": choice_reader,
+        }
+        with self.assertRaisesRegex(ValueError, "permutation"):
+            run_episode(**common, choice_view_fn=lambda *_: (("a", "b", "c", "x"), 1))
+        with self.assertRaisesRegex(ValueError, "semantic target"):
+            run_episode(**common, choice_view_fn=lambda *_: (("b", "c", "d", "a"), 1))
+
+    def test_training_regime_contract_is_fail_closed_and_reports_teacher_loss(self):
+        episode = {
+            "episode_id": "teacher-regime",
+            "turns": [
+                {"turn_id": "write", "kind": "event", "event_text": "set red"},
+                {"kind": "query", "query_text": "q", "target_text": "red"},
+            ],
+        }
+        common = {
+            "episode": episode,
+            "initial_state": torch.zeros(1, 1, 2, 2),
+            "update_fn": lambda state, *_: state + 1,
+            "decode_fn": lambda state: state,
+            "reader_loss_fn": reader_loss,
+        }
+        with self.assertRaisesRegex(ValueError, "qa_only training forbids"):
+            run_episode(**common, state_supervision_fn=lambda *_: torch.tensor(1.0))
+        qa_result = run_episode(**common, training_regime="teacher_assisted")
+        self.assertEqual(float(qa_result.loss), 1.0)
+
+        observed: list[tuple[str, str | int]] = []
+
+        def state_supervision(state, episode_id, turn_id):
+            observed.append((episode_id, turn_id))
+            return SimpleNamespace(loss=state.mean() * 2)
+
+        with self.assertRaisesRegex(ValueError, "must unload teacher"):
+            run_episode(
+                **common,
+                training_regime="teacher_assisted",
+                state_supervision_fn=state_supervision,
+            )
+        self.assertEqual(observed, [])
+
+    def test_teacher_stages_are_disjoint_and_distill_skips_queries(self):
+        episode = {
+            "episode_id": "disjoint-stages",
+            "turns": [
+                {"turn_id": 0, "kind": "event", "event_text": "set red"},
+                {"turn_id": 1, "kind": "query", "query_text": "q", "target_text": "red"},
+            ],
+        }
+
+        def state_supervision(state, *_):
+            scalar = state.mean()
+            return SimpleNamespace(
+                loss=scalar,
+                latent_raw=scalar + 1,
+                image_raw=scalar + 2,
+                feature_raw=scalar + 3,
+            )
+
+        distill = run_episode(
+            episode=episode,
+            initial_state=torch.zeros(1, 1, 2, 2),
+            update_fn=lambda state, *_: state + 1,
+            decode_fn=lambda state: state,
+            reader_loss_mode="listwise-choice",
+            training_regime="teacher_assisted",
+            objective_stage="distill",
+            state_supervision_fn=state_supervision,
+        )
+        self.assertIsNone(distill.qa_loss)
+        self.assertEqual(distill.query_count, 0)
+        self.assertEqual(float(distill.loss), 1.0)
+        self.assertEqual(float(distill.latent_distill_loss), 2.0)
+        self.assertIn("1:read-skipped-distill", distill.route_trace)
+
+        with self.assertRaisesRegex(ValueError, "must unload teacher"):
+            run_episode(
+                episode=episode,
+                initial_state=torch.zeros(1, 1, 2, 2),
+                update_fn=lambda state, *_: state + 1,
+                decode_fn=lambda state: state,
+                reader_loss_fn=reader_loss,
+                training_regime="teacher_assisted",
+                objective_stage="qa",
+                state_supervision_fn=state_supervision,
+            )
 
     def test_reader_loss_mode_and_callable_contracts_fail_closed(self):
         episode = {
@@ -303,6 +504,10 @@ class EpisodeRunnerTest(unittest.TestCase):
                     "now blue",
                     QuerySpec("Which?", ("red", "blue", "green", "yellow"), 1),
                 ),
+                Turn(
+                    TurnType.QUERY,
+                    query=QuerySpec("Which remains?", ("red", "blue", "green", "yellow"), 1),
+                ),
             ),
         )
         updater = ScalarUpdater()
@@ -314,7 +519,7 @@ class EpisodeRunnerTest(unittest.TestCase):
             reader_loss_fn=reader_loss,
         )
         self.assertEqual([call[0] for call in updater.calls], ["remember red", "unrelated weather", "now blue"])
-        self.assertEqual(output.query_count, 2)
+        self.assertEqual(output.query_count, 3)
 
 
 class ReproducibilityTest(unittest.TestCase):

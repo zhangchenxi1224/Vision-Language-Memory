@@ -47,16 +47,18 @@ FORBIDDEN_LEDGER_KEYS = frozenset(
 )
 
 
-def _reject_hidden_ledger(value: Any, *, path: str = "episode") -> None:
+def reject_hidden_ledger(value: Any, *, path: str = "episode") -> None:
+    """Reject any model-visible embedded oracle/hidden ledger recursively."""
+
     if isinstance(value, Mapping):
         for key, item in value.items():
             normalized = str(key).strip().lower()
             if normalized in FORBIDDEN_LEDGER_KEYS or normalized.startswith("hidden_ledger"):
                 raise ValueError(f"Hidden ledger field is forbidden at {path}.{key}")
-            _reject_hidden_ledger(item, path=f"{path}.{key}")
+            reject_hidden_ledger(item, path=f"{path}.{key}")
     elif isinstance(value, (list, tuple)):
         for index, item in enumerate(value):
-            _reject_hidden_ledger(item, path=f"{path}[{index}]")
+            reject_hidden_ledger(item, path=f"{path}[{index}]")
 
 
 @dataclass(frozen=True)
@@ -186,6 +188,7 @@ class Episode:
     pair_id: str
     counterfactual_episode_id: str
     topic: str
+    semantic_group_id: str | None = None
     ood_group: str | None = None
     entity_surface: str | None = None
     template_family: str | None = None
@@ -207,6 +210,8 @@ class Episode:
                 raise ValueError(f"{name} must be non-empty")
         if self.counterfactual_episode_id == self.episode_id:
             raise ValueError("counterfactual_episode_id must refer to another episode")
+        if self.semantic_group_id is not None and not self.semantic_group_id.strip():
+            raise ValueError("semantic_group_id must be non-empty when provided")
         if self.entity_surface is not None and not self.entity_surface.strip():
             raise ValueError("entity_surface must be non-empty when provided")
         if self.template_family is not None and not self.template_family.strip():
@@ -219,8 +224,12 @@ class Episode:
                 raise ValueError("distractor_episode_id must refer to another episode")
         elif any(value is not None for value in distractor_links):
             raise ValueError("unpaired episodes must not contain distractor link fields")
-        if not 4 <= len(self.turns) <= 16:
-            raise ValueError("episodes must contain between 4 and 16 turns")
+        # Formal synthetic ID/OOD validation still requires 4--8 turns (or
+        # 9--16 for the length extrapolation split).  The general schema also
+        # admits the preregistered R3 Set8 micro episodes, whose minimal causal
+        # unit is exactly one event followed by one delayed query.
+        if not 2 <= len(self.turns) <= 16:
+            raise ValueError("episodes must contain between 2 and 16 turns")
         if not any(turn.calls_reader for turn in self.turns):
             raise ValueError("episode must contain at least one query")
 
@@ -264,6 +273,8 @@ class Episode:
         }
         if self.ood_group is not None:
             value["ood_group"] = self.ood_group
+        if self.semantic_group_id is not None:
+            value["semantic_group_id"] = self.semantic_group_id
         if self.entity_surface is not None:
             value["entity_surface"] = self.entity_surface
         if self.template_family is not None:
@@ -278,7 +289,7 @@ class Episode:
 
     @classmethod
     def from_dict(cls, value: Mapping[str, Any]) -> "Episode":
-        _reject_hidden_ledger(value)
+        reject_hidden_ledger(value)
         allowed = {
             "episode_id",
             "split",
@@ -289,6 +300,7 @@ class Episode:
             "counterfactual_episode_id",
             "topic",
             "turns",
+            "semantic_group_id",
             "ood_group",
             "entity_surface",
             "template_family",
@@ -323,6 +335,11 @@ class Episode:
             counterfactual_episode_id=str(value["counterfactual_episode_id"]),
             topic=str(value["topic"]),
             turns=tuple(Turn.from_dict(item) for item in value["turns"]),
+            semantic_group_id=(
+                str(value["semantic_group_id"])
+                if value.get("semantic_group_id") is not None
+                else None
+            ),
             ood_group=str(value["ood_group"]) if value.get("ood_group") is not None else None,
             entity_surface=(
                 str(value["entity_surface"]) if value.get("entity_surface") is not None else None

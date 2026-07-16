@@ -26,32 +26,59 @@ class MockBatch(dict):
 
 
 class MockTokenizer:
+    def __init__(self):
+        self.observed_texts: list[str] = []
+
     def __call__(self, text, add_special_tokens, return_tensors):
         del add_special_tokens, return_tensors
-        ids = {"a": [2], "b": [3], "c": [4], "d": [5]}.get(text, [2, 3])
+        self.observed_texts.append(text)
+        mapping = {
+            "prompt ": [0, 1, 1],
+            "prompt answer": [0, 1, 1, 6, 7],
+            "answer": [2, 3],
+            "prompt a": [0, 1, 1, 2],
+            "prompt b": [0, 1, 1, 3],
+            "prompt c": [0, 1, 1, 4],
+            "prompt d": [0, 1, 1, 5],
+            "a": [2],
+            "b": [3],
+            "c": [4],
+            "d": [5],
+        }
+        ids = mapping.get(text, [2, 3])
         return {"input_ids": torch.tensor([ids], dtype=torch.long)}
 
 
 class MockProcessor:
-    tokenizer = MockTokenizer()
-
     def __init__(self):
+        self.tokenizer = MockTokenizer()
         self.observed_do_resize = "not-passed"
         self.observed_do_resize_calls: list[object] = []
+        self.observed_processor_texts: list[str] = []
 
     def apply_chat_template(self, messages, tokenize, add_generation_prompt):
         del messages, tokenize, add_generation_prompt
-        return "prompt"
+        return "prompt "
 
     def __call__(self, *, text, images, return_tensors, do_rescale, do_resize="not-passed"):
-        del text, return_tensors, do_rescale
+        del return_tensors, do_rescale
         self.observed_do_resize = do_resize
         self.observed_do_resize_calls.append(do_resize)
+        rendered_text = text[0]
+        self.observed_processor_texts.append(rendered_text)
         image = images[0]
         return MockBatch(
             {
-                "input_ids": torch.tensor([[0, 1, 1]], dtype=torch.long),
-                "attention_mask": torch.ones(1, 3, dtype=torch.long),
+                "input_ids": self.tokenizer(
+                    rendered_text,
+                    add_special_tokens=False,
+                    return_tensors="pt",
+                )["input_ids"],
+                "attention_mask": torch.ones(
+                    1,
+                    len(self.tokenizer(rendered_text, add_special_tokens=False, return_tensors="pt")["input_ids"][0]),
+                    dtype=torch.long,
+                ),
                 "pixel_values": image.unsqueeze(0),
                 "image_grid_thw": torch.tensor([[1, 1, 1]], dtype=torch.long),
             }
@@ -102,7 +129,34 @@ class ReaderLossContractTest(unittest.TestCase):
         self.assertGreater(image.grad.norm().item(), 0.0)
         self.assertTrue(all(parameter.grad is None for parameter in model.parameters()))
         self.assertEqual(tuple(result.target_logits.shape[:2]), (1, 2))
+        self.assertEqual(result.target_ids.tolist(), [[6, 7]])
+        self.assertEqual(processor.observed_processor_texts, ["prompt answer"])
+        self.assertNotIn("answer", processor.tokenizer.observed_texts)
         self.assertEqual(processor.observed_do_resize, "not-passed")
+
+    def test_joint_target_tokenization_fails_if_appending_target_retokenizes_prefix(self):
+        class RetokenizingTokenizer(MockTokenizer):
+            def __call__(self, text, add_special_tokens, return_tensors):
+                if text == "prompt ":
+                    return {"input_ids": torch.tensor([[0, 1]], dtype=torch.long)}
+                if text == "prompt answer":
+                    return {"input_ids": torch.tensor([[0, 9, 6]], dtype=torch.long)}
+                return super().__call__(text, add_special_tokens, return_tensors)
+
+        model = freeze_module(MockQwen())
+        processor = MockProcessor()
+        processor.tokenizer = RetokenizingTokenizer()
+        image = torch.rand(3, 8, 8, requires_grad=True)
+
+        with self.assertRaisesRegex(RuntimeError, "retokenized the chat-template prefix"):
+            qwen3vl_target_only_ce(
+                model=model,
+                processor=processor,
+                image=image,
+                query="question",
+                target="answer",
+                device=torch.device("cpu"),
+            )
 
     def test_target_only_ce_can_explicitly_disable_processor_resize(self):
         model = freeze_module(MockQwen())

@@ -43,9 +43,9 @@ decode/re-encode, and stop-gradient versus differentiable conditioning.
 
 ## Local development
 
-Use any supported Python 3.10-3.13 environment for lightweight work; Python 3.10 is the
-verified Fudan A800 cluster target. Create and activate the environment, install a suitable CPU/CUDA PyTorch
-build **inside it**, then install the pinned application dependencies:
+Use any supported Python 3.10-3.13 environment for lightweight work. Create and activate
+the environment, install a suitable CPU/CUDA PyTorch build **inside it**, then install the
+pinned application dependencies:
 
 ```powershell
 cd D:\2026WorkExperience\VisonLearnableMemory
@@ -66,32 +66,38 @@ is optional:
 python scripts\bootstrap\fetch_models.py --metadata-only
 ```
 
-## Cluster bootstrap
+## R3 Inspire H200 bootstrap
 
-The verified Fudan A800 environment is Python 3.10, CUDA module 11.8,
-`torch==2.7.1+cu118`, and `torchvision==0.22.1+cu118`. The earlier Torch 2.4.1
-environment is incompatible with Diffusers 0.39.0's custom attention-op annotations and
-must not be used. The executable bootstrap is `scripts/cluster/setup_fudan_a800.sh`.
+The current R3 target is the existing Inspire notebook
+`vlm-r3-h200x2-live-20260717`: one node with 2 H200 GPUs, the official
+`ngc-pytorch:25.02-cuda12.8.0-py3` image, Python 3.12, CUDA 12.8, and the
+image-supplied `torch==2.7.0a0+ecf3bae40a.nv25.02`. R3 must not install a
+replacement PyTorch wheel. It uses an overlay venv with
+`--system-site-packages` and installs only the explicitly locked non-Torch packages with
+`--no-deps`. Full path, egress, background-sentinel, and formal-preflight instructions are
+in [INSPIRE.md](INSPIRE.md).
 
 ```bash
-python -m pip install -r requirements/runtime-pinned.txt
-python -m pip install -e . --no-deps
-python scripts/bootstrap/fetch_sources.py
-python scripts/bootstrap/fetch_models.py --model-root "$VLM_MODEL_ROOT"
-python scripts/bootstrap/preflight.py \
-  --mode cluster \
+source /absolute/private/path/vlm-r3.env
+export VLM_EXPECTED_COMMIT=<FULL_40_CHARACTER_R3_COMMIT>
+bash scripts/inspire/bootstrap_r3_h200.sh
+
+# After the locked model snapshots have been reconstructed through the
+# detached infrastructure launcher, create the scientific preflight.
+$VLM_VENV_ROOT/bin/python scripts/inspire/preflight_r3_h200.py \
+  --repo "$PWD" \
   --model-root "$VLM_MODEL_ROOT" \
-  --expected-torch "$VLM_EXPECTED_TORCH" \
-  --min-gpus 2 \
-  --min-gpu-memory-gib 40 \
-  --output runs/preflight.json
+  --expected-commit "$VLM_EXPECTED_COMMIT" \
+  --require-models \
+  --output "$VLM_RUN_ROOT/preflight/$VLM_EXPECTED_COMMIT/r3_h200_formal.json"
 ```
 
-The final two resource flags are the conservative starting gate for the two-device E2E
-probe, not a measured minimum. Activations and four-step recurrent graphs dominate memory;
-the approximately 14 GB of checkpoint files alone are not a useful VRAM estimate. Prefer
-Reader and updater on separate 40/80 GB GPUs and leave non-reentrant U-Net checkpointing
-enabled. Record the final cluster-specific Torch/CUDA lock after the first successful run.
+The H200 preflight fails on a dirty or different commit, a venv-local Torch copy, any
+runtime/package drift, fewer than two H200 devices, incomplete immutable model snapshots,
+or a missing deterministic environment variable. Historical A800 technical results are not
+accepted as H200 R3 gate evidence; R3-S0, G4-L, G5-L, G6-L, and DL-S are rerun serially.
+The old Fudan setup and Slurm renderers remain in `scripts/cluster` solely to reproduce R1/R2
+audit artifacts and are not an R3 execution path.
 
 ## Real-model probe order
 
@@ -333,35 +339,34 @@ python scripts/eval/score_prefeval.py --predictions predictions.jsonl --output s
 python scripts/eval/score_synthetic.py --predictions predictions.jsonl --output scores.json
 ```
 
-## Strict Fudan probe submission
+## Strict Inspire R3 execution
 
-After committing and synchronizing an identical clean checkout on the cluster, first
-generate a dry run:
+Long Inspire operations are detached processes with immutable input metadata,
+`running.json`, complete stdout/stderr, content hashes, and an atomic `terminal.json`.
+`scripts/inspire/launch_background.py` rejects a reused run directory, a changed/dirty
+commit, preflight SHA drift, and (for scientific stages) any report without
+`formal_ready=true`. Monitor without mutating the stage:
+
+```bash
+$VLM_VENV_ROOT/bin/python scripts/inspire/poll_stage.py /absolute/stage/run-directory
+```
+
+The scientific order is R3-S0 -> G4-L -> G5-L -> G6-L -> DL-S, with the next stage launched
+only after the previous terminal report and scientific validator pass. Model downloads and
+teacher-cache construction use the explicitly restricted `--infrastructure-stage` path;
+that path cannot authorize a scientific gate. No DreamLite pilot is launched directly.
+
+### Historical Fudan Slurm path (R1/R2 only)
+
+The following command only renders the archived Fudan probe plan for audit/reproduction:
 
 ```bash
 python scripts/cluster/submit_probe_gates.py --through G6 --dry-run
 ```
 
-Run the same command without `--dry-run` to submit G1-G6. Each job is single-node, has an
-explicit GPU/time/memory request, runs strict preflight, and is chained with Slurm
-`afterok`. Logs and result JSON are written outside the repository. G6 validates that the
-two-event positive and detach reports have identical forward metadata/loss within the
-fixed tolerance and opposite intermediate-gradient behavior. The submission manifest is
-updated atomically after every sbatch, so partial submissions remain auditable.
-
-After the final clean commit re-passes G1--G6, the post-gate orchestrator builds the entire
-stop-gated formal matrix. It defaults to a dry run; real submission additionally requires
-`--submit` and the exact expected commit:
-
-```bash
-python scripts/cluster/submit_experiment_dag.py \
-  --expected-commit "$(git rev-parse HEAD)" --through eval \
-  --fetch-prefeval --include-ablations --include-prefeval-adaptation
-```
-
-Pilot learning-rate selection, its two baseline gains, and reset/shuffle checks use only the
-dev split. Test-ID is first evaluated after the selected learning rate is frozen. Failed data,
-sanity, lightweight, pilot, or resume gates cancel all dependent Slurm jobs.
+Do not remove `--dry-run` and do not use `setup_fudan_a800.sh` or
+`submit_experiment_dag.py` for R3. Their Python 3.10/CUDA 11.8/Torch 2.7.1 A800 lock and
+Slurm dependency semantics describe the historical platform, not the current H200 runtime.
 
 ## Repository boundaries
 
