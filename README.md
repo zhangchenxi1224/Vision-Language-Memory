@@ -189,11 +189,12 @@ a content-addressed schema-v2 manifest. The OOD split is evenly divided among he
 entities, topics, paraphrase templates, and 9-16-turn length extrapolation. The set-only
 corpus is independently generated; it is never made by deleting turns from full episodes.
 
-The lightweight implementation is a hashed event encoder, one-layer BiGRU, 64-channel
-64x64 FiLM-ConvGRU state, and differentiable RGB head. `lightweight_overfit.py` uses a
-fixed local surrogate only for CPU/API smoke tests. The scientific 64-episode gate uses
-the real frozen Qwen Reader and fails closed unless it reaches 90% training MCQ accuracy
-within 2,000 optimizer steps:
+The lightweight implementation is a hashed event encoder, one-layer BiGRU, an
+event-conditioned 16-mode orthogonal DCT-II writer, a 64-channel 64x64 FiLM-ConvGRU
+state, and a differentiable RGB head. The fixed zero initial state remains non-trainable.
+`lightweight_overfit.py` uses a fixed local surrogate only for CPU/API smoke tests. The
+scientific 64-episode gate uses the real frozen Qwen Reader and fails closed unless it
+reaches 90% training MCQ accuracy within 2,000 optimizer steps:
 
 ```bash
 python scripts/train/lightweight_episode.py \
@@ -202,6 +203,11 @@ python scripts/train/lightweight_episode.py \
   --method recurrent --overfit-gate --overfit-episodes 64 \
   --max-optimizer-steps 2000 --overfit-threshold 0.90
 ```
+
+`scripts/probes/qwen_visual_control_upper_bound.py` is a deliberately target-supervised
+diagnostic: the answer position selects one of four learned images. It tests whether the
+frozen Reader can be controlled through its visual channel, but it is not a memory method,
+baseline, or ablation and must never be reported as one.
 
 The formal DreamLite trainer supports whole-episode BPTT, direct-latent and differentiable
 decode/re-encode recurrence, deterministic per-event noise, LoRA-only parameter

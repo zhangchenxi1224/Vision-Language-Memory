@@ -65,6 +65,74 @@ class LightweightUpdaterTest(unittest.TestCase):
         torch.testing.assert_close(first, second)
         torch.testing.assert_close(lengths_a, lengths_b)
 
+    def test_fixed_spatial_basis_is_shape_checked_deterministic_and_orthogonal(self):
+        torch.manual_seed(11)
+        first = self.make_updater()
+        torch.manual_seed(97)
+        second = self.make_updater()
+
+        self.assertEqual(tuple(first.spatial_basis.shape), (16, 8, 8))
+        torch.testing.assert_close(first.spatial_basis, second.spatial_basis, rtol=0, atol=0)
+        flattened = first.spatial_basis.flatten(1)
+        gram = flattened @ flattened.T / (8 * 8)
+        torch.testing.assert_close(gram, torch.eye(16), rtol=1e-5, atol=1e-5)
+        self.assertNotIsInstance(first.initial_hidden, torch.nn.Parameter)
+        self.assertEqual(torch.count_nonzero(first.initial_hidden).item(), 0)
+
+        first.spatial_basis = torch.zeros(15, 8, 8)
+        state = first.initial_state(batch_size=1, device=torch.device("cpu"), dtype=torch.float32)
+        with self.assertRaisesRegex(RuntimeError, "spatial_basis shape"):
+            first.update(state, "Remember red.")
+
+    def test_event_creates_central_spatial_variance_and_backpropagates(self):
+        torch.manual_seed(23)
+        updater = self.make_updater()
+        state = updater.initial_state(batch_size=1, device=torch.device("cpu"), dtype=torch.float32)
+        image = updater.render(updater.update(state, "The preferred color is red."))
+        central_image = image[..., 4:12, 4:12]
+        spatial_variance = central_image.var(dim=(-2, -1), unbiased=False).mean()
+
+        self.assertTrue(torch.isfinite(spatial_variance))
+        self.assertGreater(spatial_variance.item(), 0.0)
+        spatial_variance.backward()
+
+        encoder_gradients = [
+            parameter.grad for parameter in updater.event_encoder.parameters() if parameter.requires_grad
+        ]
+        writer_gradient = updater.event_spatial_projection.weight.grad
+        self.assertTrue(any(gradient is not None and gradient.norm().item() > 0 for gradient in encoder_gradients))
+        self.assertIsNotNone(writer_gradient)
+        self.assertGreater(writer_gradient.norm().item(), 0.0)
+
+    def test_event_conditioned_spatial_maps_are_not_channelwise_rank_one(self):
+        torch.manual_seed(29)
+        updater = self.make_updater()
+        captured_inputs = []
+
+        def capture_cell_inputs(_module, inputs):
+            captured_inputs.append(inputs[0].detach())
+
+        handle = updater.cell.register_forward_pre_hook(capture_cell_inputs)
+        try:
+            state = updater.initial_state(batch_size=2, device=torch.device("cpu"), dtype=torch.float32)
+            updater.update(
+                state,
+                ["The preferred color is red.", "The preferred destination is Kyoto."],
+            )
+        finally:
+            handle.remove()
+
+        self.assertEqual(tuple(updater.event_spatial_projection.weight.shape), (8 * 16, 16))
+        self.assertEqual(len(captured_inputs), 1)
+        event_maps = captured_inputs[0]
+        centered = event_maps - event_maps.mean(dim=(-2, -1), keepdim=True)
+        similarities = torch.nn.functional.cosine_similarity(
+            centered[0].flatten(1),
+            centered[1].flatten(1),
+            dim=1,
+        ).abs()
+        self.assertGreater((similarities < 0.99).float().mean().item(), 0.5)
+
 
 if __name__ == "__main__":
     unittest.main()

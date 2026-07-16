@@ -4,8 +4,10 @@ import argparse
 import hashlib
 import importlib.metadata
 import json
+import math
 import platform
 import random
+import re
 import subprocess
 import sys
 import time
@@ -169,6 +171,233 @@ def episode_value(episode: Mapping[str, Any] | Any, name: str, default: Any = No
     return episode.get(name, default) if isinstance(episode, Mapping) else getattr(episode, name, default)
 
 
+def training_subset_audit(episodes: Sequence[Any]) -> dict[str, Any]:
+    """Fingerprint the exact ordered episodes consumed by the optimizer."""
+
+    episode_ids: list[str] = []
+    for episode in episodes:
+        episode_id = episode_value(episode, "episode_id")
+        if not isinstance(episode_id, str) or not episode_id.strip():
+            raise ValueError("Every selected training episode requires a non-empty episode_id.")
+        episode_ids.append(episode_id)
+    serialized = "\n".join(episode_ids).encode("utf-8")
+    return {
+        "count": len(episode_ids),
+        "ordered_episode_ids_sha256": hashlib.sha256(serialized).hexdigest(),
+        "hash_serialization": "UTF-8 episode IDs joined by LF with no trailing LF",
+        "ordered_episode_ids": episode_ids,
+    }
+
+
+def episode_pattern(episode: Mapping[str, Any] | Any) -> str:
+    template_id = episode_value(episode, "template_id")
+    if not isinstance(template_id, str):
+        return "unknown"
+    match = re.search(r"(?:^|-)pattern-(\d+)(?:-|$)", template_id)
+    return f"pattern_{match.group(1)}" if match else "unknown"
+
+
+def tensor_spatial_diagnostics(
+    tensor: torch.Tensor,
+    *,
+    value_bounds: tuple[float, float],
+) -> dict[str, float]:
+    """Summarize spatial collapse and boundary saturation without retaining tensors."""
+
+    if tensor.ndim < 2 or tensor.numel() == 0:
+        raise ValueError("Diagnostic tensors must have non-empty spatial dimensions.")
+    values = tensor.detach().to(dtype=torch.float32)
+    finite = torch.isfinite(values)
+    finite_fraction = float(finite.float().mean().item())
+    if finite_fraction != 1.0:
+        raise RuntimeError(f"Non-finite evaluation tensor; finite_fraction={finite_fraction:.6f}")
+
+    height, width = values.shape[-2:]
+    center_height = max(1, height // 2)
+    center_width = max(1, width // 2)
+    top = (height - center_height) // 2
+    left = (width - center_width) // 2
+    center = values[..., top : top + center_height, left : left + center_width]
+    spatial = values.reshape(-1, height * width)
+    center_spatial = center.reshape(-1, center_height * center_width)
+
+    lower, upper = value_bounds
+    if not lower < upper:
+        raise ValueError("value_bounds must be strictly increasing.")
+    margin = 0.01 * (upper - lower)
+    saturation = (values <= lower + margin) | (values >= upper - margin)
+    minimum = float(values.min().item())
+    maximum = float(values.max().item())
+    return {
+        "value_mean": float(values.mean().item()),
+        "value_std": float(values.std(correction=0).item()),
+        "value_min": minimum,
+        "value_max": maximum,
+        "dynamic_range": maximum - minimum,
+        "spatial_std_mean": float(spatial.std(dim=1, correction=0).mean().item()),
+        "center_spatial_std_mean": float(center_spatial.std(dim=1, correction=0).mean().item()),
+        "saturation_fraction": float(saturation.float().mean().item()),
+        "finite_fraction": finite_fraction,
+    }
+
+
+class _PairwiseMoments:
+    def __init__(self) -> None:
+        self.count = 0
+        self.shape: tuple[int, ...] | None = None
+        self.sum_vector: torch.Tensor | None = None
+        self.sum_squared_norm = 0.0
+
+    def add(self, tensor: torch.Tensor) -> None:
+        detached = tensor.detach().to(device="cpu", dtype=torch.float64)
+        shape = tuple(detached.shape)
+        if self.shape is None:
+            self.shape = shape
+        elif shape != self.shape:
+            raise ValueError(f"Pairwise diagnostic shape changed from {self.shape} to {shape}.")
+        vector = detached.reshape(-1)
+        if self.sum_vector is None:
+            self.sum_vector = torch.zeros_like(vector)
+        self.sum_vector.add_(vector)
+        self.sum_squared_norm += float(torch.dot(vector, vector).item())
+        self.count += 1
+
+    @property
+    def pair_count(self) -> int:
+        return self.count * (self.count - 1) // 2
+
+    def squared_difference_sum(self) -> float:
+        if self.count < 2 or self.sum_vector is None:
+            return 0.0
+        value = self.count * self.sum_squared_norm - float(torch.dot(self.sum_vector, self.sum_vector).item())
+        return max(0.0, value)
+
+
+def _distance_summary(
+    *,
+    squared_difference_sum: float,
+    pair_count: int,
+    element_count: int,
+) -> dict[str, float | int | None]:
+    if pair_count == 0 or element_count == 0:
+        return {
+            "pair_count": pair_count,
+            "mean_squared_element_distance": None,
+            "rms_element_distance": None,
+        }
+    mean_squared = squared_difference_sum / (pair_count * element_count)
+    return {
+        "pair_count": pair_count,
+        "mean_squared_element_distance": mean_squared,
+        "rms_element_distance": math.sqrt(max(0.0, mean_squared)),
+    }
+
+
+class PairwiseTensorDiagnostics:
+    """Exact all-pair RMS distances from sufficient statistics, grouped by target."""
+
+    def __init__(self) -> None:
+        self.all = _PairwiseMoments()
+        self.by_target: dict[int, _PairwiseMoments] = {}
+
+    def add(self, tensor: torch.Tensor, *, target_index: int) -> None:
+        self.all.add(tensor)
+        self.by_target.setdefault(target_index, _PairwiseMoments()).add(tensor)
+
+    def summary(self) -> dict[str, Any]:
+        element_count = 0 if self.all.sum_vector is None else self.all.sum_vector.numel()
+        all_squared = self.all.squared_difference_sum()
+        same_target_squared = sum(moments.squared_difference_sum() for moments in self.by_target.values())
+        same_target_pairs = sum(moments.pair_count for moments in self.by_target.values())
+        different_target_squared = max(0.0, all_squared - same_target_squared)
+        different_target_pairs = self.all.pair_count - same_target_pairs
+        return {
+            "query_count": self.all.count,
+            "tensor_shape": list(self.all.shape) if self.all.shape is not None else None,
+            "all_pairs": _distance_summary(
+                squared_difference_sum=all_squared,
+                pair_count=self.all.pair_count,
+                element_count=element_count,
+            ),
+            "same_target_pairs": _distance_summary(
+                squared_difference_sum=same_target_squared,
+                pair_count=same_target_pairs,
+                element_count=element_count,
+            ),
+            "different_target_pairs": _distance_summary(
+                squared_difference_sum=different_target_squared,
+                pair_count=different_target_pairs,
+                element_count=element_count,
+            ),
+        }
+
+
+def _grouped_accuracy(records: Sequence[Mapping[str, Any]], key: str) -> dict[str, Any]:
+    groups: dict[str, list[int]] = {}
+    for record in records:
+        label = str(record.get(key) or "unknown")
+        counts = groups.setdefault(label, [0, 0])
+        counts[0] += int(bool(record["correct"]))
+        counts[1] += 1
+    return {
+        label: {"correct": counts[0], "count": counts[1], "accuracy": counts[0] / counts[1]}
+        for label, counts in sorted(groups.items())
+    }
+
+
+def _aggregate_tensor_diagnostics(records: Sequence[Mapping[str, Any]], key: str) -> dict[str, dict[str, float]]:
+    if not records:
+        return {}
+    metric_names = tuple(records[0][key])
+    result: dict[str, dict[str, float]] = {}
+    for metric_name in metric_names:
+        values = [float(record[key][metric_name]) for record in records]
+        result[metric_name] = {
+            "min": min(values),
+            "mean": sum(values) / len(values),
+            "max": max(values),
+        }
+    return result
+
+
+def evaluation_diagnostics(
+    records: Sequence[Mapping[str, Any]],
+    *,
+    state_pairwise: PairwiseTensorDiagnostics,
+    image_pairwise: PairwiseTensorDiagnostics,
+) -> dict[str, Any]:
+    if not records:
+        raise ValueError("Cannot summarize an evaluation without query records.")
+    return {
+        "schema_version": "vision_memory.lightweight.evaluation_diagnostics.v1",
+        "definitions": {
+            "spatial_std_mean": "mean population std over HxW, computed independently per leading slice",
+            "center_spatial_std_mean": "same statistic over the central floor(H/2) x floor(W/2) crop",
+            "state_saturation": "fraction outside the inner 98% of nominal [-1, 1]",
+            "image_saturation": "fraction outside the inner 98% of nominal [0, 1]",
+            "pairwise_distance": "exact RMS per tensor element over unordered query pairs",
+            "target_grouping": "post-hoc diagnostic grouping only; targets never enter model inputs",
+        },
+        "query_count": len(records),
+        "accuracy": sum(int(bool(record["correct"])) for record in records) / len(records),
+        "accuracy_by_pattern": _grouped_accuracy(records, "pattern"),
+        "accuracy_by_subtype": _grouped_accuracy(records, "subtype"),
+        "accuracy_by_turn_type": _grouped_accuracy(records, "turn_type"),
+        "accuracy_by_distractor_variant": _grouped_accuracy(records, "distractor_variant"),
+        "state_query_statistics": _aggregate_tensor_diagnostics(records, "state_diagnostics"),
+        "image_query_statistics": _aggregate_tensor_diagnostics(records, "image_diagnostics"),
+        "pairwise_state_distances": state_pairwise.summary(),
+        "pairwise_image_distances": image_pairwise.summary(),
+    }
+
+
+def overfit_evaluation_paths(output_dir: Path, optimizer_step: int) -> tuple[Path, Path]:
+    if optimizer_step < 0:
+        raise ValueError("optimizer_step must be non-negative.")
+    stem = output_dir / "overfit_evaluations" / f"step_{optimizer_step:07d}"
+    return stem.with_name(stem.name + "_predictions.jsonl"), stem.with_name(stem.name + "_diagnostics.json")
+
+
 def synchronize(device: torch.device) -> None:
     if device.type == "cuda":
         torch.cuda.synchronize(device)
@@ -203,8 +432,7 @@ def validate_overfit_gate_configuration(args: argparse.Namespace) -> None:
         raise SystemExit("--overfit-gate requires the fixed zero lightweight hidden initial state.")
     if args.overfit_episodes != FORMAL_OVERFIT_EPISODES:
         raise SystemExit(
-            f"--overfit-gate requires exactly {FORMAL_OVERFIT_EPISODES} episodes; "
-            f"got {args.overfit_episodes}."
+            f"--overfit-gate requires exactly {FORMAL_OVERFIT_EPISODES} episodes; got {args.overfit_episodes}."
         )
     if args.max_optimizer_steps != FORMAL_OVERFIT_MAX_OPTIMIZER_STEPS:
         raise SystemExit(
@@ -213,8 +441,7 @@ def validate_overfit_gate_configuration(args: argparse.Namespace) -> None:
         )
     if args.overfit_threshold != FORMAL_OVERFIT_THRESHOLD:
         raise SystemExit(
-            f"--overfit-gate requires accuracy threshold {FORMAL_OVERFIT_THRESHOLD:.2f}; "
-            f"got {args.overfit_threshold}."
+            f"--overfit-gate requires accuracy threshold {FORMAL_OVERFIT_THRESHOLD:.2f}; got {args.overfit_threshold}."
         )
 
 
@@ -260,8 +487,7 @@ def validate_overfit_gate_episodes(episodes: Sequence[Any]) -> None:
 
     if len(episodes) != FORMAL_OVERFIT_EPISODES:
         raise SystemExit(
-            f"Overfit gate requires exactly {FORMAL_OVERFIT_EPISODES} selected training "
-            f"episodes; got {len(episodes)}."
+            f"Overfit gate requires exactly {FORMAL_OVERFIT_EPISODES} selected training episodes; got {len(episodes)}."
         )
     by_id = {str(episode_value(episode, "episode_id")): episode for episode in episodes}
     if len(by_id) != len(episodes) or "" in by_id:
@@ -279,18 +505,12 @@ def validate_overfit_gate_episodes(episodes: Sequence[Any]) -> None:
         pair_id = _normalized_value(episode_value(episode, "distractor_pair_id"))
         counterpart_id = _normalized_value(episode_value(episode, "distractor_episode_id"))
         if pair_id is None or counterpart_id is None or counterpart_id not in by_id:
-            raise SystemExit(
-                f"Overfit gate episode {episode_id!r} has an incomplete in-subset distractor pair."
-            )
+            raise SystemExit(f"Overfit gate episode {episode_id!r} has an incomplete in-subset distractor pair.")
         counterpart = by_id[counterpart_id]
-        counterpart_variant = _normalized_value(
-            episode_value(counterpart, "distractor_variant")
-        )
+        counterpart_variant = _normalized_value(episode_value(counterpart, "distractor_variant"))
         expected_variant = "distractor" if variant == "clean" else "clean"
         if counterpart_variant != expected_variant:
-            raise SystemExit(
-                f"Overfit gate pair {pair_id!r} does not contain one clean and one distractor member."
-            )
+            raise SystemExit(f"Overfit gate pair {pair_id!r} does not contain one clean and one distractor member.")
         if _normalized_value(episode_value(counterpart, "distractor_pair_id")) != pair_id:
             raise SystemExit(f"Overfit gate pair {pair_id!r} has inconsistent pair IDs.")
         if _normalized_value(episode_value(counterpart, "distractor_episode_id")) != episode_id:
@@ -300,10 +520,7 @@ def validate_overfit_gate_episodes(episodes: Sequence[Any]) -> None:
 
     expected_per_variant = FORMAL_OVERFIT_EPISODES // 2
     if variants != {"clean": expected_per_variant, "distractor": expected_per_variant}:
-        raise SystemExit(
-            "Overfit gate requires 32 clean and 32 distractor episodes; "
-            f"got {variants}."
-        )
+        raise SystemExit(f"Overfit gate requires 32 clean and 32 distractor episodes; got {variants}.")
 
 
 def evaluate_accuracy(
@@ -315,11 +532,15 @@ def evaluate_accuracy(
     device: torch.device,
     noop_policy: str,
     predictions_path: Path | None = None,
+    diagnostics_path: Path | None = None,
     method: str,
     seed: int,
 ) -> float:
     model.eval()
     records: list[dict[str, Any]] = []
+    collect_diagnostics = diagnostics_path is not None
+    state_pairwise = PairwiseTensorDiagnostics()
+    image_pairwise = PairwiseTensorDiagnostics()
     correct = 0
     total = 0
     with torch.no_grad():
@@ -350,32 +571,47 @@ def evaluate_accuracy(
                     last_transition = event_kind or "unknown"
                 if kind in {"query", "mixed"}:
                     query, choices, target_index, comparison_id = query_payload(turn)
+                    image = model.render(state)[0]
                     synchronize(device)
                     started = time.monotonic()
                     score = qwen3vl_choice_nll(
                         model=reader,
                         processor=processor,
-                        image=model.render(state)[0],
+                        image=image,
                         query=format_mcq_query(query, choices),
                         choices=choices,
                         device=device,
                     )
                     synchronize(device)
                     query_latency = time.monotonic() - started
-                    correct += int(score.predicted_index == target_index)
+                    is_correct = score.predicted_index == target_index
+                    correct += int(is_correct)
                     total += 1
+                    choice_mean_nll = [float(value) for value in score.mean_nll]
+                    target_mean_nll = choice_mean_nll[target_index]
+                    best_other_mean_nll = min(
+                        value for index, value in enumerate(choice_mean_nll) if index != target_index
+                    )
                     record = {
                         "episode_id": str(episode_value(episode, "episode_id")),
                         "query_id": f"{episode_value(episode, 'episode_id')}:q{query_index}",
                         "query_ordinal": query_index,
+                        "turn_id": turn_id,
+                        "turn_type": kind,
                         "method": method,
                         "seed": seed,
                         "condition": "standard",
                         "prediction_index": score.predicted_index,
                         "target_index": target_index,
-                        "choice_mean_nll": list(score.mean_nll),
+                        "correct": is_correct,
+                        "choice_mean_nll": choice_mean_nll,
+                        "target_mean_nll": target_mean_nll,
+                        "predicted_mean_nll": choice_mean_nll[score.predicted_index],
+                        "target_nll_margin": best_other_mean_nll - target_mean_nll,
                         "split": episode_value(episode, "split"),
                         "topic": episode_value(episode, "topic"),
+                        "template_id": episode_value(episode, "template_id"),
+                        "pattern": episode_pattern(episode),
                         "form": episode_value(episode, "form", last_transition),
                         "protocol": episode_value(episode, "protocol"),
                         "forced_write_k": episode_value(episode, "forced_write_k"),
@@ -387,9 +623,7 @@ def evaluate_accuracy(
                             episode, "pair_id", episode_value(episode, "base_pair_id")
                         ),
                         "semantic_counterfactual_pair_id": episode_value(episode, "pair_id"),
-                        "counterfactual_episode_id": episode_value(
-                            episode, "counterfactual_episode_id"
-                        ),
+                        "counterfactual_episode_id": episode_value(episode, "counterfactual_episode_id"),
                         "distractor_pair_id": episode_value(episode, "distractor_pair_id"),
                         "distractor_episode_id": episode_value(episode, "distractor_episode_id"),
                         "distractor_variant": getattr(
@@ -409,6 +643,11 @@ def evaluate_accuracy(
                         "peak_vram_gib": peak_vram_gib(device),
                         "peak_reader_vram_gib": peak_vram_gib(device),
                     }
+                    if collect_diagnostics:
+                        record["state_diagnostics"] = tensor_spatial_diagnostics(state, value_bounds=(-1.0, 1.0))
+                        record["image_diagnostics"] = tensor_spatial_diagnostics(image, value_bounds=(0.0, 1.0))
+                        state_pairwise.add(state, target_index=target_index)
+                        image_pairwise.add(image, target_index=target_index)
                     records.append(record)
                     query_index += 1
                     updater_calls_since_query = 0
@@ -422,6 +661,17 @@ def evaluate_accuracy(
         with predictions_path.open("w", encoding="utf-8", newline="\n") as handle:
             for record in records:
                 handle.write(json.dumps(record, ensure_ascii=False, sort_keys=True) + "\n")
+    if diagnostics_path is not None:
+        diagnostics_path.parent.mkdir(parents=True, exist_ok=True)
+        diagnostics = evaluation_diagnostics(
+            records,
+            state_pairwise=state_pairwise,
+            image_pairwise=image_pairwise,
+        )
+        diagnostics_path.write_text(
+            json.dumps(diagnostics, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
     model.train()
     return correct / total
 
@@ -518,6 +768,7 @@ def main() -> int:
 
     args.output_dir.mkdir(parents=True)
     reader_revision = locked_revision(args.reader)
+    train_subset = training_subset_audit(train)
     manifest = {
         "schema_version": "vision_memory.lightweight.training.v1",
         "git_commit": git_value("rev-parse", "HEAD"),
@@ -541,7 +792,12 @@ def main() -> int:
             if args.overfit_gate
             else None
         ),
-        "curriculum": {**selection.to_dict(), "selected_after_limit": len(train), "turns_rewritten": False},
+        "curriculum": {
+            **selection.to_dict(),
+            "selected_after_limit": len(train),
+            "turns_rewritten": False,
+        },
+        "train_subset": train_subset,
         "environment": {
             "python": platform.python_version(),
             "torch": torch.__version__,
@@ -656,11 +912,10 @@ def main() -> int:
                     )
                     + "\n"
                 )
-            reached_step_limit = (
-                args.max_optimizer_steps is not None and optimizer_step >= args.max_optimizer_steps
-            )
+            reached_step_limit = args.max_optimizer_steps is not None and optimizer_step >= args.max_optimizer_steps
             if optimizer_step % args.eval_every == 0 or reached_step_limit:
                 if args.overfit_gate:
+                    predictions_path, diagnostics_path = overfit_evaluation_paths(args.output_dir, optimizer_step)
                     train_accuracy = evaluate_accuracy(
                         episodes=train,
                         model=model,
@@ -668,6 +923,8 @@ def main() -> int:
                         processor=processor,
                         device=device,
                         noop_policy=args.noop_policy,
+                        predictions_path=predictions_path,
+                        diagnostics_path=diagnostics_path,
                         method=args.method,
                         seed=args.seed,
                     )
@@ -682,6 +939,8 @@ def main() -> int:
                                     "accuracy": train_accuracy,
                                     "threshold": args.overfit_threshold,
                                     "passed": overfit_gate_passed,
+                                    "predictions_path": str(predictions_path.resolve()),
+                                    "diagnostics_path": str(diagnostics_path.resolve()),
                                 }
                             )
                             + "\n"
@@ -697,9 +956,7 @@ def main() -> int:
                         method=args.method,
                         seed=args.seed,
                     )
-                    with (args.output_dir / "metrics.jsonl").open(
-                        "a", encoding="utf-8"
-                    ) as handle:
+                    with (args.output_dir / "metrics.jsonl").open("a", encoding="utf-8") as handle:
                         handle.write(
                             json.dumps(
                                 {
@@ -737,6 +994,7 @@ def main() -> int:
         device=device,
         noop_policy=args.noop_policy,
         predictions_path=args.output_dir / "dev_predictions.jsonl",
+        diagnostics_path=args.output_dir / "dev_diagnostics.json",
         method=args.method,
         seed=args.seed,
     )
@@ -761,6 +1019,7 @@ def main() -> int:
             device=device,
             noop_policy=args.noop_policy,
             predictions_path=args.output_dir / "train_predictions.jsonl",
+            diagnostics_path=args.output_dir / "train_diagnostics.json",
             method=args.method,
             seed=args.seed,
         )
@@ -799,6 +1058,18 @@ def main() -> int:
         "overfit_gate_enabled": args.overfit_gate,
         "overfit_gate_threshold": args.overfit_threshold if args.overfit_gate else None,
         "overfit_gate_passed": overfit_gate_passed if args.overfit_gate else None,
+        "train_subset_count": train_subset["count"],
+        "train_subset_ordered_episode_ids_sha256": train_subset["ordered_episode_ids_sha256"],
+        "final_prediction_artifacts": {
+            "dev_predictions": str((args.output_dir / "dev_predictions.jsonl").resolve()),
+            "dev_diagnostics": str((args.output_dir / "dev_diagnostics.json").resolve()),
+            "train_predictions": (
+                str((args.output_dir / "train_predictions.jsonl").resolve()) if args.overfit_gate else None
+            ),
+            "train_diagnostics": (
+                str((args.output_dir / "train_diagnostics.json").resolve()) if args.overfit_gate else None
+            ),
+        },
         "trainable_parameters": sum(parameter.numel() for parameter in trainable),
         "elapsed_seconds": time.monotonic() - started,
         "peak_vram_gib": torch.cuda.max_memory_allocated(device) / 2**30,

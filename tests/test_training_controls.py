@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import hashlib
 import json
+import math
 import sys
 import tempfile
 import unittest
@@ -23,7 +25,11 @@ from vision_memory.training import (  # noqa: E402
     select_curriculum_episodes,
 )
 from scripts.train.lightweight_episode import (  # noqa: E402
+    PairwiseTensorDiagnostics,
     evaluate_accuracy,
+    overfit_evaluation_paths,
+    tensor_spatial_diagnostics,
+    training_subset_audit,
     training_budget_open,
     validate_overfit_gate_configuration,
     validate_overfit_gate_episodes,
@@ -219,6 +225,7 @@ class LightweightPredictionSchemaTest(unittest.TestCase):
         score = SimpleNamespace(predicted_index=0, mean_nll=(0.0, 1.0, 2.0, 3.0))
         with tempfile.TemporaryDirectory() as directory:
             output = Path(directory) / "predictions.jsonl"
+            diagnostics_output = Path(directory) / "diagnostics.json"
             with patch("scripts.train.lightweight_episode.qwen3vl_choice_nll", return_value=score):
                 accuracy = evaluate_accuracy(
                     episodes=[episode],
@@ -228,10 +235,12 @@ class LightweightPredictionSchemaTest(unittest.TestCase):
                     device=torch.device("cpu"),
                     noop_policy="skip",
                     predictions_path=output,
+                    diagnostics_path=diagnostics_output,
                     method="lightweight_recurrent",
                     seed=0,
                 )
             record = json.loads(output.read_text(encoding="utf-8"))
+            diagnostics = json.loads(diagnostics_output.read_text(encoding="utf-8"))
 
         self.assertEqual(accuracy, 1.0)
         self.assertEqual(record["counterfactual_pair_id"], "semantic-pair")
@@ -241,7 +250,62 @@ class LightweightPredictionSchemaTest(unittest.TestCase):
         self.assertEqual(record["noop_policy"], "skip")
         self.assertEqual(record["noop_events_since_query"], 1)
         self.assertEqual(record["noop_events_applied_since_query"], 0)
+        self.assertEqual(record["choice_mean_nll"], [0.0, 1.0, 2.0, 3.0])
+        self.assertEqual(record["target_nll_margin"], 1.0)
+        self.assertEqual(record["pattern"], "unknown")
+        self.assertEqual(record["state_diagnostics"]["spatial_std_mean"], 0.0)
+        self.assertEqual(record["image_diagnostics"]["spatial_std_mean"], 0.0)
+        self.assertEqual(diagnostics["query_count"], 1)
+        self.assertEqual(diagnostics["accuracy_by_subtype"]["noop"]["accuracy"], 1.0)
+        self.assertEqual(diagnostics["pairwise_state_distances"]["all_pairs"]["pair_count"], 0)
         self.assertNotIn("counterfactual_variant", record)
+
+
+class LightweightAuditHelperTest(unittest.TestCase):
+    def test_training_subset_hashes_exact_order_after_limits(self):
+        episodes = [{"episode_id": "episode-b"}, {"episode_id": "episode-a"}]
+        audit = training_subset_audit(episodes)
+        expected = hashlib.sha256(b"episode-b\nepisode-a").hexdigest()
+        self.assertEqual(audit["count"], 2)
+        self.assertEqual(audit["ordered_episode_ids_sha256"], expected)
+        self.assertEqual(audit["ordered_episode_ids"], ["episode-b", "episode-a"])
+
+    def test_tensor_spatial_diagnostics_cover_center_range_and_saturation(self):
+        tensor = torch.arange(16, dtype=torch.float32).reshape(1, 1, 4, 4) / 15
+        diagnostics = tensor_spatial_diagnostics(tensor, value_bounds=(0.0, 1.0))
+        center = tensor[..., 1:3, 1:3].reshape(1, -1)
+        self.assertEqual(diagnostics["value_min"], 0.0)
+        self.assertEqual(diagnostics["value_max"], 1.0)
+        self.assertEqual(diagnostics["dynamic_range"], 1.0)
+        self.assertAlmostEqual(diagnostics["saturation_fraction"], 2 / 16)
+        self.assertAlmostEqual(
+            diagnostics["center_spatial_std_mean"],
+            float(center.std(dim=1, correction=0).item()),
+        )
+
+    def test_pairwise_rms_separates_same_and_different_targets(self):
+        diagnostics = PairwiseTensorDiagnostics()
+        diagnostics.add(torch.zeros(1, 2, 2), target_index=0)
+        diagnostics.add(torch.ones(1, 2, 2), target_index=0)
+        diagnostics.add(torch.full((1, 2, 2), 2.0), target_index=1)
+        summary = diagnostics.summary()
+        self.assertEqual(summary["all_pairs"]["pair_count"], 3)
+        self.assertAlmostEqual(summary["all_pairs"]["rms_element_distance"], math.sqrt(2.0))
+        self.assertEqual(summary["same_target_pairs"]["pair_count"], 1)
+        self.assertAlmostEqual(summary["same_target_pairs"]["rms_element_distance"], 1.0)
+        self.assertEqual(summary["different_target_pairs"]["pair_count"], 2)
+        self.assertAlmostEqual(summary["different_target_pairs"]["rms_element_distance"], math.sqrt(2.5))
+
+    def test_periodic_overfit_artifact_paths_include_optimizer_step(self):
+        predictions, diagnostics = overfit_evaluation_paths(Path("run"), 250)
+        self.assertEqual(
+            predictions,
+            Path("run/overfit_evaluations/step_0000250_predictions.jsonl"),
+        )
+        self.assertEqual(
+            diagnostics,
+            Path("run/overfit_evaluations/step_0000250_diagnostics.json"),
+        )
 
 
 class LightweightOverfitGateTest(unittest.TestCase):
@@ -306,15 +370,9 @@ class LightweightOverfitGateTest(unittest.TestCase):
 
     def test_formal_gate_budget_is_optimizer_step_driven(self):
         args = self.arguments()
-        self.assertTrue(
-            training_budget_open(args, epoch=2, optimizer_step=16, gate_passed=False)
-        )
-        self.assertFalse(
-            training_budget_open(args, epoch=250, optimizer_step=2_000, gate_passed=False)
-        )
-        self.assertFalse(
-            training_budget_open(args, epoch=1, optimizer_step=250, gate_passed=True)
-        )
+        self.assertTrue(training_budget_open(args, epoch=2, optimizer_step=16, gate_passed=False))
+        self.assertFalse(training_budget_open(args, epoch=250, optimizer_step=2_000, gate_passed=False))
+        self.assertFalse(training_budget_open(args, epoch=1, optimizer_step=250, gate_passed=True))
 
     def test_gate_subset_requires_reciprocal_clean_distractor_pairs(self):
         episodes = self.paired_episodes()

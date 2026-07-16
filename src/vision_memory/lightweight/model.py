@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import hashlib
+import math
 import re
 from collections.abc import Sequence
 
@@ -13,6 +14,50 @@ from torch.nn.utils.rnn import pack_padded_sequence
 
 
 _TOKEN_PATTERN = re.compile(r"[\w']+|[^\w\s]", flags=re.UNICODE)
+_LOW_FREQUENCY_DCT_MODES = (
+    (1, 0),
+    (0, 1),
+    (1, 1),
+    (2, 0),
+    (0, 2),
+    (2, 1),
+    (1, 2),
+    (2, 2),
+    (3, 0),
+    (0, 3),
+    (3, 1),
+    (1, 3),
+    (3, 2),
+    (2, 3),
+    (4, 0),
+    (0, 4),
+)
+
+
+def _fixed_spatial_basis(state_size: int, basis_count: int) -> Tensor:
+    """Return deterministic, zero-mean, unit-RMS low-frequency DCT-II maps."""
+
+    if state_size < 5:
+        raise ValueError("state_size must be at least 5 for the fixed spatial basis")
+    if basis_count < 1 or basis_count > len(_LOW_FREQUENCY_DCT_MODES):
+        raise ValueError(f"basis_count must be in [1, {len(_LOW_FREQUENCY_DCT_MODES)}]")
+
+    coordinates = torch.arange(state_size, dtype=torch.float32) + 0.5
+    one_dimensional = torch.stack(
+        [torch.cos(torch.pi * frequency * coordinates / state_size) for frequency in range(state_size)]
+    )
+    frequency_pairs = _LOW_FREQUENCY_DCT_MODES[:basis_count]
+    basis = torch.stack(
+        [
+            one_dimensional[vertical].unsqueeze(1) * one_dimensional[horizontal].unsqueeze(0)
+            for vertical, horizontal in frequency_pairs
+        ]
+    )
+    basis = basis - basis.mean(dim=(-2, -1), keepdim=True)
+    root_mean_square = basis.square().mean(dim=(-2, -1), keepdim=True).sqrt()
+    if not torch.isfinite(root_mean_square).all() or (root_mean_square <= 1e-6).any():
+        raise RuntimeError("Fixed coordinate/Fourier basis is degenerate")
+    return basis / root_mean_square
 
 
 def _stable_token_id(token: str, vocabulary_size: int) -> int:
@@ -93,6 +138,8 @@ class ConvGRUCell(nn.Module):
 class LightweightVisualUpdater(nn.Module):
     """64-channel 64x64 recurrent state rendered as a differentiable RGB image."""
 
+    _SPATIAL_BASIS_COUNT = 16
+
     def __init__(
         self,
         *,
@@ -105,8 +152,8 @@ class LightweightVisualUpdater(nn.Module):
         learned_initial_state: bool = False,
     ) -> None:
         super().__init__()
-        if state_channels < 1 or state_size < 1 or output_size < 1:
-            raise ValueError("state_channels, state_size, and output_size must be positive")
+        if state_channels < 1 or output_size < 1:
+            raise ValueError("state_channels and output_size must be positive")
         self.state_channels = state_channels
         self.state_size = state_size
         self.output_size = output_size
@@ -117,6 +164,14 @@ class LightweightVisualUpdater(nn.Module):
         )
         event_dim = self.event_encoder.output_dim
         self.event_projection = nn.Linear(event_dim, state_channels)
+        self.event_spatial_projection = nn.Linear(
+            event_dim,
+            state_channels * self._SPATIAL_BASIS_COUNT,
+            bias=False,
+        )
+        nn.init.xavier_uniform_(self.event_spatial_projection.weight, gain=1.0)
+        spatial_basis = _fixed_spatial_basis(state_size, self._SPATIAL_BASIS_COUNT)
+        self.register_buffer("spatial_basis", spatial_basis, persistent=False)
         self.film = nn.Linear(event_dim, state_channels * 2)
         self.cell = ConvGRUCell(state_channels, state_channels)
         head_channels = max(16, state_channels // 2)
@@ -146,9 +201,19 @@ class LightweightVisualUpdater(nn.Module):
         texts = [event_text] if isinstance(event_text, str) else list(event_text)
         if len(texts) != state.shape[0]:
             raise ValueError("One event string is required for every state in the batch")
+        expected_basis_shape = (self._SPATIAL_BASIS_COUNT, self.state_size, self.state_size)
+        if tuple(self.spatial_basis.shape) != expected_basis_shape:
+            raise RuntimeError(
+                f"Expected fixed spatial_basis shape {expected_basis_shape}, got {tuple(self.spatial_basis.shape)}"
+            )
         features = self.event_encoder(texts).to(device=state.device, dtype=state.dtype)
         event_map = self.event_projection(features).unsqueeze(-1).unsqueeze(-1)
-        event_map = event_map.expand(-1, -1, self.state_size, self.state_size)
+        spatial_coefficients = self.event_spatial_projection(features).reshape(
+            state.shape[0], self.state_channels, self._SPATIAL_BASIS_COUNT
+        )
+        spatial_basis = self.spatial_basis.to(device=state.device, dtype=state.dtype)
+        spatial_event_map = torch.einsum("bck,khw->bchw", spatial_coefficients, spatial_basis)
+        event_map = event_map + spatial_event_map / math.sqrt(self._SPATIAL_BASIS_COUNT)
         updated = self.cell(event_map, state)
         gamma, beta = self.film(features).chunk(2, dim=-1)
         gamma = gamma.unsqueeze(-1).unsqueeze(-1)
