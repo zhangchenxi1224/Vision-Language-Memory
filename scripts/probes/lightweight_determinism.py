@@ -47,7 +47,12 @@ SEED = 0
 STATE_CHANNELS = 64
 STATE_SIZE = 64
 PRODUCTION_OUTPUT_SIZE = 256
-DETERMINISTIC_READER_SIZE = 252
+DETERMINISTIC_READER_SIZE = 256
+EXPECTED_QWEN_IMAGE_GRID = {
+    "patch_size": 16,
+    "temporal_patch_size": 2,
+    "merge_size": 2,
+}
 LEARNING_RATE = 3e-4
 WEIGHT_DECAY = 0.01
 GRADIENT_CLIP = 5.0
@@ -77,6 +82,24 @@ def locked_revision(path: Path) -> str:
     if not marker.is_file() or not marker.read_text(encoding="utf-8").strip():
         raise RuntimeError(f"Reader has no non-empty revision lock: {marker}")
     return marker.read_text(encoding="utf-8").strip()
+
+
+def validate_qwen_image_grid_contract(image_processor: Any, *, image_size: int) -> dict[str, int]:
+    actual: dict[str, int] = {}
+    for field, expected in EXPECTED_QWEN_IMAGE_GRID.items():
+        value = getattr(image_processor, field, None)
+        if value is None:
+            raise RuntimeError(f"Qwen image processor does not expose required {field}.")
+        actual[field] = int(value)
+        if actual[field] != expected:
+            raise RuntimeError(f"Qwen image processor {field} drifted: expected {expected}, got {actual[field]}.")
+    spatial_factor = actual["patch_size"] * actual["merge_size"]
+    if image_size % spatial_factor:
+        raise RuntimeError(
+            "Deterministic reader size must be divisible by patch_size * merge_size; "
+            f"got image_size={image_size}, spatial_factor={spatial_factor}."
+        )
+    return {**actual, "spatial_factor": spatial_factor}
 
 
 def git_value(*arguments: str) -> str | None:
@@ -284,6 +307,10 @@ def run_probe(args: argparse.Namespace) -> dict[str, Any]:
     )
     if "Fast" not in type(processor.image_processor).__name__:
         raise RuntimeError("The deterministic probe requires a tensor-native fast Qwen processor.")
+    qwen_image_grid = validate_qwen_image_grid_contract(
+        processor.image_processor,
+        image_size=DETERMINISTIC_READER_SIZE,
+    )
     reader = Qwen3VLForConditionalGeneration.from_pretrained(
         args.reader,
         local_files_only=True,
@@ -402,7 +429,7 @@ def run_probe(args: argparse.Namespace) -> dict[str, Any]:
     runtime = runtime_metadata(device, determinism)
 
     protocol = {
-        "schema_version": "vision_memory.lightweight_determinism_protocol.v1",
+        "schema_version": "vision_memory.lightweight_determinism_protocol.v2",
         "episode_count": EPISODE_COUNT,
         "seed": SEED,
         "steps": args.steps,
@@ -410,8 +437,9 @@ def run_probe(args: argparse.Namespace) -> dict[str, Any]:
         "state_size": STATE_SIZE,
         "production_output_size": PRODUCTION_OUTPUT_SIZE,
         "deterministic_reader_size": DETERMINISTIC_READER_SIZE,
-        "renderer": "integer-repeat-then-center-crop",
+        "renderer": "integer-repeat-without-crop",
         "qwen_do_resize": False,
+        "qwen_image_grid": qwen_image_grid,
         "reader_ce": "fp32-logsumexp-minus-target-score",
         "attention": "sdpa-math-only",
         "gradient_accumulation": GRADIENT_ACCUMULATION,

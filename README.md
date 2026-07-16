@@ -213,8 +213,8 @@ python scripts/train/lightweight_episode.py \
 CUDA reproducibility is audited separately from that scientific gate. The paired probe runs
 two fresh Python processes serially on one allocated GPU, enables fail-closed deterministic
 algorithms and math-only SDPA, and compares exact gradients, optimizer states, RNG states,
-per-step traces, and canonical predictions. Its diagnostic renderer uses integer repeat plus
-center crop to 252x252 and disables Qwen processor resizing; therefore its accuracy is not a
+per-step traces, and canonical predictions. Its diagnostic renderer uses integer repeat to
+256x256 without a crop and disables Qwen processor resizing; therefore its accuracy is not a
 D2 result and must not be compared with the production bilinear path. It also replaces CUDA
 NLLLoss only in this diagnostic with an equivalent FP32 logsumexp-minus-target formulation;
 the default Reader loss remains `F.cross_entropy`.

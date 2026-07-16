@@ -3,6 +3,7 @@ from __future__ import annotations
 import sys
 import unittest
 from pathlib import Path
+from types import SimpleNamespace
 
 import torch
 from torch import nn
@@ -27,6 +28,7 @@ from vision_memory.repro import (  # noqa: E402
     seed_adapter_initialization,
     validate_e2e_pair_reports,
 )
+from scripts.probes.lightweight_determinism import validate_qwen_image_grid_contract  # noqa: E402
 
 
 def make_pair_report(*, detached: bool) -> dict:
@@ -49,6 +51,20 @@ def make_pair_report(*, detached: bool) -> dict:
 
 
 class ReproProbeContractTest(unittest.TestCase):
+    def test_qwen3_image_grid_contract_accepts_256_and_rejects_252(self):
+        processor = SimpleNamespace(patch_size=16, temporal_patch_size=2, merge_size=2)
+
+        contract = validate_qwen_image_grid_contract(processor, image_size=256)
+
+        self.assertEqual(contract["spatial_factor"], 32)
+        with self.assertRaisesRegex(RuntimeError, "divisible"):
+            validate_qwen_image_grid_contract(processor, image_size=252)
+
+    def test_qwen3_image_grid_contract_rejects_configuration_drift(self):
+        processor = SimpleNamespace(patch_size=14, temporal_patch_size=2, merge_size=2)
+        with self.assertRaisesRegex(RuntimeError, "patch_size drifted"):
+            validate_qwen_image_grid_contract(processor, image_size=252)
+
     def test_canonical_tensor_and_object_hashes_are_bitwise_and_order_stable(self):
         tensor = torch.tensor([[1.0, -0.0], [2.0, 3.0]], dtype=torch.float32)
         clone = tensor.clone()

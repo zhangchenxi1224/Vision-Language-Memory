@@ -109,7 +109,7 @@ class LightweightUpdaterTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "integer multiple"):
             updater.render_deterministic_repro(state, target_size=13)
 
-    def test_formal_deterministic_renderer_contract_is_64_repeat_to_256_crop_to_252(self):
+    def test_formal_deterministic_renderer_contract_is_64_repeat_to_256_without_crop(self):
         torch.manual_seed(9)
         updater = LightweightVisualUpdater(
             state_channels=2,
@@ -126,8 +126,8 @@ class LightweightUpdaterTest(unittest.TestCase):
         image = updater.render_deterministic_repro(state)
 
         self.assertEqual(tuple(head.shape), (1, 3, 64, 64))
-        self.assertEqual(tuple(image.shape), (1, 3, 252, 252))
-        torch.testing.assert_close(image, expanded[..., 2:254, 2:254], rtol=0, atol=0)
+        self.assertEqual(tuple(image.shape), (1, 3, 256, 256))
+        torch.testing.assert_close(image, expanded, rtol=0, atol=0)
 
     def test_hashed_encoder_is_deterministic(self):
         updater = self.make_updater()

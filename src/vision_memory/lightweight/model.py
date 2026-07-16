@@ -241,16 +241,16 @@ class LightweightVisualUpdater(nn.Module):
             )
         return image
 
-    def render_deterministic_repro(self, state: Tensor, *, target_size: int = 252) -> Tensor:
+    def render_deterministic_repro(self, state: Tensor, *, target_size: int = 256) -> Tensor:
         """Render through a strict-determinism diagnostic path.
 
         The production renderer above deliberately remains unchanged.  Its CUDA
         bilinear backward is not supported by ``torch.use_deterministic_algorithms``.
         This diagnostic-only path instead expands each RGB-head pixel by an integer
-        repeat and takes a centered crop.  The preregistered reproducibility probe uses
-        the production 64x64 state and 256x256 output settings, producing a 252x252
-        image that already lies on Qwen's 28-pixel patch/merge grid.  Qwen resizing can
-        therefore be disabled without changing the updater or RGB-head parameters.
+        repeat and optionally takes a centered crop.  The reproducibility probe uses
+        the production 64x64 state and 256x256 output settings without a crop.  Its
+        256x256 result lies on the locked Qwen3-VL processor's 32-pixel spatial grid, so
+        Qwen resizing can be disabled without changing the updater or RGB-head parameters.
         """
 
         if target_size <= 0:
