@@ -48,6 +48,11 @@ STATE_CHANNELS = 64
 STATE_SIZE = 64
 PRODUCTION_OUTPUT_SIZE = 256
 DETERMINISTIC_READER_SIZE = 256
+ALLOWED_STEP_COUNTS = (1, 100, 2000)
+REACHABILITY_STEP_BUDGET = 2000
+REACHABILITY_PREDICTION_COUNT = 128
+REACHABILITY_MINIMUM_CORRECT = 116
+REACHABILITY_MILESTONE_STEPS = (1, 2, 10, 100, 500, 1000, 1500, 1900, 2000)
 EXPECTED_QWEN_IMAGE_GRID = {
     "patch_size": 16,
     "temporal_patch_size": 2,
@@ -64,7 +69,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--train", type=Path, required=True)
     parser.add_argument("--reader", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
-    parser.add_argument("--steps", type=int, choices=(1, 100), required=True)
+    parser.add_argument("--steps", type=int, choices=ALLOWED_STEP_COUNTS, required=True)
     parser.add_argument("--device", default="cuda:0")
     return parser.parse_args()
 
@@ -140,6 +145,79 @@ def episode_schedule(count: int, steps: int) -> list[tuple[int, int]]:
         schedule.extend((epoch, index) for index in order)
         epoch += 1
     return schedule[:steps]
+
+
+def normalized_categorical_label(value: Any) -> str | None:
+    value = getattr(value, "value", value)
+    return None if value is None else str(value)
+
+
+def grouped_prediction_summary(predictions: list[dict[str, Any]]) -> dict[str, dict[str, dict[str, Any]]]:
+    summary: dict[str, dict[str, dict[str, Any]]] = {}
+    for field in ("target_index", "event_kind", "distractor_variant", "turn_type", "topic"):
+        groups: dict[str, dict[str, int]] = {}
+        for prediction in predictions:
+            key = str(prediction[field])
+            group = groups.setdefault(key, {"count": 0, "correct": 0})
+            group["count"] += 1
+            group["correct"] += int(prediction["correct"])
+        summary[field] = {
+            key: {
+                **groups[key],
+                "accuracy_float_hex": (groups[key]["correct"] / groups[key]["count"]).hex(),
+            }
+            for key in sorted(groups)
+        }
+    return summary
+
+
+def reachability_gate_summary(
+    *,
+    steps: int,
+    optimizer_steps_completed: int,
+    predictions: list[dict[str, Any]],
+    positive_gradient_steps: int,
+    clipped_steps: int,
+) -> dict[str, Any]:
+    applicable = steps == REACHABILITY_STEP_BUDGET
+    final_prediction_count = len(predictions)
+    if final_prediction_count == 0:
+        raise RuntimeError("Reachability evaluation produced no predictions.")
+    final_correct = sum(int(record["correct"]) for record in predictions)
+    reached_step_budget = optimizer_steps_completed == steps
+    prediction_count_matches = final_prediction_count == REACHABILITY_PREDICTION_COUNT
+    gradient_chain_valid = positive_gradient_steps == optimizer_steps_completed == steps
+    threshold_reached = (
+        prediction_count_matches
+        and final_correct >= REACHABILITY_MINIMUM_CORRECT
+        and final_correct * 10 >= final_prediction_count * 9
+    )
+    passed = (
+        reached_step_budget and prediction_count_matches and gradient_chain_valid and threshold_reached
+        if applicable
+        else None
+    )
+    return {
+        "applicable": applicable,
+        "passed": passed,
+        "step_budget": REACHABILITY_STEP_BUDGET,
+        "optimizer_steps_completed": optimizer_steps_completed,
+        "reached_step_budget": reached_step_budget,
+        "expected_prediction_count": REACHABILITY_PREDICTION_COUNT,
+        "final_prediction_count": final_prediction_count,
+        "prediction_count_matches": prediction_count_matches,
+        "minimum_correct": REACHABILITY_MINIMUM_CORRECT,
+        "final_correct": final_correct,
+        "final_accuracy_float_hex": (final_correct / final_prediction_count).hex(),
+        "threshold_fraction": {"numerator": 9, "denominator": 10},
+        "threshold_reached": threshold_reached,
+        "positive_gradient_steps": positive_gradient_steps,
+        "gradient_chain_valid": gradient_chain_valid,
+        "clipped_steps": clipped_steps,
+        "trace_values_finite": True,
+        "reader_frozen_parameter_gradients": 0,
+        "grouped_predictions": grouped_prediction_summary(predictions),
+    }
 
 
 def gradient_manifest(model: torch.nn.Module) -> dict[str, Any]:
@@ -239,10 +317,11 @@ def evaluate_canonical_predictions(
         for episode in episodes:
             state = updater.initial_state(batch_size=1, device=device, dtype=torch.float32)
             query_ordinal = 0
+            last_event_kind: str | None = None
             for turn_id, turn in enumerate(episode_value(episode, "turns")):
                 kind = turn_kind(turn)
                 if kind in {"event", "mixed"}:
-                    event_text, _event_kind = event_payload(turn)
+                    event_text, last_event_kind = event_payload(turn)
                     state = updater.update(state, event_text)
                 if kind in {"query", "mixed"}:
                     query, choices, target_index, comparison_id = query_payload(turn)
@@ -260,7 +339,13 @@ def evaluate_canonical_predictions(
                     predictions.append(
                         {
                             "episode_id": str(episode_value(episode, "episode_id")),
+                            "event_kind": last_event_kind,
+                            "distractor_variant": normalized_categorical_label(
+                                episode_value(episode, "distractor_variant")
+                            ),
+                            "topic": normalized_categorical_label(episode_value(episode, "topic")),
                             "turn_id": turn_id,
+                            "turn_type": kind,
                             "query_ordinal": query_ordinal,
                             "comparison_id": comparison_id,
                             "target_index": target_index,
@@ -354,10 +439,22 @@ def run_probe(args: argparse.Namespace) -> dict[str, Any]:
     trace: list[dict[str, Any]] = []
     milestones: dict[str, Any] = {}
     step_one_gradients: dict[str, Any] | None = None
-    milestone_steps = {1, 2, 10, args.steps}
+    milestone_steps = {step for step in REACHABILITY_MILESTONE_STEPS if step <= args.steps} | {args.steps}
+    positive_gradient_steps = 0
+    clipped_steps = 0
+    schedule = episode_schedule(len(episodes), args.steps)
+    schedule_records = [
+        {
+            "optimizer_step": optimizer_step,
+            "epoch": epoch,
+            "episode_index": episode_index,
+            "episode_id": str(episode_value(episodes[episode_index], "episode_id")),
+        }
+        for optimizer_step, (epoch, episode_index) in enumerate(schedule, start=1)
+    ]
     torch.cuda.reset_peak_memory_stats(device)
     for optimizer_step, (epoch, episode_index) in enumerate(
-        episode_schedule(len(episodes), args.steps),
+        schedule,
         start=1,
     ):
         episode = episodes[episode_index]
@@ -385,7 +482,10 @@ def run_probe(args: argparse.Namespace) -> dict[str, Any]:
         )
         clipped_gradients = gradient_manifest(updater)
         clipped_module_gradient_norms = module_gradient_norms(updater)
-        clipping_factor = min(1.0, GRADIENT_CLIP / (float(norm_before_clip.item()) + 1e-6))
+        norm_before_clip_value = float(norm_before_clip.item())
+        clipping_factor = min(1.0, GRADIENT_CLIP / (norm_before_clip_value + 1e-6))
+        positive_gradient_steps += int(norm_before_clip_value > 0.0)
+        clipped_steps += int(clipping_factor < 1.0)
         if optimizer_step == 1:
             step_one_gradients = {
                 "raw": raw_gradients,
@@ -413,6 +513,8 @@ def run_probe(args: argparse.Namespace) -> dict[str, Any]:
 
     if step_one_gradients is None:
         raise RuntimeError("The probe did not execute optimizer step 1.")
+    if len(trace) != args.steps:
+        raise RuntimeError(f"Expected {args.steps} trace records, got {len(trace)}.")
 
     predictions = evaluate_canonical_predictions(
         episodes=episodes,
@@ -427,9 +529,21 @@ def run_probe(args: argparse.Namespace) -> dict[str, Any]:
     write_jsonl(trace_path, trace)
     write_jsonl(predictions_path, predictions)
     runtime = runtime_metadata(device, determinism)
+    reachability_gate = reachability_gate_summary(
+        steps=args.steps,
+        optimizer_steps_completed=len(trace),
+        predictions=predictions,
+        positive_gradient_steps=positive_gradient_steps,
+        clipped_steps=clipped_steps,
+    )
 
     protocol = {
-        "schema_version": "vision_memory.lightweight_determinism_protocol.v2",
+        "schema_version": "vision_memory.lightweight_determinism_protocol.v3",
+        "run_purpose": (
+            "strict-deterministic-exact64-reachability"
+            if reachability_gate["applicable"]
+            else "bitwise-reproducibility-audit"
+        ),
         "episode_count": EPISODE_COUNT,
         "seed": SEED,
         "steps": args.steps,
@@ -449,6 +563,7 @@ def run_probe(args: argparse.Namespace) -> dict[str, Any]:
         "optimizer": "AdamW(foreach=False)",
         "dtype": str(dtype).removeprefix("torch."),
         "determinism": determinism,
+        "milestone_steps": sorted(milestone_steps),
     }
     comparison_payload = {
         "protocol": protocol,
@@ -472,6 +587,8 @@ def run_probe(args: argparse.Namespace) -> dict[str, Any]:
         "train_sha256": sha256_file(args.train),
         "train_subset": subset,
         "reader_revision": locked_revision(args.reader),
+        "training_schedule_count": len(schedule_records),
+        "training_schedule_sha256": canonical_object_sha256(schedule_records),
         "initial": initial,
         "step_one_gradients": step_one_gradients,
         "trace": trace,
@@ -482,10 +599,12 @@ def run_probe(args: argparse.Namespace) -> dict[str, Any]:
         "final_predictions_file_sha256": sha256_file(predictions_path),
         "final_prediction_count": len(predictions),
         "final_correct": sum(int(record["correct"]) for record in predictions),
+        "reachability_gate": reachability_gate,
     }
     report = {
-        "schema_version": "vision_memory.lightweight_determinism_report.v1",
+        "schema_version": "vision_memory.lightweight_determinism_report.v2",
         "status": "complete",
+        "reachability_gate": reachability_gate,
         "comparison_payload_sha256": canonical_object_sha256(comparison_payload),
         "comparison_payload": comparison_payload,
         "runtime": runtime,
@@ -510,7 +629,7 @@ def main() -> int:
         if not refused_preexisting_output:
             args.output_dir.mkdir(parents=True, exist_ok=True)
             failure = {
-                "schema_version": "vision_memory.lightweight_determinism_report.v1",
+                "schema_version": "vision_memory.lightweight_determinism_report.v2",
                 "status": "failed",
                 "error_type": type(error).__name__,
                 "error": str(error),

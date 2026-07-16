@@ -28,7 +28,14 @@ from vision_memory.repro import (  # noqa: E402
     seed_adapter_initialization,
     validate_e2e_pair_reports,
 )
-from scripts.probes.lightweight_determinism import validate_qwen_image_grid_contract  # noqa: E402
+from scripts.probes.lightweight_determinism import (  # noqa: E402
+    ALLOWED_STEP_COUNTS,
+    episode_schedule,
+    grouped_prediction_summary,
+    normalized_categorical_label,
+    reachability_gate_summary,
+    validate_qwen_image_grid_contract,
+)
 
 
 def make_pair_report(*, detached: bool) -> dict:
@@ -51,6 +58,104 @@ def make_pair_report(*, detached: bool) -> dict:
 
 
 class ReproProbeContractTest(unittest.TestCase):
+    def test_categorical_metadata_uses_enum_value(self):
+        self.assertEqual(normalized_categorical_label(SimpleNamespace(value="clean")), "clean")
+        self.assertEqual(normalized_categorical_label("distractor"), "distractor")
+        self.assertIsNone(normalized_categorical_label(None))
+
+    def test_reachability_step_budget_and_schedule_are_locked(self):
+        schedule = episode_schedule(64, 2000)
+
+        self.assertEqual(ALLOWED_STEP_COUNTS, (1, 100, 2000))
+        self.assertEqual(len(schedule), 2000)
+        self.assertEqual(schedule[0], (0, 29))
+        self.assertEqual(schedule[-1][0], 31)
+        self.assertEqual(len(schedule[1984:]), 16)
+        schedule_records = [
+            {
+                "optimizer_step": optimizer_step,
+                "epoch": epoch,
+                "episode_index": episode_index,
+                "episode_id": f"train-{episode_index:07d}",
+            }
+            for optimizer_step, (epoch, episode_index) in enumerate(schedule, start=1)
+        ]
+        self.assertEqual(
+            canonical_object_sha256(schedule_records),
+            "a4c9bfb6e108ac6de97fc04c18a530245ae339a1250f54312205369d0be49dcc",
+        )
+
+    def test_reachability_gate_requires_116_of_128_at_exact_budget(self):
+        base = [
+            {
+                "correct": index < 116,
+                "target_index": index % 4,
+                "event_kind": "set" if index % 2 == 0 else "overwrite",
+                "distractor_variant": "clean" if index % 2 == 0 else "distractor",
+                "turn_type": "query" if index % 2 == 0 else "mixed",
+                "topic": "style",
+            }
+            for index in range(128)
+        ]
+
+        passed = reachability_gate_summary(
+            steps=2000,
+            optimizer_steps_completed=2000,
+            predictions=base,
+            positive_gradient_steps=2000,
+            clipped_steps=17,
+        )
+        base[115]["correct"] = False
+        failed = reachability_gate_summary(
+            steps=2000,
+            optimizer_steps_completed=2000,
+            predictions=base,
+            positive_gradient_steps=2000,
+            clipped_steps=17,
+        )
+        audit_only = reachability_gate_summary(
+            steps=100,
+            optimizer_steps_completed=100,
+            predictions=base,
+            positive_gradient_steps=100,
+            clipped_steps=4,
+        )
+
+        self.assertTrue(passed["passed"])
+        self.assertEqual(passed["final_correct"], 116)
+        self.assertFalse(failed["passed"])
+        self.assertEqual(failed["final_correct"], 115)
+        self.assertFalse(audit_only["applicable"])
+        self.assertIsNone(audit_only["passed"])
+
+    def test_grouped_prediction_summary_records_labels_and_subtypes(self):
+        predictions = [
+            {
+                "correct": True,
+                "target_index": 0,
+                "event_kind": "set",
+                "distractor_variant": "clean",
+                "turn_type": "query",
+                "topic": "style",
+            },
+            {
+                "correct": False,
+                "target_index": 0,
+                "event_kind": "overwrite",
+                "distractor_variant": "distractor",
+                "turn_type": "mixed",
+                "topic": "style",
+            },
+        ]
+
+        summary = grouped_prediction_summary(predictions)
+
+        self.assertEqual(summary["target_index"]["0"]["count"], 2)
+        self.assertEqual(summary["target_index"]["0"]["correct"], 1)
+        self.assertEqual(summary["event_kind"]["set"]["correct"], 1)
+        self.assertEqual(summary["distractor_variant"]["clean"]["correct"], 1)
+        self.assertEqual(summary["turn_type"]["mixed"]["correct"], 0)
+
     def test_qwen3_image_grid_contract_accepts_256_and_rejects_252(self):
         processor = SimpleNamespace(patch_size=16, temporal_patch_size=2, merge_size=2)
 

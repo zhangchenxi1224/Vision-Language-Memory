@@ -227,6 +227,20 @@ python scripts/probes/run_lightweight_determinism_pair.py \
   --output-dir runs/repro-pair --steps 100 --device cuda:0
 ```
 
+After the 1-step and 100-step bitwise audits pass, the same strict path can run the
+preregistered `R1/D2R` exact-64 reachability gate. This is a prospective deterministic
+lightweight variant, not a retroactive production-bilinear D2 result. Both fresh replicas
+must match bitwise, complete exactly 2,000 optimizer steps, and finish with at least
+116/128 correct. A threshold failure still writes and compares both complete child reports;
+the pair wrapper then exits non-zero with `reproducibility_valid=true` and
+`reachability_gate_passed=false`.
+
+```bash
+python scripts/probes/run_lightweight_determinism_pair.py \
+  --train data/synthetic_v2/train.jsonl --reader "$READER" \
+  --output-dir runs/d2r-exact64-pair --steps 2000 --device cuda:0
+```
+
 `scripts/probes/qwen_visual_control_upper_bound.py` is a deliberately target-supervised
 diagnostic: the answer position selects one of four learned images. It tests whether the
 frozen Reader can be controlled through its visual channel, but it is not a memory method,
