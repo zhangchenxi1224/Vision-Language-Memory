@@ -291,6 +291,7 @@ class InspireStaticContractTest(unittest.TestCase):
         requirements = (ROOT / "requirements" / "inspire-ngc2502-pinned.txt").read_text(encoding="utf-8")
         self.assertIn("--system-site-packages", bootstrap)
         self.assertIn("--no-deps", bootstrap)
+        self.assertIn("--isolated", bootstrap)
         self.assertIn("install_non_torch_dependencies.py", bootstrap)
         self.assertIn("Torch fingerprint changed", bootstrap)
         self.assertNotIn("sbatch", bootstrap)

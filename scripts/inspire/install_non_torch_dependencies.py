@@ -80,6 +80,7 @@ def install_requirement(requirement: Requirement, *, index_url: str, trusted_hos
         sys.executable,
         "-m",
         "pip",
+        "--isolated",
         "install",
         "--disable-pip-version-check",
         "--no-deps",
