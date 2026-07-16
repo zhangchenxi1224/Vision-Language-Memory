@@ -68,7 +68,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--overfit-gate",
         action="store_true",
-        help="Fail unless recurrent updater reaches --overfit-threshold on exactly --overfit-episodes training episodes.",
+        help=(
+            "Run the full formal optimizer-step budget and fail unless the recurrent updater's "
+            "final accuracy reaches --overfit-threshold on exactly --overfit-episodes episodes."
+        ),
     )
     parser.add_argument("--overfit-episodes", type=int, default=64)
     parser.add_argument("--overfit-threshold", type=float, default=0.90)
@@ -679,16 +682,32 @@ def training_budget_open(
 ) -> bool:
     """Return whether another epoch may start under ordinary or step-driven gate training."""
 
-    if gate_passed:
-        return False
     if args.max_optimizer_steps is not None and optimizer_step >= args.max_optimizer_steps:
         return False
     if args.overfit_gate:
         # The formal gate is optimizer-step bounded. ``--epochs`` is deliberately not
         # a second, much smaller hidden budget (64 / accumulation * two epochs was only
-        # 16 optimizer steps with the defaults).
+        # 16 optimizer steps with the defaults). An intermediate threshold crossing
+        # is diagnostic only and must not shorten the preregistered fixed budget.
         return True
+    if gate_passed:
+        return False
     return epoch < args.epochs
+
+
+def formal_overfit_gate_passed(
+    args: argparse.Namespace,
+    *,
+    optimizer_step: int,
+    final_train_accuracy: float,
+) -> bool:
+    """Apply the formal gate only to the complete-budget final evaluation."""
+
+    if not args.overfit_gate:
+        return False
+    if not math.isfinite(final_train_accuracy) or not 0.0 <= final_train_accuracy <= 1.0:
+        return False
+    return optimizer_step == args.max_optimizer_steps and final_train_accuracy >= args.overfit_threshold
 
 
 def _query_comparison_ids(episode: Mapping[str, Any] | Any) -> tuple[str, ...]:
@@ -1095,6 +1114,7 @@ def main() -> int:
     best_dev = -1.0
     best_train = -1.0
     overfit_gate_passed = False
+    overfit_threshold_crossed_steps: list[int] = []
     started = time.monotonic()
     torch.cuda.reset_peak_memory_stats(device)
     stop_training = False
@@ -1164,7 +1184,9 @@ def main() -> int:
                         seed=args.seed,
                     )
                     best_train = max(best_train, train_accuracy)
-                    overfit_gate_passed = train_accuracy >= args.overfit_threshold
+                    evaluation_passed_threshold = train_accuracy >= args.overfit_threshold
+                    if evaluation_passed_threshold:
+                        overfit_threshold_crossed_steps.append(optimizer_step)
                     with (args.output_dir / "metrics.jsonl").open("a", encoding="utf-8") as handle:
                         handle.write(
                             json.dumps(
@@ -1173,7 +1195,8 @@ def main() -> int:
                                     "optimizer_step": optimizer_step,
                                     "accuracy": train_accuracy,
                                     "threshold": args.overfit_threshold,
-                                    "passed": overfit_gate_passed,
+                                    "passed": evaluation_passed_threshold,
+                                    "decision_scope": "trajectory_only_until_final_budget_step",
                                     "predictions_path": str(predictions_path.resolve()),
                                     "diagnostics_path": str(diagnostics_path.resolve()),
                                 }
@@ -1213,7 +1236,7 @@ def main() -> int:
                             optimizer_step=optimizer_step,
                             best_dev_accuracy=best_dev,
                         )
-            if overfit_gate_passed or reached_step_limit:
+            if reached_step_limit:
                 stop_training = True
                 break
         completed_epochs += 1
@@ -1259,8 +1282,11 @@ def main() -> int:
             seed=args.seed,
         )
         best_train = max(best_train, final_train_accuracy)
-        if final_train_accuracy >= args.overfit_threshold:
-            overfit_gate_passed = True
+        overfit_gate_passed = formal_overfit_gate_passed(
+            args,
+            optimizer_step=optimizer_step,
+            final_train_accuracy=final_train_accuracy,
+        )
     if args.overfit_gate and overfit_gate_passed:
         save_checkpoint(
             args.output_dir / "gate.pt",
@@ -1293,6 +1319,8 @@ def main() -> int:
         "overfit_gate_enabled": args.overfit_gate,
         "overfit_gate_threshold": args.overfit_threshold if args.overfit_gate else None,
         "overfit_gate_passed": overfit_gate_passed if args.overfit_gate else None,
+        "overfit_gate_decision_scope": "final_budget_step" if args.overfit_gate else None,
+        "overfit_threshold_crossed_steps": overfit_threshold_crossed_steps if args.overfit_gate else None,
         "train_subset_count": train_subset["count"],
         "train_subset_ordered_episode_ids_sha256": train_subset["ordered_episode_ids_sha256"],
         "final_prediction_artifacts": {
@@ -1313,8 +1341,10 @@ def main() -> int:
     print(json.dumps(summary, indent=2))
     if args.overfit_gate and not overfit_gate_passed:
         raise RuntimeError(
-            f"Lightweight overfit gate failed: best train accuracy {best_train:.4f} "
-            f"< {args.overfit_threshold:.4f} within {optimizer_step} optimizer steps."
+            f"Lightweight overfit gate failed: final train accuracy {final_train_accuracy:.4f} "
+            f"at optimizer step {optimizer_step}; passing requires accuracy >= "
+            f"{args.overfit_threshold:.4f} at exactly {args.max_optimizer_steps} optimizer steps ("
+            f"best trajectory accuracy {best_train:.4f})."
         )
     return 0
 

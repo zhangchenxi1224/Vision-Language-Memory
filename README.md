@@ -199,7 +199,8 @@ the actual clipping factor, conditioned-input magnitude, gate saturation, and hi
 bounds.
 `lightweight_overfit.py` uses a fixed local surrogate only for CPU/API smoke tests. The
 scientific 64-episode gate uses the real frozen Qwen Reader and fails closed unless it
-reaches 90% training MCQ accuracy within 2,000 optimizer steps:
+reaches 90% training MCQ accuracy at exactly the final 2,000th optimizer step. Intermediate
+threshold crossings are logged as trajectory diagnostics and never trigger early stopping:
 
 ```bash
 python scripts/train/lightweight_episode.py \

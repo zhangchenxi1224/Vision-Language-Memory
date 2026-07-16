@@ -30,6 +30,7 @@ from scripts.train.lightweight_episode import (  # noqa: E402
     PairwiseTensorDiagnostics,
     clip_gradients_with_diagnostics,
     evaluate_accuracy,
+    formal_overfit_gate_passed,
     gradient_norms_before_clip,
     overfit_evaluation_paths,
     tensor_spatial_diagnostics,
@@ -524,7 +525,21 @@ class LightweightOverfitGateTest(unittest.TestCase):
         args = self.arguments()
         self.assertTrue(training_budget_open(args, epoch=2, optimizer_step=16, gate_passed=False))
         self.assertFalse(training_budget_open(args, epoch=250, optimizer_step=2_000, gate_passed=False))
-        self.assertFalse(training_budget_open(args, epoch=1, optimizer_step=250, gate_passed=True))
+        self.assertTrue(training_budget_open(args, epoch=1, optimizer_step=250, gate_passed=True))
+        ordinary = self.arguments(overfit_gate=False, max_optimizer_steps=None)
+        self.assertFalse(training_budget_open(ordinary, epoch=1, optimizer_step=250, gate_passed=True))
+
+    def test_formal_gate_uses_only_full_budget_final_accuracy(self):
+        args = self.arguments()
+        self.assertFalse(
+            formal_overfit_gate_passed(args, optimizer_step=1_900, final_train_accuracy=1.0)
+        )
+        self.assertFalse(
+            formal_overfit_gate_passed(args, optimizer_step=2_000, final_train_accuracy=0.899)
+        )
+        self.assertTrue(
+            formal_overfit_gate_passed(args, optimizer_step=2_000, final_train_accuracy=0.90)
+        )
 
     def test_gate_subset_requires_reciprocal_clean_distractor_pairs(self):
         episodes = self.paired_episodes()
