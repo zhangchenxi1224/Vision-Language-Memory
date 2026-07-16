@@ -122,11 +122,11 @@ class ConvGRUCell(nn.Module):
         combined_channels = input_channels + hidden_channels
         self.gates = nn.Conv2d(combined_channels, hidden_channels * 2, kernel_size, padding=padding)
         self.candidate = nn.Conv2d(combined_channels, hidden_channels, kernel_size, padding=padding)
-        # Bias the update gate toward retention so an event does not overwrite half
-        # of a fresh memory state before the model has learned event semantics.
+        # Retain most of the previous state while leaving enough initial write
+        # capacity for overwrite and mixed-event transitions.
         if self.gates.bias is not None:
             with torch.no_grad():
-                self.gates.bias[hidden_channels:].fill_(-2.0)
+                self.gates.bias[hidden_channels:].fill_(-1.0)
 
     def forward(self, inputs: Tensor, hidden: Tensor) -> Tensor:
         if inputs.ndim != 4 or hidden.ndim != 4:

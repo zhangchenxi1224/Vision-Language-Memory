@@ -192,7 +192,8 @@ corpus is independently generated; it is never made by deleting turns from full 
 The lightweight implementation is a hashed event encoder, one-layer BiGRU, an
 event-conditioned 16-mode orthogonal DCT-II writer, a 64-channel 64x64 FiLM-ConvGRU
 state, and a differentiable RGB head. The spatial writer and pre-GRU FiLM map are bounded;
-the update-gate bias starts at -2 so a fresh model favors state retention. The fixed zero
+the update-gate bias starts at -1, retaining most prior state while providing an initial
+write ratio of about `sigmoid(-1)=0.269`. The fixed zero
 initial state remains non-trainable. Formal training logs per-module gradient norms,
 the actual clipping factor, conditioned-input magnitude, gate saturation, and hidden-state
 bounds.

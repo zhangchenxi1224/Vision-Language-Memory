@@ -133,13 +133,13 @@ class LightweightUpdaterTest(unittest.TestCase):
         ).abs()
         self.assertGreater((similarities < 0.99).float().mean().item(), 0.5)
 
-    def test_update_gate_bias_is_initialized_to_negative_two(self):
+    def test_update_gate_bias_is_initialized_to_negative_one(self):
         torch.manual_seed(31)
         updater = self.make_updater()
         reset_bias, update_bias = updater.cell.gates.bias.chunk(2)
 
-        torch.testing.assert_close(update_bias, torch.full_like(update_bias, -2.0), rtol=0, atol=0)
-        self.assertFalse(torch.equal(reset_bias, torch.full_like(reset_bias, -2.0)))
+        torch.testing.assert_close(update_bias, torch.full_like(update_bias, -1.0), rtol=0, atol=0)
+        self.assertFalse(torch.equal(reset_bias, torch.full_like(reset_bias, -1.0)))
 
     def test_learned_initial_state_is_tanh_parameterized_but_fixed_zero_path_is_unchanged(self):
         torch.manual_seed(33)
