@@ -86,6 +86,15 @@ def validate_prerequisites(
                 errors.append("teacher T0 probe identity is invalid")
             if teacher_t0.get("passed") is not True:
                 errors.append("teacher T0 did not pass")
+            preregistered_inputs = teacher_t0.get("preregistered_inputs")
+            if (
+                not isinstance(preregistered_inputs, Mapping)
+                or preregistered_inputs.get("passed") is not True
+                or not isinstance(preregistered_inputs.get("checks"), Mapping)
+                or not preregistered_inputs["checks"]
+                or not all(value is True for value in preregistered_inputs["checks"].values())
+            ):
+                errors.append("teacher T0 is not bound to every prospective preregistered input")
             for field in ("cache_integrity", "cross_split_fail_closed", "upper_bound"):
                 value = teacher_t0.get(field)
                 if not isinstance(value, Mapping) or value.get("passed") is not True:

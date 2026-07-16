@@ -23,6 +23,7 @@ from scripts.probes.teacher_t0_upper_bound import (  # noqa: E402
     audit_cache_identity_and_paths,
     audit_cross_split_fail_closed,
     audit_identity_mutations,
+    audit_preregistered_inputs,
     contract_exit_code,
     manifest_transition_records,
     parse_raw_sidecar_records,
@@ -119,6 +120,74 @@ class TeacherT0UpperBoundTest(unittest.TestCase):
 
         self.assertTrue(audit_cross_split_fail_closed(RefusingProvider(), "0" * 64)["passed"])
         self.assertFalse(audit_cross_split_fail_closed(AcceptingProvider(), "0" * 64)["passed"])
+
+    def test_preregistered_input_audit_binds_t0_to_transition_cache_and_model(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            gate = root / "gate.jsonl"
+            sidecar = root / "raw-sidecar.jsonl"
+            teacher_manifest = root / "manifest.json"
+            font = root / "font.ttf"
+            reader = root / "reader"
+            reader.mkdir()
+            gate.write_bytes(b"gate")
+            sidecar.write_bytes(b"sidecar")
+            teacher_manifest.write_bytes(b"manifest")
+            font.write_bytes(b"font")
+            (reader / ".locked_revision").write_text("reader-revision\n", encoding="utf-8")
+            manifest = SimpleNamespace(
+                renderer_contract_sha256="1" * 64,
+                teacher_contract_sha256="2" * 64,
+            )
+            preregistration = root / "r3_preregistration.json"
+            preregistration.write_text(
+                json.dumps(
+                    {
+                        "schema": "vision_memory.r3-preregistration.v1",
+                        "micro_data": {
+                            "transition16": {
+                                "gate_sha256": hashlib.sha256(b"gate").hexdigest(),
+                                "raw_teacher_sidecar_sha256": hashlib.sha256(b"sidecar").hexdigest(),
+                            }
+                        },
+                        "teacher_contract": {
+                            "cache_manifest_sha256": {
+                                "transition16": hashlib.sha256(b"manifest").hexdigest(),
+                            },
+                            "font_sha256": hashlib.sha256(b"font").hexdigest(),
+                            "renderer_contract_sha256": "1" * 64,
+                            "build_contract_sha256": "2" * 64,
+                            "pillow_version": teacher_t0_upper_bound.PILLOW_VERSION,
+                        },
+                        "models": {"reader": {"revision": "reader-revision"}},
+                    }
+                ),
+                encoding="utf-8",
+            )
+            passed = audit_preregistered_inputs(
+                preregistration_path=preregistration,
+                gate_jsonl=gate,
+                raw_sidecar=sidecar,
+                teacher_manifest_path=teacher_manifest,
+                manifest=manifest,
+                font_path=font,
+                reader_path=reader,
+            )
+            self.assertTrue(passed["passed"])
+            self.assertTrue(all(passed["checks"].values()))
+
+            gate.write_bytes(b"wrong gate")
+            failed = audit_preregistered_inputs(
+                preregistration_path=preregistration,
+                gate_jsonl=gate,
+                raw_sidecar=sidecar,
+                teacher_manifest_path=teacher_manifest,
+                manifest=manifest,
+                font_path=font,
+                reader_path=reader,
+            )
+            self.assertFalse(failed["passed"])
+            self.assertFalse(failed["checks"]["gate_jsonl_sha256"])
 
     def test_cache_audit_covers_path_invariance_noop_and_collisions(self):
         registry = semantic_state_registry(self.transitions)

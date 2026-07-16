@@ -75,6 +75,19 @@ def _teacher_t0_report() -> dict:
         "schema_version": 1,
         "probe": "teacher_t0_real_qwen_integrity_upper_bound",
         "passed": True,
+        "preregistered_inputs": {
+            "passed": True,
+            "checks": {
+                "gate_jsonl_sha256": True,
+                "raw_sidecar_sha256": True,
+                "teacher_manifest_sha256": True,
+                "font_sha256": True,
+                "renderer_contract_sha256": True,
+                "teacher_contract_sha256": True,
+                "reader_revision": True,
+                "pillow_version": True,
+            },
+        },
         "cache_integrity": {"passed": True},
         "cross_split_fail_closed": {"passed": True},
         "upper_bound": {"passed": True},
@@ -131,6 +144,17 @@ def test_prerequisites_require_both_complete_reports_and_clean_commit() -> None:
     )
     assert failed["passed"] is False
     assert any("upper_bound" in error for error in failed["errors"])
+    unbound_t0 = _teacher_t0_report()
+    unbound_t0["preregistered_inputs"]["checks"]["teacher_manifest_sha256"] = False
+    unbound = validate_prerequisites(
+        scorer_s0=_s0_report(),
+        technical=_technical_report(),
+        teacher_t0=unbound_t0,
+        training_regime="teacher_assisted",
+        expected_commit=COMMIT,
+    )
+    assert unbound["passed"] is False
+    assert any("prospective preregistered input" in error for error in unbound["errors"])
     qa_only = validate_prerequisites(
         scorer_s0=_s0_report(),
         technical=_technical_report(),

@@ -42,6 +42,7 @@ EXPECTED_ARGUMENTS: dict[str, Any] = {
     "max_optimizer_steps": 17,
     "audit_gradient_sha": True,
     "strict_determinism": True,
+    "require_mixed_delayed_probe": True,
     "gradient_accumulation": 1,
     "checkpoint_every": 8,
     "eval_every": 100000,

@@ -1,7 +1,7 @@
 {
   "schema": "vision_memory.r3-preregistration.v1",
   "decision_date": "2026-07-17",
-  "status": "prospective_environment_locked_no_r3_scientific_results",
+  "status": "prospective_teacher_caches_locked_no_r3_scientific_results",
   "research_boundary": {
     "r2c_disposition": "archived_reproducible_lightweight_performance_failure",
     "lightweight_role": "data_router_loss_reader_diagnostic_only",
@@ -86,8 +86,49 @@
     "build_contract_sha256": "5a8dec081c53bd47265f20e8dc38836a65ea459ea0d291c3ab1118af604535c7",
     "latent_normalization_epsilon": 0.000001,
     "calibration_denominator_epsilon": 0.000001,
-    "cache_manifest_sha256": {"set8": null, "transition16": null},
-    "cache_lock_rule": "Deterministic GPU cache-build jobs assign both SHAs; no T0, teacher training, or scientific micro gate may run until the generated manifests and every tensor SHA are archived and these locks are amended prospectively."
+    "calibration_protocol": {
+      "global_seed": 0,
+      "adapter_seed": 0,
+      "lora_rank": 4,
+      "initial_state": "blank_1024",
+      "strict_cuda_determinism": true,
+      "sdpa_backend": "math_only",
+      "sample_unit": "one_unweighted_sample_per_updater_transition",
+      "query_turns_excluded": true,
+      "duplicate_semantic_after_states_retained": true,
+      "component_reduction": "median",
+      "set8_transition_samples": 8,
+      "set8_unique_after_states": 8,
+      "transition16_transition_samples": 28,
+      "transition16_unique_after_states": 16,
+      "generated_calibration_artifact_sha_rule": "Archive calibration.json and report SHA in the immutable run audit; do not amend the science commit after calibration."
+    },
+    "cache_manifest_sha256": {
+      "set8": "1e611a8155ebc2b3055fd899271fdcc949bf12798ce49f7c64877fe71488ef02",
+      "transition16": "4d793bf76f44ddca573698832b19dfe242615e359bcc4c273bf180cb3bcd873e"
+    },
+    "cache_build_commit": "d2343f4ae6a6ea12e561fd3e865547bd01f0c518",
+    "cache_builds": {
+      "set8": {
+        "state_count": 10,
+        "transition_count": 8,
+        "artifact_tensor_count": 30,
+        "transitions_sha256": "1f76546dbf6f9e72ce764cf3c4fe519204667ef6609cfd9f293da0154ef11ad1",
+        "build_report_sha256": "9dde73eeff89248f4df59d5cc495d62d0e5b659ac43a2bf0e5196902dd42aa66",
+        "artifact_file_sha_map_sha256": "cd1c5abcf5dbb590458ddc463e4c61639cec2e8ca2dc6a40274fe40d64ecfe8f",
+        "tensor_content_sha_map_sha256": "7e37e6e2dafc0175015a5d70d7842ce83404d76d8376175cf809fa7fb8e59467"
+      },
+      "transition16": {
+        "state_count": 20,
+        "transition_count": 28,
+        "artifact_tensor_count": 60,
+        "transitions_sha256": "e80e6456db5f8fb513c10e02a42362b0478d2efb9863411492c309599e7527f0",
+        "build_report_sha256": "79f5c4bf4833ecf94898146a4594f022e844a6663fe807c7715441ec2f9f77c7",
+        "artifact_file_sha_map_sha256": "0045a1f5240b91f7a4c791a57e7f1f61888beb5530c32388dd14d5590d8d68bf",
+        "tensor_content_sha_map_sha256": "db1a3bae37446192eb0a49997beab0e281afbf476c62aca4dd1779a51f5589a0"
+      }
+    },
+    "cache_lock_rule": "Fulfilled prospectively before R3 scientific gates: both deterministic train-only cache manifests, transition files, build reports, and the complete per-tensor file/content SHA maps are archived. Any rebuild changes the protocol and requires a new preregistration amendment before further scientific work."
   },
   "technical_gates": {
     "order": ["R3-S0", "G4-L", "G5-L", "G6-L", "DL-S"],
@@ -200,9 +241,11 @@
       "torch_reported_gpu_memory_mib_each": 143167,
       "environment_manifest_sha256": "75620ba3e88994b5d79f3c9c3ec4ba58da176279a1a2e1519c6195ac0532c9c0",
       "infrastructure_preflight_sha256": "1d02c53d71db5a551a527bf7f9894cb02cdcdab5c5963159adf90f9f76b1d9",
-      "formal_preflight_sha256": "4b157c294a00b06aae366ad00ceff1d3ec83eb7af2583cf3cdbfaa771f3274f4",
+      "formal_preflight_sha256": "20cedc6c5b79a7298992d1651352c8c8a57da25316abf2420af547dfb2b4a589",
+      "formal_preflight_commit": "d2343f4ae6a6ea12e561fd3e865547bd01f0c518",
       "formal_preflight_checks": 47,
-      "formal_preflight_passed": true
+      "formal_preflight_passed": true,
+      "science_launch_requires_new_exact_commit_preflight": true
     },
     "network": {
       "internal_pypi_reachable": true,
@@ -238,6 +281,6 @@
     "scientific_jobs_require_clean_commit": true,
     "h200_requires_fresh_technical_gate_evidence": true,
     "historical_a800_gate_results_do_not_transfer": true,
-    "submission_state": "environment_and_models_ready_no_scientific_gate_submitted"
+    "submission_state": "environment_models_and_teacher_caches_ready_no_scientific_gate_submitted"
   }
 }

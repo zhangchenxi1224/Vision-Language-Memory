@@ -48,6 +48,7 @@ from vision_memory.training import format_mcq_query  # noqa: E402
 RAW_SIDECAR_SCHEMA = "vlm.r3.teacher_transition.v1"
 LOCKED_FONT_SHA256 = "3fdf69cabf06049ea70a00b5919340e2ce1e6d02b0cc3c4b44fb6801bd1e0d22"
 LOCKED_FONT_ID = "DejaVuSans-2.37-embedded"
+PREREGISTRATION_PATH = ROOT / "configs" / "experiments" / "r3_preregistration.json"
 MODALITIES = ("raw_state_card", "vae_decoded_teacher_card")
 MACRO_ACCURACY_THRESHOLD = 0.95
 HELDOUT_TEMPLATE_THRESHOLD = 0.90
@@ -78,6 +79,73 @@ def sha256_file(path: Path) -> str:
         for block in iter(lambda: handle.read(1024 * 1024), b""):
             digest.update(block)
     return digest.hexdigest()
+
+
+def _nested_mapping(value: Mapping[str, Any], *keys: str) -> Mapping[str, Any]:
+    current: Any = value
+    for key in keys:
+        if not isinstance(current, Mapping) or key not in current:
+            raise ValueError(f"R3 preregistration is missing {'.'.join(keys)}.")
+        current = current[key]
+    if not isinstance(current, Mapping):
+        raise ValueError(f"R3 preregistration field {'.'.join(keys)} must be an object.")
+    return current
+
+
+def audit_preregistered_inputs(
+    *,
+    preregistration_path: Path,
+    gate_jsonl: Path,
+    raw_sidecar: Path,
+    teacher_manifest_path: Path,
+    manifest: TeacherCacheManifest,
+    font_path: Path,
+    reader_path: Path,
+) -> dict[str, Any]:
+    """Bind T0 to the prospective R3 data/cache/model contract in Git."""
+
+    value = json.loads(preregistration_path.read_text(encoding="utf-8"))
+    if not isinstance(value, Mapping) or value.get("schema") != "vision_memory.r3-preregistration.v1":
+        raise ValueError("Teacher T0 requires the locked R3 preregistration schema.")
+    transition16 = _nested_mapping(value, "micro_data", "transition16")
+    teacher_contract = _nested_mapping(value, "teacher_contract")
+    cache_locks = _nested_mapping(value, "teacher_contract", "cache_manifest_sha256")
+    reader_lock = _nested_mapping(value, "models", "reader")
+    reader_marker = reader_path / ".locked_revision"
+    observed = {
+        "gate_jsonl_sha256": sha256_file(gate_jsonl),
+        "raw_sidecar_sha256": sha256_file(raw_sidecar),
+        "teacher_manifest_sha256": sha256_file(teacher_manifest_path),
+        "font_sha256": sha256_file(font_path),
+        "renderer_contract_sha256": manifest.renderer_contract_sha256,
+        "teacher_contract_sha256": manifest.teacher_contract_sha256,
+        "reader_revision": reader_marker.read_text(encoding="utf-8").strip() if reader_marker.is_file() else None,
+        "pillow_version": PILLOW_VERSION,
+    }
+    expected = {
+        "gate_jsonl_sha256": transition16.get("gate_sha256"),
+        "raw_sidecar_sha256": transition16.get("raw_teacher_sidecar_sha256"),
+        "teacher_manifest_sha256": cache_locks.get("transition16"),
+        "font_sha256": teacher_contract.get("font_sha256"),
+        "renderer_contract_sha256": teacher_contract.get("renderer_contract_sha256"),
+        "teacher_contract_sha256": teacher_contract.get("build_contract_sha256"),
+        "reader_revision": reader_lock.get("revision"),
+        "pillow_version": teacher_contract.get("pillow_version"),
+    }
+    checks = {
+        name: isinstance(expected_value, str) and bool(expected_value) and observed[name] == expected_value
+        for name, expected_value in expected.items()
+    }
+    return {
+        "passed": all(checks.values()),
+        "preregistration": {
+            "path": str(preregistration_path),
+            "sha256": sha256_file(preregistration_path),
+        },
+        "checks": checks,
+        "expected": expected,
+        "observed": observed,
+    }
 
 
 def parse_raw_sidecar_records(values: Iterable[Mapping[str, Any]]) -> tuple[RawTransition, ...]:
@@ -615,6 +683,20 @@ def main(argv: Sequence[str] | None = None) -> int:
         if file_sha256(args.font) != LOCKED_FONT_SHA256:
             raise RuntimeError("Embedded DejaVuSans.ttf differs from the locked R3 font SHA256.")
         manifest = load_teacher_manifest(args.teacher_manifest)
+        preregistered_inputs = audit_preregistered_inputs(
+            preregistration_path=PREREGISTRATION_PATH,
+            gate_jsonl=args.gate_jsonl,
+            raw_sidecar=args.raw_sidecar,
+            teacher_manifest_path=args.teacher_manifest,
+            manifest=manifest,
+            font_path=args.font,
+            reader_path=args.reader,
+        )
+        if not preregistered_inputs["passed"]:
+            raise RuntimeError(
+                "Teacher T0 inputs differ from the prospective R3 locks: "
+                f"{preregistered_inputs['checks']}"
+            )
         font = FixedFontContract(
             font_id=LOCKED_FONT_ID,
             path=args.font,
@@ -713,6 +795,8 @@ def main(argv: Sequence[str] | None = None) -> int:
                 "predictions": len(predictions),
             },
             "renderer_contract_sha256": renderer.contract_sha256,
+            "teacher_contract_sha256": manifest.teacher_contract_sha256,
+            "preregistered_inputs": preregistered_inputs,
             "cache_integrity": cache_integrity,
             "cross_split_fail_closed": cross_split,
             "identity_mutations": mutation_reports,

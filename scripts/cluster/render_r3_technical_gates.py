@@ -209,6 +209,7 @@ def _training_command(paths: R3Paths, *, output_dir: Path, resume: Path | None =
         "17",
         "--audit-gradient-sha",
         "--strict-determinism",
+        "--require-mixed-delayed-probe",
         "--recurrence-mode",
         "direct_latent",
         "--noop-policy",

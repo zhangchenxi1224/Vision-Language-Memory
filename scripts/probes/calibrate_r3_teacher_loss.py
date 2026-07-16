@@ -18,7 +18,13 @@ sys.path.insert(0, str(ROOT / "src"))
 from vision_memory.data import read_jsonl  # noqa: E402
 from vision_memory.dreamlite import freeze_module  # noqa: E402
 from vision_memory.reader import qwen3vl_query_free_visual_features  # noqa: E402
-from vision_memory.repro import load_initial_image  # noqa: E402
+from vision_memory.repro import (  # noqa: E402
+    configure_strict_cuda_determinism,
+    cuda_peak_memory_report,
+    load_initial_image,
+    probe_provenance,
+    reset_cuda_peak_memory,
+)
 from vision_memory.teacher import (  # noqa: E402
     FrozenTeacherLossCalibration,
     composite_teacher_distillation_loss,
@@ -39,7 +45,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--report", type=Path, required=True)
     parser.add_argument("--resolution", type=int, default=1024)
-    parser.add_argument("--seed", type=int, default=2026)
+    # This is the updater/global diffusion seed, not the dataset-generation seed.
+    # R3 micro training is pre-registered at global seed 0, so calibration must
+    # observe the exact same initial student/noise protocol.
+    parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--adapter-seed", type=int, default=0)
     parser.add_argument("--lora-rank", type=int, default=4)
     parser.add_argument("--dreamlite-device", default="cuda:0")
@@ -68,6 +77,15 @@ def main() -> int:
         raise SystemExit("Teacher-loss calibration requires two visible CUDA GPUs.")
     if args.output.exists() or args.report.exists():
         raise SystemExit("Calibration refuses to overwrite an existing output or report.")
+    determinism = configure_strict_cuda_determinism(args.seed)
+    provenance = probe_provenance(
+        root=ROOT,
+        arguments=args,
+        models={"dreamlite": args.dreamlite, "reader": args.reader},
+    )
+    git = provenance.get("git", {})
+    if git.get("clean") is not True or not git.get("commit"):
+        raise SystemExit("Teacher-loss calibration requires a clean, committed checkout.")
     manifest_path = args.cache_dir / "manifest.json"
     sidecar_path = args.cache_dir / "transitions.jsonl"
     manifest = load_teacher_cache_manifest(manifest_path)
@@ -148,6 +166,8 @@ def main() -> int:
     ).to(reader_device)
     freeze_module(reader)
     reader.eval()
+    reader.config.use_cache = False
+    reset_cuda_peak_memory((dreamlite_device, reader_device))
 
     unit = FrozenTeacherLossCalibration(latent_scale=1.0, image_scale=1.0, feature_scale=1.0)
     raw_latent: list[float] = []
@@ -202,12 +222,21 @@ def main() -> int:
         "adapter_seed": args.adapter_seed,
         "lora_rank": args.lora_rank,
         "initial_state": source_metadata,
+        "sample_selection": {
+            "split": "train",
+            "unit": "one-unweighted-sample-per-updater-transition",
+            "query_turns_excluded": True,
+            "duplicate-semantic-after-states_retained": True,
+        },
         "scales": calibration.to_dict(),
         "raw_component_ranges": {
             "latent": [min(raw_latent), max(raw_latent)],
             "image": [min(raw_image), max(raw_image)],
             "feature": [min(raw_feature), max(raw_feature)],
         },
+        "strict_determinism": determinism,
+        "cuda_peak_memory": cuda_peak_memory_report((dreamlite_device, reader_device)),
+        "provenance": provenance,
     }
     args.report.parent.mkdir(parents=True, exist_ok=True)
     args.report.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")

@@ -376,6 +376,7 @@ class R3TechnicalRenderingTest(unittest.TestCase):
             self.assertIn("--max-optimizer-steps 17", resume_commands)
             self.assertIn("--audit-gradient-sha", resume_commands)
             self.assertIn("--strict-determinism", resume_commands)
+            self.assertIn("--require-mixed-delayed-probe", resume_commands)
             self.assertIn("--gradient-accumulation 1", resume_commands)
             self.assertIn("checkpoint-000008.pt", resume_commands)
             self.assertIn("--resume", resume_commands)
