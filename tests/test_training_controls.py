@@ -321,10 +321,21 @@ class LightweightAuditHelperTest(unittest.TestCase):
         diagnostics = LightweightDynamicsDiagnostics()
         conditioned_input = torch.ones(1, 1, 2, 2)
         hidden = torch.ones_like(conditioned_input)
-        with diagnostics.capture(cell):
-            cell(conditioned_input, hidden)
+        gate_forward_calls = 0
+
+        def count_gate_forward(_module, _inputs, _output):
+            nonlocal gate_forward_calls
+            gate_forward_calls += 1
+
+        counter_handle = cell.gates.register_forward_hook(count_gate_forward)
+        try:
+            with diagnostics.capture(cell):
+                cell(conditioned_input, hidden)
+        finally:
+            counter_handle.remove()
         summary = diagnostics.summary()
 
+        self.assertEqual(gate_forward_calls, 1)
         self.assertEqual(summary["updater_calls"], 1)
         self.assertEqual(summary["conditioned_cell_input"]["rms"]["mean"], 1.0)
         self.assertEqual(summary["conditioned_cell_input"]["absolute_max"]["mean"], 1.0)
@@ -332,6 +343,7 @@ class LightweightAuditHelperTest(unittest.TestCase):
         self.assertEqual(summary["update_gate_saturation"]["above_0_99_fraction"], 1.0)
         self.assertEqual(summary["cell_output"]["outside_nominal_fraction"], 0.0)
         self.assertFalse(cell._forward_hooks)
+        self.assertFalse(cell.gates._forward_hooks)
 
     def test_module_gradient_norms_are_disjoint_and_clip_fields_are_json_ready(self):
         model = LightweightVisualUpdater(
@@ -399,23 +411,35 @@ class LightweightAuditHelperTest(unittest.TestCase):
             ],
         }
         score = SimpleNamespace(predicted_index=0, mean_nll=(0.0, 1.0, 2.0, 3.0))
+        gate_forward_calls = 0
+
+        def count_gate_forward(_module, _inputs, _output):
+            nonlocal gate_forward_calls
+            gate_forward_calls += 1
+
+        counter_handle = model.cell.gates.register_forward_hook(count_gate_forward)
         with tempfile.TemporaryDirectory() as directory:
             diagnostics_path = Path(directory) / "diagnostics.json"
-            with patch("scripts.train.lightweight_episode.qwen3vl_choice_nll", return_value=score):
-                evaluate_accuracy(
-                    episodes=[episode],
-                    model=model,
-                    reader=object(),
-                    processor=object(),
-                    device=torch.device("cpu"),
-                    noop_policy="update",
-                    diagnostics_path=diagnostics_path,
-                    method="recurrent",
-                    seed=0,
-                )
+            try:
+                with patch("scripts.train.lightweight_episode.qwen3vl_choice_nll", return_value=score):
+                    evaluate_accuracy(
+                        episodes=[episode],
+                        model=model,
+                        reader=object(),
+                        processor=object(),
+                        device=torch.device("cpu"),
+                        noop_policy="update",
+                        diagnostics_path=diagnostics_path,
+                        method="recurrent",
+                        seed=0,
+                    )
+            finally:
+                counter_handle.remove()
             written = json.loads(diagnostics_path.read_text(encoding="utf-8"))
+        self.assertEqual(gate_forward_calls, 1)
         self.assertEqual(written["lightweight_dynamics"]["updater_calls"], 1)
         self.assertFalse(model.cell._forward_hooks)
+        self.assertFalse(model.cell.gates._forward_hooks)
 
         with (
             patch("scripts.train.lightweight_episode.qwen3vl_choice_nll", side_effect=RuntimeError("reader failed")),
@@ -433,6 +457,7 @@ class LightweightAuditHelperTest(unittest.TestCase):
                 seed=0,
             )
         self.assertFalse(model.cell._forward_hooks)
+        self.assertFalse(model.cell.gates._forward_hooks)
 
 
 class LightweightOverfitGateTest(unittest.TestCase):

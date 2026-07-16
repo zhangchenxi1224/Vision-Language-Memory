@@ -195,7 +195,10 @@ class LightweightVisualUpdater(nn.Module):
     def initial_state(self, *, batch_size: int, device: torch.device, dtype: torch.dtype) -> Tensor:
         if batch_size < 1:
             raise ValueError("batch_size must be positive")
-        return self.initial_hidden.to(device=device, dtype=dtype).expand(batch_size, -1, -1, -1).clone()
+        initial_hidden = (
+            torch.tanh(self.initial_hidden) if isinstance(self.initial_hidden, nn.Parameter) else self.initial_hidden
+        )
+        return initial_hidden.to(device=device, dtype=dtype).expand(batch_size, -1, -1, -1).clone()
 
     def update(self, state: Tensor, event_text: str | Sequence[str]) -> Tensor:
         if state.ndim != 4 or state.shape[1:] != (self.state_channels, self.state_size, self.state_size):

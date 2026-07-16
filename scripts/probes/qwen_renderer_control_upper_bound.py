@@ -139,6 +139,10 @@ def grouped_accuracy(records: Sequence[dict[str, Any]], key: str) -> dict[str, A
     }
 
 
+def renderer_control_exit_code(passed_threshold: bool) -> int:
+    return 0 if passed_threshold else 3
+
+
 class TargetSelectedRendererControl(nn.Module):
     """Four leaked-label state codes rendered only through the production RGB head."""
 
@@ -596,7 +600,7 @@ def main() -> int:
     summary_path = args.output_dir / "summary.json"
     _write_json(summary_path, summary)
     print(json.dumps(summary, ensure_ascii=False, indent=2, sort_keys=True))
-    return 0
+    return renderer_control_exit_code(summary["passed_threshold"])
 
 
 if __name__ == "__main__":

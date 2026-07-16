@@ -19,6 +19,7 @@ from scripts.probes.qwen_renderer_control_upper_bound import (  # noqa: E402
     TargetSelectedRendererControl,
     evaluate_renderer_control,
     optimize_target_selected_image,
+    renderer_control_exit_code,
 )
 from scripts.data.qwen_sanity import QueryMember, UniqueQuery  # noqa: E402
 from vision_memory.data import QuerySpec  # noqa: E402
@@ -159,6 +160,10 @@ class RendererControlUpperBoundTest(unittest.TestCase):
         self.assertIn("TARGET-SUPERVISED LABEL-LEAK DIAGNOSTIC ONLY", DISCLAIMER)
         self.assertIn("only probes the renderer manifold", DISCLAIMER)
         self.assertIn("not a method, baseline, ablation", DISCLAIMER)
+
+    def test_threshold_failure_uses_nonzero_exit_code(self):
+        self.assertEqual(renderer_control_exit_code(True), 0)
+        self.assertEqual(renderer_control_exit_code(False), 3)
 
 
 if __name__ == "__main__":

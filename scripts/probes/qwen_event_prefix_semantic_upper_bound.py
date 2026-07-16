@@ -11,7 +11,7 @@ import subprocess
 import sys
 import time
 from collections import Counter, defaultdict
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 from typing import Any, Mapping, Sequence
 
@@ -67,6 +67,19 @@ class EventPrefixRead:
     event_texts: tuple[str, ...]
     state_key: str
     query: QuerySpec
+    topic: str
+    template_id: str
+    distractor_variant: str | None
+    members: tuple[EventPrefixReadMember, ...]
+
+
+@dataclass(frozen=True)
+class EventPrefixReadMember:
+    episode_id: str
+    turn_index: int
+    query_ordinal: int
+    comparison_id: str | None
+    original_choices: tuple[str, str, str, str]
     topic: str
     template_id: str
     distractor_variant: str | None
@@ -167,6 +180,22 @@ def collect_event_prefix_reads(episodes: Sequence[Episode]) -> list[EventPrefixR
             existing_payload = payload_by_key.setdefault(state_key, payload)
             if existing_payload != payload:
                 raise RuntimeError(f"SHA256 collision for event-prefix key {state_key}")
+            distractor_variant = (
+                episode.distractor_variant.value if episode.distractor_variant is not None else None
+            )
+            choices = tuple(turn.query.choices)
+            if len(choices) != 4:
+                raise RuntimeError("The event-prefix diagnostic requires exactly four choices")
+            member = EventPrefixReadMember(
+                episode_id=episode.episode_id,
+                turn_index=turn_index,
+                query_ordinal=query_ordinal,
+                comparison_id=turn.query.comparison_id,
+                original_choices=choices,
+                topic=episode.topic,
+                template_id=episode.template_id,
+                distractor_variant=distractor_variant,
+            )
             reads.append(
                 EventPrefixRead(
                     episode_id=episode.episode_id,
@@ -177,15 +206,106 @@ def collect_event_prefix_reads(episodes: Sequence[Episode]) -> list[EventPrefixR
                     query=turn.query,
                     topic=episode.topic,
                     template_id=episode.template_id,
-                    distractor_variant=(
-                        episode.distractor_variant.value if episode.distractor_variant is not None else None
-                    ),
+                    distractor_variant=distractor_variant,
+                    members=(member,),
                 )
             )
             query_ordinal += 1
     if not reads:
         raise ValueError("The event-prefix diagnostic dataset contains no queries")
     return reads
+
+
+def _read_identity_payload(read: EventPrefixRead) -> dict[str, Any]:
+    choices = tuple(read.query.choices)
+    if len(choices) != 4 or len(set(choices)) != 4:
+        raise ValueError("Exactly four distinct choices are required")
+    return {
+        "schema": "vision_memory.effective_event_prefix_read.v1",
+        "state_key": read.state_key,
+        "query_text": read.query.text,
+        "canonical_choices": sorted(choices),
+        "target": read.query.target,
+    }
+
+
+def _read_identity_bytes(read: EventPrefixRead) -> bytes:
+    return json.dumps(
+        _read_identity_payload(read),
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    ).encode("utf-8")
+
+
+def _member_payload(member: EventPrefixReadMember) -> dict[str, Any]:
+    return {
+        "episode_id": member.episode_id,
+        "turn_index": member.turn_index,
+        "query_ordinal": member.query_ordinal,
+        "comparison_id": member.comparison_id,
+        "original_choices": list(member.original_choices),
+        "topic": member.topic,
+        "template_id": member.template_id,
+        "distractor_variant": member.distractor_variant,
+    }
+
+
+def deduplicate_event_prefix_reads(
+    reads: Sequence[EventPrefixRead],
+) -> tuple[list[EventPrefixRead], dict[str, Any]]:
+    """Collapse model-identical selector/query reads while retaining every raw member."""
+
+    if not reads:
+        raise ValueError("reads must be non-empty")
+    effective_by_identity: dict[bytes, EventPrefixRead] = {}
+    for read in reads:
+        identity = _read_identity_bytes(read)
+        existing = effective_by_identity.get(identity)
+        if existing is None:
+            effective_by_identity[identity] = read
+            continue
+        if existing.event_texts != read.event_texts:
+            raise RuntimeError(
+                "A deduplication identity collision mapped different visible event-text prefixes"
+            )
+        effective_by_identity[identity] = replace(
+            existing,
+            members=existing.members + read.members,
+        )
+
+    effective_reads = list(effective_by_identity.values())
+    groups: list[dict[str, Any]] = []
+    multiplicities: Counter[int] = Counter()
+    for identity, read in effective_by_identity.items():
+        multiplicities[len(read.members)] += 1
+        groups.append(
+            {
+                "read_identity_sha256": hashlib.sha256(identity).hexdigest(),
+                **_read_identity_payload(read),
+                "member_count": len(read.members),
+                "members": [_member_payload(member) for member in read.members],
+            }
+        )
+    identity_inventory = b"\n".join(effective_by_identity)
+    audit = {
+        "schema_version": "vision_memory.event_prefix_read_deduplication.v1",
+        "identity_fields": ["state_key", "query_text", "canonical_choices", "target"],
+        "raw_read_count": len(reads),
+        "effective_read_count": len(effective_reads),
+        "duplicate_read_count": len(reads) - len(effective_reads),
+        "duplicate_group_count": sum(
+            group_count
+            for multiplicity, group_count in multiplicities.items()
+            if multiplicity > 1
+        ),
+        "member_multiplicity_counts": {
+            str(multiplicity): count for multiplicity, count in sorted(multiplicities.items())
+        },
+        "effective_read_identity_inventory_sha256": hashlib.sha256(identity_inventory).hexdigest(),
+        "groups": groups,
+    }
+    return effective_reads, audit
 
 
 def permutation_parity(permutation: Sequence[int]) -> int:
@@ -275,6 +395,23 @@ def grouped_accuracy(records: Sequence[dict[str, Any]], key: str) -> dict[str, A
     }
 
 
+def read_identity_sha256(read: EventPrefixRead) -> str:
+    return hashlib.sha256(_read_identity_bytes(read)).hexdigest()
+
+
+def read_member_summary(read: EventPrefixRead) -> dict[str, Any]:
+    variants = sorted(
+        {member.distractor_variant if member.distractor_variant is not None else "none" for member in read.members}
+    )
+    return {
+        "read_identity_sha256": read_identity_sha256(read),
+        "member_count": len(read.members),
+        "member_episode_ids": [member.episode_id for member in read.members],
+        "member_distractor_variants": variants,
+        "distractor_membership": "+".join(variants),
+    }
+
+
 def selector_leakage_audit(reads: Sequence[EventPrefixRead]) -> dict[str, Any]:
     signature = tuple(inspect.signature(select_code_index).parameters)
     if signature != ("state_key", "code_index_by_key"):
@@ -298,6 +435,22 @@ def sha256_bytes(payload: bytes) -> str:
     return hashlib.sha256(payload).hexdigest()
 
 
+def prepare_empty_output_dir(path: Path) -> None:
+    if path.exists():
+        if not path.is_dir():
+            raise SystemExit("--output-dir must be a directory")
+        if any(path.iterdir()):
+            raise SystemExit("The diagnostic refuses a non-empty --output-dir.")
+    path.mkdir(parents=True, exist_ok=True)
+
+
+def _write_json(path: Path, payload: dict[str, Any]) -> None:
+    path.write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+
+
 def main() -> int:
     args = parse_args()
     if args.steps <= 0 or args.learning_rate <= 0:
@@ -306,8 +459,7 @@ def main() -> int:
         raise SystemExit("--threshold must be in (0, 1]")
     if not torch.cuda.is_available():
         raise SystemExit("The event-prefix visual-code diagnostic requires CUDA and real frozen Qwen.")
-    if args.output_dir.exists() and any(args.output_dir.iterdir()):
-        raise SystemExit("The diagnostic refuses a non-empty --output-dir.")
+    prepare_empty_output_dir(args.output_dir)
     status = git_value("status", "--porcelain")
     if status and not args.allow_dirty:
         raise SystemExit("The diagnostic refuses a dirty worktree.")
@@ -319,17 +471,18 @@ def main() -> int:
     episodes = list(read_jsonl(args.dataset))[:FORMAL_OVERFIT_EPISODES]
     validate_overfit_gate_episodes(episodes)
     subset_audit = training_subset_audit(episodes)
-    reads = collect_event_prefix_reads(episodes)
-    if len(reads) != EXPECTED_RAW_READS:
-        raise RuntimeError(f"Expected {EXPECTED_RAW_READS} raw reads, found {len(reads)}")
-    leakage_audit = selector_leakage_audit(reads)
+    raw_reads = collect_event_prefix_reads(episodes)
+    if len(raw_reads) != EXPECTED_RAW_READS:
+        raise RuntimeError(f"Expected {EXPECTED_RAW_READS} raw reads, found {len(raw_reads)}")
+    leakage_audit = selector_leakage_audit(raw_reads)
+    reads, read_deduplication = deduplicate_event_prefix_reads(raw_reads)
     train_views, heldout_views = build_permutation_views(reads)
-    expected_views = EXPECTED_RAW_READS * PERMUTATIONS_PER_SPLIT
+    expected_views = len(reads) * PERMUTATIONS_PER_SPLIT
     if len(train_views) != expected_views or len(heldout_views) != expected_views:
         raise RuntimeError(
             f"Expected {expected_views} views per split, found {len(train_views)} and {len(heldout_views)}"
         )
-    expected_position_count = EXPECTED_RAW_READS * 3
+    expected_position_count = len(reads) * 3
     expected_positions = {index: expected_position_count for index in range(4)}
     if target_position_counts(train_views) != expected_positions:
         raise RuntimeError("Training permutations are not exactly target-position balanced")
@@ -341,7 +494,48 @@ def main() -> int:
     for read in reads:
         select_code_index(read.state_key, code_index_by_key)
 
-    args.output_dir.mkdir(parents=True)
+    manifest_path = args.output_dir / "manifest.json"
+    reader_revision = locked_revision(args.reader)
+    manifest = {
+        "schema_version": "vision_memory.event_prefix_semantic_upper_bound_manifest.v1",
+        "diagnostic_disclaimer": DISCLAIMER,
+        "dataset": str(args.dataset.resolve()),
+        "dataset_sha256": sha256_file(args.dataset),
+        "reader": str(args.reader.resolve()),
+        "reader_revision": reader_revision,
+        "git_commit": git_value("rev-parse", "HEAD"),
+        "git_dirty": bool(status),
+        "arguments": {
+            key: str(value) if isinstance(value, Path) else value for key, value in vars(args).items()
+        },
+        "train_subset": subset_audit,
+        "raw_read_count": len(raw_reads),
+        "effective_read_count": len(reads),
+        "read_deduplication": read_deduplication,
+        "selector_leakage_audit": leakage_audit,
+        "unique_event_prefix_code_count": len(state_keys),
+        "state_key_inventory_sha256": sha256_bytes(
+            json.dumps(state_keys, separators=(",", ":")).encode("utf-8")
+        ),
+        "permutation_protocol": {
+            "total_per_effective_read": PERMUTATION_COUNT,
+            "train": "12 even permutations",
+            "heldout": "12 odd permutations",
+            "train_permutation_view_count": len(train_views),
+            "heldout_permutation_view_count": len(heldout_views),
+            "train_target_position_counts": target_position_counts(train_views),
+            "heldout_target_position_counts": target_position_counts(heldout_views),
+        },
+        "environment": {
+            "python": platform.python_version(),
+            "torch": torch.__version__,
+            "cuda_runtime": torch.version.cuda,
+            "device": str(device),
+            "device_name": torch.cuda.get_device_name(device),
+        },
+    }
+    _write_json(manifest_path, manifest)
+
     from transformers import AutoProcessor, Qwen3VLForConditionalGeneration
 
     dtype = torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16
@@ -391,11 +585,12 @@ def main() -> int:
             if gradient_norm is None or not torch.isfinite(gradient_norm) or gradient_norm.item() <= 0:
                 raise RuntimeError(f"Invalid event-prefix control gradient at step {optimizer_step}: {gradient_norm}")
             optimizer.step()
+            member_summary = read_member_summary(read)
             handle.write(
                 json.dumps(
                     {
                         "optimizer_step": optimizer_step,
-                        "episode_id": read.episode_id,
+                        "representative_episode_id": read.episode_id,
                         "turn_index": read.turn_index,
                         "state_key": read.state_key,
                         "code_index": code_index,
@@ -405,6 +600,7 @@ def main() -> int:
                         "loss": float(output.loss.item()),
                         "gradient_norm": float(gradient_norm.item()),
                         "diagnostic_disclaimer": DISCLAIMER,
+                        **member_summary,
                     },
                     ensure_ascii=False,
                     sort_keys=True,
@@ -426,8 +622,9 @@ def main() -> int:
                 choices=view.choices,
                 device=device,
             )
+            member_summary = read_member_summary(read)
             record = {
-                "episode_id": read.episode_id,
+                "representative_episode_id": read.episode_id,
                 "turn_index": read.turn_index,
                 "query_ordinal": read.query_ordinal,
                 "state_key": read.state_key,
@@ -435,7 +632,7 @@ def main() -> int:
                 "event_count": len(read.event_texts),
                 "topic": read.topic,
                 "template_id": read.template_id,
-                "distractor_variant": read.distractor_variant,
+                "distractor_variant": member_summary["distractor_membership"],
                 "permutation_split": view.split,
                 "permutation_parity": view.parity,
                 "choices": list(view.choices),
@@ -445,6 +642,7 @@ def main() -> int:
                 "choice_mean_nll": list(score.mean_nll),
                 "correct": score.predicted_index == view.target_index,
                 "diagnostic_disclaimer": DISCLAIMER,
+                **member_summary,
             }
             records.append(record)
             handle.write(json.dumps(record, ensure_ascii=False, sort_keys=True) + "\n")
@@ -469,7 +667,9 @@ def main() -> int:
         "heldout_accuracy_by_topic": grouped_accuracy(records, "topic"),
         "heldout_accuracy_by_distractor_variant": grouped_accuracy(records, "distractor_variant"),
         "episode_count": len(episodes),
-        "raw_read_count": len(reads),
+        "raw_read_count": len(raw_reads),
+        "effective_read_count": len(reads),
+        "read_deduplication": read_deduplication,
         "unique_event_prefix_code_count": len(state_keys),
         "train_permutation_view_count": len(train_views),
         "heldout_permutation_view_count": len(heldout_views),
@@ -486,7 +686,7 @@ def main() -> int:
         "selector_leakage_audit": leakage_audit,
         "train_subset": subset_audit,
         "dataset_sha256": sha256_file(args.dataset),
-        "reader_revision": locked_revision(args.reader),
+        "reader_revision": reader_revision,
         "git_commit": git_value("rev-parse", "HEAD"),
         "git_dirty": bool(status),
         "arguments": {key: str(value) if isinstance(value, Path) else value for key, value in vars(args).items()},
@@ -497,6 +697,8 @@ def main() -> int:
             "dtype": str(dtype).removeprefix("torch."),
         },
         "artifacts": {
+            "manifest": str(manifest_path.resolve()),
+            "manifest_sha256": sha256_file(manifest_path),
             "training_metrics": str(metrics_path.resolve()),
             "training_metrics_sha256": sha256_file(metrics_path),
             "heldout_predictions": str(predictions_path.resolve()),
@@ -511,10 +713,7 @@ def main() -> int:
         "peak_vram_gib": torch.cuda.max_memory_allocated(device) / 2**30,
     }
     summary_path = args.output_dir / "summary.json"
-    summary_path.write_text(
-        json.dumps(summary, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
-        encoding="utf-8",
-    )
+    _write_json(summary_path, summary)
     print(json.dumps(summary, ensure_ascii=False, indent=2, sort_keys=True))
     return 0 if summary["passed_threshold"] else 3
 

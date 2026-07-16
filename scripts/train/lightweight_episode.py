@@ -395,47 +395,57 @@ class LightweightDynamicsDiagnostics:
             "saturated_fraction": (below + above) / elements,
         }
 
-    def _capture_cell(self, module: torch.nn.Module, inputs: tuple[Any, ...], output: Any) -> None:
-        if len(inputs) != 2 or not all(isinstance(value, torch.Tensor) for value in inputs):
-            raise RuntimeError("ConvGRU dynamics hook expected conditioned input and hidden tensors.")
-        if not isinstance(output, torch.Tensor):
-            raise RuntimeError("ConvGRU dynamics hook expected a tensor output.")
-        conditioned_input, hidden = inputs
-        gates = getattr(module, "gates", None)
-        hidden_channels = getattr(module, "hidden_channels", None)
-        if not isinstance(gates, torch.nn.Module) or not isinstance(hidden_channels, int):
-            raise RuntimeError("ConvGRU dynamics hook requires gates and hidden_channels attributes.")
+    def _capture_gates(self, _module: torch.nn.Module, _inputs: tuple[Any, ...], output: Any) -> None:
+        if not isinstance(output, torch.Tensor) or output.ndim != 4 or output.shape[1] % 2 != 0:
+            raise RuntimeError("ConvGRU dynamics gate hook expected an even-channel BCHW tensor output.")
 
         with torch.no_grad():
-            conditioned = conditioned_input.detach().to(dtype=torch.float32)
-            cell_output = output.detach().to(dtype=torch.float32)
-            gate_logits = gates(torch.cat([conditioned_input.detach(), hidden.detach()], dim=1))
-            reset, update = gate_logits.split(hidden_channels, dim=1)
+            reset, update = output.detach().chunk(2, dim=1)
             reset = torch.sigmoid(reset).to(dtype=torch.float32)
             update = torch.sigmoid(update).to(dtype=torch.float32)
-
-            self.conditioned_input_rms.add(float(conditioned.square().mean().sqrt().item()))
-            self.conditioned_input_absolute_max.add(float(conditioned.abs().max().item()))
-            self.cell_output_absolute_max.add(float(cell_output.abs().max().item()))
             self.reset_elements += reset.numel()
             self.reset_below += int((reset < 0.01).sum().item())
             self.reset_above += int((reset > 0.99).sum().item())
             self.update_elements += update.numel()
             self.update_below += int((update < 0.01).sum().item())
             self.update_above += int((update > 0.99).sum().item())
+
+    def _capture_cell(self, _module: torch.nn.Module, inputs: tuple[Any, ...], output: Any) -> None:
+        if len(inputs) != 2 or not all(isinstance(value, torch.Tensor) for value in inputs):
+            raise RuntimeError("ConvGRU dynamics hook expected conditioned input and hidden tensors.")
+        if not isinstance(output, torch.Tensor):
+            raise RuntimeError("ConvGRU dynamics hook expected a tensor output.")
+        conditioned_input, _hidden = inputs
+
+        with torch.no_grad():
+            conditioned = conditioned_input.detach().to(dtype=torch.float32)
+            cell_output = output.detach().to(dtype=torch.float32)
+
+            self.conditioned_input_rms.add(float(conditioned.square().mean().sqrt().item()))
+            self.conditioned_input_absolute_max.add(float(conditioned.abs().max().item()))
+            self.cell_output_absolute_max.add(float(cell_output.abs().max().item()))
             self.cell_output_elements += cell_output.numel()
             self.cell_output_outside_nominal += int(((cell_output < -0.98) | (cell_output > 0.98)).sum().item())
             self.updater_calls += 1
 
     @contextmanager
     def capture(self, cell: torch.nn.Module) -> Iterator[None]:
-        """Install one temporary hook and guarantee removal, including on evaluation errors."""
+        """Capture actual gate/cell outputs and guarantee hook removal on every exit path."""
 
-        handle = cell.register_forward_hook(self._capture_cell)
+        gates = getattr(cell, "gates", None)
+        if not isinstance(gates, torch.nn.Module):
+            raise RuntimeError("ConvGRU dynamics capture requires a gates module.")
+        gate_handle = None
+        cell_handle = None
         try:
+            gate_handle = gates.register_forward_hook(self._capture_gates)
+            cell_handle = cell.register_forward_hook(self._capture_cell)
             yield
         finally:
-            handle.remove()
+            if cell_handle is not None:
+                cell_handle.remove()
+            if gate_handle is not None:
+                gate_handle.remove()
 
     def summary(self) -> dict[str, Any]:
         outside_fraction = (

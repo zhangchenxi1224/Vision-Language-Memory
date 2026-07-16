@@ -141,6 +141,41 @@ class LightweightUpdaterTest(unittest.TestCase):
         torch.testing.assert_close(update_bias, torch.full_like(update_bias, -2.0), rtol=0, atol=0)
         self.assertFalse(torch.equal(reset_bias, torch.full_like(reset_bias, -2.0)))
 
+    def test_learned_initial_state_is_tanh_parameterized_but_fixed_zero_path_is_unchanged(self):
+        torch.manual_seed(33)
+        learned = LightweightVisualUpdater(
+            state_channels=8,
+            state_size=8,
+            output_size=16,
+            vocabulary_size=64,
+            embedding_dim=16,
+            text_hidden_dim=8,
+            learned_initial_state=True,
+        )
+        with torch.no_grad():
+            learned.initial_hidden.fill_(2.0)
+        learned_state = learned.initial_state(
+            batch_size=2,
+            device=torch.device("cpu"),
+            dtype=torch.float32,
+        )
+
+        self.assertIsInstance(learned.initial_hidden, torch.nn.Parameter)
+        torch.testing.assert_close(learned_state, torch.full_like(learned_state, torch.tanh(torch.tensor(2.0))))
+        self.assertLess(learned_state.abs().max().item(), 1.0)
+        learned_state.sum().backward()
+        self.assertIsNotNone(learned.initial_hidden.grad)
+        self.assertGreater(learned.initial_hidden.grad.norm().item(), 0.0)
+
+        fixed = self.make_updater()
+        fixed_state = fixed.initial_state(
+            batch_size=2,
+            device=torch.device("cpu"),
+            dtype=torch.float32,
+        )
+        self.assertNotIsInstance(fixed.initial_hidden, torch.nn.Parameter)
+        self.assertTrue(torch.equal(fixed_state, torch.zeros_like(fixed_state)))
+
     def test_cell_event_input_is_bounded_and_initial_gates_are_not_saturated(self):
         torch.manual_seed(37)
         updater = self.make_updater()

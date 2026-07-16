@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import sys
+import tempfile
 import unittest
 from collections import Counter
 from dataclasses import replace
@@ -15,8 +16,10 @@ from scripts.probes.qwen_event_prefix_semantic_upper_bound import (  # noqa: E40
     DISCLAIMER,
     build_permutation_views,
     collect_event_prefix_reads,
+    deduplicate_event_prefix_reads,
     event_prefix_key,
     permutation_parity,
+    prepare_empty_output_dir,
     select_code_index,
     selector_leakage_audit,
     split_choice_permutations,
@@ -177,6 +180,56 @@ class EventPrefixSemanticUpperBoundTest(unittest.TestCase):
         changed_query = replace(query, target_index=2)
         changed_read = collect_event_prefix_reads([self.episode(episode_id="episode-1", query=changed_query)])[0]
         self.assertEqual(read.state_key, changed_read.state_key)
+
+    def test_model_identical_reads_are_deduplicated_with_all_members_preserved(self):
+        original = QuerySpec(
+            text="Which color is current?",
+            choices=("red", "blue", "green", "yellow"),
+            target_index=0,
+            comparison_id="comparison-original",
+        )
+        reordered = QuerySpec(
+            text="Which color is current?",
+            choices=("yellow", "green", "blue", "red"),
+            target_index=3,
+            comparison_id="comparison-reordered",
+        )
+        raw_reads = collect_event_prefix_reads(
+            [
+                self.episode(episode_id="episode-clean", query=original),
+                self.episode(episode_id="episode-distractor", query=reordered),
+            ]
+        )
+
+        effective_reads, audit = deduplicate_event_prefix_reads(raw_reads)
+        train, heldout = build_permutation_views(effective_reads)
+
+        self.assertEqual(len(raw_reads), 2)
+        self.assertEqual(len(effective_reads), 1)
+        self.assertEqual(
+            [member.episode_id for member in effective_reads[0].members],
+            ["episode-clean", "episode-distractor"],
+        )
+        self.assertEqual(audit["raw_read_count"], 2)
+        self.assertEqual(audit["effective_read_count"], 1)
+        self.assertEqual(audit["duplicate_read_count"], 1)
+        self.assertEqual(audit["duplicate_group_count"], 1)
+        self.assertEqual(audit["member_multiplicity_counts"], {"2": 1})
+        self.assertEqual(len(audit["groups"][0]["members"]), 2)
+        self.assertEqual(len(train), 12)
+        self.assertEqual(len(heldout), 12)
+        self.assertEqual(target_position_counts(train), {0: 3, 1: 3, 2: 3, 3: 3})
+
+    def test_existing_empty_output_directory_is_accepted_but_nonempty_is_rejected(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            output_dir = Path(temporary) / "already-created"
+            output_dir.mkdir()
+            prepare_empty_output_dir(output_dir)
+            self.assertTrue(output_dir.is_dir())
+
+            (output_dir / "existing.json").write_text("{}\n", encoding="utf-8")
+            with self.assertRaisesRegex(SystemExit, "non-empty"):
+                prepare_empty_output_dir(output_dir)
 
 
 if __name__ == "__main__":
