@@ -1,7 +1,7 @@
 {
   "schema": "vision_memory.r3-preregistration.v1",
   "decision_date": "2026-07-17",
-  "status": "prospective_no_r3_gpu_results",
+  "status": "prospective_environment_locked_no_r3_scientific_results",
   "research_boundary": {
     "r2c_disposition": "archived_reproducible_lightweight_performance_failure",
     "lightweight_role": "data_router_loss_reader_diagnostic_only",
@@ -195,13 +195,23 @@
       "torch_cuda": "12.8",
       "cuda_toolkit": "12.8.61",
       "driver": "570.124.06",
-      "environment_strategy": "venv_with_system_site_packages_preserving_ngc_torch"
+      "environment_strategy": "venv_with_system_site_packages_preserving_ngc_torch",
+      "torch_distribution_version_normalized": "2.7.0a0+ecf3bae40a.nv25.2",
+      "torch_reported_gpu_memory_mib_each": 143167,
+      "environment_manifest_sha256": "75620ba3e88994b5d79f3c9c3ec4ba58da176279a1a2e1519c6195ac0532c9c0",
+      "infrastructure_preflight_sha256": "1d02c53d71db5a551a527bf7f9894cb02cdcdab5c5963159adf90f9f76b1d9",
+      "formal_preflight_sha256": "4b157c294a00b06aae366ad00ceff1d3ec83eb7af2583cf3cdbfaa771f3274f4",
+      "formal_preflight_checks": 47,
+      "formal_preflight_passed": true
     },
     "network": {
       "internal_pypi_reachable": true,
       "github_from_gpu_instance": false,
       "huggingface_from_gpu_instance": false,
-      "external_download_path": "CPU资源空间 preparation notebook to project-shared storage"
+      "external_download_path": "CPU资源空间 preparation notebook to project-shared storage",
+      "active_preparation_notebook": "vlm-r3-egress-cpu-live-20260717",
+      "first_model_fetch_status": "infrastructure_failed_after_dreamlite_due_transient_huggingface_disconnect",
+      "qwen_retry_status": "complete_same_revision"
     },
     "paths": {
       "repo": "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory",
@@ -210,9 +220,24 @@
       "models": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory",
       "hf_cache": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/cache/huggingface"
     },
+    "locked_infrastructure_commit": "88a3e6474870543011d6ed7a7327f77fd3f8e2f7",
+    "model_snapshots": {
+      "dreamlite_mobile": {
+        "revision": "6695c3f4be230f0493fa5dbf78be3bc4d3bb2ab4",
+        "weight_file_count": 3,
+        "weight_bytes": 5040118270,
+        "snapshot_complete": true
+      },
+      "qwen_reader": {
+        "revision": "ebb281ec70b05090aa6165b016eac8ec08e71b17",
+        "weight_file_count": 2,
+        "weight_bytes": 8875719344,
+        "snapshot_complete": true
+      }
+    },
     "scientific_jobs_require_clean_commit": true,
     "h200_requires_fresh_technical_gate_evidence": true,
     "historical_a800_gate_results_do_not_transfer": true,
-    "submission_state": "not_submitted"
+    "submission_state": "environment_and_models_ready_no_scientific_gate_submitted"
   }
 }
