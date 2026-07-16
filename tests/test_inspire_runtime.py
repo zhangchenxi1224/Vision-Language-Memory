@@ -288,10 +288,14 @@ class InspireStaticContractTest(unittest.TestCase):
 
     def test_bootstrap_cannot_install_torch_and_has_no_fudan_submission(self):
         bootstrap = (INSPIRE / "bootstrap_r3_h200.sh").read_text(encoding="utf-8")
+        dependency_installer = (INSPIRE / "install_non_torch_dependencies.py").read_text(encoding="utf-8")
         requirements = (ROOT / "requirements" / "inspire-ngc2502-pinned.txt").read_text(encoding="utf-8")
         self.assertIn("--system-site-packages", bootstrap)
         self.assertIn("--no-deps", bootstrap)
-        self.assertIn("--isolated", bootstrap)
+        self.assertIn("PIP_CONFIG_FILE=/dev/null", bootstrap)
+        self.assertIn("PIP_EXTRA_INDEX_URL=", bootstrap)
+        self.assertIn('"PIP_CONFIG_FILE": "/dev/null"', dependency_installer)
+        self.assertIn('"PIP_EXTRA_INDEX_URL": ""', dependency_installer)
         self.assertIn("install_non_torch_dependencies.py", bootstrap)
         self.assertIn("Torch fingerprint changed", bootstrap)
         self.assertNotIn("sbatch", bootstrap)

@@ -102,13 +102,14 @@ before_install="$(torch_fingerprint "$PYTHON")"
   exit 2
 }
 
-"$PYTHON" -m pip --isolated install \
+PIP_CONFIG_FILE=/dev/null PIP_EXTRA_INDEX_URL= "$PYTHON" -m pip install \
   --disable-pip-version-check \
   --no-deps \
   --index-url "$PIP_INDEX_URL_VALUE" \
   --trusted-host "$PIP_TRUSTED_HOST_VALUE" \
   -r "$ROOT/requirements/inspire-ngc2502-pinned.txt"
-"$PYTHON" -m pip --isolated install --disable-pip-version-check --no-deps --no-build-isolation -e "$ROOT"
+PIP_CONFIG_FILE=/dev/null PIP_EXTRA_INDEX_URL= "$PYTHON" -m pip install \
+  --disable-pip-version-check --no-deps --no-build-isolation -e "$ROOT"
 "$PYTHON" "$ROOT/scripts/inspire/install_non_torch_dependencies.py" \
   --index-url "$PIP_INDEX_URL_VALUE" \
   --trusted-host "$PIP_TRUSTED_HOST_VALUE" \

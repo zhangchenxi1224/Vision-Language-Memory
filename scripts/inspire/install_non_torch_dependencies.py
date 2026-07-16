@@ -80,7 +80,6 @@ def install_requirement(requirement: Requirement, *, index_url: str, trusted_hos
         sys.executable,
         "-m",
         "pip",
-        "--isolated",
         "install",
         "--disable-pip-version-check",
         "--no-deps",
@@ -90,7 +89,12 @@ def install_requirement(requirement: Requirement, *, index_url: str, trusted_hos
         trusted_host,
         str(requirement),
     ]
-    subprocess.run(command, check=True)
+    environment = {
+        **os.environ,
+        "PIP_CONFIG_FILE": "/dev/null",
+        "PIP_EXTRA_INDEX_URL": "",
+    }
+    subprocess.run(command, check=True, env=environment)
 
 
 def close_dependencies(
