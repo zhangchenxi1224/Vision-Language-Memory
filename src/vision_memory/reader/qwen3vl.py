@@ -41,6 +41,8 @@ def qwen3vl_target_only_ce(
     target: str,
     device: torch.device,
     require_image_grad: bool = True,
+    do_resize: bool | None = None,
+    deterministic_ce: bool = False,
 ) -> ReaderLossOutput:
     """Compute teacher-forced CE while retaining image-to-loss autograd.
 
@@ -58,11 +60,16 @@ def qwen3vl_target_only_ce(
         }
     ]
     prompt = processor.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+    processor_kwargs = {
+        "text": [prompt],
+        "images": [image],
+        "return_tensors": "pt",
+        "do_rescale": False,
+    }
+    if do_resize is not None:
+        processor_kwargs["do_resize"] = do_resize
     batch = processor(
-        text=[prompt],
-        images=[image],
-        return_tensors="pt",
-        do_rescale=False,
+        **processor_kwargs,
     ).to(device)
 
     pixel_values = batch["pixel_values"]
@@ -106,7 +113,17 @@ def qwen3vl_target_only_ce(
     )
     target_hidden = hidden.index_select(dim=1, index=positions)
     logits = model.lm_head(target_hidden)
-    loss = F.cross_entropy(logits.float().reshape(-1, logits.shape[-1]), target_ids.reshape(-1))
+    flat_logits = logits.float().reshape(-1, logits.shape[-1])
+    flat_targets = target_ids.reshape(-1)
+    if deterministic_ce:
+        # CUDA NLLLoss backward is rejected by torch.use_deterministic_algorithms.
+        # This mathematically equivalent FP32 target log-probability path is used
+        # only by the explicit reproducibility probe; the production default above
+        # remains PyTorch cross entropy.
+        target_scores = flat_logits.gather(dim=-1, index=flat_targets.unsqueeze(-1)).squeeze(-1)
+        loss = (torch.logsumexp(flat_logits, dim=-1) - target_scores).mean()
+    else:
+        loss = F.cross_entropy(flat_logits, flat_targets)
     return ReaderLossOutput(loss=loss, pixel_values=pixel_values, target_ids=target_ids, target_logits=logits)
 
 
@@ -118,6 +135,8 @@ def qwen3vl_choice_nll(
     query: str,
     choices: list[str] | tuple[str, ...],
     device: torch.device,
+    do_resize: bool | None = None,
+    deterministic_ce: bool = False,
 ) -> ChoiceScoreOutput:
     """Score MCQ option texts by teacher-forced mean NLL for evaluation."""
 
@@ -134,6 +153,8 @@ def qwen3vl_choice_nll(
                 target=choice,
                 device=device,
                 require_image_grad=False,
+                do_resize=do_resize,
+                deterministic_ce=deterministic_ce,
             )
             scores.append(float(output.loss.item()))
     predicted_index = min(range(len(scores)), key=scores.__getitem__)

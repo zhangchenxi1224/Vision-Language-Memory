@@ -1,5 +1,18 @@
 """Reproducibility helpers shared by the real GPU probes."""
 
+from .determinism import (
+    REQUIRED_DETERMINISM_ENV,
+    assert_determinism_environment,
+    canonical_object_sha256,
+    canonical_tensor_manifest,
+    canonical_tensor_sha256,
+    compare_bitwise_repro_reports,
+    configure_strict_cuda_determinism,
+    model_optimizer_rng_manifest,
+    named_tensors_manifest,
+    rng_manifest,
+)
+
 from .probes import (
     DETERMINISTIC_FIXTURE_ID,
     DETERMINISTIC_FIXTURE_RGB_SHA256_1024,
@@ -19,15 +32,25 @@ from .probes import (
 __all__ = [
     "DETERMINISTIC_FIXTURE_ID",
     "DETERMINISTIC_FIXTURE_RGB_SHA256_1024",
+    "REQUIRED_DETERMINISM_ENV",
     "assert_no_frozen_parameter_grads",
+    "assert_determinism_environment",
     "canonical_json_sha256",
+    "canonical_object_sha256",
+    "canonical_tensor_manifest",
+    "canonical_tensor_sha256",
+    "compare_bitwise_repro_reports",
+    "configure_strict_cuda_determinism",
     "cuda_peak_memory_report",
     "emit_json_report",
     "load_source_image",
     "load_initial_image",
     "lora_trainable_parameters",
+    "model_optimizer_rng_manifest",
+    "named_tensors_manifest",
     "probe_provenance",
     "reset_cuda_peak_memory",
+    "rng_manifest",
     "seed_adapter_initialization",
     "validate_e2e_pair_reports",
 ]

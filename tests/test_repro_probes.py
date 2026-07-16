@@ -14,10 +14,16 @@ sys.path.insert(0, str(ROOT / "src"))
 from vision_memory.repro import (  # noqa: E402
     DETERMINISTIC_FIXTURE_RGB_SHA256_1024,
     assert_no_frozen_parameter_grads,
+    assert_determinism_environment,
     canonical_json_sha256,
+    canonical_object_sha256,
+    canonical_tensor_sha256,
+    compare_bitwise_repro_reports,
     load_initial_image,
     load_source_image,
     lora_trainable_parameters,
+    model_optimizer_rng_manifest,
+    named_tensors_manifest,
     seed_adapter_initialization,
     validate_e2e_pair_reports,
 )
@@ -36,15 +42,76 @@ def make_pair_report(*, detached: bool) -> dict:
         "pair_id": canonical_json_sha256(metadata),
         "pair_metadata": metadata,
         "loss": 1.25,
-        "intermediate_gradients": [
-            {"norm": None if detached else 0.75, "nonfinite_elements": None if detached else 0}
-        ],
+        "intermediate_gradients": [{"norm": None if detached else 0.75, "nonfinite_elements": None if detached else 0}],
         "lora_grad_norm": 2.0,
         "unclamped_image_grad_norm": 3.0,
     }
 
 
 class ReproProbeContractTest(unittest.TestCase):
+    def test_canonical_tensor_and_object_hashes_are_bitwise_and_order_stable(self):
+        tensor = torch.tensor([[1.0, -0.0], [2.0, 3.0]], dtype=torch.float32)
+        clone = tensor.clone()
+        changed = tensor.clone()
+        changed[1, 1] = torch.nextafter(changed[1, 1], torch.tensor(float("inf")))
+
+        self.assertEqual(canonical_tensor_sha256(tensor), canonical_tensor_sha256(clone))
+        self.assertNotEqual(canonical_tensor_sha256(tensor), canonical_tensor_sha256(changed))
+        self.assertNotEqual(canonical_tensor_sha256(tensor), canonical_tensor_sha256(tensor.double()))
+        self.assertEqual(
+            canonical_object_sha256({"b": [tensor], "a": 1}),
+            canonical_object_sha256({"a": 1, "b": [clone]}),
+        )
+        self.assertNotEqual(canonical_object_sha256(0.0), canonical_object_sha256(-0.0))
+
+        manifest = named_tensors_manifest({"second": changed, "first": tensor})
+        self.assertEqual(list(manifest["tensors"]), ["first", "second"])
+        self.assertEqual(manifest["tensors"]["first"]["sha256"], canonical_tensor_sha256(tensor))
+
+    def test_determinism_environment_fails_closed(self):
+        expected = {
+            "PYTHONHASHSEED": "0",
+            "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+            "OMP_NUM_THREADS": "1",
+            "MKL_NUM_THREADS": "1",
+            "TOKENIZERS_PARALLELISM": "false",
+        }
+        self.assertEqual(assert_determinism_environment(expected), dict(sorted(expected.items())))
+        with self.assertRaisesRegex(RuntimeError, "environment mismatch"):
+            assert_determinism_environment({**expected, "OMP_NUM_THREADS": "2"})
+
+    def test_model_manifest_includes_nonpersistent_buffers(self):
+        module = nn.Linear(2, 2)
+        module.register_buffer("ephemeral", torch.tensor([3.0]), persistent=False)
+        optimizer = torch.optim.AdamW(module.parameters(), lr=1e-3)
+
+        manifest = model_optimizer_rng_manifest(module, optimizer)
+
+        self.assertIn("parameter:weight", manifest["model"]["tensors"])
+        self.assertIn("parameter:bias", manifest["model"]["tensors"])
+        self.assertIn("buffer:ephemeral", manifest["model"]["tensors"])
+
+    def test_bitwise_report_comparator_ignores_runtime_but_rejects_payload_drift(self):
+        first = {
+            "status": "complete",
+            "runtime": {"pid": 1},
+            "comparison_payload": {"trace": [{"loss": "0x1.0p+0"}], "model": "abc"},
+        }
+        second = {
+            "status": "complete",
+            "runtime": {"pid": 2},
+            "comparison_payload": {"model": "abc", "trace": [{"loss": "0x1.0p+0"}]},
+        }
+        self.assertTrue(compare_bitwise_repro_reports(first, second)["valid"])
+
+        second["comparison_payload"]["trace"][0]["loss"] = "0x1.0000000000001p+0"
+        comparison = compare_bitwise_repro_reports(first, second)
+        self.assertFalse(comparison["valid"])
+        self.assertTrue(any("trace[0].loss" in mismatch for mismatch in comparison["mismatches"]))
+
+        second["status"] = "failed"
+        self.assertFalse(compare_bitwise_repro_reports(first, second)["valid"])
+
     def test_lora_whitelist_rejects_accidentally_trainable_base_weights(self):
         module = nn.Module()
         module.lora_A = nn.ModuleDict({"default": nn.Linear(2, 2, bias=False)})

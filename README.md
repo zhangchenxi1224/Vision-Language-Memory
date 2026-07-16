@@ -210,6 +210,23 @@ python scripts/train/lightweight_episode.py \
   --max-optimizer-steps 2000 --overfit-threshold 0.90
 ```
 
+CUDA reproducibility is audited separately from that scientific gate. The paired probe runs
+two fresh Python processes serially on one allocated GPU, enables fail-closed deterministic
+algorithms and math-only SDPA, and compares exact gradients, optimizer states, RNG states,
+per-step traces, and canonical predictions. Its diagnostic renderer uses integer repeat plus
+center crop to 252x252 and disables Qwen processor resizing; therefore its accuracy is not a
+D2 result and must not be compared with the production bilinear path. It also replaces CUDA
+NLLLoss only in this diagnostic with an equivalent FP32 logsumexp-minus-target formulation;
+the default Reader loss remains `F.cross_entropy`.
+
+```bash
+export PYTHONHASHSEED=0 CUBLAS_WORKSPACE_CONFIG=:4096:8
+export TOKENIZERS_PARALLELISM=false OMP_NUM_THREADS=1 MKL_NUM_THREADS=1
+python scripts/probes/run_lightweight_determinism_pair.py \
+  --train data/synthetic_v2/train.jsonl --reader "$READER" \
+  --output-dir runs/repro-pair --steps 100 --device cuda:0
+```
+
 `scripts/probes/qwen_visual_control_upper_bound.py` is a deliberately target-supervised
 diagnostic: the answer position selects one of four learned images. It tests whether the
 frozen Reader can be controlled through its visual channel, but it is not a memory method,

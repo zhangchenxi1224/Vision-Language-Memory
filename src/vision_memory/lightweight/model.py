@@ -227,9 +227,7 @@ class LightweightVisualUpdater(nn.Module):
         beta = torch.tanh(beta).unsqueeze(-1).unsqueeze(-1)
         # FiLM acts before the GRU and is bounded with the spatial writer. The cell
         # can therefore preserve its convex-combination hidden-state invariant.
-        conditioned_event_map = torch.tanh(
-            (1.0 + 0.1 * torch.tanh(gamma)) * event_map + 0.1 * beta
-        )
+        conditioned_event_map = torch.tanh((1.0 + 0.1 * torch.tanh(gamma)) * event_map + 0.1 * beta)
         return self.cell(conditioned_event_map, state)
 
     def render(self, state: Tensor) -> Tensor:
@@ -242,6 +240,40 @@ class LightweightVisualUpdater(nn.Module):
                 align_corners=False,
             )
         return image
+
+    def render_deterministic_repro(self, state: Tensor, *, target_size: int = 252) -> Tensor:
+        """Render through a strict-determinism diagnostic path.
+
+        The production renderer above deliberately remains unchanged.  Its CUDA
+        bilinear backward is not supported by ``torch.use_deterministic_algorithms``.
+        This diagnostic-only path instead expands each RGB-head pixel by an integer
+        repeat and takes a centered crop.  The preregistered reproducibility probe uses
+        the production 64x64 state and 256x256 output settings, producing a 252x252
+        image that already lies on Qwen's 28-pixel patch/merge grid.  Qwen resizing can
+        therefore be disabled without changing the updater or RGB-head parameters.
+        """
+
+        if target_size <= 0:
+            raise ValueError("target_size must be positive")
+        image = self.rgb_head(state)
+        height, width = image.shape[-2:]
+        if height != width:
+            raise ValueError("Deterministic reproducibility rendering requires a square RGB-head output.")
+        if self.output_size % height != 0:
+            raise ValueError(
+                "Deterministic reproducibility rendering requires output_size to be an integer "
+                f"multiple of the RGB-head size; got output_size={self.output_size}, head_size={height}."
+            )
+        repeat_factor = self.output_size // height
+        expanded = image.repeat_interleave(repeat_factor, dim=-2).repeat_interleave(repeat_factor, dim=-1)
+        crop = self.output_size - target_size
+        if crop < 0 or crop % 2:
+            raise ValueError(
+                "target_size must not exceed output_size and must leave an even centered crop; "
+                f"got target_size={target_size}, output_size={self.output_size}."
+            )
+        offset = crop // 2
+        return expanded[..., offset : offset + target_size, offset : offset + target_size]
 
     def forward(self, state: Tensor, event_text: str | Sequence[str]) -> Tensor:
         return self.update(state, event_text)

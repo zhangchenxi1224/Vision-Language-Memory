@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from vision_memory.dreamlite import freeze_module  # noqa: E402
-from vision_memory.reader import qwen3vl_target_only_ce  # noqa: E402
+from vision_memory.reader import qwen3vl_choice_nll, qwen3vl_target_only_ce  # noqa: E402
 
 
 class MockBatch(dict):
@@ -30,12 +30,16 @@ class MockTokenizer:
 class MockProcessor:
     tokenizer = MockTokenizer()
 
+    def __init__(self):
+        self.observed_do_resize = "not-passed"
+
     def apply_chat_template(self, messages, tokenize, add_generation_prompt):
         del messages, tokenize, add_generation_prompt
         return "prompt"
 
-    def __call__(self, *, text, images, return_tensors, do_rescale):
+    def __call__(self, *, text, images, return_tensors, do_rescale, do_resize="not-passed"):
         del text, return_tensors, do_rescale
+        self.observed_do_resize = do_resize
         image = images[0]
         return MockBatch(
             {
@@ -75,9 +79,10 @@ class ReaderLossContractTest(unittest.TestCase):
     def test_target_only_ce_preserves_image_gradient_and_freezes_parameters(self):
         model = freeze_module(MockQwen())
         image = torch.rand(3, 8, 8, requires_grad=True)
+        processor = MockProcessor()
         result = qwen3vl_target_only_ce(
             model=model,
-            processor=MockProcessor(),
+            processor=processor,
             image=image,
             query="question",
             target="answer",
@@ -90,8 +95,73 @@ class ReaderLossContractTest(unittest.TestCase):
         self.assertGreater(image.grad.norm().item(), 0.0)
         self.assertTrue(all(parameter.grad is None for parameter in model.parameters()))
         self.assertEqual(tuple(result.target_logits.shape[:2]), (1, 2))
+        self.assertEqual(processor.observed_do_resize, "not-passed")
+
+    def test_target_only_ce_can_explicitly_disable_processor_resize(self):
+        model = freeze_module(MockQwen())
+        processor = MockProcessor()
+        image = torch.rand(3, 8, 8, requires_grad=True)
+
+        result = qwen3vl_target_only_ce(
+            model=model,
+            processor=processor,
+            image=image,
+            query="question",
+            target="answer",
+            device=torch.device("cpu"),
+            do_resize=False,
+        )
+
+        self.assertEqual(processor.observed_do_resize, False)
+        result.loss.backward()
+        self.assertIsNotNone(image.grad)
+
+    def test_choice_scorer_propagates_disabled_resize_to_every_choice(self):
+        model = freeze_module(MockQwen())
+        processor = MockProcessor()
+        image = torch.rand(3, 8, 8)
+
+        score = qwen3vl_choice_nll(
+            model=model,
+            processor=processor,
+            image=image,
+            query="question",
+            choices=("a", "b", "c", "d"),
+            device=torch.device("cpu"),
+            do_resize=False,
+        )
+
+        self.assertEqual(processor.observed_do_resize, False)
+        self.assertEqual(len(score.mean_nll), 4)
+
+    def test_deterministic_ce_matches_default_and_preserves_gradient(self):
+        torch.manual_seed(17)
+        model = freeze_module(MockQwen())
+        ordinary_image = torch.rand(3, 8, 8, requires_grad=True)
+        deterministic_image = ordinary_image.detach().clone().requires_grad_(True)
+        ordinary = qwen3vl_target_only_ce(
+            model=model,
+            processor=MockProcessor(),
+            image=ordinary_image,
+            query="question",
+            target="answer",
+            device=torch.device("cpu"),
+        )
+        deterministic = qwen3vl_target_only_ce(
+            model=model,
+            processor=MockProcessor(),
+            image=deterministic_image,
+            query="question",
+            target="answer",
+            device=torch.device("cpu"),
+            deterministic_ce=True,
+        )
+
+        torch.testing.assert_close(deterministic.loss, ordinary.loss, rtol=1e-6, atol=1e-6)
+        deterministic.loss.backward()
+        self.assertIsNotNone(deterministic_image.grad)
+        self.assertGreater(deterministic_image.grad.norm().item(), 0.0)
 
 
 if __name__ == "__main__":
     unittest.main()
-

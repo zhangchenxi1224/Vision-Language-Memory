@@ -3,6 +3,7 @@ from __future__ import annotations
 import sys
 import unittest
 from pathlib import Path
+from unittest import mock
 
 import torch
 
@@ -57,6 +58,76 @@ class LightweightUpdaterTest(unittest.TestCase):
         gradients = [parameter.grad for parameter in updater.parameters() if parameter.requires_grad]
         self.assertTrue(any(gradient is not None and gradient.norm().item() > 0 for gradient in gradients))
         self.assertEqual(sum(parameter.numel() for parameter in reader.parameters()), 0)
+
+    def test_default_renderer_keeps_bilinear_production_behavior(self):
+        torch.manual_seed(5)
+        updater = self.make_updater()
+        state = updater.initial_state(batch_size=1, device=torch.device("cpu"), dtype=torch.float32)
+        head_image = updater.rgb_head(state)
+        expected = torch.nn.functional.interpolate(
+            head_image,
+            size=(16, 16),
+            mode="bilinear",
+            align_corners=False,
+        )
+
+        with mock.patch(
+            "vision_memory.lightweight.model.F.interpolate", wraps=torch.nn.functional.interpolate
+        ) as resize:
+            actual = updater.render(state)
+
+        resize.assert_called_once()
+        torch.testing.assert_close(actual, expected, rtol=0, atol=0)
+
+    def test_deterministic_repro_renderer_repeats_and_center_crops_without_interpolate(self):
+        torch.manual_seed(7)
+        updater = self.make_updater()
+        state = updater.initial_state(batch_size=1, device=torch.device("cpu"), dtype=torch.float32)
+        expected_expanded = updater.rgb_head(state).repeat_interleave(2, dim=-2).repeat_interleave(2, dim=-1)
+        expected = expected_expanded[..., 1:15, 1:15]
+
+        with mock.patch("vision_memory.lightweight.model.F.interpolate", side_effect=AssertionError("called")):
+            actual = updater.render_deterministic_repro(state, target_size=14)
+
+        self.assertEqual(tuple(actual.shape), (1, 3, 14, 14))
+        torch.testing.assert_close(actual, expected, rtol=0, atol=0)
+        actual.square().mean().backward()
+        self.assertTrue(
+            all(
+                parameter.grad is not None and torch.isfinite(parameter.grad).all()
+                for parameter in updater.rgb_head.parameters()
+            )
+        )
+
+    def test_deterministic_repro_renderer_rejects_non_integer_repeat_or_asymmetric_crop(self):
+        updater = self.make_updater()
+        state = updater.initial_state(batch_size=1, device=torch.device("cpu"), dtype=torch.float32)
+        with self.assertRaisesRegex(ValueError, "even centered crop"):
+            updater.render_deterministic_repro(state, target_size=15)
+
+        updater.output_size = 15
+        with self.assertRaisesRegex(ValueError, "integer multiple"):
+            updater.render_deterministic_repro(state, target_size=13)
+
+    def test_formal_deterministic_renderer_contract_is_64_repeat_to_256_crop_to_252(self):
+        torch.manual_seed(9)
+        updater = LightweightVisualUpdater(
+            state_channels=2,
+            state_size=64,
+            output_size=256,
+            vocabulary_size=64,
+            embedding_dim=8,
+            text_hidden_dim=4,
+        )
+        state = updater.initial_state(batch_size=1, device=torch.device("cpu"), dtype=torch.float32)
+        head = updater.rgb_head(state)
+        expanded = head.repeat_interleave(4, dim=-2).repeat_interleave(4, dim=-1)
+
+        image = updater.render_deterministic_repro(state)
+
+        self.assertEqual(tuple(head.shape), (1, 3, 64, 64))
+        self.assertEqual(tuple(image.shape), (1, 3, 252, 252))
+        torch.testing.assert_close(image, expanded[..., 2:254, 2:254], rtol=0, atol=0)
 
     def test_hashed_encoder_is_deterministic(self):
         updater = self.make_updater()
