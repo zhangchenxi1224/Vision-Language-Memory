@@ -77,6 +77,12 @@ replacement PyTorch wheel. It uses an overlay venv with
 `--no-deps`. Full path, egress, background-sentinel, and formal-preflight instructions are
 in [INSPIRE.md](INSPIRE.md).
 
+The verified allocation is one `qb-prod-gpu2007` node with two `143771 MiB`
+H200s, 40 CPUs, 400 GiB RAM, and 128 GiB SHM. Public Git/Hugging Face work is
+performed by the running CPU preparation notebook
+`vlm-r3-egress-cpu-live-20260717`; the GPU notebook reads the clean commit,
+environment, data, caches, and model snapshots from project-shared storage.
+
 ```bash
 source /absolute/private/path/vlm-r3.env
 export VLM_EXPECTED_COMMIT=<FULL_40_CHARACTER_R3_COMMIT>
@@ -95,9 +101,25 @@ $VLM_VENV_ROOT/bin/python scripts/inspire/preflight_r3_h200.py \
 The H200 preflight fails on a dirty or different commit, a venv-local Torch copy, any
 runtime/package drift, fewer than two H200 devices, incomplete immutable model snapshots,
 or a missing deterministic environment variable. Historical A800 technical results are not
-accepted as H200 R3 gate evidence; R3-S0, G4-L, G5-L, G6-L, and DL-S are rerun serially.
-The old Fudan setup and Slurm renderers remain in `scripts/cluster` solely to reproduce R1/R2
-audit artifacts and are not an R3 execution path.
+accepted as H200 R3 gate evidence; R3-R0, R3-S0, G4-L, G5-L, G6-L, and DL-S are rerun
+serially. R3-R0 first requires the repaired Qwen resize to preserve legacy forward tensors
+bit-for-bit, match the native CPU mathematical adjoint exactly, remain within preregistered
+tolerance of three isolated legacy CUDA backward references, and produce finite, nonzero,
+bitwise-repeatable candidate gradients under strict mode. The isolated references contain no
+model weights, optimizer, or scientific metric and restore strict mode after every run.
+Model identity is closed by `vlm.hf-snapshot-sha256.v1` manifests over every non-cache
+snapshot file, not merely revision marker text or aggregate byte counts. Their SHA values
+are carried by the formal preflight, immutable plans, stage evidence, and strict training
+checkpoint provenance.
+The old Fudan launch path is historical only. Any `render_r3_*` code under `scripts/cluster`
+is a static command-contract/dry-run fixture; neither its sbatch output nor an A800 result is
+authoritative R3 evidence. Formal evidence must be created by the Inspire launcher and bind
+its exact formal-preflight and worker-input SHA256 values.
+
+Teacher-assisted micro experiments additionally require the completed immutable
+`R3-TC0 -> R3-TF0 -> T0 -> CAL-Set8 -> CAL-Transition16` preparation DAG. Its generated
+calibrations live in the run directory rather than the read-only teacher cache. QA-only
+experiments fail closed if any teacher parent, cache, sidecar, or calibration is supplied.
 
 ## Real-model probe order
 
@@ -351,7 +373,8 @@ commit, preflight SHA drift, and (for scientific stages) any report without
 $VLM_VENV_ROOT/bin/python scripts/inspire/poll_stage.py /absolute/stage/run-directory
 ```
 
-The scientific order is R3-S0 -> G4-L -> G5-L -> G6-L -> DL-S, with the next stage launched
+The scientific order is R3-R0 -> R3-S0 -> G4-L -> G5-L -> G6-L -> DL-S. R3-R0 is the
+bitwise-forward-equivalence and strict-backward-repeatability gate; each later stage launches
 only after the previous terminal report and scientific validator pass. Model downloads and
 teacher-cache construction use the explicitly restricted `--infrastructure-stage` path;
 that path cannot authorize a scientific gate. No DreamLite pilot is launched directly.

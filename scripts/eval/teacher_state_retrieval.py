@@ -27,7 +27,6 @@ from vision_memory.eval.teacher_retrieval import (  # noqa: E402
 )
 from vision_memory.repro import load_initial_image  # noqa: E402
 from vision_memory.teacher import (  # noqa: E402
-    CALIBRATION_FILENAME,
     MANIFEST_FILENAME,
     SIDECAR_FILENAME,
     file_sha256,
@@ -44,6 +43,12 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--episodes", type=Path, required=True)
     parser.add_argument("--teacher-cache", type=Path, required=True)
+    parser.add_argument(
+        "--teacher-calibration",
+        type=Path,
+        required=True,
+        help="Immutable suite calibration file; kept outside the read-only tensor cache.",
+    )
     parser.add_argument("--dreamlite", type=Path, required=True)
     parser.add_argument("--checkpoint", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
@@ -246,7 +251,8 @@ def main() -> int:
 
     manifest_file_sha256 = file_sha256(cache_root / MANIFEST_FILENAME)
     sidecar_file_sha256 = file_sha256(cache_root / SIDECAR_FILENAME)
-    calibration_file_sha256 = file_sha256(cache_root / CALIBRATION_FILENAME)
+    calibration_path = args.teacher_calibration.expanduser().resolve(strict=True)
+    calibration_file_sha256 = file_sha256(calibration_path)
     lineage = validate_teacher_checkpoint_lineage(
         checkpoint_manifest,
         manifest_file_sha256=manifest_file_sha256,
@@ -256,6 +262,7 @@ def main() -> int:
     )
     cache = load_teacher_cache(
         cache_root,
+        calibration_path=calibration_path,
         expected_manifest_file_sha256=manifest_file_sha256,
         expected_sidecar_file_sha256=sidecar_file_sha256,
         expected_calibration_file_sha256=calibration_file_sha256,
@@ -313,6 +320,7 @@ def main() -> int:
         "episodes": str(episodes_path),
         "episodes_sha256": episodes_sha256,
         "teacher_cache": str(cache_root),
+        "teacher_calibration": str(calibration_path),
         "teacher_cache_lock_sha256": cache_lock,
         "teacher_cache_files": {
             "manifest_sha256": manifest_file_sha256,

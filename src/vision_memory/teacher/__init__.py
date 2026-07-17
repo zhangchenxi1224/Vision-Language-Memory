@@ -23,6 +23,13 @@ from .cache import (
     tensor_sha256,
     validate_teacher_sidecar,
 )
+from .calibration_lock import (
+    CALIBRATION_SAMPLE_SELECTION,
+    CALIBRATION_SUITES,
+    TeacherCalibrationInputLock,
+    load_teacher_calibration_input_lock,
+    verify_teacher_calibration_input_files,
+)
 from .loss import (
     CALIBRATION_DENOMINATOR_EPSILON,
     LATENT_NORMALIZATION_EPSILON,
@@ -74,6 +81,8 @@ __all__ = [
     "FULL_STATE_RENDERER_SCHEMA",
     "FULL_STATE_RESOLUTION",
     "CALIBRATION_FILENAME",
+    "CALIBRATION_SAMPLE_SELECTION",
+    "CALIBRATION_SUITES",
     "CALIBRATION_DENOMINATOR_EPSILON",
     "LATENT_NORMALIZATION_EPSILON",
     "MANIFEST_FILENAME",
@@ -95,6 +104,7 @@ __all__ = [
     "TeacherArtifactRecord",
     "TeacherArtifactSpec",
     "TeacherBuildContract",
+    "TeacherCalibrationInputLock",
     "TeacherCacheManifest",
     "TeacherCacheFileHashes",
     "TeacherDistillationLossOutput",
@@ -110,6 +120,7 @@ __all__ = [
     "composite_teacher_distillation_loss",
     "file_sha256",
     "load_teacher_cache",
+    "load_teacher_calibration_input_lock",
     "load_teacher_cache_manifest",
     "load_teacher_calibration",
     "load_teacher_manifest",
@@ -128,4 +139,5 @@ __all__ = [
     "save_teacher_tensor",
     "tensor_sha256",
     "validate_teacher_sidecar",
+    "verify_teacher_calibration_input_files",
 ]

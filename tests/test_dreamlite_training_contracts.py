@@ -157,6 +157,32 @@ class DreamLiteTrainingContractTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "--teacher-manifest is required"):
             dreamlite_episode.training_lineage(teacher_args)
 
+    def test_parent_checkpoint_lineage_requires_locked_reader_resize_contract(self):
+        with tempfile.TemporaryDirectory() as directory:
+            checkpoint = Path(directory) / "parent.pt"
+            payload = {
+                "schema_version": 1,
+                "manifest": {
+                    "training_lineage": {"training_regime": "teacher_assisted"},
+                },
+            }
+            torch.save(payload, checkpoint)
+            with self.assertRaisesRegex(ValueError, "Reader resize contract"):
+                dreamlite_episode._checkpoint_lineage(checkpoint)
+
+            payload["manifest"]["reader_resize_contract"] = "incompatible"
+            torch.save(payload, checkpoint)
+            with self.assertRaisesRegex(ValueError, "Reader resize contract"):
+                dreamlite_episode._checkpoint_lineage(checkpoint)
+
+            payload["manifest"]["reader_resize_contract"] = (
+                dreamlite_episode.R3_QWEN_READER_RESIZE_CONTRACT
+            )
+            torch.save(payload, checkpoint)
+            lineage, digest = dreamlite_episode._checkpoint_lineage(checkpoint)
+            self.assertEqual(lineage, payload["manifest"]["training_lineage"])
+            self.assertEqual(digest, dreamlite_episode.sha256_file(checkpoint))
+
     def test_random_teacher_control_is_deterministic_and_preserves_channel_moments(self):
         image = torch.rand(1, 3, 8, 8)
         latent = torch.randn(1, 4, 4, 4)
@@ -210,6 +236,44 @@ class DreamLiteTrainingContractTest(unittest.TestCase):
         self.assertEqual(kwargs["choices"], ("a", "b", "c", "d"))
         self.assertEqual(kwargs["target_index"], 2)
         self.assertTrue(kwargs["require_image_grad"])
+        self.assertEqual(
+            kwargs["reader_resize_contract"],
+            dreamlite_episode.R3_QWEN_READER_RESIZE_CONTRACT,
+        )
+        self.assertEqual([category for category, _tensor in audit_tensors], ["query_image"])
+        self.assertIs(audit_tensors[0][1], kwargs["image"])
+
+    def test_target_callable_propagates_locked_reader_resize_contract(self):
+        expected = object()
+        reader = object()
+        processor = object()
+        image = torch.rand(1, 3, 8, 8, requires_grad=True)
+        audit_tensors: list[tuple[str, torch.Tensor]] = []
+        with mock.patch.object(
+            dreamlite_episode,
+            "qwen3vl_target_only_ce",
+            return_value=expected,
+        ) as scorer:
+            callable_reader = dreamlite_episode.target_reader_callable(
+                reader=reader,
+                processor=processor,
+                reader_device=torch.device("cpu"),
+                require_grad=True,
+                gradient_audit_tensors=audit_tensors,
+            )
+            result = callable_reader(image, "formatted query", "answer")
+
+        self.assertIs(result, expected)
+        kwargs = scorer.call_args.kwargs
+        self.assertIs(kwargs["model"], reader)
+        self.assertIs(kwargs["processor"], processor)
+        self.assertEqual(tuple(kwargs["image"].shape), (3, 8, 8))
+        self.assertEqual(kwargs["target"], "answer")
+        self.assertTrue(kwargs["require_image_grad"])
+        self.assertEqual(
+            kwargs["reader_resize_contract"],
+            dreamlite_episode.R3_QWEN_READER_RESIZE_CONTRACT,
+        )
         self.assertEqual([category for category, _tensor in audit_tensors], ["query_image"])
         self.assertIs(audit_tensors[0][1], kwargs["image"])
 

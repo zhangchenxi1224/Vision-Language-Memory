@@ -12,9 +12,11 @@ import sys
 import sysconfig
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, Mapping
 
 from packaging.version import InvalidVersion, Version
+
+from model_snapshot_manifest import SNAPSHOT_MANIFEST_NAME, verify_snapshot_manifest
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -192,6 +194,20 @@ def collect_inventory(repo: Path, model_root: Path) -> dict[str, Any]:
     for name, specification in lock["models"].items():
         path = model_root / Path(specification["local_dir"]).name
         weight_files = sorted([*path.rglob("*.safetensors"), *path.rglob("*.bin")]) if path.exists() else []
+        manifest_path = path / str(specification.get("snapshot_manifest", SNAPSHOT_MANIFEST_NAME))
+        try:
+            snapshot_manifest = verify_snapshot_manifest(
+                manifest_path=manifest_path,
+                model_dir=path,
+                expected_repo_id=str(specification["repo_id"]),
+                expected_revision=str(specification["revision"]),
+            )
+        except (OSError, ValueError, json.JSONDecodeError) as exc:
+            snapshot_manifest = {
+                "passed": False,
+                "manifest_path": str(manifest_path),
+                "error": f"{type(exc).__name__}: {exc}",
+            }
         models[name] = {
             "path": str(path),
             "expected_revision": specification["revision"],
@@ -200,6 +216,7 @@ def collect_inventory(repo: Path, model_root: Path) -> dict[str, Any]:
             "weight_file_count": len(weight_files),
             "weight_bytes": sum(item.stat().st_size for item in weight_files),
             "minimum_weight_bytes": int(int(specification.get("weight_bytes", specification.get("approx_bytes", 0))) * 0.85),
+            "snapshot_manifest": snapshot_manifest,
         }
 
     paths = {}
@@ -357,7 +374,9 @@ def evaluate_inventory(
                 model["locked_revision"] == model["expected_revision"]
                 and model["snapshot_complete"] == model["expected_revision"]
                 and model["weight_file_count"] > 0
-                and model["weight_bytes"] >= model["minimum_weight_bytes"],
+                and model["weight_bytes"] >= model["minimum_weight_bytes"]
+                and isinstance(model.get("snapshot_manifest"), Mapping)
+                and model["snapshot_manifest"].get("passed") is True,
                 model,
             )
 

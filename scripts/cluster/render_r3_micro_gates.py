@@ -61,6 +61,7 @@ class MicroPaths:
     environment: Path
     model_root: Path
     run_root: Path
+    resize_contract_report: Path
     scorer_s0_report: Path
     technical_report: Path
     teacher_t0_report: Path
@@ -695,6 +696,7 @@ def _prerequisite_command(
     stage: str,
     training_regime: str,
     expected_commit: str,
+    resize_contract_report_sha256: str,
     scorer_s0_report_sha256: str,
     technical_report_sha256: str,
     teacher_t0_report_sha256: str,
@@ -702,6 +704,10 @@ def _prerequisite_command(
     parts: list[str | Path] = [
         "python",
         paths.project / "scripts" / "probes" / "validate_r3_micro_prerequisites.py",
+        "--resize-contract-report",
+        paths.resize_contract_report,
+        "--resize-contract-report-sha256",
+        resize_contract_report_sha256,
         "--scorer-s0-report",
         paths.scorer_s0_report,
         "--scorer-s0-report-sha256",
@@ -744,6 +750,7 @@ def render_stage_sbatch(
     paths: MicroPaths,
     expected_commit: str,
     expected_torch: str,
+    resize_contract_report_sha256: str,
     scorer_s0_report_sha256: str,
     technical_report_sha256: str,
     teacher_t0_report_sha256: str,
@@ -784,7 +791,7 @@ test "$(git rev-parse HEAD)" = {shlex.quote(expected_commit)}
 test -z "$(git status --porcelain --untracked-files=all)"
 {_preflight(paths, expected_torch=expected_torch, output=paths.results / f"{stage.name}_preflight.json")}
 {_gpu_contract()}
-{_prerequisite_command(paths, stage=stage.name, training_regime=stage.training_regime, expected_commit=expected_commit, scorer_s0_report_sha256=scorer_s0_report_sha256, technical_report_sha256=technical_report_sha256, teacher_t0_report_sha256=teacher_t0_report_sha256)}
+{_prerequisite_command(paths, stage=stage.name, training_regime=stage.training_regime, expected_commit=expected_commit, resize_contract_report_sha256=resize_contract_report_sha256, scorer_s0_report_sha256=scorer_s0_report_sha256, technical_report_sha256=technical_report_sha256, teacher_t0_report_sha256=teacher_t0_report_sha256)}
 
 {commands}
 """
@@ -798,6 +805,7 @@ def materialize_dry_run(
     transition16: SuiteSpec,
     expected_commit: str,
     expected_torch: str,
+    resize_contract_report_sha256: str,
     scorer_s0_report_sha256: str,
     technical_report_sha256: str,
     teacher_t0_report_sha256: str,
@@ -824,6 +832,7 @@ def materialize_dry_run(
                 paths=paths,
                 expected_commit=expected_commit,
                 expected_torch=expected_torch,
+                resize_contract_report_sha256=resize_contract_report_sha256,
                 scorer_s0_report_sha256=scorer_s0_report_sha256,
                 technical_report_sha256=technical_report_sha256,
                 teacher_t0_report_sha256=teacher_t0_report_sha256,
@@ -839,9 +848,9 @@ def materialize_dry_run(
             "suite": stage.suite,
             "training_regime": stage.training_regime,
             "hard_prerequisites": (
-                ["R3-S0", "G4-L", "G5-L", "G6-L", "DL-S"]
+                ["R3-R0", "R3-S0", "G4-L", "G5-L", "G6-L", "DL-S"]
                 if stage.training_regime == "qa_only"
-                else ["R3-S0", "G4-L", "G5-L", "G6-L", "DL-S", "T0"]
+                else ["R3-R0", "R3-S0", "G4-L", "G5-L", "G6-L", "DL-S", "T0"]
             ),
             "partition": "a800",
             "nodes": 1,
@@ -849,14 +858,16 @@ def materialize_dry_run(
             "sbatch": str(destination),
         }
     manifest = {
-        "schema_version": 1,
-        "protocol": "R3-Set8-Transition16-micro-dry-run-v1",
+        "schema_version": 2,
+        "protocol": "R3-Set8-Transition16-micro-resize-dry-run-v2",
         "dry_run": True,
         "submission_supported": False,
         "commit": expected_commit,
         "expected_torch": expected_torch,
         "external_hard_dependencies": {
             "all_tracks": {
+                "resize_contract_report": str(paths.resize_contract_report),
+                "resize_contract_report_sha256": resize_contract_report_sha256,
                 "scorer_s0_report": str(paths.scorer_s0_report),
                 "scorer_s0_report_sha256": scorer_s0_report_sha256,
                 "technical_report": str(paths.technical_report),
@@ -952,6 +963,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--model-root", type=Path, required=True)
     parser.add_argument("--runs-root", type=Path, required=True)
     parser.add_argument("--run-name")
+    parser.add_argument("--resize-contract-report", type=Path, required=True)
+    parser.add_argument("--resize-contract-report-sha256", required=True)
     parser.add_argument("--scorer-s0-report", type=Path, required=True)
     parser.add_argument("--scorer-s0-report-sha256", required=True)
     parser.add_argument("--technical-report", type=Path, required=True)
@@ -986,6 +999,7 @@ def main() -> int:
         name: _require_sha(name, str(getattr(args, name)))
         for name in (
             "technical_report_sha256",
+            "resize_contract_report_sha256",
             "scorer_s0_report_sha256",
             "teacher_t0_report_sha256",
             "set8_train_sha256",
@@ -1006,6 +1020,7 @@ def main() -> int:
         environment=args.environment,
         model_root=args.model_root,
         run_root=args.runs_root / (args.run_name or f"r3-micro-{stamp}-{commit[:8]}"),
+        resize_contract_report=args.resize_contract_report,
         scorer_s0_report=args.scorer_s0_report,
         technical_report=args.technical_report,
         teacher_t0_report=args.teacher_t0_report,
@@ -1041,6 +1056,7 @@ def main() -> int:
         transition16=transition16,
         expected_commit=commit,
         expected_torch=args.expected_torch,
+        resize_contract_report_sha256=sha_fields["resize_contract_report_sha256"],
         scorer_s0_report_sha256=sha_fields["scorer_s0_report_sha256"],
         technical_report_sha256=sha_fields["technical_report_sha256"],
         teacher_t0_report_sha256=sha_fields["teacher_t0_report_sha256"],

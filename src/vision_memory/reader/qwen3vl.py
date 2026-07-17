@@ -9,6 +9,13 @@ import torch
 import torch.nn.functional as F
 from torch import Tensor
 
+from .deterministic_resize import (
+    R3_QWEN_READER_GRID_THW,
+    R3_QWEN_READER_PIXEL_VALUES_SHAPE,
+    R3_QWEN_READER_RESIZE_CONTRACT,
+    deterministic_qwen_reader_resize,
+)
+
 
 @dataclass(frozen=True)
 class ReaderLossOutput:
@@ -42,6 +49,45 @@ class VisualFeatureOutput:
     image_grid_thw: Tensor
 
 
+def _prepare_reader_image(
+    image: Tensor,
+    *,
+    do_resize: bool | None,
+    reader_resize_contract: str | None,
+) -> tuple[Tensor, bool | None]:
+    if reader_resize_contract is None:
+        return image, do_resize
+    if reader_resize_contract != R3_QWEN_READER_RESIZE_CONTRACT:
+        raise ValueError(f"Unknown Qwen Reader resize contract: {reader_resize_contract!r}.")
+    if do_resize is not None and do_resize is not False:
+        raise ValueError("The locked R3 Reader resize contract requires processor do_resize=False.")
+    return deterministic_qwen_reader_resize(image, contract=reader_resize_contract), False
+
+
+def _assert_locked_reader_processor_output(pixel_values: Tensor, image_grid_thw: Tensor) -> None:
+    if tuple(pixel_values.shape) != R3_QWEN_READER_PIXEL_VALUES_SHAPE:
+        raise RuntimeError(
+            "Locked R3 Qwen processor pixel shape drifted: "
+            f"expected {R3_QWEN_READER_PIXEL_VALUES_SHAPE}, got {tuple(pixel_values.shape)}."
+        )
+    if pixel_values.dtype != torch.float32:
+        raise RuntimeError(
+            f"Locked R3 Qwen processor must emit float32 pixels, got {pixel_values.dtype}."
+        )
+    if not torch.isfinite(pixel_values).all():
+        raise RuntimeError("Locked R3 Qwen processor pixels contain NaN or Inf.")
+    if tuple(image_grid_thw.shape) != (1, 3):
+        raise RuntimeError(f"Locked R3 Qwen image grid must have shape [1,3], got {tuple(image_grid_thw.shape)}.")
+    if image_grid_thw.dtype != torch.int64:
+        raise RuntimeError(f"Locked R3 Qwen image grid must be int64, got {image_grid_thw.dtype}.")
+    actual_grid = tuple(int(value) for value in image_grid_thw.detach().cpu().reshape(-1).tolist())
+    if actual_grid != R3_QWEN_READER_GRID_THW:
+        raise RuntimeError(
+            "Locked R3 Qwen image grid drifted: "
+            f"expected {R3_QWEN_READER_GRID_THW}, got {actual_grid}."
+        )
+
+
 def _hidden_states(output: Any) -> Tensor:
     if hasattr(output, "last_hidden_state"):
         return output.last_hidden_state
@@ -58,6 +104,7 @@ def qwen3vl_query_free_visual_features(
     device: torch.device,
     require_image_grad: bool = True,
     do_resize: bool | None = None,
+    reader_resize_contract: str | None = None,
 ) -> VisualFeatureOutput:
     """Extract post-merger visual tokens without accepting any text/query input."""
 
@@ -67,6 +114,11 @@ def qwen3vl_query_free_visual_features(
         image = image[0]
     if image.ndim != 3 or image.shape[0] != 3 or not image.is_floating_point():
         raise ValueError("image must be a floating RGB tensor with shape [3,H,W] or [1,3,H,W].")
+    image, do_resize = _prepare_reader_image(
+        image,
+        do_resize=do_resize,
+        reader_resize_contract=reader_resize_contract,
+    )
     image_processor = getattr(processor, "image_processor", None)
     if image_processor is None or not callable(image_processor):
         raise TypeError("Qwen processor must expose a callable tensor image_processor.")
@@ -80,6 +132,8 @@ def qwen3vl_query_free_visual_features(
     batch = image_processor(**kwargs)
     pixel_values = batch["pixel_values"].to(device)
     image_grid_thw = batch["image_grid_thw"].to(device)
+    if reader_resize_contract is not None:
+        _assert_locked_reader_processor_output(pixel_values, image_grid_thw)
     if require_image_grad and (not pixel_values.requires_grad or pixel_values.grad_fn is None):
         raise RuntimeError("Qwen image processor detached the query-free visual feature input.")
     encoded = model.get_image_features(pixel_values, image_grid_thw)
@@ -141,7 +195,7 @@ def _joint_prompt_target_tokenization(processor: Any, prompt: str, target: str) 
     return joint_text, joint_ids[:, prompt_length:]
 
 
-def qwen3vl_target_only_ce(
+def _qwen3vl_target_only_ce_prepared(
     *,
     model: Any,
     processor: Any,
@@ -149,16 +203,11 @@ def qwen3vl_target_only_ce(
     query: str,
     target: str,
     device: torch.device,
-    require_image_grad: bool = True,
-    do_resize: bool | None = None,
-    deterministic_ce: bool = False,
+    require_image_grad: bool,
+    do_resize: bool | None,
+    locked_resize_contract: bool,
+    deterministic_ce: bool,
 ) -> ReaderLossOutput:
-    """Compute teacher-forced CE while retaining image-to-loss autograd.
-
-    model parameters should already be frozen with requires_grad_(False). Do not call this
-    function under no_grad/inference_mode. image is expected to contain floats in [0, 1].
-    """
-
     messages = [
         {
             "role": "user",
@@ -183,6 +232,8 @@ def qwen3vl_target_only_ce(
     ).to(device)
 
     pixel_values = batch["pixel_values"]
+    if locked_resize_contract:
+        _assert_locked_reader_processor_output(pixel_values, batch["image_grid_thw"])
     if require_image_grad and (not pixel_values.requires_grad or pixel_values.grad_fn is None):
         raise RuntimeError(
             "Qwen processor detached the image. Require the fast tensor processor or add a tensor-native adapter."
@@ -237,6 +288,44 @@ def qwen3vl_target_only_ce(
     return ReaderLossOutput(loss=loss, pixel_values=pixel_values, target_ids=target_ids, target_logits=logits)
 
 
+def qwen3vl_target_only_ce(
+    *,
+    model: Any,
+    processor: Any,
+    image: Tensor,
+    query: str,
+    target: str,
+    device: torch.device,
+    require_image_grad: bool = True,
+    do_resize: bool | None = None,
+    reader_resize_contract: str | None = None,
+    deterministic_ce: bool = False,
+) -> ReaderLossOutput:
+    """Compute teacher-forced CE while retaining image-to-loss autograd.
+
+    model parameters should already be frozen with requires_grad_(False). Do not call this
+    function under no_grad/inference_mode. image is expected to contain floats in [0, 1].
+    """
+
+    image, do_resize = _prepare_reader_image(
+        image,
+        do_resize=do_resize,
+        reader_resize_contract=reader_resize_contract,
+    )
+    return _qwen3vl_target_only_ce_prepared(
+        model=model,
+        processor=processor,
+        image=image,
+        query=query,
+        target=target,
+        device=device,
+        require_image_grad=require_image_grad,
+        do_resize=do_resize,
+        locked_resize_contract=reader_resize_contract is not None,
+        deterministic_ce=deterministic_ce,
+    )
+
+
 def qwen3vl_listwise_choice_ce(
     *,
     model: Any,
@@ -248,6 +337,7 @@ def qwen3vl_listwise_choice_ce(
     device: torch.device,
     require_image_grad: bool = True,
     do_resize: bool | None = None,
+    reader_resize_contract: str | None = None,
     deterministic_ce: bool = False,
 ) -> ListwiseChoiceLossOutput:
     """Compute differentiable listwise CE over four teacher-forced option scores.
@@ -266,10 +356,16 @@ def qwen3vl_listwise_choice_ce(
     if isinstance(target_index, bool) or not isinstance(target_index, int) or not 0 <= target_index < 4:
         raise ValueError("target_index must be an integer in [0, 3].")
 
+    image, do_resize = _prepare_reader_image(
+        image,
+        do_resize=do_resize,
+        reader_resize_contract=reader_resize_contract,
+    )
+    locked_resize_contract = reader_resize_contract is not None
     option_outputs: list[ReaderLossOutput] = []
     for choice in choices:
         option_outputs.append(
-            qwen3vl_target_only_ce(
+            _qwen3vl_target_only_ce_prepared(
                 model=model,
                 processor=processor,
                 image=image,
@@ -278,6 +374,7 @@ def qwen3vl_listwise_choice_ce(
                 device=device,
                 require_image_grad=require_image_grad,
                 do_resize=do_resize,
+                locked_resize_contract=locked_resize_contract,
                 deterministic_ce=deterministic_ce,
             )
         )
@@ -310,6 +407,7 @@ def qwen3vl_choice_nll(
     choices: list[str] | tuple[str, ...],
     device: torch.device,
     do_resize: bool | None = None,
+    reader_resize_contract: str | None = None,
     deterministic_ce: bool = False,
 ) -> ChoiceScoreOutput:
     """Score MCQ option texts by teacher-forced mean NLL for evaluation."""
@@ -318,8 +416,14 @@ def qwen3vl_choice_nll(
         raise ValueError("Choice scoring requires at least two options.")
     scores: list[float] = []
     with torch.no_grad():
+        image, do_resize = _prepare_reader_image(
+            image,
+            do_resize=do_resize,
+            reader_resize_contract=reader_resize_contract,
+        )
+        locked_resize_contract = reader_resize_contract is not None
         for choice in choices:
-            output = qwen3vl_target_only_ce(
+            output = _qwen3vl_target_only_ce_prepared(
                 model=model,
                 processor=processor,
                 image=image,
@@ -328,6 +432,7 @@ def qwen3vl_choice_nll(
                 device=device,
                 require_image_grad=False,
                 do_resize=do_resize,
+                locked_resize_contract=locked_resize_contract,
                 deterministic_ce=deterministic_ce,
             )
             scores.append(float(output.loss.item()))

@@ -4,7 +4,7 @@ import unittest
 
 import torch
 
-from vision_memory.reader import qwen3vl_query_free_visual_features
+from vision_memory.reader import R3_QWEN_READER_RESIZE_CONTRACT, qwen3vl_query_free_visual_features
 
 
 class MockImageProcessor:
@@ -34,6 +34,29 @@ class MockModel(torch.nn.Module):
         del image_grid_thw
         feature = pixel_values.flatten(2).transpose(1, 2)
         return (tuple(feature[index] for index in range(feature.shape[0])), ())
+
+
+class LockedImageProcessor(MockImageProcessor):
+    def __call__(self, **kwargs):
+        self.observed = kwargs
+        image = kwargs["images"][0]
+        if tuple(image.shape) != (3, 256, 256):
+            raise AssertionError(f"Expected explicitly resized image, got {tuple(image.shape)}")
+        return {
+            "pixel_values": image.reshape(-1).repeat(2).reshape(256, 1536).float(),
+            "image_grid_thw": torch.tensor([[1, 16, 16]], dtype=torch.long),
+        }
+
+
+class LockedProcessor:
+    def __init__(self) -> None:
+        self.image_processor = LockedImageProcessor()
+
+
+class LockedModel(torch.nn.Module):
+    def get_image_features(self, pixel_values, image_grid_thw):
+        del image_grid_thw
+        return (pixel_values.mean().reshape(1, 1, 1),)
 
 
 class QwenVisualFeatureTest(unittest.TestCase):
@@ -72,6 +95,23 @@ class QwenVisualFeatureTest(unittest.TestCase):
                 device=torch.device("cpu"),
                 query="forbidden",
             )
+
+    def test_locked_query_free_feature_uses_explicit_resize_and_disables_processor_resize(self) -> None:
+        image = torch.rand(1, 3, 1024, 1024, dtype=torch.bfloat16, requires_grad=True)
+        processor = LockedProcessor()
+        output = qwen3vl_query_free_visual_features(
+            model=LockedModel(),
+            processor=processor,
+            image=image,
+            device=torch.device("cpu"),
+            reader_resize_contract=R3_QWEN_READER_RESIZE_CONTRACT,
+        )
+        self.assertIs(processor.image_processor.observed["do_resize"], False)
+        self.assertEqual(tuple(output.pixel_values.shape), (256, 1536))
+        self.assertEqual(output.image_grid_thw.tolist(), [[1, 16, 16]])
+        output.features.sum().backward()
+        self.assertIsNotNone(image.grad)
+        self.assertGreater(float(image.grad.float().norm()), 0.0)
 
 
 if __name__ == "__main__":

@@ -6,6 +6,7 @@ import hashlib
 import importlib.metadata
 import json
 import math
+import os
 import platform
 import random
 import subprocess
@@ -26,6 +27,7 @@ from vision_memory.dreamlite import assert_no_frozen_parameter_grads, freeze_mod
 from vision_memory.data import CYCLIC4, REVERSE_CYCLIC4, permutation_family_sha256  # noqa: E402
 from vision_memory.data import read_jsonl as read_episode_jsonl  # noqa: E402
 from vision_memory.reader import (  # noqa: E402
+    R3_QWEN_READER_RESIZE_CONTRACT,
     qwen3vl_listwise_choice_ce,
     qwen3vl_query_free_visual_features,
     qwen3vl_target_only_ce,
@@ -255,7 +257,10 @@ def _checkpoint_lineage(path: Path) -> tuple[dict[str, Any], str]:
     payload = torch.load(path, map_location="cpu", weights_only=False)
     if payload.get("schema_version") != 1 or not isinstance(payload.get("manifest"), dict):
         raise ValueError("Parent checkpoint does not contain a supported training manifest.")
-    lineage = payload["manifest"].get("training_lineage")
+    manifest = payload["manifest"]
+    if manifest.get("reader_resize_contract") != R3_QWEN_READER_RESIZE_CONTRACT:
+        raise ValueError("Parent checkpoint has a missing or incompatible Reader resize contract.")
+    lineage = manifest.get("training_lineage")
     if not isinstance(lineage, dict):
         raise ValueError("Parent checkpoint is missing training_lineage.")
     return lineage, sha256_file(path)
@@ -465,12 +470,23 @@ def make_manifest(args: argparse.Namespace) -> dict[str, Any]:
     for excluded in ("resume", "initialize_from", "output_dir", "allow_dirty"):
         compatibility_args.pop(excluded, None)
     lineage = training_lineage(args)
+    model_snapshot_manifests = {
+        "dreamlite_mobile": os.environ.get("VLM_DREAMLITE_SNAPSHOT_MANIFEST_SHA256"),
+        "qwen_reader": os.environ.get("VLM_READER_SNAPSHOT_MANIFEST_SHA256"),
+    }
+    if args.strict_determinism and any(
+        not isinstance(value, str) or len(value) != 64 or value != value.lower()
+        for value in model_snapshot_manifests.values()
+    ):
+        raise RuntimeError("Formal strict R3 training requires both model snapshot manifest SHA256 bindings.")
     return {
         "schema_version": 2,
         "git_commit": commit,
         "git_dirty": bool(status),
         "dreamlite_revision": locked_revision(args.dreamlite),
         "reader_revision": locked_revision(args.reader),
+        "reader_resize_contract": R3_QWEN_READER_RESIZE_CONTRACT,
+        "model_snapshot_manifests": model_snapshot_manifests,
         "train_sha256": sha256_file(args.train),
         "dev_sha256": sha256_file(args.dev),
         "initial_image": load_initial_image(
@@ -484,6 +500,7 @@ def make_manifest(args: argparse.Namespace) -> dict[str, Any]:
         "environment": {
             "python": platform.python_version(),
             "torch": torch.__version__,
+            "torchvision": importlib.metadata.version("torchvision"),
             "cuda_runtime": torch.version.cuda,
             "diffusers": importlib.metadata.version("diffusers"),
             "transformers": importlib.metadata.version("transformers"),
@@ -660,6 +677,7 @@ def build_state_supervision_provider(
             image=student_image,
             device=reader_device,
             require_image_grad=torch.is_grad_enabled(),
+            reader_resize_contract=R3_QWEN_READER_RESIZE_CONTRACT,
         ).features
         if gradient_audit_tensors is not None and torch.is_grad_enabled():
             retain_gradient_audit_tensor(
@@ -752,6 +770,7 @@ def target_reader_callable(
             target=target,
             device=reader_device,
             require_image_grad=require_grad,
+            reader_resize_contract=R3_QWEN_READER_RESIZE_CONTRACT,
             deterministic_ce=deterministic_ce,
         )
 
@@ -788,6 +807,7 @@ def choice_reader_callable(
             target_index=target_index,
             device=reader_device,
             require_image_grad=require_grad,
+            reader_resize_contract=R3_QWEN_READER_RESIZE_CONTRACT,
             deterministic_ce=deterministic_ce,
         )
 
@@ -1126,6 +1146,8 @@ def main() -> int:
         raise SystemExit("--max-train-episodes must be positive when supplied.")
     if args.max_optimizer_steps is not None and args.max_optimizer_steps <= 0:
         raise SystemExit("--max-optimizer-steps must be positive when supplied.")
+    if args.resolution != 1024:
+        raise SystemExit("Formal DreamLite R3 requires --resolution 1024 for the locked Reader resize contract.")
     if args.resume is not None and args.initialize_from is not None:
         raise SystemExit("--resume and --initialize-from are mutually exclusive.")
     for field in ("presentations_per_state", "distill_presentations", "qa_presentations"):

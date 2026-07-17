@@ -34,7 +34,11 @@ def validate_replication(
         raise ValueError("suite must be set8 or transition16.")
     if training_regime not in {"qa_only", "teacher_assisted"}:
         raise ValueError("training_regime must be qa_only or teacher_assisted.")
-    expected_control = "none" if training_regime == "qa_only" else teacher_control
+    expected_control = "none" if training_regime == "qa_only" else "correct"
+    if teacher_control != expected_control:
+        raise ValueError(
+            f"teacher_control must be {expected_control!r} for training_regime={training_regime!r}."
+        )
     errors: list[str] = []
     digests: dict[str, str | None] = {}
     checkpoints: dict[str, str | None] = {}
@@ -92,6 +96,7 @@ def validate_replication(
         "scientific_prediction_payload_sha256": prediction_payloads,
         "checkpoint_sha256": checkpoints,
         "checkpoint_paths": checkpoint_paths,
+        "artifact_provenance_validated": not errors,
         "bitwise_scientific_payload_match": (
             digests.get("A") == digests.get("B")
             and digests.get("A") is not None
@@ -116,7 +121,7 @@ def main() -> int:
     parser.add_argument("--b", type=Path, required=True)
     parser.add_argument("--suite", choices=tuple(_SCHEMAS), required=True)
     parser.add_argument("--training-regime", choices=("qa_only", "teacher_assisted"), required=True)
-    parser.add_argument("--teacher-control", choices=("correct",), default="correct")
+    parser.add_argument("--teacher-control", choices=("none", "correct"), required=True)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     try:

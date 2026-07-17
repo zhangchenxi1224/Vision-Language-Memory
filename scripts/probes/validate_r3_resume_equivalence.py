@@ -15,8 +15,10 @@ import torch
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "scripts" / "cluster"))
+sys.path.insert(0, str(ROOT / "src"))
 
 from compare_checkpoints import compare_values  # noqa: E402
+from vision_memory.reader import R3_QWEN_READER_RESIZE_CONTRACT  # noqa: E402
 
 
 REQUIRED_CHECKPOINT_FIELDS = {
@@ -241,6 +243,8 @@ def validate_resume_checkpoints(
                     errors.append(f"reference.manifest.arguments.{name} must be {expected!r}, found {actual!r}.")
         if reference_manifest.get("git_dirty") is not False:
             errors.append("DL-S requires manifest.git_dirty=false.")
+        if reference_manifest.get("reader_resize_contract") != R3_QWEN_READER_RESIZE_CONTRACT:
+            errors.append("DL-S manifest has the wrong Reader resize contract.")
         for field in ("git_commit", "dreamlite_revision", "reader_revision"):
             value = reference_manifest.get(field)
             if not isinstance(value, str) or _HEX_40.fullmatch(value) is None:
@@ -249,6 +253,19 @@ def validate_resume_checkpoints(
             value = reference_manifest.get(field)
             if not isinstance(value, str) or _HEX_64.fullmatch(value) is None:
                 errors.append(f"reference.manifest.{field} must be a SHA256 digest.")
+        expected_runtime = {
+            "python": "3.12.3",
+            "torch": "2.7.0a0+ecf3bae40a.nv25.02",
+            "torchvision": "0.22.0a0",
+            "cuda_runtime": "12.8",
+            "diffusers": "0.39.0",
+            "transformers": "4.57.3",
+            "peft": "0.18.1",
+        }
+        if reference_manifest.get("environment") != expected_runtime:
+            errors.append(
+                "reference.manifest.environment must equal the locked Inspire H200 software runtime."
+            )
         determinism = reference_manifest.get("strict_determinism")
         if not isinstance(determinism, Mapping):
             errors.append("reference.manifest.strict_determinism is missing or invalid.")
@@ -335,6 +352,17 @@ def validate_resume_checkpoints(
     return {
         "schema_version": 2,
         "protocol": "DL-S-common-prefix-16-vs-8-resume-8-next-step-v2",
+        "git_commit": None if reference_manifest is None else reference_manifest.get("git_commit"),
+        "dreamlite_revision": (
+            None if reference_manifest is None else reference_manifest.get("dreamlite_revision")
+        ),
+        "reader_revision": None if reference_manifest is None else reference_manifest.get("reader_revision"),
+        "reader_resize_contract": (
+            None if reference_manifest is None else reference_manifest.get("reader_resize_contract")
+        ),
+        "runtime_environment": (
+            None if reference_manifest is None else reference_manifest.get("environment")
+        ),
         "presentations": {"uninterrupted": 16, "shared_prefix": 8, "resumed_suffix": 8, "next_step": 17},
         "atol": 0.0,
         "rtol": 0.0,

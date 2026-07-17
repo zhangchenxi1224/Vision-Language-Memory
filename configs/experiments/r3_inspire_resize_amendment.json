@@ -1,0 +1,107 @@
+{
+  "schema": "vision_memory.r3-inspire-resize-amendment.v1",
+  "decision_date": "2026-07-17",
+  "status": "prospective_before_replacement_commit_scientific_results",
+  "classification": "protocol-preserving implementation repair; not a scientific-gate failure and not an R4 method change",
+  "trigger": {
+    "historical_commit": "1ac4a90d316573d75caaca0a7cec33282538c276",
+    "stage": "DL-S",
+    "failure_point": "first backward before optimizer step, metric, or checkpoint",
+    "exception": "upsample_bicubic2d_aa_backward_out_cuda does not have a deterministic implementation",
+    "launcher_configuration_sha256": "c06de47ab83a490d5aa858ce6a0629949e22f55f91aac5f08ad0c3026e7108ee",
+    "stdout_sha256": "56b9875ffe01a5895519433cf1d71c35ba2aeae4c8994f78f1c7e4bcce53818a",
+    "stderr_sha256": "de0d1bf468020f1e63362034d1a28551d2b2aa4a49528b8c8d5b6fa8c1ee9fed",
+    "scientific_outputs_observed": false
+  },
+  "diagnosis": {
+    "runtime": "Inspire ngc-pytorch:25.02-cuda12.8.0-py3 on NVIDIA H200",
+    "reader_input": "one differentiable 3x1024x1024 floating RGB tensor",
+    "legacy_processor_configuration": {
+      "min_pixels": 65536,
+      "max_pixels": 65536,
+      "resize": "torchvision bicubic with antialias",
+      "output_image_size": [256, 256],
+      "image_grid_thw": [1, 16, 16],
+      "pixel_values_shape": [256, 1536]
+    },
+    "direct_do_resize_false_is_forbidden": "It changes the grid to [1,64,64] and pixel_values to [4096,1536], increasing visual tokens by 16x.",
+    "exact_runtime_diagnostic_sha256": "6df54af6c0a60f0317667d31867f131ed081cd6c4f091b25854892a9735b90cf",
+    "candidate_adjoint_diagnostic_sha256": "d3bc2d071e64c4625ec8e2fe8e3e6f3df5f0d06e0df0b3b76f959200579c82e0"
+  },
+  "locked_repair": {
+    "reader_resize_contract": "r3-qwen-reader-1024-to-256-bicubic-antialias-cpu-adjoint.v1",
+    "forward": "the same torchvision bicubic-antialias operator on CUDA in the decoded tensor's original dtype",
+    "backward": "the adjoint of the same linear resize operator replayed in FP32 on single-thread CPU and returned to the source device/dtype",
+    "legacy_native_reference": "R3-R0 alone runs three isolated legacy native CUDA backward references with no model weights, optimizer, or scientific metric; the candidate remains strict and strict determinism must be restored after every reference",
+    "processor_after_explicit_resize": "do_resize=false",
+    "strict_deterministic_algorithms": true,
+    "warn_only": false,
+    "surrogate_or_ste": false,
+    "locked_input_shape": [3, 1024, 1024],
+    "locked_output_shape": [3, 256, 256],
+    "locked_grid_thw": [1, 16, 16],
+    "locked_pixel_values_shape": [256, 1536]
+  },
+  "invariants": {
+    "unchanged": [
+      "Qwen and DreamLite revisions",
+      "Reader output resolution, patch grid, visual token count, and forward pixel values",
+      "listwise choice loss and joint continuation tokenization",
+      "DreamLite recurrence, LoRA, optimizer, seeds, data, presentations, and stopping thresholds",
+      "strict deterministic algorithms and math-only SDPA for DL-S"
+    ],
+    "forbidden": [
+      "warn_only or disabling deterministic algorithms in candidate, training, or scientific paths; only the preregistered isolated R3-R0 legacy-native reference may temporarily disable it and must restore it",
+      "nearest, area, bilinear, or other forward filter changes",
+      "feeding the unresized 1024 image to Qwen",
+      "straight-through or surrogate gradients",
+      "reusing any failed or passed historical stage as replacement-commit evidence"
+    ]
+  },
+  "replacement_gate_order": [
+    "R3-R0",
+    "R3-S0",
+    "G4-L",
+    "G5-L",
+    "G6-L",
+    "DL-S"
+  ],
+  "r3_r0_acceptance": {
+    "dtypes": ["float32", "bfloat16"],
+    "legacy_vs_repair_pixel_values_torch_equal": true,
+    "legacy_vs_repair_grid_torch_equal": true,
+    "maximum_absolute_forward_difference": 0.0,
+    "strict_backward_finite_and_nonzero": true,
+    "repeated_gradient_torch_equal": true,
+    "cpu_adjoint_reference_torch_equal": true,
+    "cpu_adjoint_reference_max_absolute_difference": 0.0,
+    "legacy_native_cuda_reference": {
+      "replicas": 3,
+      "reference_only": true,
+      "no_optimizer": true,
+      "no_scientific_metric": true,
+      "float32_candidate_relative_l2_max": 1e-5,
+      "float32_candidate_cosine_min": 0.999999,
+      "bfloat16_candidate_relative_l2_max": 1e-2,
+      "bfloat16_candidate_cosine_min": 0.9999,
+      "native_run_to_run_variation": "record-only; never changes thresholds"
+    },
+    "inspire_execution_binding": "exact clean commit, formal-preflight SHA, worker_input SHA, H200 and pinned Torch/CUDA/Torchvision/Transformers"
+  },
+  "cache_rule": "Existing teacher caches may be retained only after the train-only R3-TC0 gate verifies every artifact SHA and every cached decoded image has legacy/candidate pixel-grid bitwise identity. Any changed cached tensor requires a prospective rebuild amendment before teacher-assisted results. The default-attention cache versus strict-math training feature backend must then pass R3-TF0 before T0/calibration.",
+  "teacher_feature_backend_gate": {
+    "gate": "R3-TF0",
+    "cached_feature_source_backend": "default_sdpa",
+    "replacement_backend": "strict_math_only",
+    "feature_boundary": "qwen3vl-post-merger-query-free.v1",
+    "relative_l2_max": 0.01,
+    "cosine_min": 0.9999,
+    "all_states_must_pass": true,
+    "state_count": 30,
+    "cache_access": "read-only",
+    "depends_on": "R3-TC0 on the same clean replacement commit",
+    "unlock_scope": "teacher T0, teacher-loss calibration, and teacher-assisted tracks only",
+    "qa_only_dependency": false
+  },
+  "unlock_rule": "Only a clean replacement commit with a fresh exact-commit H200 preflight and all six gates passing may establish C0 and unlock Set8. Set8 and Transition16 still precede every pilot."
+}

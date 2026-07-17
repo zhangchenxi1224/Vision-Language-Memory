@@ -1,7 +1,15 @@
 {
   "schema": "vision_memory.r3-preregistration.v1",
   "decision_date": "2026-07-17",
-  "status": "prospective_teacher_caches_locked_no_r3_scientific_results",
+  "status": "prospective_replacement_commit_after_historical_technical_gates_and_pre_optimizer_dl_s_infrastructure_failure",
+  "prospective_amendments": [
+    {
+      "decision_date": "2026-07-17",
+      "path": "configs/experiments/r3_inspire_resize_amendment.json",
+      "classification": "protocol-preserving deterministic Reader resize implementation repair",
+      "replacement_evidence_required": true
+    }
+  ],
   "research_boundary": {
     "r2c_disposition": "archived_reproducible_lightweight_performance_failure",
     "lightweight_role": "data_router_loss_reader_diagnostic_only",
@@ -131,7 +139,32 @@
     "cache_lock_rule": "Fulfilled prospectively before R3 scientific gates: both deterministic train-only cache manifests, transition files, build reports, and the complete per-tensor file/content SHA maps are archived. Any rebuild changes the protocol and requires a new preregistration amendment before further scientific work."
   },
   "technical_gates": {
-    "order": ["R3-S0", "G4-L", "G5-L", "G6-L", "DL-S"],
+    "order": ["R3-R0", "R3-S0", "G4-L", "G5-L", "G6-L", "DL-S"],
+    "r3_r0": {
+      "report_schema_version": 2,
+      "contract": "r3-qwen-reader-1024-to-256-bicubic-antialias-cpu-adjoint.v1",
+      "legacy_forward_bitwise_equal": true,
+      "strict_backward_repeat_exact": true,
+      "cpu_adjoint_reference_exact": true,
+      "dtypes": ["float32", "bfloat16"],
+      "legacy_native_cuda_reference": {
+        "replicas": 3,
+        "reference_only": true,
+        "determinism_restored": true,
+        "float32_relative_l2_max": 1e-5,
+        "float32_cosine_min": 0.999999,
+        "bfloat16_relative_l2_max": 1e-2,
+        "bfloat16_cosine_min": 0.9999
+      },
+      "runtime": {
+        "device": "NVIDIA H200",
+        "torch": "2.7.0a0+ecf3bae40a.nv25.02",
+        "cuda": "12.8",
+        "torchvision": "0.22.0a0",
+        "transformers": "4.57.3"
+      },
+      "execution_binding": "exact clean commit plus formal-preflight and worker_input SHA256"
+    },
     "r3_s0": {"nll_rtol": 1e-6, "nll_atol": 1e-6, "repeat_exact": true},
     "g4_l": "finite_positive_image_final_latent_lora_grads_and_zero_frozen_grads",
     "g5_l": "finite_positive_first_intermediate_latent_grad",
@@ -150,6 +183,22 @@
     }
   },
   "teacher_t0": {
+    "prerequisite_gates": [
+      "R3-TC0 cache-forward pixel/grid compatibility",
+      "R3-TF0 cached-feature strict-math backend compatibility"
+    ],
+    "feature_backend_gate": {
+      "gate": "R3-TF0",
+      "cached_feature_source_backend": "default_sdpa",
+      "replacement_backend": "strict_math_only",
+      "feature_boundary": "qwen3vl-post-merger-query-free.v1",
+      "relative_l2_max": 0.01,
+      "cosine_min": 0.9999,
+      "all_states_must_pass": true,
+      "state_count": 30,
+      "cache_access": "read-only"
+    },
+    "reader_resize_contract": "r3-qwen-reader-1024-to-256-bicubic-antialias-cpu-adjoint.v1",
     "raw_card_macro_accuracy_min": 0.95,
     "decoded_card_macro_accuracy_min": 0.95,
     "heldout_template_accuracy_min": 0.90,
@@ -190,6 +239,34 @@
     "shuffle_drop_min": "16/64",
     "state_swap_donor_min": "12/16",
     "fresh_replica_payload_exact": true
+  },
+  "micro_execution": {
+    "command_protocol": "r3-inspire-micro-command.v2",
+    "fixed_budget_checkpoint_only": true,
+    "intermediate_checkpoint_selection_forbidden": true,
+    "set8_qa_only": {
+      "execution_shape": "single",
+      "arms": ["A"]
+    },
+    "transition16_qa_only": {
+      "execution_shape": "paired-replica",
+      "arms": ["A", "B"],
+      "order": "fresh_A_then_passing_A_score_then_fresh_B_then_exact_replication"
+    },
+    "set8_teacher_assisted": {
+      "execution_shape": "teacher-control-composite",
+      "arms": ["correct", "shuffled", "random-moment-matched"],
+      "all_arms_fresh": true,
+      "final_gate": "complete_three_arm_attribution"
+    },
+    "transition16_teacher_assisted": {
+      "execution_shape": "paired-replica",
+      "arms": ["A", "B"],
+      "teacher_control": "correct",
+      "order": "fresh_A_then_passing_A_score_then_fresh_B_then_exact_replication"
+    },
+    "teacher_preparation_order": ["R3-TC0", "R3-TF0", "T0", "CAL-Set8", "CAL-Transition16"],
+    "teacher_micro_requires_completed_immutable_teacher_parent": true
   },
   "training": {
     "qa_only": {"qa_presentations": 512, "teacher_inputs_forbidden": true},
@@ -264,6 +341,14 @@
       "hf_cache": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/cache/huggingface"
     },
     "locked_infrastructure_commit": "88a3e6474870543011d6ed7a7327f77fd3f8e2f7",
+    "model_snapshot_integrity": {
+      "protocol": "vlm.hf-snapshot-sha256.v1",
+      "scope": "all snapshot files except local Hugging Face download cache and lock markers",
+      "manifest_created_before_formal_preflight": true,
+      "unexpected_or_missing_files_fail_closed": true,
+      "manifest_sha_bound_to_preflight_plan_stage_evidence_and_training_checkpoint": true,
+      "weights_must_not_be_rewritten_when_manifest_is_created": true
+    },
     "model_snapshots": {
       "dreamlite_mobile": {
         "revision": "6695c3f4be230f0493fa5dbf78be3bc4d3bb2ab4",
@@ -281,6 +366,6 @@
     "scientific_jobs_require_clean_commit": true,
     "h200_requires_fresh_technical_gate_evidence": true,
     "historical_a800_gate_results_do_not_transfer": true,
-    "submission_state": "environment_models_and_teacher_caches_ready_no_scientific_gate_submitted"
+    "submission_state": "historical_commit_passed_s0_g4_g5_g6_then_dl_s_failed_before_first_optimizer_step; replacement_commit_requires_r0_s0_g4_g5_g6_dl_s"
   }
 }

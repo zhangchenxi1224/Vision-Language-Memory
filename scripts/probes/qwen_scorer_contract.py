@@ -15,10 +15,15 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "src"))
 
 from vision_memory.dreamlite import freeze_module  # noqa: E402
-from vision_memory.reader import qwen3vl_choice_nll, qwen3vl_listwise_choice_ce  # noqa: E402
+from vision_memory.reader import (  # noqa: E402
+    R3_QWEN_READER_RESIZE_CONTRACT,
+    qwen3vl_choice_nll,
+    qwen3vl_listwise_choice_ce,
+)
 from vision_memory.repro import (  # noqa: E402
     assert_no_frozen_parameter_grads,
     canonical_tensor_sha256,
+    configure_strict_cuda_determinism,
     cuda_peak_memory_report,
     emit_json_report,
     probe_provenance,
@@ -229,6 +234,7 @@ def run_scorer_contract(
             target_index=view.target_index,
             device=device,
             require_image_grad=True,
+            reader_resize_contract=R3_QWEN_READER_RESIZE_CONTRACT,
             deterministic_ce=True,
         )
         train_nll = tuple(float(value) for value in train_result.choice_mean_nll.detach().cpu().tolist())
@@ -239,6 +245,7 @@ def run_scorer_contract(
             query=formatted_query,
             choices=view.choices,
             device=device,
+            reader_resize_contract=R3_QWEN_READER_RESIZE_CONTRACT,
             deterministic_ce=True,
         )
         repeat_result = eval_scorer(
@@ -248,6 +255,7 @@ def run_scorer_contract(
             query=formatted_query,
             choices=view.choices,
             device=device,
+            reader_resize_contract=R3_QWEN_READER_RESIZE_CONTRACT,
             deterministic_ce=True,
         )
         eval_nll = tuple(float(value) for value in eval_result.mean_nll)
@@ -318,6 +326,7 @@ def run_scorer_contract(
         "passed": passed,
         "contract": {
             "reader_loss_mode": "listwise-choice",
+            "reader_resize_contract": R3_QWEN_READER_RESIZE_CONTRACT,
             "nll_implementation": "fp32-logsumexp-minus-target-score",
             "tokenization": "joint-chat-template-continuation",
             "train_eval_nll_rtol": NLL_RTOL,
@@ -383,6 +392,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         if memory_gib < 16 and not args.allow_small_gpu:
             raise RuntimeError(f"Only {memory_gib:.1f} GiB VRAM detected; run this probe on the cluster.")
 
+        strict_determinism = configure_strict_cuda_determinism(seed=args.seed)
+
         from transformers import AutoProcessor, Qwen3VLForConditionalGeneration
 
         dtype = torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16
@@ -410,8 +421,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         generator = torch.Generator(device=device).manual_seed(args.seed)
         image = torch.rand(
             3,
-            256,
-            256,
+            1024,
+            1024,
             generator=generator,
             device=device,
             dtype=torch.float32,
@@ -429,8 +440,10 @@ def main(argv: Sequence[str] | None = None) -> int:
         report.update(
             {
                 "reader_processor": processor_name,
+                "reader_resize_contract": R3_QWEN_READER_RESIZE_CONTRACT,
                 "reader_dtype": str(dtype),
                 "device": str(device),
+                "strict_determinism": strict_determinism,
                 "image_sha256": canonical_tensor_sha256(image),
                 "frozen_gradients": assert_no_frozen_parameter_grads(
                     {"reader": model},

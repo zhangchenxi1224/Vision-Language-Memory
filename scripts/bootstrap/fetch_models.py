@@ -3,10 +3,14 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import sys
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "scripts" / "inspire"))
+
+from model_snapshot_manifest import create_snapshot_manifest  # noqa: E402
 METADATA_PATTERNS = [
     "*.json",
     "*.txt",
@@ -76,6 +80,13 @@ def main() -> int:
                 )
             (local_dir / ".metadata_complete").write_text(spec["revision"] + "\n", encoding="utf-8")
         (local_dir / marker).write_text(spec["revision"] + "\n", encoding="utf-8")
+        if not args.metadata_only:
+            create_snapshot_manifest(
+                model_dir=local_dir,
+                repo_id=str(spec["repo_id"]),
+                revision=str(spec["revision"]),
+                overwrite=True,
+            )
 
     return 0
 

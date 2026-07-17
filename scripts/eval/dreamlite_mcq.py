@@ -19,7 +19,7 @@ sys.path.insert(0, str(ROOT / "src"))
 from vision_memory.data import REVERSE_CYCLIC4, read_jsonl as read_synthetic_jsonl  # noqa: E402
 from vision_memory.dreamlite import freeze_module  # noqa: E402
 from vision_memory.prefeval import prefeval_noise_episode_key  # noqa: E402
-from vision_memory.reader import qwen3vl_choice_nll  # noqa: E402
+from vision_memory.reader import R3_QWEN_READER_RESIZE_CONTRACT, qwen3vl_choice_nll  # noqa: E402
 from vision_memory.repro import load_initial_image  # noqa: E402
 from vision_memory.training import DreamLiteEpisodeModel, format_mcq_query, load_trainable_weights  # noqa: E402
 
@@ -562,6 +562,8 @@ def main() -> int:
             raise SystemExit("DreamLite revision differs from the checkpoint manifest.")
         if checkpoint_manifest.get("reader_revision") != reader_revision:
             raise SystemExit("Reader revision differs from the checkpoint manifest.")
+        if checkpoint_manifest.get("reader_resize_contract") != R3_QWEN_READER_RESIZE_CONTRACT:
+            raise SystemExit("Reader resize contract differs from the checkpoint manifest.")
 
     updater_device = torch.device(args.dreamlite_device)
     reader_device = torch.device(args.reader_device)
@@ -706,6 +708,7 @@ def main() -> int:
                         query=format_mcq_query(item.query, item.choices),
                         choices=item.choices,
                         device=reader_device,
+                        reader_resize_contract=R3_QWEN_READER_RESIZE_CONTRACT,
                         deterministic_ce=deterministic_ce,
                     )
                 _synchronize(reader_device)
@@ -773,6 +776,7 @@ def main() -> int:
         "checkpoint_manifest": checkpoint_manifest,
         "dreamlite_revision": dreamlite_revision,
         "reader_revision": reader_revision,
+        "reader_resize_contract": R3_QWEN_READER_RESIZE_CONTRACT,
         "initial_image": initial_image_metadata,
         "learn_initial_state": learn_initial_state,
         **semantic_group_report(items),

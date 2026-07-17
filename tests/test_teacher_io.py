@@ -126,6 +126,17 @@ class TeacherCacheRoundTripTest(unittest.TestCase):
             provider = make_disk_teacher_provider(root)
             self.assertTrue(torch.equal(provider.get(teacher.state_id, split="train").feature, teacher.feature))
 
+            external_calibration = root.parent / f"{root.name}-calibration.json"
+            (root / CALIBRATION_FILENAME).replace(external_calibration)
+            external_cache = load_teacher_cache(
+                root,
+                calibration_path=external_calibration,
+                expected_manifest_file_sha256=hashes.manifest,
+                expected_sidecar_file_sha256=hashes.sidecar,
+                expected_calibration_file_sha256=hashes.calibration,
+            )
+            self.assertEqual(external_cache.calibration, calibration)
+
     def test_each_tensor_is_checked_for_sha_shape_and_dtype(self):
         teacher, manifest, sidecar, calibration = cache_fixture()
         record = manifest.records[0]

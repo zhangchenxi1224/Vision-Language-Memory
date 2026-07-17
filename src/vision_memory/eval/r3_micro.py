@@ -9,6 +9,151 @@ from pathlib import Path
 from typing import Any, Iterable, Mapping
 
 
+R3_MICRO_ARTIFACT_PROVENANCE_SCHEMA = "vlm.r3.micro_artifact_provenance.v1"
+R3_MICRO_ARTIFACT_PROVENANCE_FIELDS = frozenset(
+    {
+        "schema",
+        "predictions_sha256",
+        "prediction_report_sha256",
+        "checkpoint_path",
+        "checkpoint_sha256",
+        "training_summary_sha256",
+        "dreamlite_snapshot_manifest_sha256",
+        "reader_snapshot_manifest_sha256",
+        "training_regime",
+        "parent_checkpoint_regime",
+        "objective_stage",
+        "reader_loss_mode",
+        "choice_permutation_family_sha256",
+        "eval_choice_permutation_family_sha256",
+        "teacher_control",
+        "teacher_control_sha256",
+        "teacher_manifest_sha256",
+        "teacher_sidecar_sha256",
+        "teacher_calibration_sha256",
+        "presentations_per_state",
+        "distill_presentations",
+        "qa_presentations",
+        "recurrence_mode",
+        "detach_between_events",
+        "noop_policy",
+        "initial_state_mode",
+        "learn_initial_state",
+        "lora_rank",
+        "seed",
+        "adapter_seed",
+        "strict_determinism",
+        "state_gradient_audit",
+        "training_trace",
+    }
+)
+
+
+def _require_sha256(value: Any, *, field: str) -> str:
+    if not isinstance(value, str) or len(value) != 64 or value != value.lower():
+        raise ValueError(f"{field} must be a lowercase SHA256 digest")
+    try:
+        int(value, 16)
+    except ValueError as exc:
+        raise ValueError(f"{field} must be a lowercase SHA256 digest") from exc
+    return value
+
+
+def validate_r3_micro_artifact_provenance(provenance: Mapping[str, Any], *, suite: str) -> None:
+    """Validate the producer/consumer contract shared by micro and attribution scoring."""
+
+    if provenance.get("schema") != R3_MICRO_ARTIFACT_PROVENANCE_SCHEMA:
+        raise ValueError("Unsupported R3 micro artifact provenance schema")
+    if set(provenance) != R3_MICRO_ARTIFACT_PROVENANCE_FIELDS:
+        raise ValueError("R3 micro artifact provenance has missing or unexpected fields")
+    for field in (
+        "predictions_sha256",
+        "prediction_report_sha256",
+        "checkpoint_sha256",
+        "training_summary_sha256",
+        "dreamlite_snapshot_manifest_sha256",
+        "reader_snapshot_manifest_sha256",
+    ):
+        _require_sha256(provenance.get(field), field=f"artifact_provenance.{field}")
+    if not isinstance(provenance.get("checkpoint_path"), str) or not provenance["checkpoint_path"]:
+        raise ValueError("artifact_provenance.checkpoint_path must be non-empty")
+    locked_protocol = {
+        "recurrence_mode": "direct_latent",
+        "detach_between_events": False,
+        "noop_policy": "update",
+        "initial_state_mode": "blank",
+        "learn_initial_state": False,
+        "lora_rank": 4,
+        "seed": 0,
+        "adapter_seed": 0,
+    }
+    drift = {
+        field: {"expected": expected, "observed": provenance.get(field)}
+        for field, expected in locked_protocol.items()
+        if provenance.get(field) != expected
+    }
+    if drift:
+        raise ValueError(f"R3 micro artifact provenance protocol drifted: {drift}")
+    strict = provenance.get("strict_determinism")
+    if not isinstance(strict, Mapping):
+        raise ValueError("artifact_provenance.strict_determinism must be an object")
+    strict_expected = {
+        "deterministic_algorithms": True,
+        "deterministic_warn_only": False,
+        "cudnn_benchmark": False,
+        "cudnn_deterministic": True,
+        "cuda_matmul_allow_tf32": False,
+        "cudnn_allow_tf32": False,
+        "float32_matmul_precision": "highest",
+    }
+    if any(strict.get(field) != expected for field, expected in strict_expected.items()):
+        raise ValueError("R3 micro provenance does not bind the locked strict-determinism settings")
+    if strict.get("sdpa") != {"flash": False, "memory_efficient": False, "cudnn": False, "math": True}:
+        raise ValueError("R3 micro provenance does not bind math-only SDPA")
+    gradient_audit = provenance.get("state_gradient_audit")
+    if not isinstance(gradient_audit, Mapping):
+        raise ValueError("artifact_provenance.state_gradient_audit must be an object")
+    if (
+        gradient_audit.get("schema") != "vision_memory.r3-state-gradient-audit.v1"
+        or gradient_audit.get("enabled") is not True
+        or gradient_audit.get("objective_stage") != "qa"
+        or gradient_audit.get("passed") is not True
+    ):
+        raise ValueError("R3 micro provenance does not bind a passing QA state-gradient audit")
+    episodes = 8 if suite == "set8" else 16 if suite == "transition16" else None
+    if episodes is None:
+        raise ValueError("R3 micro provenance requires set8 or transition16")
+    regime = provenance.get("training_regime")
+    epochs = 512 if regime == "qa_only" else 256 if regime == "teacher_assisted" else None
+    if epochs is None:
+        raise ValueError("R3 micro provenance has an unsupported training regime")
+    steps_per_presentation = episodes // 8
+    optimizer_steps = epochs * steps_per_presentation
+    eval_start = 64 * steps_per_presentation
+    eval_every = 32 * steps_per_presentation
+    training_trace = provenance.get("training_trace")
+    if not isinstance(training_trace, Mapping):
+        raise ValueError("artifact_provenance.training_trace must be an object")
+    expected_trace = {
+        "schema": "vlm.r3.micro_training_trace.v1",
+        "suite": suite,
+        "episodes": episodes,
+        "epochs": epochs,
+        "presentations_per_state": epochs,
+        "optimizer_steps": optimizer_steps,
+        "choice_rotation_counts": [epochs * episodes // 4] * 4,
+        "dev_optimizer_steps": list(range(eval_start, optimizer_steps + 1, eval_every)),
+        "checkpoint_count": optimizer_steps // eval_every,
+        "passed": True,
+    }
+    if any(training_trace.get(field) != expected for field, expected in expected_trace.items()):
+        raise ValueError("R3 micro provenance does not bind the complete fixed-budget training trace")
+    _require_sha256(
+        training_trace.get("metrics_sha256"),
+        field="artifact_provenance.training_trace.metrics_sha256",
+    )
+
+
 def _canonical_sha256(value: Any) -> str:
     encoded = json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
     return hashlib.sha256(encoded).hexdigest()

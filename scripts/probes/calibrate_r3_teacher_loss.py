@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import random
 import statistics
@@ -17,7 +16,10 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from vision_memory.data import read_jsonl  # noqa: E402
 from vision_memory.dreamlite import freeze_module  # noqa: E402
-from vision_memory.reader import qwen3vl_query_free_visual_features  # noqa: E402
+from vision_memory.reader import (  # noqa: E402
+    R3_QWEN_READER_RESIZE_CONTRACT,
+    qwen3vl_query_free_visual_features,
+)
 from vision_memory.repro import (  # noqa: E402
     configure_strict_cuda_determinism,
     cuda_peak_memory_report,
@@ -26,12 +28,16 @@ from vision_memory.repro import (  # noqa: E402
     reset_cuda_peak_memory,
 )
 from vision_memory.teacher import (  # noqa: E402
+    CALIBRATION_SAMPLE_SELECTION,
+    CALIBRATION_SUITES,
     FrozenTeacherLossCalibration,
     composite_teacher_distillation_loss,
+    load_teacher_calibration_input_lock,
     load_teacher_cache_manifest,
     load_teacher_transition_sidecar,
     make_disk_teacher_provider,
     save_teacher_calibration,
+    verify_teacher_calibration_input_files,
 )
 from vision_memory.training import DreamLiteEpisodeModel  # noqa: E402
 
@@ -40,6 +46,12 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Freeze R3 teacher-loss median scales before training")
     parser.add_argument("--train", type=Path, required=True)
     parser.add_argument("--cache-dir", type=Path, required=True)
+    parser.add_argument("--suite", choices=CALIBRATION_SUITES, required=True)
+    parser.add_argument(
+        "--preregistration",
+        type=Path,
+        default=ROOT / "configs" / "experiments" / "r3_preregistration.json",
+    )
     parser.add_argument("--dreamlite", type=Path, required=True)
     parser.add_argument("--reader", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
@@ -54,14 +66,6 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--dreamlite-device", default="cuda:0")
     parser.add_argument("--reader-device", default="cuda:1")
     return parser.parse_args()
-
-
-def sha256_file(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for block in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(block)
-    return digest.hexdigest()
 
 
 def set_all_seeds(seed: int) -> None:
@@ -88,6 +92,16 @@ def main() -> int:
         raise SystemExit("Teacher-loss calibration requires a clean, committed checkout.")
     manifest_path = args.cache_dir / "manifest.json"
     sidecar_path = args.cache_dir / "transitions.jsonl"
+    input_lock = load_teacher_calibration_input_lock(
+        args.preregistration,
+        suite=args.suite,
+    )
+    input_binding = verify_teacher_calibration_input_files(
+        input_lock,
+        train=args.train,
+        manifest=manifest_path,
+        sidecar=sidecar_path,
+    )
     manifest = load_teacher_cache_manifest(manifest_path)
     transitions = load_teacher_transition_sidecar(sidecar_path, manifest=manifest)
     provider = make_disk_teacher_provider(manifest_path)
@@ -104,6 +118,11 @@ def main() -> int:
         for index, turn in enumerate(episode.turns)
         if turn.type.value in {"event", "mixed"}
     }
+    if len(expected_event_keys) != input_lock.transition_count:
+        raise ValueError(
+            "Train updater-transition count differs from preregistration: "
+            f"expected={input_lock.transition_count}, observed={len(expected_event_keys)}."
+        )
     if expected_event_keys != set(transition_lookup):
         missing = sorted(expected_event_keys - set(transition_lookup))
         extra = sorted(set(transition_lookup) - expected_event_keys)
@@ -190,6 +209,7 @@ def main() -> int:
                     image=image,
                     device=reader_device,
                     require_image_grad=False,
+                    reader_resize_contract=R3_QWEN_READER_RESIZE_CONTRACT,
                 ).features
                 output = composite_teacher_distillation_loss(
                     student_latent=state.to(reader_device),
@@ -212,9 +232,12 @@ def main() -> int:
     calibration_file_sha256 = save_teacher_calibration(args.output, calibration)
     report = {
         "schema": "vision_memory.r3-teacher-calibration-report.v1",
-        "train_sha256": sha256_file(args.train),
-        "manifest_sha256": sha256_file(manifest_path),
-        "sidecar_sha256": sha256_file(sidecar_path),
+        "reader_resize_contract": R3_QWEN_READER_RESIZE_CONTRACT,
+        "suite": input_binding["suite"],
+        "preregistration_sha256": input_binding["preregistration_sha256"],
+        "train_sha256": input_binding["train_sha256"],
+        "manifest_sha256": input_binding["manifest_sha256"],
+        "sidecar_sha256": input_binding["sidecar_sha256"],
         "calibration_file_sha256": calibration_file_sha256,
         "calibration_contract_sha256": calibration.contract_sha256,
         "transition_count": len(raw_latent),
@@ -222,12 +245,7 @@ def main() -> int:
         "adapter_seed": args.adapter_seed,
         "lora_rank": args.lora_rank,
         "initial_state": source_metadata,
-        "sample_selection": {
-            "split": "train",
-            "unit": "one-unweighted-sample-per-updater-transition",
-            "query_turns_excluded": True,
-            "duplicate-semantic-after-states_retained": True,
-        },
+        "sample_selection": dict(CALIBRATION_SAMPLE_SELECTION),
         "scales": calibration.to_dict(),
         "raw_component_ranges": {
             "latent": [min(raw_latent), max(raw_latent)],

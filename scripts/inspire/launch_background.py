@@ -140,6 +140,14 @@ def worker(config_path: Path, expected_config_sha: str) -> int:
 
         environment = os.environ.copy()
         environment.update(STRICT_ENVIRONMENT)
+        environment.update(
+            {
+                "VLM_STAGE_WORKER_INPUT": str(config_path),
+                "VLM_STAGE_CONFIGURATION_SHA256": expected_config_sha,
+                "VLM_STAGE_PREFLIGHT": str(configuration["preflight"]),
+                "VLM_STAGE_PREFLIGHT_SHA256": str(configuration["preflight_sha256"]),
+            }
+        )
         with (run_dir / "stdout.log").open("wb") as stdout, (run_dir / "stderr.log").open("wb") as stderr:
             process = subprocess.run(
                 command,

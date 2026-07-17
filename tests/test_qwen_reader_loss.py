@@ -4,6 +4,7 @@ import sys
 import unittest
 from pathlib import Path
 from types import SimpleNamespace
+from unittest import mock
 
 import torch
 from torch import nn
@@ -14,6 +15,8 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from vision_memory.dreamlite import freeze_module  # noqa: E402
 from vision_memory.reader import (  # noqa: E402
+    R3_QWEN_READER_RESIZE_CONTRACT,
+    deterministic_qwen_reader_resize,
     qwen3vl_choice_nll,
     qwen3vl_listwise_choice_ce,
     qwen3vl_target_only_ce,
@@ -83,6 +86,19 @@ class MockProcessor:
                 "image_grid_thw": torch.tensor([[1, 1, 1]], dtype=torch.long),
             }
         )
+
+
+class LockedResizeMockProcessor(MockProcessor):
+    """Emulate Qwen's post-resize patch tensor while retaining image autograd."""
+
+    def __call__(self, **kwargs):
+        batch = super().__call__(**kwargs)
+        image = kwargs["images"][0]
+        if tuple(image.shape) != (3, 256, 256):
+            raise AssertionError(f"Expected one explicitly resized image, got {tuple(image.shape)}")
+        batch["pixel_values"] = image.reshape(-1).repeat(2).reshape(256, 1536).float()
+        batch["image_grid_thw"] = torch.tensor([[1, 16, 16]], dtype=torch.long)
+        return batch
 
 
 class MockBaseModel(nn.Module):
@@ -284,6 +300,74 @@ class ReaderLossContractTest(unittest.TestCase):
         self.assertGreater(deterministic_image.grad.norm().item(), 0.0)
         self.assertEqual(ordinary_processor.observed_do_resize_calls, [False] * 4)
         self.assertEqual(deterministic_processor.observed_do_resize_calls, [False] * 4)
+
+    def test_locked_target_path_resizes_once_and_disables_processor_resize(self):
+        torch.manual_seed(29)
+        model = freeze_module(MockQwen())
+        processor = LockedResizeMockProcessor()
+        image = torch.rand(3, 1024, 1024, requires_grad=True)
+        with mock.patch(
+            "vision_memory.reader.qwen3vl.deterministic_qwen_reader_resize",
+            wraps=deterministic_qwen_reader_resize,
+        ) as resize:
+            result = qwen3vl_target_only_ce(
+                model=model,
+                processor=processor,
+                image=image,
+                query="question",
+                target="answer",
+                device=torch.device("cpu"),
+                reader_resize_contract=R3_QWEN_READER_RESIZE_CONTRACT,
+            )
+
+        self.assertEqual(resize.call_count, 1)
+        self.assertEqual(processor.observed_do_resize_calls, [False])
+        self.assertEqual(tuple(result.pixel_values.shape), (256, 1536))
+        result.loss.backward()
+        self.assertIsNotNone(image.grad)
+        self.assertGreater(float(image.grad.norm()), 0.0)
+
+    def test_locked_listwise_and_eval_paths_each_resize_once_for_all_choices(self):
+        torch.manual_seed(31)
+        model = freeze_module(MockQwen())
+        image = torch.rand(3, 1024, 1024, requires_grad=True)
+        train_processor = LockedResizeMockProcessor()
+        with mock.patch(
+            "vision_memory.reader.qwen3vl.deterministic_qwen_reader_resize",
+            wraps=deterministic_qwen_reader_resize,
+        ) as train_resize:
+            result = qwen3vl_listwise_choice_ce(
+                model=model,
+                processor=train_processor,
+                image=image,
+                query="question",
+                choices=("a", "b", "c", "d"),
+                target_index=2,
+                device=torch.device("cpu"),
+                reader_resize_contract=R3_QWEN_READER_RESIZE_CONTRACT,
+            )
+        self.assertEqual(train_resize.call_count, 1)
+        self.assertEqual(train_processor.observed_do_resize_calls, [False] * 4)
+        result.loss.backward()
+        self.assertIsNotNone(image.grad)
+
+        eval_processor = LockedResizeMockProcessor()
+        with mock.patch(
+            "vision_memory.reader.qwen3vl.deterministic_qwen_reader_resize",
+            wraps=deterministic_qwen_reader_resize,
+        ) as eval_resize:
+            score = qwen3vl_choice_nll(
+                model=model,
+                processor=eval_processor,
+                image=image.detach(),
+                query="question",
+                choices=("a", "b", "c", "d"),
+                device=torch.device("cpu"),
+                reader_resize_contract=R3_QWEN_READER_RESIZE_CONTRACT,
+            )
+        self.assertEqual(eval_resize.call_count, 1)
+        self.assertEqual(eval_processor.observed_do_resize_calls, [False] * 4)
+        self.assertEqual(len(score.mean_nll), 4)
 
     def test_listwise_choice_ce_rejects_invalid_choices_and_target_index(self):
         model = freeze_module(MockQwen())

@@ -12,7 +12,13 @@ from typing import Any, Mapping, Sequence
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "src"))
 
-from vision_memory.eval import read_prediction_jsonl, score_r3_micro  # noqa: E402
+from vision_memory.eval import (  # noqa: E402
+    R3_MICRO_ARTIFACT_PROVENANCE_FIELDS,
+    R3_MICRO_ARTIFACT_PROVENANCE_SCHEMA,
+    read_prediction_jsonl,
+    score_r3_micro,
+    validate_r3_micro_artifact_provenance,
+)
 
 
 def sha256_file(path: Path) -> str:
@@ -211,6 +217,11 @@ def build_artifact_provenance(
     rows: Sequence[Mapping[str, Any]],
     prediction_report: Path,
     suite: str,
+    expected_git_commit: str | None = None,
+    expected_reader_revision: str | None = None,
+    expected_dreamlite_revision: str | None = None,
+    expected_train_sha256: str | None = None,
+    expected_dev_sha256: str | None = None,
 ) -> dict[str, Any]:
     """Bind a scientific micro-gate payload to the evaluated checkpoint lineage."""
 
@@ -226,6 +237,21 @@ def build_artifact_provenance(
     arguments = manifest.get("arguments")
     if not isinstance(arguments, Mapping):
         raise ValueError("Formal R3 micro scoring requires checkpoint arguments.")
+    model_snapshot_manifests = manifest.get("model_snapshot_manifests")
+    if not isinstance(model_snapshot_manifests, Mapping):
+        raise ValueError("Formal R3 micro scoring requires model snapshot manifest lineage.")
+    expected_manifest_values = {
+        "git_commit": expected_git_commit,
+        "reader_revision": expected_reader_revision,
+        "dreamlite_revision": expected_dreamlite_revision,
+        "train_sha256": expected_train_sha256,
+        "dev_sha256": expected_dev_sha256,
+    }
+    for field, expected in expected_manifest_values.items():
+        if expected is not None and manifest.get(field) != expected:
+            raise ValueError(f"Checkpoint manifest {field!r} differs from the bound technical/data lineage.")
+    if expected_git_commit is not None and manifest.get("git_dirty") is not False:
+        raise ValueError("Formal R3 micro checkpoint must come from the clean bound Git commit.")
     locked_arguments = {
         "reader_loss_mode": "listwise-choice",
         "choice_view_schedule": "cyclic4",
@@ -294,6 +320,12 @@ def build_artifact_provenance(
         lineage=lineage,
         suite=suite,
     )
+    expected_final_checkpoint = checkpoint.parent / f"checkpoint-{training_trace['optimizer_steps']:06d}.pt"
+    if checkpoint != expected_final_checkpoint:
+        raise ValueError(
+            "Formal R3 micro scoring must use the final fixed-budget checkpoint: "
+            f"expected {expected_final_checkpoint}, got {checkpoint}."
+        )
     expected_row_values = {
         "training_regime": lineage.get("training_regime"),
         "parent_checkpoint_regime": lineage.get("parent_checkpoint_regime"),
@@ -313,13 +345,15 @@ def build_artifact_provenance(
         if any(row.get(field) != expected for row in rows):
             raise ValueError(f"Prediction rows violate the locked R3 field {field!r}.")
 
-    return {
-        "schema": "vlm.r3.micro_artifact_provenance.v1",
+    provenance = {
+        "schema": R3_MICRO_ARTIFACT_PROVENANCE_SCHEMA,
         "predictions_sha256": sha256_file(predictions),
         "prediction_report_sha256": sha256_file(prediction_report),
         "checkpoint_path": str(checkpoint),
         "checkpoint_sha256": sha256_file(checkpoint),
         "training_summary_sha256": sha256_file(training_summary_path),
+        "dreamlite_snapshot_manifest_sha256": model_snapshot_manifests.get("dreamlite_mobile"),
+        "reader_snapshot_manifest_sha256": model_snapshot_manifests.get("qwen_reader"),
         "training_regime": lineage.get("training_regime"),
         "parent_checkpoint_regime": lineage.get("parent_checkpoint_regime"),
         "objective_stage": lineage.get("objective_stage"),
@@ -346,6 +380,10 @@ def build_artifact_provenance(
         "state_gradient_audit": dict(state_gradient_audit),
         "training_trace": training_trace,
     }
+    if set(provenance) != R3_MICRO_ARTIFACT_PROVENANCE_FIELDS:
+        raise RuntimeError("R3 micro artifact provenance producer drifted from its shared schema.")
+    validate_r3_micro_artifact_provenance(provenance, suite=suite)
+    return provenance
 
 
 def main() -> int:
@@ -357,6 +395,11 @@ def main() -> int:
         help="dreamlite_mcq companion report; required by formal R3 orchestration for checkpoint binding.",
     )
     parser.add_argument("--suite", choices=("set8", "transition16"), required=True)
+    parser.add_argument("--expected-git-commit")
+    parser.add_argument("--expected-reader-revision")
+    parser.add_argument("--expected-dreamlite-revision")
+    parser.add_argument("--expected-train-sha256")
+    parser.add_argument("--expected-dev-sha256")
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument(
         "--fail-on-gate",
@@ -369,12 +412,21 @@ def main() -> int:
     report = score_r3_micro(rows, args.suite)
     report["scientific_prediction_payload"] = scientific_prediction_payload(rows)
     if args.prediction_report is not None:
-        report["artifact_provenance"] = build_artifact_provenance(
+        artifact_provenance = build_artifact_provenance(
             predictions=args.predictions,
             rows=rows,
             prediction_report=args.prediction_report,
             suite=args.suite,
+            expected_git_commit=args.expected_git_commit,
+            expected_reader_revision=args.expected_reader_revision,
+            expected_dreamlite_revision=args.expected_dreamlite_revision,
+            expected_train_sha256=args.expected_train_sha256,
+            expected_dev_sha256=args.expected_dev_sha256,
         )
+        report["artifact_provenance"] = artifact_provenance
+        report["training_regime"] = artifact_provenance["training_regime"]
+        report["teacher_control"] = artifact_provenance["teacher_control"]
+        report["artifact_provenance_validated"] = True
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(json.dumps(report, indent=2, sort_keys=True))

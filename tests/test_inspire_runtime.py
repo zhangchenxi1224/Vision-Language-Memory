@@ -90,6 +90,7 @@ def passing_inventory() -> dict:
                 "weight_file_count": 2,
                 "weight_bytes": 100,
                 "minimum_weight_bytes": 85,
+                "snapshot_manifest": {"passed": True},
             }
             for name, revision in (("dreamlite_mobile", "e" * 40), ("qwen_reader", "f" * 40))
         },
@@ -148,11 +149,13 @@ class InspirePreflightTest(unittest.TestCase):
     def test_model_marker_or_strict_environment_drift_fails(self):
         inventory = passing_inventory()
         inventory["models"]["qwen_reader"]["snapshot_complete"] = None
+        inventory["models"]["dreamlite_mobile"]["snapshot_manifest"] = {"passed": False}
         inventory["environment"]["CUBLAS_WORKSPACE_CONFIG"] = None
         report = evaluate(inventory)
         self.assertFalse(report["passed"])
         failures = {check["name"] for check in report["checks"] if not check["ok"]}
         self.assertIn("model:qwen_reader", failures)
+        self.assertIn("model:dreamlite_mobile", failures)
         self.assertIn("determinism:CUBLAS_WORKSPACE_CONFIG", failures)
 
 

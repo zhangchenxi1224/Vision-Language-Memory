@@ -26,7 +26,7 @@ from validate_r3_technical_gates import (  # noqa: E402
 
 
 _SHA256 = re.compile(r"^[0-9a-f]{64}$")
-RENDER_GATE_ORDER = ("R3-S0", *GATE_ORDER)
+RENDER_GATE_ORDER = ("R3-R0", "R3-S0", *GATE_ORDER[1:])
 
 
 @dataclass(frozen=True)
@@ -129,9 +129,11 @@ def _technical_validation_command(paths: R3Paths, *, through: str, output: Path)
         paths.project / "scripts" / "probes" / "validate_r3_technical_gates.py",
         "--through",
         through,
-        "--g4",
-        paths.results / "G4_L.json",
+        "--resize-contract",
+        paths.results / "R3_R0_qwen_resize_contract.json",
     ]
+    if through != "R3-R0":
+        parts.extend(("--g4", paths.results / "G4_L.json"))
     if through in {"G5-L", "G6-L", "DL-S"}:
         parts.extend(("--g5", paths.results / "G5_L.json"))
     if through in {"G6-L", "DL-S"}:
@@ -252,6 +254,28 @@ def build_gates(
     resumed_checkpoint = resumed_dir / "checkpoint-000016.pt"
     resume_report = paths.results / "DL_S_resume_equivalence.json"
 
+    r0_commands = (
+        shell_join(
+            [
+                "python",
+                paths.project / "scripts" / "probes" / "qwen_resize_contract.py",
+                "--reader",
+                paths.model_root / "Qwen3-VL-4B-Instruct",
+                "--device",
+                "cuda:0",
+                "--seed",
+                "0",
+                "--output-json",
+                paths.results / "R3_R0_qwen_resize_contract.json",
+            ]
+        ),
+        _technical_validation_command(
+            paths,
+            through="R3-R0",
+            output=paths.results / "R3_R0_validation.json",
+        ),
+    )
+
     s0_commands = (
         shell_join(
             [
@@ -341,7 +365,8 @@ def build_gates(
     )
 
     return [
-        R3Gate("R3-S0", None, "02:00:00", s0_commands),
+        R3Gate("R3-R0", None, "01:00:00", r0_commands),
+        R3Gate("R3-S0", "R3-R0", "02:00:00", s0_commands),
         R3Gate("G4-L", "R3-S0", "02:00:00", g4_commands),
         R3Gate("G5-L", "G4-L", "03:00:00", g5_commands),
         R3Gate("G6-L", "G5-L", "03:00:00", g6_commands),
@@ -527,8 +552,8 @@ def materialize_dry_run(
         newline="\n",
     )
     manifest = {
-        "schema_version": 1,
-        "protocol": "R3-technical-listwise-v1",
+        "schema_version": 2,
+        "protocol": "R3-technical-listwise-resize-v2",
         "dry_run": True,
         "submission_supported": False,
         "status": "dry_run_complete",
@@ -553,7 +578,10 @@ def materialize_dry_run(
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Render R3-S0/G4-L/G5-L/G6-L/DL-S sbatch templates; this command can never submit jobs"
+        description=(
+            "Render R3-R0/R3-S0/G4-L/G5-L/G6-L/DL-S sbatch templates; "
+            "this command can never submit jobs"
+        )
     )
     parser.add_argument(
         "--project-root",

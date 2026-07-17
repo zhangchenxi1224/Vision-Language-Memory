@@ -22,9 +22,10 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from vision_memory.data import REVERSE_CYCLIC4, Episode, QuerySpec, permute_query, read_jsonl  # noqa: E402
 from vision_memory.dreamlite import freeze_module  # noqa: E402
-from vision_memory.reader import qwen3vl_choice_nll  # noqa: E402
+from vision_memory.reader import R3_QWEN_READER_RESIZE_CONTRACT, qwen3vl_choice_nll  # noqa: E402
 from vision_memory.repro import (  # noqa: E402
     assert_no_frozen_parameter_grads,
+    configure_strict_cuda_determinism,
     cuda_peak_memory_report,
     emit_json_report,
     probe_provenance,
@@ -615,6 +616,8 @@ def run_real_qwen_upper_bound(
                     query=formatted_query,
                     choices=view.choices,
                     device=device,
+                    reader_resize_contract=R3_QWEN_READER_RESIZE_CONTRACT,
+                    deterministic_ce=True,
                 )
                 if len(result.mean_nll) != 4 or not all(math.isfinite(float(value)) for value in result.mean_nll):
                     raise RuntimeError(
@@ -668,6 +671,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     base_report: dict[str, Any] = {
         "schema_version": 1,
         "probe": "teacher_t0_real_qwen_integrity_upper_bound",
+        "reader_resize_contract": R3_QWEN_READER_RESIZE_CONTRACT,
         "passed": False,
     }
     try:
@@ -679,6 +683,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         memory_gib = torch.cuda.get_device_properties(device).total_memory / 2**30
         if memory_gib < 16 and not args.allow_small_gpu:
             raise RuntimeError(f"Only {memory_gib:.1f} GiB VRAM detected; run teacher T0 on the cluster.")
+
+        strict_determinism = configure_strict_cuda_determinism(seed=0)
 
         if file_sha256(args.font) != LOCKED_FONT_SHA256:
             raise RuntimeError("Embedded DejaVuSans.ttf differs from the locked R3 font SHA256.")
@@ -803,8 +809,10 @@ def main(argv: Sequence[str] | None = None) -> int:
             "upper_bound": upper_bound,
             "predictions": predictions,
             "reader_processor": processor_name,
+            "reader_resize_contract": R3_QWEN_READER_RESIZE_CONTRACT,
             "reader_dtype": str(dtype),
             "reader_device": str(device),
+            "strict_determinism": strict_determinism,
             "frozen_gradients": assert_no_frozen_parameter_grads(
                 {"reader": reader},
                 fully_frozen={"reader"},

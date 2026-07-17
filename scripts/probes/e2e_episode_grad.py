@@ -16,11 +16,16 @@ from vision_memory.dreamlite import (  # noqa: E402
     freeze_module,
 )
 from vision_memory.dreamlite.conditioning import encode_latent_path_condition  # noqa: E402
-from vision_memory.reader import qwen3vl_listwise_choice_ce, qwen3vl_target_only_ce  # noqa: E402
+from vision_memory.reader import (  # noqa: E402
+    R3_QWEN_READER_RESIZE_CONTRACT,
+    qwen3vl_listwise_choice_ce,
+    qwen3vl_target_only_ce,
+)
 from vision_memory.repro import (  # noqa: E402
     assert_no_frozen_parameter_grads,
     canonical_json_sha256,
     canonical_tensor_sha256,
+    configure_strict_cuda_determinism,
     cuda_peak_memory_report,
     emit_json_report,
     load_source_image,
@@ -103,6 +108,8 @@ def main() -> int:
     if not torch.cuda.is_available():
         raise SystemExit("CUDA is required for the real end-to-end probe.")
 
+    strict_determinism = configure_strict_cuda_determinism(seed=args.adapter_seed)
+
     from diffusers import DreamLiteMobilePipeline
     from peft import LoraConfig, get_peft_model
     from transformers import AutoProcessor, Qwen3VLForConditionalGeneration
@@ -151,6 +158,7 @@ def main() -> int:
         attn_implementation="sdpa",
     ).to(reader_device)
     freeze_module(reader)
+    reader.eval()
     reader.config.use_cache = False
 
     source_pil, source_metadata = load_source_image(args.source_image, resolution=args.resolution)
@@ -205,6 +213,8 @@ def main() -> int:
             choices=args.choice,
             target_index=args.target_index,
             device=reader_device,
+            reader_resize_contract=R3_QWEN_READER_RESIZE_CONTRACT,
+            deterministic_ce=True,
         )
     else:
         assert args.target is not None
@@ -215,6 +225,8 @@ def main() -> int:
             query=args.query,
             target=args.target,
             device=reader_device,
+            reader_resize_contract=R3_QWEN_READER_RESIZE_CONTRACT,
+            deterministic_ce=True,
         )
     if not torch.isfinite(reader_result.loss):
         raise RuntimeError("The Qwen target CE is NaN or Inf.")
@@ -292,8 +304,10 @@ def main() -> int:
         "checkpoint_unet": args.checkpoint_unet,
         "dreamlite_device": str(updater_device),
         "reader_device": str(reader_device),
+        "reader_resize_contract": R3_QWEN_READER_RESIZE_CONTRACT,
         "updater_dtype": str(updater_dtype),
         "reader_dtype": str(reader_dtype),
+        "strict_determinism": strict_determinism,
     }
 
     report = {
@@ -330,6 +344,8 @@ def main() -> int:
         "updater_dtype": str(updater_dtype),
         "reader_dtype": str(reader_dtype),
         "reader_processor": processor_name,
+        "reader_resize_contract": R3_QWEN_READER_RESIZE_CONTRACT,
+        "strict_determinism": strict_determinism,
         "frozen_gradients": frozen_gradients,
         "cuda_peak_memory": cuda_peak_memory_report([updater_device, reader_device]),
         "provenance": provenance,

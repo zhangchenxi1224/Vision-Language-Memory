@@ -86,6 +86,12 @@ def main() -> int:
     if set(arms) != set(TEACHER_CONTROLS):
         raise RuntimeError("Internal teacher-control mapping drifted from the scoring contract.")
     report = score_r3_teacher_attribution(arms)
+    report = {
+        **report,
+        "suite": "set8",
+        "training_regime": "teacher_assisted",
+        "artifact_provenance_validated": True,
+    }
     _write_json_atomic(args.output, report)
     print(
         json.dumps(

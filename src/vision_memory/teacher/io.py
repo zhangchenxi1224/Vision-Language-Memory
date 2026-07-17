@@ -436,6 +436,7 @@ def save_teacher_cache(
 def load_teacher_cache(
     root: Path,
     *,
+    calibration_path: Path | None = None,
     expected_manifest_file_sha256: str | None = None,
     expected_sidecar_file_sha256: str | None = None,
     expected_calibration_file_sha256: str | None = None,
@@ -453,8 +454,13 @@ def load_teacher_cache(
         manifest=manifest,
         expected_file_sha256=expected_sidecar_file_sha256,
     )
+    calibration_source = (
+        source / CALIBRATION_FILENAME
+        if calibration_path is None
+        else Path(calibration_path).expanduser().resolve(strict=True)
+    )
     calibration = load_teacher_calibration(
-        source / CALIBRATION_FILENAME,
+        calibration_source,
         expected_file_sha256=expected_calibration_file_sha256,
         expected_contract_sha256=expected_calibration_contract_sha256,
     )

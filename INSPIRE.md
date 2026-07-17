@@ -7,11 +7,16 @@ repository.
 ## Default image and existing notebook
 
 - Notebook: `vlm-r3-h200x2-live-20260717`
+- Status verified on 2026-07-17: `RUNNING`; priority `10`; automatic stop disabled
 - Workspace: `分布式训练空间`
 - Project: `前沿课题探索`
+- Compute group: `开发区-H200-3号机房`
 - Node reported by the platform: `qb-prod-gpu2007`
 - Image: `ngc-pytorch:25.02-cuda12.8.0-py3`
 - Allocation: one node, 2 H200 GPUs, 40 CPUs, 400 GiB RAM, 128 GiB shared memory
+- Container observation: both H200s report `143771 MiB`; driver `570.124.06`
+- Internet preparation notebook: `vlm-r3-egress-cpu-live-20260717` in
+  `CPU资源空间` (`RUNNING`, 4 CPUs, 16 GiB RAM)
 
 The R3 runtime uses the NGC image's system PyTorch. It creates a Python 3.12
 overlay venv with `--system-site-packages`; pip is never allowed to resolve or
@@ -40,6 +45,21 @@ qb-ilm.me:cache/torch/                      Torch cache
 The concrete absolute paths are exported from a private copy of
 `configs/inspire.env.example`. Model and run directories must be project-scoped,
 absolute, and writable. Formal outputs never go to the container overlay.
+
+The currently verified project paths are:
+
+```text
+/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory
+/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502
+/inspire/ssd/project/exploration-topic/czxs26210936/data/vision-language-memory-r3/micro-v1
+/inspire/ssd/project/exploration-topic/czxs26210936/data/vision-language-memory-r3/teacher-cache/micro-v1
+/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r3
+/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory
+```
+
+The CPU and GPU notebooks see the project-shared paths. Git/Hugging Face egress
+is prepared on the CPU notebook; the H200 notebook consumes only the resulting
+fixed commit and immutable snapshots.
 
 ## Code and environment migration
 
@@ -133,9 +153,37 @@ rejects any preflight without `formal_ready=true`. It also rejects a changed
 commit, dirty worktree, preflight SHA mismatch, reused run directory, non-H200
 runtime, one-GPU visibility, incomplete model snapshot, or venv-local Torch.
 
-R3-S0, G4-L, G5-L, G6-L, and DL-S must be run serially and fail closed on this
-new H200 runtime. Historical A800 results do not satisfy these gates. No
-DreamLite pilot is launched until all required technical and micro gates pass.
+Before the replacement-commit formal preflight, create full SHA256 manifests
+for the already downloaded model snapshots (this hashes but does not rewrite
+weights):
+
+```bash
+$VLM_VENV_ROOT/bin/python scripts/inspire/model_snapshot_manifest.py create \
+  --model-root "$VLM_MODEL_ROOT" --lock "$PWD/models.lock.json"
+```
+
+The formal preflight verifies every model file (weights, configs, tokenizer,
+processor, and executable model code), rejects missing or unexpected files,
+and binds each manifest SHA to the immutable DAG. Stage workers reverify both
+snapshots at the beginning and end of every stage; strict training checkpoints
+also record the two manifest SHA values. The local Hugging Face download cache
+and repository-generated lock markers are intentionally outside the snapshot
+payload.
+
+R3-R0, R3-S0, G4-L, G5-L, G6-L, and DL-S must be run serially and fail closed on this
+new H200 runtime. Historical A800 results do not satisfy these gates. Set8 then
+uses one fixed-budget QA arm or the preregistered three-arm teacher attribution
+package. Transition16 requires fresh A, a passing A score, fresh B, and an exact
+replication report. No DreamLite pilot is launched until the same-regime Set8
+and Transition16 gates pass.
+
+Teacher-assisted runs have a second immutable preparation chain after DL-S:
+`R3-TC0 -> R3-TF0 -> T0 -> CAL-Set8 -> CAL-Transition16`. The existing teacher
+cache is read-only. Calibration files are generated under that preparation
+run's `results/` directory, and a final SHA256 index binds all cache checks,
+teacher validation, and both calibration artifacts. A teacher-assisted micro
+run accepts only this completed parent run; loose reports or calibration files
+are rejected. QA-only runs reject every teacher-preparation input.
 
 ## Ongoing jobs
 

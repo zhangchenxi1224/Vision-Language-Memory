@@ -28,6 +28,7 @@ from scripts.probes.qwen_scorer_contract import (  # noqa: E402
     run_scorer_contract,
     validate_choice_view_mappings,
 )
+from vision_memory.reader import R3_QWEN_READER_RESIZE_CONTRACT  # noqa: E402
 
 
 class CharacterTokenizer:
@@ -167,6 +168,10 @@ class QwenScorerContractProbeTest(unittest.TestCase):
         )
 
         self.assertTrue(passed["passed"])
+        self.assertEqual(
+            passed["contract"]["reader_resize_contract"],
+            R3_QWEN_READER_RESIZE_CONTRACT,
+        )
         self.assertEqual(passed["summary"]["views_passed"], 8)
         self.assertEqual(passed["summary"]["joint_tokenization_views_passed"], 8)
         self.assertEqual(passed["summary"]["train_eval_views_passed"], 8)

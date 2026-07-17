@@ -14,6 +14,7 @@ import math
 from collections.abc import Mapping
 from typing import Any
 
+from .r3_micro import validate_r3_micro_artifact_provenance
 from .teacher_retrieval import TEACHER_RETRIEVAL_SCHEMA, compare_retrieval_retention
 
 
@@ -301,39 +302,10 @@ def _validate_qa_gate(
         field=f"{prefix}.scientific_payload_sha256",
     )
     provenance = _mapping(payload.pop("artifact_provenance", None), field=f"{prefix}.artifact_provenance")
-    if provenance.get("schema") != "vlm.r3.micro_artifact_provenance.v1":
-        raise ValueError(f"{prefix} has an unsupported artifact provenance schema.")
-    expected_provenance_fields = {
-        "schema",
-        "predictions_sha256",
-        "prediction_report_sha256",
-        "checkpoint_path",
-        "checkpoint_sha256",
-        "training_regime",
-        "parent_checkpoint_regime",
-        "objective_stage",
-        "reader_loss_mode",
-        "choice_permutation_family_sha256",
-        "eval_choice_permutation_family_sha256",
-        "teacher_control",
-        "teacher_control_sha256",
-        "teacher_manifest_sha256",
-        "teacher_sidecar_sha256",
-        "teacher_calibration_sha256",
-        "presentations_per_state",
-        "distill_presentations",
-        "qa_presentations",
-    }
-    if set(provenance) != expected_provenance_fields:
-        raise ValueError(f"{prefix} artifact provenance has missing or unexpected fields.")
-    _sha256(provenance.get("predictions_sha256"), field=f"{prefix}.artifact_provenance.predictions_sha256")
-    _sha256(
-        provenance.get("prediction_report_sha256"),
-        field=f"{prefix}.artifact_provenance.prediction_report_sha256",
-    )
-    checkpoint_path = provenance.get("checkpoint_path")
-    if not isinstance(checkpoint_path, str) or not checkpoint_path:
-        raise ValueError(f"{prefix}.artifact_provenance.checkpoint_path must be non-empty.")
+    try:
+        validate_r3_micro_artifact_provenance(provenance, suite="set8")
+    except ValueError as exc:
+        raise ValueError(f"{prefix} has invalid artifact provenance: {exc}") from exc
     if _canonical_sha256(payload) != reported_payload_sha:
         raise ValueError(f"{prefix} scientific payload SHA256 mismatch.")
     lineage = qa_retrieval["lineage"]

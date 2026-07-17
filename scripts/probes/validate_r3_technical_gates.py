@@ -6,9 +6,21 @@ import json
 import math
 import os
 import re
+import sys
 from collections.abc import Mapping, Sequence
-from pathlib import Path
+from pathlib import Path, PureWindowsPath
 from typing import Any
+
+
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "src"))
+
+from vision_memory.reader import (  # noqa: E402
+    R3_QWEN_READER_GRID_THW,
+    R3_QWEN_READER_INPUT_HW,
+    R3_QWEN_READER_PIXEL_VALUES_SHAPE,
+    R3_QWEN_READER_RESIZE_CONTRACT,
+)
 
 
 FIXTURE_RGB_SHA256 = "c44093f3ad73d6a3d62b5bf9b8ad226f65e65afd7841d5ef3ed80bc7d14a841a"
@@ -38,9 +50,39 @@ GATE_PROTOCOLS: dict[str, dict[str, Any]] = {
     },
 }
 
-GATE_ORDER = ("G4-L", "G5-L", "G6-L", "DL-S")
+RESIZE_CONTRACT_GATE = "R3-R0"
+SCORER_CONTRACT_GATE = "R3-S0"
+GATE_ORDER = (RESIZE_CONTRACT_GATE, "G4-L", "G5-L", "G6-L", "DL-S")
 _HEX_40 = re.compile(r"^[0-9a-f]{40}$")
 _HEX_64 = re.compile(r"^[0-9a-f]{64}$")
+
+_STRICT_DETERMINISM_ENV = {
+    "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+    "MKL_NUM_THREADS": "1",
+    "OMP_NUM_THREADS": "1",
+    "PYTHONHASHSEED": "0",
+    "TOKENIZERS_PARALLELISM": "false",
+}
+_R3_R0_RUNTIME = {
+    "torch": "2.7.0a0+ecf3bae40a.nv25.02",
+    "cuda_runtime": "12.8",
+    "torchvision": "0.22.0a0",
+    "transformers": "4.57.3",
+    "device_name": "NVIDIA H200",
+}
+_LEGACY_NATIVE_THRESHOLDS = {
+    "float32": {"candidate_relative_l2_max": 1e-5, "candidate_cosine_min": 0.999999},
+    "bfloat16": {"candidate_relative_l2_max": 1e-2, "candidate_cosine_min": 0.9999},
+}
+_DL_S_RUNTIME = {
+    "python": "3.12.3",
+    "torch": "2.7.0a0+ecf3bae40a.nv25.02",
+    "torchvision": "0.22.0a0",
+    "cuda_runtime": "12.8",
+    "diffusers": "0.39.0",
+    "transformers": "4.57.3",
+    "peft": "0.18.1",
+}
 
 
 def _atomic_json(path: Path, payload: Mapping[str, Any]) -> None:
@@ -88,7 +130,7 @@ def _require_equal(actual: Any, expected: Any, *, label: str) -> None:
         raise ValueError(f"{label} must be {expected!r}, found {actual!r}.")
 
 
-def _validate_provenance(report: Mapping[str, Any]) -> None:
+def _validate_provenance(report: Mapping[str, Any]) -> dict[str, str]:
     provenance = report.get("provenance")
     if not isinstance(provenance, Mapping):
         raise ValueError("Probe report is missing provenance.")
@@ -99,10 +141,20 @@ def _validate_provenance(report: Mapping[str, Any]) -> None:
     if not isinstance(commit, str) or _HEX_40.fullmatch(commit) is None:
         raise ValueError("Probe provenance must contain a full 40-character git commit.")
     _require_equal(git.get("clean"), True, label="provenance.git.clean")
+    runtime = provenance.get("runtime")
+    if not isinstance(runtime, Mapping):
+        raise ValueError("Probe provenance is missing runtime metadata.")
+    _require_equal(
+        runtime.get("torch"),
+        "2.7.0a0+ecf3bae40a.nv25.02",
+        label="provenance.runtime.torch",
+    )
+    _require_equal(runtime.get("cuda_runtime"), "12.8", label="provenance.runtime.cuda_runtime")
 
     models = provenance.get("models")
     if not isinstance(models, Mapping):
         raise ValueError("Probe provenance is missing model metadata.")
+    revisions: dict[str, str] = {}
     for model_name in ("dreamlite", "reader"):
         model = models.get(model_name)
         if not isinstance(model, Mapping):
@@ -112,6 +164,530 @@ def _validate_provenance(report: Mapping[str, Any]) -> None:
             True,
             label=f"provenance.models.{model_name}.revision_matches_lock",
         )
+        expected_revision = model.get("expected_revision")
+        observed_revision = model.get("observed_revision")
+        if (
+            not isinstance(expected_revision, str)
+            or _HEX_40.fullmatch(expected_revision) is None
+            or not isinstance(observed_revision, str)
+            or _HEX_40.fullmatch(observed_revision) is None
+        ):
+            raise ValueError(
+                f"Probe provenance must record full expected and observed {model_name} revisions."
+            )
+        _require_equal(
+            observed_revision,
+            expected_revision,
+            label=f"provenance.models.{model_name}.observed_revision",
+        )
+        revisions[f"{model_name}_revision"] = observed_revision
+    return {"git_commit": commit, **revisions}
+
+
+def _validate_resize_provenance(report: Mapping[str, Any]) -> dict[str, str]:
+    provenance = report.get("provenance")
+    if not isinstance(provenance, Mapping):
+        raise ValueError("R3-R0 is missing provenance.")
+    git = provenance.get("git")
+    if not isinstance(git, Mapping):
+        raise ValueError("R3-R0 provenance is missing git metadata.")
+    commit = git.get("commit")
+    if not isinstance(commit, str) or _HEX_40.fullmatch(commit) is None:
+        raise ValueError("R3-R0 provenance must contain a full 40-character git commit.")
+    _require_equal(git.get("clean"), True, label="R3-R0.provenance.git.clean")
+
+    models = provenance.get("models")
+    reader = models.get("reader") if isinstance(models, Mapping) else None
+    if not isinstance(reader, Mapping):
+        raise ValueError("R3-R0 provenance is missing Reader model metadata.")
+    _require_equal(
+        reader.get("revision_matches_lock"),
+        True,
+        label="R3-R0.provenance.models.reader.revision_matches_lock",
+    )
+    expected_revision = reader.get("expected_revision")
+    observed_revision = reader.get("observed_revision")
+    if (
+        not isinstance(expected_revision, str)
+        or _HEX_40.fullmatch(expected_revision) is None
+        or not isinstance(observed_revision, str)
+        or _HEX_40.fullmatch(observed_revision) is None
+    ):
+        raise ValueError("R3-R0 Reader provenance must record full expected and observed revisions.")
+    _require_equal(
+        observed_revision,
+        expected_revision,
+        label="R3-R0.provenance.models.reader.observed_revision",
+    )
+    return {"git_commit": commit, "reader_revision": observed_revision}
+
+
+def _validate_strict_determinism(report: Mapping[str, Any], *, label: str = "R3-R0") -> None:
+    determinism = report.get("strict_determinism")
+    if not isinstance(determinism, Mapping):
+        raise ValueError(f"{label} is missing strict_determinism evidence.")
+    _require_equal(determinism.get("seed"), 0, label=f"{label}.strict_determinism.seed")
+    _require_equal(
+        determinism.get("environment"),
+        _STRICT_DETERMINISM_ENV,
+        label=f"{label}.strict_determinism.environment",
+    )
+    expected = {
+        "deterministic_algorithms": True,
+        "deterministic_warn_only": False,
+        "cudnn_benchmark": False,
+        "cudnn_deterministic": True,
+        "cuda_matmul_allow_tf32": False,
+        "cudnn_allow_tf32": False,
+        "float32_matmul_precision": "highest",
+        "sdpa": {"flash": False, "memory_efficient": False, "cudnn": False, "math": True},
+    }
+    for field, expected_value in expected.items():
+        _require_equal(
+            determinism.get(field),
+            expected_value,
+            label=f"{label}.strict_determinism.{field}",
+        )
+
+
+def validate_scorer_contract_report(report: Mapping[str, Any]) -> dict[str, Any]:
+    """Validate the real-Qwen R3-S0 scorer contract included in the final C0 aggregate."""
+
+    _require_equal(report.get("schema_version"), 1, label="R3-S0.schema_version")
+    _require_equal(report.get("probe"), "r3_s0_qwen_scorer_contract", label="R3-S0.probe")
+    _require_equal(report.get("passed"), True, label="R3-S0.passed")
+    contract = report.get("contract")
+    if not isinstance(contract, Mapping):
+        raise ValueError("R3-S0 is missing its scorer contract.")
+    _require_equal(contract.get("reader_loss_mode"), "listwise-choice", label="R3-S0.reader_loss_mode")
+    _require_equal(
+        contract.get("reader_resize_contract"),
+        R3_QWEN_READER_RESIZE_CONTRACT,
+        label="R3-S0.reader_resize_contract",
+    )
+    _require_equal(
+        report.get("summary"),
+        {
+            "views_passed": 8,
+            "views_required": 8,
+            "joint_tokenization_views_passed": 8,
+            "train_eval_views_passed": 8,
+            "repeat_eval_views_passed": 8,
+        },
+        label="R3-S0.summary",
+    )
+    _validate_strict_determinism(report, label="R3-S0")
+    provenance = report.get("provenance")
+    if not isinstance(provenance, Mapping):
+        raise ValueError("R3-S0 is missing provenance.")
+    git = provenance.get("git")
+    if not isinstance(git, Mapping):
+        raise ValueError("R3-S0 provenance is missing Git metadata.")
+    commit = git.get("commit")
+    if not isinstance(commit, str) or _HEX_40.fullmatch(commit) is None:
+        raise ValueError("R3-S0 provenance must contain a full Git commit.")
+    _require_equal(git.get("clean"), True, label="R3-S0.provenance.git.clean")
+    runtime = provenance.get("runtime")
+    if not isinstance(runtime, Mapping):
+        raise ValueError("R3-S0 provenance is missing runtime metadata.")
+    _require_equal(runtime.get("torch"), _R3_R0_RUNTIME["torch"], label="R3-S0.runtime.torch")
+    _require_equal(runtime.get("cuda_runtime"), _R3_R0_RUNTIME["cuda_runtime"], label="R3-S0.runtime.cuda")
+    models = provenance.get("models")
+    reader = models.get("reader") if isinstance(models, Mapping) else None
+    if not isinstance(reader, Mapping):
+        raise ValueError("R3-S0 provenance is missing Reader metadata.")
+    _require_equal(reader.get("revision_matches_lock"), True, label="R3-S0.reader.revision_matches_lock")
+    expected_revision = reader.get("expected_revision")
+    observed_revision = reader.get("observed_revision")
+    if not isinstance(expected_revision, str) or _HEX_40.fullmatch(expected_revision) is None:
+        raise ValueError("R3-S0 Reader revision lock is malformed.")
+    _require_equal(observed_revision, expected_revision, label="R3-S0.reader.observed_revision")
+    frozen = report.get("frozen_gradients")
+    frozen_reader = frozen.get("reader") if isinstance(frozen, Mapping) else None
+    if not isinstance(frozen_reader, Mapping):
+        raise ValueError("R3-S0 is missing frozen Reader gradient evidence.")
+    for field in ("trainable_parameter_tensors", "frozen_tensors_with_grad", "frozen_nonfinite_grad_elements"):
+        _require_equal(frozen_reader.get(field), 0, label=f"R3-S0.frozen_gradients.reader.{field}")
+    memory = report.get("cuda_peak_memory")
+    cuda0 = memory.get("cuda:0") if isinstance(memory, Mapping) else None
+    if not isinstance(cuda0, Mapping):
+        raise ValueError("R3-S0 is missing cuda:0 peak-memory evidence.")
+    _require_equal(cuda0.get("name"), "NVIDIA H200", label="R3-S0.cuda_peak_memory.cuda:0.name")
+    for field in ("peak_allocated_gib", "peak_reserved_gib"):
+        if _finite(cuda0.get(field), label=f"R3-S0.cuda_peak_memory.cuda:0.{field}") < 0:
+            raise ValueError(f"R3-S0.cuda_peak_memory.cuda:0.{field} cannot be negative.")
+    return {"valid": True, "git_commit": commit, "reader_revision": expected_revision}
+
+
+def _validate_r3_r0_runtime(report: Mapping[str, Any]) -> None:
+    runtime = report.get("runtime")
+    if not isinstance(runtime, Mapping):
+        raise ValueError("R3-R0 is missing its locked Inspire H200 runtime.")
+    packages = runtime.get("packages")
+    if not isinstance(packages, Mapping):
+        raise ValueError("R3-R0.runtime.packages is missing.")
+    observed = {
+        "torch": runtime.get("torch"),
+        "cuda_runtime": runtime.get("cuda_runtime"),
+        "torchvision": packages.get("torchvision"),
+        "transformers": packages.get("transformers"),
+        "device_name": runtime.get("device_name"),
+    }
+    _require_equal(observed, _R3_R0_RUNTIME, label="R3-R0.runtime.lock")
+    total_memory = runtime.get("device_total_memory_bytes")
+    if not isinstance(total_memory, int) or total_memory < 140_000 * 1024**2:
+        raise ValueError("R3-R0.runtime must expose at least 140000 MiB on the locked H200.")
+
+
+def _validate_r3_r0_execution_binding(report: Mapping[str, Any], *, git_commit: str) -> dict[str, str]:
+    binding = report.get("execution_binding")
+    if not isinstance(binding, Mapping):
+        raise ValueError("R3-R0 is missing its Inspire worker/preflight execution binding.")
+    for field, expected in {
+        "passed": True,
+        "stage": "r3-r0",
+        "infrastructure_stage": False,
+        "git_commit": git_commit,
+    }.items():
+        _require_equal(binding.get(field), expected, label=f"R3-R0.execution_binding.{field}")
+    result: dict[str, str] = {}
+    for field in ("worker_input_sha256", "formal_preflight_sha256"):
+        digest = binding.get(field)
+        if not isinstance(digest, str) or _HEX_64.fullmatch(digest) is None:
+            raise ValueError(f"R3-R0.execution_binding.{field} must be a SHA256 digest.")
+        result[field] = digest
+    for field in ("worker_input_path", "formal_preflight_path"):
+        value = binding.get(field)
+        if not isinstance(value, str) or not (value.startswith("/") or PureWindowsPath(value).is_absolute()):
+            raise ValueError(f"R3-R0.execution_binding.{field} must be an absolute path.")
+    return result
+
+
+def _validate_tensor_summary(
+    summary: Any,
+    *,
+    label: str,
+    shape: Sequence[int],
+    dtype: str | None = None,
+) -> None:
+    if not isinstance(summary, Mapping):
+        raise ValueError(f"{label} must be a tensor summary.")
+    _require_equal(summary.get("shape"), list(shape), label=f"{label}.shape")
+    if dtype is not None:
+        _require_equal(summary.get("dtype"), dtype, label=f"{label}.dtype")
+    _require_equal(summary.get("finite"), True, label=f"{label}.finite")
+    digest = summary.get("sha256")
+    if not isinstance(digest, str) or _HEX_64.fullmatch(digest) is None:
+        raise ValueError(f"{label}.sha256 must be a SHA256 digest.")
+
+
+def validate_resize_contract_report(report: Mapping[str, Any]) -> dict[str, Any]:
+    """Validate the independent deterministic Qwen resize forward/backward gate."""
+
+    _require_equal(report.get("schema_version"), 2, label="R3-R0.schema_version")
+    _require_equal(
+        report.get("probe"),
+        "r3_qwen_resize_forward_backward_contract",
+        label="R3-R0.probe",
+    )
+    _require_equal(report.get("passed"), True, label="R3-R0.passed")
+    _require_equal(
+        report.get("resize_contract"),
+        R3_QWEN_READER_RESIZE_CONTRACT,
+        label="R3-R0.resize_contract",
+    )
+    _require_equal(report.get("seed"), 0, label="R3-R0.seed")
+    _require_equal(report.get("device"), "cuda:0", label="R3-R0.device")
+
+    processor = report.get("processor")
+    if not isinstance(processor, Mapping):
+        raise ValueError("R3-R0 is missing the real fast-processor audit.")
+    _require_equal(processor.get("passed"), True, label="R3-R0.processor.passed")
+    checks = processor.get("checks")
+    expected_processor_checks = {
+        "fast_tensor_processor",
+        "resize_enabled_by_default",
+        "min_pixels_locked",
+        "max_pixels_locked",
+        "patch_size_locked",
+        "temporal_patch_size_locked",
+        "merge_size_locked",
+        "bicubic_resample_locked",
+        "callable",
+    }
+    if not isinstance(checks, Mapping) or set(checks) != expected_processor_checks:
+        raise ValueError("R3-R0 processor audit has missing or unexpected checks.")
+    if not all(value is True for value in checks.values()):
+        raise ValueError("R3-R0 processor audit did not pass every locked check.")
+    observed_processor = processor.get("observed")
+    if not isinstance(observed_processor, Mapping):
+        raise ValueError("R3-R0 processor audit is missing observed values.")
+    for field, expected in {
+        "class": "Qwen2VLImageProcessorFast",
+        "do_resize": True,
+        "min_pixels": 65536,
+        "max_pixels": 65536,
+        "shortest_edge": 65536,
+        "longest_edge": 16777216,
+        "patch_size": 16,
+        "temporal_patch_size": 2,
+        "merge_size": 2,
+        "resample_value": 3,
+    }.items():
+        _require_equal(
+            observed_processor.get(field),
+            expected,
+            label=f"R3-R0.processor.observed.{field}",
+        )
+
+    dtypes = report.get("dtypes")
+    if not isinstance(dtypes, Mapping) or set(dtypes) != {"float32", "bfloat16"}:
+        raise ValueError("R3-R0 must contain exactly float32 and bfloat16 evidence.")
+    for dtype_name, tensor_dtype in (
+        ("float32", "torch.float32"),
+        ("bfloat16", "torch.bfloat16"),
+    ):
+        dtype_report = dtypes.get(dtype_name)
+        if not isinstance(dtype_report, Mapping):
+            raise ValueError(f"R3-R0.dtypes.{dtype_name} must be an object.")
+        _require_equal(dtype_report.get("passed"), True, label=f"R3-R0.dtypes.{dtype_name}.passed")
+
+        forward = dtype_report.get("forward_equivalence")
+        if not isinstance(forward, Mapping):
+            raise ValueError(f"R3-R0.dtypes.{dtype_name} is missing forward equivalence.")
+        prefix = f"R3-R0.dtypes.{dtype_name}.forward_equivalence"
+        _require_equal(forward.get("passed"), True, label=f"{prefix}.passed")
+        _require_equal(
+            forward.get("pixel_values_torch_equal"),
+            True,
+            label=f"{prefix}.pixel_values_torch_equal",
+        )
+        _require_equal(
+            forward.get("pixel_values_max_absolute_difference"),
+            0.0,
+            label=f"{prefix}.pixel_values_max_absolute_difference",
+        )
+        _require_equal(forward.get("pixel_values_shape_locked"), True, label=f"{prefix}.pixel_values_shape_locked")
+        _require_equal(
+            forward.get("expected_pixel_values_shape"),
+            list(R3_QWEN_READER_PIXEL_VALUES_SHAPE),
+            label=f"{prefix}.expected_pixel_values_shape",
+        )
+        _require_equal(
+            forward.get("legacy_grid_thw"),
+            list(R3_QWEN_READER_GRID_THW),
+            label=f"{prefix}.legacy_grid_thw",
+        )
+        _require_equal(
+            forward.get("candidate_grid_thw"),
+            list(R3_QWEN_READER_GRID_THW),
+            label=f"{prefix}.candidate_grid_thw",
+        )
+        _require_equal(forward.get("grid_torch_equal_and_locked"), True, label=f"{prefix}.grid_torch_equal_and_locked")
+        _validate_tensor_summary(
+            forward.get("input"),
+            label=f"{prefix}.input",
+            shape=(3, *R3_QWEN_READER_INPUT_HW),
+            dtype=tensor_dtype,
+        )
+        _validate_tensor_summary(
+            forward.get("resized"),
+            label=f"{prefix}.resized",
+            shape=(3, 256, 256),
+            dtype=tensor_dtype,
+        )
+        for path in ("legacy_pixel_values", "candidate_pixel_values"):
+            _validate_tensor_summary(
+                forward.get(path),
+                label=f"{prefix}.{path}",
+                shape=R3_QWEN_READER_PIXEL_VALUES_SHAPE,
+            )
+        legacy_summary = forward["legacy_pixel_values"]
+        candidate_summary = forward["candidate_pixel_values"]
+        _require_equal(
+            candidate_summary.get("sha256"),
+            legacy_summary.get("sha256"),
+            label=f"{prefix}.candidate_pixel_values.sha256",
+        )
+
+        backward = dtype_report.get("strict_backward_repeat")
+        if not isinstance(backward, Mapping):
+            raise ValueError(f"R3-R0.dtypes.{dtype_name} is missing strict backward evidence.")
+        backward_prefix = f"R3-R0.dtypes.{dtype_name}.strict_backward_repeat"
+        for field in (
+            "passed",
+            "gradient_finite",
+            "gradient_nonzero",
+            "gradient_torch_equal",
+            "loss_bitwise_equal",
+        ):
+            _require_equal(backward.get(field), True, label=f"{backward_prefix}.{field}")
+        _require_equal(
+            backward.get("gradient_max_absolute_difference"),
+            0.0,
+            label=f"{backward_prefix}.gradient_max_absolute_difference",
+        )
+        first = backward.get("first")
+        second = backward.get("second")
+        if not isinstance(first, Mapping) or not isinstance(second, Mapping):
+            raise ValueError(f"{backward_prefix} must contain both repeated runs.")
+        for run_name, run in (("first", first), ("second", second)):
+            _validate_tensor_summary(
+                run.get("gradient"),
+                label=f"{backward_prefix}.{run_name}.gradient",
+                shape=(3, *R3_QWEN_READER_INPUT_HW),
+                dtype=tensor_dtype,
+            )
+            _positive(run.get("gradient_norm"), label=f"{backward_prefix}.{run_name}.gradient_norm")
+            _positive(run.get("loss"), label=f"{backward_prefix}.{run_name}.loss")
+            if not isinstance(run.get("loss_float_hex"), str):
+                raise ValueError(f"{backward_prefix}.{run_name}.loss_float_hex must be a string.")
+            digest = run.get("pixel_values_sha256")
+            if not isinstance(digest, str) or _HEX_64.fullmatch(digest) is None:
+                raise ValueError(f"{backward_prefix}.{run_name}.pixel_values_sha256 must be a SHA256 digest.")
+        _require_equal(
+            second["gradient"].get("sha256"),
+            first["gradient"].get("sha256"),
+            label=f"{backward_prefix}.second.gradient.sha256",
+        )
+        _require_equal(second.get("loss_float_hex"), first.get("loss_float_hex"), label=f"{backward_prefix}.loss")
+        _require_equal(
+            second.get("pixel_values_sha256"),
+            first.get("pixel_values_sha256"),
+            label=f"{backward_prefix}.pixel_values_sha256",
+        )
+
+        adjoint = dtype_report.get("cpu_adjoint_reference")
+        if not isinstance(adjoint, Mapping):
+            raise ValueError(f"R3-R0.dtypes.{dtype_name} is missing CPU adjoint reference evidence.")
+        adjoint_prefix = f"R3-R0.dtypes.{dtype_name}.cpu_adjoint_reference"
+        _require_equal(adjoint.get("passed"), True, label=f"{adjoint_prefix}.passed")
+        _require_equal(
+            adjoint.get("reference"),
+            "native-torchvision-cpu-fp32-autograd",
+            label=f"{adjoint_prefix}.reference",
+        )
+        for field in ("gradient_finite", "gradient_nonzero", "gradient_torch_equal"):
+            _require_equal(adjoint.get(field), True, label=f"{adjoint_prefix}.{field}")
+        _require_equal(
+            adjoint.get("gradient_max_absolute_difference"),
+            0.0,
+            label=f"{adjoint_prefix}.gradient_max_absolute_difference",
+        )
+        _positive(adjoint.get("candidate_gradient_norm"), label=f"{adjoint_prefix}.candidate_gradient_norm")
+        _positive(adjoint.get("reference_gradient_norm"), label=f"{adjoint_prefix}.reference_gradient_norm")
+        _validate_tensor_summary(
+            adjoint.get("output_gradient"),
+            label=f"{adjoint_prefix}.output_gradient",
+            shape=(3, 256, 256),
+            dtype=tensor_dtype,
+        )
+        for path in ("candidate_gradient", "reference_gradient"):
+            _validate_tensor_summary(
+                adjoint.get(path),
+                label=f"{adjoint_prefix}.{path}",
+                shape=(3, *R3_QWEN_READER_INPUT_HW),
+                dtype=tensor_dtype,
+            )
+        _require_equal(
+            adjoint["candidate_gradient"].get("sha256"),
+            adjoint["reference_gradient"].get("sha256"),
+            label=f"{adjoint_prefix}.gradient.sha256",
+        )
+
+        legacy = dtype_report.get("legacy_native_cuda_reference")
+        if not isinstance(legacy, Mapping):
+            raise ValueError(f"R3-R0.dtypes.{dtype_name} is missing legacy native CUDA evidence.")
+        legacy_prefix = f"R3-R0.dtypes.{dtype_name}.legacy_native_cuda_reference"
+        expected_thresholds = _LEGACY_NATIVE_THRESHOLDS[dtype_name]
+        for field, expected in {
+            "passed": True,
+            "replicas": 3,
+            "reference_only": True,
+            "no_optimizer": True,
+            "no_scientific_metric": True,
+            "candidate_strict_determinism": True,
+            "native_reference_determinism_disabled": True,
+            "determinism_restored": True,
+            "all_gradients_finite_nonzero": True,
+            "thresholds": expected_thresholds,
+        }.items():
+            _require_equal(legacy.get(field), expected, label=f"{legacy_prefix}.{field}")
+        relative_l2 = _finite(
+            legacy.get("candidate_relative_l2_max"),
+            label=f"{legacy_prefix}.candidate_relative_l2_max",
+        )
+        cosine = _finite(
+            legacy.get("candidate_cosine_min"),
+            label=f"{legacy_prefix}.candidate_cosine_min",
+        )
+        native_repeat = _finite(
+            legacy.get("native_repeat_relative_l2_max"),
+            label=f"{legacy_prefix}.native_repeat_relative_l2_max",
+        )
+        if relative_l2 < 0 or relative_l2 > expected_thresholds["candidate_relative_l2_max"]:
+            raise ValueError(f"{legacy_prefix}.candidate_relative_l2_max exceeded its locked threshold.")
+        if cosine < expected_thresholds["candidate_cosine_min"] or cosine > 1.0:
+            raise ValueError(f"{legacy_prefix}.candidate_cosine_min violated its locked threshold.")
+        if native_repeat < 0:
+            raise ValueError(f"{legacy_prefix}.native_repeat_relative_l2_max cannot be negative.")
+        candidate = legacy.get("candidate")
+        native_runs = legacy.get("native_runs")
+        if not isinstance(candidate, Mapping) or not isinstance(native_runs, list) or len(native_runs) != 3:
+            raise ValueError(f"{legacy_prefix} must contain one candidate and three native runs.")
+        _validate_tensor_summary(
+            candidate.get("gradient"),
+            label=f"{legacy_prefix}.candidate.gradient",
+            shape=(3, *R3_QWEN_READER_INPUT_HW),
+            dtype=tensor_dtype,
+        )
+        _positive(candidate.get("gradient_norm"), label=f"{legacy_prefix}.candidate.gradient_norm")
+        for index, run in enumerate(native_runs):
+            if not isinstance(run, Mapping):
+                raise ValueError(f"{legacy_prefix}.native_runs[{index}] must be an object.")
+            _require_equal(
+                run.get("determinism_restored"),
+                True,
+                label=f"{legacy_prefix}.native_runs[{index}].determinism_restored",
+            )
+            _validate_tensor_summary(
+                run.get("gradient"),
+                label=f"{legacy_prefix}.native_runs[{index}].gradient",
+                shape=(3, *R3_QWEN_READER_INPUT_HW),
+                dtype=tensor_dtype,
+            )
+            _positive(
+                run.get("gradient_norm"),
+                label=f"{legacy_prefix}.native_runs[{index}].gradient_norm",
+            )
+            run_relative = _finite(
+                run.get("candidate_relative_l2"),
+                label=f"{legacy_prefix}.native_runs[{index}].candidate_relative_l2",
+            )
+            run_cosine = _finite(
+                run.get("candidate_cosine"),
+                label=f"{legacy_prefix}.native_runs[{index}].candidate_cosine",
+            )
+            if run_relative < 0 or run_relative > expected_thresholds["candidate_relative_l2_max"]:
+                raise ValueError(f"{legacy_prefix}.native_runs[{index}] exceeded relative-L2 threshold.")
+            if run_cosine < expected_thresholds["candidate_cosine_min"] or run_cosine > 1.0:
+                raise ValueError(f"{legacy_prefix}.native_runs[{index}] violated cosine threshold.")
+
+    _validate_strict_determinism(report)
+    _validate_r3_r0_runtime(report)
+    identity = _validate_resize_provenance(report)
+    execution = _validate_r3_r0_execution_binding(report, git_commit=identity["git_commit"])
+    return {
+        "valid": True,
+        "resize_contract": R3_QWEN_READER_RESIZE_CONTRACT,
+        **identity,
+        **execution,
+        "dtypes": ["float32", "bfloat16"],
+        "forward_bitwise_equivalent": True,
+        "backward_bitwise_repeatable": True,
+        "cpu_adjoint_reference_exact": True,
+        "legacy_native_cuda_reference_within_locked_tolerance": True,
+    }
 
 
 def _validate_frozen_gradients(report: Mapping[str, Any]) -> None:
@@ -147,7 +723,12 @@ def _validate_memory_report(report: Mapping[str, Any]) -> None:
     for device in ("cuda:0", "cuda:1"):
         record = memory.get(device)
         if not isinstance(record, Mapping):
-            raise ValueError(f"cuda_peak_memory is missing {device}; both allocated A800s must be recorded.")
+            raise ValueError(f"cuda_peak_memory is missing {device}; both allocated H200s must be recorded.")
+        _require_equal(
+            record.get("name"),
+            "NVIDIA H200",
+            label=f"cuda_peak_memory.{device}.name",
+        )
         for field in ("peak_allocated_gib", "peak_reserved_gib"):
             value = _finite(record.get(field), label=f"cuda_peak_memory.{device}.{field}")
             if value < 0:
@@ -173,6 +754,11 @@ def validate_probe_report(report: Mapping[str, Any], gate: str) -> dict[str, Any
     _require_equal(report.get("reader_loss_mode"), "listwise-choice", label=f"{gate}.reader_loss_mode")
     _require_equal(report.get("updater_device"), "cuda:0", label=f"{gate}.updater_device")
     _require_equal(report.get("reader_device"), "cuda:1", label=f"{gate}.reader_device")
+    _require_equal(
+        report.get("reader_resize_contract"),
+        R3_QWEN_READER_RESIZE_CONTRACT,
+        label=f"{gate}.reader_resize_contract",
+    )
 
     metadata = report.get("pair_metadata")
     if not isinstance(metadata, Mapping):
@@ -198,6 +784,16 @@ def validate_probe_report(report: Mapping[str, Any], gate: str) -> dict[str, Any
     _require_equal(metadata.get("checkpoint_unet"), True, label=f"{gate}.pair_metadata.checkpoint_unet")
     _require_equal(metadata.get("dreamlite_device"), "cuda:0", label=f"{gate}.pair_metadata.dreamlite_device")
     _require_equal(metadata.get("reader_device"), "cuda:1", label=f"{gate}.pair_metadata.reader_device")
+    _require_equal(
+        metadata.get("reader_resize_contract"),
+        R3_QWEN_READER_RESIZE_CONTRACT,
+        label=f"{gate}.pair_metadata.reader_resize_contract",
+    )
+    _require_equal(
+        metadata.get("strict_determinism"),
+        report.get("strict_determinism"),
+        label=f"{gate}.pair_metadata.strict_determinism",
+    )
 
     source = metadata.get("source_image")
     if not isinstance(source, Mapping):
@@ -261,9 +857,11 @@ def validate_probe_report(report: Mapping[str, Any], gate: str) -> dict[str, Any
 
     _validate_frozen_gradients(report)
     _validate_memory_report(report)
-    _validate_provenance(report)
+    _validate_strict_determinism(report, label=gate)
+    identity = _validate_provenance(report)
     return {
         "valid": True,
+        **identity,
         "semantic_operations": list(protocol["semantic_operations"]),
         "event_count": len(events),
         "target_index": protocol["target_index"],
@@ -322,6 +920,23 @@ def validate_resume_report(report: Mapping[str, Any]) -> dict[str, Any]:
         label="DL-S.protocol",
     )
     _require_equal(report.get("passed"), True, label="DL-S.passed")
+    git_commit = report.get("git_commit")
+    if not isinstance(git_commit, str) or _HEX_40.fullmatch(git_commit) is None:
+        raise ValueError("DL-S.git_commit must bind the checkpoint manifest to one full Git commit.")
+    _require_equal(
+        report.get("reader_resize_contract"),
+        R3_QWEN_READER_RESIZE_CONTRACT,
+        label="DL-S.reader_resize_contract",
+    )
+    for field in ("dreamlite_revision", "reader_revision"):
+        value = report.get(field)
+        if not isinstance(value, str) or _HEX_40.fullmatch(value) is None:
+            raise ValueError(f"DL-S.{field} must be a full model revision.")
+    _require_equal(
+        report.get("runtime_environment"),
+        _DL_S_RUNTIME,
+        label="DL-S.runtime_environment",
+    )
     _require_equal(report.get("exact"), True, label="DL-S.exact")
     _require_equal(report.get("atol"), 0.0, label="DL-S.atol")
     _require_equal(report.get("rtol"), 0.0, label="DL-S.rtol")
@@ -394,6 +1009,10 @@ def validate_resume_report(report: Mapping[str, Any]) -> dict[str, Any]:
     return {
         "valid": True,
         "exact": True,
+        "git_commit": git_commit,
+        "dreamlite_revision": str(report["dreamlite_revision"]),
+        "reader_revision": str(report["reader_revision"]),
+        "reader_resize_contract": R3_QWEN_READER_RESIZE_CONTRACT,
         "presentations": dict(report["presentations"]),
     }
 
@@ -401,6 +1020,8 @@ def validate_resume_report(report: Mapping[str, Any]) -> dict[str, Any]:
 def validate_reports(
     *,
     through: str,
+    resize_contract: Mapping[str, Any] | None = None,
+    scorer_s0: Mapping[str, Any] | None = None,
     g4: Mapping[str, Any] | None = None,
     g5: Mapping[str, Any] | None = None,
     g6: Mapping[str, Any] | None = None,
@@ -411,10 +1032,33 @@ def validate_reports(
     if through not in GATE_ORDER:
         raise ValueError(f"Unknown through gate: {through}.")
     required = GATE_ORDER[: GATE_ORDER.index(through) + 1]
-    inputs = {"G4-L": g4, "G5-L": g5, "G6-L": g6, "DL-S": resume}
+    inputs = {
+        RESIZE_CONTRACT_GATE: resize_contract,
+        "G4-L": g4,
+        "G5-L": g5,
+        "G6-L": g6,
+        "DL-S": resume,
+    }
     checks: dict[str, Any] = {}
     errors: list[str] = []
     probe_commits: set[str] = set()
+    reader_revisions: set[str] = set()
+    dreamlite_revisions: set[str] = set()
+
+    if through == "DL-S":
+        if scorer_s0 is None:
+            errors.append("R3-S0: required report was not supplied.")
+        else:
+            try:
+                checks[SCORER_CONTRACT_GATE] = validate_scorer_contract_report(scorer_s0)
+                scorer_commit = checks[SCORER_CONTRACT_GATE].get("git_commit")
+                scorer_reader_revision = checks[SCORER_CONTRACT_GATE].get("reader_revision")
+                if isinstance(scorer_commit, str):
+                    probe_commits.add(scorer_commit)
+                if isinstance(scorer_reader_revision, str):
+                    reader_revisions.add(scorer_reader_revision)
+            except (KeyError, TypeError, ValueError) as exc:
+                errors.append(f"R3-S0: {exc}")
 
     for gate in required:
         report = inputs[gate]
@@ -422,13 +1066,21 @@ def validate_reports(
             errors.append(f"{gate}: required report was not supplied.")
             continue
         try:
-            checks[gate] = validate_resume_report(report) if gate == "DL-S" else validate_probe_report(report, gate)
-            if gate != "DL-S":
-                provenance = report.get("provenance")
-                git = provenance.get("git") if isinstance(provenance, Mapping) else None
-                commit = git.get("commit") if isinstance(git, Mapping) else None
-                if isinstance(commit, str):
-                    probe_commits.add(commit)
+            if gate == RESIZE_CONTRACT_GATE:
+                checks[gate] = validate_resize_contract_report(report)
+            elif gate == "DL-S":
+                checks[gate] = validate_resume_report(report)
+            else:
+                checks[gate] = validate_probe_report(report, gate)
+            commit = checks[gate].get("git_commit")
+            reader_revision = checks[gate].get("reader_revision")
+            dreamlite_revision = checks[gate].get("dreamlite_revision")
+            if isinstance(commit, str):
+                probe_commits.add(commit)
+            if isinstance(reader_revision, str):
+                reader_revisions.add(reader_revision)
+            if isinstance(dreamlite_revision, str):
+                dreamlite_revisions.add(dreamlite_revision)
         except (KeyError, TypeError, ValueError) as exc:
             errors.append(f"{gate}: {exc}")
 
@@ -440,25 +1092,36 @@ def validate_reports(
 
     if len(probe_commits) != 1:
         errors.append("technical probe reports do not share one clean Git commit")
+    if len(reader_revisions) != 1:
+        errors.append("technical probe reports do not share one locked Reader revision")
+    if any(gate in required for gate in ("G4-L", "G5-L", "G6-L", "DL-S")) and len(
+        dreamlite_revisions
+    ) != 1:
+        errors.append("technical probe reports do not share one locked DreamLite revision")
     git_commit = next(iter(probe_commits)) if len(probe_commits) == 1 else None
+    reported_required = list(required)
+    if through == "DL-S":
+        reported_required.insert(1, SCORER_CONTRACT_GATE)
     return {
-        "schema_version": 1,
-        "protocol": "R3-technical-listwise-v1",
+        "schema_version": 2,
+        "protocol": "R3-technical-listwise-resize-v2",
         "through": through,
-        "required_gates": list(required),
+        "required_gates": reported_required,
         "failure_policy": "fail-closed; gates are serial and downstream gates require prior success",
         "pair_atol": pair_atol,
         "pair_rtol": pair_rtol,
         "checks": checks,
         "git_commit": git_commit,
         "errors": errors,
-        "passed": not errors and all(gate in checks for gate in required),
+        "passed": not errors and all(gate in checks for gate in reported_required),
     }
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Fail-closed validation for R3 listwise technical gates")
     parser.add_argument("--through", choices=GATE_ORDER, required=True)
+    parser.add_argument("--resize-contract", type=Path, required=True)
+    parser.add_argument("--scorer-s0", type=Path)
     parser.add_argument("--g4", type=Path)
     parser.add_argument("--g5", type=Path)
     parser.add_argument("--g6", type=Path)
@@ -469,6 +1132,8 @@ def main() -> int:
     args = parser.parse_args()
 
     paths = {
+        "resize_contract": args.resize_contract,
+        "scorer_s0": args.scorer_s0,
         "g4": args.g4,
         "g5": args.g5,
         "g6": args.g6,
@@ -489,6 +1154,8 @@ def main() -> int:
     try:
         report = validate_reports(
             through=args.through,
+            resize_contract=loaded["resize_contract"],
+            scorer_s0=loaded["scorer_s0"],
             g4=loaded["g4"],
             g5=loaded["g5"],
             g6=loaded["g6"],
@@ -498,8 +1165,8 @@ def main() -> int:
         )
     except (TypeError, ValueError) as exc:
         report = {
-            "schema_version": 1,
-            "protocol": "R3-technical-listwise-v1",
+            "schema_version": 2,
+            "protocol": "R3-technical-listwise-resize-v2",
             "through": args.through,
             "checks": {},
             "errors": [str(exc)],

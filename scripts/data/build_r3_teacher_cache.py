@@ -17,7 +17,10 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from vision_memory.dreamlite import freeze_module  # noqa: E402
 from vision_memory.dreamlite.recurrent import DreamLiteRecurrentUpdater  # noqa: E402
-from vision_memory.reader import qwen3vl_query_free_visual_features  # noqa: E402
+from vision_memory.reader import (  # noqa: E402
+    R3_QWEN_READER_RESIZE_CONTRACT,
+    qwen3vl_query_free_visual_features,
+)
 from vision_memory.teacher import (  # noqa: E402
     FixedFontContract,
     FullStateCardRenderer,
@@ -183,6 +186,7 @@ def main() -> int:
             image=image.to(device=reader_device, dtype=dtype),
             device=reader_device,
             require_image_grad=False,
+            reader_resize_contract=R3_QWEN_READER_RESIZE_CONTRACT,
         ).features
 
     teachers = tuple(
@@ -252,6 +256,7 @@ def main() -> int:
         "font": {"path": "assets/fonts/DejaVuSans.ttf", "sha256": LOCKED_FONT_SHA256},
         "pillow_version": PILLOW_VERSION,
         "teacher_contract_sha256": contract.contract_sha256,
+        "reader_resize_contract": R3_QWEN_READER_RESIZE_CONTRACT,
         "renderer_contract_sha256": renderer.contract_sha256,
         "state_count": len(teachers),
         "transition_count": len(transitions),
