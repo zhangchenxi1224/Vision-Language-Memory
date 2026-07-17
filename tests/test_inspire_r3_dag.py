@@ -686,6 +686,7 @@ def test_initialization_materializes_only_r0_and_refuses_run_root_reuse(tmp_path
     run_root = context["run_root"]
     plan = load_json_object(run_root / "dag_plan.json")
     assert result["plan_sha256"] == sha256_file(run_root / "dag_plan.json")
+    assert (run_root / "stages").is_dir()
     assert (run_root / "authorizations" / "00-r3-r0.json").is_file()
     assert not (run_root / "authorizations" / "01-r3-s0.json").exists()
     launch = load_json_object(run_root / "launch_commands" / "00-r3-r0.json")
@@ -812,6 +813,7 @@ def test_teacher_preparation_materializes_strictly_one_stage_at_a_time(tmp_path:
     _, context = _teacher_preparation_fixture(tmp_path)
     run_root = context["teacher_run_root"]
     plan = load_json_object(run_root / "dag_plan.json")
+    assert (run_root / "stages").is_dir()
     assert (run_root / "authorizations" / "00-r3-tc0.json").is_file()
     assert not (run_root / "authorizations" / "01-r3-tf0.json").exists()
     with pytest.raises((ValueError, FileNotFoundError), match="terminal.json"):

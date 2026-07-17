@@ -974,6 +974,7 @@ def initialize_technical_dag(
     if run_root.exists():
         raise ValueError(f"Unique DAG run root already exists: {run_root}")
     run_root.mkdir(parents=True, exist_ok=False)
+    (run_root / "stages").mkdir(parents=False, exist_ok=False)
     plan_path, _ = _plan_paths(run_root)
     plan_sha256 = atomic_json(plan_path, plan)
     first = authorize_stage(run_root, stage=plan["strict_order"][0])
@@ -1624,6 +1625,7 @@ def initialize_teacher_preparation_dag(
     if teacher_run_root.exists():
         raise ValueError(f"Unique teacher-preparation run root already exists: {teacher_run_root}")
     teacher_run_root.mkdir(parents=True, exist_ok=False)
+    (teacher_run_root / "stages").mkdir(parents=False, exist_ok=False)
     plan_path, _ = _plan_paths(teacher_run_root)
     plan_sha256 = atomic_json(plan_path, plan)
     first = authorize_stage(teacher_run_root, stage=TEACHER_PREPARATION_ORDER[0])
@@ -2941,6 +2943,7 @@ def initialize_micro_extension(
     if micro_run_root.exists():
         raise ValueError(f"Unique micro run root already exists: {micro_run_root}")
     micro_run_root.mkdir(parents=True, exist_ok=False)
+    (micro_run_root / "stages").mkdir(parents=False, exist_ok=False)
     plan_path, _ = _plan_paths(micro_run_root)
     plan_sha256 = atomic_json(plan_path, plan)
     result = authorize_stage(micro_run_root, stage=stage)
