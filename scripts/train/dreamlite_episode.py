@@ -1319,7 +1319,10 @@ def main() -> int:
     optimizer_step = 0
     best_dev = float("inf")
     stale_evals = 0
+    resume_checkpoint_sha256: str | None = None
+    resume_start_optimizer_step = 0
     if args.resume:
+        resume_checkpoint_sha256 = sha256_file(args.resume)
         payload = load_training_checkpoint(
             args.resume,
             trainable_module=model,
@@ -1329,9 +1332,23 @@ def main() -> int:
         start_epoch = int(payload["epoch"])
         start_cursor = int(payload["episode_cursor"])
         optimizer_step = int(payload["optimizer_step"])
+        resume_start_optimizer_step = optimizer_step
         saved_trainer_state = payload.get("trainer_state", {})
         best_dev = float(saved_trainer_state.get("best_dev", float("inf")))
         stale_evals = int(saved_trainer_state.get("stale_evals", 0))
+        (args.output_dir / "resume_lineage.json").write_text(
+            json.dumps(
+                {
+                    "schema": "vision_memory.dreamlite-resume-lineage.v1",
+                    "resume_checkpoint_sha256": resume_checkpoint_sha256,
+                    "resume_start_optimizer_step": resume_start_optimizer_step,
+                },
+                indent=2,
+                sort_keys=True,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
     if args.max_optimizer_steps is not None and optimizer_step >= args.max_optimizer_steps:
         raise RuntimeError("Resume checkpoint already reached or exceeded --max-optimizer-steps.")
 
@@ -1750,6 +1767,8 @@ def main() -> int:
         "trainable_parameters": sum(parameter.numel() for parameter in trainable),
         "distill_diagnostics": distill_diagnostics,
         "strict_determinism": determinism_report,
+        "resume_checkpoint_sha256": resume_checkpoint_sha256,
+        "resume_start_optimizer_step": resume_start_optimizer_step,
     }
     (args.output_dir / "summary.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
     print(json.dumps(summary, indent=2))

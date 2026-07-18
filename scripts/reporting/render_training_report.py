@@ -38,6 +38,7 @@ KNOWN_SOURCE_FILES = (
     "metrics.jsonl",
     "state_gradient_audit.json",
     "distill_diagnostics.json",
+    "resume_lineage.json",
     "curriculum.json",
     "environment.txt",
 )
@@ -206,9 +207,9 @@ def plot_loss_components(rows: Sequence[Mapping[str, Any]], path: Path, *, ema_s
     keys = (
         ("qa_loss", "QA"),
         ("state_supervision_loss", "distill composite"),
-        ("latent_distill_loss", "latent"),
-        ("image_distill_loss", "image"),
-        ("visual_feature_distill_loss", "visual feature"),
+        ("latent_distill_loss", "raw latent"),
+        ("image_distill_loss", "raw image"),
+        ("visual_feature_distill_loss", "raw visual feature"),
     )
     plotted = False
     for key, label in keys:
@@ -269,7 +270,7 @@ def plot_learning_rate(rows: Sequence[Mapping[str, Any]], path: Path, *, learnin
         empty_axis(ax, "Learning rate or optimizer steps unavailable")
     else:
         ax.plot(steps, [learning_rate] * len(steps))
-        ax.set(title="Learning-rate schedule", xlabel="optimizer step", ylabel="learning rate")
+        ax.set(title="Manifest-configured constant learning rate", xlabel="optimizer step", ylabel="learning rate")
         ax.ticklabel_format(axis="y", style="sci", scilimits=(0, 0))
     save_figure(fig, path)
 
@@ -345,7 +346,13 @@ def write_metrics_csv(path: Path, rows: Sequence[Mapping[str, Any]]) -> None:
             writer.writerow({key: json_cell(row.get(key)) for key in fields})
 
 
-def copy_source(path: Path | None, destination: Path, label: str) -> dict[str, Any] | None:
+def copy_source(
+    path: Path | None,
+    destination: Path,
+    label: str,
+    *,
+    report_root: Path,
+) -> dict[str, Any] | None:
     if path is None or not path.is_file():
         return None
     destination.parent.mkdir(parents=True, exist_ok=True)
@@ -353,7 +360,7 @@ def copy_source(path: Path | None, destination: Path, label: str) -> dict[str, A
     return {
         "label": label,
         "source_path": str(path.resolve()),
-        "copied_path": destination.as_posix(),
+        "copied_path": destination.relative_to(report_root).as_posix(),
         "bytes": path.stat().st_size,
         "sha256": sha256_file(path),
     }
@@ -385,6 +392,19 @@ def tail_text(path: Path | None, *, lines: int = 80) -> str:
     return "\n".join(content[-lines:])
 
 
+def terminal_bound_evidence_sha256(stdout_path: Path) -> str | None:
+    """Read the final stage report emitted into the terminal-hashed stdout stream."""
+
+    for line in reversed(stdout_path.read_text(encoding="utf-8", errors="replace").splitlines()):
+        try:
+            value = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if isinstance(value, Mapping) and valid_sha256(value.get("evidence_sha256")):
+            return str(value["evidence_sha256"])
+    return None
+
+
 def report_status(terminal: Mapping[str, Any] | None, summary: Mapping[str, Any] | None) -> tuple[str, bool | None]:
     if terminal is not None:
         passed = terminal.get("passed")
@@ -394,15 +414,30 @@ def report_status(terminal: Mapping[str, Any] | None, summary: Mapping[str, Any]
     return "incomplete-or-failed-before-summary", False
 
 
+def normalized_stage(value: Any) -> str:
+    return str(value).strip().lower().replace("_", "-")
+
+
+def valid_sha256(value: Any) -> bool:
+    return isinstance(value, str) and len(value) == 64 and all(character in "0123456789abcdef" for character in value)
+
+
 def validate_complete_training_inputs(
     *,
     manifest: Mapping[str, Any] | None,
     summary: Mapping[str, Any] | None,
     terminal: Mapping[str, Any] | None,
+    stage_evidence: Mapping[str, Any] | None,
+    stage_evidence_path: Path | None,
     metrics: Sequence[Mapping[str, Any]],
+    evaluations: Sequence[tuple[Path, Mapping[str, Any] | None]],
+    training_dir: Path,
     stage: str,
+    launcher_stage: str | None,
     stdout_path: Path | None,
     stderr_path: Path | None,
+    state_gradient_audit: Mapping[str, Any] | None,
+    resume_lineage: Mapping[str, Any] | None,
 ) -> None:
     if manifest is None or summary is None:
         raise ValueError("A strict completed-training report requires manifest.json and summary.json")
@@ -414,6 +449,8 @@ def validate_complete_training_inputs(
         raise ValueError("Training summary has an unsupported or missing schema")
     if terminal is None or terminal.get("passed") is not True or terminal.get("exit_code") != 0:
         raise ValueError("A strict completed-training report requires a successful terminal")
+    if stage_evidence is None or stage_evidence.get("passed") is not True:
+        raise ValueError("A strict completed-training report requires passing stage evidence")
     if manifest.get("git_dirty") is not False:
         raise ValueError("A strict completed-training report requires git_dirty=false")
     commit = manifest.get("git_commit")
@@ -425,9 +462,15 @@ def validate_complete_training_inputs(
         raise ValueError("Training manifest git_commit must be a lowercase 40-character SHA1")
     if terminal.get("expected_commit") != commit:
         raise ValueError("Stage terminal expected_commit differs from the training manifest")
-    normalize_stage = lambda value: str(value).strip().lower().replace("_", "-")  # noqa: E731
-    if normalize_stage(terminal.get("stage")) != normalize_stage(stage):
+    expected_launcher_stage = launcher_stage or stage
+    if normalized_stage(terminal.get("stage")) != normalized_stage(expected_launcher_stage):
         raise ValueError("Stage terminal stage differs from the requested report stage")
+    if normalized_stage(stage_evidence.get("launcher_stage")) != normalized_stage(expected_launcher_stage):
+        raise ValueError("Stage evidence launcher_stage differs from the requested launcher stage")
+    if stage_evidence.get("expected_commit") != commit:
+        raise ValueError("Stage evidence expected_commit differs from the training manifest")
+    if stage_evidence.get("configuration_sha256") != terminal.get("configuration_sha256"):
+        raise ValueError("Stage evidence and terminal configuration SHA256 differ")
     for label, path in (("stdout", stdout_path), ("stderr", stderr_path)):
         expected = terminal.get(f"{label}_sha256")
         if not isinstance(expected, str) or len(expected) != 64:
@@ -436,6 +479,34 @@ def validate_complete_training_inputs(
             raise ValueError(f"A strict completed-training report requires the terminal-bound {label} log")
         if sha256_file(path) != expected:
             raise ValueError(f"Supplied {label} log does not match the stage terminal SHA256")
+    if stage_evidence_path is None or not stage_evidence_path.is_file() or stdout_path is None:
+        raise ValueError("Strict reporting requires the stage evidence file and terminal-bound stdout")
+    bound_evidence_sha256 = terminal_bound_evidence_sha256(stdout_path)
+    if bound_evidence_sha256 is None or sha256_file(stage_evidence_path) != bound_evidence_sha256:
+        raise ValueError("Stage evidence does not match the evidence SHA256 bound by terminal stdout")
+    outputs = stage_evidence.get("outputs")
+    if not isinstance(outputs, list):
+        raise ValueError("Stage evidence outputs are missing")
+    output_hashes = {
+        output.get("sha256") for output in outputs if isinstance(output, Mapping) and valid_sha256(output.get("sha256"))
+    }
+    required_evidence_files = [
+        training_dir / "manifest.json",
+        training_dir / "metrics.jsonl",
+        training_dir / "summary.json",
+    ]
+    if bool(nested_get(manifest, "state_gradient_audit_contract", "enabled", default=False)):
+        required_evidence_files.append(training_dir / "state_gradient_audit.json")
+    if summary.get("resume_checkpoint_sha256") is not None:
+        required_evidence_files.append(training_dir / "resume_lineage.json")
+    for path in required_evidence_files:
+        if not path.is_file() or sha256_file(path) not in output_hashes:
+            raise ValueError(f"Stage evidence does not bind required training artifact: {path.name}")
+    for path, payload in evaluations:
+        if payload is None or not isinstance(payload.get("passed"), bool):
+            raise ValueError("Every strict scientific evaluation must declare boolean passed")
+        if sha256_file(path) not in output_hashes:
+            raise ValueError(f"Stage evidence does not bind scientific evaluation: {path.name}")
     if not metrics:
         raise ValueError("A strict completed-training report requires metrics rows")
     allowed_kinds = {"train", "dev", "resume"}
@@ -474,11 +545,19 @@ def validate_complete_training_inputs(
     arguments = manifest.get("arguments")
     if not isinstance(arguments, Mapping):
         raise ValueError("Training manifest arguments are missing")
+    lineage = manifest.get("training_lineage")
+    if not isinstance(lineage, Mapping):
+        raise ValueError("Training manifest lineage is missing")
+    for key in ("training_regime", "objective_stage", "reader_loss_mode", "choice_view_schedule"):
+        if lineage.get(key) != arguments.get(key):
+            raise ValueError(f"Training lineage {key} differs from the manifest arguments")
     for row in trains:
         if row.get("training_regime") != arguments.get("training_regime"):
             raise ValueError("Train metric training_regime differs from the manifest")
         if row.get("objective_stage") != arguments.get("objective_stage"):
             raise ValueError("Train metric objective_stage differs from the manifest")
+        if row.get("reader_loss_mode") != arguments.get("reader_loss_mode"):
+            raise ValueError("Train metric reader_loss_mode differs from the manifest")
         for required in ("loss", "gradient_norm"):
             if finite_number(row.get(required)) is None:
                 raise ValueError(f"Train metric is missing finite {required}")
@@ -493,10 +572,93 @@ def validate_complete_training_inputs(
             ):
                 if finite_number(row.get(required)) is None:
                     raise ValueError(f"Distillation train metric is missing finite {required}")
+        group_count = row.get("group_episode_count")
+        if not isinstance(group_count, int) or isinstance(group_count, bool) or group_count <= 0:
+            raise ValueError("Train metric group_episode_count must be a positive integer")
+        rotations = row.get("choice_rotation_counts")
+        if (
+            not isinstance(rotations, list)
+            or len(rotations) != 4
+            or any(not isinstance(value, int) or isinstance(value, bool) or value < 0 for value in rotations)
+            or sum(rotations) != group_count
+        ):
+            raise ValueError("Train metric choice_rotation_counts must be four counts summing to its group size")
+    elapsed_values = [finite_number(row.get("elapsed_seconds")) for row in trains]
+    if any(value is None or value <= 0 for value in elapsed_values):
+        raise ValueError("Train elapsed_seconds values must be finite and positive")
+    elapsed = [float(value) for value in elapsed_values if value is not None]
+    if elapsed != sorted(elapsed) or len(set(elapsed)) != len(elapsed):
+        raise ValueError("Train elapsed_seconds values must be strictly increasing")
     if summary.get("training_regime") != arguments.get("training_regime"):
         raise ValueError("Summary training_regime differs from the manifest")
     if summary.get("objective_stage") != arguments.get("objective_stage"):
         raise ValueError("Summary objective_stage differs from the manifest")
+    if summary.get("reader_loss_mode") != arguments.get("reader_loss_mode"):
+        raise ValueError("Summary reader_loss_mode differs from the manifest")
+    if summary.get("choice_view_schedule") != arguments.get("choice_view_schedule"):
+        raise ValueError("Summary choice_view_schedule differs from the manifest")
+    for key in ("training_regime", "objective_stage", "reader_loss_mode"):
+        if summary.get(key) != lineage.get(key):
+            raise ValueError(f"Summary {key} differs from the training lineage")
+    if summary.get("teacher_control") != lineage.get("teacher_control"):
+        raise ValueError("Summary teacher_control differs from the training lineage")
+    if summary.get("teacher_manifest_sha256") != lineage.get("teacher_manifest_sha256"):
+        raise ValueError("Summary teacher manifest SHA256 differs from the training lineage")
+    if summary.get("teacher_control_sha256") != lineage.get("teacher_control_sha256"):
+        raise ValueError("Summary teacher-control SHA256 differs from the training lineage")
+    regime = arguments.get("training_regime")
+    objective = arguments.get("objective_stage")
+    teacher_hash_keys = ("teacher_manifest_sha256", "teacher_sidecar_sha256", "teacher_calibration_sha256")
+    if regime == "qa_only":
+        if lineage.get("teacher_control") != "none" or any(lineage.get(key) is not None for key in teacher_hash_keys):
+            raise ValueError("QA-only lineage contains forbidden teacher supervision")
+    elif regime == "teacher_assisted":
+        if not all(valid_sha256(lineage.get(key)) for key in teacher_hash_keys):
+            raise ValueError("Teacher-assisted lineage is missing locked teacher SHA256 values")
+        if lineage.get("teacher_control") not in {"correct", "shuffled", "random"}:
+            raise ValueError("Teacher-assisted lineage has an unsupported teacher control")
+        if not valid_sha256(lineage.get("teacher_control_sha256")):
+            raise ValueError("Teacher-assisted lineage is missing its teacher-control contract SHA256")
+        if objective == "qa" and (
+            lineage.get("parent_checkpoint_regime") != "teacher_assisted"
+            or not valid_sha256(lineage.get("parent_checkpoint_sha256"))
+        ):
+            raise ValueError("Teacher-assisted QA is missing its distillation-parent lineage")
+    else:
+        raise ValueError("Training manifest has an unsupported training regime")
+    for key in ("train_sha256", "dev_sha256"):
+        if not valid_sha256(manifest.get(key)):
+            raise ValueError(f"Training manifest is missing valid {key}")
+    snapshots = manifest.get("model_snapshot_manifests")
+    if not isinstance(snapshots, Mapping) or not all(
+        valid_sha256(snapshots.get(key)) for key in ("dreamlite_mobile", "qwen_reader")
+    ):
+        raise ValueError("Training manifest is missing locked model snapshot SHA256 values")
+    if not isinstance(manifest.get("reader_resize_contract"), str) or not manifest.get("reader_resize_contract"):
+        raise ValueError("Training manifest is missing the Reader resize contract")
+    peak_vram = summary.get("peak_vram_gib")
+    if (
+        not isinstance(peak_vram, Mapping)
+        or len(peak_vram) != 2
+        or any(finite_number(value) is None or float(value) <= 0 for value in peak_vram.values())
+    ):
+        raise ValueError("Training summary must contain positive peak VRAM for exactly two devices")
+    audit_enabled = bool(nested_get(manifest, "state_gradient_audit_contract", "enabled", default=False))
+    if audit_enabled:
+        if state_gradient_audit is None or state_gradient_audit.get("passed") is not True:
+            raise ValueError("Enabled state-gradient audit is missing or failed")
+        if summary.get("state_gradient_audit") != state_gradient_audit:
+            raise ValueError("Summary state-gradient audit differs from its source artifact")
+    resume_sha = summary.get("resume_checkpoint_sha256")
+    if resume_sha is not None:
+        if not valid_sha256(resume_sha) or resume_lineage is None:
+            raise ValueError("Resumed training is missing valid resume lineage")
+        if (
+            resume_lineage.get("schema") != "vision_memory.dreamlite-resume-lineage.v1"
+            or resume_lineage.get("resume_checkpoint_sha256") != resume_sha
+            or resume_lineage.get("resume_start_optimizer_step") != summary.get("resume_start_optimizer_step")
+        ):
+            raise ValueError("Resume lineage differs from the training summary")
 
 
 def build_training_report(
@@ -505,6 +667,7 @@ def build_training_report(
     output_dir: Path,
     stage: str,
     run_id: str,
+    launcher_stage: str | None = None,
     title: str | None = None,
     terminal_path: Path | None = None,
     stage_evidence_path: Path | None = None,
@@ -523,20 +686,14 @@ def build_training_report(
         raise ValueError(f"Report output directory must be absent or empty: {output_dir}")
     if ema_span <= 0:
         raise ValueError("--ema-span must be positive")
-    output_dir.mkdir(parents=True, exist_ok=True)
-    figures_dir = output_dir / "figures"
-    metrics_dir = output_dir / "metrics"
-    provenance_dir = output_dir / "provenance"
-    logs_dir = output_dir / "logs"
-    source_dir = output_dir / "source"
-    for directory in (figures_dir, metrics_dir, provenance_dir, logs_dir, source_dir):
-        directory.mkdir(parents=True, exist_ok=True)
 
     manifest_path = training_dir / "manifest.json"
     summary_path = training_dir / "summary.json"
     metrics_path = training_dir / "metrics.jsonl"
     manifest = load_json_object(manifest_path)
     summary = load_json_object(summary_path)
+    state_gradient_audit = load_json_object(training_dir / "state_gradient_audit.json")
+    resume_lineage = load_json_object(training_dir / "resume_lineage.json")
     terminal = load_json_object(terminal_path)
     stage_evidence = load_json_object(stage_evidence_path)
     evaluations = [(path, load_json_object(path)) for path in evaluation_paths]
@@ -547,15 +704,36 @@ def build_training_report(
             manifest=manifest,
             summary=summary,
             terminal=terminal,
+            stage_evidence=stage_evidence,
+            stage_evidence_path=stage_evidence_path,
             metrics=metrics,
+            evaluations=evaluations,
+            training_dir=training_dir,
             stage=stage,
+            launcher_stage=launcher_stage,
             stdout_path=stdout_path,
             stderr_path=stderr_path,
+            state_gradient_audit=state_gradient_audit,
+            resume_lineage=resume_lineage,
         )
+
+    output_dir.mkdir(parents=True, exist_ok=True)
+    figures_dir = output_dir / "figures"
+    metrics_dir = output_dir / "metrics"
+    provenance_dir = output_dir / "provenance"
+    logs_dir = output_dir / "logs"
+    source_dir = output_dir / "source"
+    for directory in (figures_dir, metrics_dir, provenance_dir, logs_dir, source_dir):
+        directory.mkdir(parents=True, exist_ok=True)
 
     copied_sources: list[dict[str, Any]] = []
     for name in KNOWN_SOURCE_FILES:
-        item = copy_source(training_dir / name, source_dir / name, f"training:{name}")
+        item = copy_source(
+            training_dir / name,
+            source_dir / name,
+            f"training:{name}",
+            report_root=output_dir,
+        )
         if item:
             copied_sources.append(item)
     for source, destination, label in (
@@ -564,7 +742,7 @@ def build_training_report(
         (stdout_path, logs_dir / "stdout.log", "stage:stdout"),
         (stderr_path, logs_dir / "stderr.log", "stage:stderr"),
     ):
-        item = copy_source(source, destination, label)
+        item = copy_source(source, destination, label, report_root=output_dir)
         if item:
             copied_sources.append(item)
     evaluation_objects: list[dict[str, Any]] = []
@@ -572,7 +750,7 @@ def build_training_report(
         if value is None:
             continue
         destination = metrics_dir / f"evaluation_{index:02d}_{path.name}"
-        item = copy_source(path, destination, f"evaluation:{index}")
+        item = copy_source(path, destination, f"evaluation:{index}", report_root=output_dir)
         if item:
             copied_sources.append(item)
         evaluation_objects.append({"path": str(path.resolve()), "sha256": sha256_file(path), "payload": value})
@@ -589,10 +767,18 @@ def build_training_report(
     plot_dev_loss(metrics, figures_dir / "dev_loss.png")
     plot_memory_throughput(trains, figures_dir / "memory_throughput.png", summary=summary)
 
-    status, passed = report_status(terminal, summary)
-    generated_at = terminal.get("finished_at") if isinstance(terminal, Mapping) else None
-    if not isinstance(generated_at, str) or not generated_at:
-        generated_at = utc_now()
+    status, execution_passed = report_status(terminal, summary)
+    training_finished_at = terminal.get("finished_at") if isinstance(terminal, Mapping) else None
+    if not isinstance(training_finished_at, str) or not training_finished_at:
+        training_finished_at = None
+    report_rendered_at = utc_now()
+    evaluation_flags = [item["payload"].get("passed") for item in evaluation_objects]
+    scientific_gate_passed = (
+        all(bool(flag) for flag in evaluation_flags)
+        if evaluation_flags and all(isinstance(flag, bool) for flag in evaluation_flags)
+        else None
+    )
+    training_complete = bool(strict_complete and execution_passed is True)
     final_loss = next(
         (finite_number(row.get("loss")) for row in reversed(trains) if finite_number(row.get("loss")) is not None),
         None,
@@ -611,9 +797,14 @@ def build_training_report(
     )
     objective_stage = nested_get(manifest, "arguments", "objective_stage", default=None)
     overview_rows = (
-        ("Status", status),
-        ("Passed", passed),
-        ("Stage", stage),
+        ("Execution status", status),
+        ("Execution passed", execution_passed),
+        ("Strict training-artifact validation", training_complete),
+        ("Attached scientific gate passed", scientific_gate_passed),
+        ("Training finished at", training_finished_at),
+        ("Report rendered at", report_rendered_at),
+        ("Training label", stage),
+        ("Launcher stage", launcher_stage or stage),
         ("Run ID", run_id),
         ("Training regime", regime),
         ("Objective stage", objective_stage),
@@ -637,10 +828,16 @@ def build_training_report(
         warnings.append("summary.json is missing; this may be an early failure or interrupted training run.")
     if terminal is None:
         warnings.append("No stage terminal was supplied; pass/fail state is not cryptographically bound here.")
-    if passed is False:
+    if execution_passed is False:
         warnings.append(
             "The supplied terminal marks this training as failed; the report preserves the failure without reinterpretation."
         )
+    if scientific_gate_passed is False:
+        warnings.append(
+            "At least one attached scientific evaluation failed; this is reported separately from execution success."
+        )
+    if scientific_gate_passed is None:
+        warnings.append("No scientific gate report was attached; this report makes no scientific pass/fail claim.")
     stderr_tail = tail_text(stderr_path)
     if stderr_tail:
         warnings.append("stderr is non-empty; its tail is included below and the full copied log is preserved.")
@@ -649,12 +846,15 @@ def build_training_report(
 
     report_summary = {
         "schema": SCHEMA,
-        "generated_at": generated_at,
+        "report_rendered_at": report_rendered_at,
+        "training_finished_at": training_finished_at,
         "stage": stage,
+        "launcher_stage": launcher_stage or stage,
         "run_id": run_id,
         "title": title or f"Vision-Language Memory training report: {stage}",
-        "status": status,
-        "passed": passed,
+        "execution_status": status,
+        "execution_passed": execution_passed,
+        "scientific_gate_passed": scientific_gate_passed,
         "training_dir": str(training_dir),
         "optimizer_steps": optimizer_steps,
         "final_train_loss": final_loss,
@@ -671,7 +871,7 @@ def build_training_report(
         "reader_resize_contract": nested_get(manifest, "reader_resize_contract", default=None),
         "warnings": warnings,
         "strict_complete": strict_complete,
-        "complete": bool(strict_complete and passed is True),
+        "complete": training_complete,
         "figure_files": [f"figures/{name}" for name in FIGURE_NAMES],
         "source_artifacts": copied_sources,
         "evaluation_reports": [{"path": item["path"], "sha256": item["sha256"]} for item in evaluation_objects],
@@ -760,11 +960,11 @@ h1,h2,h3{{color:#0f172a}} h2{{margin-top:36px;border-bottom:1px solid #cbd5e1;pa
 table{{border-collapse:collapse;width:100%;background:white}}th,td{{border:1px solid #cbd5e1;padding:8px;text-align:left;vertical-align:top}}th{{width:26%;background:#f1f5f9}}
 section{{background:white;padding:14px;margin:16px 0;border:1px solid #e2e8f0;border-radius:8px}}img{{width:100%;height:auto}}
 pre{{white-space:pre-wrap;overflow-wrap:anywhere;background:#0f172a;color:#e2e8f0;padding:14px;border-radius:6px;max-height:680px;overflow:auto}}
-.status{{font-weight:700;color:{"#166534" if passed else "#991b1b"}}}.meta{{color:#475569}}
+.status{{font-weight:700;color:{"#166534" if training_complete else "#991b1b"}}}.meta{{color:#475569}}
 </style></head><body>
 <h1>{html.escape(str(report_summary["title"]))}</h1>
-<p class="meta">Schema {SCHEMA}; generated {html.escape(report_summary["generated_at"])}; Matplotlib {matplotlib.__version__}; EMA span {ema_span}.</p>
-<p class="status">Terminal status: {html.escape(status)}; passed: {html.escape(str(passed))}</p>
+<p class="meta">Schema {SCHEMA}; report rendered {html.escape(report_rendered_at)}; training finished {html.escape(str(training_finished_at))}; Matplotlib {matplotlib.__version__}; EMA span {ema_span}.</p>
+<p class="status">Execution status: {html.escape(status)}; execution passed: {html.escape(str(execution_passed))}; strict training validation: {html.escape(str(training_complete))}; attached scientific gate: {html.escape(str(scientific_gate_passed))}.</p>
 <h2>Outcome</h2>{html_table(overview_rows)}
 <h2>Warnings and termination notes</h2><ul>{warning_html}</ul>
 <h2>Training curves</h2>{figure_html}
@@ -795,7 +995,9 @@ pre{{white-space:pre-wrap;overflow-wrap:anywhere;background:#0f172a;color:#e2e8f
         "report_html": str(output_dir / "report.html"),
         "report_markdown": str(output_dir / "report.md"),
         "artifact_count": len(artifact_paths),
-        "passed": passed,
+        "execution_passed": execution_passed,
+        "scientific_gate_passed": scientific_gate_passed,
+        "training_complete": training_complete,
         "status": status,
     }
 
@@ -807,6 +1009,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--training-dir", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--stage", required=True)
+    parser.add_argument("--launcher-stage")
     parser.add_argument("--run-id", required=True)
     parser.add_argument("--title")
     parser.add_argument("--terminal", type=Path)
@@ -827,6 +1030,7 @@ def main() -> int:
         output_dir=args.output_dir,
         stage=args.stage,
         run_id=args.run_id,
+        launcher_stage=args.launcher_stage,
         title=args.title,
         terminal_path=args.terminal,
         stage_evidence_path=args.stage_evidence,

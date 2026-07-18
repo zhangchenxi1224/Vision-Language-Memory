@@ -542,8 +542,23 @@ def build_technical_plan(
             ],
             "static_input_labels": ["train", "dev"],
             "outputs": [
+                _output("dl_reference_manifest", reference_dir / "manifest.json", json_passed=False),
+                _output("dl_reference_summary", reference_dir / "summary.json", json_passed=False),
+                _output(
+                    "dl_reference_state_gradient_audit",
+                    reference_dir / "state_gradient_audit.json",
+                    json_passed=False,
+                ),
                 _output("dl_prefix_checkpoint", prefix_checkpoint, json_passed=False),
                 _output("dl_reference_checkpoint", reference_checkpoint, json_passed=False),
+                _output("dl_resumed_manifest", resumed_dir / "manifest.json", json_passed=False),
+                _output("dl_resumed_summary", resumed_dir / "summary.json", json_passed=False),
+                _output(
+                    "dl_resumed_state_gradient_audit",
+                    resumed_dir / "state_gradient_audit.json",
+                    json_passed=False,
+                ),
+                _output("dl_resumed_lineage", resumed_dir / "resume_lineage.json", json_passed=False),
                 _output("dl_resumed_checkpoint", resumed_checkpoint, json_passed=False),
                 _output("dl_reference_next", reference_dir / "last.pt", json_passed=False),
                 _output("dl_resumed_next", resumed_dir / "last.pt", json_passed=False),
@@ -745,16 +760,12 @@ def _verify_completed_stage(plan: Mapping[str, Any], stage: str) -> list[dict[st
     if not isinstance(actual_outputs, list):
         raise ValueError(f"{stage} evidence outputs must be a list")
     planned_outputs = {str(output["label"]): output for output in definition.get("outputs", [])}
-    actual_by_label = {
-        str(output.get("label")): output for output in actual_outputs if isinstance(output, Mapping)
-    }
+    actual_by_label = {str(output.get("label")): output for output in actual_outputs if isinstance(output, Mapping)}
     if len(actual_by_label) != len(actual_outputs) or set(actual_by_label) != set(planned_outputs):
         raise ValueError(f"{stage} evidence does not bind every planned output exactly once")
     for label, output in actual_by_label.items():
         planned = planned_outputs[label]
-        if output.get("path") != planned.get("path") or output.get("required_values") != planned.get(
-            "required_values"
-        ):
+        if output.get("path") != planned.get("path") or output.get("required_values") != planned.get("required_values"):
             raise ValueError(f"{stage} evidence output {label!r} drifted from the immutable plan")
         verify_bound_artifact(output)
     return [
@@ -1007,24 +1018,21 @@ def _teacher_preregistered_contract(preregistration: Path) -> dict[str, Any]:
     micro = _mapping_field(value.get("micro_data"), field="micro_data")
     micro_execution = _mapping_field(value.get("micro_execution"), field="micro_execution")
     if micro_execution.get("teacher_preparation_order") != list(TEACHER_PREPARATION_ORDER):
-        raise ValueError(
-            "R3 preregistration micro_execution.teacher_preparation_order differs from the canonical DAG"
-        )
+        raise ValueError("R3 preregistration micro_execution.teacher_preparation_order differs from the canonical DAG")
     transition_data = _mapping_field(micro.get("transition16"), field="micro_data.transition16")
     teacher = _mapping_field(value.get("teacher_contract"), field="teacher_contract")
     builds = _mapping_field(teacher.get("cache_builds"), field="teacher_contract.cache_builds")
     set8_build = _mapping_field(builds.get("set8"), field="teacher_contract.cache_builds.set8")
-    transition16_build = _mapping_field(
-        builds.get("transition16"), field="teacher_contract.cache_builds.transition16"
-    )
+    transition16_build = _mapping_field(builds.get("transition16"), field="teacher_contract.cache_builds.transition16")
     models = _mapping_field(value.get("models"), field="models")
     reader = _mapping_field(models.get("reader"), field="models.reader")
     updater = _mapping_field(models.get("updater"), field="models.updater")
     reader_revision = reader.get("revision")
     dreamlite_revision = updater.get("revision")
-    if COMMIT_PATTERN.fullmatch(str(reader_revision or "")) is None or COMMIT_PATTERN.fullmatch(
-        str(dreamlite_revision or "")
-    ) is None:
+    if (
+        COMMIT_PATTERN.fullmatch(str(reader_revision or "")) is None
+        or COMMIT_PATTERN.fullmatch(str(dreamlite_revision or "")) is None
+    ):
         raise ValueError("Teacher preparation model revisions must be full immutable commits")
     return {
         "preregistration_sha256": sha256_file(preregistration),
@@ -1082,9 +1090,7 @@ def build_teacher_preparation_plan(
     set8_train = require_absolute(set8_train, "set8_train")
     transition16_train = require_absolute(transition16_train, "transition16_train")
     transition16_gate = require_absolute(transition16_gate, "transition16_gate")
-    transition16_raw_sidecar = require_absolute(
-        transition16_raw_sidecar, "transition16_raw_sidecar"
-    )
+    transition16_raw_sidecar = require_absolute(transition16_raw_sidecar, "transition16_raw_sidecar")
     set8_cache = require_absolute(set8_cache, "set8_cache")
     transition16_cache = require_absolute(transition16_cache, "transition16_cache")
     font = require_absolute(font, "font")
@@ -1106,20 +1112,14 @@ def build_teacher_preparation_plan(
             raise ValueError(f"{label} snapshot does not match the preregistered revision")
 
     static_inputs = {
-        "preregistration": require_file_sha(
-            preregistration, lock["preregistration_sha256"], "R3 preregistration"
-        ),
-        "set8_train": require_file_sha(
-            set8_train, lock["set8"]["train_sha256"], "Set8 train"
-        ),
+        "preregistration": require_file_sha(preregistration, lock["preregistration_sha256"], "R3 preregistration"),
+        "set8_train": require_file_sha(set8_train, lock["set8"]["train_sha256"], "Set8 train"),
         "transition16_train": require_file_sha(
             transition16_train,
             lock["transition16"]["train_sha256"],
             "Transition16 train",
         ),
-        "transition16_gate": require_file_sha(
-            transition16_gate, lock["transition16_gate_sha256"], "Transition16 gate"
-        ),
+        "transition16_gate": require_file_sha(transition16_gate, lock["transition16_gate_sha256"], "Transition16 gate"),
         "transition16_raw_sidecar": require_file_sha(
             transition16_raw_sidecar,
             lock["transition16_raw_sidecar_sha256"],
@@ -1826,7 +1826,9 @@ def _validate_micro_command_semantics(contract: Mapping[str, Any]) -> None:
             elif control not in arm_controls:
                 raise ValueError("teacher training command control is absent from the arm contract")
             elif objective == "distill":
-                if not all(flag in command for flag in ("--teacher-manifest", "--teacher-sidecar", "--teacher-calibration")):
+                if not all(
+                    flag in command for flag in ("--teacher-manifest", "--teacher-sidecar", "--teacher-calibration")
+                ):
                     raise ValueError("teacher distillation must receive manifest, sidecar, and calibration")
                 manifest_path = Path(str(_command_flag_value(command, "--teacher-manifest", required=True)))
                 sidecar_path = Path(str(_command_flag_value(command, "--teacher-sidecar", required=True)))
@@ -1865,9 +1867,7 @@ def _validate_micro_command_semantics(contract: Mapping[str, Any]) -> None:
         elif script == "scripts/eval/teacher_state_retrieval.py":
             if regime != "teacher_assisted":
                 raise ValueError("qa_only micro command may not invoke teacher diagnostics")
-            calibration_path = Path(
-                str(_command_flag_value(command, "--teacher-calibration", required=True))
-            )
+            calibration_path = Path(str(_command_flag_value(command, "--teacher-calibration", required=True)))
             if (
                 not calibration_path.is_absolute()
                 or sha256_file(calibration_path) != calibration_binding["calibration_sha256"]
@@ -1895,7 +1895,9 @@ def _micro_command_dataflow(contract: Mapping[str, Any]) -> dict[str, Any]:
     training = [(index, command) for index, command in indexed if Path(command[1]).name == "dreamlite_episode.py"]
     evaluations = [(index, command) for index, command in indexed if Path(command[1]).name == "dreamlite_mcq.py"]
     scorers = [(index, command) for index, command in indexed if Path(command[1]).name == "score_r3_micro.py"]
-    retrievals = [(index, command) for index, command in indexed if Path(command[1]).name == "teacher_state_retrieval.py"]
+    retrievals = [
+        (index, command) for index, command in indexed if Path(command[1]).name == "teacher_state_retrieval.py"
+    ]
     replications = [
         (index, command) for index, command in indexed if Path(command[1]).name == "validate_r3_micro_replication.py"
     ]
@@ -1980,9 +1982,7 @@ def _micro_command_dataflow(contract: Mapping[str, Any]) -> dict[str, Any]:
             arm_start = distill_index
             if distill_index >= qa_index:
                 raise ValueError("teacher micro arm must finish distillation before QA")
-            initialize_from = Path(
-                str(_command_flag_value(qa_command, "--initialize-from", required=True))
-            ).resolve()
+            initialize_from = Path(str(_command_flag_value(qa_command, "--initialize-from", required=True))).resolve()
             if initialize_from != distill_record["final_checkpoint"]:
                 raise ValueError("teacher QA does not initialize from its own final distillation checkpoint")
             if (
@@ -2261,9 +2261,7 @@ def _completed_teacher_preparation_parent(
 ) -> dict[str, Any]:
     teacher_run_root = teacher_run_root.resolve()
     teacher, teacher_plan_path, teacher_plan_sha256 = _load_verified_plan(teacher_run_root)
-    if teacher.get("kind") != "teacher-preparation" or teacher.get("strict_order") != list(
-        TEACHER_PREPARATION_ORDER
-    ):
+    if teacher.get("kind") != "teacher-preparation" or teacher.get("strict_order") != list(TEACHER_PREPARATION_ORDER):
         raise ValueError("teacher_assisted micro requires the complete immutable teacher-preparation DAG")
     expected_parent = {
         "expected_commit": technical["expected_commit"],
@@ -2327,11 +2325,7 @@ def _completed_teacher_preparation_parent(
     suite = str(contract["suite"])
     calibration_binding = contract.get("teacher_calibration_binding")
     teacher_contract = teacher.get("teacher_contract")
-    locks = (
-        teacher_contract.get("calibration_input_locks")
-        if isinstance(teacher_contract, Mapping)
-        else None
-    )
+    locks = teacher_contract.get("calibration_input_locks") if isinstance(teacher_contract, Mapping) else None
     suite_lock = locks.get(suite) if isinstance(locks, Mapping) else None
     expected_input_binding = (
         {
@@ -2350,8 +2344,7 @@ def _completed_teacher_preparation_parent(
     data_binding = contract.get("data_binding")
     if (
         not isinstance(data_binding, Mapping)
-        or data_binding.get("preregistration_sha256")
-        != expected_input_binding["preregistration_sha256"]
+        or data_binding.get("preregistration_sha256") != expected_input_binding["preregistration_sha256"]
         or data_binding.get("train_sha256") != expected_input_binding["train_sha256"]
     ):
         raise ValueError("micro data binding differs from its teacher-preparation parent")
@@ -2533,20 +2526,14 @@ def initialize_micro_extension(
     }
     if contract.get("lineage_binding") != expected_lineage_binding:
         raise ValueError("micro command lineage does not match the completed technical parent")
-    training_commands = [
-        command for command in contract["commands"] if Path(command[1]).name == "dreamlite_episode.py"
-    ]
+    training_commands = [command for command in contract["commands"] if Path(command[1]).name == "dreamlite_episode.py"]
     train_paths = {
-        Path(str(_command_flag_value(command, "--train", required=True))).resolve()
-        for command in training_commands
+        Path(str(_command_flag_value(command, "--train", required=True))).resolve() for command in training_commands
     }
     gate_paths = {
-        Path(str(_command_flag_value(command, "--dev", required=True))).resolve()
-        for command in training_commands
+        Path(str(_command_flag_value(command, "--dev", required=True))).resolve() for command in training_commands
     }
-    evaluation_commands = [
-        command for command in contract["commands"] if Path(command[1]).name == "dreamlite_mcq.py"
-    ]
+    evaluation_commands = [command for command in contract["commands"] if Path(command[1]).name == "dreamlite_mcq.py"]
     evaluation_episode_paths = {
         Path(str(_command_flag_value(command, "--episodes", required=True))).resolve()
         for command in evaluation_commands
@@ -2667,9 +2654,7 @@ def initialize_micro_extension(
         ]
         expected_distill_commands = len(_validated_micro_arms(contract))
         if len(distill_commands) != expected_distill_commands:
-            raise ValueError(
-                "teacher_assisted command contract must contain one fresh distillation command per arm"
-            )
+            raise ValueError("teacher_assisted command contract must contain one fresh distillation command per arm")
         command_manifests: set[Path] = set()
         command_sidecars: set[Path] = set()
         for distill_command in distill_commands:
@@ -2740,18 +2725,14 @@ def initialize_micro_extension(
         technical=final,
         teacher_t0=teacher,
         teacher_calibration_report=calibration_report,
-        teacher_calibration_file_sha256=(
-            teacher_calibration_sha256 if regime == "teacher_assisted" else None
-        ),
+        teacher_calibration_file_sha256=(teacher_calibration_sha256 if regime == "teacher_assisted" else None),
         teacher_tc0=tc0_validation,
         teacher_tc0_file_sha256=(tc0_validation_sha256 if regime == "teacher_assisted" else None),
         teacher_tf0=tf0_validation,
         teacher_tf0_file_sha256=(tf0_validation_sha256 if regime == "teacher_assisted" else None),
         training_regime=regime,
         expected_commit=str(technical["expected_commit"]),
-        teacher_calibration_suite=(
-            calibration_input_binding["suite"] if regime == "teacher_assisted" else None
-        ),
+        teacher_calibration_suite=(calibration_input_binding["suite"] if regime == "teacher_assisted" else None),
         teacher_calibration_preregistration_sha256=(
             calibration_input_binding["preregistration_sha256"] if regime == "teacher_assisted" else None
         ),
@@ -3051,9 +3032,7 @@ def main() -> int:
         elif args.action == "init-teacher-preparation":
             technical, _, _ = _load_verified_plan(args.technical_run_root.resolve())
             commit = str(technical["expected_commit"])
-            run_name = _require_run_name(
-                args.run_name or _default_run_name("r3-teacher-preparation", commit)
-            )
+            run_name = _require_run_name(args.run_name or _default_run_name("r3-teacher-preparation", commit))
             result = initialize_teacher_preparation_dag(
                 technical_run_root=args.technical_run_root.resolve(),
                 teacher_run_root=args.runs_root.resolve() / run_name,
@@ -3079,9 +3058,7 @@ def main() -> int:
                 micro_run_root=args.runs_root.resolve() / run_name,
                 command_contract_path=args.command_contract.resolve(),
                 teacher_preparation_run_root=(
-                    None
-                    if args.teacher_preparation_run_root is None
-                    else args.teacher_preparation_run_root.resolve()
+                    None if args.teacher_preparation_run_root is None else args.teacher_preparation_run_root.resolve()
                 ),
                 teacher_t0_path=None if args.teacher_t0 is None else args.teacher_t0.resolve(),
                 teacher_t0_sha256=args.teacher_t0_sha256,
@@ -3093,13 +3070,9 @@ def main() -> int:
                     None if args.teacher_calibration_report is None else args.teacher_calibration_report.resolve()
                 ),
                 teacher_calibration_report_sha256=args.teacher_calibration_report_sha256,
-                tc0_validation_path=(
-                    None if args.tc0_validation is None else args.tc0_validation.resolve()
-                ),
+                tc0_validation_path=(None if args.tc0_validation is None else args.tc0_validation.resolve()),
                 tc0_validation_sha256=args.tc0_validation_sha256,
-                tf0_validation_path=(
-                    None if args.tf0_validation is None else args.tf0_validation.resolve()
-                ),
+                tf0_validation_path=(None if args.tf0_validation is None else args.tf0_validation.resolve()),
                 tf0_validation_sha256=args.tf0_validation_sha256,
                 set8_parent_run_root=(
                     None if args.set8_parent_run_root is None else args.set8_parent_run_root.resolve()
