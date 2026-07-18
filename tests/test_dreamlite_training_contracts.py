@@ -157,6 +157,47 @@ class DreamLiteTrainingContractTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "--teacher-manifest is required"):
             dreamlite_episode.training_lineage(teacher_args)
 
+    def test_real_manifest_places_report_schemas_at_top_level(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            train = root / "train.jsonl"
+            dev = root / "dev.jsonl"
+            train.write_text('{"episode_id":"train"}\n', encoding="utf-8")
+            dev.write_text('{"episode_id":"dev"}\n', encoding="utf-8")
+            dreamlite = root / "dreamlite"
+            reader = root / "reader"
+            dreamlite.mkdir()
+            reader.mkdir()
+            argv = [
+                "dreamlite_episode.py",
+                "--train",
+                str(train),
+                "--dev",
+                str(dev),
+                "--dreamlite",
+                str(dreamlite),
+                "--reader",
+                str(reader),
+                "--output-dir",
+                str(root / "output"),
+            ]
+            with (
+                mock.patch.object(sys, "argv", argv),
+                mock.patch.object(dreamlite_episode, "git_value", side_effect=["a" * 40, ""]),
+                mock.patch.object(dreamlite_episode, "locked_revision", return_value="b" * 40),
+                mock.patch.object(
+                    dreamlite_episode,
+                    "load_initial_image",
+                    return_value=(torch.zeros(1, 3, 1, 1), {"initial_state_mode": "blank"}),
+                ),
+            ):
+                manifest = dreamlite_episode.make_manifest(dreamlite_episode.parse_args())
+
+        self.assertEqual(manifest["metrics_schema"], dreamlite_episode.DREAMLITE_METRICS_SCHEMA)
+        self.assertEqual(manifest["summary_schema"], dreamlite_episode.DREAMLITE_SUMMARY_SCHEMA)
+        self.assertNotIn("metrics_schema", manifest["training_lineage"])
+        self.assertNotIn("summary_schema", manifest["training_lineage"])
+
     def test_parent_checkpoint_lineage_requires_locked_reader_resize_contract(self):
         with tempfile.TemporaryDirectory() as directory:
             checkpoint = Path(directory) / "parent.pt"
@@ -175,9 +216,7 @@ class DreamLiteTrainingContractTest(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "Reader resize contract"):
                 dreamlite_episode._checkpoint_lineage(checkpoint)
 
-            payload["manifest"]["reader_resize_contract"] = (
-                dreamlite_episode.R3_QWEN_READER_RESIZE_CONTRACT
-            )
+            payload["manifest"]["reader_resize_contract"] = dreamlite_episode.R3_QWEN_READER_RESIZE_CONTRACT
             torch.save(payload, checkpoint)
             lineage, digest = dreamlite_episode._checkpoint_lineage(checkpoint)
             self.assertEqual(lineage, payload["manifest"]["training_lineage"])
@@ -203,8 +242,13 @@ class DreamLiteTrainingContractTest(unittest.TestCase):
         torch.testing.assert_close(first.latent, second.latent, rtol=0, atol=0)
         torch.testing.assert_close(first.feature, second.feature, rtol=0, atol=0)
         for source, controlled in ((teacher.image, first.image), (teacher.latent, first.latent)):
-            torch.testing.assert_close(source.mean(dim=tuple(range(2, source.ndim))), controlled.mean(dim=tuple(range(2, source.ndim))))
-            torch.testing.assert_close(source.var(dim=tuple(range(2, source.ndim)), unbiased=False), controlled.var(dim=tuple(range(2, source.ndim)), unbiased=False))
+            torch.testing.assert_close(
+                source.mean(dim=tuple(range(2, source.ndim))), controlled.mean(dim=tuple(range(2, source.ndim)))
+            )
+            torch.testing.assert_close(
+                source.var(dim=tuple(range(2, source.ndim)), unbiased=False),
+                controlled.var(dim=tuple(range(2, source.ndim)), unbiased=False),
+            )
         torch.testing.assert_close(teacher.feature.mean(dim=1), first.feature.mean(dim=1))
         torch.testing.assert_close(teacher.feature.var(dim=1, unbiased=False), first.feature.var(dim=1, unbiased=False))
 

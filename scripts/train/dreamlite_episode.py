@@ -23,6 +23,9 @@ import torch
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "src"))
 
+DREAMLITE_METRICS_SCHEMA = "vision_memory.dreamlite-training-metrics.v1"
+DREAMLITE_SUMMARY_SCHEMA = "vision_memory.dreamlite-training-summary.v1"
+
 from vision_memory.dreamlite import assert_no_frozen_parameter_grads, freeze_module  # noqa: E402
 from vision_memory.data import CYCLIC4, REVERSE_CYCLIC4, permutation_family_sha256  # noqa: E402
 from vision_memory.data import read_jsonl as read_episode_jsonl  # noqa: E402
@@ -481,6 +484,8 @@ def make_manifest(args: argparse.Namespace) -> dict[str, Any]:
         raise RuntimeError("Formal strict R3 training requires both model snapshot manifest SHA256 bindings.")
     return {
         "schema_version": 2,
+        "metrics_schema": DREAMLITE_METRICS_SCHEMA,
+        "summary_schema": DREAMLITE_SUMMARY_SCHEMA,
         "git_commit": commit,
         "git_dirty": bool(status),
         "dreamlite_revision": locked_revision(args.dreamlite),
@@ -1115,7 +1120,16 @@ def truncate_metrics_for_resume(path: Path, *, optimizer_step: int) -> float:
     with temporary.open("w", encoding="utf-8", newline="\n") as handle:
         for value in kept:
             handle.write(json.dumps(value, ensure_ascii=False) + "\n")
-        handle.write(json.dumps({"kind": "resume", "optimizer_step": optimizer_step}) + "\n")
+        handle.write(
+            json.dumps(
+                {
+                    "schema": DREAMLITE_METRICS_SCHEMA,
+                    "kind": "resume",
+                    "optimizer_step": optimizer_step,
+                }
+            )
+            + "\n"
+        )
     temporary.replace(path)
     return prior_elapsed
 
@@ -1530,7 +1544,9 @@ def main() -> int:
                 optimizer_step += 1
                 group_episode_count = accumulation_count
                 group_mean_loss = accumulation_loss_sum / group_episode_count
-                group_mean_qa_loss = accumulation_qa_loss_sum / group_episode_count
+                group_mean_qa_loss = (
+                    accumulation_qa_loss_sum / group_episode_count if args.objective_stage == "qa" else None
+                )
                 group_mean_state_loss = (
                     accumulation_state_loss_sum / group_episode_count if args.objective_stage == "distill" else None
                 )
@@ -1564,6 +1580,7 @@ def main() -> int:
                 append_jsonl(
                     metrics_path,
                     {
+                        "schema": DREAMLITE_METRICS_SCHEMA,
                         "kind": "train",
                         "epoch": epoch,
                         "episode_cursor": position + 1,
@@ -1607,7 +1624,15 @@ def main() -> int:
                         choice_view_schedule=args.choice_view_schedule,
                         require_mixed_delayed_probe=args.require_mixed_delayed_probe,
                     )
-                    append_jsonl(metrics_path, {"kind": "dev", "optimizer_step": optimizer_step, "loss": dev_loss})
+                    append_jsonl(
+                        metrics_path,
+                        {
+                            "schema": DREAMLITE_METRICS_SCHEMA,
+                            "kind": "dev",
+                            "optimizer_step": optimizer_step,
+                            "loss": dev_loss,
+                        },
+                    )
                     if dev_loss < best_dev:
                         best_dev = dev_loss
                         stale_evals = 0
@@ -1706,6 +1731,7 @@ def main() -> int:
             encoding="utf-8",
         )
     summary = {
+        "schema": DREAMLITE_SUMMARY_SCHEMA,
         "optimizer_steps": optimizer_step,
         "best_dev_loss": None if best_dev == float("inf") else best_dev,
         "training_regime": args.training_regime,
