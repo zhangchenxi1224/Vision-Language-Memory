@@ -19,6 +19,7 @@ sys.path.insert(0, str(ROOT / "src"))
 from launch_background import STRICT_ENVIRONMENT, validate_command, verify_preflight  # noqa: E402
 from model_snapshot_manifest import verify_snapshot_binding, verify_snapshot_manifest  # noqa: E402
 from r3_dag_contract import (  # noqa: E402
+    LAUNCH_COMMAND_PROTOCOL,
     COMMIT_PATTERN,
     MICRO_COMMAND_PROTOCOL,
     PLAN_PROTOCOL,
@@ -916,7 +917,7 @@ def authorize_stage(run_root: Path, *, stage: str | None = None, dry_run: bool =
     )
     launch = {
         "schema_version": 1,
-        "protocol": "r3-inspire-launch-command.v1",
+        "protocol": LAUNCH_COMMAND_PROTOCOL,
         "stage": stage,
         "stage_spec": str(spec_path),
         "stage_spec_sha256": spec_sha256,
@@ -926,8 +927,15 @@ def authorize_stage(run_root: Path, *, stage: str | None = None, dry_run: bool =
         "executed": False,
     }
     launch_path = run_root / "launch_commands" / f"{definition['slug']}.json"
-    atomic_json(launch_path, launch)
-    return {"dry_run": False, "stage_spec": spec, "stage_spec_sha256": spec_sha256, "launch": launch}
+    launch_sha256 = atomic_json(launch_path, launch)
+    return {
+        "dry_run": False,
+        "stage_spec": spec,
+        "stage_spec_sha256": spec_sha256,
+        "launch_path": str(launch_path),
+        "launch_sha256": launch_sha256,
+        "launch": launch,
+    }
 
 
 def initialize_technical_dag(

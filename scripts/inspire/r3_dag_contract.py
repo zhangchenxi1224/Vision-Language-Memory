@@ -13,6 +13,7 @@ PLAN_PROTOCOL = "r3-inspire-immutable-dag.v1"
 STAGE_SPEC_PROTOCOL = "r3-inspire-bound-stage.v1"
 STAGE_EVIDENCE_PROTOCOL = "r3-inspire-stage-evidence.v1"
 MICRO_COMMAND_PROTOCOL = "r3-inspire-micro-command.v2"
+LAUNCH_COMMAND_PROTOCOL = "r3-inspire-launch-command.v1"
 
 COMMIT_PATTERN = re.compile(r"^[0-9a-f]{40}$")
 SHA256_PATTERN = re.compile(r"^[0-9a-f]{64}$")
