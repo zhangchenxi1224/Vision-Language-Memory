@@ -17,8 +17,10 @@ from r3_dag_contract import require_absolute_executable, verify_sha_sidecar  # n
 
 
 PLATFORM_STATUS_PROTOCOL = "vision-memory-inspire-platform-status.v1"
+JOB_STATUS_PROTOCOL = "vision-memory-inspire-job-status.v1"
 FORBIDDEN_FORWARDED_OPTIONS = {
     "--expected-node",
+    "--expected-workload-kind",
     "--platform-status",
     "--platform-status-sha256",
 }
@@ -44,13 +46,19 @@ def load_running_receipt(path: Path) -> tuple[dict[str, Any], str]:
     value = json.loads(path.read_text(encoding="utf-8"))
     if not isinstance(value, dict):
         raise ValueError("Platform status receipt must be a JSON object")
-    if value.get("schema_version") != 1 or value.get("protocol") != PLATFORM_STATUS_PROTOCOL:
+    protocol = value.get("protocol")
+    if value.get("schema_version") != 1 or protocol not in {PLATFORM_STATUS_PROTOCOL, JOB_STATUS_PROTOCOL}:
         raise ValueError("Platform status receipt has the wrong protocol")
     if value.get("status") != "RUNNING" or value.get("node_status") != "READY":
         raise ValueError("Platform status receipt does not prove a running ready instance")
     node = value.get("node")
     if not isinstance(node, str) or not node:
         raise ValueError("Platform status receipt does not contain a scheduled node")
+    workload_kind = value.get("workload_kind")
+    expected_kind = "job" if protocol == JOB_STATUS_PROTOCOL else "notebook"
+    if workload_kind not in (None, expected_kind):
+        raise ValueError("Platform status receipt workload kind does not match its protocol")
+    value["workload_kind"] = expected_kind
     return value, digest
 
 
@@ -120,6 +128,8 @@ def main() -> int:
                     *forwarded,
                     "--expected-node",
                     str(receipt["node"]),
+                    "--expected-workload-kind",
+                    str(receipt["workload_kind"]),
                     "--platform-status",
                     str(receipt_path),
                     "--platform-status-sha256",

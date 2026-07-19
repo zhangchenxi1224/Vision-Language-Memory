@@ -79,6 +79,7 @@ def normalize_status_payload(
     return {
         "schema_version": 1,
         "protocol": PROTOCOL,
+        "workload_kind": "notebook",
         "captured_at": utc_now(),
         "source": "inspire --json notebook status",
         "source_command": source_command,

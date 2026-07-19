@@ -48,3 +48,21 @@ def test_stopped_receipt_cannot_launch(tmp_path: Path) -> None:
     atomic_json(path, value)
     with pytest.raises(ValueError, match="running ready"):
         waiter.load_running_receipt(path)
+
+
+def test_job_receipt_derives_job_workload_kind(tmp_path: Path) -> None:
+    path = tmp_path / "job-status.json"
+    digest = atomic_json(
+        path,
+        {
+            "schema_version": 1,
+            "protocol": waiter.JOB_STATUS_PROTOCOL,
+            "workload_kind": "job",
+            "status": "RUNNING",
+            "node_status": "READY",
+            "node": "qb-prod-gpu2007",
+        },
+    )
+    value, actual = waiter.load_running_receipt(path)
+    assert actual == digest
+    assert value["workload_kind"] == "job"

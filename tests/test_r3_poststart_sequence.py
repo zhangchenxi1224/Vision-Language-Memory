@@ -29,6 +29,7 @@ def make_args(tmp_path: Path) -> argparse.Namespace:
         {
             "schema_version": 1,
             "protocol": sequence.PLATFORM_STATUS_PROTOCOL,
+            "workload_kind": "notebook",
             "captured_at": datetime.now(UTC).isoformat(),
             "instance": "instance",
             "status": "RUNNING",
@@ -61,6 +62,8 @@ def make_args(tmp_path: Path) -> argparse.Namespace:
         expected_commit="c" * 40,
         expected_instance="instance",
         expected_node="node",
+        expected_workload_kind="notebook",
+        expected_compute_group="compute-group",
         expected_image="image",
         expected_workspace="workspace",
         expected_project="project",
@@ -167,6 +170,32 @@ def test_environment_is_explicit_and_deterministic(tmp_path: Path) -> None:
     assert environment["VLM_INSPIRE_NODE"] == "node"
     assert environment["VLM_MODEL_ROOT"] == str(args.model_root)
     assert environment["VLM_RUN_ROOT"] == str(args.runs_root)
+
+
+def test_job_platform_receipt_is_accepted_only_with_locked_single_node_resources(tmp_path: Path) -> None:
+    args = make_args(tmp_path)
+    args.expected_workload_kind = "job"
+    args.expected_compute_group = "compute-group"
+    receipt = json.loads(args.platform_status.read_text(encoding="utf-8"))
+    receipt.update(
+        {
+            "protocol": sequence.JOB_STATUS_PROTOCOL,
+            "workload_kind": "job",
+            "node_count": 1,
+            "compute_group": "compute-group",
+        }
+    )
+    receipt.pop("auto_stop")
+    receipt.pop("shared_memory_gib")
+    args.platform_status_sha256 = atomic_contract_json(args.platform_status, receipt)
+    verified = sequence.verify_platform_status(args)
+    assert verified["workload_kind"] == "job"
+    assert verified["protocol"] == sequence.JOB_STATUS_PROTOCOL
+
+    receipt["node_count"] = 2
+    args.platform_status_sha256 = atomic_contract_json(args.platform_status, receipt)
+    with pytest.raises(ValueError, match="node_count=1"):
+        sequence.verify_platform_status(args)
 
 
 def test_venv_python_symlink_identity_is_not_dereferenced(tmp_path: Path) -> None:

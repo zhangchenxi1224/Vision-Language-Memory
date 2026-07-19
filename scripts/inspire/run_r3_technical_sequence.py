@@ -33,6 +33,7 @@ from r3_dag_contract import (  # noqa: E402
 
 SCHEMA = "vision_memory.r3-poststart-technical-sequence.v1"
 PLATFORM_STATUS_PROTOCOL = "vision-memory-inspire-platform-status.v1"
+JOB_STATUS_PROTOCOL = "vision-memory-inspire-job-status.v1"
 STAGES = ("R3-R0", "R3-S0", "G4-L", "G5-L", "G6-L", "DL-S")
 DEFAULT_STAGE_TIMEOUTS = {
     "R3-R0": 60 * 60,
@@ -102,9 +103,12 @@ def verify_platform_status(args: argparse.Namespace) -> dict[str, Any]:
     status_path = args.platform_status.resolve()
     actual_sha256 = verify_sha_sidecar(status_path, expected_sha256=args.platform_status_sha256)
     receipt = load_json(status_path)
+    protocol = receipt.get("protocol")
+    expected_protocol = JOB_STATUS_PROTOCOL if args.expected_workload_kind == "job" else PLATFORM_STATUS_PROTOCOL
     expected = {
         "schema_version": 1,
-        "protocol": PLATFORM_STATUS_PROTOCOL,
+        "protocol": expected_protocol,
+        "workload_kind": args.expected_workload_kind,
         "instance": args.expected_instance,
         "status": "RUNNING",
         "node": args.expected_node,
@@ -113,14 +117,15 @@ def verify_platform_status(args: argparse.Namespace) -> dict[str, Any]:
         "workspace": args.expected_workspace,
         "project": args.expected_project,
         "project_priority": "10",
-        "image_source": "SOURCE_OFFICIAL",
         "gpu_product": "H200",
         "gpu_count": 2,
         "cpu_count": 40,
         "memory_gib": 400,
-        "shared_memory_gib": 128,
-        "auto_stop": False,
     }
+    if args.expected_workload_kind == "notebook":
+        expected.update({"image_source": "SOURCE_OFFICIAL", "shared_memory_gib": 128, "auto_stop": False})
+    else:
+        expected.update({"node_count": 1, "compute_group": args.expected_compute_group})
     for key, expected_value in expected.items():
         if receipt.get(key) != expected_value:
             raise ValueError(f"Platform status receipt requires {key}={expected_value!r}, got {receipt.get(key)!r}")
@@ -139,7 +144,13 @@ def verify_platform_status(args: argparse.Namespace) -> dict[str, Any]:
             "Platform status receipt is outside the allowed freshness window: "
             f"age={age_seconds:.1f}s, maximum={args.max_platform_status_age_seconds}s"
         )
-    return {"path": str(status_path), "sha256": actual_sha256, "age_seconds": age_seconds}
+    return {
+        "path": str(status_path),
+        "sha256": actual_sha256,
+        "age_seconds": age_seconds,
+        "protocol": protocol,
+        "workload_kind": args.expected_workload_kind,
+    }
 
 
 def verify_launch_binding(
@@ -634,6 +645,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--expected-commit", required=True)
     parser.add_argument("--expected-instance", required=True)
     parser.add_argument("--expected-node", required=True)
+    parser.add_argument("--expected-workload-kind", choices=("notebook", "job"), default="notebook")
+    parser.add_argument("--expected-compute-group", default="开发区-H200-3号机房")
     parser.add_argument("--expected-image", required=True)
     parser.add_argument("--expected-workspace", required=True)
     parser.add_argument("--expected-project", required=True)

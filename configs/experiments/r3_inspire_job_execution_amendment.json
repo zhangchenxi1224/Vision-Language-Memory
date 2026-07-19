@@ -1,0 +1,40 @@
+{
+  "schema": "vision_memory.r3-inspire-job-execution-amendment.v1",
+  "decision_date": "2026-07-19",
+  "status": "prospective_before_any_set8_optimizer_step_or_scientific_prediction",
+  "classification": "platform execution adapter only; no scientific protocol or threshold change",
+  "trigger": {
+    "notebook_instance": "vlm-r3-h200x2-live-20260717",
+    "notebook_control_plane_status": "RUNNING_READY",
+    "post_start_executed": false,
+    "ssh_reachable": false,
+    "set8_started": false,
+    "set8_optimizer_steps_observed": 0,
+    "set8_scientific_predictions_observed": 0
+  },
+  "replacement_execution_path": {
+    "workload": "Inspire GPU job",
+    "workspace": "分布式训练空间",
+    "project": "前沿课题探索",
+    "compute_group": "开发区-H200-3号机房",
+    "quota": "2 GPU, 40 CPU, 400 GiB memory",
+    "nodes": 1,
+    "image": "ngc-pytorch:25.02-cuda12.8.0-py3",
+    "priority": 10,
+    "runtime_contract": [
+      "the job waits on shared storage for an independently captured SHA-bound platform receipt",
+      "job status and pod instances must identify the same job",
+      "exactly one running instance and its scheduled node must be recorded",
+      "the formal in-container preflight independently verifies 2 H200 GPUs, driver, CPU, memory, shared memory, models, environment, and clean commit",
+      "the six technical gates rerun in preregistered order on the final implementation commit before Set8"
+    ]
+  },
+  "scientific_contract_unchanged": [
+    "models and revisions",
+    "data and manifests",
+    "listwise objective and choice permutation families",
+    "presentations and optimizer settings",
+    "Set8 and Transition16 thresholds",
+    "fail-stop ordering and no post-hoc rescue rule"
+  ]
+}
