@@ -184,14 +184,38 @@ def _validate_inputs(inputs: RenderInputs) -> dict[str, Any]:
     preregistered = json.loads(preregistration.read_text(encoding="utf-8"))
     try:
         suite_lock = preregistered["micro_data"][inputs.suite]
+        expected_manifest_sha = str(suite_lock["suite_manifest_sha256"])
         expected_train_sha = str(suite_lock["train_sha256"])
         expected_gate_sha = str(suite_lock["gate_sha256"])
     except (KeyError, TypeError) as exc:
         raise ValueError(f"R3 preregistration lacks the {inputs.suite} data lock") from exc
     train_sha = sha256_file(train)
     gate_sha = sha256_file(gate)
-    if train_sha != expected_train_sha or gate_sha != expected_gate_sha:
-        raise ValueError("train/gate files differ from the preregistered micro-data lock")
+    suite_manifest = _require_file(
+        train.parent / f"{inputs.suite}_manifest.json",
+        f"{inputs.suite} suite manifest",
+    )
+    if gate.parent != train.parent:
+        raise ValueError("train, gate, and suite manifest must share one immutable data directory")
+    suite_manifest_sha = sha256_file(suite_manifest)
+    if (
+        suite_manifest_sha != expected_manifest_sha
+        or train_sha != expected_train_sha
+        or gate_sha != expected_gate_sha
+    ):
+        raise ValueError("suite manifest/train/gate files differ from the preregistered micro-data lock")
+    manifest_value = json.loads(suite_manifest.read_text(encoding="utf-8"))
+    manifest_artifacts = manifest_value.get("artifacts")
+    expected_artifacts = {
+        train.name: train_sha,
+        gate.name: gate_sha,
+    }
+    if not isinstance(manifest_artifacts, dict) or any(
+        not isinstance(manifest_artifacts.get(name), dict)
+        or manifest_artifacts[name].get("sha256") != expected_sha
+        for name, expected_sha in expected_artifacts.items()
+    ):
+        raise ValueError("suite manifest does not bind the selected train/gate artifacts")
 
     teacher_binding = None
     teacher_files = None
@@ -223,6 +247,7 @@ def _validate_inputs(inputs: RenderInputs) -> dict[str, Any]:
     return {
         "data_binding": {
             "preregistration_sha256": sha256_file(preregistration),
+            "suite_manifest_sha256": suite_manifest_sha,
             "train_sha256": train_sha,
             "gate_sha256": gate_sha,
         },
@@ -433,6 +458,7 @@ def _evaluation_command(
         "blank",
         "--choice-view-family",
         "reverse-cyclic4",
+        "--strict-determinism",
         "--dreamlite-device",
         "cuda:0",
         "--reader-device",

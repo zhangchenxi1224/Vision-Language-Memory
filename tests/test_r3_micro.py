@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 import tempfile
 import unittest
@@ -94,6 +95,23 @@ class R3MicroTest(unittest.TestCase):
             self.assertEqual(read_jsonl(root / "set8_train.jsonl"), list(suite.train_episodes))
             self.assertEqual(manifest["artifacts"]["set8_train.jsonl"]["count"], 8)
             self.assertEqual(len(manifest["artifacts"]["set8_train.jsonl"]["sha256"]), 64)
+            manifest_bytes = (root / "set8_manifest.json").read_bytes()
+            self.assertNotIn(b"\r\n", manifest_bytes)
+            self.assertEqual(
+                hashlib.sha256(manifest_bytes).hexdigest(),
+                "f54c5cdbd5b77c65499325daee4bdf203d1b3e1f665ac7ce809aa0c81b469198",
+            )
+
+    def test_transition_manifest_is_platform_neutral_and_locked(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            write_r3_micro_suite(root, build_transition16())
+            manifest_bytes = (root / "transition16_manifest.json").read_bytes()
+            self.assertNotIn(b"\r\n", manifest_bytes)
+            self.assertEqual(
+                hashlib.sha256(manifest_bytes).hexdigest(),
+                "ea30117bd942edfd2d3d603902bef505d13c360737ca6405d5c45291bf746830",
+            )
 
 
 if __name__ == "__main__":

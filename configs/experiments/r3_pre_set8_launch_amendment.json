@@ -1,0 +1,56 @@
+{
+  "schema": "vision_memory.r3-pre-set8-launch-amendment.v1",
+  "decision_date": "2026-07-19",
+  "status": "prospective_before_any_set8_optimizer_step_or_scientific_prediction",
+  "classification": "protocol-preserving implementation and audit repair; not an R4 method change and not a scientific-gate failure",
+  "trigger": {
+    "last_technical_commit": "176fc1e7319a68aa17a1173b0b5212d7a35dc6ee",
+    "last_technical_result": "C0 passed through DL-S",
+    "set8_started": false,
+    "set8_optimizer_steps_observed": 0,
+    "set8_scientific_predictions_observed": 0
+  },
+  "evaluation_determinism_repair": {
+    "diagnosis": "The formal evaluator inherited deterministic_ce from the training manifest but did not configure deterministic algorithms and math-only SDPA in its own process.",
+    "locked_repair": [
+      "formal evaluation explicitly requests strict determinism",
+      "configure_strict_cuda_determinism runs before the first CUDA probe or model load",
+      "the prediction report records the observed evaluation runtime backend",
+      "the scientific scorer independently validates the observed training and evaluation reports",
+      "training and evaluation strict-determinism reports must match exactly"
+    ],
+    "unchanged": [
+      "model revisions and weights",
+      "DreamLite recurrence and LoRA configuration",
+      "Reader listwise objective and choice permutations",
+      "data, target labels, presentations, thresholds, and stopping rules"
+    ]
+  },
+  "suite_manifest_repair": {
+    "diagnosis": "Path.write_text used host-native newline translation: the preregistered Windows artifacts used CRLF while the Linux Inspire copies used LF despite identical parsed JSON and identical train/gate/sidecar payload hashes.",
+    "serialization": "sorted-indented-utf8-lf-v1",
+    "old_windows_crlf_sha256": {
+      "set8": "5a05350003e16923ddb2e27f135cd69a826c768724a64b4a080572b601ed1dd5",
+      "transition16": "0438dff0399a030903f6355ef1c8a2785b178c80577141ce8ce77627467c2b59"
+    },
+    "locked_linux_lf_sha256": {
+      "set8": "f54c5cdbd5b77c65499325daee4bdf203d1b3e1f665ac7ce809aa0c81b469198",
+      "transition16": "ea30117bd942edfd2d3d603902bef505d13c360737ca6405d5c45291bf746830"
+    },
+    "payload_sha256_unchanged": {
+      "set8_train": "b0b8896c14ea597379271bc485f57011a0028b3a50eef08185817bdf3442deb6",
+      "set8_gate": "2653c3b5a43c6b11d282397a27a14d94f1daf9e558aea943378bd40c307d94b1",
+      "set8_teacher_sidecar": "51bc74eb3a6579a6fd07b31a4d2e5b80e2b2f34cacc3d7048242249fe64be2bb",
+      "transition16_train": "879ff26cf638e87cea404ce5135e546b165f6a2a6da2a9415990b3e855651ae0",
+      "transition16_gate": "b9cb3218292e2ae91f54909e8d97436cc2664699dfdf6ca6280a024092a4790a",
+      "transition16_teacher_sidecar": "745fc1f06fab76eb85819dcf8d98158c92a832f0756c1c9e0f8f68d5a30321ab"
+    },
+    "fail_closed_consumption": "The micro renderer and materializer bind and verify the exact suite manifest as well as train and gate payloads."
+  },
+  "replacement_evidence": {
+    "requires_clean_commit": true,
+    "requires_fresh_formal_preflight": true,
+    "required_gate_order": ["R3-R0", "R3-S0", "G4-L", "G5-L", "G6-L", "DL-S"],
+    "old_commit_evidence_may_not_authorize_set8": true
+  }
+}

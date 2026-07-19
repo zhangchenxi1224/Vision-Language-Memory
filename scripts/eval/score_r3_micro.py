@@ -19,6 +19,7 @@ from vision_memory.eval import (  # noqa: E402
     score_r3_micro,
     validate_r3_micro_artifact_provenance,
 )
+from vision_memory.repro import REQUIRED_DETERMINISM_ENV  # noqa: E402
 
 
 def sha256_file(path: Path) -> str:
@@ -46,6 +47,33 @@ def _load_jsonl_objects(path: Path) -> list[dict[str, Any]]:
             raise ValueError(f"{path}:{line_number} must contain a JSON object.")
         values.append(value)
     return values
+
+
+def _validate_strict_determinism_runtime(value: Any, *, label: str) -> dict[str, Any]:
+    """Validate an observed runtime report, not a requested configuration flag."""
+
+    if not isinstance(value, Mapping):
+        raise ValueError(f"{label} strict-determinism runtime report is missing or invalid.")
+    expected = {
+        "seed": 0,
+        "environment": dict(sorted(REQUIRED_DETERMINISM_ENV.items())),
+        "deterministic_algorithms": True,
+        "deterministic_warn_only": False,
+        "cudnn_benchmark": False,
+        "cudnn_deterministic": True,
+        "cuda_matmul_allow_tf32": False,
+        "cudnn_allow_tf32": False,
+        "float32_matmul_precision": "highest",
+        "sdpa": {"flash": False, "memory_efficient": False, "cudnn": False, "math": True},
+    }
+    drift = {
+        field: {"expected": expected_value, "observed": value.get(field)}
+        for field, expected_value in expected.items()
+        if value.get(field) != expected_value
+    }
+    if drift:
+        raise ValueError(f"{label} strict-determinism runtime drifted: {drift}.")
+    return dict(value)
 
 
 def scientific_prediction_payload(rows: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
@@ -274,8 +302,10 @@ def build_artifact_provenance(
     }
     if drift:
         raise ValueError(f"Checkpoint violates the locked R3 micro protocol: {drift}.")
-    if not isinstance(manifest.get("strict_determinism"), Mapping):
-        raise ValueError("Formal R3 micro checkpoint lacks strict-determinism provenance.")
+    training_strict_determinism = _validate_strict_determinism_runtime(
+        manifest.get("strict_determinism"),
+        label="Training",
+    )
     if lineage.get("reader_loss_mode") != "listwise-choice" or lineage.get("choice_view_schedule") != "cyclic4":
         raise ValueError("Checkpoint lineage does not use listwise-choice/cyclic4 training.")
     expected_conditions = ["standard", "reset", "shuffle"]
@@ -295,6 +325,12 @@ def build_artifact_provenance(
     }
     if bad_evaluation:
         raise ValueError(f"R3 micro evaluation protocol drifted: {bad_evaluation}.")
+    evaluation_strict_determinism = _validate_strict_determinism_runtime(
+        report.get("strict_determinism"),
+        label="Evaluation",
+    )
+    if evaluation_strict_determinism != training_strict_determinism:
+        raise ValueError("Evaluation strict-determinism runtime differs from the checkpoint training runtime.")
     if lineage.get("training_regime") == "qa_only":
         if lineage.get("parent_checkpoint_regime") is not None or lineage.get("parent_checkpoint_sha256") is not None:
             raise ValueError("QA-only R3 micro replicas must use fresh LoRA initialization.")
@@ -376,7 +412,7 @@ def build_artifact_provenance(
         "lora_rank": arguments.get("lora_rank"),
         "seed": arguments.get("seed"),
         "adapter_seed": arguments.get("adapter_seed"),
-        "strict_determinism": dict(manifest["strict_determinism"]),
+        "strict_determinism": evaluation_strict_determinism,
         "state_gradient_audit": dict(state_gradient_audit),
         "training_trace": training_trace,
     }

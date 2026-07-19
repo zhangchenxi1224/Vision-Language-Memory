@@ -4,6 +4,7 @@ import hashlib
 import sys
 import tempfile
 import unittest
+from unittest import mock
 from dataclasses import replace
 from pathlib import Path
 
@@ -20,6 +21,7 @@ from scripts.eval.dreamlite_mcq import (  # noqa: E402
     intervention_states,
     semantic_group_report,
 )
+from scripts.eval import dreamlite_mcq  # noqa: E402
 from scripts.eval.qwen_text_baselines import synthetic_queries  # noqa: E402
 from scripts.eval.score_synthetic import DEFAULT_MAIN_CONTRASTS  # noqa: E402
 from vision_memory.data import DatasetSizes, generate_dataset, read_jsonl, write_jsonl  # noqa: E402
@@ -50,6 +52,40 @@ def row(episode, prediction, *, condition="standard", distractor_variant=None, *
 
 
 class SyntheticMetricTest(unittest.TestCase):
+    def test_strict_evaluation_configures_runtime_before_first_cuda_probe(self):
+        argv = [
+            "dreamlite_mcq.py",
+            "--episodes",
+            "episodes.jsonl",
+            "--format",
+            "synthetic",
+            "--dreamlite",
+            "dreamlite",
+            "--reader",
+            "reader",
+            "--output",
+            "predictions.jsonl",
+            "--method",
+            "test",
+            "--seed",
+            "7",
+            "--strict-determinism",
+        ]
+        sentinel = RuntimeError("strict-runtime-configured")
+        with (
+            mock.patch.object(sys, "argv", argv),
+            mock.patch.object(
+                dreamlite_mcq,
+                "configure_strict_cuda_determinism",
+                side_effect=sentinel,
+            ) as configure,
+            mock.patch.object(dreamlite_mcq.torch.cuda, "is_available") as cuda_available,
+            self.assertRaisesRegex(RuntimeError, "strict-runtime-configured"),
+        ):
+            dreamlite_mcq.main()
+        configure.assert_called_once_with(seed=7)
+        cuda_available.assert_not_called()
+
     def test_four_main_comparisons_are_fixed_and_distinct(self):
         self.assertEqual(len(DEFAULT_MAIN_CONTRASTS), 4)
         self.assertEqual(len(set(DEFAULT_MAIN_CONTRASTS)), 4)

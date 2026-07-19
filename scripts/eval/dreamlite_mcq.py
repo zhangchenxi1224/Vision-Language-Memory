@@ -20,7 +20,7 @@ from vision_memory.data import REVERSE_CYCLIC4, read_jsonl as read_synthetic_jso
 from vision_memory.dreamlite import freeze_module  # noqa: E402
 from vision_memory.prefeval import prefeval_noise_episode_key  # noqa: E402
 from vision_memory.reader import R3_QWEN_READER_RESIZE_CONTRACT, qwen3vl_choice_nll  # noqa: E402
-from vision_memory.repro import load_initial_image  # noqa: E402
+from vision_memory.repro import configure_strict_cuda_determinism, load_initial_image  # noqa: E402
 from vision_memory.training import DreamLiteEpisodeModel, format_mcq_query, load_trainable_weights  # noqa: E402
 
 
@@ -487,10 +487,22 @@ def main() -> int:
     )
     parser.add_argument("--dreamlite-device", default="cuda:0")
     parser.add_argument("--reader-device", default="cuda:1")
+    parser.add_argument(
+        "--strict-determinism",
+        action=argparse.BooleanOptionalAction,
+        default=False,
+        help=(
+            "Fail closed unless the process environment supports deterministic algorithms and "
+            "math-only SDPA; formal R3 evaluation requires this flag."
+        ),
+    )
     args = parser.parse_args()
 
     if args.format == "prefeval" and "state_swap" in args.conditions:
         raise SystemExit("state_swap requires synthetic matched counterfactual episodes.")
+    evaluation_strict_determinism = (
+        configure_strict_cuda_determinism(seed=args.seed) if args.strict_determinism else None
+    )
     if not torch.cuda.is_available() or torch.cuda.device_count() < 2:
         raise SystemExit("DreamLite MCQ evaluation requires two visible GPUs.")
     checkpoint_manifest = read_checkpoint_manifest(args.checkpoint)
@@ -553,7 +565,7 @@ def main() -> int:
     elif source_image is not None:
         raise SystemExit("--source-image is accepted only with --initial-state-mode file.")
     learn_initial_state = bool(manifest_args.get("learn_initial_state", False)) if manifest_args else False
-    deterministic_ce = bool(manifest_args.get("strict_determinism", False)) if manifest_args else False
+    deterministic_ce = bool(args.strict_determinism)
 
     dreamlite_revision = locked_revision(args.dreamlite)
     reader_revision = locked_revision(args.reader)
@@ -773,6 +785,7 @@ def main() -> int:
         "noop_policy": args.noop_policy,
         "choice_view_family": args.choice_view_family,
         "deterministic_ce": deterministic_ce,
+        "strict_determinism": evaluation_strict_determinism,
         "checkpoint_manifest": checkpoint_manifest,
         "dreamlite_revision": dreamlite_revision,
         "reader_revision": reader_revision,

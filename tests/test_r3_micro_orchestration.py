@@ -815,6 +815,7 @@ def test_score_provenance_binds_rows_report_checkpoint_and_lineage() -> None:
                     "noop_policy": "keep",
                     "episodes_sha256": SHA,
                     "deterministic_ce": True,
+                    "strict_determinism": _s0_report()["strict_determinism"],
                     "checkpoint_manifest": {
                         "training_lineage": lineage,
                         "arguments": arguments,
@@ -838,6 +839,18 @@ def test_score_provenance_binds_rows_report_checkpoint_and_lineage() -> None:
         assert provenance["checkpoint_sha256"] == sha256_file(checkpoint)
         assert provenance["objective_stage"] == "qa"
         assert provenance["distill_presentations"] == 256
+        assert provenance["strict_determinism"] == _s0_report()["strict_determinism"]
+
+        companion_payload = json.loads(companion.read_text(encoding="utf-8"))
+        companion_payload.pop("strict_determinism")
+        companion.write_text(json.dumps(companion_payload), encoding="utf-8")
+        with pytest.raises(ValueError, match="Evaluation strict-determinism runtime report"):
+            build_artifact_provenance(
+                predictions=predictions,
+                rows=[row],
+                prediction_report=companion,
+                suite="set8",
+            )
 
 
 def _gate_report(path: str, *, payload_sha: str = SHA) -> dict:

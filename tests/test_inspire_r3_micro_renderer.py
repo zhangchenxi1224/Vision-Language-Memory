@@ -107,6 +107,10 @@ def test_renderer_produces_loader_valid_arm_aware_contracts(
 
     loaded = _load_micro_command_contract(path)
     assert loaded == contract
+    assert loaded["data_binding"]["suite_manifest_sha256"] in {
+        "f54c5cdbd5b77c65499325daee4bdf203d1b3e1f665ac7ce809aa0c81b469198",
+        "ea30117bd942edfd2d3d603902bef505d13c360737ca6405d5c45291bf746830",
+    }
     assert loaded["execution_shape"] == shape
     assert [arm["arm_id"] for arm in loaded["arms"]] == arm_ids
     assert Path(loaded["commands"][-1][1]).name == final_script
@@ -119,6 +123,7 @@ def test_renderer_produces_loader_valid_arm_aware_contracts(
     ]
     assert len(evaluation_commands) == len(arm_ids)
     for command in evaluation_commands:
+        assert "--strict-determinism" in command
         checkpoint = Path(command[command.index("--checkpoint") + 1])
         expected_step = (512 if regime == "qa_only" else 256) * (8 if suite == "set8" else 16) // 8
         assert checkpoint.name == f"checkpoint-{expected_step:06d}.pt"
@@ -154,3 +159,23 @@ def test_renderer_rejects_teacher_cache_on_qa_only(tmp_path: Path) -> None:
     cache.mkdir()
     with pytest.raises(ValueError, match="qa_only rendering forbids"):
         render_contract(RenderInputs(**{**inputs.__dict__, "teacher_cache": cache}))
+
+
+def test_renderer_rejects_suite_manifest_byte_drift(tmp_path: Path) -> None:
+    inputs = _fixture_inputs(tmp_path, "set8", "qa_only")
+    data = tmp_path / "copied-data"
+    data.mkdir()
+    for name in ("set8_train.jsonl", "set8_gate.jsonl", "set8_manifest.json"):
+        source = ROOT / "data" / "r3_micro_v1" / name
+        (data / name).write_bytes(source.read_bytes())
+    manifest = data / "set8_manifest.json"
+    manifest.write_bytes(manifest.read_bytes() + b" ")
+    drifted = RenderInputs(
+        **{
+            **inputs.__dict__,
+            "train": data / "set8_train.jsonl",
+            "gate": data / "set8_gate.jsonl",
+        }
+    )
+    with pytest.raises(ValueError, match="suite manifest/train/gate files differ"):
+        render_contract(drifted)

@@ -71,6 +71,9 @@ def _qa_micro_contract_payload(tmp_path: Path, suite: str) -> dict:
         train.write_text('{"episode_id":"train"}\n', encoding="utf-8")
     if not gate.exists():
         gate.write_text('{"episode_id":"gate"}\n', encoding="utf-8")
+    suite_manifest = tmp_path / f"{suite}_manifest.json"
+    if not suite_manifest.exists():
+        suite_manifest.write_text('{"schema":"fixture"}\n', encoding="utf-8", newline="\n")
     episodes = 8 if suite == "set8" else 16
     final_step = 512 * episodes // 8
     arm_ids = ["A"] if suite == "set8" else ["A", "B"]
@@ -265,6 +268,7 @@ def _qa_micro_contract_payload(tmp_path: Path, suite: str) -> dict:
         "arms": arms,
         "data_binding": {
             "preregistration_sha256": "e" * 64,
+            "suite_manifest_sha256": sha256_file(suite_manifest),
             "train_sha256": sha256_file(train),
             "gate_sha256": sha256_file(gate),
         },
@@ -1070,6 +1074,19 @@ def test_micro_extension_contract_supports_both_locked_suites(tmp_path: Path, su
     assert [arm["arm_id"] for arm in loaded["arms"]] == (
         ["A"] if suite == "set8" else ["A", "B"]
     )
+
+
+def test_micro_extension_rejects_suite_manifest_rewrite_after_render(tmp_path: Path) -> None:
+    payload = _qa_micro_contract_payload(tmp_path, "set8")
+    contract = tmp_path / "set8-rewritten-manifest.json"
+    contract.write_text(json.dumps(payload), encoding="utf-8")
+    suite_manifest = tmp_path / "set8_manifest.json"
+    suite_manifest.write_bytes(suite_manifest.read_bytes() + b"rewrite")
+    with patch(
+        "materialize_r3_dag._preregistered_micro_data_binding",
+        return_value=payload["data_binding"],
+    ), pytest.raises(ValueError, match="suite-manifest/train/gate"):
+        _load_micro_command_contract(contract)
 
 
 def test_transition_micro_rejects_replica_b_starting_before_a_score(tmp_path: Path) -> None:

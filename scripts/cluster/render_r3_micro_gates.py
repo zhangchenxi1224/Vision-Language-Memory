@@ -283,6 +283,7 @@ def _evaluation_commands(
             "0",
             "--choice-view-family",
             "reverse-cyclic4",
+            "--strict-determinism",
             "--dreamlite-device",
             "cuda:0",
             "--reader-device",

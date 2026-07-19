@@ -8,6 +8,12 @@
       "path": "configs/experiments/r3_inspire_resize_amendment.json",
       "classification": "protocol-preserving deterministic Reader resize implementation repair",
       "replacement_evidence_required": true
+    },
+    {
+      "decision_date": "2026-07-19",
+      "path": "configs/experiments/r3_pre_set8_launch_amendment.json",
+      "classification": "protocol-preserving evaluation determinism and cross-platform manifest serialization repair",
+      "replacement_evidence_required": true
     }
   ],
   "research_boundary": {
@@ -40,8 +46,9 @@
   },
   "micro_data": {
     "generator_seed": 2026,
+    "suite_manifest_serialization": "sorted-indented-utf8-lf-v1",
     "set8": {
-      "suite_manifest_sha256": "5a05350003e16923ddb2e27f135cd69a826c768724a64b4a080572b601ed1dd5",
+      "suite_manifest_sha256": "f54c5cdbd5b77c65499325daee4bdf203d1b3e1f665ac7ce809aa0c81b469198",
       "train_sha256": "b0b8896c14ea597379271bc485f57011a0028b3a50eef08185817bdf3442deb6",
       "gate_sha256": "2653c3b5a43c6b11d282397a27a14d94f1daf9e558aea943378bd40c307d94b1",
       "raw_teacher_sidecar_sha256": "51bc74eb3a6579a6fd07b31a4d2e5b80e2b2f34cacc3d7048242249fe64be2bb",
@@ -49,7 +56,7 @@
       "gate_views": 32
     },
     "transition16": {
-      "suite_manifest_sha256": "0438dff0399a030903f6355ef1c8a2785b178c80577141ce8ce77627467c2b59",
+      "suite_manifest_sha256": "ea30117bd942edfd2d3d603902bef505d13c360737ca6405d5c45291bf746830",
       "train_sha256": "879ff26cf638e87cea404ce5135e546b165f6a2a6da2a9415990b3e855651ae0",
       "gate_sha256": "b9cb3218292e2ae91f54909e8d97436cc2664699dfdf6ca6280a024092a4790a",
       "raw_teacher_sidecar_sha256": "745fc1f06fab76eb85819dcf8d98158c92a832f0756c1c9e0f8f68d5a30321ab",

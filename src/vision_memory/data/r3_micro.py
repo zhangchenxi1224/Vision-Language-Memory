@@ -499,8 +499,10 @@ def write_r3_micro_suite(output_dir: Path, suite: R3MicroSuite) -> dict[str, Any
             sidecar_path.name: {"sha256": _sha256_file(sidecar_path), "count": len(suite.teacher_sidecar)},
         },
     }
-    manifest_path.write_text(
-        json.dumps(manifest, ensure_ascii=False, sort_keys=True, indent=2) + "\n",
-        encoding="utf-8",
-    )
+    # ``Path.write_text`` uses the host newline convention.  These manifests
+    # are preregistered byte artifacts, so writing them with implicit newlines
+    # made the same JSON hash differently on Windows (CRLF) and Linux (LF).
+    # Keep the serialization byte-identical on every platform.
+    with manifest_path.open("w", encoding="utf-8", newline="\n") as handle:
+        handle.write(json.dumps(manifest, ensure_ascii=False, sort_keys=True, indent=2) + "\n")
     return manifest

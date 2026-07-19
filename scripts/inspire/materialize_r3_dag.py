@@ -1693,6 +1693,7 @@ def _preregistered_micro_data_binding(suite: str) -> dict[str, str]:
         raise ValueError(f"R3 preregistration has no micro-data lock for {suite}")
     result = {
         "preregistration_sha256": sha256_file(preregistration),
+        "suite_manifest_sha256": str(locked.get("suite_manifest_sha256", "")),
         "train_sha256": str(locked.get("train_sha256", "")),
         "gate_sha256": str(locked.get("gate_sha256", "")),
     }
@@ -1765,10 +1766,11 @@ def _validate_micro_command_semantics(contract: Mapping[str, Any]) -> None:
     data_binding = contract.get("data_binding")
     if not isinstance(data_binding, Mapping) or set(data_binding) != {
         "preregistration_sha256",
+        "suite_manifest_sha256",
         "train_sha256",
         "gate_sha256",
     }:
-        raise ValueError("micro command requires exact train/gate data SHA256 bindings")
+        raise ValueError("micro command requires exact suite-manifest/train/gate SHA256 bindings")
     if any(SHA256_PATTERN.fullmatch(str(value)) is None for value in data_binding.values()):
         raise ValueError("micro command data SHA256 binding is malformed")
     if dict(data_binding) != _preregistered_micro_data_binding(suite):
@@ -1820,13 +1822,19 @@ def _validate_micro_command_semantics(contract: Mapping[str, Any]) -> None:
             control = str(_command_flag_value(command, "--teacher-control", required=True))
             train_path = Path(str(_command_flag_value(command, "--train", required=True)))
             gate_path = Path(str(_command_flag_value(command, "--dev", required=True)))
+            suite_manifest_path = train_path.parent / f"{suite}_manifest.json"
             if (
                 not train_path.is_absolute()
                 or not gate_path.is_absolute()
+                or gate_path.parent != train_path.parent
+                or not suite_manifest_path.is_file()
+                or sha256_file(suite_manifest_path) != data_binding["suite_manifest_sha256"]
                 or sha256_file(train_path) != data_binding["train_sha256"]
                 or sha256_file(gate_path) != data_binding["gate_sha256"]
             ):
-                raise ValueError("micro training command data paths do not match the bound train/gate SHA256")
+                raise ValueError(
+                    "micro training command data paths do not match the bound suite-manifest/train/gate SHA256"
+                )
             has_teacher_inputs = any(flag in command for flag in _MICRO_TEACHER_INPUT_FLAGS)
             if regime == "qa_only":
                 if control != "correct" or objective != "qa" or has_teacher_inputs or "--initialize-from" in command:
@@ -2786,6 +2794,12 @@ def initialize_micro_extension(
     ]
     evidence_bindings.extend(
         (
+            {
+                "label": "micro-data:suite-manifest",
+                "path": str(train_path.parent / f"{contract['suite']}_manifest.json"),
+                "sha256": contract["data_binding"]["suite_manifest_sha256"],
+                "required_values": {},
+            },
             {
                 "label": "micro-data:train",
                 "path": str(train_path),
