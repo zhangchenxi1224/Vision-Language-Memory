@@ -162,6 +162,14 @@ def parse_args() -> argparse.Namespace:
         help="Record bitwise raw/clipped gradient payloads for DL-S; incurs synchronization overhead.",
     )
     parser.add_argument(
+        "--audit-optimizer-diagnostics",
+        action="store_true",
+        help=(
+            "Record opt-in DreamLite LoRA gradient, clipping, parameter, and optimizer-update "
+            "norms grouped by U-Net stage, attention projection, adapter factor, and their cross-product."
+        ),
+    )
+    parser.add_argument(
         "--audit-state-gradients",
         action="store_true",
         help="Fail closed unless every expected micro-run state/image tensor has a finite non-zero gradient.",
@@ -252,6 +260,17 @@ def set_all_seeds(seed: int) -> None:
 
 def serializable_args(args: argparse.Namespace) -> dict[str, Any]:
     return {key: str(value) if isinstance(value, Path) else value for key, value in vars(args).items()}
+
+
+def manifest_compatibility_args(args: argparse.Namespace) -> dict[str, Any]:
+    compatibility_args = serializable_args(args)
+    for excluded in ("resume", "initialize_from", "output_dir", "allow_dirty"):
+        compatibility_args.pop(excluded, None)
+    # Keep the default arguments payload stable: a disabled diagnostic must not become
+    # part of the ordinary training compatibility contract.
+    if not compatibility_args.get("audit_optimizer_diagnostics", False):
+        compatibility_args.pop("audit_optimizer_diagnostics", None)
+    return compatibility_args
 
 
 def _checkpoint_lineage(path: Path) -> tuple[dict[str, Any], str]:
@@ -469,9 +488,7 @@ def make_manifest(args: argparse.Namespace) -> dict[str, Any]:
     status = git_value("status", "--porcelain")
     if status and not args.allow_dirty:
         raise RuntimeError("Formal training refuses a dirty worktree. Commit or pass --allow-dirty for debugging only.")
-    compatibility_args = serializable_args(args)
-    for excluded in ("resume", "initialize_from", "output_dir", "allow_dirty"):
-        compatibility_args.pop(excluded, None)
+    compatibility_args = manifest_compatibility_args(args)
     lineage = training_lineage(args)
     model_snapshot_manifests = {
         "dreamlite_mobile": os.environ.get("VLM_DREAMLITE_SNAPSHOT_MANIFEST_SHA256"),
@@ -1099,6 +1116,236 @@ def gradient_payload_sha256(named_parameters: Iterable[tuple[str, torch.nn.Param
     ).hexdigest()
 
 
+OPTIMIZER_DIAGNOSTICS_SCHEMA = "vision_memory.dreamlite-optimizer-diagnostics.v1"
+_OPTIMIZER_DIAGNOSTIC_AXES = ("stage", "projection", "factor", "cross")
+
+
+def optimizer_diagnostic_group_labels(parameter_name: str) -> dict[str, str]:
+    """Return exhaustive DreamLite LoRA diagnostic labels for one trainable tensor."""
+
+    bounded = f".{parameter_name}."
+    stage = next(
+        (
+            label
+            for label, marker in (
+                ("down_blocks", ".down_blocks."),
+                ("mid_block", ".mid_block."),
+                ("up_blocks", ".up_blocks."),
+            )
+            if marker in bounded
+        ),
+        "other",
+    )
+    projection = next(
+        (
+            label
+            for label, marker in (
+                ("to_q", ".to_q."),
+                ("to_k", ".to_k."),
+                ("to_v", ".to_v."),
+                ("to_out", ".to_out."),
+            )
+            if marker in bounded
+        ),
+        "other",
+    )
+    factor = next(
+        (
+            label
+            for label, marker in (
+                ("lora_A", ".lora_A."),
+                ("lora_B", ".lora_B."),
+            )
+            if marker in bounded
+        ),
+        "initial_state" if parameter_name == "initial_state" else "other",
+    )
+    return {
+        "stage": stage,
+        "projection": projection,
+        "factor": factor,
+        "cross": f"{stage}|{projection}|{factor}",
+    }
+
+
+def grouped_tensor_norms(
+    named_tensors: Iterable[tuple[str, torch.Tensor | None]],
+) -> dict[str, Any]:
+    """Summarize tensor L2 norms over exhaustive, independently disjoint grouping axes."""
+
+    entries = list(named_tensors)
+    names = [name for name, _tensor in entries]
+    if len(set(names)) != len(names):
+        raise ValueError("Optimizer diagnostics require unique tensor names.")
+
+    def new_bucket() -> dict[str, Any]:
+        return {
+            "squared_components": [],
+            "tensor_count": 0,
+            "observed_tensor_count": 0,
+            "missing_tensor_count": 0,
+            "element_count": 0,
+        }
+
+    global_bucket = new_bucket()
+    grouped: dict[str, dict[str, dict[str, Any]]] = {axis: {} for axis in _OPTIMIZER_DIAGNOSTIC_AXES}
+    for name, tensor in entries:
+        labels = optimizer_diagnostic_group_labels(name)
+        buckets = [global_bucket]
+        for axis in _OPTIMIZER_DIAGNOSTIC_AXES:
+            buckets.append(grouped[axis].setdefault(labels[axis], new_bucket()))
+        for bucket in buckets:
+            bucket["tensor_count"] += 1
+        if tensor is None:
+            for bucket in buckets:
+                bucket["missing_tensor_count"] += 1
+            continue
+        value = tensor.detach()
+        if value.is_sparse:
+            value = value.coalesce().values()
+        squared = value.to(dtype=torch.float32).square().sum()
+        for bucket in buckets:
+            bucket["squared_components"].append(squared)
+            bucket["observed_tensor_count"] += 1
+            bucket["element_count"] += value.numel()
+
+    def squared_value(bucket: dict[str, Any]) -> float:
+        components = bucket.pop("squared_components")
+        if not components:
+            return 0.0
+        devices = {component.device for component in components}
+        if len(devices) == 1:
+            return float(torch.stack(components).sum().item())
+        return sum(float(component.item()) for component in components)
+
+    global_squared = squared_value(global_bucket)
+    if not math.isfinite(global_squared) or global_squared < 0.0:
+        raise RuntimeError(f"Optimizer diagnostics found invalid global squared norm: {global_squared}")
+
+    def finalize(bucket: dict[str, Any], squared: float) -> dict[str, Any]:
+        if not math.isfinite(squared) or squared < 0.0:
+            raise RuntimeError(f"Optimizer diagnostics found invalid grouped squared norm: {squared}")
+        return {
+            "norm": math.sqrt(squared),
+            "squared_norm_share": squared / global_squared if global_squared > 0.0 else 0.0,
+            "tensor_count": int(bucket["tensor_count"]),
+            "observed_tensor_count": int(bucket["observed_tensor_count"]),
+            "missing_tensor_count": int(bucket["missing_tensor_count"]),
+            "element_count": int(bucket["element_count"]),
+        }
+
+    result: dict[str, Any] = {
+        "global": finalize(global_bucket, global_squared),
+    }
+    for axis in _OPTIMIZER_DIAGNOSTIC_AXES:
+        axis_result: dict[str, Any] = {}
+        for label, bucket in sorted(grouped[axis].items()):
+            axis_result[label] = finalize(bucket, squared_value(bucket))
+        result[f"by_{axis}"] = axis_result
+    return result
+
+
+def begin_optimizer_diagnostics(
+    named_parameters: Iterable[tuple[str, torch.nn.Parameter]],
+) -> tuple[dict[str, torch.Tensor], dict[str, Any]]:
+    """Capture pre-clip gradient/parameter norms and the small trainable-state snapshot."""
+
+    named = list(named_parameters)
+    snapshot = {name: parameter.detach().clone() for name, parameter in named}
+    report = {
+        "schema": OPTIMIZER_DIAGNOSTICS_SCHEMA,
+        "parameter_norms_before_step": grouped_tensor_norms(
+            (name, parameter.detach()) for name, parameter in named
+        ),
+        "gradient_norms_before_clip": grouped_tensor_norms(
+            (name, parameter.grad) for name, parameter in named
+        ),
+    }
+    return snapshot, report
+
+
+def record_optimizer_diagnostics_after_clip(
+    report: dict[str, Any],
+    named_parameters: Iterable[tuple[str, torch.nn.Parameter]],
+    *,
+    gradient_norm: torch.Tensor | float,
+    max_norm: float,
+    epsilon: float = 1e-6,
+) -> None:
+    """Record actual clipped norms and cross-check PyTorch's returned pre-clip global norm."""
+
+    if not math.isfinite(max_norm) or not math.isfinite(epsilon) or max_norm <= 0.0 or epsilon <= 0.0:
+        raise ValueError("Optimizer diagnostic clipping constants must be finite and positive.")
+    named = list(named_parameters)
+    returned_norm = float(gradient_norm.item() if isinstance(gradient_norm, torch.Tensor) else gradient_norm)
+    if not math.isfinite(returned_norm) or returned_norm < 0.0:
+        raise RuntimeError(f"Optimizer diagnostics found invalid returned gradient norm: {returned_norm}")
+    pre_norm = float(report["gradient_norms_before_clip"]["global"]["norm"])
+    norm_difference = pre_norm - returned_norm
+    norm_relative_difference = abs(norm_difference) / max(abs(returned_norm), epsilon)
+    clipping_factor = min(1.0, max_norm / (returned_norm + epsilon))
+    low_precision_gradients = any(
+        parameter.grad is not None and parameter.grad.dtype in {torch.bfloat16, torch.float16}
+        for _name, parameter in named
+    )
+    comparison_rel_tol = 5e-3 if low_precision_gradients else 2e-5
+    report["gradient_clipping"] = {
+        "max_norm": float(max_norm),
+        "epsilon": float(epsilon),
+        "pre_clip_norm_returned": returned_norm,
+        "pre_clip_norm_diagnostic_difference": norm_difference,
+        "pre_clip_norm_diagnostic_relative_difference": norm_relative_difference,
+        "pre_clip_norm_diagnostic_matches": math.isclose(
+            returned_norm,
+            pre_norm,
+            rel_tol=comparison_rel_tol,
+            abs_tol=1e-6,
+        ),
+        "pre_clip_norm_comparison_rel_tol": comparison_rel_tol,
+        "clipping_factor": clipping_factor,
+        "clipped": returned_norm > max_norm,
+    }
+    report["gradient_norms_after_clip"] = grouped_tensor_norms(
+        (name, parameter.grad) for name, parameter in named
+    )
+
+
+def finalize_optimizer_diagnostics_after_step(
+    report: dict[str, Any],
+    named_parameters: Iterable[tuple[str, torch.nn.Parameter]],
+    snapshot: dict[str, torch.Tensor],
+) -> dict[str, Any]:
+    """Record the actual optimizer update and its ratio to each pre-step weight group."""
+
+    named = list(named_parameters)
+    if set(snapshot) != {name for name, _parameter in named}:
+        raise ValueError("Optimizer diagnostic snapshot names differ from current trainable parameters.")
+    updates = grouped_tensor_norms(
+        (name, parameter.detach() - snapshot[name]) for name, parameter in named
+    )
+    weights = report["parameter_norms_before_step"]
+
+    def attach_ratios(update_scope: dict[str, Any], weight_scope: dict[str, Any]) -> None:
+        if set(update_scope) != set(weight_scope):
+            raise RuntimeError("Optimizer diagnostic update and parameter groups differ.")
+        for label, update_item in update_scope.items():
+            parameter_norm = float(weight_scope[label]["norm"])
+            update_norm = float(update_item["norm"])
+            update_item["parameter_norm_before_step"] = parameter_norm
+            update_item["update_weight_ratio"] = update_norm / parameter_norm if parameter_norm > 0.0 else None
+
+    global_parameter_norm = float(weights["global"]["norm"])
+    global_update_norm = float(updates["global"]["norm"])
+    updates["global"]["parameter_norm_before_step"] = global_parameter_norm
+    updates["global"]["update_weight_ratio"] = (
+        global_update_norm / global_parameter_norm if global_parameter_norm > 0.0 else None
+    )
+    for axis in _OPTIMIZER_DIAGNOSTIC_AXES:
+        attach_ratios(updates[f"by_{axis}"], weights[f"by_{axis}"])
+    report["updates_after_step"] = updates
+    return report
+
+
 def truncate_metrics_for_resume(path: Path, *, optimizer_step: int) -> float:
     if not path.exists():
         return 0.0
@@ -1551,12 +1798,32 @@ def main() -> int:
                     for parameter in trainable:
                         if parameter.grad is not None:
                             parameter.grad.mul_(accumulation_rescale)
+                optimizer_diagnostics_snapshot: dict[str, torch.Tensor] | None = None
+                optimizer_diagnostics: dict[str, Any] | None = None
+                if args.audit_optimizer_diagnostics:
+                    optimizer_diagnostics_snapshot, optimizer_diagnostics = begin_optimizer_diagnostics(
+                        named_trainable
+                    )
                 raw_gradient_sha256 = gradient_payload_sha256(named_trainable) if args.audit_gradient_sha else None
                 gradient_norm = torch.nn.utils.clip_grad_norm_(trainable, args.gradient_clip)
                 if not torch.isfinite(gradient_norm) or gradient_norm.item() <= 0:
                     raise RuntimeError(f"Invalid trainable gradient norm: {gradient_norm.item()}")
+                if optimizer_diagnostics is not None:
+                    record_optimizer_diagnostics_after_clip(
+                        optimizer_diagnostics,
+                        named_trainable,
+                        gradient_norm=gradient_norm,
+                        max_norm=args.gradient_clip,
+                    )
                 clipped_gradient_sha256 = gradient_payload_sha256(named_trainable) if args.audit_gradient_sha else None
                 optimizer.step()
+                if optimizer_diagnostics is not None:
+                    assert optimizer_diagnostics_snapshot is not None
+                    optimizer_diagnostics = finalize_optimizer_diagnostics_after_step(
+                        optimizer_diagnostics,
+                        named_trainable,
+                        optimizer_diagnostics_snapshot,
+                    )
                 optimizer.zero_grad(set_to_none=True)
                 optimizer_step += 1
                 group_episode_count = accumulation_count
@@ -1619,6 +1886,11 @@ def main() -> int:
                         "raw_gradient_sha256": raw_gradient_sha256,
                         "clipped_gradient_sha256": clipped_gradient_sha256,
                         "state_gradient_audit": group_gradient_audit,
+                        **(
+                            {"optimizer_diagnostics": optimizer_diagnostics}
+                            if optimizer_diagnostics is not None
+                            else {}
+                        ),
                         "elapsed_seconds": prior_elapsed + time.monotonic() - started,
                     },
                 )

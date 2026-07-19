@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import argparse
 from collections import Counter
+import json
+import math
 import sys
 import tempfile
 import unittest
@@ -40,6 +42,157 @@ class DreamLiteTrainingContractTest(unittest.TestCase):
         self.assertEqual(args.choice_view_schedule, "cyclic4")
         self.assertEqual(args.training_regime, "qa_only")
         self.assertIsNone(args.teacher_manifest)
+        self.assertFalse(args.audit_optimizer_diagnostics)
+        self.assertNotIn(
+            "audit_optimizer_diagnostics",
+            dreamlite_episode.manifest_compatibility_args(args),
+        )
+        args.audit_optimizer_diagnostics = True
+        self.assertTrue(
+            dreamlite_episode.manifest_compatibility_args(args)["audit_optimizer_diagnostics"]
+        )
+
+    def test_optimizer_diagnostic_groups_are_exhaustive_and_norms_partition_each_axis(self):
+        named_tensors = [
+            (
+                "updater.pipeline.unet.base_model.model.down_blocks.0.attentions.0.to_q."
+                "lora_A.default.weight",
+                torch.tensor([3.0, 4.0]),
+            ),
+            (
+                "updater.pipeline.unet.base_model.model.down_blocks.0.attentions.0.to_k."
+                "lora_B.default.weight",
+                torch.tensor([12.0]),
+            ),
+            (
+                "updater.pipeline.unet.base_model.model.mid_block.attentions.0.to_v."
+                "lora_A.default.weight",
+                torch.tensor([5.0]),
+            ),
+            (
+                "updater.pipeline.unet.base_model.model.up_blocks.0.attentions.0.to_out.0."
+                "lora_B.default.weight",
+                torch.tensor([8.0, 15.0]),
+            ),
+            ("initial_state", torch.tensor([7.0, 24.0])),
+        ]
+
+        summary = dreamlite_episode.grouped_tensor_norms(named_tensors)
+        global_squared = summary["global"]["norm"] ** 2
+
+        self.assertEqual(summary["global"]["tensor_count"], len(named_tensors))
+        self.assertEqual(summary["global"]["missing_tensor_count"], 0)
+        self.assertEqual(
+            set(summary["by_stage"]),
+            {"down_blocks", "mid_block", "up_blocks", "other"},
+        )
+        self.assertEqual(set(summary["by_projection"]), {"to_q", "to_k", "to_v", "to_out", "other"})
+        self.assertEqual(set(summary["by_factor"]), {"lora_A", "lora_B", "initial_state"})
+        self.assertEqual(len(summary["by_cross"]), len(named_tensors))
+        for axis in dreamlite_episode._OPTIMIZER_DIAGNOSTIC_AXES:
+            groups = summary[f"by_{axis}"]
+            self.assertEqual(sum(item["tensor_count"] for item in groups.values()), len(named_tensors))
+            self.assertTrue(
+                math.isclose(
+                    sum(item["norm"] ** 2 for item in groups.values()),
+                    global_squared,
+                    rel_tol=1e-6,
+                    abs_tol=1e-6,
+                )
+            )
+            self.assertTrue(
+                math.isclose(
+                    sum(item["squared_norm_share"] for item in groups.values()),
+                    1.0,
+                    rel_tol=1e-6,
+                    abs_tol=1e-6,
+                )
+            )
+        self.assertIsInstance(json.dumps(summary, allow_nan=False, sort_keys=True), str)
+
+    def test_optimizer_diagnostics_record_actual_clip_and_update_ratios(self):
+        down = torch.nn.Parameter(torch.tensor([3.0, 4.0]))
+        up = torch.nn.Parameter(torch.tensor([0.0, 12.0]))
+        down.grad = torch.tensor([3.0, 4.0])
+        up.grad = torch.tensor([0.0, 12.0])
+        named_parameters = [
+            (
+                "updater.pipeline.unet.base_model.model.down_blocks.0.attentions.0.to_q."
+                "lora_A.default.weight",
+                down,
+            ),
+            (
+                "updater.pipeline.unet.base_model.model.up_blocks.0.attentions.0.to_v."
+                "lora_B.default.weight",
+                up,
+            ),
+        ]
+        optimizer = torch.optim.SGD([down, up], lr=0.1)
+
+        snapshot, report = dreamlite_episode.begin_optimizer_diagnostics(named_parameters)
+        gradient_norm = torch.nn.utils.clip_grad_norm_([down, up], 6.5)
+        dreamlite_episode.record_optimizer_diagnostics_after_clip(
+            report,
+            named_parameters,
+            gradient_norm=gradient_norm,
+            max_norm=6.5,
+        )
+        optimizer.step()
+        report = dreamlite_episode.finalize_optimizer_diagnostics_after_step(
+            report,
+            named_parameters,
+            snapshot,
+        )
+
+        self.assertAlmostEqual(report["parameter_norms_before_step"]["global"]["norm"], 13.0, places=6)
+        self.assertAlmostEqual(report["gradient_norms_before_clip"]["global"]["norm"], 13.0, places=6)
+        self.assertAlmostEqual(report["gradient_clipping"]["pre_clip_norm_returned"], 13.0, places=6)
+        self.assertTrue(report["gradient_clipping"]["pre_clip_norm_diagnostic_matches"])
+        self.assertAlmostEqual(
+            report["gradient_clipping"]["clipping_factor"],
+            6.5 / (13.0 + 1e-6),
+            places=7,
+        )
+        self.assertTrue(report["gradient_clipping"]["clipped"])
+        self.assertAlmostEqual(report["gradient_norms_after_clip"]["global"]["norm"], 6.5, places=5)
+        self.assertAlmostEqual(report["updates_after_step"]["global"]["norm"], 0.65, places=5)
+        self.assertAlmostEqual(report["updates_after_step"]["global"]["update_weight_ratio"], 0.05, places=5)
+        self.assertEqual(
+            set(report["updates_after_step"]["by_stage"]),
+            set(report["parameter_norms_before_step"]["by_stage"]),
+        )
+        self.assertIsInstance(json.dumps(report, allow_nan=False, sort_keys=True), str)
+
+        with self.assertRaisesRegex(ValueError, "finite and positive"):
+            dreamlite_episode.record_optimizer_diagnostics_after_clip(
+                report,
+                named_parameters,
+                gradient_norm=gradient_norm,
+                max_norm=float("inf"),
+            )
+
+    def test_optimizer_diagnostics_use_low_precision_norm_tolerance(self):
+        parameter = torch.nn.Parameter(torch.tensor([1.0, 2.0, 3.0], dtype=torch.bfloat16))
+        parameter.grad = torch.tensor([1.0, 2.0, 3.0], dtype=torch.bfloat16)
+        named_parameters = [
+            (
+                "updater.pipeline.unet.base_model.model.mid_block.attentions.0.to_q."
+                "lora_A.default.weight",
+                parameter,
+            )
+        ]
+
+        _snapshot, report = dreamlite_episode.begin_optimizer_diagnostics(named_parameters)
+        gradient_norm = torch.nn.utils.clip_grad_norm_([parameter], 1.0)
+        dreamlite_episode.record_optimizer_diagnostics_after_clip(
+            report,
+            named_parameters,
+            gradient_norm=gradient_norm,
+            max_norm=1.0,
+        )
+
+        self.assertEqual(report["gradient_clipping"]["pre_clip_norm_comparison_rel_tol"], 5e-3)
+        self.assertTrue(report["gradient_clipping"]["pre_clip_norm_diagnostic_matches"])
 
     def test_cyclic_rotation_synchronizes_target_index(self):
         choices = ("a", "b", "c", "d")
