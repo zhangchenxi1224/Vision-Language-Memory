@@ -269,3 +269,11 @@ def test_prediction_report_rejects_each_contract_drift(
             rows,
             method=QWEN_R4_RAW_HISTORY,
         )
+
+
+def test_amendment_is_locked_to_lf_in_git_attributes() -> None:
+    attributes = (ROOT / ".gitattributes").read_text(encoding="utf-8").splitlines()
+    assert (
+        "configs/experiments/r4_qwen_history_comparison_20260722.json text eol=lf"
+        in attributes
+    )
