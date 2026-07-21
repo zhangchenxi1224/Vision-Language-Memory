@@ -1,0 +1,226 @@
+{
+  "schema": "vision_memory.r4-qwen-history-comparison-amendment.v1",
+  "decision_date": "2026-07-22",
+  "status": "prospective_before_any_r4_gpu_prediction",
+  "parent_r3_commit": "7048e7749b37e4a8b1f862b783491b4d6fa25717",
+  "research_role": {
+    "name": "qwen_history_r4_three_arm_comparison",
+    "training": false,
+    "dreamlite_loaded": false,
+    "teacher_or_oracle_state_used": false,
+    "oracle_router_metadata_used_by_tagged_and_reducer": true
+  },
+  "reader": {
+    "repo_id": "Qwen/Qwen3-VL-4B-Instruct",
+    "revision": "ebb281ec70b05090aa6165b016eac8ec08e71b17",
+    "snapshot_key": "qwen_reader",
+    "loss_mode": "listwise-choice",
+    "choice_family": "reverse-cyclic4",
+    "choice_family_sha256": "4cd725a443d8661dccccbff2d714876aee317c654ef2aa1bcb79aee307d64bbd",
+    "parameters_frozen": true,
+    "visual_input": "fixed_blank_1024x1024_rgb_float32"
+  },
+  "blank_image": {
+    "input_mode": "blank_image",
+    "shape_chw": [3, 1024, 1024],
+    "dtype": "float32",
+    "rgb_value": 0.5,
+    "constant_visual_input_bytes": 12582912,
+    "reader_resize_contract": "r3-qwen-reader-1024-to-256-bicubic-antialias-cpu-adjoint.v1"
+  },
+  "prompt_contract": {
+    "instruction": "Apply the visible memory events in chronological order. A later effective update replaces the earlier preference; clearing removes the current preference; an unrelated or no-op event leaves it unchanged. Answer the current question from the final state, using only the memory below.",
+    "instruction_sha256": "95c5223e70075b8e57c04f7b0bd016b98e51c20be4cdc0584b48a9b433228e74",
+    "query_choices_or_target_in_memory": false,
+    "future_event_access": false
+  },
+  "arms": {
+    "raw": {
+      "method": "qwen_r4_raw_history",
+      "history_representation": "raw_chronological_event_history",
+      "representation_contract_sha256": "096f874e4ee9cce819fe3e193d96bef40ee4b2f11310dc0313ee9449f770d381",
+      "training": false,
+      "teacher_access": false,
+      "oracle_ledger_access": false,
+      "target_access": false,
+      "oracle_router_metadata": false,
+      "performance_role": "descriptive_nonblocking"
+    },
+    "tagged": {
+      "method": "qwen_r4_operation_tagged_history",
+      "history_representation": "operation_tagged_event_history",
+      "representation_contract_sha256": "b75b0354d546c96f065b21b814cdcf8c3e522dd2eb7cde9ac1ee4ce3d70964be",
+      "training": false,
+      "teacher_access": false,
+      "oracle_ledger_access": false,
+      "target_access": false,
+      "oracle_router_metadata": true,
+      "performance_role": "descriptive_nonblocking"
+    },
+    "last_effective": {
+      "method": "qwen_r4_last_effective_event",
+      "history_representation": "last_effective_event",
+      "representation_contract_sha256": "aa28a9d2ce7c1260cbd1ab0df30058bbd0c99ad2eb94735d8ecdd74818f15a8f",
+      "training": false,
+      "teacher_access": false,
+      "oracle_ledger_access": false,
+      "target_access": false,
+      "oracle_router_metadata": true,
+      "performance_role": "data_readability_gate"
+    }
+  },
+  "lockbox": {
+    "seed": 20260722,
+    "manifest_sha256": "f3c5f235df9a3f026e3671ff2d330167fa7fd7ea39d520666f4624874209b321",
+    "lockbox_contract_sha256": "9a6b5e737744d204bd7eebee03e49f9c099cb65ebe0ca61f4f13bce337264c4d",
+    "source_contract_sha256": "d9c60efad65ce29aeb527fa954da7cfacb3fe88cda1683422532d613d9ffe4d7",
+    "independent_generations_bitwise_identical": true,
+    "pre_bh2_test_policy": {
+      "scope": ["formal_test_id", "formal_test_ood"],
+      "allowed_before_bh2_unlock": ["sha256_byte_binding"],
+      "json_semantic_parse_before_bh2_unlock": false,
+      "scoring_before_bh2_unlock": false,
+      "metric_access_before_bh2_unlock": false,
+      "evaluation_before_bh2_unlock": false,
+      "unlock_condition": "BH2_last_effective_dev_gate_passed"
+    }
+  },
+  "data": {
+    "lockbox_manifest": "f3c5f235df9a3f026e3671ff2d330167fa7fd7ea39d520666f4624874209b321",
+    "smoke4": "e1a7868e39694f8b4f241878e73f6ac9e5003d1bf733111cc769d607509b4b14",
+    "transition32": "200fccf3758cd9bb75224f90f50fe732474c5e1ec1ad3463bb386ce080d6ee1d",
+    "formal_train": "493a8668422a17bd94666b4a07198eaa7d38192b5e1e7a42f5d6db98496dddc7",
+    "formal_dev": "541da388a0261d119db8b77f7903ba1082b07c7ff34f9fc60acd6c2b3e09bde0",
+    "formal_test_id": "d1722dba096d1da8fee4ea4a994b026add8e0e704cb6cf71d132f83453e27079",
+    "formal_test_ood": "b193dadd116ecd1f112682c1d574da91eca55ae48601cc8f5b716a743e7c6f9f"
+  },
+  "expected_inventory": {
+    "smoke4": {
+      "data_key": "smoke4",
+      "query_states": 4,
+      "conditions": ["standard"],
+      "probe_role": "delayed",
+      "limit": null,
+      "records_per_condition": 16,
+      "prediction_records_per_arm": 16
+    },
+    "transition32": {
+      "data_key": "transition32",
+      "query_states": 32,
+      "conditions": ["standard", "reset", "shuffle", "state_swap"],
+      "probe_role": "delayed",
+      "limit": null,
+      "records_per_condition": 128,
+      "prediction_records_per_arm": 512
+    },
+    "formal_dev": {
+      "data_key": "formal_dev",
+      "query_states": 1252,
+      "conditions": ["standard"],
+      "probe_role": "all",
+      "limit": null,
+      "records_per_condition": 5008,
+      "prediction_records_per_arm": 5008
+    },
+    "formal_test_id": {
+      "data_key": "formal_test_id",
+      "query_states": 2488,
+      "conditions": ["standard"],
+      "probe_role": "all",
+      "limit": null,
+      "records_per_condition": 9952,
+      "prediction_records_per_arm": 9952
+    },
+    "formal_test_ood": {
+      "data_key": "formal_test_ood",
+      "query_states": 2488,
+      "conditions": ["standard"],
+      "probe_role": "all",
+      "limit": null,
+      "records_per_condition": 9952,
+      "prediction_records_per_arm": 9952
+    }
+  },
+  "stages": {
+    "BH0": {
+      "datasets": ["smoke4"],
+      "score_suite": "smoke",
+      "comparison_suite": null,
+      "last_effective_gate_required": true
+    },
+    "BH1": {
+      "datasets": ["transition32"],
+      "score_suite": "transition32",
+      "comparison_suite": "bh1",
+      "last_effective_gate_required": true
+    },
+    "BH2": {
+      "datasets": ["formal_dev"],
+      "score_suite": "formal",
+      "comparison_suite": "formal",
+      "last_effective_gate_required": true
+    },
+    "BH3": {
+      "datasets": ["formal_test_id", "formal_test_ood"],
+      "score_suite": "formal",
+      "comparison_suite": "formal",
+      "last_effective_gate_required": false
+    }
+  },
+  "thresholds": {
+    "bh0_last_effective": {
+      "overall": "15/16",
+      "per_position": "3/4",
+      "per_event_kind": "3/4",
+      "rotation_consistent_states": "4/4",
+      "clean_noop_memory_prompt_prediction_nll_exact": "4/4"
+    },
+    "bh1_raw_and_tagged_report_only": {
+      "overall": "116/128",
+      "per_position": "28/32",
+      "per_event_kind": "28/32",
+      "mixed": "58/64",
+      "per_kind_form_cell": "14/16",
+      "rotation_consistent_states": "30/32",
+      "state_swap_donor": "28/32",
+      "reset_drop": "32/128",
+      "shuffle_drop": "32/128",
+      "clean_noop_prediction_agreement": "30/32"
+    },
+    "bh1_last_effective_blocking": {
+      "overall": "122/128",
+      "per_position": "30/32",
+      "per_event_kind": "30/32",
+      "mixed": "61/64",
+      "per_kind_form_cell": "15/16",
+      "rotation_consistent_states": "31/32",
+      "state_swap_donor": "30/32",
+      "reset_drop": "32/128",
+      "shuffle_drop": "32/128",
+      "clean_noop_memory_prompt_prediction_nll_exact": "32/32"
+    },
+    "bh2_last_effective_dev_standard_accuracy": 0.95
+  },
+  "execution": {
+    "strict_order": ["BH0", "BH1", "BH2", "BH3"],
+    "arm_order": ["raw", "tagged", "last_effective"],
+    "replica_order": ["A", "B"],
+    "replica_a_device": "cuda:0",
+    "replica_b_device": "cuda:1",
+    "sequential_within_arm": true,
+    "scientific_prediction_payload_exact": true,
+    "raw_tagged_performance_failure_blocks": false,
+    "integrity_replication_leakage_context_failure_blocks": true,
+    "bh3_accuracy_is_not_a_stop_gate": true,
+    "bootstrap_iterations": 10000,
+    "bootstrap_seed": 2026
+  },
+  "forbidden": [
+    "DreamLite training",
+    "PrefEval",
+    "text-only R4 arm",
+    "teacher or ledger sidecar",
+    "pre-BH2 test JSON semantic parsing, scoring, metric access, or evaluation execution",
+    "post-hoc prompt, threshold, data, or permutation changes"
+  ]
+}
