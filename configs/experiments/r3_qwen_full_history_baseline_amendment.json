@@ -1,0 +1,163 @@
+{
+  "schema": "vision_memory.r3-qwen-full-history-baseline-amendment.v1",
+  "decision_date": "2026-07-21",
+  "status": "prospective_before_any_qwen_full_history_baseline_gpu_prediction",
+  "classification": "new_frozen_reader_text_history_baseline; no DreamLite training protocol change",
+  "research_role": {
+    "name": "qwen_full_event_history_blank_image",
+    "interpretation": "strong textual-memory reference, not a parameter-count- or state-byte-matched comparator",
+    "primary_input_mode": "complete prior event text plus one fixed blank image",
+    "text_only_role": "micro-suite sensitivity analysis only; excluded from the primary baseline",
+    "training": false,
+    "dreamlite_loaded": false
+  },
+  "reader": {
+    "repo_id": "Qwen/Qwen3-VL-4B-Instruct",
+    "revision": "ebb281ec70b05090aa6165b016eac8ec08e71b17",
+    "snapshot_key": "qwen_reader",
+    "loss_mode": "listwise-choice",
+    "choice_family": "reverse-cyclic4",
+    "choice_family_sha256": "4cd725a443d8661dccccbff2d714876aee317c654ef2aa1bcb79aee307d64bbd",
+    "joint_chat_continuation_tokenization": true,
+    "attention_backend": "strict_math_only",
+    "parameters_frozen": true
+  },
+  "blank_image": {
+    "shape_chw": [3, 1024, 1024],
+    "dtype": "float32",
+    "rgb_value": 0.5,
+    "reader_resize_contract": "r3-qwen-reader-1024-to-256-bicubic-antialias-cpu-adjoint.v1",
+    "constant_visual_input_bytes": 12582912
+  },
+  "history_contract": {
+    "protocol": "vlm.qwen-full-event-history.v1",
+    "include": ["set", "overwrite", "clear", "noop"],
+    "mixed_order": "append_event_then_answer_immediate_query",
+    "delayed_query_reads_accumulated_history": true,
+    "exclude": [
+      "query_text_from_history",
+      "previous_answers",
+      "ledger",
+      "teacher",
+      "target_index",
+      "future_events",
+      "episode_id",
+      "answer_reminders"
+    ],
+    "empty_history_literal": "<empty>",
+    "silent_context_truncation_forbidden": true
+  },
+  "data": {
+    "set8_gate_sha256": "2653c3b5a43c6b11d282397a27a14d94f1daf9e558aea943378bd40c307d94b1",
+    "transition16_gate_sha256": "b9cb3218292e2ae91f54909e8d97436cc2664699dfdf6ca6280a024092a4790a",
+    "formal_manifest_sha256": "089beefa00b9b78149b3d7f4bd40cf802dc2c92a3757c04f30d9534bbdc51215",
+    "formal_dev_sha256": "8b167df38022a631d4e631d3c0d66e9fca74171f4224fec436030d6650047303",
+    "formal_test_id_sha256": "31e910ab878869faf9d6a032d8135eebe29f98d1509114e4fe04f9d95deaf4ff",
+    "formal_test_ood_sha256": "40d80fffaaaee1f9bcdedb7e09c5e7782f577213e0d4187c156d15b590ba23cc"
+  },
+  "conditions": ["standard", "reset", "shuffle", "state_swap"],
+  "expected_inventory": {
+    "bh0_set8_smoke": {
+      "query_states": 1,
+      "conditions": 1,
+      "records_per_condition": 4,
+      "prediction_records": 4,
+      "probe_role": "all"
+    },
+    "set8": {
+      "query_states": 8,
+      "conditions": 4,
+      "records_per_condition": 32,
+      "prediction_records": 128,
+      "probe_role": "all"
+    },
+    "transition16": {
+      "query_states": 16,
+      "conditions": 4,
+      "records_per_condition": 64,
+      "prediction_records": 256,
+      "probe_role": "delayed"
+    },
+    "formal_dev": {
+      "query_states": 1252,
+      "conditions": 4,
+      "records_per_condition": 5008,
+      "prediction_records": 20032,
+      "probe_role": "all"
+    },
+    "formal_test_id": {
+      "query_states": 2488,
+      "conditions": 4,
+      "records_per_condition": 9952,
+      "prediction_records": 39808,
+      "probe_role": "all"
+    },
+    "formal_test_ood": {
+      "query_states": 2488,
+      "conditions": 4,
+      "records_per_condition": 9952,
+      "prediction_records": 39808,
+      "probe_role": "all"
+    }
+  },
+  "replication": {
+    "replica_a_device": "cuda:0",
+    "replica_b_device": "cuda:1",
+    "concurrent_within_dataset": true,
+    "scientific_prediction_payload_exact": true,
+    "timing_and_device_fields_excluded_from_scientific_payload": true,
+    "replicas_are_not_statistical_seeds": true
+  },
+  "execution": {
+    "protocol": "r3-inspire-qwen-history-baseline-dag.v1",
+    "backend": "inspire-notebook-background",
+    "launcher": "scripts/inspire/launch_background.py",
+    "poller": "scripts/inspire/poll_stage.py",
+    "strict_order": ["BH0", "BH1", "BH2", "BH3"],
+    "bh0": "formal preflight, clean exact commit, Qwen snapshot, data SHA and bounded A/B smoke",
+    "bh1": "Set8 and Transition16 blank-image full micro gates with exact A/B scientific payload, followed by one explicitly labeled true text-only sensitivity run per suite",
+    "bh2": "formal dev completeness and exact A/B scientific payload; no accuracy tuning",
+    "bh3": "formal test-ID and test-OOD with exact A/B scientific payload",
+    "formal_authorization": "BH2 and BH3 require a terminal passing BH1 stage",
+    "unique_output_directories": true,
+    "remote_submission_by_materializer": false
+  },
+  "text_only_micro_sensitivity": {
+    "method": "qwen_full_event_history_text_only",
+    "input_mode": "text_only",
+    "micro_sensitivity": true,
+    "suites": ["set8", "transition16"],
+    "replica": "A",
+    "device": "cuda:0",
+    "role": "micro_sensitivity_not_formal_baseline",
+    "formal_dev_or_test_forbidden": true,
+    "does_not_authorize_formal_stages": true
+  },
+  "micro_gates": {
+    "set8": {
+      "correct_min": "30/32",
+      "per_position_correct_min": "7/8",
+      "per_state_correct_min": "3/4",
+      "rotation_consistent_states_min": "7/8",
+      "reset_drop_min": "8/32",
+      "shuffle_drop_min": "8/32"
+    },
+    "transition16": {
+      "correct_min": "58/64",
+      "per_position_correct_min": "14/16",
+      "per_event_kind_correct_min": "14/16",
+      "mixed_delayed_correct_min": "28/32",
+      "per_kind_read_form_cell_correct_min": "7/8",
+      "clean_noop_agreement_min": "15/16",
+      "reset_drop_min": "16/64",
+      "shuffle_drop_min": "16/64",
+      "state_swap_donor_min": "12/16"
+    }
+  },
+  "failure_policy": {
+    "infrastructure_failure": "same_commit_same_contract_fresh_rerun_allowed",
+    "scientific_or_replication_failure": "stop; do not lower thresholds or edit prompts",
+    "context_overflow_or_data_drift": "fail_closed",
+    "prefeval": "out_of_scope_for_this_baseline_execution"
+  }
+}
