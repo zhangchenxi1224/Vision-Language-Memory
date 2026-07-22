@@ -23,6 +23,15 @@ from qwen_history_r4_contract import (  # noqa: E402
 AMENDMENT = ROOT / "configs" / "experiments" / "r5_qwen_history_same_entity_20260722.json"
 
 
+def test_r5_amendment_is_lf_locked_in_git_attributes() -> None:
+    attributes = (ROOT / ".gitattributes").read_text(encoding="utf-8").splitlines()
+    assert (
+        "configs/experiments/r5_qwen_history_same_entity_20260722.json text eol=lf"
+        in attributes
+    )
+    assert b"\r" not in AMENDMENT.read_bytes()
+
+
 def test_r5_amendment_is_prospective_and_changes_only_pair_semantics() -> None:
     amendment, digest = load_amendment(AMENDMENT)
     assert len(digest) == 64
