@@ -7,16 +7,25 @@ repository.
 ## Default image and existing notebook
 
 - Notebook: `vlm-r3-h200x2-live-20260717`
-- Status verified on 2026-07-17: `RUNNING`; priority `10`; automatic stop disabled
+- Status verified on 2026-07-22: `RUNNING`; notebook status reports workload
+  priority `4`, while the project class was separately confirmed as `HIGH/10`;
+  automatic stop remains disabled
 - Workspace: `分布式训练空间`
 - Project: `前沿课题探索`
 - Compute group: `开发区-H200-3号机房`
-- Node reported by the platform: `qb-prod-gpu2007`
+- Node reported by the platform on 2026-07-22: `qb-prod-gpu1405`
 - Image: `ngc-pytorch:25.02-cuda12.8.0-py3`
 - Allocation: one node, 2 H200 GPUs, 40 CPUs, 400 GiB RAM, 128 GiB shared memory
 - Container observation: both H200s report `143771 MiB`; driver `570.124.06`
 - Internet preparation notebook: `vlm-r3-egress-cpu-live-20260717` in
   `CPU资源空间` (`RUNNING`, 4 CPUs, 16 GiB RAM)
+
+The H200 notebook is a restricted, no-public-ingress target. Platform policy
+blocks SSH, rtunnel, connection refresh, and the old `/proxy/31337` URL. Operate
+it only through `inspire notebook exec` or `inspire notebook shell`, which use
+the authenticated JupyterTerminal channel. Each `exec` call is an independent
+shell; keep dependent cwd/environment state in one quoted command. Use the CPU
+notebook for Git egress and non-Git SCP into the project-shared filesystem.
 
 The R3 runtime uses the NGC image's system PyTorch. It creates a Python 3.12
 overlay venv with `--system-site-packages`; pip is never allowed to resolve or
