@@ -31,6 +31,7 @@ from vision_memory.eval.r4_history_representations import (  # noqa: E402
 
 
 AMENDMENT_SCHEMA = "vision_memory.r4-qwen-history-comparison-amendment.v1"
+R5_AMENDMENT_SCHEMA = "vision_memory.r5-qwen-history-same-entity-amendment.v1"
 PLAN_PROTOCOL = "r4-inspire-qwen-history-comparison-dag.v1"
 STAGE_SPEC_PROTOCOL = "r4-inspire-qwen-history-comparison-stage.v1"
 STAGE_EVIDENCE_PROTOCOL = "r4-inspire-qwen-history-comparison-evidence.v1"
@@ -121,6 +122,14 @@ EXPECTED_FORBIDDEN = [
     "DreamLite training",
     "PrefEval",
     "text-only R4 arm",
+    "teacher or ledger sidecar",
+    "pre-BH2 test JSON semantic parsing, scoring, metric access, or evaluation execution",
+    "post-hoc prompt, threshold, data, or permutation changes",
+]
+EXPECTED_R5_FORBIDDEN = [
+    "DreamLite training",
+    "PrefEval",
+    "text-only comparison arm",
     "teacher or ledger sidecar",
     "pre-BH2 test JSON semantic parsing, scoring, metric access, or evaluation execution",
     "post-hoc prompt, threshold, data, or permutation changes",
@@ -298,28 +307,56 @@ def _validate_inventory(amendment: Mapping[str, Any]) -> None:
 def load_amendment(path: Path) -> tuple[dict[str, Any], str]:
     path = path.resolve()
     amendment = load_json_object(path)
+    schema = amendment.get("schema")
+    if schema == AMENDMENT_SCHEMA:
+        label = "R4"
+        expected_status = "prospective_before_any_r4_gpu_prediction"
+        expected_role_name = "qwen_history_r4_three_arm_comparison"
+        expected_forbidden = EXPECTED_FORBIDDEN
+    elif schema == R5_AMENDMENT_SCHEMA:
+        label = "R5"
+        expected_status = "prospective_before_any_r5_gpu_prediction"
+        expected_role_name = "qwen_history_r5_same_entity_three_arm_comparison"
+        expected_forbidden = EXPECTED_R5_FORBIDDEN
+    else:
+        raise ValueError(f"Unsupported Qwen history amendment schema: {schema!r}")
     require_json_values(
         amendment,
         {
-            "schema": AMENDMENT_SCHEMA,
-            "status": "prospective_before_any_r4_gpu_prediction",
+            "schema": schema,
+            "status": expected_status,
         },
-        "R4 amendment",
+        f"{label} amendment",
     )
     role = amendment.get("research_role")
     if not isinstance(role, Mapping):
-        raise ValueError("R4 amendment research_role must be an object")
+        raise ValueError(f"{label} amendment research_role must be an object")
     require_json_values(
         role,
         {
-            "name": "qwen_history_r4_three_arm_comparison",
+            "name": expected_role_name,
             "training": False,
             "dreamlite_loaded": False,
             "teacher_or_oracle_state_used": False,
             "oracle_router_metadata_used_by_tagged_and_reducer": True,
         },
-        "R4 research role",
+        f"{label} research role",
     )
+    if schema == R5_AMENDMENT_SCHEMA:
+        delta = amendment.get("protocol_delta")
+        expected_delta = {
+            "parent_protocol": AMENDMENT_SCHEMA,
+            "only_scientific_change": "same_entity_counterfactual_micro_lockbox",
+            "r4_result_reinterpreted": False,
+            "reader_prompt_arms_thresholds_unchanged": True,
+            "formal_artifacts_byte_inherited": True,
+            "r4_model_inference_and_scorer_unchanged": True,
+        }
+        if not isinstance(delta, Mapping):
+            raise ValueError("R5 protocol_delta must be an object")
+        require_json_values(delta, expected_delta, "R5 protocol delta")
+        if set(delta) != set(expected_delta):
+            raise ValueError("R5 protocol_delta contains missing or unexpected fields")
     reader = amendment.get("reader")
     if not isinstance(reader, Mapping):
         raise ValueError("R4 amendment reader must be an object")
@@ -408,11 +445,35 @@ def load_amendment(path: Path) -> tuple[dict[str, Any], str]:
         "independent_generations_bitwise_identical",
         "pre_bh2_test_policy",
     }
+    if schema == R5_AMENDMENT_SCHEMA:
+        expected_lockbox_keys |= {
+            "parent_r4_manifest_sha256",
+            "inherited_formal_files_byte_identical",
+            "micro_schema",
+            "same_entity_pair_contract_validated",
+            "smoke4_pair_map_sha256",
+            "transition32_pair_map_sha256",
+        }
+        require_json_values(
+            lockbox,
+            {
+                "seed": 20260723,
+                "parent_r4_manifest_sha256": "f3c5f235df9a3f026e3671ff2d330167fa7fd7ea39d520666f4624874209b321",
+                "inherited_formal_files_byte_identical": True,
+                "micro_schema": "vlm.r5.qwen-baseline-lockbox.same-entity.v1",
+                "same_entity_pair_contract_validated": True,
+                "smoke4_pair_map_sha256": "aa10f6e2e1c9005fa2c4a136fa5e58900c87f80862f62c009c60f33be2e1659a",
+                "transition32_pair_map_sha256": "ecab8312126d5b9d745116d6cb09e03036c29d2a0beecbcf8c2f43200cd600ae",
+            },
+            "R5 lockbox contract",
+        )
     if set(lockbox) != expected_lockbox_keys:
-        raise ValueError("R4 lockbox contains missing or unexpected fields")
+        raise ValueError(f"{label} lockbox contains missing or unexpected fields")
     forbidden = amendment.get("forbidden")
-    if forbidden != EXPECTED_FORBIDDEN:
-        raise ValueError("R4 forbidden list does not match the SHA-only pre-BH2 test policy")
+    if forbidden != expected_forbidden:
+        raise ValueError(
+            f"{label} forbidden list does not match the SHA-only pre-BH2 test policy"
+        )
     _validate_inventory(amendment)
     return amendment, sha256_file(path)
 
@@ -715,6 +776,7 @@ def read_json(path: Path) -> dict[str, Any]:
 __all__ = [
     "ALLOWED_CONDITIONS",
     "AMENDMENT_SCHEMA",
+    "R5_AMENDMENT_SCHEMA",
     "ARM_METHODS",
     "ARM_ORDER",
     "COMPARISON_SCHEMA",

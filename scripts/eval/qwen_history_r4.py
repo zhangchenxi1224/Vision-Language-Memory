@@ -28,6 +28,9 @@ from scripts.eval.qwen_text_baselines import (  # noqa: E402
     sha256_text,
 )
 from vision_memory.data import REVERSE_CYCLIC4, Episode, read_jsonl  # noqa: E402
+from vision_memory.data.r5_baseline_lockbox import (  # noqa: E402
+    validate_same_entity_pair_contract,
+)
 from vision_memory.dreamlite import freeze_module  # noqa: E402
 from vision_memory.eval.r4_history_representations import (  # noqa: E402
     R4_HISTORY_METHODS,
@@ -133,6 +136,22 @@ def synthetic_queries(path: Path, limit: int | None) -> Iterator[R4HistoryQuery]
     """
 
     episodes = read_jsonl(path)
+    r5_micro = [episode for episode in episodes if episode.episode_id.startswith("r5-")]
+    if r5_micro:
+        if len(r5_micro) != len(episodes) or any(
+            episode.split != "lockbox" for episode in episodes
+        ):
+            raise ValueError("R5 micro validation refuses mixed namespaces or non-lockbox episodes.")
+        delayed_states = sum(
+            turn.type.value == "query"
+            for episode in episodes
+            for turn in episode.turns
+            if turn.calls_reader
+        )
+        validate_same_entity_pair_contract(
+            episodes,
+            expected_delayed_states=delayed_states,
+        )
     if limit is not None:
         if limit < 1:
             raise ValueError("--limit must be positive when provided.")

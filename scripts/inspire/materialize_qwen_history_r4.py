@@ -11,7 +11,6 @@ from typing import Any, Mapping
 
 from launch_background import STRICT_ENVIRONMENT, verify_preflight
 from qwen_history_r4_contract import (
-    AMENDMENT_SCHEMA,
     ARM_METHODS,
     ARM_ORDER,
     COMPARISON_SCHEMA,
@@ -493,7 +492,10 @@ def build_plan(
         "amendment": {
             "path": str(amendment_path.resolve()),
             "sha256": amendment_sha256,
+            "schema": amendment["schema"],
         },
+        "research_protocol": amendment["schema"],
+        "research_role": amendment["research_role"]["name"],
         "qwen_reader_snapshot": reader_snapshot,
         "dreamlite_snapshot_bound": False,
         "dreamlite_loaded": False,
@@ -759,10 +761,10 @@ def authorize_stage(
         verify_bound_artifact(prerequisite)
         prerequisites.append(prerequisite)
     amendment_binding = {
-        "label": "prospective-r4-amendment",
+        "label": "prospective-qwen-history-amendment",
         "path": plan["amendment"]["path"],
         "sha256": plan["amendment"]["sha256"],
-        "required_values": {"schema": AMENDMENT_SCHEMA},
+        "required_values": {"schema": plan["amendment"]["schema"]},
     }
     verify_bound_artifact(amendment_binding)
     prerequisites.append(amendment_binding)
