@@ -213,12 +213,11 @@ def _validate_score_bindings(
     report_a: Path,
     predictions_b: Path,
     report_b: Path,
-) -> None:
+    allow_blocking_scientific_failure: bool = False,
+) -> bool:
     method = ARM_METHODS[arm]
     if score.get("schema") != SCORE_SCHEMA or score.get("method") != method:
         raise ValueError(f"R4 {arm} score schema/method mismatch")
-    if score.get("passed") is not True or score.get("execution_passed") is not True:
-        raise ValueError(f"R4 {arm} score did not pass integrity/replication execution checks")
     integrity = score.get("integrity")
     replication = score.get("replication")
     if not isinstance(integrity, Mapping) or integrity.get("passed") is not True:
@@ -238,6 +237,27 @@ def _validate_score_bindings(
     for key, value in expected.items():
         if integrity.get(key) != value:
             raise ValueError(f"R4 {arm} score does not bind {key}")
+    if score.get("passed") is True and score.get("execution_passed") is True:
+        return True
+    if not allow_blocking_scientific_failure:
+        raise ValueError(f"R4 {arm} score did not pass integrity/replication execution checks")
+    scientific_gate = score.get("scientific_gate")
+    blocking_policy = score.get("blocking_policy")
+    if (
+        arm != "last_effective"
+        or score.get("suite") != "transition32"
+        or score.get("passed") is not False
+        or score.get("execution_passed") is not False
+        or not isinstance(scientific_gate, Mapping)
+        or scientific_gate.get("passed") is not False
+        or scientific_gate.get("data_readability_required") is not True
+        or not isinstance(blocking_policy, Mapping)
+        or blocking_policy.get("scientific_gate_blocks_execution") is not True
+    ):
+        raise ValueError(
+            "R4 last_effective score is not an authenticated blocking BH1 scientific-gate failure"
+        )
+    return False
 
 
 def _validate_prediction_reports(
@@ -270,43 +290,90 @@ def _validate_execution(
     stage: str,
     scientific_paths: Sequence[Path],
     strict: bool,
+    report_scientific_failure: bool,
 ) -> dict[str, Any]:
+    if report_scientific_failure and not strict:
+        raise ValueError("Scientific-failure reporting requires strict execution validation")
     if not strict:
-        return {"strict": False, "passed": True, "terminal": None, "evidence": None}
-    if terminal_path is None or evidence_path is None:
+        return {
+            "strict": False,
+            "passed": True,
+            "audit_validation_passed": True,
+            "scientific_stage_passed": True,
+            "report_mode": "non-strict",
+            "terminal": None,
+            "evidence": None,
+        }
+    if terminal_path is None:
+        raise ValueError("Strict R4 reporting requires a terminal artifact")
+    if report_scientific_failure and stage != "BH1":
+        raise ValueError("Scientific-failure reporting is restricted to BH1")
+    if report_scientific_failure and evidence_path is not None:
+        raise ValueError("A failed BH1 scientific stage must not claim successful stage evidence")
+    if not report_scientific_failure and evidence_path is None:
         raise ValueError("Strict R4 reporting requires terminal and evidence artifacts")
     terminal = load_json(terminal_path)
-    evidence = load_json(evidence_path)
-    if terminal.get("status") != "succeeded" or terminal.get("passed") is not True:
-        raise ValueError("R4 terminal artifact is not a successful terminal state")
-    if terminal.get("exit_code") != 0:
-        raise ValueError("R4 terminal exit code is nonzero")
-    if (
-        evidence.get("protocol") != STAGE_EVIDENCE_PROTOCOL
-        or evidence.get("stage") != stage
-        or evidence.get("passed") is not True
-    ):
-        raise ValueError("R4 evidence protocol/stage/pass binding is invalid")
-    if evidence.get("execution_mode") != "sequential_within_arm":
-        raise ValueError("R4 evidence does not prove sequential-within-arm execution")
-    output_hashes = {
-        str(item.get("sha256"))
-        for item in evidence.get("outputs", [])
-        if isinstance(item, Mapping)
-    }
-    missing = [str(path) for path in scientific_paths if sha256_file(path) not in output_hashes]
-    if missing:
-        raise ValueError(f"R4 evidence does not bind report inputs: {missing}")
+    evidence = None
+    if report_scientific_failure:
+        exit_code = terminal.get("exit_code")
+        if (
+            terminal.get("status") != "failed"
+            or terminal.get("stage") != "qwen-history-r4-bh1"
+            or terminal.get("passed") is not False
+            or not isinstance(exit_code, int)
+            or isinstance(exit_code, bool)
+            or exit_code == 0
+        ):
+            raise ValueError("R4 BH1 scientific-failure report requires a failed nonzero terminal")
+    else:
+        if terminal.get("status") != "succeeded" or terminal.get("passed") is not True:
+            raise ValueError("R4 terminal artifact is not a successful terminal state")
+        if terminal.get("exit_code") != 0:
+            raise ValueError("R4 terminal exit code is nonzero")
+        assert evidence_path is not None
+        evidence = load_json(evidence_path)
+        if (
+            evidence.get("protocol") != STAGE_EVIDENCE_PROTOCOL
+            or evidence.get("stage") != stage
+            or evidence.get("passed") is not True
+        ):
+            raise ValueError("R4 evidence protocol/stage/pass binding is invalid")
+        if evidence.get("execution_mode") != "sequential_within_arm":
+            raise ValueError("R4 evidence does not prove sequential-within-arm execution")
+        output_hashes = {
+            str(item.get("sha256"))
+            for item in evidence.get("outputs", [])
+            if isinstance(item, Mapping)
+        }
+        missing = [str(path) for path in scientific_paths if sha256_file(path) not in output_hashes]
+        if missing:
+            raise ValueError(f"R4 evidence does not bind report inputs: {missing}")
     terminal_dir = terminal_path.parent
     for name, key in (("stdout.log", "stdout_sha256"), ("stderr.log", "stderr_sha256")):
         path = terminal_dir / name
+        if report_scientific_failure and not path.is_file():
+            raise ValueError(
+                f"R4 BH1 scientific-failure report requires downloaded {name}"
+            )
         if path.is_file() and terminal.get(key) != sha256_file(path):
             raise ValueError(f"R4 terminal does not bind downloaded {name}")
     return {
         "strict": True,
-        "passed": True,
+        "passed": not report_scientific_failure,
+        "audit_validation_passed": True,
+        "scientific_stage_passed": not report_scientific_failure,
+        "report_mode": (
+            "failed-scientific-bh1" if report_scientific_failure else "strict-success"
+        ),
         "terminal": {"path": str(terminal_path.resolve()), "sha256": sha256_file(terminal_path)},
-        "evidence": {"path": str(evidence_path.resolve()), "sha256": sha256_file(evidence_path)},
+        "evidence": (
+            None
+            if evidence_path is None
+            else {
+                "path": str(evidence_path.resolve()),
+                "sha256": sha256_file(evidence_path),
+            }
+        ),
     }
 
 
@@ -390,13 +457,17 @@ def build_arm_report(
         predictions_b=predictions_b,
         report_b=report_b,
     )
-    _validate_score_bindings(
+    score_passed = _validate_score_bindings(
         arm=arm,
         score=score,
         predictions_a=predictions_a,
         report_a=prediction_report_a,
         predictions_b=predictions_b,
         report_b=prediction_report_b,
+        allow_blocking_scientific_failure=(
+            execution.get("report_mode") == "failed-scientific-bh1"
+            and arm == "last_effective"
+        ),
     )
     if len(rows_a) != len(rows_b):
         raise ValueError(f"R4 {arm} A/B prediction counts differ")
@@ -439,13 +510,18 @@ def build_arm_report(
     _write_csv(output_dir / "metrics.csv", metric_rows)
     standard = metrics.get("standard", {})
     scientific_gate = score.get("scientific_gate", {})
+    scientific_stage_passed = execution.get("scientific_stage_passed") is True
     payload = {
         "schema": SCHEMA,
         "stage": stage,
         "dataset": dataset,
         "arm": arm,
         "method": ARM_METHODS[arm],
-        "passed": True,
+        "passed": score_passed,
+        "report_generation_passed": True,
+        "scientific_stage_passed": scientific_stage_passed,
+        "arm_score_passed": score.get("passed"),
+        "arm_execution_passed": score.get("execution_passed"),
         "execution": dict(execution),
         "replication": score.get("replication"),
         "standard": standard,
@@ -468,6 +544,12 @@ def build_arm_report(
     accuracy = standard.get("accuracy") if isinstance(standard, Mapping) else None
     correct = standard.get("correct") if isinstance(standard, Mapping) else None
     count = standard.get("count") if isinstance(standard, Mapping) else None
+    stage_status = "PASSED" if scientific_stage_passed else "FAILED"
+    stage_explanation = (
+        "The preregistered BH1 scientific gate passed."
+        if scientific_stage_passed
+        else "The preregistered BH1 scientific gate failed. Report generation succeeded, but this report does not convert that scientific failure into a pass."
+    )
     markdown = [
         f"# R4 Qwen baseline report — {stage}/{dataset}/{arm}",
         "",
@@ -483,6 +565,13 @@ def build_arm_report(
         "",
         "## Diagnostic figures",
         "",
+    ]
+    markdown[2:2] = [
+        f"> **SCIENTIFIC STAGE STATUS: {stage_status}.** {stage_explanation}",
+        "",
+        "- Report generation passed: `true`",
+        f"- Scientific stage passed: `{str(scientific_stage_passed).lower()}`",
+        f"- Arm score passed: `{str(score_passed).lower()}`",
     ]
     for name in PLOT_NAMES:
         markdown.extend((f"### {name}", "", f"![{name}](plots/{name})", ""))
@@ -500,6 +589,14 @@ def build_arm_report(
 <li>Exact A/B payload: <code>{html.escape(str(score.get('replication', {}).get('bitwise_scientific_payload_match')))}</code></li>
 <li>Training: <code>false</code>; no loss curve exists for this frozen-inference baseline.</li></ul>
 <p>Raw/tagged performance thresholds are descriptive. Only locked last-effective gates can block BH0–BH2; BH3 has no accuracy stop gate.</p>{images}</body></html>"""
+    html_payload = html_payload.replace(
+        "<body>",
+        f"<body><p><strong>SCIENTIFIC STAGE STATUS: {stage_status}.</strong> "
+        f"{html.escape(stage_explanation)}</p><p>Report generation passed: <code>true</code>; "
+        f"scientific stage passed: <code>{str(scientific_stage_passed).lower()}</code>; "
+        f"arm score passed: <code>{str(score_passed).lower()}</code>.</p>",
+        1,
+    )
     atomic_write(output_dir / "report.html", html_payload)
     manifest_files = [
         output_dir / "report.json",
@@ -541,6 +638,12 @@ def build_combined_report(
         arm: report.get("standard", {})
         for arm, report in arm_reports.items()
     }
+    stage_outcomes = {
+        report.get("scientific_stage_passed") for report in arm_reports.values()
+    }
+    if stage_outcomes not in ({True}, {False}):
+        raise ValueError("R4 arm reports disagree on scientific stage status")
+    scientific_stage_passed = stage_outcomes == {True}
     comparison = None
     if comparison_path is not None:
         comparison = load_json(comparison_path)
@@ -595,7 +698,9 @@ def build_combined_report(
         "schema": COMBINED_SCHEMA,
         "stage": stage,
         "dataset": dataset,
-        "passed": True,
+        "passed": scientific_stage_passed,
+        "report_generation_passed": True,
+        "scientific_stage_passed": scientific_stage_passed,
         "arms": rows,
         "comparison": comparison,
         "comparison_source_sha256": None if comparison_path is None else sha256_file(comparison_path),
@@ -607,6 +712,12 @@ def build_combined_report(
         },
     }
     atomic_write(output_dir / "report.json", json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n")
+    stage_status = "PASSED" if scientific_stage_passed else "FAILED"
+    stage_explanation = (
+        "The preregistered stage gate passed."
+        if scientific_stage_passed
+        else "The preregistered BH1 scientific gate failed. Report generation succeeded; the experiment remains a scientific failure."
+    )
     markdown = [
         f"# R4 combined Qwen comparison — {stage}/{dataset}",
         "",
@@ -625,11 +736,24 @@ def build_combined_report(
         "",
         "![paired inventory](plots/paired_inventory.png)",
     ]
+    markdown[2:2] = [
+        f"> **SCIENTIFIC STAGE STATUS: {stage_status}.** {stage_explanation}",
+        "",
+        "- Report generation passed: `true`",
+        f"- Scientific stage passed: `{str(scientific_stage_passed).lower()}`",
+        "",
+    ]
     atomic_write(output_dir / "report.md", "\n".join(markdown) + "\n")
     image_tags = "".join(
         f"<img alt='{name}' src='{_image_data_uri(plots / name)}'>"
         for name in ("standard_accuracy.png", "paired_differences.png", "paired_inventory.png")
     )
+    status_html = (
+        f"<p><strong>SCIENTIFIC STAGE STATUS: {stage_status}.</strong> "
+        f"{html.escape(stage_explanation)}</p><p>Report generation passed: <code>true</code>; "
+        f"scientific stage passed: <code>{str(scientific_stage_passed).lower()}</code>.</p>"
+    )
+    image_tags = status_html + image_tags
     atomic_write(
         output_dir / "report.html",
         f"<!doctype html><html><head><meta charset='utf-8'><title>R4 combined</title>"
@@ -651,6 +775,7 @@ def render_stage_reports(
     terminal: Path | None,
     evidence: Path | None,
     strict_execution: bool,
+    report_scientific_failure: bool = False,
 ) -> dict[str, Any]:
     if stage not in {"BH0", "BH1", "BH2", "BH3"}:
         raise ValueError("stage must be BH0, BH1, BH2, or BH3")
@@ -658,6 +783,8 @@ def render_stage_reports(
         raise ValueError(f"arm inputs must be ordered exactly as {list(ARM_ORDER)}")
     if output_dir.exists():
         raise ValueError(f"Refusing to overwrite R4 report root: {output_dir}")
+    if report_scientific_failure and comparison is not None:
+        raise ValueError("A failed BH1 scientific stage cannot have a successful comparison artifact")
     scientific_paths = [
         path
         for values in arm_inputs.values()
@@ -671,7 +798,29 @@ def render_stage_reports(
         stage=stage,
         scientific_paths=scientific_paths,
         strict=strict_execution,
+        report_scientific_failure=report_scientific_failure,
     )
+    if report_scientific_failure:
+        score_outcomes: dict[str, bool] = {}
+        for arm in ARM_ORDER:
+            values = arm_inputs[arm]
+            score_outcomes[arm] = _validate_score_bindings(
+                arm=arm,
+                score=load_json(values["score"]),
+                predictions_a=values["predictions_a"],
+                report_a=values["report_a"],
+                predictions_b=values["predictions_b"],
+                report_b=values["report_b"],
+                allow_blocking_scientific_failure=arm == "last_effective",
+            )
+        if score_outcomes != {
+            "raw": True,
+            "tagged": True,
+            "last_effective": False,
+        }:
+            raise ValueError(
+                "Failed BH1 reporting requires passing raw/tagged scores and exactly one blocking last_effective scientific failure"
+            )
     output_dir.mkdir(parents=True, exist_ok=False)
     reports: dict[str, dict[str, Any]] = {}
     for arm in ARM_ORDER:
@@ -699,7 +848,9 @@ def render_stage_reports(
         "schema": "vlm.qwen-history-r4-report-set.v1",
         "stage": stage,
         "dataset": dataset,
-        "passed": True,
+        "passed": execution.get("scientific_stage_passed") is True,
+        "report_generation_passed": True,
+        "scientific_stage_passed": execution.get("scientific_stage_passed") is True,
         "strict_execution": execution,
         "arm_reports": {arm: reports[arm]["output_dir"] for arm in ARM_ORDER},
         "combined_report": combined["output_dir"],
@@ -726,6 +877,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--strict-execution", action=argparse.BooleanOptionalAction, default=True
     )
+    parser.add_argument(
+        "--report-scientific-failure",
+        action="store_true",
+        help="Render an audited failed BH1 science gate without treating it as success",
+    )
     return parser.parse_args()
 
 
@@ -751,6 +907,7 @@ def main() -> int:
             terminal=args.terminal,
             evidence=args.evidence,
             strict_execution=args.strict_execution,
+            report_scientific_failure=args.report_scientific_failure,
         )
     except (OSError, ValueError, json.JSONDecodeError) as exc:
         print(f"{type(exc).__name__}: {exc}", file=sys.stderr)
