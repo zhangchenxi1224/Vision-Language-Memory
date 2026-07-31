@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from dataclasses import dataclass
 from typing import Any, Iterable, Literal
 
 import torch
@@ -12,6 +13,17 @@ from vision_memory.event_noise import make_event_generator
 from .conditioning import encode_latent_path_condition
 from .differentiable_mobile import DifferentiableDreamLiteMobileSampler
 from .latent_codec import decode_model_latents_unit_interval
+
+
+@dataclass(frozen=True)
+class DreamLiteUpdateTrace:
+    """Trace of one recurrent DreamLite event update for checkpoint analysis."""
+    output_state: Tensor
+    source_latents: Tensor
+    output_latents: Tensor
+    latent_trajectory: tuple[Tensor, ...]
+    selected_step_indices: tuple[int, ...]
+    persistent_state: str
 
 
 def assert_no_frozen_parameter_grads(module: nn.Module, name: str) -> None:
@@ -115,6 +127,62 @@ class DreamLiteRecurrentUpdater(nn.Module):
         persistent_state: Literal["latent", "float_rgb"] = "latent",
         presentation_index: int = 0,
     ) -> Tensor:
+        return self._forward_impl(
+            state,
+            event_text,
+            episode_id,
+            turn_id,
+            gradient_mode=gradient_mode,
+            selected_step_indices=selected_step_indices,
+            persistent_state=persistent_state,
+            presentation_index=presentation_index,
+            return_trace=False,
+        )
+
+    def forward_with_trace(
+        self,
+        state: Tensor,
+        event_text: str,
+        episode_id: str,
+        turn_id: str | int,
+        *,
+        gradient_mode: Literal["full", "drtune"] = "full",
+        selected_step_indices: Iterable[int] | None = None,
+        persistent_state: Literal["latent", "float_rgb"] = "latent",
+        presentation_index: int = 0,
+    ) -> DreamLiteUpdateTrace:
+        """Run one update while retaining the five-point four-step latent trajectory."""
+        result = self._forward_impl(
+            state,
+            event_text,
+            episode_id,
+            turn_id,
+            gradient_mode=gradient_mode,
+            selected_step_indices=selected_step_indices,
+            persistent_state=persistent_state,
+            presentation_index=presentation_index,
+            return_trace=True,
+        )
+        if not isinstance(result, DreamLiteUpdateTrace):
+            raise RuntimeError("DreamLite trace implementation returned an invalid result.")
+        return result
+
+    def _forward_impl(
+        self,
+        state: Tensor,
+        event_text: str,
+        episode_id: str,
+        turn_id: str | int,
+        *,
+        gradient_mode: Literal["full", "drtune"],
+        selected_step_indices: Iterable[int] | None,
+        persistent_state: Literal["latent", "float_rgb"],
+        presentation_index: int,
+        return_trace: bool,
+    ) -> Tensor | DreamLiteUpdateTrace:
+        resolved_selected_step_indices = (
+            tuple(selected_step_indices) if selected_step_indices is not None else None
+        )
         resolved_persistence = self._validate_persistent_state(persistent_state)
         resolved_presentation_index = self._validate_presentation_index(presentation_index)
         source_latents = self.encode_persistent_rgb(state) if resolved_persistence == "float_rgb" else state
@@ -134,18 +202,34 @@ class DreamLiteRecurrentUpdater(nn.Module):
             device=source_latents.device,
             dtype=source_latents.dtype,
         )
-        updated_latents = self.sampler(
+        sampler_output = self.sampler(
             source_latents=source_latents,
             noise_latents=noise,
             prompt_embeds=condition.prompt_embeds,
             prompt_attention_mask=condition.attention_mask,
-            return_trajectory=False,
+            return_trajectory=return_trace,
             gradient_mode=gradient_mode,
-            selected_step_indices=selected_step_indices,
-        ).latents
-        if resolved_persistence == "float_rgb":
-            return self.persist_rgb_state(updated_latents)
-        return updated_latents
+            selected_step_indices=resolved_selected_step_indices,
+        )
+        updated_latents = sampler_output.latents
+        output_state = (
+            self.persist_rgb_state(updated_latents)
+            if resolved_persistence == "float_rgb"
+            else updated_latents
+        )
+        if not return_trace:
+            return output_state
+        trajectory = sampler_output.trajectory
+        if trajectory is None:
+            raise RuntimeError("DreamLite trace requested without a sampler trajectory.")
+        return DreamLiteUpdateTrace(
+            output_state=output_state,
+            source_latents=source_latents,
+            output_latents=updated_latents,
+            latent_trajectory=trajectory,
+            selected_step_indices=tuple(resolved_selected_step_indices or ()),
+            persistent_state=resolved_persistence,
+        )
 
     def decode_for_reader(
         self,

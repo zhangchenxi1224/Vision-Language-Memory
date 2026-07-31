@@ -39,6 +39,10 @@ from scripts.train.dreamlite_episode import (  # noqa: E402
     locked_revision,
     set_all_seeds,
     sha256_file,
+    begin_optimizer_diagnostics,
+    finalize_optimizer_diagnostics_after_step,
+    record_optimizer_diagnostics_after_clip,
+    grouped_tensor_norms,
 )
 from scripts.inspire.model_snapshot_manifest import (  # noqa: E402
     SNAPSHOT_MANIFEST_NAME,
@@ -72,6 +76,7 @@ R4_SUMMARY_SCHEMA = "vision_memory.r4-free-pixel-training-summary.v1"
 R4_CHECKPOINT_STATE_SCHEMA = "vision_memory.r4-free-pixel-checkpoint-state.v1"
 R4_IDENTITY_CALIBRATION_SCHEMA = "vision_memory.r4-noop-identity-calibration.v1"
 R4_WARMUP_SCHEMA = "vision_memory.r4-set-from-blank-warmup.v1"
+R4_MICRO_METRICS_SCHEMA = "vision_memory.r4-free-pixel-micro-metrics.v1"
 R4_PROFILE = "mechanism-rescue-v1"
 
 FORMAL_OPTIMIZER_STEPS = 256
@@ -139,20 +144,22 @@ class TrainingUnit:
     phase_unit_index: int
     selected_step_index: int
     transition: TransitionExample
+    selected_step_count: int = 1
     balanced_schedule: ScheduledTransition | None = None
 
     def updater_kwargs(self) -> dict[str, Any]:
+        selected = _selected_step_indices(self.selected_step_index, self.selected_step_count)
         if self.balanced_schedule is None:
             kwargs: dict[str, Any] = {
                 "gradient_mode": "drtune",
-                "selected_step_indices": (self.selected_step_index,),
+                "selected_step_indices": selected,
                 "persistent_state": "float_rgb",
             }
         else:
-            kwargs = target_update_kwargs(self.balanced_schedule)
+            kwargs = {**target_update_kwargs(self.balanced_schedule), "selected_step_indices": selected}
         expected = {
             "gradient_mode": "drtune",
-            "selected_step_indices": (self.selected_step_index,),
+            "selected_step_indices": selected,
             "persistent_state": "float_rgb",
         }
         if kwargs != expected:
@@ -174,6 +181,7 @@ class TrainingUnit:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Teacher-free R4-FreePixel DreamLite transition training")
+    parser.add_argument("--experimental", action="store_true", help="Allow short research arms with explicit hyperparameters.")
     parser.add_argument("--train", type=Path, required=True)
     parser.add_argument("--dev", type=Path, required=True)
     parser.add_argument("--dreamlite", type=Path, required=True)
@@ -199,6 +207,17 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--resume", type=Path)
     parser.add_argument("--allow-dirty", action="store_true")
     parser.add_argument("--smoke", action="store_true")
+    parser.add_argument("--gradient-accumulation", type=int, default=GRADIENT_ACCUMULATION)
+    parser.add_argument("--learning-rate", type=float, default=LEARNING_RATE)
+    parser.add_argument("--weight-decay", type=float, default=WEIGHT_DECAY)
+    parser.add_argument("--gradient-clip", type=float, default=GRADIENT_CLIP)
+    parser.add_argument("--lora-rank", type=int, default=LORA_RANK)
+    parser.add_argument("--selected-step-count", type=int, choices=(1, 2), default=1)
+    parser.add_argument("--optimizer-diagnostics", action=argparse.BooleanOptionalAction, default=False)
+    parser.add_argument("--record-micro-metrics", action=argparse.BooleanOptionalAction, default=False)
+    parser.add_argument("--save-step-zero", action=argparse.BooleanOptionalAction, default=False)
+    parser.add_argument("--record-validation-metrics", action=argparse.BooleanOptionalAction, default=False)
+    parser.add_argument("--validation-every", type=int)
     return parser
 
 
@@ -213,6 +232,7 @@ def resolve_budget(args: argparse.Namespace) -> RunBudget:
         "eval_limit": args.eval_limit,
         "identity_calibration_count": args.identity_calibration_count,
         "checkpoint_every": args.checkpoint_every,
+        "gradient_accumulation": getattr(args, "gradient_accumulation", GRADIENT_ACCUMULATION),
     }
     if any(isinstance(value, bool) or not isinstance(value, int) for value in values.values()):
         raise ValueError("R4 budget fields must be integers.")
@@ -222,10 +242,12 @@ def resolve_budget(args: argparse.Namespace) -> RunBudget:
         raise ValueError("SET warmup optimizer steps cannot be negative.")
     if args.set_warmup_optimizer_steps > args.max_optimizer_steps:
         raise ValueError("SET warmup cannot exceed the optimizer endpoint.")
-    if args.smoke:
+    if getattr(args, "smoke", False):
         if args.max_optimizer_steps != 2 or args.set_warmup_optimizer_steps != 0:
             raise ValueError("R4 smoke requires --max-optimizer-steps 2 --set-warmup-optimizer-steps 0.")
         scope = "technical_smoke"
+    elif getattr(args, "experimental", False):
+        scope = "experimental"
     else:
         formal = {
             "max_optimizer_steps": FORMAL_OPTIMIZER_STEPS,
@@ -233,6 +255,7 @@ def resolve_budget(args: argparse.Namespace) -> RunBudget:
             "eval_limit": FORMAL_EVAL_LIMIT,
             "identity_calibration_count": FORMAL_CALIBRATION_COUNT,
             "checkpoint_every": FORMAL_CHECKPOINT_EVERY,
+            "gradient_accumulation": GRADIENT_ACCUMULATION,
         }
         mismatches = {name: (formal[name], values[name]) for name in formal if formal[name] != values[name]}
         if mismatches:
@@ -243,7 +266,7 @@ def resolve_budget(args: argparse.Namespace) -> RunBudget:
         optimizer_steps=args.max_optimizer_steps,
         warmup_optimizer_steps=args.set_warmup_optimizer_steps,
         balanced_optimizer_steps=args.max_optimizer_steps - args.set_warmup_optimizer_steps,
-        gradient_accumulation=GRADIENT_ACCUMULATION,
+        gradient_accumulation=values["gradient_accumulation"],
         eval_limit=args.eval_limit,
         identity_calibration_count=args.identity_calibration_count,
         checkpoint_every=args.checkpoint_every,
@@ -263,6 +286,9 @@ def validate_runtime_args(args: argparse.Namespace) -> RunBudget:
         raise ValueError("R4-FreePixel locks 1024x1024 RGB state and the Reader resize contract.")
     if torch.device(args.dreamlite_device) == torch.device(args.reader_device):
         raise ValueError("DreamLite and the frozen Reader must use distinct devices.")
+    validation_every = getattr(args, "validation_every", None)
+    if validation_every is not None and (isinstance(validation_every, bool) or not isinstance(validation_every, int) or validation_every <= 0):
+        raise ValueError("--validation-every must be a positive integer when provided.")
     return budget
 
 
@@ -273,7 +299,7 @@ def validate_formal_data_contract(
     audit: Mapping[str, Any],
     transition_digest: str,
 ) -> None:
-    if budget.scope == "technical_smoke":
+    if budget.scope != "mechanism_rescue":
         return
     observed_hashes = {"train": sha256_file(args.train), "dev": sha256_file(args.dev)}
     expected_hashes = {"train": FORMAL_TRAIN_SHA256, "dev": FORMAL_DEV_SHA256}
@@ -346,9 +372,12 @@ def training_unit_for_micro(
     schedule_seed: int,
     global_micro_index: int,
     warmup_micro_transitions: int,
+    selected_step_count: int = 1,
 ) -> TrainingUnit:
     if global_micro_index < 0:
         raise ValueError("global_micro_index must be non-negative.")
+    if selected_step_count not in (1, 2):
+        raise ValueError("selected_step_count must be 1 or 2.")
     if global_micro_index < warmup_micro_transitions:
         pool = _warmup_pool(examples)
         epoch, offset = divmod(global_micro_index, len(pool))
@@ -358,6 +387,7 @@ def training_unit_for_micro(
             phase_unit_index=global_micro_index,
             selected_step_index=R4_DIFFUSION_STEPS[global_micro_index % len(R4_DIFFUSION_STEPS)],
             transition=_stable_warmup_order(pool, seed=schedule_seed, epoch=epoch)[offset],
+            selected_step_count=selected_step_count,
         )
     balanced_index = global_micro_index - warmup_micro_transitions
     scheduled = next(
@@ -375,7 +405,16 @@ def training_unit_for_micro(
         selected_step_index=scheduled.selected_step_index,
         transition=scheduled.transition,
         balanced_schedule=scheduled,
+        selected_step_count=selected_step_count,
     )
+
+
+def _selected_step_indices(selected_step_index: int, selected_step_count: int) -> tuple[int, ...]:
+    if selected_step_count == 1:
+        return (selected_step_index,)
+    if selected_step_count == 2:
+        return (0, 2) if selected_step_index % 2 == 0 else (1, 3)
+    raise ValueError("selected_step_count must be 1 or 2.")
 
 
 def expected_schedule_counts(budget: RunBudget) -> dict[str, dict[str, int]]:
@@ -442,10 +481,12 @@ def _run_training(
     pipe: Any,
     reader: nn.Module,
     examples: Sequence[TransitionExample],
+    dev_records: Sequence[Any],
     optimizer: torch.optim.Optimizer,
     named_trainable: Sequence[tuple[str, nn.Parameter]],
     trainable: Sequence[nn.Parameter],
     reader_fn: Any,
+    eval_reader: Any,
     manifest: Mapping[str, Any],
     identity_scale: float,
     m0: Mapping[str, Any],
@@ -472,6 +513,10 @@ def _run_training(
         )
         elapsed = prior_elapsed + time.monotonic() - started
         metric["elapsed_seconds"] = elapsed
+        micro_records = metric.pop("micro_records", None)
+        if micro_records:
+            for micro_record in micro_records:
+                append_jsonl(args.output_dir / "micro_metrics.jsonl", micro_record)
         append_jsonl(args.output_dir / "metrics.jsonl", metric)
         print(
             json.dumps(
@@ -488,6 +533,26 @@ def _run_training(
             ),
             flush=True,
         )
+        if bool(getattr(args, "record_validation_metrics", False)):
+            validation_every = int(getattr(args, "validation_every", budget.checkpoint_every) or budget.checkpoint_every)
+            if (step_zero + 1) % validation_every == 0:
+                was_training = model.training
+                model.eval()
+                try:
+                    validation = evaluate_r4(model=model, records=dev_records, reader_fn=eval_reader)
+                finally:
+                    model.train(was_training)
+                append_jsonl(
+                    args.output_dir / "metrics.jsonl",
+                    {
+                        "schema": R4_METRICS_SCHEMA,
+                        "kind": "validation",
+                        "optimizer_step": step_zero + 1,
+                        "validation_loss": validation["mean_episode_listwise_choice_ce"],
+                        **validation,
+                        "elapsed_seconds": elapsed,
+                    },
+                )
         _periodic_checkpoint(
             args=args,
             budget=budget,
@@ -519,6 +584,22 @@ def _prepare_metrics_resume(path: Path, *, optimizer_step: int) -> float:
     temporary.write_text("\n".join(retained) + ("\n" if retained else ""), encoding="utf-8")
     os.replace(temporary, path)
     return elapsed
+
+
+def _prepare_micro_metrics_resume(path: Path, *, global_micro_index: int) -> None:
+    if not path.is_file():
+        return
+    retained: list[str] = []
+    for line in path.read_text(encoding="utf-8").splitlines():
+        if not line.strip():
+            continue
+        value = json.loads(line)
+        index = value.get("global_micro_index")
+        if isinstance(index, int) and index < global_micro_index:
+            retained.append(json.dumps(value, ensure_ascii=False))
+    temporary = path.with_suffix(path.suffix + ".resume.tmp")
+    temporary.write_text("\n".join(retained) + ("\n" if retained else ""), encoding="utf-8")
+    os.replace(temporary, path)
 
 
 def _write_json(path: Path, value: Mapping[str, Any]) -> None:
@@ -584,10 +665,12 @@ def main(argv: Sequence[str] | None = None) -> int:
         pipe=runtime.pipe,
         reader=runtime.reader,
         examples=data.trainable,
+        dev_records=getattr(data, "dev_records", ()),
         optimizer=runtime.optimizer,
         named_trainable=runtime.named_trainable,
         trainable=runtime.trainable,
         reader_fn=train_reader,
+        eval_reader=eval_reader,
         manifest=state.manifest,
         identity_scale=state.identity_scale,
         m0=state.m0,
@@ -781,6 +864,18 @@ def _prepare_run_state(
             "elapsed_seconds": 0.0,
         },
     )
+    if bool(getattr(args, "save_step_zero", False)):
+        _save_checkpoint(
+            args.output_dir / "checkpoints" / "step-000000.pt",
+            model=runtime.model,
+            optimizer=runtime.optimizer,
+            step=0,
+            manifest=manifest,
+            budget=budget,
+            schedule_seed=args.schedule_seed,
+            identity_scale=scale,
+            m0=m0,
+        )
     return ResumeState(manifest, scale, 0, 0.0, m0)
 
 
@@ -902,6 +997,10 @@ def _resume_state(
     if int(payload["episode_cursor"]) != step * budget.gradient_accumulation:
         raise ValueError("R4 resume micro-transition cursor mismatch.")
     elapsed = _prepare_metrics_resume(args.output_dir / "metrics.jsonl", optimizer_step=step)
+    _prepare_micro_metrics_resume(
+        args.output_dir / "micro_metrics.jsonl",
+        global_micro_index=step * budget.gradient_accumulation,
+    )
     return ResumeState(manifest, scale, step, elapsed, dict(trainer_state["m0_evaluation"]))
 
 
@@ -934,7 +1033,11 @@ def _load_runtime(args: argparse.Namespace) -> RuntimeBundle:
         checkpoint_unet=args.checkpoint_unet,
     )
     named, trainable = _force_trainable_fp32(model)
-    optimizer = torch.optim.AdamW(trainable, lr=LEARNING_RATE, weight_decay=WEIGHT_DECAY)
+    optimizer = torch.optim.AdamW(
+        trainable,
+        lr=float(getattr(args, "learning_rate", LEARNING_RATE)),
+        weight_decay=float(getattr(args, "weight_decay", WEIGHT_DECAY)),
+    )
     return RuntimeBundle(
         pipe=pipe,
         processor=processor,
@@ -987,8 +1090,8 @@ def _load_pipeline(args: argparse.Namespace, device: torch.device, dtype: torch.
     pipe.unet = get_peft_model(
         pipe.unet,
         LoraConfig(
-            r=LORA_RANK,
-            lora_alpha=LORA_RANK,
+            r=int(getattr(args, "lora_rank", LORA_RANK)),
+            lora_alpha=int(getattr(args, "lora_rank", LORA_RANK)),
             lora_dropout=0.0,
             target_modules=["to_q", "to_k", "to_v", "to_out.0"],
         ),
@@ -1070,6 +1173,7 @@ def _run_one_step(
             schedule_seed=args.schedule_seed,
             global_micro_index=micro,
             warmup_micro_transitions=budget.warmup_micro_transitions,
+            selected_step_count=int(getattr(args, "selected_step_count", 1)),
         )
         outcomes.append(
             _micro_forward_backward(
@@ -1078,11 +1182,34 @@ def _run_one_step(
                 reader_fn=reader_fn,
                 identity_scale=identity_scale,
                 accumulation=budget.gradient_accumulation,
+                named_trainable=named_trainable,
+                record_micro_gradient=bool(getattr(args, "record_micro_metrics", False)),
             )
         )
     assert_frozen_contract(pipe, reader)
-    gradient_norm = _clip_gradients(named_trainable, trainable)
+    diagnostic_snapshot = None
+    diagnostic_report = None
+    if bool(getattr(args, "optimizer_diagnostics", False)):
+        diagnostic_snapshot, diagnostic_report = begin_optimizer_diagnostics(named_trainable)
+    gradient_norm = _clip_gradients(
+        named_trainable,
+        trainable,
+        max_norm=float(getattr(args, "gradient_clip", GRADIENT_CLIP)),
+    )
+    if diagnostic_report is not None:
+        record_optimizer_diagnostics_after_clip(
+            diagnostic_report,
+            named_trainable,
+            gradient_norm=gradient_norm,
+            max_norm=float(getattr(args, "gradient_clip", GRADIENT_CLIP)),
+        )
     optimizer.step()
+    if diagnostic_report is not None and diagnostic_snapshot is not None:
+        diagnostic_report = finalize_optimizer_diagnostics_after_step(
+            diagnostic_report,
+            named_trainable,
+            diagnostic_snapshot,
+        )
     optimizer.zero_grad(set_to_none=True)
     step = step_zero + 1
     balanced_next = max(0, step * budget.gradient_accumulation - budget.warmup_micro_transitions)
@@ -1091,6 +1218,9 @@ def _run_one_step(
         step=step,
         balanced_next=balanced_next,
         gradient_norm=gradient_norm,
+        gradient_accumulation=budget.gradient_accumulation,
+        optimizer_diagnostics=diagnostic_report,
+        include_micro_metrics=bool(getattr(args, "record_micro_metrics", False)),
         elapsed=elapsed,
         updater_device=torch.device(args.dreamlite_device),
         reader_device=torch.device(args.reader_device),
@@ -1103,6 +1233,9 @@ def _step_metric(
     step: int,
     balanced_next: int,
     gradient_norm: float,
+    gradient_accumulation: int,
+    optimizer_diagnostics: Mapping[str, Any] | None,
+    include_micro_metrics: bool,
     elapsed: float,
     updater_device: torch.device,
     reader_device: torch.device,
@@ -1114,7 +1247,7 @@ def _step_metric(
         "schema": R4_METRICS_SCHEMA,
         "kind": "optimizer_step",
         "optimizer_step": step,
-        "next_global_micro_index": step * GRADIENT_ACCUMULATION,
+        "next_global_micro_index": step * gradient_accumulation,
         "balanced_next_unit_index": balanced_next,
         "loss_mean": _mean([item.loss for item in outcomes]),
         "qa_loss_mean": _mean(qa),
@@ -1134,12 +1267,19 @@ def _step_metric(
         "elapsed_seconds": elapsed,
         "updater_peak_memory_gib": _peak_gib(updater_device),
         "reader_peak_memory_gib": _peak_gib(reader_device),
+        "optimizer_diagnostics": optimizer_diagnostics,
+        "micro_records": [
+            item.to_dict()
+            for item in outcomes
+        ] if include_micro_metrics else None,
     }
 
 
 def _clip_gradients(
     named_trainable: Sequence[tuple[str, nn.Parameter]],
     trainable: Sequence[nn.Parameter],
+    *,
+    max_norm: float = GRADIENT_CLIP,
 ) -> float:
     observed = 0
     for name, parameter in named_trainable:
@@ -1151,7 +1291,9 @@ def _clip_gradients(
                 raise RuntimeError(f"R4 adapter has non-finite gradient: {name}")
     if observed == 0:
         raise RuntimeError("R4 optimizer group has no adapter gradients.")
-    norm = torch.nn.utils.clip_grad_norm_(trainable, GRADIENT_CLIP)
+    if not math.isfinite(max_norm) or max_norm <= 0:
+        raise ValueError("gradient clip must be finite and positive.")
+    norm = torch.nn.utils.clip_grad_norm_(trainable, max_norm)
     if not torch.isfinite(norm) or float(norm) <= 0:
         raise RuntimeError(f"R4 optimizer group has invalid gradient norm: {float(norm)}")
     return float(norm)
@@ -1168,6 +1310,8 @@ def _micro_forward_backward(
     reader_fn: Any,
     identity_scale: float,
     accumulation: int,
+    named_trainable: Sequence[tuple[str, nn.Parameter]],
+    record_micro_gradient: bool,
 ) -> MicroOutcome:
     source = _replay_prefix(
         model=model,
@@ -1181,8 +1325,26 @@ def _micro_forward_backward(
     total = combine_objective_losses(qa, identity)
     if not torch.isfinite(total):
         raise RuntimeError("R4 transition loss is non-finite.")
+    previous_gradients = (
+        {name: parameter.grad.detach().clone() if parameter.grad is not None else None
+         for name, parameter in named_trainable}
+        if record_micro_gradient
+        else None
+    )
     (total / accumulation).backward()
+    micro_gradient_norms = None
+    if previous_gradients is not None:
+        micro_gradient_norms = grouped_tensor_norms(
+            (
+                name,
+                None if parameter.grad is None else (
+                    parameter.grad.detach() - (previous_gradients[name] if previous_gradients[name] is not None else 0)
+                ),
+            )
+            for name, parameter in named_trainable
+        )
     detached = output.detach().float()
+    selected_step_indices = tuple(unit.updater_kwargs()["selected_step_indices"])
     delta = detached - source.detach().float()
     return MicroOutcome(
         loss=float(total.detach()),
@@ -1192,7 +1354,11 @@ def _micro_forward_backward(
         phase=unit.phase,
         event_kind=unit.transition.event_kind,
         step_index=unit.selected_step_index,
+        selected_step_indices=selected_step_indices,
+        micro_gradient_norms=micro_gradient_norms,
         objective=unit.transition.objective.value,
+        transition_id=unit.transition.transition_id,
+        global_micro_index=unit.global_micro_index,
         rgb_min=float(detached.min()),
         rgb_max=float(detached.max()),
         saturation=float(((detached <= 1 / 255) | (detached >= 254 / 255)).float().mean()),
@@ -1211,13 +1377,41 @@ class MicroOutcome:
     phase: str
     event_kind: str
     step_index: int
+    selected_step_indices: tuple[int, ...]
+    micro_gradient_norms: dict[str, Any] | None
     objective: str
+    transition_id: str
+    global_micro_index: int
     rgb_min: float
     rgb_max: float
     saturation: float
     rgb_rms: float
     delta_rms: float
     receipt: dict[str, Any]
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "schema": R4_MICRO_METRICS_SCHEMA,
+            "kind": "micro_transition",
+            "global_micro_index": self.global_micro_index,
+            "transition_id": self.transition_id,
+            "phase": self.phase,
+            "event_kind": self.event_kind,
+            "selected_step_index": self.step_index,
+            "selected_step_indices": list(self.selected_step_indices),
+            "micro_gradient_norms": self.micro_gradient_norms,
+            "objective": self.objective,
+            "loss": self.loss,
+            "qa_loss": self.qa_loss,
+            "identity_raw_smooth_l1": self.identity_raw,
+            "identity_normalized": self.identity_normalized,
+            "rgb_min": self.rgb_min,
+            "rgb_max": self.rgb_max,
+            "rgb_saturation_fraction": self.saturation,
+            "rgb_rms": self.rgb_rms,
+            "rgb_delta_rms": self.delta_rms,
+            "receipt": self.receipt,
+        }
 
 
 def _optional_float(value: Tensor | None) -> float | None:
@@ -1582,7 +1776,7 @@ def make_static_manifest(
         "git_dirty": bool(status),
         "protocol_contract": protocol,
         "teacher_bindings": None,
-        "training_profile": _training_profile(budget, warmup_pool),
+        "training_profile": _training_profile(budget, warmup_pool, args),
         "historical_comparator": _historical_comparator(),
         "transition_index_audit": dict(transition_audit),
         "transition_index_sha256": transition_index_digest(all_transitions),
@@ -1702,14 +1896,19 @@ def transition_index_digest(examples: Sequence[TransitionExample]) -> str:
     return _canonical_sha256(payload)
 
 
-def _training_profile(budget: RunBudget, warmup_pool: Sequence[TransitionExample]) -> dict[str, Any]:
+def _training_profile(budget: RunBudget, warmup_pool: Sequence[TransitionExample], args: argparse.Namespace | None = None) -> dict[str, Any]:
     warmup_ids = sorted(item.transition_id for item in warmup_pool)
     return {
         **budget.to_dict(),
-        "lora_rank": LORA_RANK,
-        "learning_rate": LEARNING_RATE,
-        "weight_decay": WEIGHT_DECAY,
-        "gradient_clip": GRADIENT_CLIP,
+        "lora_rank": int(getattr(args, "lora_rank", LORA_RANK)),
+        "learning_rate": float(getattr(args, "learning_rate", LEARNING_RATE)),
+        "weight_decay": float(getattr(args, "weight_decay", WEIGHT_DECAY)),
+        "gradient_clip": float(getattr(args, "gradient_clip", GRADIENT_CLIP)),
+        "selected_step_count": int(getattr(args, "selected_step_count", 1)),
+        "optimizer_diagnostics": bool(getattr(args, "optimizer_diagnostics", False)),
+        "record_micro_metrics": bool(getattr(args, "record_micro_metrics", False)),
+        "record_validation_metrics": bool(getattr(args, "record_validation_metrics", False)),
+        "validation_every": int(getattr(args, "validation_every", None) or budget.checkpoint_every),
         "optimizer": "AdamW",
         "identity_loss": "SmoothL1(output_rgb,stopgrad(input_rgb))/frozen_train_median",
         "qa_loss": "frozen_qwen_listwise_choice_ce",
