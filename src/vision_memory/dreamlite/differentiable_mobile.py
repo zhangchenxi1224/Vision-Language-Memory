@@ -7,7 +7,7 @@ does not implement generation, CFG, PIL output, model offload hooks, or implicit
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Iterable
+from typing import Any, Iterable, Literal
 
 import torch
 from torch import Tensor, nn
@@ -73,6 +73,44 @@ class DifferentiableDreamLiteMobileSampler(nn.Module):
             vae_scale_factor=int(pipeline.vae_scale_factor),
             checkpoint_unet=checkpoint_unet,
         )
+
+    @staticmethod
+    def _validate_gradient_mode(value: str) -> Literal["full", "drtune"]:
+        if value not in {"full", "drtune"}:
+            raise ValueError("gradient_mode must be exactly 'full' or 'drtune'.")
+        return value
+
+    @staticmethod
+    def _normalize_selected_step_indices(values: Iterable[int] | None) -> tuple[int, ...] | None:
+        if values is None:
+            return None
+        normalized = tuple(values)
+        if not normalized:
+            raise ValueError("selected_step_indices must not be empty when provided.")
+        if any(isinstance(index, bool) or not isinstance(index, int) for index in normalized):
+            raise TypeError("selected_step_indices must contain integers only.")
+        if len(set(normalized)) != len(normalized):
+            raise ValueError("selected_step_indices must not contain duplicates.")
+        return normalized
+
+    def _resolve_gradient_policy(
+        self,
+        *,
+        gradient_mode: str,
+        selected_step_indices: Iterable[int] | None,
+        num_steps: int,
+    ) -> tuple[Literal["full", "drtune"], frozenset[int]]:
+        mode = self._validate_gradient_mode(gradient_mode)
+        selected = self._normalize_selected_step_indices(selected_step_indices)
+        if mode == "full":
+            if selected is not None:
+                raise ValueError("selected_step_indices is valid only when gradient_mode='drtune'.")
+            return mode, frozenset()
+        if selected is None:
+            raise ValueError("gradient_mode='drtune' requires selected_step_indices.")
+        if any(index < 0 or index >= num_steps for index in selected):
+            raise ValueError(f"selected_step_indices must be in [0, {num_steps - 1}].")
+        return mode, frozenset(selected)
 
     def _validate_inputs(
         self,
@@ -157,8 +195,15 @@ class DifferentiableDreamLiteMobileSampler(nn.Module):
         sigmas: Iterable[float] | None = None,
         time_ids: Tensor | None = None,
         return_trajectory: bool = False,
+        gradient_mode: Literal["full", "drtune"] = "full",
+        selected_step_indices: Iterable[int] | None = None,
     ) -> DreamLiteSamplerOutput:
         self._validate_inputs(source_latents, noise_latents, prompt_embeds, prompt_attention_mask)
+        resolved_gradient_mode, resolved_selected_steps = self._resolve_gradient_policy(
+            gradient_mode=gradient_mode,
+            selected_step_indices=selected_step_indices,
+            num_steps=num_steps,
+        )
 
         latents = noise_latents
         timesteps = self._prepare_timesteps(latents, num_steps, sigmas)
@@ -170,26 +215,58 @@ class DifferentiableDreamLiteMobileSampler(nn.Module):
             time_ids = time_ids.to(device=latents.device, dtype=latents.dtype)
 
         trajectory = [latents] if return_trajectory else None
-        for timestep in timesteps:
+        for step_index, timestep in enumerate(timesteps):
             model_input = torch.cat([latents, source_latents], dim=3)
-            if self.checkpoint_unet and torch.is_grad_enabled():
-                noise_pair = checkpoint(
-                    self._unet_step,
-                    model_input,
-                    timestep,
-                    prompt_embeds,
-                    prompt_attention_mask,
-                    time_ids,
-                    use_reentrant=False,
-                )
+            if resolved_gradient_mode == "full":
+                if self.checkpoint_unet and torch.is_grad_enabled():
+                    noise_pair = checkpoint(
+                        self._unet_step,
+                        model_input,
+                        timestep,
+                        prompt_embeds,
+                        prompt_attention_mask,
+                        time_ids,
+                        use_reentrant=False,
+                    )
+                else:
+                    noise_pair = self._unet_step(
+                        model_input,
+                        timestep,
+                        prompt_embeds,
+                        prompt_attention_mask,
+                        time_ids,
+                    )
+            elif step_index in resolved_selected_steps:
+                # Stop gradients at the selected denoiser input while retaining
+                # parameter gradients. Scheduler updates stay outside no_grad.
+                detached_model_input = model_input.detach()
+                if self.checkpoint_unet and torch.is_grad_enabled():
+                    noise_pair = checkpoint(
+                        self._unet_step,
+                        detached_model_input,
+                        timestep,
+                        prompt_embeds,
+                        prompt_attention_mask,
+                        time_ids,
+                        use_reentrant=False,
+                    )
+                else:
+                    noise_pair = self._unet_step(
+                        detached_model_input,
+                        timestep,
+                        prompt_embeds,
+                        prompt_attention_mask,
+                        time_ids,
+                    )
             else:
-                noise_pair = self._unet_step(
-                    model_input,
-                    timestep,
-                    prompt_embeds,
-                    prompt_attention_mask,
-                    time_ids,
-                )
+                with torch.no_grad():
+                    noise_pair = self._unet_step(
+                        model_input.detach(),
+                        timestep,
+                        prompt_embeds,
+                        prompt_attention_mask,
+                        time_ids,
+                    )
 
             noise_prediction = noise_pair[..., : latents.shape[-1]]
             latents = self.scheduler.step(noise_prediction, timestep, latents, return_dict=False)[0]

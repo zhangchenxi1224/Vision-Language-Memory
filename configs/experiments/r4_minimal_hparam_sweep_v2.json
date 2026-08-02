@@ -1,0 +1,57 @@
+{
+  "schema": "vision_memory.r4-minimal-hparam-sweep.v2",
+  "purpose": "four-arm formal-v1 sweep after historical clip=1 saturation; keep rank and diffusion depth fixed",
+  "budget": {
+    "optimizer_steps": 64,
+    "set_warmup_optimizer_steps": 8,
+    "gradient_accumulation": 8,
+    "eval_limit": 32,
+    "identity_calibration_count": 8,
+    "checkpoint_every": 8,
+    "validation_every": 8,
+    "save_step_zero": true,
+    "record_micro_metrics": true,
+    "optimizer_diagnostics": true
+  },
+  "datasets": [
+    {
+      "name": "formal-v1",
+      "train": "${R4_TRAIN_JSONL}",
+      "dev": "${R4_DEV_JSONL}"
+    }
+  ],
+  "arms": [
+    {
+      "name": "lr3e5_clip5_rank4_k1",
+      "learning_rate": 3e-5,
+      "weight_decay": 1e-4,
+      "gradient_clip": 5.0,
+      "lora_rank": 4,
+      "selected_step_count": 1
+    },
+    {
+      "name": "lr3e5_clip10_rank4_k1",
+      "learning_rate": 3e-5,
+      "weight_decay": 1e-4,
+      "gradient_clip": 10.0,
+      "lora_rank": 4,
+      "selected_step_count": 1
+    },
+    {
+      "name": "lr1e5_clip10_rank4_k1",
+      "learning_rate": 1e-5,
+      "weight_decay": 1e-4,
+      "gradient_clip": 10.0,
+      "lora_rank": 4,
+      "selected_step_count": 1
+    },
+    {
+      "name": "lr1e4_clip10_rank4_k1",
+      "learning_rate": 1e-4,
+      "weight_decay": 1e-4,
+      "gradient_clip": 10.0,
+      "lora_rank": 4,
+      "selected_step_count": 1
+    }
+  ]
+}

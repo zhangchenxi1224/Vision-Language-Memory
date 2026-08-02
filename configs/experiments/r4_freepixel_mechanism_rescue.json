@@ -1,0 +1,233 @@
+{
+  "schema": "vision_memory.r4-free-pixel-mechanism-rescue.v1",
+  "protocol": "R4-FreePixel",
+  "decision_date": "2026-07-22",
+  "status": "fixed_before_any_r4_formal_optimizer_step",
+  "classification": "mechanism_rescue_not_confirmatory_proof",
+  "purpose": "Test whether teacher-free recurrent RGB state can learn through a fixed Reader after replacing full-event BPTT with transition-local DRTune updates.",
+  "runtime": {
+    "platform": "Inspire",
+    "notebook_instance": "vlm-dreamlite-full-h200x2-20260720",
+    "control_route": "inspire notebook exec",
+    "forbidden_routes": [
+      "notebook connection refresh",
+      "SSH",
+      "rtunnel",
+      "/proxy/31337"
+    ],
+    "accelerator": "NVIDIA H200 141GB",
+    "accelerator_count": 2,
+    "dreamlite_device": "cuda:0",
+    "reader_device": "cuda:1",
+    "target_wall_time_hours": {
+      "minimum": 3,
+      "maximum": 4,
+      "interpretation": "fixed compute budget target, never an early-stopping or checkpoint-selection rule"
+    }
+  },
+  "models": {
+    "updater": "DreamLite-mobile",
+    "reader": "Qwen3-VL-4B-Instruct",
+    "reader_frozen": true,
+    "dreamlite_base_frozen": true,
+    "trainable_parameters": "DreamLite U-Net LoRA only",
+    "lora": {
+      "rank": 4,
+      "alpha": 4,
+      "target_modules": [
+        "to_q",
+        "to_k",
+        "to_v",
+        "to_out.0"
+      ],
+      "trainable_dtype": "float32"
+    }
+  },
+  "state_contract": {
+    "schema": "vision_memory.r4-free-pixel-contract.v1",
+    "protocol": "R4-FreePixel",
+    "persistent_state": "float_rgb",
+    "state_target_policy": "none",
+    "canonical_teacher_artifacts_loaded": false,
+    "pixel_or_latent_targets_forbidden": true,
+    "codebook_forbidden": true,
+    "learn_initial_state": false,
+    "updater_input_contract": "previous_rgb+visible_event_text+deterministic_sampling_noise",
+    "updater_learned_conditioning": "previous_rgb+visible_event_text",
+    "sampling_noise_contract": "prng(global_seed,episode_id,turn_id,presentation_index)",
+    "sampling_noise_keys_answer_agnostic": true,
+    "query_or_target_in_noise_seed_forbidden": true,
+    "updater_query_inputs_forbidden": true,
+    "reader_parameters_frozen": true,
+    "event_index_rule": "event_kind_non_null",
+    "query_attribution_rule": "target_mixed_or_before_next_updater",
+    "intermediate_noop_objective": "identity_only",
+    "event_tbptt_horizon": 1,
+    "diffusion_gradient_mode": "drtune",
+    "diffusion_step_count": 4,
+    "selected_steps_per_transition": 1,
+    "balanced_schedule_schema": "vision_memory.r4-balanced-transition-schedule.v1",
+    "balanced_schedule_seed": 0,
+    "balanced_block_size": 16
+  },
+  "forbidden_bindings": [
+    "teacher_image",
+    "teacher_manifest",
+    "teacher_sidecar",
+    "canonical_canvas",
+    "canonical_target",
+    "pixel_target",
+    "latent_target",
+    "feature_target",
+    "codebook"
+  ],
+  "data": {
+    "dataset": "formal-v1",
+    "train_episodes": 5000,
+    "dev_episodes": 500,
+    "sha256": {
+      "train_jsonl": "24327edc39e0d133df5150dc1aab4f55c6cf5b05ccfca9025ad90c5accc6d184",
+      "dev_jsonl": "8b167df38022a631d4e631d3c0d66e9fca74171f4224fec436030d6650047303",
+      "manifest_json": "089beefa00b9b78149b3d7f4bd40cf802dc2c92a3757c04f30d9534bbdc51215"
+    },
+    "canonical_transition_index_sha256": "2b96ae090955c25092b0d415b5b5a7e36a3e9f9fc91bf693725c197ae94f4964",
+    "transition_audit": {
+      "total_transitions": 12500,
+      "trainable_transitions": 11876,
+      "prefix_only_transitions": 624,
+      "local_query_count": 12496,
+      "by_event_kind": {
+        "set": 7504,
+        "overwrite": 1872,
+        "clear": 624,
+        "noop": 2500
+      },
+      "trainable_by_event_kind": {
+        "set": 6880,
+        "overwrite": 1872,
+        "clear": 624,
+        "noop": 2500
+      },
+      "by_objective": {
+        "qa_only": 9376,
+        "identity_only": 1876,
+        "qa_and_identity": 624,
+        "prefix_only": 624
+      }
+    }
+  },
+  "training": {
+    "resolution": 1024,
+    "seed": 0,
+    "adapter_seed": 0,
+    "schedule_seed": 0,
+    "strict_determinism": true,
+    "optimizer": "AdamW",
+    "learning_rate": 0.00003,
+    "weight_decay": 0.0001,
+    "gradient_accumulation": 8,
+    "gradient_clip_global_norm": 1.0,
+    "optimizer_steps": 256,
+    "warmup_optimizer_steps": 32,
+    "balanced_optimizer_steps": 224,
+    "total_micro_transitions": 2048,
+    "warmup_micro_transitions": 256,
+    "balanced_micro_transitions": 1792,
+    "checkpoint_every_optimizer_steps": 16,
+    "checkpoint_unet": true,
+    "event_tbptt_horizon": 1,
+    "prefix_replay": "on_policy_no_grad_exact_visible_prefix",
+    "initial_state": "neutral_gray_float_rgb",
+    "identity_calibration_count": 8,
+    "losses": {
+      "set_overwrite_clear": "local_semantic_listwise_ce",
+      "noop": "smooth_l1_output_rgb_vs_stopgrad_input_rgb",
+      "terminal_noop": "local_semantic_listwise_ce_plus_normalized_identity",
+      "identity_scale": "frozen_train_only_median_from_calibration_pool"
+    },
+    "excluded_first_run_changes": [
+      "residual_gate",
+      "rank_increase",
+      "adaptive_gradient_clipping",
+      "teacher_or_target_loss"
+    ]
+  },
+  "schedule": {
+    "warmup": {
+      "event_kind": "set",
+      "source_state": "blank",
+      "requires_no_prefix_updaters": true,
+      "selected_diffusion_steps": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "selection_rule": "cycle_all_four_steps"
+    },
+    "balanced": {
+      "block_size": 16,
+      "cross_product": "4_event_kinds_x_4_diffusion_steps",
+      "complete_blocks": 112,
+      "selected_steps_per_transition": 1
+    },
+    "expected_counts": {
+      "by_event_kind": {
+        "set": 704,
+        "overwrite": 448,
+        "clear": 448,
+        "noop": 448
+      },
+      "by_diffusion_step": {
+        "0": 512,
+        "1": 512,
+        "2": 512,
+        "3": 512
+      },
+      "balanced_by_event_kind_step": {
+        "set:0": 112,
+        "set:1": 112,
+        "set:2": 112,
+        "set:3": 112,
+        "overwrite:0": 112,
+        "overwrite:1": 112,
+        "overwrite:2": 112,
+        "overwrite:3": 112,
+        "clear:0": 112,
+        "clear:1": 112,
+        "clear:2": 112,
+        "clear:3": 112,
+        "noop:0": 112,
+        "noop:1": 112,
+        "noop:2": 112,
+        "noop:3": 112
+      }
+    }
+  },
+  "evaluation": {
+    "eval_limit": 8,
+    "checkpoints": [
+      "M0",
+      "final_step_256"
+    ],
+    "endpoint_selection": "fixed_final_only",
+    "intermediate_dev_evaluation": false,
+    "best_dev_checkpoint_selection": false,
+    "historical_run_is_rerun": false
+  },
+  "historical_comparator": {
+    "label": "M_hist",
+    "run_id": "dreamlite-fullscale-formal-v1-seed0-20260720-10bde56",
+    "commit": "10bde565d30d119a68e8460757d979b1c35e1b8f",
+    "best_dev_loss": 10.0844607353,
+    "elapsed_seconds": 11233.8007,
+    "use": "descriptive historical comparator only",
+    "rerun": false
+  },
+  "failure_policy": {
+    "invalid_contract": "fail_closed_before_model_or_optimizer_work",
+    "nonfinite_loss_or_gradient": "write_terminal_failure_and_stop",
+    "interrupted_run": "resume_only_from_sha_bound_checkpoint_cursor",
+    "scientific_claim": "no strong emergent-memory claim from this single mechanism-rescue run"
+  }
+}

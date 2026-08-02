@@ -1,0 +1,307 @@
+{
+  "aggregate_fixed_dev": {
+    "choice_presentations_per_episode": 4,
+    "choice_view_family": "reverse_cyclic4",
+    "episode_count": 1,
+    "mean_episode_listwise_choice_ce": 8.777279198169708,
+    "noise_presentation_index": 0,
+    "query_loss_count": 8,
+    "updater_call_count": 8
+  },
+  "cases": [
+    {
+      "case_index": 0,
+      "episode_id": "r3-dev-semantic-000000-s0-clean",
+      "turns": [
+        {
+          "event_text": "R3 Dev Standard Templates 02: For the linen desk dev 001250, remember that the preferred style is formal.",
+          "kind": "event",
+          "output_latents": {
+            "finite_fraction": 1.0,
+            "max": 2.84375,
+            "mean": -0.20292961597442627,
+            "min": -2.734375,
+            "rms": 0.6473803520202637,
+            "std": 0.6147574186325073
+          },
+          "output_state": {
+            "finite_fraction": 1.0,
+            "max": 1.0,
+            "mean": 0.48688119649887085,
+            "min": 0.0,
+            "rms": 0.509057343006134,
+            "std": 0.14861400425434113
+          },
+          "source_latents": {
+            "finite_fraction": 1.0,
+            "max": 1.0390625,
+            "mean": -0.08177465200424194,
+            "min": -0.9453125,
+            "rms": 0.5672445893287659,
+            "std": 0.5613235235214233
+          },
+          "trajectory": [
+            {
+              "decoded_rgb": {
+                "finite_fraction": 1.0,
+                "max": 1.0,
+                "mean": 0.486165851354599,
+                "min": 0.0,
+                "rms": 0.5533938407897949,
+                "std": 0.2643624544143677
+              },
+              "diffusion_index": 0,
+              "latent": {
+                "finite_fraction": 1.0,
+                "max": 4.28125,
+                "mean": 0.001704498426988721,
+                "min": -3.875,
+                "rms": 0.996920108795166,
+                "std": 0.9969263076782227
+              }
+            },
+            {
+              "decoded_rgb": {
+                "finite_fraction": 1.0,
+                "max": 1.0,
+                "mean": 0.48920631408691406,
+                "min": 0.0,
+                "rms": 0.5450045466423035,
+                "std": 0.24022318422794342
+              },
+              "diffusion_index": 1,
+              "latent": {
+                "finite_fraction": 1.0,
+                "max": 3.921875,
+                "mean": -0.01938641630113125,
+                "min": -3.59375,
+                "rms": 0.9222514629364014,
+                "std": 0.9220547676086426
+              }
+            },
+            {
+              "decoded_rgb": {
+                "finite_fraction": 1.0,
+                "max": 1.0,
+                "mean": 0.49132415652275085,
+                "min": 0.0,
+                "rms": 0.5308626890182495,
+                "std": 0.20103676617145538
+              },
+              "diffusion_index": 2,
+              "latent": {
+                "finite_fraction": 1.0,
+                "max": 3.421875,
+                "mean": -0.050546154379844666,
+                "min": -3.171875,
+                "rms": 0.8151341080665588,
+                "std": 0.813571572303772
+              }
+            },
+            {
+              "decoded_rgb": {
+                "finite_fraction": 1.0,
+                "max": 1.0,
+                "mean": 0.49305063486099243,
+                "min": 0.0,
+                "rms": 0.5135700702667236,
+                "std": 0.14371953904628754
+              },
+              "diffusion_index": 3,
+              "latent": {
+                "finite_fraction": 1.0,
+                "max": 2.9375,
+                "mean": -0.10245651006698608,
+                "min": -2.546875,
+                "rms": 0.6653617024421692,
+                "std": 0.6574309468269348
+              }
+            },
+            {
+              "decoded_rgb": {
+                "finite_fraction": 1.0,
+                "max": 1.0,
+                "mean": 0.48688119649887085,
+                "min": 0.0,
+                "rms": 0.509057343006134,
+                "std": 0.14861400425434113
+              },
+              "diffusion_index": 4,
+              "latent": {
+                "finite_fraction": 1.0,
+                "max": 2.84375,
+                "mean": -0.20292961597442627,
+                "min": -2.734375,
+                "rms": 0.6473803520202637,
+                "std": 0.6147574186325073
+              }
+            }
+          ],
+          "turn_index": 0
+        },
+        {
+          "choice_ce": 9.492860794067383,
+          "kind": "query",
+          "query": "R3 Dev Standard Templates 02: Before any later update, what is the current style preference for the linen desk dev 001250? Choose exactly one option.",
+          "state": {
+            "finite_fraction": 1.0,
+            "max": 1.0,
+            "mean": 0.48688119649887085,
+            "min": 0.0,
+            "rms": 0.509057343006134,
+            "std": 0.14861400425434113
+          },
+          "target_index": 0,
+          "turn_index": 1
+        },
+        {
+          "event_text": "R3 Dev Standard Templates 02: For the linen desk dev 001250, remember that the preferred style is modern.",
+          "kind": "event",
+          "output_latents": {
+            "finite_fraction": 1.0,
+            "max": 2.859375,
+            "mean": -0.21026358008384705,
+            "min": -2.90625,
+            "rms": 0.6845098733901978,
+            "std": 0.651421070098877
+          },
+          "output_state": {
+            "finite_fraction": 1.0,
+            "max": 1.0,
+            "mean": 0.49346035718917847,
+            "min": 0.0,
+            "rms": 0.523960530757904,
+            "std": 0.17615772783756256
+          },
+          "source_latents": {
+            "finite_fraction": 1.0,
+            "max": 2.96875,
+            "mean": -0.23026901483535767,
+            "min": -3.078125,
+            "rms": 0.6436018347740173,
+            "std": 0.6010033488273621
+          },
+          "trajectory": [
+            {
+              "decoded_rgb": {
+                "finite_fraction": 1.0,
+                "max": 1.0,
+                "mean": 0.4888555407524109,
+                "min": 0.0,
+                "rms": 0.5554582476615906,
+                "std": 0.2637312412261963
+              },
+              "diffusion_index": 0,
+              "latent": {
+                "finite_fraction": 1.0,
+                "max": 4.75,
+                "mean": -4.126864951103926e-06,
+                "min": -4.25,
+                "rms": 0.9976996183395386,
+                "std": 0.9977072477340698
+              }
+            },
+            {
+              "decoded_rgb": {
+                "finite_fraction": 1.0,
+                "max": 1.0,
+                "mean": 0.4930006265640259,
+                "min": 0.0,
+                "rms": 0.5487444400787354,
+                "std": 0.2409789264202118
+              },
+              "diffusion_index": 1,
+              "latent": {
+                "finite_fraction": 1.0,
+                "max": 4.28125,
+                "mean": -0.020439360290765762,
+                "min": -3.953125,
+                "rms": 0.9246593117713928,
+                "std": 0.9244404435157776
+              }
+            },
+            {
+              "decoded_rgb": {
+                "finite_fraction": 1.0,
+                "max": 1.0,
+                "mean": 0.49701279401779175,
+                "min": 0.0,
+                "rms": 0.5377649664878845,
+                "std": 0.20535209774971008
+              },
+              "diffusion_index": 2,
+              "latent": {
+                "finite_fraction": 1.0,
+                "max": 3.59375,
+                "mean": -0.052594903856515884,
+                "min": -3.515625,
+                "rms": 0.8218653798103333,
+                "std": 0.8201870322227478
+              }
+            },
+            {
+              "decoded_rgb": {
+                "finite_fraction": 1.0,
+                "max": 1.0,
+                "mean": 0.5002632141113281,
+                "min": 0.0,
+                "rms": 0.5241296291351318,
+                "std": 0.15636049211025238
+              },
+              "diffusion_index": 3,
+              "latent": {
+                "finite_fraction": 1.0,
+                "max": 2.890625,
+                "mean": -0.10442044585943222,
+                "min": -2.75,
+                "rms": 0.6822190880775452,
+                "std": 0.674185574054718
+              }
+            },
+            {
+              "decoded_rgb": {
+                "finite_fraction": 1.0,
+                "max": 1.0,
+                "mean": 0.49346035718917847,
+                "min": 0.0,
+                "rms": 0.523960530757904,
+                "std": 0.17615772783756256
+              },
+              "diffusion_index": 4,
+              "latent": {
+                "finite_fraction": 1.0,
+                "max": 2.859375,
+                "mean": -0.21026358008384705,
+                "min": -2.90625,
+                "rms": 0.6845098733901978,
+                "std": 0.651421070098877
+              }
+            }
+          ],
+          "turn_index": 2
+        },
+        {
+          "choice_ce": 9.283273696899414,
+          "kind": "query",
+          "query": "R3 Dev Standard Templates 02: At this later check, what is the current style preference for the linen desk dev 001250? Choose exactly one option.",
+          "state": {
+            "finite_fraction": 1.0,
+            "max": 1.0,
+            "mean": 0.49346035718917847,
+            "min": 0.0,
+            "rms": 0.523960530757904,
+            "std": 0.17615772783756256
+          },
+          "target_index": 2,
+          "turn_index": 3
+        }
+      ]
+    }
+  ],
+  "checkpoint": "endpoint.pt",
+  "notes": [
+    "Trajectory index 0 is the initial noisy latent; indices 1-4 are after each mobile denoising step.",
+    "Case analysis is diagnostic only and never changes endpoint or checkpoint selection."
+  ],
+  "schema": "vision_memory.r4-checkpoint-case-analysis.v1"
+}

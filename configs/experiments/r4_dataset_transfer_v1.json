@@ -1,0 +1,39 @@
+{
+  "schema": "vision_memory.r4-dataset-transfer.v1",
+  "purpose": "run the selected formal-v1 arm unchanged on controlled full and set-only synthetic corpora",
+  "budget": {
+    "optimizer_steps": 64,
+    "set_warmup_optimizer_steps": 8,
+    "gradient_accumulation": 8,
+    "eval_limit": 32,
+    "identity_calibration_count": 8,
+    "checkpoint_every": 8,
+    "validation_every": 8,
+    "save_step_zero": true,
+    "record_micro_metrics": true,
+    "optimizer_diagnostics": true
+  },
+  "datasets": [
+    {
+      "name": "synthetic-v2-full",
+      "train": "data/synthetic_v2/train.jsonl",
+      "dev": "data/synthetic_v2/dev.jsonl"
+    },
+    {
+      "name": "synthetic-v2-set-only",
+      "train": "data/synthetic_v2_set_only/train.jsonl",
+      "dev": "data/synthetic_v2_set_only/dev.jsonl"
+    }
+  ],
+  "arms": [
+    {
+      "name": "selected_formal_arm_lr3e5_clip10_rank4_k1",
+      "learning_rate": 3e-5,
+      "weight_decay": 1e-4,
+      "gradient_clip": 10.0,
+      "lora_rank": 4,
+      "selected_step_count": 1
+    }
+  ],
+  "note": "If the formal-v1 sweep selects a different arm, replace only the arm values before expansion and preserve the selected run manifest."
+}
