@@ -16,6 +16,7 @@ sys.path.insert(0, str(INSPIRE))
 
 from launch_background import STRICT_ENVIRONMENT  # noqa: E402
 from materialize_qwen_history_baseline import (  # noqa: E402
+    _expected_query_states,
     authorize_stage,
     initialize,
 )
@@ -118,7 +119,20 @@ def _fixture(tmp_path: Path) -> dict[str, object]:
             path.write_text('{"schema":"fixture"}\n', encoding="utf-8")
             continue
         count = query_counts[name]
-        if name in {"set8_gate_sha256", "transition16_gate_sha256"}:
+        if name == "transition16_gate_sha256":
+            episodes = []
+            for index in range(count):
+                turns = [{"type": "event"}]
+                if index >= count // 2:
+                    turns.append({"type": "mixed"})
+                turns.append({"type": "query"})
+                episodes.append(
+                    {
+                        "episode_id": f"{name}-{index}",
+                        "turns": turns,
+                    }
+                )
+        elif name == "set8_gate_sha256":
             episodes = [
                 {"episode_id": f"{name}-{index}", "turns": [{"type": "query"}]}
                 for index in range(count)
@@ -231,6 +245,41 @@ def test_prospective_amendment_locks_blank_image_and_ab_replication() -> None:
     assert amendment["execution"]["strict_order"] == ["BH0", "BH1", "BH2", "BH3"]
     assert amendment["expected_inventory"]["formal_dev"]["prediction_records"] == 20_032
     assert amendment["expected_inventory"]["formal_test_id"]["prediction_records"] == 39_808
+
+
+def test_delayed_inventory_ignores_mixed_immediate_query(tmp_path: Path) -> None:
+    episodes = tmp_path / "transition16.jsonl"
+    episodes.write_text(
+        json.dumps(
+            {
+                "episode_id": "mixed-with-delayed-probe",
+                "turns": [
+                    {"type": "event"},
+                    {"type": "mixed"},
+                    {"type": "query"},
+                ],
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    assert _expected_query_states(episodes, probe_role="all", limit=None) == 2
+    assert _expected_query_states(episodes, probe_role="delayed", limit=None) == 1
+
+
+def test_inventory_rejects_unknown_turn_type(tmp_path: Path) -> None:
+    episodes = tmp_path / "invalid.jsonl"
+    episodes.write_text(
+        json.dumps(
+            {"episode_id": "invalid", "turns": [{"type": "query_event"}]}
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    with pytest.raises(ValueError, match="Unsupported synthetic turn type"):
+        _expected_query_states(episodes, probe_role="all", limit=None)
 
 
 def test_command_contract_rejects_training_privilege_and_wrong_device() -> None:
