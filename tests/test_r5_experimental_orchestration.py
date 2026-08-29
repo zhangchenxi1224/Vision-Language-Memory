@@ -258,6 +258,36 @@ class R5ExperimentalOrchestrationTest(unittest.TestCase):
             self.assertTrue((output / "FINAL_REPORT.md").is_file())
             self.assertTrue((output / "DELIVERY_MANIFEST.json").is_file())
 
+    def test_report_renderer_expands_rescue_optimizer_diagnostics(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary) / "experiment"
+            output = root / "delivery"
+            summary = pilot_summary(
+                state="latent", horizon=4, delayed=1.9, formal=2.1, eligible=False
+            )
+            summary["residual_blend"] = 0.5
+            write_json(root / "rescue_decision.json", {"reason": "pilot failed", "summary": summary})
+            write_json(root / "pilot_selection.json", {"decision": "no_eligible_pilot", "winner": None})
+            metrics = {
+                "kind": "optimizer_step",
+                "optimizer_step": 1,
+                "loss_mean": 2.0,
+                "gradient_norm_before_clip": 20.0,
+                "gradient_clipped": True,
+                "optimizer_diagnostics": {
+                    "updates_after_step": {"global": {"update_weight_ratio": 0.001}}
+                },
+            }
+            metrics_path = root / "runs" / "rescue-latent-h4-k0-tau05" / "metrics.jsonl"
+            metrics_path.parent.mkdir(parents=True, exist_ok=True)
+            metrics_path.write_text(json.dumps(metrics) + "\n", encoding="utf-8")
+            result = reporter.render(root, output)
+            report = (output / "FINAL_REPORT.md").read_text(encoding="utf-8")
+            self.assertEqual(result["status"], "completed")
+            self.assertIn("条件 residual rescue", report)
+            self.assertIn("median update/weight", report)
+            self.assertTrue((output / "figures" / "rescue_training_loss.png").is_file())
+
 
 if __name__ == "__main__":
     unittest.main()

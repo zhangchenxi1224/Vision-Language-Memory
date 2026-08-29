@@ -7,6 +7,7 @@ import csv
 import hashlib
 import json
 import math
+import statistics
 from pathlib import Path
 from typing import Any, Mapping, Sequence
 
@@ -83,7 +84,9 @@ def _gradient_figure(report: Mapping[str, Any], output: Path) -> None:
     plt.close(fig)
 
 
-def _pilot_figure(pilots: Sequence[Mapping[str, Any]], output: Path) -> None:
+def _pilot_figure(
+    pilots: Sequence[Mapping[str, Any]], output: Path, *, title: str = "R5 pilot endpoints"
+) -> None:
     eligible = [value for value in pilots if isinstance(value.get("pilot_selection"), Mapping)]
     if not eligible:
         return
@@ -97,8 +100,31 @@ def _pilot_figure(pilots: Sequence[Mapping[str, Any]], output: Path) -> None:
     axis.bar([value + width / 2 for value in positions], endpoint, width=width, label="EMA step128")
     axis.set_xticks(positions, labels, rotation=15, ha="right")
     axis.set_ylabel("mechanism-select mean CE (lower is better)")
-    axis.set_title("R5 2×2 pilot endpoints")
+    axis.set_title(title)
     axis.legend()
+    fig.tight_layout()
+    fig.savefig(output, dpi=180)
+    plt.close(fig)
+
+
+def _single_run_loss_figure(metrics_path: Path, output: Path, *, title: str) -> None:
+    records = _rows(metrics_path, kind="optimizer_step")
+    if not records:
+        return
+    steps = [int(record["optimizer_step"]) for record in records]
+    losses = [float(record["loss_mean"]) for record in records]
+    window = 16
+    smoothed = [
+        sum(losses[max(0, index - window + 1) : index + 1]) / min(index + 1, window)
+        for index in range(len(losses))
+    ]
+    fig, axis = plt.subplots(figsize=(7.4, 4.2))
+    axis.plot(steps, losses, alpha=0.35, linewidth=0.8, label="raw step loss")
+    axis.plot(steps, smoothed, linewidth=1.8, label=f"moving mean ({window})")
+    axis.set_xlabel("optimizer step")
+    axis.set_ylabel("mean delayed-query training CE")
+    axis.set_title(title)
+    axis.legend(fontsize=8)
     fig.tight_layout()
     fig.savefig(output, dpi=180)
     plt.close(fig)
@@ -200,6 +226,108 @@ def _evaluation_row(seed: int, value: Mapping[str, Any]) -> list[Any]:
     ]
 
 
+def _run_optimizer_rows(root: Path) -> list[list[Any]]:
+    paths = sorted((root / "runs").glob("pilot-*/metrics.jsonl"))
+    paths += sorted((root / "runs").glob("rescue-*/metrics.jsonl"))
+    paths += sorted((root / "runs").glob("main-seed*/metrics.jsonl"))
+    rows: list[list[Any]] = []
+    for path in paths:
+        records = _rows(path, kind="optimizer_step")
+        if not records:
+            continue
+        ratios: list[float] = []
+        for record in records:
+            diagnostics = record.get("optimizer_diagnostics", {})
+            updates = diagnostics.get("updates_after_step", {}) if isinstance(diagnostics, Mapping) else {}
+            global_update = updates.get("global", {}) if isinstance(updates, Mapping) else {}
+            ratio = global_update.get("update_weight_ratio") if isinstance(global_update, Mapping) else None
+            if isinstance(ratio, (int, float)) and math.isfinite(float(ratio)):
+                ratios.append(float(ratio))
+        first = [float(record["loss_mean"]) for record in records[:16]]
+        last = [float(record["loss_mean"]) for record in records[-16:]]
+        gradients = [float(record["gradient_norm_before_clip"]) for record in records]
+        rows.append(
+            [
+                path.parent.name,
+                len(records),
+                _fmt(sum(first) / len(first)),
+                _fmt(sum(last) / len(last)),
+                _fmt(statistics.median(gradients)),
+                _fmt(sum(bool(record["gradient_clipped"]) for record in records) / len(records)),
+                _fmt(statistics.median(ratios) if ratios else None, 6),
+            ]
+        )
+    return rows
+
+
+def _breakdown_rows(
+    evaluations: Sequence[tuple[int, Mapping[str, Any]]], *, field: str
+) -> list[list[Any]]:
+    rows: list[list[Any]] = []
+    suite = "mechanism_final_128"
+    for seed, value in evaluations:
+        breakdowns = value.get("breakdowns", {})
+        metrics = breakdowns.get(field, {}) if isinstance(breakdowns, Mapping) else {}
+        if not isinstance(metrics, Mapping):
+            continue
+        primary = str(value.get("primary_checkpoint", "ema_step640"))
+        baseline_prefix = f"m0|{suite}|normal|"
+        endpoint_prefix = f"{primary}|{suite}|normal|"
+        categories = sorted(
+            {
+                str(key).removeprefix(baseline_prefix)
+                for key in metrics
+                if str(key).startswith(baseline_prefix)
+            }
+            & {
+                str(key).removeprefix(endpoint_prefix)
+                for key in metrics
+                if str(key).startswith(endpoint_prefix)
+            },
+            key=lambda item: (not item.lstrip("-").isdigit(), int(item) if item.lstrip("-").isdigit() else item),
+        )
+        for category in categories:
+            baseline = metrics[f"{baseline_prefix}{category}"]
+            endpoint = metrics[f"{endpoint_prefix}{category}"]
+            baseline_ce = float(baseline["mean_ce"])
+            endpoint_ce = float(endpoint["mean_ce"])
+            rows.append(
+                [
+                    seed,
+                    category,
+                    _fmt(baseline_ce),
+                    _fmt(endpoint_ce),
+                    _fmt(endpoint_ce - baseline_ce),
+                    _fmt(baseline.get("mean_margin")),
+                    _fmt(endpoint.get("mean_margin")),
+                ]
+            )
+    return rows
+
+
+def _provenance_rows(root: Path) -> list[list[Any]]:
+    rows: list[list[Any]] = []
+    for path in sorted((root / "runs").glob("*/manifest.json")):
+        value = _load(path)
+        if value is None:
+            continue
+        contract = value.get("protocol_contract", {})
+        supervision = value.get("supervision", {})
+        rows.append(
+            [
+                path.parent.name,
+                str(value.get("git_commit", "—"))[:12],
+                contract.get("persistent_state", "—") if isinstance(contract, Mapping) else "—",
+                contract.get("tbptt_horizon", "—") if isinstance(contract, Mapping) else "—",
+                contract.get("gradient_mode", "—") if isinstance(contract, Mapping) else "—",
+                supervision.get("residual_blend", "—") if isinstance(supervision, Mapping) else "—",
+                str(value.get("train_sha256", "—"))[:12],
+                str(value.get("dev_sha256", "—"))[:12],
+            ]
+        )
+    return rows
+
+
 def render(root: Path, output: Path) -> dict[str, Any]:
     output.mkdir(parents=True, exist_ok=True)
     topology = _load(root / "topology_topology_decision.json")
@@ -222,12 +350,26 @@ def render(root: Path, output: Path) -> dict[str, Any]:
         if (value := _load(path)) is not None
     ]
     evaluations.sort(key=lambda item: item[0])
+    rescue_summary = rescue.get("summary") if isinstance(rescue, Mapping) else None
+    if not isinstance(rescue_summary, Mapping):
+        rescue_summary = None
 
     figures = output / "figures"
     figures.mkdir(exist_ok=True)
     if gradient is not None:
         _gradient_figure(gradient, figures / "gradient_fidelity.png")
     _pilot_figure(pilot_summaries, figures / "pilot_delayed_ce.png")
+    if rescue_summary is not None:
+        _pilot_figure(
+            [rescue_summary],
+            figures / "rescue_delayed_ce.png",
+            title="R5 conditional residual rescue endpoint",
+        )
+        _single_run_loss_figure(
+            root / "runs" / "rescue-latent-h4-k0-tau05" / "metrics.jsonl",
+            figures / "rescue_training_loss.png",
+            title="R5 conditional residual rescue training loss",
+        )
     _loss_figure(root, sorted(main_summaries), figures / "main_training_loss.png")
     _causal_figure(evaluations, figures / "causal_controls.png")
 
@@ -323,7 +465,25 @@ def render(root: Path, output: Path) -> dict[str, Any]:
         )
     else:
         lines.append("无完整 pilot summary。")
-    lines.extend(["", "## 4. 主训练与最终因果评测", ""])
+    if rescue_summary is not None:
+        rescue_rows = _pilot_rows([rescue_summary])
+        lines.extend(["", "## 4. 条件 residual rescue", ""])
+        if rescue_rows:
+            lines.extend(
+                [
+                    "该分支仅用于诊断 τ=0.5 是否缓解状态大面积重写，不作为主线正向结果。",
+                    "",
+                    _table(
+                        ["Arm", "M0 delayed CE", "Endpoint delayed CE", "ΔCE", "Normal−Reset", "技术门", "机制门", "秒"],
+                        rescue_rows,
+                    ),
+                    "",
+                    "![Rescue delayed CE](figures/rescue_delayed_ce.png)",
+                    "",
+                    "![Rescue training loss](figures/rescue_training_loss.png)",
+                ]
+            )
+    lines.extend(["", "## 5. 主训练与最终因果评测", ""])
     if evaluations:
         lines.extend(
             [
@@ -370,14 +530,47 @@ def render(root: Path, output: Path) -> dict[str, Any]:
                 ],
             )
         )
+    optimizer_rows = _run_optimizer_rows(root)
+    if optimizer_rows:
+        lines.extend(
+            [
+                "",
+                "### 全运行优化诊断",
+                "",
+                _table(
+                    ["Run", "steps", "first-16 loss", "last-16 loss", "median preclip grad", "clip rate", "median update/weight"],
+                    optimizer_rows,
+                ),
+            ]
+        )
+    event_rows = _breakdown_rows(evaluations, field="target_event_kind")
+    gap_rows = _breakdown_rows(evaluations, field="query_gap")
+    if event_rows:
+        lines.extend(
+            [
+                "",
+                "### Mechanism final：事件类型分解",
+                "",
+                _table(["Seed", "Event", "M0 CE", "EMA CE", "ΔCE", "M0 margin", "EMA margin"], event_rows),
+            ]
+        )
+    if gap_rows:
+        lines.extend(
+            [
+                "",
+                "### Mechanism final：query-gap 曲线",
+                "",
+                _table(["Seed", "Gap", "M0 CE", "EMA CE", "ΔCE", "M0 margin", "EMA margin"], gap_rows),
+            ]
+        )
     lines.extend(
         [
             "",
-            "## 5. 状态图片与可解释性边界",
+            "## 6. 状态图片与可解释性边界",
             "",
             "每个最终评测目录都包含 `state_examples/index.json` 以及 F1–F6 的初始/中间/最终图片。图片是否人类可读不是本实验成功标准；核心证据是固定 Reader 的 CE、状态干预和配对 bootstrap。",
             "",
-            "## 6. 严谨解释",
+            "## 7. 严谨解释",
             "",
             "- 正向结论只有在多 seed endpoint 改善且 Normal 显著优于 Reset/Cross-swap 时才成立。",
             "- train loss 下降本身不能证明状态被使用；因果对照是必要条件。",
@@ -386,6 +579,19 @@ def render(root: Path, output: Path) -> dict[str, Any]:
             "- hard NOOP 是机制隔离，不代表生成式 updater 已学会 NOOP。",
         ]
     )
+    provenance_rows = _provenance_rows(root)
+    if provenance_rows:
+        lines.extend(
+            [
+                "",
+                "## 8. 运行 provenance",
+                "",
+                _table(
+                    ["Run", "Git", "State", "h", "Gradient", "τ", "Train SHA", "Dev SHA"],
+                    provenance_rows,
+                ),
+            ]
+        )
     (output / "FINAL_REPORT.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
     with (output / "main_seed_summary.csv").open("w", encoding="utf-8", newline="") as handle:
