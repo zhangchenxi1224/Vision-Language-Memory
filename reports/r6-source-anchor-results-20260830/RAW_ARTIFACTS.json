@@ -1,0 +1,52 @@
+{
+  "schema": "vision_memory.r6-source-anchor-raw-delivery.v1",
+  "status": "completed",
+  "formal_success_claim": false,
+  "git_commit": "e1ab129ae86a39814a9ce0ce17ac06965f2e835c",
+  "implementation_revision": "scheduler-effective-sigma-v2",
+  "selected_segments_sha256": "eeade3e006791aeea87aa12cf897956d34b4e2c3769c162db494e42fb7828ea6",
+  "inspire_run_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r6/r6-source-anchor-e1ab129-20260829",
+  "local_delivery_root": "C:\\Users\\Expedition\\DreamLite_R6_SourceAnchor_Final_20260829",
+  "archives": {
+    "remote_uncompressed_tar": {
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r6/r6-source-anchor-e1ab129-20260829/delivery_archives/r6-complete-e1ab129.tar",
+      "bytes": 380907520,
+      "sha256": "4a66dbd14431957df34f2f057e230cd62c5978e3edd64037bec8a032eda9b0b9"
+    },
+    "validated_gzip_tar": {
+      "remote_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r6/r6-source-anchor-e1ab129-20260829/delivery_archives/r6-complete-e1ab129.tar.gz",
+      "local_path": "C:\\Users\\Expedition\\DreamLite_R6_SourceAnchor_Final_20260829\\raw\\r6-complete-e1ab129.validated-resume.tar.gz",
+      "bytes": 314369636,
+      "sha256": "79e65a55d70173ab7cfdaf715678912ff9125f7058262c0851c8303c549fc826"
+    },
+    "validated_extraction": {
+      "local_path": "C:\\Users\\Expedition\\DreamLite_R6_SourceAnchor_Final_20260829\\raw\\complete-validated",
+      "file_count": 62,
+      "total_file_bytes": 380851786
+    }
+  },
+  "source_inventory_sha256": {
+    "legacy-pure-noise": "f2451dd93408f02afd2982239e9a29a85426c02713e0c0a49d361065184947df",
+    "source-anchored": "19e3180f2698ac881e81b0948ca3e154fb0a4c25874af90062c0cef58c6bf837"
+  },
+  "endpoints": {
+    "legacy-pure-noise": {
+      "raw_sha256": "1b58414564f19e9823d3617feac5436980cbaafe1f6c0a3d39f941ea7cfb4a52",
+      "ema_sha256": "da0563c2ea49ec100b930ff8f9dbe19dfa11775bc8fe409d396ac545e530f3b9"
+    },
+    "source-anchored": {
+      "raw_sha256": "07e0eeff8af760dd8b107936e2478556964322632a7d0526caf1dbd577f6df70",
+      "ema_sha256": "e92f4acc8c232065fbb2f6c4ccde8c56053948682e472146b8441e45f9b9d320"
+    }
+  },
+  "comparison": {
+    "decision": "reject_sigma_as_sufficient_test_gradient_balancing",
+    "comparison_json_sha256": "1bbc960e3b0ab8cc54c91114a2fe87b96a8a8e9776355bdfd1611134af21748d",
+    "report_md_sha256": "a51116bd29ea148c60e6574ec849945078b89af0f17e4b74e89641dab5d376b1"
+  },
+  "integrity_checks": [
+    "transfer chunks matched the remote SHA256SUMS",
+    "reconstructed archive matched the remote byte count and SHA-256",
+    "the renderer validated every extracted artifact against both source artifact inventories"
+  ]
+}
