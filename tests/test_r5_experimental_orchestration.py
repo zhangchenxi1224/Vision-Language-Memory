@@ -196,7 +196,11 @@ class R5ExperimentalOrchestrationTest(unittest.TestCase):
             self.assertEqual(same[same.index("--reader-device") + 1], "cuda:0")
             self.assertEqual(split[split.index("--reader-device") + 1], "cuda:1")
             self.assertIn("--strict-determinism", same)
-            self.assertEqual(value.environment("0")["PYTHONHASHSEED"], "0")
+            environment = value.environment("0")
+            self.assertEqual(environment["PYTHONHASHSEED"], "0")
+            self.assertEqual(environment["CUBLAS_WORKSPACE_CONFIG"], ":4096:8")
+            self.assertEqual(environment["OMP_NUM_THREADS"], "1")
+            self.assertEqual(environment["MKL_NUM_THREADS"], "1")
 
     def test_controller_uses_separate_reporting_python(self):
         with tempfile.TemporaryDirectory() as temporary:

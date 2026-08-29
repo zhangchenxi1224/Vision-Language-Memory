@@ -94,6 +94,9 @@ class Controller:
             {
                 "CUDA_VISIBLE_DEVICES": visible_devices,
                 "PYTHONHASHSEED": "0",
+                "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+                "OMP_NUM_THREADS": "1",
+                "MKL_NUM_THREADS": "1",
                 "TOKENIZERS_PARALLELISM": "false",
                 "HF_HUB_OFFLINE": "1",
                 "TRANSFORMERS_OFFLINE": "1",
