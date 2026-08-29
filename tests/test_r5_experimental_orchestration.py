@@ -225,6 +225,24 @@ class R5ExperimentalOrchestrationTest(unittest.TestCase):
                 value.render_report()
             self.assertEqual(Path(run.call_args.args[0][0]), args.report_python)
 
+    def test_full_gradient_winner_forces_split_two_gpu_execution(self):
+        single_h200 = {"decision": "single_h200_parallel_arms"}
+        self.assertTrue(
+            controller.Controller._same_device_parallel_allowed(
+                single_h200, {"gradient_mode": "drtune_stateful"}
+            )
+        )
+        self.assertFalse(
+            controller.Controller._same_device_parallel_allowed(
+                single_h200, {"gradient_mode": "full"}
+            )
+        )
+        self.assertFalse(
+            controller.Controller._same_device_parallel_allowed(
+                {"decision": "split_h200_serial"}, {"gradient_mode": "drtune_stateful"}
+            )
+        )
+
     def test_report_renderer_handles_pilot_only_negative_delivery(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary) / "experiment"

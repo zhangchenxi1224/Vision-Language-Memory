@@ -627,8 +627,17 @@ class Controller:
             visible_devices=visible_devices,
         )
 
+    @staticmethod
+    def _same_device_parallel_allowed(
+        topology: Mapping[str, Any], winner: Mapping[str, Any]
+    ) -> bool:
+        return (
+            topology["decision"] == "single_h200_parallel_arms"
+            and str(winner["gradient_mode"]) != "full"
+        )
+
     def main_and_evaluate(self, topology: Mapping[str, Any], winner: Mapping[str, Any]) -> list[int]:
-        same = topology["decision"] == "single_h200_parallel_arms"
+        same = self._same_device_parallel_allowed(topology, winner)
         if same:
             self.run_jobs(
                 [
