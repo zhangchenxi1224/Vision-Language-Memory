@@ -1,13 +1,22 @@
 {
   "schema": "vision_memory.r6-source-anchor-preregistration.v1",
   "protocol": "R6-SourceAnchor-Bottleneck",
+  "implementation_revision": "scheduler-effective-sigma-v2",
   "research_target": "A recurrent picture state that carries event history through the frozen VLM image interface.",
   "diagnostic_question": "Does R5 fail because every event restarts DreamLite from pure noise and redraws the complete state?",
   "single_changed_variable": {
     "name": "edit_start_sigma",
     "legacy-pure-noise": 1.0,
     "source-anchored": 0.5,
-    "initialization": "x_sigma=(1-sigma)*source_latent+sigma*fixed_event_noise"
+    "initialization": "x_sigma=(1-sigma)*source_latent+sigma*fixed_event_noise",
+    "sigma_semantics": "effective post-scheduler-shift flow sigma",
+    "source_anchor_effective_schedule": [
+      0.5,
+      0.375,
+      0.25,
+      0.125
+    ],
+    "fail_closed_alignment_check": true
   },
   "fixed_contract": {
     "dataset": "formal-v1 train/dev with the R5 deterministic split",

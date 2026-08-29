@@ -40,7 +40,10 @@ def _validate(legacy: Mapping[str, Any], anchored: Mapping[str, Any]) -> None:
             raise ValueError(f"Incomplete or mislabelled R6 summary for {expected_arm}.")
         if value.get("full_success_claim_allowed") is not False:
             raise ValueError(f"R6 diagnostic incorrectly allows a formal success claim: {expected_arm}.")
-    immutable = ("selected_segments_sha256",)
+        for required in ("implementation_revision", "git_commit"):
+            if not value.get(required):
+                raise ValueError(f"R6 summary is missing {required}: {expected_arm}.")
+    immutable = ("selected_segments_sha256", "implementation_revision", "git_commit")
     drift = {key: (legacy.get(key), anchored.get(key)) for key in immutable if legacy.get(key) != anchored.get(key)}
     if drift:
         raise ValueError(f"R6 paired-arm immutable drift: {drift}")

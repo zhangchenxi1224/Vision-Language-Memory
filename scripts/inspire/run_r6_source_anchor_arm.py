@@ -174,6 +174,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         "summary_schema": isinstance(summary, dict) and summary.get("schema") == "vision_memory.r6-source-anchor-summary.v1",
         "summary_completed": isinstance(summary, dict) and summary.get("status") == "completed",
         "arm_matches": isinstance(summary, dict) and summary.get("arm") == args.arm,
+        "summary_commit_matches": isinstance(summary, dict) and summary.get("git_commit") == args.expected_commit,
+        "implementation_revision_recorded": isinstance(summary, dict) and bool(summary.get("implementation_revision")),
         "formal_success_not_claimed": isinstance(summary, dict) and summary.get("full_success_claim_allowed") is False,
     }
     terminal = {

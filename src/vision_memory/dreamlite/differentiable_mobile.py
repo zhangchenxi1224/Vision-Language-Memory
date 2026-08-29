@@ -20,6 +20,7 @@ from torch.utils.checkpoint import checkpoint
 class DreamLiteSamplerOutput:
     latents: Tensor
     trajectory: tuple[Tensor, ...] | None = None
+    effective_sigmas: tuple[float, ...] = ()
 
 
 def calculate_shift(
@@ -156,7 +157,68 @@ class DifferentiableDreamLiteMobileSampler(nn.Module):
         if not source_latents.is_floating_point() or not prompt_embeds.is_floating_point():
             raise ValueError("DreamLite latent and prompt tensors must use floating-point dtypes.")
 
-    def _prepare_timesteps(self, latents: Tensor, num_steps: int, sigmas: Iterable[float] | None) -> Tensor:
+    @staticmethod
+    def _raw_sigmas_for_effective_schedule(
+        effective_sigmas: Iterable[float],
+        *,
+        config: Any,
+        mu: float,
+    ) -> list[float]:
+        """Invert the scheduler shift so its *effective* sigmas match the flow state.
+
+        ``FlowMatchEulerDiscreteScheduler.set_timesteps`` shifts even explicitly
+        supplied sigmas.  An img2img state must be mixed with the post-shift
+        sigma consumed by ``scheduler.step`` and the denoiser timestep.  R6
+        therefore specifies effective flow sigmas and maps them back to the raw
+        values expected by ``set_timesteps``.
+        """
+
+        values = [float(value) for value in effective_sigmas]
+        if not values or any(not math.isfinite(value) or not 0.0 < value <= 1.0 for value in values):
+            raise ValueError("Effective scheduler sigmas must be finite values in (0, 1].")
+        unsupported = {
+            name: _config_value(config, name, False)
+            for name in (
+                "use_karras_sigmas",
+                "use_exponential_sigmas",
+                "use_beta_sigmas",
+                "invert_sigmas",
+            )
+            if _config_value(config, name, False)
+        }
+        if _config_value(config, "shift_terminal", None):
+            unsupported["shift_terminal"] = _config_value(config, "shift_terminal", None)
+        if unsupported:
+            raise ValueError(
+                "Effective-sigma inversion is unsupported for scheduler post-processing: "
+                f"{unsupported}"
+            )
+
+        if _config_value(config, "use_dynamic_shifting", False):
+            shift_type = _config_value(config, "time_shift_type", "exponential")
+            if shift_type == "exponential":
+                scale = math.exp(float(mu))
+            elif shift_type == "linear":
+                scale = float(mu)
+            else:
+                raise ValueError(f"Unsupported dynamic time_shift_type: {shift_type!r}")
+            if not math.isfinite(scale) or scale <= 0.0:
+                raise ValueError(f"Invalid scheduler shift scale: {scale}")
+            return [1.0 / (1.0 + scale * (1.0 / value - 1.0)) for value in values]
+
+        shift = float(_config_value(config, "shift", 1.0))
+        if not math.isfinite(shift) or shift <= 0.0:
+            raise ValueError(f"Invalid static scheduler shift: {shift}")
+        return [value / (shift - value * (shift - 1.0)) for value in values]
+
+    def _prepare_timesteps(
+        self,
+        latents: Tensor,
+        num_steps: int,
+        sigmas: Iterable[float] | None,
+        *,
+        sigmas_are_effective: bool = False,
+    ) -> tuple[Tensor, tuple[float, ...]]:
         if num_steps != 4:
             raise ValueError("The first training wrapper is deliberately restricted to DreamLite-mobile's 4 steps.")
         sigma_values = list(sigmas) if sigmas is not None else torch.linspace(1.0, 1.0 / num_steps, num_steps).tolist()
@@ -173,9 +235,25 @@ class DifferentiableDreamLiteMobileSampler(nn.Module):
             _config_value(config, "max_shift", 1.16),
         )
 
+        scheduler_inputs = (
+            self._raw_sigmas_for_effective_schedule(sigma_values, config=config, mu=mu)
+            if sigmas_are_effective
+            else sigma_values
+        )
         # set_timesteps resets the scheduler's mutable step index for every event update.
-        self.scheduler.set_timesteps(sigmas=sigma_values, device=latents.device, mu=mu)
-        return self.scheduler.timesteps
+        self.scheduler.set_timesteps(sigmas=scheduler_inputs, device=latents.device, mu=mu)
+        effective = self.scheduler.sigmas[:num_steps]
+        if not isinstance(effective, Tensor) or effective.numel() != num_steps:
+            raise RuntimeError("DreamLite scheduler did not expose the expected effective sigma schedule.")
+        if sigmas_are_effective:
+            expected = torch.tensor(sigma_values, device=effective.device, dtype=effective.dtype)
+            if not torch.allclose(effective, expected, rtol=2e-6, atol=2e-6):
+                raise RuntimeError(
+                    "DreamLite scheduler effective sigmas do not match the requested flow schedule: "
+                    f"expected={expected.detach().cpu().tolist()}, "
+                    f"observed={effective.detach().cpu().tolist()}"
+                )
+        return self.scheduler.timesteps, tuple(float(value) for value in effective.detach().cpu().tolist())
 
     def _unet_step(
         self,
@@ -220,19 +298,6 @@ class DifferentiableDreamLiteMobileSampler(nn.Module):
 
         if sigmas is not None and resolved_start_sigma != 1.0:
             raise ValueError("Explicit sigmas cannot be combined with edit_start_sigma != 1.")
-        # DreamLite is flow-matching trained with
-        # x_sigma=(1-sigma)*x_0 + sigma*epsilon.  R5's sigma=1 path therefore
-        # starts every event from pure noise.  A smaller start sigma is a
-        # pretrained-manifold-consistent image-to-image update: it anchors the
-        # ODE trajectory in the previous persistent state instead of redrawing
-        # the complete state from scratch.
-        latents = (
-            noise_latents
-            if resolved_start_sigma == 1.0
-            else source_latents.mul(1.0 - resolved_start_sigma).add(
-                noise_latents, alpha=resolved_start_sigma
-            )
-        )
         resolved_sigmas = (
             sigmas
             if sigmas is not None or resolved_start_sigma == 1.0
@@ -242,7 +307,37 @@ class DifferentiableDreamLiteMobileSampler(nn.Module):
                 num_steps,
             ).tolist()
         )
-        timesteps = self._prepare_timesteps(latents, num_steps, resolved_sigmas)
+        timesteps, effective_sigmas = self._prepare_timesteps(
+            source_latents,
+            num_steps,
+            resolved_sigmas,
+            sigmas_are_effective=resolved_start_sigma != 1.0,
+        )
+        # DreamLite is flow-matching trained with
+        # x_sigma=(1-sigma)*x_0 + sigma*epsilon.  R5's sigma=1 path therefore
+        # starts every event from pure noise.  A smaller start sigma is a
+        # pretrained-manifold-consistent image-to-image update: it anchors the
+        # ODE trajectory in the previous persistent state instead of redrawing
+        # the complete state from scratch.  The scheduler contract above makes
+        # this sigma the *effective post-shift* sigma, not merely its raw input.
+        effective_start_sigma = effective_sigmas[0]
+        if resolved_start_sigma != 1.0 and not math.isclose(
+            effective_start_sigma,
+            resolved_start_sigma,
+            rel_tol=2e-6,
+            abs_tol=2e-6,
+        ):
+            raise RuntimeError(
+                "Source interpolation and scheduler start sigma diverged: "
+                f"mix={resolved_start_sigma}, scheduler={effective_start_sigma}"
+            )
+        latents = (
+            noise_latents
+            if resolved_start_sigma == 1.0
+            else source_latents.mul(1.0 - effective_start_sigma).add(
+                noise_latents, alpha=effective_start_sigma
+            )
+        )
         if time_ids is None:
             height = source_latents.shape[-2] * self.vae_scale_factor
             width = source_latents.shape[-1] * self.vae_scale_factor
@@ -317,4 +412,5 @@ class DifferentiableDreamLiteMobileSampler(nn.Module):
         return DreamLiteSamplerOutput(
             latents=latents,
             trajectory=tuple(trajectory) if trajectory is not None else None,
+            effective_sigmas=effective_sigmas,
         )

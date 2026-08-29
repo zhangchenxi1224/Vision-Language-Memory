@@ -38,6 +38,8 @@ def summary(arm: str, *, overfit: bool, dev: bool, formal_delta: float = -1.0):
         "edit_start_sigma": 1.0 if arm == "legacy-pure-noise" else 0.5,
         "full_success_claim_allowed": False,
         "selected_segments_sha256": "same",
+        "implementation_revision": "scheduler-effective-sigma-v2",
+        "git_commit": "a" * 40,
         "gates": {
             "hard8_overfit_learnability_gate": overfit,
             "fixed_dev_generalization_gate": dev,

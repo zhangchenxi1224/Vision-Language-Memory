@@ -24,8 +24,11 @@ x_sigma = (1-sigma) * previous_state + sigma * fixed_event_noise
 ```
 
 R5 is exactly `sigma=1`.  R6 compares it with `sigma=0.5`, then integrates the same four-step
-DreamLite vector field to zero.  No Reader, data, loss, LoRA, optimizer, or evaluation change is
-allowed.
+DreamLite vector field to zero.  Here sigma always means the **effective post-scheduler-shift**
+flow sigma.  The wrapper analytically inverts DreamLite's dynamic timestep shift before calling
+the scheduler and fails closed unless the scheduler exposes exactly `[0.5, 0.375, 0.25, 0.125]`;
+the latent interpolation and denoiser timestep therefore describe the same flow state.  No
+Reader, data, loss, LoRA, optimizer, or evaluation change is allowed.
 
 ## Paired experiment
 
@@ -35,6 +38,12 @@ Two H200 instances run concurrently:
 | --- | --- | --- |
 | `legacy-pure-noise` | `x_1 = noise` | exact R5 update-law control |
 | `source-anchored` | `x_0.5 = 0.5*old + 0.5*noise` | preserve old state inside the pretrained flow path |
+
+An initial pre-launch implementation passed raw `[0.5, 0.375, 0.25, 0.125]` values into a
+scheduler that shifts explicit sigmas.  At 1024 resolution this made the first effective sigma
+about `0.76` while the latent mixture remained `0.5`.  Both partial arms were stopped before an
+endpoint and are retained only as invalidated engineering evidence; the paired diagnostic is
+restarted from one corrected commit.
 
 Both repeat the identical hard eight-segment batch: two each from F2 retention, F3 overwrite,
 F5 and F6 cross-slot composition.  The purpose is a bottleneck diagnostic: can the architecture
@@ -55,4 +64,3 @@ The machine-readable contract and exact gates are in
 Regardless of outcome, this repeated-subset, one-seed diagnostic can never be labeled formal
 training success.  Formal success still requires fixed full data, ID/OOD, causal resets/swaps,
 paired endpoint-versus-M0 uncertainty, and at least two consistent seeds.
-

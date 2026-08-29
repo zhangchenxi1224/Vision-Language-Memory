@@ -12,7 +12,6 @@ import argparse
 import hashlib
 import json
 import math
-import os
 import sys
 import time
 from collections import Counter, defaultdict
@@ -52,6 +51,7 @@ from vision_memory.training.r5_compose import (  # noqa: E402
 
 
 R6_PROTOCOL = "R6-SourceAnchor-Bottleneck"
+R6_IMPLEMENTATION_REVISION = "scheduler-effective-sigma-v2"
 R6_SCHEMA = "vision_memory.r6-source-anchor-summary.v1"
 R6_MANIFEST_SCHEMA = "vision_memory.r6-source-anchor-manifest.v1"
 R6_GRADIENT_SCHEMA = "vision_memory.r6-gradient-conflict-audit.v1"
@@ -62,6 +62,7 @@ ARM_SIGMA = {
     "legacy-pure-noise": 1.0,
     "source-anchored": 0.5,
 }
+SOURCE_ANCHOR_EFFECTIVE_SIGMAS = (0.5, 0.375, 0.25, 0.125)
 
 
 class R6SourceAnchorModel(nn.Module):
@@ -308,11 +309,15 @@ def _manifest(
     return {
         "schema": R6_MANIFEST_SCHEMA,
         "protocol": R6_PROTOCOL,
+        "implementation_revision": R6_IMPLEMENTATION_REVISION,
         "diagnostic_only_not_formal_success": True,
         "hypothesis": "R5 recurrence fails because every non-NOOP event restarts from pure noise and redraws the full state.",
         "arm": args.arm,
         "edit_start_sigma": ARM_SIGMA[args.arm],
         "flow_initialization": "x_sigma=(1-sigma)*source_latent+sigma*fixed_event_noise",
+        "edit_start_sigma_semantics": "effective post-scheduler-shift flow sigma",
+        "source_anchor_effective_sigma_schedule": list(SOURCE_ANCHOR_EFFECTIVE_SIGMAS),
+        "scheduler_alignment_fail_closed": True,
         "git_commit": git_value("rev-parse", "HEAD"),
         "git_dirty": bool(git_value("status", "--porcelain")),
         "train_sha256": sha256_file(args.train),
@@ -743,8 +748,12 @@ def _run(args: argparse.Namespace) -> dict[str, Any]:
         "schema": R6_SCHEMA,
         "status": "completed",
         "protocol": R6_PROTOCOL,
+        "implementation_revision": R6_IMPLEMENTATION_REVISION,
+        "git_commit": manifest["git_commit"],
         "arm": args.arm,
         "edit_start_sigma": ARM_SIGMA[args.arm],
+        "edit_start_sigma_semantics": "effective post-scheduler-shift flow sigma",
+        "source_anchor_effective_sigma_schedule": list(SOURCE_ANCHOR_EFFECTIVE_SIGMAS),
         "diagnostic_only_not_formal_success": True,
         "full_success_claim_allowed": False,
         "selected_segments": [segment.segment_id for segment in selected],

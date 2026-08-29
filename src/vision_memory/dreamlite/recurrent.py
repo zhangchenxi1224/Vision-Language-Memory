@@ -25,6 +25,7 @@ class DreamLiteUpdateTrace:
     selected_step_indices: tuple[int, ...]
     persistent_state: str
     edit_start_sigma: float
+    effective_sigma_schedule: tuple[float, ...]
 
 
 def assert_no_frozen_parameter_grads(module: nn.Module, name: str) -> None:
@@ -244,6 +245,7 @@ class DreamLiteRecurrentUpdater(nn.Module):
             selected_step_indices=tuple(resolved_selected_step_indices or ()),
             persistent_state=resolved_persistence,
             edit_start_sigma=float(edit_start_sigma),
+            effective_sigma_schedule=sampler_output.effective_sigmas,
         )
 
     def decode_for_reader(
