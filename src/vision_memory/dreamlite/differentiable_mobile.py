@@ -75,9 +75,9 @@ class DifferentiableDreamLiteMobileSampler(nn.Module):
         )
 
     @staticmethod
-    def _validate_gradient_mode(value: str) -> Literal["full", "drtune"]:
-        if value not in {"full", "drtune"}:
-            raise ValueError("gradient_mode must be exactly 'full' or 'drtune'.")
+    def _validate_gradient_mode(value: str) -> Literal["full", "drtune", "drtune_stateful"]:
+        if value not in {"full", "drtune", "drtune_stateful"}:
+            raise ValueError("gradient_mode must be exactly 'full', 'drtune', or 'drtune_stateful'.")
         return value
 
     @staticmethod
@@ -99,7 +99,7 @@ class DifferentiableDreamLiteMobileSampler(nn.Module):
         gradient_mode: str,
         selected_step_indices: Iterable[int] | None,
         num_steps: int,
-    ) -> tuple[Literal["full", "drtune"], frozenset[int]]:
+    ) -> tuple[Literal["full", "drtune", "drtune_stateful"], frozenset[int]]:
         mode = self._validate_gradient_mode(gradient_mode)
         selected = self._normalize_selected_step_indices(selected_step_indices)
         if mode == "full":
@@ -107,7 +107,7 @@ class DifferentiableDreamLiteMobileSampler(nn.Module):
                 raise ValueError("selected_step_indices is valid only when gradient_mode='drtune'.")
             return mode, frozenset()
         if selected is None:
-            raise ValueError("gradient_mode='drtune' requires selected_step_indices.")
+            raise ValueError(f"gradient_mode={mode!r} requires selected_step_indices.")
         if any(index < 0 or index >= num_steps for index in selected):
             raise ValueError(f"selected_step_indices must be in [0, {num_steps - 1}].")
         return mode, frozenset(selected)
@@ -195,7 +195,7 @@ class DifferentiableDreamLiteMobileSampler(nn.Module):
         sigmas: Iterable[float] | None = None,
         time_ids: Tensor | None = None,
         return_trajectory: bool = False,
-        gradient_mode: Literal["full", "drtune"] = "full",
+        gradient_mode: Literal["full", "drtune", "drtune_stateful"] = "full",
         selected_step_indices: Iterable[int] | None = None,
     ) -> DreamLiteSamplerOutput:
         self._validate_inputs(source_latents, noise_latents, prompt_embeds, prompt_attention_mask)
@@ -237,13 +237,18 @@ class DifferentiableDreamLiteMobileSampler(nn.Module):
                         time_ids,
                     )
             elif step_index in resolved_selected_steps:
-                # Stop gradients at the selected denoiser input while retaining
-                # parameter gradients. Scheduler updates stay outside no_grad.
-                detached_model_input = model_input.detach()
+                # Classic DRTune stops gradients at the selected denoiser input.
+                # R5's stateful variant keeps that input connected so a delayed
+                # query can assign credit to prior recurrent states.  Both modes
+                # still expose parameter gradients at selected U-Net steps only;
+                # scheduler updates deliberately remain outside ``no_grad``.
+                selected_model_input = (
+                    model_input if resolved_gradient_mode == "drtune_stateful" else model_input.detach()
+                )
                 if self.checkpoint_unet and torch.is_grad_enabled():
                     noise_pair = checkpoint(
                         self._unet_step,
-                        detached_model_input,
+                        selected_model_input,
                         timestep,
                         prompt_embeds,
                         prompt_attention_mask,
@@ -252,7 +257,7 @@ class DifferentiableDreamLiteMobileSampler(nn.Module):
                     )
                 else:
                     noise_pair = self._unet_step(
-                        detached_model_input,
+                        selected_model_input,
                         timestep,
                         prompt_embeds,
                         prompt_attention_mask,

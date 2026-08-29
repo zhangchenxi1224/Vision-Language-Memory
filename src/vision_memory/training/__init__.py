@@ -7,6 +7,18 @@ from .lightweight import StaticLearnedInitialImage
 from .noise import event_seed, make_event_generator
 from .prefeval import AdaptedPrefEvalRecord, read_prefeval_adapted_jsonl, read_prefeval_supervised_jsonl
 from .selection import CurriculumSelection, select_curriculum_episodes
+from .r5_compose import (
+    R5Event,
+    R5Segment,
+    ScheduledR5Segment,
+    build_r5_family_pools,
+    build_r5_schedule,
+    family_pool_audit,
+    make_r5_manifest_contract,
+    mechanism_subsets,
+    schedule_audit,
+    stable_record_split,
+)
 
 __all__ = [
     "EpisodeLossOutput",
@@ -24,4 +36,14 @@ __all__ = [
     "read_prefeval_supervised_jsonl",
     "save_training_checkpoint",
     "select_curriculum_episodes",
+    "R5Event",
+    "R5Segment",
+    "ScheduledR5Segment",
+    "build_r5_family_pools",
+    "build_r5_schedule",
+    "family_pool_audit",
+    "make_r5_manifest_contract",
+    "mechanism_subsets",
+    "schedule_audit",
+    "stable_record_split",
 ]

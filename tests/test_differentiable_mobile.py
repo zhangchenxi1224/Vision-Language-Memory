@@ -257,6 +257,61 @@ class DifferentiableSamplerContractTest(unittest.TestCase):
                 self.assertEqual(scheduler.step_grad_enabled, [True, True, True, True])
                 self.assertIsNone(source.grad)
 
+    def test_drtune_stateful_keeps_source_path_and_selected_parameter_only(self):
+        for selected_step in range(4):
+            with self.subTest(selected_step=selected_step):
+                source, noise, prompt, mask = make_inputs()
+                unet = StepwiseDreamLiteUNet()
+                scheduler = MockFlowScheduler()
+                sampler = DifferentiableDreamLiteMobileSampler(unet=unet, scheduler=scheduler)
+                output = sampler(
+                    source_latents=source,
+                    noise_latents=noise,
+                    prompt_embeds=prompt,
+                    prompt_attention_mask=mask,
+                    gradient_mode="drtune_stateful",
+                    selected_step_indices=(selected_step,),
+                )
+                output.latents.square().mean().backward()
+
+                self.assertIsNotNone(source.grad)
+                self.assertGreater(source.grad.norm().item(), 0.0)
+                nonzero = unet.gains.grad.ne(0).nonzero().flatten().tolist()
+                self.assertEqual(nonzero, [selected_step])
+                self.assertEqual(
+                    unet.call_input_requires_grad,
+                    [index == selected_step for index in range(4)],
+                )
+                self.assertEqual(scheduler.step_grad_enabled, [True, True, True, True])
+
+    def test_drtune_stateful_forward_is_bitwise_equal_to_full(self):
+        source, noise, prompt, mask = make_inputs()
+        reference_unet = StepwiseDreamLiteUNet()
+        reference = DifferentiableDreamLiteMobileSampler(
+            unet=reference_unet,
+            scheduler=MockFlowScheduler(),
+        )(
+            source_latents=source,
+            noise_latents=noise,
+            prompt_embeds=prompt,
+            prompt_attention_mask=mask,
+        ).latents
+        for selected in ((0,), (3,), (0, 2), (1, 3)):
+            unet = StepwiseDreamLiteUNet()
+            unet.load_state_dict(reference_unet.state_dict())
+            observed = DifferentiableDreamLiteMobileSampler(
+                unet=unet,
+                scheduler=MockFlowScheduler(),
+            )(
+                source_latents=source,
+                noise_latents=noise,
+                prompt_embeds=prompt,
+                prompt_attention_mask=mask,
+                gradient_mode="drtune_stateful",
+                selected_step_indices=selected,
+            ).latents
+            self.assertTrue(torch.equal(reference, observed))
+
     def test_drtune_selected_step_checkpoint_keeps_parameter_gradients(self):
         source, noise, prompt, mask = make_inputs()
         unet = StepwiseDreamLiteUNet()
