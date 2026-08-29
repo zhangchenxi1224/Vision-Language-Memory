@@ -7,6 +7,8 @@ does not implement generation, CFG, PIL output, model offload hooks, or implicit
 from __future__ import annotations
 
 from dataclasses import dataclass
+import math
+from numbers import Real
 from typing import Any, Iterable, Literal
 
 import torch
@@ -92,6 +94,15 @@ class DifferentiableDreamLiteMobileSampler(nn.Module):
         if len(set(normalized)) != len(normalized):
             raise ValueError("selected_step_indices must not contain duplicates.")
         return normalized
+
+    @staticmethod
+    def _validate_edit_start_sigma(value: float) -> float:
+        if isinstance(value, bool) or not isinstance(value, Real):
+            raise TypeError("edit_start_sigma must be a real number in (0, 1].")
+        resolved = float(value)
+        if not math.isfinite(resolved) or not 0.0 < resolved <= 1.0:
+            raise ValueError("edit_start_sigma must be finite and lie in (0, 1].")
+        return resolved
 
     def _resolve_gradient_policy(
         self,
@@ -197,16 +208,41 @@ class DifferentiableDreamLiteMobileSampler(nn.Module):
         return_trajectory: bool = False,
         gradient_mode: Literal["full", "drtune", "drtune_stateful"] = "full",
         selected_step_indices: Iterable[int] | None = None,
+        edit_start_sigma: float = 1.0,
     ) -> DreamLiteSamplerOutput:
         self._validate_inputs(source_latents, noise_latents, prompt_embeds, prompt_attention_mask)
+        resolved_start_sigma = self._validate_edit_start_sigma(edit_start_sigma)
         resolved_gradient_mode, resolved_selected_steps = self._resolve_gradient_policy(
             gradient_mode=gradient_mode,
             selected_step_indices=selected_step_indices,
             num_steps=num_steps,
         )
 
-        latents = noise_latents
-        timesteps = self._prepare_timesteps(latents, num_steps, sigmas)
+        if sigmas is not None and resolved_start_sigma != 1.0:
+            raise ValueError("Explicit sigmas cannot be combined with edit_start_sigma != 1.")
+        # DreamLite is flow-matching trained with
+        # x_sigma=(1-sigma)*x_0 + sigma*epsilon.  R5's sigma=1 path therefore
+        # starts every event from pure noise.  A smaller start sigma is a
+        # pretrained-manifold-consistent image-to-image update: it anchors the
+        # ODE trajectory in the previous persistent state instead of redrawing
+        # the complete state from scratch.
+        latents = (
+            noise_latents
+            if resolved_start_sigma == 1.0
+            else source_latents.mul(1.0 - resolved_start_sigma).add(
+                noise_latents, alpha=resolved_start_sigma
+            )
+        )
+        resolved_sigmas = (
+            sigmas
+            if sigmas is not None or resolved_start_sigma == 1.0
+            else torch.linspace(
+                resolved_start_sigma,
+                resolved_start_sigma / num_steps,
+                num_steps,
+            ).tolist()
+        )
+        timesteps = self._prepare_timesteps(latents, num_steps, resolved_sigmas)
         if time_ids is None:
             height = source_latents.shape[-2] * self.vae_scale_factor
             width = source_latents.shape[-1] * self.vae_scale_factor

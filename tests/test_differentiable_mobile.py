@@ -24,10 +24,12 @@ class MockFlowScheduler:
 
     def __init__(self):
         self.step_grad_enabled = []
+        self.requested_sigmas = []
 
     def set_timesteps(self, *, sigmas, device, mu):
         del mu
-        values = torch.tensor(list(sigmas) + [0.0], device=device, dtype=torch.float32)
+        self.requested_sigmas = list(sigmas)
+        values = torch.tensor(self.requested_sigmas + [0.0], device=device, dtype=torch.float32)
         self.sigmas = values
         self.timesteps = values[:-1] * 1000.0
         self._step_index = 0
@@ -181,6 +183,71 @@ class DifferentiableSamplerContractTest(unittest.TestCase):
         first = sampler(**kwargs).latents
         second = sampler(**kwargs).latents
         torch.testing.assert_close(first, second)
+
+    def test_source_anchored_edit_uses_flow_matching_interpolation_and_scaled_schedule(self):
+        source, noise, prompt, mask = make_inputs()
+        noise = torch.full_like(noise, 3.0)
+        scheduler = MockFlowScheduler()
+        sampler = DifferentiableDreamLiteMobileSampler(
+            unet=MockDreamLiteUNet(),
+            scheduler=scheduler,
+        )
+        output = sampler(
+            source_latents=source,
+            noise_latents=noise,
+            prompt_embeds=prompt,
+            prompt_attention_mask=mask,
+            edit_start_sigma=0.5,
+            return_trajectory=True,
+        )
+        self.assertEqual(scheduler.requested_sigmas, [0.5, 0.375, 0.25, 0.125])
+        self.assertIsNotNone(output.trajectory)
+        expected_start = source * 0.5 + noise * 0.5
+        torch.testing.assert_close(output.trajectory[0], expected_start)
+        output.latents.square().mean().backward()
+        self.assertIsNotNone(source.grad)
+        self.assertGreater(source.grad.norm().item(), 0.0)
+
+    def test_sigma_one_remains_exactly_the_legacy_pure_noise_path(self):
+        source, noise, prompt, mask = make_inputs()
+        default_sampler = self.make_sampler()
+        explicit_sampler = self.make_sampler()
+        explicit_sampler.unet.load_state_dict(default_sampler.unet.state_dict())
+        default = default_sampler(
+            source_latents=source,
+            noise_latents=noise,
+            prompt_embeds=prompt,
+            prompt_attention_mask=mask,
+            return_trajectory=True,
+        )
+        explicit = explicit_sampler(
+            source_latents=source,
+            noise_latents=noise,
+            prompt_embeds=prompt,
+            prompt_attention_mask=mask,
+            edit_start_sigma=1.0,
+            return_trajectory=True,
+        )
+        self.assertTrue(torch.equal(default.latents, explicit.latents))
+        self.assertTrue(torch.equal(default.trajectory[0], noise))
+        self.assertTrue(torch.equal(explicit.trajectory[0], noise))
+
+    def test_invalid_source_anchor_contract_fails_closed(self):
+        sampler = self.make_sampler()
+        source, noise, prompt, mask = make_inputs()
+        kwargs = {
+            "source_latents": source,
+            "noise_latents": noise,
+            "prompt_embeds": prompt,
+            "prompt_attention_mask": mask,
+        }
+        for value in (0.0, -0.1, 1.1, float("nan")):
+            with self.subTest(value=value), self.assertRaises(ValueError):
+                sampler(**kwargs, edit_start_sigma=value)
+        with self.assertRaises(TypeError):
+            sampler(**kwargs, edit_start_sigma=True)
+        with self.assertRaisesRegex(ValueError, "Explicit sigmas"):
+            sampler(**kwargs, edit_start_sigma=0.5, sigmas=[0.5, 0.375, 0.25, 0.125])
 
     def test_non_reentrant_checkpoint_preserves_gradients(self):
         sampler = self.make_sampler(checkpoint_unet=True)
