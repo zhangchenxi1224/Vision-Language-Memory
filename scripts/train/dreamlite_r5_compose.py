@@ -639,6 +639,7 @@ def _micro_forward_backward(
     reader_fn: Any,
     args: argparse.Namespace,
     named_trainable: Sequence[tuple[str, nn.Parameter]],
+    loss_divisor: float | None = None,
 ) -> MicroOutcome:
     permutation = _training_choice_view(unit.segment.segment_id, unit.global_micro_index)
     forward = _segment_forward(
@@ -661,7 +662,10 @@ def _micro_forward_backward(
         if args.record_micro_metrics
         else None
     )
-    (forward.loss / args.gradient_accumulation).backward()
+    divisor = float(args.gradient_accumulation) if loss_divisor is None else float(loss_divisor)
+    if not math.isfinite(divisor) or divisor <= 0.0:
+        raise ValueError(f"R5 backward loss divisor must be finite and positive, got {divisor}.")
+    (forward.loss / divisor).backward()
     micro_gradient_norms = None
     if previous is not None:
         micro_gradient_norms = grouped_tensor_norms(
@@ -1852,6 +1856,7 @@ def run_training_profile(
     data: R5DataBundle,
     runtime: RuntimeBundle,
     manifest: Mapping[str, Any],
+    optimizer_step_fn: Any | None = None,
 ) -> dict[str, Any]:
     train_reader = choice_reader_callable(
         reader=runtime.reader,
@@ -1943,10 +1948,11 @@ def run_training_profile(
     _reset_peak_memory(runtime)
     started = time.monotonic()
     step_metrics: list[dict[str, Any]] = []
+    step_function = _run_optimizer_step if optimizer_step_fn is None else optimizer_step_fn
     for step_zero in range(start_step, optimizer_steps):
         units = data.schedule[step_zero * 8 : (step_zero + 1) * 8]
         elapsed = prior_elapsed + time.monotonic() - started
-        metric = _run_optimizer_step(
+        metric = step_function(
             step_zero=step_zero,
             units=units,
             runtime=runtime,
