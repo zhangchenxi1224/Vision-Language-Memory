@@ -180,6 +180,39 @@ class R8CheckpointTrajectoryTest(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "not the exact step128 EMA"):
                 trajectory._endpoint_binding(endpoint_path=endpoint, step128_payload=observed)
 
+    def test_checkpoint_manifest_uses_json_normalized_content(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            checkpoint = root / "step-000000.pt"
+            expected_manifest = {"environment": {"torch": "2.7"}, "counts": {"1": 3}}
+            observed_manifest = {
+                "environment": {"torch": torch.torch_version.TorchVersion("2.7")},
+                "counts": {1: 3},
+            }
+            payload = {
+                "schema_version": 1,
+                "optimizer_step": 0,
+                "manifest": observed_manifest,
+                "trainer_state": {
+                    "schema": trajectory.r5.R5_TRAINER_STATE_SCHEMA,
+                    "next_optimizer_step": 0,
+                    "ema_state": {"weight": torch.tensor([1.0])},
+                },
+            }
+            torch.save(payload, checkpoint)
+            trajectory._checkpoint_payload(
+                checkpoint,
+                expected_manifest=expected_manifest,
+                expected_step=0,
+            )
+            expected_manifest["counts"]["1"] = 4
+            with self.assertRaisesRegex(ValueError, "manifest drift"):
+                trajectory._checkpoint_payload(
+                    checkpoint,
+                    expected_manifest=expected_manifest,
+                    expected_step=0,
+                )
+
     def test_source_inventory_detects_tampering(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

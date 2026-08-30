@@ -111,7 +111,10 @@ def _checkpoint_payload(path: Path, *, expected_manifest: Mapping[str, Any], exp
     payload = torch.load(path, map_location="cpu", weights_only=False)
     if payload.get("schema_version") != 1 or int(payload.get("optimizer_step", -1)) != expected_step:
         raise ValueError(f"R8 checkpoint schema/step mismatch: {path}")
-    if payload.get("manifest") != dict(expected_manifest):
+    observed_manifest = payload.get("manifest")
+    if not isinstance(observed_manifest, Mapping) or canonical_sha256(observed_manifest) != canonical_sha256(
+        dict(expected_manifest)
+    ):
         raise ValueError(f"R8 checkpoint manifest drift: {path}")
     trainer_state = payload.get("trainer_state")
     if not isinstance(trainer_state, Mapping) or trainer_state.get("schema") != r5.R5_TRAINER_STATE_SCHEMA:
