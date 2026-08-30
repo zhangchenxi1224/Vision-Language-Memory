@@ -1,10 +1,13 @@
 from __future__ import annotations
 
 import importlib.util
+import json
 import subprocess
 import sys
+import tempfile
 import unittest
 from pathlib import Path
+from types import SimpleNamespace
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -14,6 +17,52 @@ assert SPEC is not None and SPEC.loader is not None
 r9 = importlib.util.module_from_spec(SPEC)
 sys.modules[SPEC.name] = r9
 SPEC.loader.exec_module(r9)
+
+CONTROLLER_SCRIPT = ROOT / "scripts" / "inspire" / "run_r9_individual_target.py"
+CONTROLLER_SPEC = importlib.util.spec_from_file_location(
+    "r9_individual_target_controller_under_test",
+    CONTROLLER_SCRIPT,
+)
+assert CONTROLLER_SPEC is not None and CONTROLLER_SPEC.loader is not None
+controller = importlib.util.module_from_spec(CONTROLLER_SPEC)
+sys.modules[CONTROLLER_SPEC.name] = controller
+CONTROLLER_SPEC.loader.exec_module(controller)
+
+
+def make_r8_activation(root: Path, *, projected_passes: bool = False) -> Path:
+    arms = {}
+    paths = {}
+    hashes = {}
+    for arm in controller.R8_ARMS:
+        summary = {
+            "schema": "vision_memory.r8-common-descent-summary.v1",
+            "status": "completed",
+            "arm": arm,
+            "git_commit": controller.EXPECTED_R8_TRAINING_COMMIT,
+            "selected_segments_sha256": controller.EXPECTED_SELECTED_SHA,
+            "full_success_claim_allowed": False,
+            "gates": {
+                "technical_gate": True,
+                "hard8_overfit_learnability_gate": projected_passes and arm.startswith("common"),
+            },
+        }
+        path = root / f"{arm}.json"
+        path.write_text(json.dumps(summary), encoding="utf-8")
+        arms[arm] = summary
+        paths[arm] = str(path.resolve())
+        hashes[arm] = controller._sha256(path)
+    comparison = {
+        "schema": "vision_memory.r8-common-descent-comparison.v1",
+        "status": "completed",
+        "decision": controller.ACTIVATION_DECISION,
+        "formal_success_claim": False,
+        "arms": arms,
+        "summary_paths": paths,
+        "summary_sha256": hashes,
+    }
+    comparison_path = root / "comparison.json"
+    comparison_path.write_text(json.dumps(comparison), encoding="utf-8")
+    return comparison_path
 
 
 class R9IndividualLearnabilityTest(unittest.TestCase):
@@ -53,6 +102,43 @@ class R9IndividualLearnabilityTest(unittest.TestCase):
         self.assertEqual(args.gradient_clip, 10.0)
         self.assertEqual(args.checkpoint_every, 32)
         self.assertEqual(args.max_optimizer_steps, 128)
+
+    def test_controller_entrypoint_command_and_activation_lock(self):
+        result = subprocess.run(
+            [sys.executable, str(CONTROLLER_SCRIPT), "--help"],
+            cwd=ROOT.parent,
+            check=False,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("--parent-comparison", result.stdout)
+        args = SimpleNamespace(
+            target_index=5,
+            train=Path("train.jsonl"),
+            dev=Path("dev.jsonl"),
+            dreamlite=Path("dreamlite"),
+            reader=Path("reader"),
+            seed=0,
+            dreamlite_device="cuda:0",
+            reader_device="cuda:1",
+        )
+        command = controller._command(args, Path("run"))
+        self.assertEqual(command[command.index("--target-index") + 1], "5")
+        self.assertIn("--strict-determinism", command)
+        for forbidden in ("--learning-rate", "--gradient-clip", "--lora-rank", "--edit-start-sigma"):
+            self.assertNotIn(forbidden, command)
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            comparison = make_r8_activation(root)
+            observed = controller._validate_parent(comparison)
+            self.assertEqual(observed["decision"], controller.ACTIVATION_DECISION)
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            comparison = make_r8_activation(root, projected_passes=True)
+            with self.assertRaisesRegex(ValueError, "did not jointly fail"):
+                controller._validate_parent(comparison)
 
     def test_target_statistics_use_four_fixed_views_without_fake_bootstrap(self):
         target = "target-segment"
