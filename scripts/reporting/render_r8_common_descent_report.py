@@ -116,6 +116,71 @@ def _validate_trajectory(
                 raise ValueError(f"R8 trajectory view coverage drift: {root}:{label}:{condition}")
             if any(not math.isfinite(float(row["ce"])) for row in subset):
                 raise ValueError(f"R8 trajectory contains non-finite CE: {root}")
+    reported_accuracy = trajectory.get("normal_accuracy", {})
+    comparisons = trajectory.get("normal_ce_vs_m0", {})
+    state_did = trajectory.get("normal_reset_difference_in_differences_vs_m0", {})
+    if not all(isinstance(value, Mapping) for value in (reported_accuracy, comparisons, state_did)):
+        raise ValueError(f"R8 trajectory aggregate structure drift: {root}")
+    m0_normal = _trajectory_cell_mean(rows, label="m0", condition="normal", field="ce")
+    m0_reset = _trajectory_cell_mean(rows, label="m0", condition="reset", field="ce")
+    m0_per_unit = {
+        unit: sum(
+            float(row["ce"])
+            for row in rows
+            if row.get("checkpoint") == "m0"
+            and row.get("condition") == "normal"
+            and str(row.get("pair_unit")) == unit
+        )
+        / 4.0
+        for unit in sorted({str(row.get("pair_unit")) for row in rows})
+    }
+    for label in TRAJECTORY_LABELS:
+        observed_accuracy = _trajectory_cell_mean(rows, label=label, condition="normal", field="correct")
+        if label not in reported_accuracy or not math.isclose(
+            float(reported_accuracy[label]), observed_accuracy, rel_tol=1e-9, abs_tol=1e-9
+        ):
+            raise ValueError(f"R8 trajectory reported accuracy disagrees with raw rows: {root}:{label}")
+        if label == "m0":
+            continue
+        comparison_record = comparisons.get(label)
+        did_record = state_did.get(label)
+        if not isinstance(comparison_record, Mapping) or not isinstance(did_record, Mapping):
+            raise ValueError(f"R8 trajectory aggregate checkpoint is missing: {root}:{label}")
+        endpoint_normal = _trajectory_cell_mean(rows, label=label, condition="normal", field="ce")
+        endpoint_reset = _trajectory_cell_mean(rows, label=label, condition="reset", field="ce")
+        expected_values = {
+            "m0_mean_ce": m0_normal,
+            "endpoint_mean_ce": endpoint_normal,
+            "estimate": endpoint_normal - m0_normal,
+            "relative_change": endpoint_normal / m0_normal - 1.0,
+        }
+        if any(
+            key not in comparison_record
+            or not math.isclose(
+                float(comparison_record[key]), expected, rel_tol=1e-9, abs_tol=1e-9
+            )
+            for key, expected in expected_values.items()
+        ):
+            raise ValueError(f"R8 trajectory CE aggregate disagrees with raw rows: {root}:{label}")
+        endpoint_per_unit = {
+            unit: sum(
+                float(row["ce"])
+                for row in rows
+                if row.get("checkpoint") == label
+                and row.get("condition") == "normal"
+                and str(row.get("pair_unit")) == unit
+            )
+            / 4.0
+            for unit in m0_per_unit
+        }
+        improved_units = sum(endpoint_per_unit[unit] < m0_per_unit[unit] for unit in m0_per_unit)
+        if int(comparison_record.get("improved_pair_units", -1)) != improved_units:
+            raise ValueError(f"R8 trajectory improved-unit count disagrees with raw rows: {root}:{label}")
+        observed_did = (endpoint_normal - endpoint_reset) - (m0_normal - m0_reset)
+        if "estimate" not in did_record or not math.isclose(
+            float(did_record["estimate"]), observed_did, rel_tol=1e-9, abs_tol=1e-9
+        ):
+            raise ValueError(f"R8 trajectory state DiD disagrees with raw rows: {root}:{label}")
     return summary, rows
 
 
