@@ -1,0 +1,362 @@
+{
+  "aggregation_technical_gates": {
+    "raw-mean-control": {
+      "exact_step_count": true,
+      "expected_mode": "raw-mean",
+      "finite": true,
+      "intervention_check": true,
+      "maximum_norm_match_relative_error": 0.0,
+      "minimum_raw_vs_applied_cosine": 0.9999997019767761,
+      "modes_match": true,
+      "norm_match": true,
+      "optimizer_step_records": 128,
+      "passed": true,
+      "schema": "vision_memory.r7-gradient-aggregation-gate.v1"
+    },
+    "unit-balanced-norm-matched": {
+      "exact_step_count": true,
+      "expected_mode": "unit-balanced-norm-matched",
+      "finite": true,
+      "intervention_check": true,
+      "maximum_norm_match_relative_error": 1.2918266834027747e-07,
+      "minimum_raw_vs_applied_cosine": -0.5080744624137878,
+      "modes_match": true,
+      "norm_match": true,
+      "optimizer_step_records": 128,
+      "passed": true,
+      "schema": "vision_memory.r7-gradient-aggregation-gate.v1"
+    }
+  },
+  "comparisons": {
+    "raw-mean-control": {
+      "formal_select_32_endpoint_vs_m0": {
+        "ci95": [
+          -0.036301805327336116,
+          0.07759810794765758
+        ],
+        "definition": "mean_ce(ema_step128,normal)-mean_ce(m0,normal) on formal_select_32",
+        "endpoint_mean_ce": 21.862439919884004,
+        "estimate": 0.018860382338364956,
+        "fraction_below_zero": 0.2534,
+        "improved_pair_units": 14,
+        "iterations": 10000,
+        "m0_mean_ce": 21.84357953754564,
+        "pair_units": 32,
+        "per_pair_unit_delta": {
+          "r3-dev-semantic-000000-s1-noop": 0.04947209358215332,
+          "r3-dev-semantic-000002-s1-clean": 0.052546143531799316,
+          "r3-dev-semantic-000016-s1-clean": 0.170403679211935,
+          "r3-dev-semantic-000018-s0-noop": -0.2647548516591378,
+          "r3-dev-semantic-000023-s0-clean": 0.008846680323282285,
+          "r3-dev-semantic-000025-s0-clean": -0.08060896396636963,
+          "r3-dev-semantic-000026-s0-noop": 0.47452203432718854,
+          "r3-dev-semantic-000030-s0-clean": 0.14192724227905273,
+          "r3-dev-semantic-000033-s1-clean": 0.3827892541885376,
+          "r3-dev-semantic-000045-s1-noop": 0.058603525161743164,
+          "r3-dev-semantic-000055-s0-noop": -0.011283636093139648,
+          "r3-dev-semantic-000055-s1-clean": 0.044243971506753965,
+          "r3-dev-semantic-000056-s0-clean": -0.02604182561238577,
+          "r3-dev-semantic-000059-s0-clean": 0.20659701029459399,
+          "r3-dev-semantic-000059-s0-noop": 0.09461832046508789,
+          "r3-dev-semantic-000064-s0-noop": -0.08984160423278809,
+          "r3-dev-semantic-000069-s0-noop": -0.11718630790710449,
+          "r3-dev-semantic-000076-s0-clean": -0.25260281562805176,
+          "r3-dev-semantic-000076-s0-noop": -0.20963382720947266,
+          "r3-dev-semantic-000077-s0-clean": 0.03255152702331543,
+          "r3-dev-semantic-000086-s0-clean": -0.00434048970540335,
+          "r3-dev-semantic-000087-s0-noop": -0.028645833333333925,
+          "r3-dev-semantic-000089-s0-clean": 0.007812817891439394,
+          "r3-dev-semantic-000090-s1-noop": 0.013889153798421816,
+          "r3-dev-semantic-000091-s0-noop": 0.06510345141093055,
+          "r3-dev-semantic-000099-s1-noop": 0.1874995231628418,
+          "r3-dev-semantic-000101-s0-clean": -0.30989646911621094,
+          "r3-dev-semantic-000107-s1-noop": -0.005209922790527344,
+          "r3-dev-semantic-000113-s0-clean": 0.08680550257365383,
+          "r3-dev-semantic-000114-s1-clean": -0.10069497426351148,
+          "r3-dev-semantic-000115-s0-noop": -0.05381949742635328,
+          "r3-dev-semantic-000121-s0-clean": 0.07986132303873816
+        },
+        "relative_change": 0.0008634291053783993,
+        "seed": 20260843
+      },
+      "mechanism_select_32_endpoint_vs_m0": {
+        "ci95": [
+          -0.10189415118657053,
+          0.11949640894308684
+        ],
+        "definition": "mean_ce(ema_step128,normal)-mean_ce(m0,normal) on mechanism_select_32",
+        "endpoint_mean_ce": 20.558288080617785,
+        "estimate": -0.0009147990494966507,
+        "fraction_below_zero": 0.5348,
+        "improved_pair_units": 19,
+        "iterations": 10000,
+        "m0_mean_ce": 20.559202879667282,
+        "pair_units": 32,
+        "per_pair_unit_delta": {
+          "r5-f3-17cea1275a4dbb86e24b56d4": -0.07291603088378906,
+          "r5-f3-5cfe4f507ce6671f0ab41443": -0.11458301544189453,
+          "r5-f3-6dc41ae67f0ab8f08656f694": 0.4218759536743164,
+          "r5-f3-755718ad6713115c41882126": -0.34895849227905273,
+          "r5-f3-828b19e0c16b1452bcc560c4": 0.08333301544189453,
+          "r5-f3-a5e3595f5535f46fcdb84c32": -0.5416069030761719,
+          "r5-f3-e9667c86fa92f3178dba441c": 0.125,
+          "r5-f3-faa342491cf6e98784e8ea83": -0.05208301544189453,
+          "r5-f4-19f0bd731cbbf3b36d21b5f9": -3.5762786865234375e-07,
+          "r5-f4-4288edb735bb699822c9db20": 1.1920928955078125e-07,
+          "r5-f4-430d702491c11e00d1bafa3c": 7.748603820800781e-07,
+          "r5-f4-5067eb9879be904b8b70927f": -1.1920928955078125e-07,
+          "r5-f4-5109aed1b352fec488a0f616": -1.1920928955078125e-07,
+          "r5-f4-5d78525a4bb3dedef6226002": 1.1920928955078125e-07,
+          "r5-f4-f881264a2c9159536868db64": 0.0,
+          "r5-f4-fe2215ca2f4a255b270f307b": -5.888938903808594e-05,
+          "r5-f5-4b92e4842174fdc8e2a8679c": -0.44791507720947266,
+          "r5-f5-510a595fb1eee8971efa530b": 0.0885322093963623,
+          "r5-f5-915d164b0d46c01c2e702ce6": -0.06253719329833984,
+          "r5-f5-b81284eeec393540e5f01086": -0.020833492279052734,
+          "r5-f5-c5fdb9933f0402234acd092c": 0.1171870231628418,
+          "r5-f5-d857a2ff52640e57ecfbfa21": 0.1875009536743164,
+          "r5-f5-daadb58238108a04e6ba673f": 0.3411397933959961,
+          "r5-f5-f9517445c0b6c6fbd9ea10a0": -0.02604198455810547,
+          "r5-f6-05affbfbfa38beee46d8448b": -0.26041698455810547,
+          "r5-f6-06a4bfb22cc03b68e8c3a8b5": -0.07291603088378906,
+          "r5-f6-2bab34f60cc6464d2c4bc897": -0.22916650772094727,
+          "r5-f6-3890422d67d7f872ae353a8b": -0.046875,
+          "r5-f6-60e739186ae50e2133babe44": 9.5367431640625e-07,
+          "r5-f6-7037b2f635b563ab6598630a": -0.0078125,
+          "r5-f6-7c126446375e6354dc5ac578": 1.4108762741088867,
+          "r5-f6-b012a183835d943189a02465": -0.4999990463256836
+        },
+        "relative_change": -4.449584231702719e-05,
+        "seed": 20260844
+      },
+      "mechanism_select_32_state_did": {
+        "ci95": [
+          -0.10310429208911956,
+          0.12413148363120852
+        ],
+        "definition": "(endpoint_normal-endpoint_reset)-(m0_normal-m0_reset); negative means training-induced state dependence",
+        "estimate": -0.0009147990494966507,
+        "fraction_below_zero": 0.5346,
+        "iterations": 10000,
+        "pair_units": 32,
+        "seed": 20260845
+      },
+      "train_overfit_hard8_endpoint_vs_m0": {
+        "ci95": [
+          -0.2138580083847046,
+          0.05831131786108017
+        ],
+        "definition": "mean_ce(ema_step128,normal)-mean_ce(m0,normal) on train_overfit_hard8",
+        "endpoint_mean_ce": 21.073971152305603,
+        "estimate": -0.08054004609584808,
+        "fraction_below_zero": 0.8739,
+        "improved_pair_units": 4,
+        "iterations": 10000,
+        "m0_mean_ce": 21.15451119840145,
+        "pair_units": 8,
+        "per_pair_unit_delta": {
+          "r5-f2-6db739261bbb0fc74169dc1f": 0.03270113468170166,
+          "r5-f2-d1803aae745ed83f142b0bae": 0.057291507720947266,
+          "r5-f3-913c95f41d8e72f9b0aabac4": -0.2786388397216797,
+          "r5-f3-dbc9791cf4ba3569afc7a3d0": 0.26562070846557617,
+          "r5-f5-56ef217cc7251269d003b5c8": -0.1562490463256836,
+          "r5-f5-9fec14ebb444f5f1fe201087": -0.296816349029541,
+          "r5-f6-1ccc652bfea4b3e698683232": -0.32291603088378906,
+          "r5-f6-b6302052a821cfd9e9d9261e": 0.054686546325683594
+        },
+        "relative_change": -0.0038072279402009412,
+        "seed": 20260841
+      },
+      "train_overfit_hard8_state_did": {
+        "ci95": [
+          -0.21366934478282928,
+          0.060583680868148804
+        ],
+        "definition": "(endpoint_normal-endpoint_reset)-(m0_normal-m0_reset); negative means training-induced state dependence",
+        "estimate": -0.08054004609584808,
+        "fraction_below_zero": 0.8723,
+        "iterations": 10000,
+        "pair_units": 8,
+        "seed": 20260842
+      }
+    },
+    "unit-balanced-norm-matched": {
+      "formal_select_32_endpoint_vs_m0": {
+        "ci95": [
+          -0.021105267511059816,
+          0.07299554908337698
+        ],
+        "definition": "mean_ce(ema_step128,normal)-mean_ce(m0,normal) on formal_select_32",
+        "endpoint_mean_ce": 21.867448941494025,
+        "estimate": 0.023869403948386603,
+        "fraction_below_zero": 0.1627,
+        "improved_pair_units": 17,
+        "iterations": 10000,
+        "m0_mean_ce": 21.84357953754564,
+        "pair_units": 32,
+        "per_pair_unit_delta": {
+          "r3-dev-semantic-000000-s1-noop": 0.1510295867919922,
+          "r3-dev-semantic-000002-s1-clean": 0.3543732166290283,
+          "r3-dev-semantic-000016-s1-clean": -0.048165321350097656,
+          "r3-dev-semantic-000018-s0-noop": -0.08506695429483813,
+          "r3-dev-semantic-000023-s0-clean": 0.09196080764134695,
+          "r3-dev-semantic-000025-s0-clean": -0.009275893370309873,
+          "r3-dev-semantic-000026-s0-noop": 0.32769123713175397,
+          "r3-dev-semantic-000030-s0-clean": 0.0976567268371582,
+          "r3-dev-semantic-000033-s1-clean": 0.1926729679107666,
+          "r3-dev-semantic-000045-s1-noop": 0.063812255859375,
+          "r3-dev-semantic-000055-s0-noop": -0.025181571642558076,
+          "r3-dev-semantic-000055-s1-clean": 0.05378588040669818,
+          "r3-dev-semantic-000056-s0-clean": -0.02343765894571881,
+          "r3-dev-semantic-000059-s0-clean": 0.02083301544189453,
+          "r3-dev-semantic-000059-s0-noop": 0.25954786936442176,
+          "r3-dev-semantic-000064-s0-noop": -0.08984148502349854,
+          "r3-dev-semantic-000069-s0-noop": 0.15364646911621094,
+          "r3-dev-semantic-000076-s0-clean": -0.1380171775817871,
+          "r3-dev-semantic-000076-s0-noop": -0.0625004768371582,
+          "r3-dev-semantic-000077-s0-clean": 0.11718869209289551,
+          "r3-dev-semantic-000086-s0-clean": -0.0008679628372192383,
+          "r3-dev-semantic-000087-s0-noop": -0.1397571563720703,
+          "r3-dev-semantic-000089-s0-clean": -0.0234375,
+          "r3-dev-semantic-000090-s1-noop": 0.0468752384185791,
+          "r3-dev-semantic-000091-s0-noop": -0.06857705116271973,
+          "r3-dev-semantic-000099-s1-noop": 0.0026030540466308594,
+          "r3-dev-semantic-000101-s0-clean": -0.13541626930236816,
+          "r3-dev-semantic-000107-s1-noop": -0.1015634536743164,
+          "r3-dev-semantic-000113-s0-clean": 0.17534716924031812,
+          "r3-dev-semantic-000114-s1-clean": -0.11805566151937086,
+          "r3-dev-semantic-000115-s0-noop": -0.2152775128682478,
+          "r3-dev-semantic-000121-s0-clean": -0.06076415379842004
+        },
+        "relative_change": 0.001092742327664542,
+        "seed": 20260843
+      },
+      "mechanism_select_32_endpoint_vs_m0": {
+        "ci95": [
+          -0.18025374920107423,
+          0.08724769758991892
+        ],
+        "definition": "mean_ce(ema_step128,normal)-mean_ce(m0,normal) on mechanism_select_32",
+        "endpoint_mean_ce": 20.51566988043487,
+        "estimate": -0.043532999232411385,
+        "fraction_below_zero": 0.7329,
+        "improved_pair_units": 17,
+        "iterations": 10000,
+        "m0_mean_ce": 20.559202879667282,
+        "pair_units": 32,
+        "per_pair_unit_delta": {
+          "r5-f3-17cea1275a4dbb86e24b56d4": -0.09895777702331543,
+          "r5-f3-5cfe4f507ce6671f0ab41443": -0.234375,
+          "r5-f3-6dc41ae67f0ab8f08656f694": 0.546875,
+          "r5-f3-755718ad6713115c41882126": -0.6197915077209473,
+          "r5-f3-828b19e0c16b1452bcc560c4": -0.41666603088378906,
+          "r5-f3-a5e3595f5535f46fcdb84c32": -0.5623736381530762,
+          "r5-f3-e9667c86fa92f3178dba441c": 0.2708320617675781,
+          "r5-f3-faa342491cf6e98784e8ea83": 0.020832538604736328,
+          "r5-f4-19f0bd731cbbf3b36d21b5f9": -3.5762786865234375e-07,
+          "r5-f4-4288edb735bb699822c9db20": 1.1920928955078125e-07,
+          "r5-f4-430d702491c11e00d1bafa3c": 5.960464477539062e-07,
+          "r5-f4-5067eb9879be904b8b70927f": -1.1920928955078125e-07,
+          "r5-f4-5109aed1b352fec488a0f616": -2.384185791015625e-07,
+          "r5-f4-5d78525a4bb3dedef6226002": -1.1920928955078125e-07,
+          "r5-f4-f881264a2c9159536868db64": 0.0,
+          "r5-f4-fe2215ca2f4a255b270f307b": 2.3424625396728516e-05,
+          "r5-f5-4b92e4842174fdc8e2a8679c": -0.2656230926513672,
+          "r5-f5-510a595fb1eee8971efa530b": 0.09896039962768555,
+          "r5-f5-915d164b0d46c01c2e702ce6": 0.052123308181762695,
+          "r5-f5-b81284eeec393540e5f01086": 0.1015625,
+          "r5-f5-c5fdb9933f0402234acd092c": 0.1328129768371582,
+          "r5-f5-d857a2ff52640e57ecfbfa21": -0.03125,
+          "r5-f5-daadb58238108a04e6ba673f": 0.08332967758178711,
+          "r5-f5-f9517445c0b6c6fbd9ea10a0": -0.05729198455810547,
+          "r5-f6-05affbfbfa38beee46d8448b": -0.15625,
+          "r5-f6-06a4bfb22cc03b68e8c3a8b5": -0.046875953674316406,
+          "r5-f6-2bab34f60cc6464d2c4bc897": -0.05208253860473633,
+          "r5-f6-3890422d67d7f872ae353a8b": -0.140625,
+          "r5-f6-60e739186ae50e2133babe44": 0.04166698455810547,
+          "r5-f6-7037b2f635b563ab6598630a": 0.28385257720947266,
+          "r5-f6-7c126446375e6354dc5ac578": 1.1197762489318848,
+          "r5-f6-b012a183835d943189a02465": -1.463541030883789
+        },
+        "relative_change": -0.0021174458702124532,
+        "seed": 20260844
+      },
+      "mechanism_select_32_state_did": {
+        "ci95": [
+          -0.18375349328853188,
+          0.08870878424495458
+        ],
+        "definition": "(endpoint_normal-endpoint_reset)-(m0_normal-m0_reset); negative means training-induced state dependence",
+        "estimate": -0.043532999232411385,
+        "fraction_below_zero": 0.7323,
+        "iterations": 10000,
+        "pair_units": 32,
+        "seed": 20260845
+      },
+      "train_overfit_hard8_endpoint_vs_m0": {
+        "ci95": [
+          -0.2890591025352478,
+          0.10875162482261658
+        ],
+        "definition": "mean_ce(ema_step128,normal)-mean_ce(m0,normal) on train_overfit_hard8",
+        "endpoint_mean_ce": 21.07706819474697,
+        "estimate": -0.07744300365447998,
+        "fraction_below_zero": 0.7735,
+        "improved_pair_units": 5,
+        "iterations": 10000,
+        "m0_mean_ce": 21.15451119840145,
+        "pair_units": 8,
+        "per_pair_unit_delta": {
+          "r5-f2-6db739261bbb0fc74169dc1f": 0.17472577095031738,
+          "r5-f2-d1803aae745ed83f142b0bae": -0.04947948455810547,
+          "r5-f3-913c95f41d8e72f9b0aabac4": -0.16405725479125977,
+          "r5-f3-dbc9791cf4ba3569afc7a3d0": 0.2708303928375244,
+          "r5-f5-56ef217cc7251269d003b5c8": 0.1979045867919922,
+          "r5-f5-9fec14ebb444f5f1fe201087": -0.28124237060546875,
+          "r5-f6-1ccc652bfea4b3e698683232": -0.6718740463256836,
+          "r5-f6-b6302052a821cfd9e9d9261e": -0.09635162353515625
+        },
+        "relative_change": -0.0036608269001427995,
+        "seed": 20260841
+      },
+      "train_overfit_hard8_state_did": {
+        "ci95": [
+          -0.2861312925815582,
+          0.1074475646018982
+        ],
+        "definition": "(endpoint_normal-endpoint_reset)-(m0_normal-m0_reset); negative means training-induced state dependence",
+        "estimate": -0.07744300365447998,
+        "fraction_below_zero": 0.768,
+        "iterations": 10000,
+        "pair_units": 8,
+        "seed": 20260842
+      }
+    }
+  },
+  "formal_success_claim": false,
+  "gates": {
+    "raw-mean-control": {
+      "fixed_dev_generalization_gate": false,
+      "formal_success_gate": false,
+      "formal_success_gate_reason": "single-seed repeated-subset diagnostic cannot establish fixed-full-data ID/OOD success",
+      "hard8_overfit_learnability_gate": false,
+      "technical_gate": true
+    },
+    "unit-balanced-norm-matched": {
+      "fixed_dev_generalization_gate": false,
+      "formal_success_gate": false,
+      "formal_success_gate_reason": "single-seed repeated-subset diagnostic cannot establish fixed-full-data ID/OOD success",
+      "hard8_overfit_learnability_gate": false,
+      "technical_gate": true
+    }
+  },
+  "git_commit": "c720f6b28e3ce6ef4e8f838a576d3b042d35cd58",
+  "implementation_revision": "explicit-micro-gradient-unit-balance-v1",
+  "schema": "vision_memory.r7-gradient-balance-rendered-analysis.v1",
+  "selected_segments_sha256": "eeade3e006791aeea87aa12cf897956d34b4e2c3769c162db494e42fb7828ea6",
+  "source_roots": {
+    "raw-mean-control": "C:\\Users\\Expedition\\DreamLite_R7_GradientBalance_Final_20260830\\raw\\complete-validated\\r7-gradient-balance-c720f6b-detfix1-20260830\\raw-mean-control",
+    "unit-balanced-norm-matched": "C:\\Users\\Expedition\\DreamLite_R7_GradientBalance_Final_20260830\\raw\\complete-validated\\r7-gradient-balance-c720f6b-detfix1-20260830\\unit-balanced-norm-matched"
+  },
+  "status": "completed"
+}
