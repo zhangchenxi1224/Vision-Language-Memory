@@ -16,6 +16,13 @@ r9 = importlib.util.module_from_spec(SPEC)
 sys.modules[SPEC.name] = r9
 SPEC.loader.exec_module(r9)
 
+RENDER_SCRIPT = ROOT / "scripts" / "reporting" / "render_r9_individual_learnability_report.py"
+RENDER_SPEC = importlib.util.spec_from_file_location("r9_renderer_under_test", RENDER_SCRIPT)
+assert RENDER_SPEC is not None and RENDER_SPEC.loader is not None
+renderer = importlib.util.module_from_spec(RENDER_SPEC)
+sys.modules[RENDER_SPEC.name] = renderer
+RENDER_SPEC.loader.exec_module(renderer)
+
 
 def sha256(path: Path) -> str:
     return r9._sha256(path)
@@ -87,10 +94,31 @@ def make_target(root: Path, index: int, *, passed: bool) -> None:
     }
     (target / "terminal.json").write_text(json.dumps(terminal), encoding="utf-8")
     (target / "launch.json").write_text("{}", encoding="utf-8")
+    metrics = []
+    for step in range(1, 129):
+        metrics.append(
+            json.dumps(
+                {
+                    "kind": "optimizer_step",
+                    "optimizer_step": step,
+                    "learning_rate": 3e-5,
+                    "loss_mean": 10.0 - step / 256.0,
+                    "gradient_norm_before_clip": 0.5 + step / 512.0,
+                    "gradient_clipped": False,
+                    "state_gradient_nonzero_fraction": 1.0,
+                    "optimizer_diagnostics": {
+                        "updates_after_step": {"global": {"update_weight_ratio": 1e-3}}
+                    },
+                }
+            )
+        )
+    (run / "metrics.jsonl").write_text("\n".join(metrics) + "\n", encoding="utf-8")
+    (run / "micro_metrics.jsonl").write_text(
+        "\n".join(json.dumps({"micro": step}) for step in range(128)) + "\n",
+        encoding="utf-8",
+    )
     for relative in (
         "manifest.json",
-        "metrics.jsonl",
-        "micro_metrics.jsonl",
         "endpoint_ema.pt",
         "endpoint_raw.pt",
         "overfit_evaluation_rows.jsonl",
@@ -152,6 +180,26 @@ class R9ComparisonTest(unittest.TestCase):
             (run_root / "target-03" / "run" / "metrics.jsonl").write_text("tampered", encoding="utf-8")
             with self.assertRaisesRegex(ValueError, "size/SHA"):
                 r9.compare(run_root, Path(directory) / "output")
+
+    def test_renderer_writes_loss_and_endpoint_figures_with_refreshed_manifest(self):
+        with tempfile.TemporaryDirectory() as directory:
+            run_root = self._root(directory, {0, 4})
+            output = Path(directory) / "output"
+            analysis = renderer.render(run_root, output)
+            self.assertEqual(analysis["pass_count"], 2)
+            for name in (
+                "training_metrics.csv",
+                "training_diagnostics.png",
+                "endpoint_metrics.png",
+                "RAW_ARTIFACTS.json",
+                "ANALYSIS.json",
+                "DELIVERY_MANIFEST.json",
+            ):
+                self.assertTrue((output / name).is_file(), name)
+            delivery = json.loads((output / "DELIVERY_MANIFEST.json").read_text(encoding="utf-8"))
+            names = {record["path"] for record in delivery["artifacts"]}
+            self.assertIn("training_diagnostics.png", names)
+            self.assertIn("endpoint_metrics.png", names)
 
 
 if __name__ == "__main__":
