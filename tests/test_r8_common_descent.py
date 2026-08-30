@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import importlib.util
 import math
+import subprocess
 import sys
 import unittest
 from pathlib import Path
@@ -63,6 +64,23 @@ def summary(arm: str, *, overfit: bool, dev: bool, technical: bool = True):
 
 
 class R8CommonDescentTest(unittest.TestCase):
+    def test_r8_controller_file_entrypoint_imports_outside_repository(self):
+        result = subprocess.run(
+            [
+                sys.executable,
+                str(ROOT / "scripts" / "inspire" / "run_r8_common_descent_arm.py"),
+                "--help",
+            ],
+            cwd=ROOT.parent,
+            check=False,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("--protocol-revision", result.stdout)
+        self.assertIn("common-descent-projected-norm-matched", result.stdout)
+
     def test_projection_removes_raw_micro_ascent_and_matches_norm(self):
         vectors = [torch.tensor([1.0, 0.0]) for _ in range(7)] + [torch.tensor([-2.0, 1.0])]
         raw, _raw_report = engine._aggregate_micro_gradients(
