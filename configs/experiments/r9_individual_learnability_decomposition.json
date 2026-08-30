@@ -1,0 +1,99 @@
+{
+  "schema": "vision_memory.r9-individual-learnability-preregistration.v1",
+  "status": "conditional_locked_before_r8_outcomes",
+  "protocol": "R9-IndividualLearnability-Decomposition",
+  "research_target": "A recurrent picture state that carries event history through the frozen VLM image interface.",
+  "activation_condition": "Both technically valid R8 arms fail the unchanged hard8_overfit_learnability_gate.",
+  "non_activation_condition": "If either valid R8 arm passes hard8, advance the selected R8 law to the fixed full-data pilot and do not run R9.",
+  "diagnostic_question": "At its original one-eighth raw-mean coefficient, can each fixed recurrent hard8 transition learn in isolation without seven simultaneous segment gradients?",
+  "fixed_hard8": {
+    "sha256": "eeade3e006791aeea87aa12cf897956d34b4e2c3769c162db494e42fb7828ea6",
+    "targets_in_order": [
+      {"index": 0, "family": "F2", "segment_id": "r5-f2-d1803aae745ed83f142b0bae"},
+      {"index": 1, "family": "F2", "segment_id": "r5-f2-6db739261bbb0fc74169dc1f"},
+      {"index": 2, "family": "F3", "segment_id": "r5-f3-dbc9791cf4ba3569afc7a3d0"},
+      {"index": 3, "family": "F3", "segment_id": "r5-f3-913c95f41d8e72f9b0aabac4"},
+      {"index": 4, "family": "F5", "segment_id": "r5-f5-9fec14ebb444f5f1fe201087"},
+      {"index": 5, "family": "F5", "segment_id": "r5-f5-56ef217cc7251269d003b5c8"},
+      {"index": 6, "family": "F6", "segment_id": "r5-f6-b6302052a821cfd9e9d9261e"},
+      {"index": 7, "family": "F6", "segment_id": "r5-f6-1ccc652bfea4b3e698683232"}
+    ]
+  },
+  "single_changed_variable": {
+    "name": "simultaneous_training_segments",
+    "r8": "Eight independently computed segment gradients are aggregated each optimizer step.",
+    "r9": "One preregistered target segment gradient is computed per independent run and applied as g_target/8.",
+    "gradient_coefficient": 0.125,
+    "reason": "Preserve the target segment's coefficient in the R8 raw mean and avoid an eight-fold gradient advantage."
+  },
+  "fixed_contract": {
+    "train_sha256": "24327edc39e0d133df5150dc1aab4f55c6cf5b05ccfca9025ad90c5accc6d184",
+    "dev_sha256": "8b167df38022a631d4e631d3c0d66e9fca74171f4224fec436030d6650047303",
+    "independent_runs": 8,
+    "optimizer_steps_per_run": 128,
+    "target_exposures_per_run": 128,
+    "micro_receipts_per_run": 128,
+    "persistent_state": "latent",
+    "source_anchor_effective_schedule": [0.5, 0.375, 0.25, 0.125],
+    "tbptt_horizon": 4,
+    "gradient_mode": "full",
+    "diffusion_steps": 4,
+    "updater": "DreamLite-mobile U-Net LoRA rank 4; base frozen",
+    "reader": "Qwen3-VL-4B-Instruct frozen",
+    "loss": "four-choice listwise CE",
+    "optimizer": "AdamW",
+    "weight_decay": 0.0001,
+    "gradient_clip": 10.0,
+    "learning_rate_schedule": "R5 640-step schedule prefix: 16-step 1e-5 to 3e-5 warmup then cosine toward 1e-5",
+    "ema_decay": 0.995,
+    "checkpoint_steps": [0, 32, 64, 96, 128],
+    "primary_endpoint": "EMA step128",
+    "seed": 0
+  },
+  "evaluation": {
+    "segments": "all fixed hard8 segments for every target-trained model",
+    "choice_views": "reverse-cyclic4",
+    "conditions": ["normal", "reset", "cross_episode_swap", "temporal_swap"],
+    "reason_all_hard8": "Retain valid swap donors and quantify leakage to the seven non-target transitions.",
+    "intermediate_checkpoints_descriptive_only": true
+  },
+  "technical_gate": {
+    "exact_optimizer_receipts": 128,
+    "exact_micro_receipts": 128,
+    "gradient_scale_relative_error_at_most": 1e-6,
+    "finite_gradients_weights_and_metrics": true,
+    "frozen_reader_and_base_updater": true,
+    "checkpoint_and_evaluation_inventory_complete": true
+  },
+  "per_target_learnability_gate": {
+    "normal_relative_ce_change_at_most": -0.2,
+    "fixed_choice_views_with_lower_ce": "4/4",
+    "normal_accuracy_delta_at_least": 0.25,
+    "normal_reset_difference_in_differences_estimate_below_zero": true,
+    "bootstrap_ci_used": false,
+    "bootstrap_ci_reason": "There is only one independent target pair unit; resampling four deterministic choice views would imply false independence."
+  },
+  "locked_interpretation": {
+    "8_of_8_pass": "Individual representability at the original R8 weight is supported; diagnose realized shared-parameter/optimizer update interference next.",
+    "1_to_7_pass": "Transition heterogeneity is causal; analyze fixed structural properties of failing targets and repair that bottleneck without averaging it away.",
+    "0_of_8_pass": "Batch aggregation is not the bottleneck; reopen recurrent source anchoring and temporal credit assignment against the single-step SET positive control.",
+    "technical_failure": "Rerun only the invalid target in a fresh root and make no scientific inference for it."
+  },
+  "false_positive_guard": {
+    "diagnostic_can_claim_formal_success": false,
+    "cannot_rescue_target_failure_with": [
+      "non-target improvements",
+      "intermediate checkpoints",
+      "training loss",
+      "fixed-dev averages"
+    ],
+    "formal_success_still_requires": [
+      "fixed full-data training",
+      "predeclared primary endpoint",
+      "at least two consistent seeds",
+      "ID and OOD evaluation",
+      "normal better than reset and state swaps",
+      "paired uncertainty over independent evaluation units"
+    ]
+  }
+}
