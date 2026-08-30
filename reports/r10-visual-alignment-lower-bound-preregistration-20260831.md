@@ -47,7 +47,7 @@ No target may be replaced based on M0 difficulty or outcome.
 
 ### A. Direct-pixel oracle
 
-For each target independently, optimize a 1024x1024 RGB image through the unchanged differentiable Qwen Reader. The image is `sigmoid(logits)`, initialized to the exact uniform `127/255` blank state. Adam uses LR `0.05`, no weight decay, for 128 fixed steps. The four reverse-cyclic choice views each occur exactly 32 times. Raw step128 is the sole endpoint.
+For each target independently, optimize a 1024x1024 RGB image through the unchanged differentiable Qwen Reader. The image is `sigmoid(logits)`, initialized to the exact uniform `127/255` blank state. Adam uses LR `0.05`, no weight decay, for 128 fixed steps. The four forward-cyclic training views each occur exactly 32 times. Raw step128 is the sole endpoint.
 
 This arm answers only: **does a readable image code exist under the current Reader, preprocessing, and listwise loss?** It sees the answer through the training loss and is therefore a capacity oracle, not a memory model or success result.
 
@@ -55,7 +55,7 @@ This arm answers only: **does a readable image code exist under the current Read
 
 For the same target independently, train only DreamLite-mobile U-Net rank-4 LoRA. Keep the R6/R9 source-anchored latent update, four effective sigmas `[0.5, 0.375, 0.25, 0.125]`, frozen Qwen, full gradient, AdamW, clip 10, weight decay `1e-4`, unchanged R5 LR prefix, and EMA `0.995`. Apply the target gradient at coefficient `1.0`; this is a base-learnability upper-bound test, not an R9 coefficient-matched comparison. EMA step128 is the sole endpoint.
 
-The target is trained across the same four choice views, exactly 32 exposures each.
+The target is trained across the same four forward-cyclic views, exactly 32 exposures each. Both arms are evaluated on the disjoint four reverse-cyclic views used by R9, so the endpoint cannot pass by memorizing a training answer position.
 
 ## Fixed gates
 
@@ -63,7 +63,7 @@ Each target in each arm passes only if all conditions hold:
 
 1. complete technical receipts and checkpoints at 0/32/64/96/128;
 2. endpoint normal CE improves by at least 20% relative to its own M0;
-3. all four fixed choice views have lower CE;
+3. all four held-out reverse-cyclic choice views have lower CE;
 4. accuracy increases by at least 0.25;
 5. the normal/reset difference-in-differences is negative.
 

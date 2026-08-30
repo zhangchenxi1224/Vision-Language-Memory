@@ -39,8 +39,8 @@
   "shared_contract": {
     "independent_run_per_target": true,
     "optimizer_steps": 128,
-    "choice_views": "four reverse-cyclic views, exactly 32 training exposures each",
-    "evaluation": "M0 and fixed endpoint under all four views for normal and reset",
+    "choice_views": "four forward-cyclic training views, exactly 32 exposures each; four disjoint fixed reverse-cyclic evaluation views",
+    "evaluation": "M0 and fixed endpoint under all four held-out reverse-cyclic views for normal and reset",
     "best_checkpoint_selection_forbidden": true,
     "checkpoints": [0, 32, 64, 96, 128],
     "reader": "frozen Qwen3-VL-4B-Instruct",
