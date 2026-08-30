@@ -9,6 +9,8 @@ import unittest
 from pathlib import Path
 from types import SimpleNamespace
 
+import torch
+
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts" / "train" / "dreamlite_r9_individual_learnability.py"
@@ -66,6 +68,12 @@ def make_r8_activation(root: Path, *, projected_passes: bool = False) -> Path:
 
 
 class R9IndividualLearnabilityTest(unittest.TestCase):
+    def test_positive_scaled_target_gradient_has_unit_cosine(self):
+        raw = torch.tensor([1.0, -2.0, 3.0])
+        self.assertAlmostEqual(r9._cosine(raw, raw / 8.0), 1.0, places=7)
+        with self.assertRaisesRegex(ValueError, "zero vector"):
+            r9._cosine(raw, torch.zeros_like(raw))
+
     def test_direct_entrypoint_and_parser_freeze_contract(self):
         result = subprocess.run(
             [sys.executable, str(SCRIPT), "--help"],
