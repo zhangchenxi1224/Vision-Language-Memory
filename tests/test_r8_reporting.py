@@ -142,6 +142,82 @@ def make_arm(root: Path, arm: str) -> None:
     (root / "artifact_inventory.json").write_text(json.dumps(inventory), encoding="utf-8")
 
 
+def make_trajectory(root: Path, arm: str, arm_root: Path) -> None:
+    root.mkdir(parents=True)
+    labels = reporting.TRAJECTORY_LABELS
+    conditions = reporting.TRAJECTORY_CONDITIONS
+    rows = []
+    for label_index, label in enumerate(labels):
+        for unit in range(8):
+            for condition in conditions:
+                for view_index in range(4):
+                    improvement = 0.25 * label_index if condition == "normal" else 0.0
+                    rows.append(
+                        {
+                            "checkpoint": label,
+                            "suite": "train_overfit_hard8",
+                            "condition": condition,
+                            "pair_unit": f"unit-{unit}",
+                            "view_index": view_index,
+                            "ce": 10.0 + unit / 10.0 + view_index / 100.0 - improvement,
+                            "correct": condition == "normal" and label_index >= 2,
+                        }
+                    )
+    rows_path = root / "hard8_checkpoint_rows.jsonl"
+    rows_path.write_text("".join(json.dumps(row) + "\n" for row in rows), encoding="utf-8")
+    comparisons = {
+        label: checkpoint_comparison(10.365, 10.365 - 0.25 * index)
+        for index, label in enumerate(labels)
+        if label != "m0"
+    }
+    did = {
+        label: {"estimate": -0.25 * index, "ci95": [-0.25 * index - 0.1, -0.25 * index + 0.1]}
+        for index, label in enumerate(labels)
+        if label != "m0"
+    }
+    source_inventory = arm_root / "artifact_inventory.json"
+    summary = {
+        "schema": reporting.TRAJECTORY_SCHEMA,
+        "status": "completed",
+        "formal_success_claim": False,
+        "arm": arm,
+        "gradient_aggregation": reporting.EXPECTED_MODE[arm],
+        "training_commit": "a" * 40,
+        "analysis_commit": "c" * 40,
+        "selected_segments_sha256": "b" * 64,
+        "source_validation": {"inventory_sha256": reporting.base._sha256(source_inventory)},
+        "checkpoint_sha256": {
+            f"step{step}": f"{index + 1:x}" * 64
+            for index, step in enumerate((0, 32, 64, 96, 128))
+        },
+        "endpoint_binding": {"passed": True, "matched_tensors": 2},
+        "trajectory": {
+            "checkpoint_order": list(labels),
+            "normal_accuracy": {label: float(index >= 2) for index, label in enumerate(labels)},
+            "normal_ce_vs_m0": comparisons,
+            "normal_reset_difference_in_differences_vs_m0": did,
+            "descriptive_only_not_checkpoint_selection": True,
+            "primary_endpoint_remains": "ema_step128",
+        },
+        "rows": len(rows),
+    }
+    summary_path = root / "trajectory_summary.json"
+    summary_path.write_text(json.dumps(summary), encoding="utf-8")
+    paths = (rows_path, summary_path)
+    inventory = {
+        "schema": reporting.TRAJECTORY_INVENTORY_SCHEMA,
+        "artifacts": [
+            {
+                "path": path.relative_to(root).as_posix(),
+                "bytes": path.stat().st_size,
+                "sha256": reporting.base._sha256(path),
+            }
+            for path in paths
+        ],
+    }
+    (root / "artifact_inventory.json").write_text(json.dumps(inventory), encoding="utf-8")
+
+
 class R8ReportingTest(unittest.TestCase):
     def test_render_validates_sources_and_emits_projection_delivery(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -150,8 +226,18 @@ class R8ReportingTest(unittest.TestCase):
             projected = root / "projected"
             make_arm(raw, "raw-mean-control")
             make_arm(projected, "common-descent-projected-norm-matched")
+            raw_trajectory = root / "raw-trajectory"
+            projected_trajectory = root / "projected-trajectory"
+            make_trajectory(raw_trajectory, "raw-mean-control", raw)
+            make_trajectory(projected_trajectory, "common-descent-projected-norm-matched", projected)
             output = root / "delivery"
-            analysis = reporting.render(raw, projected, output)
+            analysis = reporting.render(
+                raw,
+                projected,
+                output,
+                raw_trajectory_root=raw_trajectory,
+                projected_trajectory_root=projected_trajectory,
+            )
 
             self.assertEqual(analysis["status"], "completed")
             self.assertFalse(analysis["formal_success_claim"])
@@ -160,6 +246,8 @@ class R8ReportingTest(unittest.TestCase):
                 "DELIVERY_MANIFEST.json",
                 "REPORT.md",
                 "aggregation_diagnostics.csv",
+                "checkpoint_trajectory.csv",
+                "checkpoint_trajectory.png",
                 "endpoint_metrics.png",
                 "endpoint_summary.csv",
                 "projection_diagnostics.csv",
@@ -168,6 +256,7 @@ class R8ReportingTest(unittest.TestCase):
                 "training_metrics.csv",
             }
             self.assertEqual({path.name for path in output.iterdir()}, expected)
+            self.assertTrue(analysis["checkpoint_trajectory"]["included"])
             manifest = json.loads((output / "DELIVERY_MANIFEST.json").read_text(encoding="utf-8"))
             self.assertEqual(len(manifest["artifacts"]), len(expected) - 1)
             for record in manifest["artifacts"]:

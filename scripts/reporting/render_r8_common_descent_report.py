@@ -25,10 +25,98 @@ from scripts.reporting import render_r7_gradient_balance_report as base  # noqa:
 
 ARMS = ("raw-mean-control", "common-descent-projected-norm-matched")
 COLORS = {"raw-mean-control": "#d97706", "common-descent-projected-norm-matched": "#059669"}
+TRAJECTORY_SCHEMA = "vision_memory.r8-checkpoint-trajectory.v1"
+TRAJECTORY_INVENTORY_SCHEMA = "vision_memory.r8-checkpoint-trajectory-inventory.v1"
+TRAJECTORY_LABELS = ("m0", "ema_step32", "ema_step64", "ema_step96", "ema_step128")
+TRAJECTORY_STEPS = {"m0": 0, "ema_step32": 32, "ema_step64": 64, "ema_step96": 96, "ema_step128": 128}
+TRAJECTORY_CONDITIONS = ("normal", "reset", "cross_episode_swap", "temporal_swap")
 EXPECTED_MODE = {
     "raw-mean-control": "raw-mean",
     "common-descent-projected-norm-matched": "common-descent-projected-norm-matched",
 }
+
+
+def _validate_inventory(root: Path, *, expected_schema: str) -> dict[str, Any]:
+    inventory = base._load_json(root / "artifact_inventory.json")
+    if inventory.get("schema") != expected_schema:
+        raise ValueError(f"Artifact inventory schema mismatch: {root}")
+    records = inventory.get("artifacts")
+    if not isinstance(records, list) or not records:
+        raise ValueError(f"Artifact inventory is empty: {root}")
+    for record in records:
+        path = root / str(record["path"])
+        if not path.is_file():
+            raise ValueError(f"Inventory artifact is missing: {path}")
+        if path.stat().st_size != int(record["bytes"]) or base._sha256(path) != record["sha256"]:
+            raise ValueError(f"Inventory artifact failed size/SHA validation: {path}")
+    return inventory
+
+
+def _validate_trajectory(
+    root: Path,
+    *,
+    expected_arm: str,
+    arm_root: Path,
+    source_summary: Mapping[str, Any],
+) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    _validate_inventory(root, expected_schema=TRAJECTORY_INVENTORY_SCHEMA)
+    summary = base._load_json(root / "trajectory_summary.json")
+    if summary.get("schema") != TRAJECTORY_SCHEMA or summary.get("status") != "completed":
+        raise ValueError(f"R8 trajectory schema/status mismatch: {root}")
+    if summary.get("formal_success_claim") is not False or summary.get("arm") != expected_arm:
+        raise ValueError(f"R8 trajectory scope/arm mismatch: {root}")
+    if summary.get("gradient_aggregation") != EXPECTED_MODE[expected_arm]:
+        raise ValueError(f"R8 trajectory aggregation drift: {root}")
+    if summary.get("training_commit") != source_summary.get("git_commit"):
+        raise ValueError(f"R8 trajectory training lineage drift: {root}")
+    if summary.get("selected_segments_sha256") != source_summary.get("selected_segments_sha256"):
+        raise ValueError(f"R8 trajectory hard8 selection drift: {root}")
+    trajectory = summary.get("trajectory")
+    if not isinstance(trajectory, Mapping):
+        raise ValueError(f"R8 trajectory statistics are missing: {root}")
+    if tuple(trajectory.get("checkpoint_order", ())) != TRAJECTORY_LABELS:
+        raise ValueError(f"R8 trajectory checkpoint order drift: {root}")
+    if trajectory.get("descriptive_only_not_checkpoint_selection") is not True:
+        raise ValueError(f"R8 trajectory permits checkpoint selection: {root}")
+    if trajectory.get("primary_endpoint_remains") != "ema_step128":
+        raise ValueError(f"R8 trajectory changed the primary endpoint: {root}")
+    source_validation = summary.get("source_validation", {})
+    source_inventory = arm_root / "artifact_inventory.json"
+    if source_validation.get("inventory_sha256") != base._sha256(source_inventory):
+        raise ValueError(f"R8 trajectory source inventory binding failed: {root}")
+    endpoint_binding = summary.get("endpoint_binding", {})
+    if endpoint_binding.get("passed") is not True or int(endpoint_binding.get("matched_tensors", 0)) <= 0:
+        raise ValueError(f"R8 trajectory endpoint binding failed: {root}")
+    hashes = summary.get("checkpoint_sha256", {})
+    if set(hashes) != {"step0", "step32", "step64", "step96", "step128"} or any(
+        not isinstance(value, str) or len(value) != 64 for value in hashes.values()
+    ):
+        raise ValueError(f"R8 trajectory checkpoint hashes are incomplete: {root}")
+
+    rows = base._load_jsonl(root / "hard8_checkpoint_rows.jsonl")
+    if int(summary.get("rows", -1)) != 640 or len(rows) != 640:
+        raise ValueError(f"R8 trajectory does not contain exactly 640 rows: {root}")
+    labels = {str(row.get("checkpoint")) for row in rows}
+    conditions = {str(row.get("condition")) for row in rows}
+    suites = {str(row.get("suite")) for row in rows}
+    if labels != set(TRAJECTORY_LABELS) or conditions != set(TRAJECTORY_CONDITIONS):
+        raise ValueError(f"R8 trajectory checkpoint/condition coverage drift: {root}")
+    if suites != {"train_overfit_hard8"}:
+        raise ValueError(f"R8 trajectory suite drift: {root}")
+    for label in TRAJECTORY_LABELS:
+        for condition in TRAJECTORY_CONDITIONS:
+            subset = [
+                row
+                for row in rows
+                if row.get("checkpoint") == label and row.get("condition") == condition
+            ]
+            if len(subset) != 32 or len({str(row.get("pair_unit")) for row in subset}) != 8:
+                raise ValueError(f"R8 trajectory cell coverage drift: {root}:{label}:{condition}")
+            if {int(row.get("view_index", -1)) for row in subset} != {0, 1, 2, 3}:
+                raise ValueError(f"R8 trajectory view coverage drift: {root}:{label}:{condition}")
+            if any(not math.isfinite(float(row["ce"])) for row in subset):
+                raise ValueError(f"R8 trajectory contains non-finite CE: {root}")
+    return summary, rows
 
 
 def _validate_arm(root: Path, expected_arm: str) -> tuple[dict[str, Any], list[dict[str, Any]]]:
@@ -154,6 +242,97 @@ def _projection_figure(output: Path, records: Sequence[Mapping[str, Any]]) -> No
     plt.close(fig)
 
 
+def _trajectory_cell_mean(
+    rows: Sequence[Mapping[str, Any]],
+    *,
+    label: str,
+    condition: str,
+    field: str,
+) -> float:
+    values = [
+        float(row[field])
+        for row in rows
+        if row.get("checkpoint") == label and row.get("condition") == condition
+    ]
+    if len(values) != 32 or not all(math.isfinite(value) for value in values):
+        raise ValueError(f"R8 trajectory cell is incomplete: {label}:{condition}:{field}")
+    return sum(values) / len(values)
+
+
+def _trajectory_rows(
+    summaries: Mapping[str, Mapping[str, Any]],
+    evaluation_rows: Mapping[str, Sequence[Mapping[str, Any]]],
+) -> list[list[Any]]:
+    output: list[list[Any]] = []
+    for arm in ARMS:
+        trajectory = summaries[arm]["trajectory"]
+        comparisons = trajectory["normal_ce_vs_m0"]
+        state_did = trajectory["normal_reset_difference_in_differences_vs_m0"]
+        for label in TRAJECTORY_LABELS:
+            comparison_record = comparisons.get(label)
+            did_record = state_did.get(label)
+            output.append(
+                [
+                    arm,
+                    label,
+                    TRAJECTORY_STEPS[label],
+                    label == "ema_step128",
+                    _trajectory_cell_mean(evaluation_rows[arm], label=label, condition="normal", field="ce"),
+                    _trajectory_cell_mean(evaluation_rows[arm], label=label, condition="normal", field="correct"),
+                    _trajectory_cell_mean(evaluation_rows[arm], label=label, condition="reset", field="ce"),
+                    _trajectory_cell_mean(
+                        evaluation_rows[arm], label=label, condition="cross_episode_swap", field="ce"
+                    ),
+                    _trajectory_cell_mean(
+                        evaluation_rows[arm], label=label, condition="temporal_swap", field="ce"
+                    ),
+                    comparison_record.get("estimate") if comparison_record else None,
+                    comparison_record.get("relative_change") if comparison_record else None,
+                    comparison_record.get("ci95", [None, None])[0] if comparison_record else None,
+                    comparison_record.get("ci95", [None, None])[1] if comparison_record else None,
+                    comparison_record.get("improved_pair_units") if comparison_record else None,
+                    did_record.get("estimate") if did_record else None,
+                    did_record.get("ci95", [None, None])[0] if did_record else None,
+                    did_record.get("ci95", [None, None])[1] if did_record else None,
+                ]
+            )
+    return output
+
+
+def _trajectory_figure(output: Path, rows: Sequence[Sequence[Any]]) -> None:
+    fig, axes = plt.subplots(2, 2, figsize=(12.0, 8.0))
+    for arm in ARMS:
+        selected = [row for row in rows if row[0] == arm]
+        steps = [int(row[2]) for row in selected]
+        color = COLORS[arm]
+        short = "raw" if arm == ARMS[0] else "projected"
+        axes[0, 0].plot(steps, [float(row[4]) for row in selected], marker="o", color=color, label=short)
+        axes[0, 1].plot(steps, [float(row[5]) for row in selected], marker="o", color=color, label=short)
+        axes[1, 0].plot(
+            steps[1:], [float(row[9]) for row in selected[1:]], marker="o", color=color, label=short
+        )
+        axes[1, 1].plot(
+            steps[1:], [float(row[14]) for row in selected[1:]], marker="o", color=color, label=short
+        )
+    axes[0, 0].set(title="Hard8 normal CE trajectory", xlabel="optimizer step", ylabel="mean CE")
+    axes[0, 1].set(title="Hard8 normal accuracy trajectory", xlabel="optimizer step", ylabel="accuracy")
+    axes[0, 1].set_ylim(-0.03, 1.03)
+    axes[1, 0].axhline(0.0, color="black", linewidth=0.8)
+    axes[1, 0].set(title="Normal CE change from M0", xlabel="optimizer step", ylabel="delta CE")
+    axes[1, 1].axhline(0.0, color="black", linewidth=0.8)
+    axes[1, 1].set(
+        title="Normal/reset difference-in-differences",
+        xlabel="optimizer step",
+        ylabel="DiD (negative = learned state dependence)",
+    )
+    for axis in axes.flat:
+        axis.grid(alpha=0.18)
+        axis.legend(fontsize=8)
+    fig.tight_layout()
+    fig.savefig(output, dpi=180)
+    plt.close(fig)
+
+
 def _endpoint_rows(summaries: Mapping[str, Mapping[str, Any]]) -> list[list[Any]]:
     rows = base._endpoint_rows(summaries, arms=ARMS)
     for arm, row in zip(ARMS, rows, strict=True):
@@ -180,6 +359,7 @@ def _report(
     *,
     decision: str,
     reason: str,
+    trajectory_rows: Sequence[Sequence[Any]] | None = None,
 ) -> str:
     lines = [
         "# R8 common-descent paired diagnostic delivery",
@@ -226,10 +406,33 @@ def _report(
             "",
         )
     )
+    if trajectory_rows is not None:
+        lines.extend(
+            (
+                "## Fixed checkpoint trajectory",
+                "",
+                "Steps 32/64/96 are descriptive only; step128 remains the preregistered primary endpoint and no intermediate checkpoint may rescue a failed endpoint.",
+                "",
+                "| Arm | Step | normal CE | delta from M0 | accuracy | normal/reset DiD |",
+                "| --- | ---: | ---: | ---: | ---: | ---: |",
+            )
+        )
+        for row in trajectory_rows:
+            lines.append(
+                f"| {row[0]} | {row[2]} | {_fmt(row[4])} | {_fmt(row[9])} | {_fmt(row[5])} | {_fmt(row[14])} |"
+            )
+        lines.append("")
     return "\n".join(lines)
 
 
-def render(raw_root: Path, projected_root: Path, output_dir: Path) -> dict[str, Any]:
+def render(
+    raw_root: Path,
+    projected_root: Path,
+    output_dir: Path,
+    *,
+    raw_trajectory_root: Path | None = None,
+    projected_trajectory_root: Path | None = None,
+) -> dict[str, Any]:
     if output_dir.exists() and any(output_dir.iterdir()):
         raise ValueError("R8 renderer refuses a non-empty output directory.")
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -242,6 +445,28 @@ def render(raw_root: Path, projected_root: Path, output_dir: Path) -> dict[str, 
             raise ValueError(f"R8 arm does not contain exactly 128 optimizer records: {arm}")
     _validate_pair(summaries)
     decision, reason = comparison._decision(summaries[ARMS[0]], summaries[ARMS[1]])
+
+    supplied_trajectories = (raw_trajectory_root, projected_trajectory_root)
+    if sum(value is not None for value in supplied_trajectories) not in (0, 2):
+        raise ValueError("R8 renderer requires both checkpoint trajectories or neither.")
+    trajectory_roots: dict[str, Path] = {}
+    trajectory_summaries: dict[str, dict[str, Any]] = {}
+    trajectory_evaluation_rows: dict[str, list[dict[str, Any]]] = {}
+    rendered_trajectory_rows: list[list[Any]] | None = None
+    if all(value is not None for value in supplied_trajectories):
+        assert raw_trajectory_root is not None and projected_trajectory_root is not None
+        trajectory_roots = {
+            ARMS[0]: raw_trajectory_root.resolve(),
+            ARMS[1]: projected_trajectory_root.resolve(),
+        }
+        for arm in ARMS:
+            trajectory_summaries[arm], trajectory_evaluation_rows[arm] = _validate_trajectory(
+                trajectory_roots[arm],
+                expected_arm=arm,
+                arm_root=roots[arm],
+                source_summary=summaries[arm],
+            )
+        rendered_trajectory_rows = _trajectory_rows(trajectory_summaries, trajectory_evaluation_rows)
 
     base._training_csv(output_dir / "training_metrics.csv", metrics, arms=ARMS)
     base._aggregation_csv(output_dir / "aggregation_diagnostics.csv", metrics, arms=ARMS)
@@ -286,8 +511,39 @@ def render(raw_root: Path, projected_root: Path, output_dir: Path) -> dict[str, 
         colors=COLORS,
         xlabels=("raw", "projected"),
     )
+    if rendered_trajectory_rows is not None:
+        base._write_csv(
+            output_dir / "checkpoint_trajectory.csv",
+            (
+                "arm",
+                "checkpoint",
+                "optimizer_step",
+                "primary_endpoint",
+                "normal_mean_ce",
+                "normal_accuracy",
+                "reset_mean_ce",
+                "cross_episode_swap_mean_ce",
+                "temporal_swap_mean_ce",
+                "normal_delta_ce_vs_m0",
+                "normal_relative_change_vs_m0",
+                "normal_delta_ci95_low",
+                "normal_delta_ci95_high",
+                "improved_pair_units",
+                "normal_reset_did",
+                "normal_reset_did_ci95_low",
+                "normal_reset_did_ci95_high",
+            ),
+            rendered_trajectory_rows,
+        )
+        _trajectory_figure(output_dir / "checkpoint_trajectory.png", rendered_trajectory_rows)
     (output_dir / "REPORT.md").write_text(
-        _report(summaries, endpoint_rows, decision=decision, reason=reason),
+        _report(
+            summaries,
+            endpoint_rows,
+            decision=decision,
+            reason=reason,
+            trajectory_rows=rendered_trajectory_rows,
+        ),
         encoding="utf-8",
     )
 
@@ -304,6 +560,13 @@ def render(raw_root: Path, projected_root: Path, output_dir: Path) -> dict[str, 
         "aggregation_technical_gates": {arm: summaries[arm]["aggregation_technical_gate"] for arm in ARMS},
         "gates": {arm: summaries[arm]["gates"] for arm in ARMS},
         "comparisons": {arm: summaries[arm]["comparisons"] for arm in ARMS},
+        "checkpoint_trajectory": {
+            "included": rendered_trajectory_rows is not None,
+            "source_roots": {arm: str(root) for arm, root in trajectory_roots.items()},
+            "summaries": {
+                arm: trajectory_summaries[arm]["trajectory"] for arm in trajectory_summaries
+            },
+        },
     }
     base._write_json(output_dir / "ANALYSIS.json", analysis)
     artifacts = []
@@ -323,6 +586,10 @@ def render(raw_root: Path, projected_root: Path, output_dir: Path) -> dict[str, 
         "source_inventory_sha256": {
             arm: base._sha256(roots[arm] / "artifact_inventory.json") for arm in ARMS
         },
+        "source_trajectory_inventory_sha256": {
+            arm: base._sha256(trajectory_roots[arm] / "artifact_inventory.json")
+            for arm in trajectory_roots
+        },
     }
     base._write_json(output_dir / "DELIVERY_MANIFEST.json", delivery)
     return analysis
@@ -332,9 +599,17 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--raw-root", type=Path, required=True)
     parser.add_argument("--projected-root", type=Path, required=True)
+    parser.add_argument("--raw-trajectory-root", type=Path)
+    parser.add_argument("--projected-trajectory-root", type=Path)
     parser.add_argument("--output-dir", type=Path, required=True)
     args = parser.parse_args()
-    analysis = render(args.raw_root, args.projected_root, args.output_dir)
+    analysis = render(
+        args.raw_root,
+        args.projected_root,
+        args.output_dir,
+        raw_trajectory_root=args.raw_trajectory_root,
+        projected_trajectory_root=args.projected_trajectory_root,
+    )
     print(
         json.dumps(
             {
