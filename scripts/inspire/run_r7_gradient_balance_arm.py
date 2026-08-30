@@ -16,15 +16,42 @@ from typing import Any, Sequence
 
 
 ROOT = Path(__file__).resolve().parents[2]
-TRAINER = ROOT / "scripts" / "train" / "dreamlite_r7_gradient_balance.py"
+R7_TRAINER = ROOT / "scripts" / "train" / "dreamlite_r7_gradient_balance.py"
+R8_TRAINER = ROOT / "scripts" / "train" / "dreamlite_r8_conflict_projection.py"
+TRAINER = R7_TRAINER
 EXPECTED_DATA_SHA = {
     "train": "24327edc39e0d133df5150dc1aab4f55c6cf5b05ccfca9025ad90c5accc6d184",
     "dev": "8b167df38022a631d4e631d3c0d66e9fca74171f4224fec436030d6650047303",
 }
 EXPECTED_SELECTED_SHA = "eeade3e006791aeea87aa12cf897956d34b4e2c3769c162db494e42fb7828ea6"
-EXPECTED_MODE = {
+R7_EXPECTED_MODE = {
     "raw-mean-control": "raw-mean",
     "unit-balanced-norm-matched": "unit-balanced-norm-matched",
+}
+R8_EXPECTED_MODE = {
+    "raw-mean-control": "raw-mean",
+    "common-descent-projected-norm-matched": "common-descent-projected-norm-matched",
+}
+EXPECTED_MODE = {**R7_EXPECTED_MODE, **R8_EXPECTED_MODE}
+PROTOCOL = {
+    "r7": {
+        "trainer": R7_TRAINER,
+        "expected_mode": R7_EXPECTED_MODE,
+        "summary_filename": "r7_summary.json",
+        "summary_schema": "vision_memory.r7-gradient-balance-summary.v1",
+        "launch_schema": "vision_memory.r7-inspire-arm-launch.v1",
+        "terminal_schema": "vision_memory.r7-inspire-arm-terminal.v1",
+        "inventory_schema": "vision_memory.r7-artifact-inventory.v1",
+    },
+    "r8": {
+        "trainer": R8_TRAINER,
+        "expected_mode": R8_EXPECTED_MODE,
+        "summary_filename": "r8_summary.json",
+        "summary_schema": "vision_memory.r8-common-descent-summary.v1",
+        "launch_schema": "vision_memory.r8-inspire-arm-launch.v1",
+        "terminal_schema": "vision_memory.r8-inspire-arm-terminal.v1",
+        "inventory_schema": "vision_memory.r8-artifact-inventory.v1",
+    },
 }
 
 
@@ -75,6 +102,7 @@ def _inventory(root: Path) -> list[dict[str, Any]]:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--protocol-revision", choices=tuple(PROTOCOL), default="r7")
     parser.add_argument("--arm", choices=tuple(EXPECTED_MODE), required=True)
     parser.add_argument("--train", type=Path, required=True)
     parser.add_argument("--dev", type=Path, required=True)
@@ -89,17 +117,23 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def _validate(args: argparse.Namespace) -> dict[str, Any]:
+    protocol_revision = getattr(args, "protocol_revision", "r7")
+    contract = PROTOCOL[protocol_revision]
+    if args.arm not in contract["expected_mode"]:
+        raise ValueError(f"{protocol_revision.upper()} controller does not define arm {args.arm}.")
     head = _git("rev-parse", "HEAD")
     dirty = _git("status", "--porcelain")
     if head != args.expected_commit:
-        raise ValueError(f"R7 controller commit mismatch: expected {args.expected_commit}, got {head}")
+        raise ValueError(
+            f"{protocol_revision.upper()} controller commit mismatch: expected {args.expected_commit}, got {head}"
+        )
     if dirty:
-        raise ValueError("R7 controller requires a clean detached experiment snapshot.")
+        raise ValueError(f"{protocol_revision.upper()} controller requires a clean detached experiment snapshot.")
     if args.output_root.exists() and any(args.output_root.iterdir()):
-        raise ValueError("R7 controller refuses a non-empty output root.")
+        raise ValueError(f"{protocol_revision.upper()} controller refuses a non-empty output root.")
     observed = {"train": _sha256(args.train), "dev": _sha256(args.dev)}
     if observed != EXPECTED_DATA_SHA:
-        raise ValueError(f"R7 fixed data SHA mismatch: {observed}")
+        raise ValueError(f"{protocol_revision.upper()} fixed data SHA mismatch: {observed}")
     required_environment = (
         "PYTHONHASHSEED",
         "CUBLAS_WORKSPACE_CONFIG",
@@ -108,22 +142,25 @@ def _validate(args: argparse.Namespace) -> dict[str, Any]:
     )
     missing = [name for name in required_environment if not os.environ.get(name)]
     if missing:
-        raise ValueError(f"R7 controller is missing strict environment variables: {missing}")
+        raise ValueError(
+            f"{protocol_revision.upper()} controller is missing strict environment variables: {missing}"
+        )
     return {
         "git_commit": head,
         "git_dirty": False,
         "data_sha256": observed,
-        "trainer": str(TRAINER.resolve()),
-        "trainer_sha256": _sha256(TRAINER),
+        "trainer": str(Path(contract["trainer"]).resolve()),
+        "trainer_sha256": _sha256(Path(contract["trainer"])),
         "python": sys.executable,
         "host": platform.node(),
     }
 
 
 def _command(args: argparse.Namespace, run_dir: Path) -> list[str]:
+    contract = PROTOCOL[getattr(args, "protocol_revision", "r7")]
     return [
         sys.executable,
-        str(TRAINER),
+        str(contract["trainer"]),
         "--arm",
         args.arm,
         "--train",
@@ -148,6 +185,8 @@ def _command(args: argparse.Namespace, run_dir: Path) -> list[str]:
 
 def main(argv: Sequence[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
+    contract = PROTOCOL[args.protocol_revision]
+    expected_mode = contract["expected_mode"]
     try:
         validated = _validate(args)
     except ValueError as exc:
@@ -156,11 +195,11 @@ def main(argv: Sequence[str] | None = None) -> int:
     run_dir = args.output_root / "run"
     command = _command(args, run_dir)
     launch = {
-        "schema": "vision_memory.r7-inspire-arm-launch.v1",
+        "schema": contract["launch_schema"],
         "status": "running",
         "started_at_utc": _utc_now(),
         "arm": args.arm,
-        "gradient_aggregation": EXPECTED_MODE[args.arm],
+        "gradient_aggregation": expected_mode[args.arm],
         "seed": args.seed,
         "command": command,
         **validated,
@@ -172,17 +211,17 @@ def main(argv: Sequence[str] | None = None) -> int:
     with stdout_path.open("wb") as stdout, stderr_path.open("wb") as stderr:
         result = subprocess.run(command, cwd=ROOT, env=os.environ.copy(), stdout=stdout, stderr=stderr)
     elapsed = time.monotonic() - started
-    summary_path = run_dir / "r7_summary.json"
+    summary_path = run_dir / str(contract["summary_filename"])
     summary = json.loads(summary_path.read_text(encoding="utf-8")) if summary_path.is_file() else None
     checks = {
         "child_exit_zero": result.returncode == 0,
         "summary_exists": summary_path.is_file(),
         "summary_schema": isinstance(summary, dict)
-        and summary.get("schema") == "vision_memory.r7-gradient-balance-summary.v1",
+        and summary.get("schema") == contract["summary_schema"],
         "summary_completed": isinstance(summary, dict) and summary.get("status") == "completed",
         "arm_matches": isinstance(summary, dict) and summary.get("arm") == args.arm,
         "aggregation_matches": isinstance(summary, dict)
-        and summary.get("gradient_aggregation") == EXPECTED_MODE[args.arm],
+        and summary.get("gradient_aggregation") == expected_mode[args.arm],
         "summary_commit_matches": isinstance(summary, dict) and summary.get("git_commit") == args.expected_commit,
         "selected_segments_match": isinstance(summary, dict)
         and summary.get("selected_segments_sha256") == EXPECTED_SELECTED_SHA,
@@ -190,12 +229,12 @@ def main(argv: Sequence[str] | None = None) -> int:
         "formal_success_not_claimed": isinstance(summary, dict) and summary.get("full_success_claim_allowed") is False,
     }
     terminal = {
-        "schema": "vision_memory.r7-inspire-arm-terminal.v1",
+        "schema": contract["terminal_schema"],
         "status": "completed_diagnostic" if all(checks.values()) else "failed",
         "passed": all(checks.values()),
         "scientific_success_claim": False,
         "arm": args.arm,
-        "gradient_aggregation": EXPECTED_MODE[args.arm],
+        "gradient_aggregation": expected_mode[args.arm],
         "child_exit_code": result.returncode,
         "checks": checks,
         "started_at_utc": launch["started_at_utc"],
@@ -208,7 +247,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     }
     _write_json(args.output_root / "terminal.json", terminal)
     inventory = {
-        "schema": "vision_memory.r7-artifact-inventory.v1",
+        "schema": contract["inventory_schema"],
         "root": str(args.output_root.resolve()),
         "artifacts": _inventory(args.output_root),
     }

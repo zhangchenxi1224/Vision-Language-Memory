@@ -1,9 +1,10 @@
-"""R7 paired hard8 diagnostic for explicit micro-gradient balancing.
+"""R7/R8 paired hard8 diagnostics for explicit micro-gradient aggregation.
 
 Both arms use the corrected R6 source-anchored DreamLite update.  The only
-changed variable is whether eight independently computed segment gradients are
-aggregated as a raw mean or as an equal-unit directional vote whose global norm
-is matched back to the raw mean before the unchanged clip and AdamW step.
+changed variable is how eight independently computed segment gradients are
+aggregated before the unchanged global clip and AdamW step.  R7 tests equal
+directional votes; R8 tests an exact deterministic projection of the raw mean
+onto the current micro-gradients' common first-order descent cone.
 """
 
 from __future__ import annotations
@@ -49,14 +50,52 @@ R7_MANIFEST_SCHEMA = "vision_memory.r7-gradient-balance-manifest.v1"
 R7_AGGREGATION_SCHEMA = "vision_memory.r7-gradient-aggregation-step.v1"
 R7_OPTIMIZER_STEPS = 128
 R7_SELECTED_SEGMENTS_SHA256 = "eeade3e006791aeea87aa12cf897956d34b4e2c3769c162db494e42fb7828ea6"
-AGGREGATION_MODE = {
+R8_PROTOCOL = "R8-CommonDescent-Bottleneck"
+R8_IMPLEMENTATION_REVISION = "exact-active-set-common-descent-projection-v1"
+R8_SCHEMA = "vision_memory.r8-common-descent-summary.v1"
+R8_MANIFEST_SCHEMA = "vision_memory.r8-common-descent-manifest.v1"
+R8_AGGREGATION_SCHEMA = "vision_memory.r8-common-descent-step.v1"
+R8_OPTIMIZER_STEPS = 128
+R8_SELECTED_SEGMENTS_SHA256 = R7_SELECTED_SEGMENTS_SHA256
+
+R7_AGGREGATION_MODE = {
     "raw-mean-control": "raw-mean",
     "unit-balanced-norm-matched": "unit-balanced-norm-matched",
+}
+R8_AGGREGATION_MODE = {
+    "raw-mean-control": "raw-mean",
+    "common-descent-projected-norm-matched": "common-descent-projected-norm-matched",
+}
+AGGREGATION_MODE = {**R7_AGGREGATION_MODE, **R8_AGGREGATION_MODE}
+PROTOCOL_CONTRACT = {
+    "r7": {
+        "protocol": R7_PROTOCOL,
+        "implementation_revision": R7_IMPLEMENTATION_REVISION,
+        "summary_schema": R7_SCHEMA,
+        "manifest_schema": R7_MANIFEST_SCHEMA,
+        "aggregation_schema": R7_AGGREGATION_SCHEMA,
+        "optimizer_steps": R7_OPTIMIZER_STEPS,
+        "selected_segments_sha256": R7_SELECTED_SEGMENTS_SHA256,
+        "summary_filename": "r7_summary.json",
+        "allowed_arms": R7_AGGREGATION_MODE,
+    },
+    "r8": {
+        "protocol": R8_PROTOCOL,
+        "implementation_revision": R8_IMPLEMENTATION_REVISION,
+        "summary_schema": R8_SCHEMA,
+        "manifest_schema": R8_MANIFEST_SCHEMA,
+        "aggregation_schema": R8_AGGREGATION_SCHEMA,
+        "optimizer_steps": R8_OPTIMIZER_STEPS,
+        "selected_segments_sha256": R8_SELECTED_SEGMENTS_SHA256,
+        "summary_filename": "r8_summary.json",
+        "allowed_arms": R8_AGGREGATION_MODE,
+    },
 }
 
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=R7_PROTOCOL)
+    parser.add_argument("--protocol-revision", choices=tuple(PROTOCOL_CONTRACT), default="r7")
     parser.add_argument("--arm", choices=tuple(AGGREGATION_MODE), required=True)
     parser.add_argument("--train", type=Path, required=True)
     parser.add_argument("--dev", type=Path, required=True)
@@ -80,6 +119,10 @@ def build_parser() -> argparse.ArgumentParser:
 
 def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     args = build_parser().parse_args(argv)
+    contract = PROTOCOL_CONTRACT[args.protocol_revision]
+    allowed_arms = contract["allowed_arms"]
+    if args.arm not in allowed_arms:
+        raise ValueError(f"{args.protocol_revision.upper()} does not define arm {args.arm}.")
     if args.adapter_seed is None:
         args.adapter_seed = args.seed
     args.profile = "pilot"
@@ -88,14 +131,14 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     args.gradient_mode = "full"
     args.selected_step_count = 0
     args.gradient_accumulation = r5.GRADIENT_ACCUMULATION
-    args.gradient_aggregation = AGGREGATION_MODE[args.arm]
+    args.gradient_aggregation = allowed_arms[args.arm]
     args.weight_decay = r5.WEIGHT_DECAY
     args.gradient_clip = r5.GRADIENT_CLIP
     args.lora_rank = r5.LORA_RANK
     args.ema_decay = r5.EMA_DECAY
     args.residual_blend = 1.0
     args.checkpoint_every = 32
-    args.max_optimizer_steps = R7_OPTIMIZER_STEPS
+    args.max_optimizer_steps = int(contract["optimizer_steps"])
     args.resume = None
     args.checkpoint = []
     args.audit_state_gradients = True
@@ -106,21 +149,24 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
 
 
 def _validate_args(args: argparse.Namespace) -> None:
+    contract = PROTOCOL_CONTRACT[args.protocol_revision]
+    protocol = str(contract["protocol"])
     if args.resolution != 1024:
-        raise ValueError("R7 preserves the fixed 1024x1024 visual/Reader contract.")
-    if args.gradient_aggregation != AGGREGATION_MODE[args.arm]:
-        raise ValueError("R7 aggregation arm and implementation mode drifted.")
+        raise ValueError(f"{protocol} preserves the fixed 1024x1024 visual/Reader contract.")
+    allowed_arms = contract["allowed_arms"]
+    if args.arm not in allowed_arms or args.gradient_aggregation != allowed_arms[args.arm]:
+        raise ValueError(f"{protocol} aggregation arm and implementation mode drifted.")
     for name in ("train", "dev"):
         if not getattr(args, name).is_file():
-            raise ValueError(f"R7 {name} path is not a file: {getattr(args, name)}")
+            raise ValueError(f"{protocol} {name} path is not a file: {getattr(args, name)}")
     for name in ("dreamlite", "reader"):
         if not getattr(args, name).is_dir():
-            raise ValueError(f"R7 {name} path is not a directory: {getattr(args, name)}")
+            raise ValueError(f"{protocol} {name} path is not a directory: {getattr(args, name)}")
     if args.output_dir.exists() and any(args.output_dir.iterdir()):
-        raise ValueError("A fresh R7 arm refuses a non-empty output directory.")
+        raise ValueError(f"A fresh {protocol} arm refuses a non-empty output directory.")
     status = git_value("status", "--porcelain")
     if status and not args.allow_dirty:
-        raise ValueError("R7 refuses a dirty source tree unless --allow-dirty is explicit.")
+        raise ValueError(f"{protocol} refuses a dirty source tree unless --allow-dirty is explicit.")
 
 
 def _source_anchored_args(args: argparse.Namespace) -> argparse.Namespace:
@@ -140,6 +186,7 @@ def _manifest(
     selected: Sequence[r5.R5Segment],
     determinism: Mapping[str, Any] | None,
 ) -> dict[str, Any]:
+    contract = PROTOCOL_CONTRACT[args.protocol_revision]
     payload = r6._manifest(
         args=_source_anchored_args(args),
         data=data,
@@ -148,29 +195,63 @@ def _manifest(
     )
     payload.update(
         {
-            "schema": R7_MANIFEST_SCHEMA,
-            "protocol": R7_PROTOCOL,
-            "implementation_revision": R7_IMPLEMENTATION_REVISION,
-            "hypothesis": (
-                "After source anchoring repairs gradient scale, raw micro-segment aggregation "
-                "still blocks hard8 learning through norm dominance and cancellation."
-            ),
+            "schema": contract["manifest_schema"],
+            "protocol": contract["protocol"],
+            "implementation_revision": contract["implementation_revision"],
             "arm": args.arm,
             "gradient_aggregation": args.gradient_aggregation,
             "edit_start_sigma": r6.ARM_SIGMA["source-anchored"],
-            "parent_r6": {
-                "git_commit": "e1ab129ae86a39814a9ce0ce17ac06965f2e835c",
-                "decision": "reject_sigma_as_sufficient_test_gradient_balancing",
-                "selected_segments_sha256": R7_SELECTED_SEGMENTS_SHA256,
-            },
-            "single_changed_variable": {
-                "name": "micro_segment_gradient_aggregation",
-                "raw_mean": "g_raw=(1/8)*sum_i(g_i)",
-                "unit_balanced": "u=(1/8)*sum_i(g_i/||g_i||)",
-                "norm_match": "g_applied=u*||g_raw||/||u|| before unchanged global clip",
-            },
         }
     )
+    if args.protocol_revision == "r7":
+        payload.update(
+            {
+                "hypothesis": (
+                    "After source anchoring repairs gradient scale, raw micro-segment aggregation "
+                    "still blocks hard8 learning through norm dominance and cancellation."
+                ),
+                "parent_r6": {
+                    "git_commit": "e1ab129ae86a39814a9ce0ce17ac06965f2e835c",
+                    "decision": "reject_sigma_as_sufficient_test_gradient_balancing",
+                    "selected_segments_sha256": R7_SELECTED_SEGMENTS_SHA256,
+                },
+                "single_changed_variable": {
+                    "name": "micro_segment_gradient_aggregation",
+                    "raw_mean": "g_raw=(1/8)*sum_i(g_i)",
+                    "unit_balanced": "u=(1/8)*sum_i(g_i/||g_i||)",
+                    "norm_match": "g_applied=u*||g_raw||/||u|| before unchanged global clip",
+                },
+            }
+        )
+    else:
+        payload.update(
+            {
+                "hypothesis": (
+                    "R7 equal weighting failed because it did not prevent the aggregate from being "
+                    "a first-order ascent direction for individual micro-segments."
+                ),
+                "parent_r7": {
+                    "git_commit": "c720f6b28e3ce6ef4e8f838a576d3b042d35cd58",
+                    "decision": "reject_unit_balance_as_sufficient_test_conflict_projection",
+                    "raw_summary_sha256": "1c78f9e4d10c6d2e0ffee5b9764120306f13687f13aa1bffecf2779c66e14096",
+                    "balanced_summary_sha256": "e80c2f88dfe127693f4328294d92877480ce6abc14d6515809df420b98220185",
+                    "selected_segments_sha256": R8_SELECTED_SEGMENTS_SHA256,
+                },
+                "single_changed_variable": {
+                    "name": "micro_segment_gradient_aggregation",
+                    "raw_mean": "g_raw=(1/8)*sum_i(g_i)",
+                    "common_descent_projection": (
+                        "d=argmin_v 0.5*||v-g_raw||^2 subject to dot(g_i,v)>=0 for all eight micros"
+                    ),
+                    "exact_solver": "deterministic exhaustive active-set KKT solve over at most 2^8 subsets",
+                    "norm_match": "g_applied=d*||g_raw||/||d|| before unchanged global clip",
+                    "optimizer_geometry_caveat": (
+                        "the constraint is enforced in pre-AdamW gradient geometry, not on the "
+                        "preconditioned finite optimizer update"
+                    ),
+                },
+            }
+        )
     payload["fixed_contract"] = {
         **payload["fixed_contract"],
         "source_anchor_effective_sigma": 0.5,
@@ -179,6 +260,14 @@ def _manifest(
         "gradient_aggregation": args.gradient_aggregation,
         "unit_balanced_norm_match_relative_tolerance": 1e-5,
     }
+    if args.protocol_revision == "r8":
+        payload["fixed_contract"].update(
+            {
+                "common_descent_primal_cosine_tolerance": 1e-5,
+                "common_descent_norm_match_relative_tolerance": 1e-5,
+                "active_set_order": "ascending integer bitmask with smallest-mask objective tie break",
+            }
+        )
     payload["arguments"] = {
         key: str(value) if isinstance(value, Path) else value
         for key, value in sorted(vars(args).items())
@@ -236,10 +325,123 @@ def _install_gradient_vector(
         offset += count
 
 
+def _project_raw_mean_to_common_descent(
+    vectors: Sequence[Tensor],
+    *,
+    raw_mean: Tensor,
+    norms: Sequence[float],
+) -> tuple[Tensor, dict[str, Any]]:
+    """Project ``raw_mean`` onto ``dot(g_i, d) >= 0`` by exact active-set search.
+
+    Positive rescaling of a constraint leaves its half-space unchanged, so the
+    KKT system uses unit micro-gradients for conditioning.  With exactly eight
+    micros, enumerating all 256 active sets is cheap and removes the randomized
+    task-order ambiguity of sequential PCGrad.
+    """
+
+    count = len(vectors)
+    if count != r5.GRADIENT_ACCUMULATION:
+        raise ValueError("R8 common-descent projection requires exactly eight micro-gradients.")
+    raw_norm = float(raw_mean.norm())
+    if not math.isfinite(raw_norm) or raw_norm <= 0.0:
+        raise RuntimeError("R8 common-descent projection received an invalid raw mean.")
+    unit_stack = torch.stack(
+        [vector / norm for vector, norm in zip(vectors, norms, strict=True)],
+        dim=0,
+    )
+    gram = (unit_stack @ unit_stack.T).detach().double().cpu()
+    raw_constraint = (unit_stack @ raw_mean).detach().double().cpu()
+    if not bool(torch.isfinite(gram).all()) or not bool(torch.isfinite(raw_constraint).all()):
+        raise RuntimeError("R8 common-descent KKT inputs are non-finite.")
+
+    primal_tolerance = 2e-6 * max(raw_norm, 1.0)
+    dual_tolerance = 2e-8 * max(raw_norm, 1.0)
+    solve_tolerance = 2e-7 * max(raw_norm, 1.0)
+    best: tuple[float, int, Tensor, Tensor] | None = None
+    for mask in range(1 << count):
+        indices = [index for index in range(count) if mask & (1 << index)]
+        coefficients = torch.zeros(count, dtype=torch.float64)
+        if indices:
+            submatrix = gram[indices][:, indices]
+            right_hand_side = -raw_constraint[indices]
+            try:
+                solution = torch.linalg.lstsq(submatrix, right_hand_side, rcond=1e-12).solution
+            except RuntimeError:
+                continue
+            if not bool(torch.isfinite(solution).all()):
+                continue
+            residual = submatrix @ solution - right_hand_side
+            if float(residual.abs().max()) > solve_tolerance:
+                continue
+            if float(solution.min()) < -dual_tolerance:
+                continue
+            solution = solution.clamp_min(0.0)
+            coefficients[indices] = solution
+        constraints = raw_constraint + gram @ coefficients
+        if float(constraints.min()) < -primal_tolerance:
+            continue
+        objective = float(coefficients @ gram @ coefficients)
+        if not math.isfinite(objective) or objective < -1e-10:
+            continue
+        objective = max(objective, 0.0)
+        if best is None:
+            best = (objective, mask, coefficients, constraints)
+            continue
+        tie_tolerance = 1e-12 * max(1.0, best[0], objective)
+        if objective < best[0] - tie_tolerance or (
+            abs(objective - best[0]) <= tie_tolerance and mask < best[1]
+        ):
+            best = (objective, mask, coefficients, constraints)
+    if best is None:
+        raise RuntimeError("R8 found no numerically feasible common-descent projection active set.")
+
+    objective, mask, coefficients_cpu, _constraints_cpu = best
+    coefficients = coefficients_cpu.to(device=raw_mean.device, dtype=raw_mean.dtype)
+    projected = raw_mean + torch.sum(unit_stack * coefficients[:, None], dim=0)
+    projected_norm = float(projected.norm())
+    if not math.isfinite(projected_norm) or projected_norm <= 1e-8 * raw_norm:
+        raise RuntimeError("R8 common-descent projection collapsed to a zero direction.")
+    raw_micro_cosines = [
+        float(torch.dot(vector, raw_mean) / (norm * raw_norm))
+        for vector, norm in zip(vectors, norms, strict=True)
+    ]
+    projected_micro_cosines = [
+        float(torch.dot(vector, projected) / (norm * projected_norm))
+        for vector, norm in zip(vectors, norms, strict=True)
+    ]
+    minimum_projected_cosine = min(projected_micro_cosines)
+    if minimum_projected_cosine < -1e-5:
+        raise RuntimeError(
+            "R8 common-descent projection violated a micro constraint: "
+            f"minimum cosine={minimum_projected_cosine}"
+        )
+    active = [index for index, value in enumerate(coefficients_cpu.tolist()) if value > dual_tolerance]
+    return projected, {
+        "solver": "exhaustive-active-set-kkt",
+        "candidate_active_sets": 1 << count,
+        "selected_active_set_mask": mask,
+        "selected_active_constraints": active,
+        "active_constraint_count": len(active),
+        "projection_distance_squared": objective,
+        "raw_micro_cosines": raw_micro_cosines,
+        "projected_micro_cosines": projected_micro_cosines,
+        "raw_violating_micro_count": sum(value < 0.0 for value in raw_micro_cosines),
+        "projected_violating_micro_count_at_tolerance": sum(
+            value < -1e-5 for value in projected_micro_cosines
+        ),
+        "minimum_raw_micro_cosine": min(raw_micro_cosines),
+        "minimum_projected_micro_cosine": minimum_projected_cosine,
+        "primal_tolerance_dot_units": primal_tolerance,
+        "dual_tolerance": dual_tolerance,
+        "projected_norm_before_match": projected_norm,
+    }
+
+
 def _aggregate_micro_gradients(
     vectors: Sequence[Tensor],
     *,
     mode: str,
+    protocol_revision: str = "r7",
 ) -> tuple[Tensor, dict[str, Any]]:
     if len(vectors) != r5.GRADIENT_ACCUMULATION:
         raise ValueError("R7 aggregation requires exactly eight micro-gradients.")
@@ -266,7 +468,19 @@ def _aggregate_micro_gradients(
         raise RuntimeError("R7 unit-balanced aggregate is non-finite or zero.")
 
     unit_matched = unit_mean * (raw_norm / unit_norm)
-    applied = raw_mean if mode == "raw-mean" else unit_matched
+    projection_report: dict[str, Any] | None = None
+    if mode == "common-descent-projected-norm-matched":
+        projected, projection_report = _project_raw_mean_to_common_descent(
+            vectors,
+            raw_mean=raw_mean,
+            norms=norms,
+        )
+        projected_norm = float(projected.norm())
+        applied = projected * (raw_norm / projected_norm)
+    elif mode == "unit-balanced-norm-matched":
+        applied = unit_matched
+    else:
+        applied = raw_mean
     applied_norm = float(applied.norm())
     relative_norm_error = abs(applied_norm / raw_norm - 1.0)
     if relative_norm_error > 1e-5:
@@ -282,8 +496,12 @@ def _aggregate_micro_gradients(
     norm_array = np.asarray(norms, dtype=np.float64)
     raw_vs_unit = float(torch.dot(raw_mean, unit_matched) / (raw_norm * float(unit_matched.norm())))
     raw_vs_applied = float(torch.dot(raw_mean, applied) / (raw_norm * applied_norm))
-    return applied, {
-        "schema": R7_AGGREGATION_SCHEMA,
+    report = {
+        "schema": (
+            R8_AGGREGATION_SCHEMA
+            if protocol_revision == "r8"
+            else R7_AGGREGATION_SCHEMA
+        ),
         "mode": mode,
         "micro_count": len(vectors),
         "micro_gradient_norms": norms,
@@ -305,8 +523,11 @@ def _aggregate_micro_gradients(
         "norm_match_relative_error": relative_norm_error,
         "raw_vs_unit_balanced_cosine": raw_vs_unit,
         "raw_vs_applied_cosine": raw_vs_applied,
-        "intervention_active": mode == "unit-balanced-norm-matched" and raw_vs_applied < 1.0 - 1e-6,
+        "intervention_active": mode != "raw-mean" and raw_vs_applied < 1.0 - 1e-6,
     }
+    if projection_report is not None:
+        report["common_descent_projection"] = projection_report
+    return applied, report
 
 
 def _run_optimizer_step(
@@ -345,7 +566,11 @@ def _run_optimizer_step(
         vectors.append(vector)
         activity_masks.append(activity)
     runtime.optimizer.zero_grad(set_to_none=True)
-    applied, aggregation = _aggregate_micro_gradients(vectors, mode=args.gradient_aggregation)
+    applied, aggregation = _aggregate_micro_gradients(
+        vectors,
+        mode=args.gradient_aggregation,
+        protocol_revision=args.protocol_revision,
+    )
     active_parameters = tuple(any(mask[index] for mask in activity_masks) for index in range(len(activity_masks[0])))
     _install_gradient_vector(
         runtime.named_trainable,
@@ -419,6 +644,7 @@ def _aggregation_technical_gate(
     metrics: Sequence[Mapping[str, Any]],
     *,
     expected_mode: str,
+    protocol_revision: str = "r7",
 ) -> dict[str, Any]:
     records = [
         metric["gradient_aggregation"]
@@ -440,13 +666,46 @@ def _aggregation_technical_gate(
         )
     )
     norm_match = bool(errors) and max(errors) <= 1e-5
-    exact_step_count = len(records) == R7_OPTIMIZER_STEPS
+    expected_step_count = int(PROTOCOL_CONTRACT[protocol_revision]["optimizer_steps"])
+    exact_step_count = len(records) == expected_step_count
     if expected_mode == "raw-mean":
         intervention_check = bool(cosines) and max(abs(value - 1.0) for value in cosines) <= 1e-6
     else:
         intervention_check = any(bool(record.get("intervention_active")) for record in records)
-    return {
-        "schema": "vision_memory.r7-gradient-aggregation-gate.v1",
+    common_descent_records = [
+        record.get("common_descent_projection")
+        for record in records
+        if isinstance(record.get("common_descent_projection"), Mapping)
+    ]
+    common_descent_gate = True
+    minimum_projected_micro_cosine = None
+    maximum_projected_violation_count = None
+    raw_violating_steps = None
+    if expected_mode == "common-descent-projected-norm-matched":
+        projected_cosines = [
+            float(record["minimum_projected_micro_cosine"])
+            for record in common_descent_records
+        ]
+        projected_violation_counts = [
+            int(record["projected_violating_micro_count_at_tolerance"])
+            for record in common_descent_records
+        ]
+        raw_violating_steps = sum(int(record["raw_violating_micro_count"]) > 0 for record in common_descent_records)
+        minimum_projected_micro_cosine = min(projected_cosines) if projected_cosines else None
+        maximum_projected_violation_count = max(projected_violation_counts) if projected_violation_counts else None
+        common_descent_gate = (
+            len(common_descent_records) == len(records)
+            and bool(projected_cosines)
+            and all(math.isfinite(value) and value >= -1e-5 for value in projected_cosines)
+            and max(projected_violation_counts) == 0
+            and raw_violating_steps > 0
+        )
+    result = {
+        "schema": (
+            "vision_memory.r8-common-descent-gate.v1"
+            if protocol_revision == "r8"
+            else "vision_memory.r7-gradient-aggregation-gate.v1"
+        ),
         "expected_mode": expected_mode,
         "optimizer_step_records": len(records),
         "exact_step_count": exact_step_count,
@@ -456,17 +715,32 @@ def _aggregation_technical_gate(
         "maximum_norm_match_relative_error": None if not errors else max(errors),
         "minimum_raw_vs_applied_cosine": None if not cosines else min(cosines),
         "intervention_check": intervention_check,
-        "passed": exact_step_count and modes_match and finite and norm_match and intervention_check,
+        "common_descent_constraint_check": common_descent_gate,
+        "minimum_projected_micro_cosine": minimum_projected_micro_cosine,
+        "maximum_projected_violation_count": maximum_projected_violation_count,
+        "raw_violating_steps": raw_violating_steps,
+        "passed": (
+            exact_step_count
+            and modes_match
+            and finite
+            and norm_match
+            and intervention_check
+            and common_descent_gate
+        ),
     }
+    return result
 
 
 def _run(args: argparse.Namespace) -> dict[str, Any]:
+    contract = PROTOCOL_CONTRACT[args.protocol_revision]
+    protocol_tag = args.protocol_revision
+    optimizer_steps = int(contract["optimizer_steps"])
     determinism = configure_strict_cuda_determinism(args.seed) if args.strict_determinism else None
     set_all_seeds(args.seed)
     data, selected = r6._load_data(args)
     selected_sha = r5.canonical_sha256([segment.to_dict() for segment in selected])
-    if selected_sha != R7_SELECTED_SEGMENTS_SHA256:
-        raise RuntimeError(f"R7 hard8 selection drifted: {selected_sha}")
+    if selected_sha != contract["selected_segments_sha256"]:
+        raise RuntimeError(f"{contract['protocol']} hard8 selection drifted: {selected_sha}")
     args.output_dir.mkdir(parents=True, exist_ok=True)
     r5._write_json(args.output_dir / "family_pool_audit.json", data.pool_audit)
     r5._write_json(args.output_dir / "dev_split_audit.json", data.split_audit)
@@ -492,7 +766,10 @@ def _run(args: argparse.Namespace) -> dict[str, Any]:
         deterministic_ce=args.strict_determinism,
     )
 
-    print(json.dumps({"milestone": "r7_m0_overfit_eval", "arm": args.arm}, sort_keys=True), flush=True)
+    print(
+        json.dumps({"milestone": f"{protocol_tag}_m0_overfit_eval", "arm": args.arm}, sort_keys=True),
+        flush=True,
+    )
     m0_rows = r6._evaluation_rows(
         model=runtime.model,
         reader_fn=eval_reader,
@@ -512,11 +789,11 @@ def _run(args: argparse.Namespace) -> dict[str, Any]:
     print(
         json.dumps(
             {
-                "milestone": "r7_training_start",
+                "milestone": f"{protocol_tag}_training_start",
                 "arm": args.arm,
                 "gradient_aggregation": args.gradient_aggregation,
                 "edit_start_sigma": 0.5,
-                "optimizer_steps": R7_OPTIMIZER_STEPS,
+                "optimizer_steps": optimizer_steps,
             },
             sort_keys=True,
         ),
@@ -524,7 +801,7 @@ def _run(args: argparse.Namespace) -> dict[str, Any]:
     )
     training_summary = r5.run_training_profile(
         args=args,
-        optimizer_steps=R7_OPTIMIZER_STEPS,
+        optimizer_steps=optimizer_steps,
         data=data,
         runtime=runtime,
         manifest=manifest,
@@ -534,13 +811,19 @@ def _run(args: argparse.Namespace) -> dict[str, Any]:
     aggregation_gate = _aggregation_technical_gate(
         training_metrics,
         expected_mode=args.gradient_aggregation,
+        protocol_revision=args.protocol_revision,
     )
     combined_technical_gate = bool(training_summary["technical_gate"]["passed"]) and bool(aggregation_gate["passed"])
 
     endpoint_path = args.output_dir / "endpoint_ema.pt"
     load_trainable_weights(endpoint_path, trainable_module=runtime.model)
     endpoint_label = "ema_step128"
-    print(json.dumps({"milestone": "r7_endpoint_overfit_eval", "arm": args.arm}, sort_keys=True), flush=True)
+    print(
+        json.dumps(
+            {"milestone": f"{protocol_tag}_endpoint_overfit_eval", "arm": args.arm}, sort_keys=True
+        ),
+        flush=True,
+    )
     endpoint_rows = r6._evaluation_rows(
         model=runtime.model,
         reader_fn=eval_reader,
@@ -617,10 +900,11 @@ def _run(args: argparse.Namespace) -> dict[str, Any]:
     )
 
     summary = {
-        "schema": R7_SCHEMA,
+        "schema": contract["summary_schema"],
         "status": "completed",
-        "protocol": R7_PROTOCOL,
-        "implementation_revision": R7_IMPLEMENTATION_REVISION,
+        "protocol": contract["protocol"],
+        "protocol_revision": args.protocol_revision,
+        "implementation_revision": contract["implementation_revision"],
         "git_commit": manifest["git_commit"],
         "arm": args.arm,
         "gradient_aggregation": args.gradient_aggregation,
@@ -668,7 +952,7 @@ def _run(args: argparse.Namespace) -> dict[str, Any]:
             "endpoint_raw_sha256": sha256_file(args.output_dir / "endpoint_raw.pt"),
         },
     }
-    r5._write_json(args.output_dir / "r7_summary.json", summary)
+    r5._write_json(args.output_dir / str(contract["summary_filename"]), summary)
     return summary
 
 
@@ -681,11 +965,12 @@ def main(argv: Sequence[str] | None = None) -> int:
     started = time.monotonic()
     summary = _run(args)
     summary["wall_clock_seconds"] = time.monotonic() - started
-    r5._write_json(args.output_dir / "r7_summary.json", summary)
+    contract = PROTOCOL_CONTRACT[args.protocol_revision]
+    r5._write_json(args.output_dir / str(contract["summary_filename"]), summary)
     print(
         json.dumps(
             {
-                "milestone": "r7_completed",
+                "milestone": f"{args.protocol_revision}_completed",
                 "arm": args.arm,
                 "hard8_overfit_learnability_gate": summary["gates"]["hard8_overfit_learnability_gate"],
                 "fixed_dev_generalization_gate": summary["gates"]["fixed_dev_generalization_gate"],
