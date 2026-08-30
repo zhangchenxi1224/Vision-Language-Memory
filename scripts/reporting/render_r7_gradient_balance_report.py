@@ -104,9 +104,14 @@ def _validate_pair(summaries: Mapping[str, Mapping[str, Any]]) -> None:
         raise ValueError(f"R7 aggregation modes are invalid: {modes}")
 
 
-def _training_csv(output: Path, metrics: Mapping[str, Sequence[Mapping[str, Any]]]) -> None:
+def _training_csv(
+    output: Path,
+    metrics: Mapping[str, Sequence[Mapping[str, Any]]],
+    *,
+    arms: Sequence[str] = ARMS,
+) -> None:
     rows: list[list[Any]] = []
-    for arm in ARMS:
+    for arm in arms:
         for record in metrics[arm]:
             diagnostics = record.get("optimizer_diagnostics", {})
             update = diagnostics.get("updates_after_step", {}).get("global", {})
@@ -158,9 +163,14 @@ def _training_csv(output: Path, metrics: Mapping[str, Sequence[Mapping[str, Any]
     )
 
 
-def _aggregation_csv(output: Path, metrics: Mapping[str, Sequence[Mapping[str, Any]]]) -> None:
+def _aggregation_csv(
+    output: Path,
+    metrics: Mapping[str, Sequence[Mapping[str, Any]]],
+    *,
+    arms: Sequence[str] = ARMS,
+) -> None:
     rows = []
-    for arm in ARMS:
+    for arm in arms:
         for record in metrics[arm]:
             aggregation = record["gradient_aggregation"]
             rows.append(
@@ -211,9 +221,13 @@ def _aggregation_csv(output: Path, metrics: Mapping[str, Sequence[Mapping[str, A
     )
 
 
-def _endpoint_rows(summaries: Mapping[str, Mapping[str, Any]]) -> list[list[Any]]:
+def _endpoint_rows(
+    summaries: Mapping[str, Mapping[str, Any]],
+    *,
+    arms: Sequence[str] = ARMS,
+) -> list[list[Any]]:
     rows = []
-    for arm in ARMS:
+    for arm in arms:
         summary = summaries[arm]
         comparisons = summary["comparisons"]
         hard8 = comparisons["train_overfit_hard8_endpoint_vs_m0"]
@@ -249,15 +263,21 @@ def _endpoint_rows(summaries: Mapping[str, Mapping[str, Any]]) -> list[list[Any]
     return rows
 
 
-def _training_figure(output: Path, metrics: Mapping[str, Sequence[Mapping[str, Any]]]) -> None:
+def _training_figure(
+    output: Path,
+    metrics: Mapping[str, Sequence[Mapping[str, Any]]],
+    *,
+    arms: Sequence[str] = ARMS,
+    colors: Mapping[str, str] = COLORS,
+) -> None:
     fig, axes = plt.subplots(2, 2, figsize=(12.0, 8.0))
-    for arm in ARMS:
+    for arm in arms:
         records = metrics[arm]
         steps = [int(record["optimizer_step"]) for record in records]
         losses = [float(record["loss_mean"]) for record in records]
         gradients = [float(record["gradient_norm_before_clip"]) for record in records]
         cosines = [float(record["gradient_aggregation"]["raw_vs_applied_cosine"]) for record in records]
-        color = COLORS[arm]
+        color = colors[arm]
         axes[0, 0].plot(steps, losses, color=color, alpha=0.22, linewidth=0.8)
         axes[0, 0].plot(steps, _moving_mean(losses), color=color, linewidth=1.8, label=arm)
         axes[0, 1].plot(steps, gradients, color=color, linewidth=1.2, label=arm)
@@ -334,11 +354,18 @@ def _aggregation_figure(output: Path, metrics: Mapping[str, Sequence[Mapping[str
     plt.close(fig)
 
 
-def _endpoint_figure(output: Path, summaries: Mapping[str, Mapping[str, Any]]) -> None:
+def _endpoint_figure(
+    output: Path,
+    summaries: Mapping[str, Mapping[str, Any]],
+    *,
+    arms: Sequence[str] = ARMS,
+    colors: Mapping[str, str] = COLORS,
+    xlabels: Sequence[str] = ("raw", "unit-balanced"),
+) -> None:
     fig, axes = plt.subplots(1, 3, figsize=(14.0, 4.3))
-    positions = list(range(len(ARMS)))
+    positions = list(range(len(arms)))
     width = 0.36
-    hard8 = [summaries[arm]["comparisons"]["train_overfit_hard8_endpoint_vs_m0"] for arm in ARMS]
+    hard8 = [summaries[arm]["comparisons"]["train_overfit_hard8_endpoint_vs_m0"] for arm in arms]
     axes[0].bar(
         [value - width / 2 for value in positions],
         [value["m0_mean_ce"] for value in hard8],
@@ -355,13 +382,13 @@ def _endpoint_figure(output: Path, summaries: Mapping[str, Mapping[str, Any]]) -
     axes[0].legend(fontsize=8)
     axes[1].bar(
         [value - width / 2 for value in positions],
-        [summaries[arm]["overfit_accuracy"]["m0"] for arm in ARMS],
+        [summaries[arm]["overfit_accuracy"]["m0"] for arm in arms],
         width,
         label="M0",
     )
     axes[1].bar(
         [value + width / 2 for value in positions],
-        [summaries[arm]["overfit_accuracy"]["endpoint"] for arm in ARMS],
+        [summaries[arm]["overfit_accuracy"]["endpoint"] for arm in arms],
         width,
         label="EMA step128",
     )
@@ -374,12 +401,12 @@ def _endpoint_figure(output: Path, summaries: Mapping[str, Mapping[str, Any]]) -
         "mechanism_select_32_endpoint_vs_m0",
     )
     suite_positions = list(range(len(suites)))
-    for offset, arm in ((-width / 2, ARMS[0]), (width / 2, ARMS[1])):
+    for offset, arm in ((-width / 2, arms[0]), (width / 2, arms[1])):
         axes[2].bar(
             [value + offset for value in suite_positions],
             [summaries[arm]["comparisons"][key]["estimate"] for key in keys],
             width,
-            color=COLORS[arm],
+            color=colors[arm],
             label=arm,
         )
     axes[2].axhline(0.0, color="black", linewidth=0.8)
@@ -387,7 +414,7 @@ def _endpoint_figure(output: Path, summaries: Mapping[str, Mapping[str, Any]]) -
     axes[2].set(title="Endpoint minus own M0", ylabel="paired CE delta")
     axes[2].legend(fontsize=7)
     for axis in axes[:2]:
-        axis.set_xticks(positions, ["raw", "unit-balanced"])
+        axis.set_xticks(positions, xlabels)
     for axis in axes:
         axis.grid(axis="y", alpha=0.18)
     fig.tight_layout()
