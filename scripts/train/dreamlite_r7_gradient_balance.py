@@ -349,8 +349,21 @@ def _project_raw_mean_to_common_descent(
         [vector / norm for vector, norm in zip(vectors, norms, strict=True)],
         dim=0,
     )
-    gram = (unit_stack @ unit_stack.T).detach().double().cpu()
-    raw_constraint = (unit_stack @ raw_mean).detach().double().cpu()
+    # Do not use a CUDA matmul here: when TF32 is globally enabled, its Gram
+    # geometry can disagree with the final torch.dot feasibility audit by more
+    # than the preregistered cosine tolerance.  Pairwise dot products use the
+    # same reduction primitive as the audit and stay correct even outside the
+    # strict-determinism controller.
+    gram = torch.empty((count, count), dtype=torch.float64)
+    for first in range(count):
+        for second in range(first, count):
+            value = float(torch.dot(unit_stack[first], unit_stack[second]))
+            gram[first, second] = value
+            gram[second, first] = value
+    raw_constraint = torch.tensor(
+        [float(torch.dot(unit_stack[index], raw_mean)) for index in range(count)],
+        dtype=torch.float64,
+    )
     if not bool(torch.isfinite(gram).all()) or not bool(torch.isfinite(raw_constraint).all()):
         raise RuntimeError("R8 common-descent KKT inputs are non-finite.")
 
@@ -396,8 +409,10 @@ def _project_raw_mean_to_common_descent(
         raise RuntimeError("R8 found no numerically feasible common-descent projection active set.")
 
     objective, mask, coefficients_cpu, _constraints_cpu = best
-    coefficients = coefficients_cpu.to(device=raw_mean.device, dtype=raw_mean.dtype)
-    projected = raw_mean + torch.sum(unit_stack * coefficients[:, None], dim=0)
+    projected = raw_mean.clone()
+    for index, coefficient in enumerate(coefficients_cpu.tolist()):
+        if coefficient != 0.0:
+            projected.add_(unit_stack[index], alpha=coefficient)
     projected_norm = float(projected.norm())
     if not math.isfinite(projected_norm) or projected_norm <= 1e-8 * raw_norm:
         raise RuntimeError("R8 common-descent projection collapsed to a zero direction.")
