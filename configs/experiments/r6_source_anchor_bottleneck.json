@@ -1,0 +1,87 @@
+{
+  "schema": "vision_memory.r6-source-anchor-preregistration.v1",
+  "protocol": "R6-SourceAnchor-Bottleneck",
+  "implementation_revision": "scheduler-effective-sigma-v2",
+  "research_target": "A recurrent picture state that carries event history through the frozen VLM image interface.",
+  "diagnostic_question": "Does R5 fail because every event restarts DreamLite from pure noise and redraws the complete state?",
+  "single_changed_variable": {
+    "name": "edit_start_sigma",
+    "legacy-pure-noise": 1.0,
+    "source-anchored": 0.5,
+    "initialization": "x_sigma=(1-sigma)*source_latent+sigma*fixed_event_noise",
+    "sigma_semantics": "effective post-scheduler-shift flow sigma",
+    "source_anchor_effective_schedule": [
+      0.5,
+      0.375,
+      0.25,
+      0.125
+    ],
+    "fail_closed_alignment_check": true
+  },
+  "fixed_contract": {
+    "dataset": "formal-v1 train/dev with the R5 deterministic split",
+    "train_subset": "two deterministic segments from each of F2/F3/F5/F6; the same hard8 batch is repeated",
+    "optimizer_steps": 128,
+    "micro_segments_per_step": 8,
+    "persistent_state": "latent",
+    "tbptt_horizon": 4,
+    "gradient_mode": "full",
+    "diffusion_steps": 4,
+    "noise_key": [
+      "global_seed",
+      "source_episode_id",
+      "source_turn_id"
+    ],
+    "noop": "hard graph-preserving identity",
+    "updater": "DreamLite-mobile U-Net LoRA rank 4; base frozen",
+    "reader": "Qwen3-VL-4B-Instruct frozen",
+    "loss": "four-choice listwise CE",
+    "optimizer": "AdamW",
+    "weight_decay": 0.0001,
+    "gradient_clip": 10.0,
+    "learning_rate_schedule": "R5 640-step schedule prefix: 16-step 1e-5 to 3e-5 warmup then cosine toward 1e-5",
+    "ema_decay": 0.995,
+    "primary_endpoint": "EMA step128",
+    "checkpoint_every": 32,
+    "choice_views": "reverse-cyclic4",
+    "seed": 0
+  },
+  "paired_diagnostics": [
+    "hard8 train endpoint versus arm-specific M0",
+    "fixed formal-select-32 endpoint versus arm-specific M0",
+    "fixed mechanism-select-32 endpoint versus arm-specific M0",
+    "normal/reset difference-in-differences from M0 to endpoint",
+    "cross-episode and temporal state swaps on hard8",
+    "per-segment full-gradient norm and pairwise gradient cosine"
+  ],
+  "hard8_learnability_gate": {
+    "technical_gate": true,
+    "relative_ce_change_at_most": -0.2,
+    "improved_pair_units_at_least": "7/8",
+    "paired_bootstrap_ce_ci95_upper_below_zero": true,
+    "accuracy_delta_at_least": 0.2,
+    "state_dependence_difference_in_differences_estimate_below_zero": true
+  },
+  "fixed_dev_generalization_gate": {
+    "formal_select_32_endpoint_vs_m0_ci95_upper_below_zero": true,
+    "mechanism_select_32_endpoint_vs_m0_ci95_upper_below_zero": true,
+    "mechanism_state_dependence_difference_in_differences_ci95_upper_below_zero": true
+  },
+  "interpretation_rules": {
+    "source_anchor_pass_legacy_fail": "pure-noise redraw is a supported primary cause; advance sigma=0.5 to a fixed full-data pilot",
+    "both_pass": "recurrence can overfit under both laws; compare fixed-dev generalization and gradient conflict before selecting",
+    "both_fail": "reject start sigma as sufficient; next test per-micro gradient conflict/balancing without increasing rank or data",
+    "legacy_pass_source_anchor_fail": "source anchoring is rejected and must not advance"
+  },
+  "false_positive_guard": {
+    "diagnostic_can_claim_formal_success": false,
+    "formal_success_still_requires": [
+      "fixed full training schedule",
+      "predeclared endpoint",
+      "at least two consistent seeds",
+      "ID and OOD evaluation",
+      "normal better than reset and state swaps",
+      "endpoint improvement over its own M0 with paired uncertainty"
+    ]
+  }
+}

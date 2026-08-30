@@ -1,0 +1,334 @@
+{
+  "comparisons": {
+    "legacy-pure-noise": {
+      "formal_select_32_endpoint_vs_m0": {
+        "ci95": [
+          -0.012224744337921116,
+          1.2044741568776471
+        ],
+        "definition": "mean_ce(ema_step128,normal)-mean_ce(m0,normal) on formal_select_32",
+        "endpoint_mean_ce": 14.52507996497055,
+        "estimate": 0.5652986901501817,
+        "fraction_below_zero": 0.0271,
+        "improved_pair_units": 10,
+        "iterations": 10000,
+        "m0_mean_ce": 13.959781274820369,
+        "pair_units": 32,
+        "per_pair_unit_delta": {
+          "r3-dev-semantic-000000-s1-noop": -0.4790416955947876,
+          "r3-dev-semantic-000002-s1-clean": 0.358938992023468,
+          "r3-dev-semantic-000016-s1-clean": 3.981176535288493,
+          "r3-dev-semantic-000018-s0-noop": 0.038056890169779534,
+          "r3-dev-semantic-000023-s0-clean": -0.37172853946685813,
+          "r3-dev-semantic-000025-s0-clean": -0.34941577911376953,
+          "r3-dev-semantic-000026-s0-noop": 0.20182867844899377,
+          "r3-dev-semantic-000030-s0-clean": 3.396424412727356,
+          "r3-dev-semantic-000033-s1-clean": 1.4783151149749756,
+          "r3-dev-semantic-000045-s1-noop": 6.8147348165512085,
+          "r3-dev-semantic-000055-s0-noop": 0.47043047348658273,
+          "r3-dev-semantic-000055-s1-clean": 1.4103526075681052,
+          "r3-dev-semantic-000056-s0-clean": 0.10176785786946618,
+          "r3-dev-semantic-000059-s0-clean": -4.2964337666829415,
+          "r3-dev-semantic-000059-s0-noop": -0.5842007001241001,
+          "r3-dev-semantic-000064-s0-noop": -0.1271049976348877,
+          "r3-dev-semantic-000069-s0-noop": 0.03907346725463867,
+          "r3-dev-semantic-000076-s0-clean": 0.0039052963256835938,
+          "r3-dev-semantic-000076-s0-noop": 0.2890625,
+          "r3-dev-semantic-000077-s0-clean": 0.05338478088378906,
+          "r3-dev-semantic-000086-s0-clean": -0.12934444348017404,
+          "r3-dev-semantic-000087-s0-noop": 0.10503514607747455,
+          "r3-dev-semantic-000089-s0-clean": -0.013020515441894531,
+          "r3-dev-semantic-000090-s1-noop": 0.9967767000198364,
+          "r3-dev-semantic-000091-s0-noop": 0.631793737411499,
+          "r3-dev-semantic-000099-s1-noop": 0.924906849861145,
+          "r3-dev-semantic-000101-s0-clean": 0.9128540754318237,
+          "r3-dev-semantic-000107-s1-noop": 1.308367371559143,
+          "r3-dev-semantic-000113-s0-clean": 1.4084019660949707,
+          "r3-dev-semantic-000114-s1-clean": -1.2718960046768188,
+          "r3-dev-semantic-000115-s0-noop": 0.8949623107910156,
+          "r3-dev-semantic-000121-s0-clean": -0.10880605379740338
+        },
+        "relative_change": 0.040494809984582325,
+        "seed": 20260832
+      },
+      "mechanism_select_32_endpoint_vs_m0": {
+        "ci95": [
+          -0.5890155409928411,
+          0.3195621888618916
+        ],
+        "definition": "mean_ce(ema_step128,normal)-mean_ce(m0,normal) on mechanism_select_32",
+        "endpoint_mean_ce": 10.709037439897656,
+        "estimate": -0.10230322368443012,
+        "fraction_below_zero": 0.6564,
+        "improved_pair_units": 14,
+        "iterations": 10000,
+        "m0_mean_ce": 10.811340663582087,
+        "pair_units": 32,
+        "per_pair_unit_delta": {
+          "r5-f3-17cea1275a4dbb86e24b56d4": 1.3200716972351074,
+          "r5-f3-5cfe4f507ce6671f0ab41443": 0.3333320617675781,
+          "r5-f3-6dc41ae67f0ab8f08656f694": -0.0007259845733642578,
+          "r5-f3-755718ad6713115c41882126": 1.639089584350586,
+          "r5-f3-828b19e0c16b1452bcc560c4": -0.6170580387115479,
+          "r5-f3-a5e3595f5535f46fcdb84c32": 0.200836181640625,
+          "r5-f3-e9667c86fa92f3178dba441c": -1.6315358877182007,
+          "r5-f3-faa342491cf6e98784e8ea83": 0.30728769302368164,
+          "r5-f4-19f0bd731cbbf3b36d21b5f9": -0.008199751377105713,
+          "r5-f4-4288edb735bb699822c9db20": 2.9206275939941406e-06,
+          "r5-f4-430d702491c11e00d1bafa3c": 8.344650268554688e-07,
+          "r5-f4-5067eb9879be904b8b70927f": -0.0003885030746459961,
+          "r5-f4-5109aed1b352fec488a0f616": 0.0584070086479187,
+          "r5-f4-5d78525a4bb3dedef6226002": 1.1920928955078125e-07,
+          "r5-f4-f881264a2c9159536868db64": -1.1920928955078125e-07,
+          "r5-f4-fe2215ca2f4a255b270f307b": 0.16351759433746338,
+          "r5-f5-4b92e4842174fdc8e2a8679c": -4.536426544189453,
+          "r5-f5-510a595fb1eee8971efa530b": 0.21822881698608398,
+          "r5-f5-915d164b0d46c01c2e702ce6": -1.2029168605804443,
+          "r5-f5-b81284eeec393540e5f01086": 1.241448163986206,
+          "r5-f5-c5fdb9933f0402234acd092c": -0.1575472354888916,
+          "r5-f5-d857a2ff52640e57ecfbfa21": 1.8737261295318604,
+          "r5-f5-daadb58238108a04e6ba673f": 0.7991033792495728,
+          "r5-f5-f9517445c0b6c6fbd9ea10a0": -1.0155621767044067,
+          "r5-f6-05affbfbfa38beee46d8448b": 0.3437509536743164,
+          "r5-f6-06a4bfb22cc03b68e8c3a8b5": -0.7187490463256836,
+          "r5-f6-2bab34f60cc6464d2c4bc897": -3.9642670154571533,
+          "r5-f6-3890422d67d7f872ae353a8b": 1.046623945236206,
+          "r5-f6-60e739186ae50e2133babe44": -0.2812490463256836,
+          "r5-f6-7037b2f635b563ab6598630a": 0.0947868824005127,
+          "r5-f6-7c126446375e6354dc5ac578": 1.590183973312378,
+          "r5-f6-b012a183835d943189a02465": -0.3694748878479004
+        },
+        "relative_change": -0.009462584416476405,
+        "seed": 20260833
+      },
+      "mechanism_select_32_state_did": {
+        "ci95": [
+          -0.5989671451970935,
+          0.32561880620196443
+        ],
+        "definition": "(endpoint_normal-endpoint_reset)-(m0_normal-m0_reset); negative means training-induced state dependence",
+        "estimate": -0.10230322368443012,
+        "fraction_below_zero": 0.6585,
+        "iterations": 10000,
+        "pair_units": 32,
+        "seed": 20260834
+      },
+      "train_overfit_hard8_endpoint_vs_m0": {
+        "ci95": [
+          -3.4305551052093506,
+          0.14014435932040098
+        ],
+        "definition": "mean_ce(ema_step128,normal)-mean_ce(m0,normal) on train_overfit_hard8",
+        "endpoint_mean_ce": 15.114492148160934,
+        "estimate": -1.4418301433324814,
+        "fraction_below_zero": 0.9596,
+        "improved_pair_units": 5,
+        "iterations": 10000,
+        "m0_mean_ce": 16.556322291493416,
+        "pair_units": 8,
+        "per_pair_unit_delta": {
+          "r5-f2-6db739261bbb0fc74169dc1f": 0.10809266567230225,
+          "r5-f2-d1803aae745ed83f142b0bae": -0.21707916259765625,
+          "r5-f3-913c95f41d8e72f9b0aabac4": 0.24477839469909668,
+          "r5-f3-dbc9791cf4ba3569afc7a3d0": -2.5413293838500977,
+          "r5-f5-56ef217cc7251269d003b5c8": -0.25539588928222656,
+          "r5-f5-9fec14ebb444f5f1fe201087": -2.9462289810180664,
+          "r5-f6-1ccc652bfea4b3e698683232": -7.318662881851196,
+          "r5-f6-b6302052a821cfd9e9d9261e": 1.3911840915679932
+        },
+        "relative_change": -0.08708637811872566,
+        "seed": 20260830
+      },
+      "train_overfit_hard8_state_did": {
+        "ci95": [
+          -3.4305551052093506,
+          0.12146209068596352
+        ],
+        "definition": "(endpoint_normal-endpoint_reset)-(m0_normal-m0_reset); negative means training-induced state dependence",
+        "estimate": -1.4418301433324814,
+        "fraction_below_zero": 0.9625,
+        "iterations": 10000,
+        "pair_units": 8,
+        "seed": 20260831
+      }
+    },
+    "source-anchored": {
+      "formal_select_32_endpoint_vs_m0": {
+        "ci95": [
+          -0.036204182698080754,
+          0.07609872743487325
+        ],
+        "definition": "mean_ce(ema_step128,normal)-mean_ce(m0,normal) on formal_select_32",
+        "endpoint_mean_ce": 21.862439919884004,
+        "estimate": 0.018860382338364956,
+        "fraction_below_zero": 0.2526,
+        "improved_pair_units": 14,
+        "iterations": 10000,
+        "m0_mean_ce": 21.84357953754564,
+        "pair_units": 32,
+        "per_pair_unit_delta": {
+          "r3-dev-semantic-000000-s1-noop": 0.04947209358215332,
+          "r3-dev-semantic-000002-s1-clean": 0.052546143531799316,
+          "r3-dev-semantic-000016-s1-clean": 0.170403679211935,
+          "r3-dev-semantic-000018-s0-noop": -0.2647548516591378,
+          "r3-dev-semantic-000023-s0-clean": 0.008846680323282285,
+          "r3-dev-semantic-000025-s0-clean": -0.08060896396636963,
+          "r3-dev-semantic-000026-s0-noop": 0.47452203432718854,
+          "r3-dev-semantic-000030-s0-clean": 0.14192724227905273,
+          "r3-dev-semantic-000033-s1-clean": 0.3827892541885376,
+          "r3-dev-semantic-000045-s1-noop": 0.058603525161743164,
+          "r3-dev-semantic-000055-s0-noop": -0.011283636093139648,
+          "r3-dev-semantic-000055-s1-clean": 0.044243971506753965,
+          "r3-dev-semantic-000056-s0-clean": -0.02604182561238577,
+          "r3-dev-semantic-000059-s0-clean": 0.20659701029459399,
+          "r3-dev-semantic-000059-s0-noop": 0.09461832046508789,
+          "r3-dev-semantic-000064-s0-noop": -0.08984160423278809,
+          "r3-dev-semantic-000069-s0-noop": -0.11718630790710449,
+          "r3-dev-semantic-000076-s0-clean": -0.25260281562805176,
+          "r3-dev-semantic-000076-s0-noop": -0.20963382720947266,
+          "r3-dev-semantic-000077-s0-clean": 0.03255152702331543,
+          "r3-dev-semantic-000086-s0-clean": -0.00434048970540335,
+          "r3-dev-semantic-000087-s0-noop": -0.028645833333333925,
+          "r3-dev-semantic-000089-s0-clean": 0.007812817891439394,
+          "r3-dev-semantic-000090-s1-noop": 0.013889153798421816,
+          "r3-dev-semantic-000091-s0-noop": 0.06510345141093055,
+          "r3-dev-semantic-000099-s1-noop": 0.1874995231628418,
+          "r3-dev-semantic-000101-s0-clean": -0.30989646911621094,
+          "r3-dev-semantic-000107-s1-noop": -0.005209922790527344,
+          "r3-dev-semantic-000113-s0-clean": 0.08680550257365383,
+          "r3-dev-semantic-000114-s1-clean": -0.10069497426351148,
+          "r3-dev-semantic-000115-s0-noop": -0.05381949742635328,
+          "r3-dev-semantic-000121-s0-clean": 0.07986132303873816
+        },
+        "relative_change": 0.0008634291053783993,
+        "seed": 20260832
+      },
+      "mechanism_select_32_endpoint_vs_m0": {
+        "ci95": [
+          -0.10522630871273576,
+          0.12292644428089256
+        ],
+        "definition": "mean_ce(ema_step128,normal)-mean_ce(m0,normal) on mechanism_select_32",
+        "endpoint_mean_ce": 20.558288080617785,
+        "estimate": -0.0009147990494966507,
+        "fraction_below_zero": 0.5349,
+        "improved_pair_units": 19,
+        "iterations": 10000,
+        "m0_mean_ce": 20.559202879667282,
+        "pair_units": 32,
+        "per_pair_unit_delta": {
+          "r5-f3-17cea1275a4dbb86e24b56d4": -0.07291603088378906,
+          "r5-f3-5cfe4f507ce6671f0ab41443": -0.11458301544189453,
+          "r5-f3-6dc41ae67f0ab8f08656f694": 0.4218759536743164,
+          "r5-f3-755718ad6713115c41882126": -0.34895849227905273,
+          "r5-f3-828b19e0c16b1452bcc560c4": 0.08333301544189453,
+          "r5-f3-a5e3595f5535f46fcdb84c32": -0.5416069030761719,
+          "r5-f3-e9667c86fa92f3178dba441c": 0.125,
+          "r5-f3-faa342491cf6e98784e8ea83": -0.05208301544189453,
+          "r5-f4-19f0bd731cbbf3b36d21b5f9": -3.5762786865234375e-07,
+          "r5-f4-4288edb735bb699822c9db20": 1.1920928955078125e-07,
+          "r5-f4-430d702491c11e00d1bafa3c": 7.748603820800781e-07,
+          "r5-f4-5067eb9879be904b8b70927f": -1.1920928955078125e-07,
+          "r5-f4-5109aed1b352fec488a0f616": -1.1920928955078125e-07,
+          "r5-f4-5d78525a4bb3dedef6226002": 1.1920928955078125e-07,
+          "r5-f4-f881264a2c9159536868db64": 0.0,
+          "r5-f4-fe2215ca2f4a255b270f307b": -5.888938903808594e-05,
+          "r5-f5-4b92e4842174fdc8e2a8679c": -0.44791507720947266,
+          "r5-f5-510a595fb1eee8971efa530b": 0.0885322093963623,
+          "r5-f5-915d164b0d46c01c2e702ce6": -0.06253719329833984,
+          "r5-f5-b81284eeec393540e5f01086": -0.020833492279052734,
+          "r5-f5-c5fdb9933f0402234acd092c": 0.1171870231628418,
+          "r5-f5-d857a2ff52640e57ecfbfa21": 0.1875009536743164,
+          "r5-f5-daadb58238108a04e6ba673f": 0.3411397933959961,
+          "r5-f5-f9517445c0b6c6fbd9ea10a0": -0.02604198455810547,
+          "r5-f6-05affbfbfa38beee46d8448b": -0.26041698455810547,
+          "r5-f6-06a4bfb22cc03b68e8c3a8b5": -0.07291603088378906,
+          "r5-f6-2bab34f60cc6464d2c4bc897": -0.22916650772094727,
+          "r5-f6-3890422d67d7f872ae353a8b": -0.046875,
+          "r5-f6-60e739186ae50e2133babe44": 9.5367431640625e-07,
+          "r5-f6-7037b2f635b563ab6598630a": -0.0078125,
+          "r5-f6-7c126446375e6354dc5ac578": 1.4108762741088867,
+          "r5-f6-b012a183835d943189a02465": -0.4999990463256836
+        },
+        "relative_change": -4.449584231702719e-05,
+        "seed": 20260833
+      },
+      "mechanism_select_32_state_did": {
+        "ci95": [
+          -0.10392294875346124,
+          0.1211315254215151
+        ],
+        "definition": "(endpoint_normal-endpoint_reset)-(m0_normal-m0_reset); negative means training-induced state dependence",
+        "estimate": -0.0009147990494966507,
+        "fraction_below_zero": 0.5434,
+        "iterations": 10000,
+        "pair_units": 32,
+        "seed": 20260834
+      },
+      "train_overfit_hard8_endpoint_vs_m0": {
+        "ci95": [
+          -0.2133518651127815,
+          0.05812265425920486
+        ],
+        "definition": "mean_ce(ema_step128,normal)-mean_ce(m0,normal) on train_overfit_hard8",
+        "endpoint_mean_ce": 21.073971152305603,
+        "estimate": -0.08054004609584808,
+        "fraction_below_zero": 0.8683,
+        "improved_pair_units": 4,
+        "iterations": 10000,
+        "m0_mean_ce": 21.15451119840145,
+        "pair_units": 8,
+        "per_pair_unit_delta": {
+          "r5-f2-6db739261bbb0fc74169dc1f": 0.03270113468170166,
+          "r5-f2-d1803aae745ed83f142b0bae": 0.057291507720947266,
+          "r5-f3-913c95f41d8e72f9b0aabac4": -0.2786388397216797,
+          "r5-f3-dbc9791cf4ba3569afc7a3d0": 0.26562070846557617,
+          "r5-f5-56ef217cc7251269d003b5c8": -0.1562490463256836,
+          "r5-f5-9fec14ebb444f5f1fe201087": -0.296816349029541,
+          "r5-f6-1ccc652bfea4b3e698683232": -0.32291603088378906,
+          "r5-f6-b6302052a821cfd9e9d9261e": 0.054686546325683594
+        },
+        "relative_change": -0.0038072279402009412,
+        "seed": 20260830
+      },
+      "train_overfit_hard8_state_did": {
+        "ci95": [
+          -0.22166377305984497,
+          0.06073746792972083
+        ],
+        "definition": "(endpoint_normal-endpoint_reset)-(m0_normal-m0_reset); negative means training-induced state dependence",
+        "estimate": -0.08054004609584808,
+        "fraction_below_zero": 0.8707,
+        "iterations": 10000,
+        "pair_units": 8,
+        "seed": 20260831
+      }
+    }
+  },
+  "formal_success_claim": false,
+  "gates": {
+    "legacy-pure-noise": {
+      "fixed_dev_generalization_gate": false,
+      "formal_success_gate": false,
+      "formal_success_gate_reason": "single-seed repeated-subset diagnostic cannot establish fixed-full-data ID/OOD success",
+      "hard8_overfit_learnability_gate": false,
+      "technical_gate": true
+    },
+    "source-anchored": {
+      "fixed_dev_generalization_gate": false,
+      "formal_success_gate": false,
+      "formal_success_gate_reason": "single-seed repeated-subset diagnostic cannot establish fixed-full-data ID/OOD success",
+      "hard8_overfit_learnability_gate": false,
+      "technical_gate": true
+    }
+  },
+  "git_commit": "e1ab129ae86a39814a9ce0ce17ac06965f2e835c",
+  "implementation_revision": "scheduler-effective-sigma-v2",
+  "schema": "vision_memory.r6-source-anchor-rendered-analysis.v1",
+  "selected_segments_sha256": "eeade3e006791aeea87aa12cf897956d34b4e2c3769c162db494e42fb7828ea6",
+  "source_roots": {
+    "legacy-pure-noise": "C:\\Users\\Expedition\\DreamLite_R6_SourceAnchor_Final_20260829\\raw\\complete-validated\\legacy-pure-noise",
+    "source-anchored": "C:\\Users\\Expedition\\DreamLite_R6_SourceAnchor_Final_20260829\\raw\\complete-validated\\source-anchored"
+  },
+  "status": "completed"
+}

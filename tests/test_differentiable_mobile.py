@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import math
 import sys
 import unittest
 from pathlib import Path
@@ -24,10 +25,12 @@ class MockFlowScheduler:
 
     def __init__(self):
         self.step_grad_enabled = []
+        self.requested_sigmas = []
 
     def set_timesteps(self, *, sigmas, device, mu):
         del mu
-        values = torch.tensor(list(sigmas) + [0.0], device=device, dtype=torch.float32)
+        self.requested_sigmas = list(sigmas)
+        values = torch.tensor(self.requested_sigmas + [0.0], device=device, dtype=torch.float32)
         self.sigmas = values
         self.timesteps = values[:-1] * 1000.0
         self._step_index = 0
@@ -39,6 +42,34 @@ class MockFlowScheduler:
         dt = self.sigmas[self._step_index + 1] - self.sigmas[self._step_index]
         self._step_index += 1
         return (sample + dt.to(sample.dtype) * model_output,)
+
+
+class ShiftedMockFlowScheduler(MockFlowScheduler):
+    """Faithful dynamic-shift behavior used by DreamLite's FlowMatch scheduler."""
+
+    config = {
+        "base_image_seq_len": 16,
+        "max_image_seq_len": 4096,
+        "base_shift": 0.5,
+        "max_shift": 1.16,
+        "use_dynamic_shifting": True,
+        "time_shift_type": "exponential",
+        "shift_terminal": None,
+        "use_karras_sigmas": False,
+        "use_exponential_sigmas": False,
+        "use_beta_sigmas": False,
+        "invert_sigmas": False,
+    }
+
+    def set_timesteps(self, *, sigmas, device, mu):
+        self.requested_sigmas = list(sigmas)
+        scale = math.exp(mu)
+        shifted = [scale / (scale + (1.0 / value - 1.0)) for value in self.requested_sigmas]
+        values = torch.tensor(shifted + [0.0], device=device, dtype=torch.float32)
+        self.sigmas = values
+        self.timesteps = values[:-1] * 1000.0
+        self._step_index = 0
+        self.step_grad_enabled = []
 
 
 class MockDreamLiteUNet(nn.Module):
@@ -182,6 +213,121 @@ class DifferentiableSamplerContractTest(unittest.TestCase):
         second = sampler(**kwargs).latents
         torch.testing.assert_close(first, second)
 
+    def test_source_anchored_edit_uses_flow_matching_interpolation_and_scaled_schedule(self):
+        source, noise, prompt, mask = make_inputs()
+        noise = torch.full_like(noise, 3.0)
+        scheduler = MockFlowScheduler()
+        sampler = DifferentiableDreamLiteMobileSampler(
+            unet=MockDreamLiteUNet(),
+            scheduler=scheduler,
+        )
+        output = sampler(
+            source_latents=source,
+            noise_latents=noise,
+            prompt_embeds=prompt,
+            prompt_attention_mask=mask,
+            edit_start_sigma=0.5,
+            return_trajectory=True,
+        )
+        self.assertEqual(scheduler.requested_sigmas, [0.5, 0.375, 0.25, 0.125])
+        self.assertEqual(output.effective_sigmas, (0.5, 0.375, 0.25, 0.125))
+        self.assertIsNotNone(output.trajectory)
+        expected_start = source * 0.5 + noise * 0.5
+        torch.testing.assert_close(output.trajectory[0], expected_start)
+        output.latents.square().mean().backward()
+        self.assertIsNotNone(source.grad)
+        self.assertGreater(source.grad.norm().item(), 0.0)
+
+    def test_source_anchor_inverts_dynamic_shift_to_match_effective_flow_sigma(self):
+        source, noise, prompt, mask = make_inputs()
+        noise = torch.full_like(noise, 3.0)
+        scheduler = ShiftedMockFlowScheduler()
+        sampler = DifferentiableDreamLiteMobileSampler(
+            unet=MockDreamLiteUNet(),
+            scheduler=scheduler,
+        )
+        output = sampler(
+            source_latents=source,
+            noise_latents=noise,
+            prompt_embeds=prompt,
+            prompt_attention_mask=mask,
+            edit_start_sigma=0.5,
+            return_trajectory=True,
+        )
+
+        expected_effective = torch.tensor([0.5, 0.375, 0.25, 0.125])
+        torch.testing.assert_close(scheduler.sigmas[:4], expected_effective)
+        self.assertEqual(output.effective_sigmas, (0.5, 0.375, 0.25, 0.125))
+        scale = math.exp(0.5)
+        expected_raw = [
+            1.0 / (1.0 + scale * (1.0 / value - 1.0))
+            for value in expected_effective.tolist()
+        ]
+        for observed, expected in zip(scheduler.requested_sigmas, expected_raw, strict=True):
+            self.assertAlmostEqual(observed, expected, places=7)
+        self.assertIsNotNone(output.trajectory)
+        torch.testing.assert_close(output.trajectory[0], source * 0.5 + noise * 0.5)
+
+    def test_dynamic_shift_does_not_change_legacy_raw_sigma_schedule(self):
+        source, noise, prompt, mask = make_inputs()
+        scheduler = ShiftedMockFlowScheduler()
+        output = DifferentiableDreamLiteMobileSampler(
+            unet=MockDreamLiteUNet(),
+            scheduler=scheduler,
+        )(
+            source_latents=source,
+            noise_latents=noise,
+            prompt_embeds=prompt,
+            prompt_attention_mask=mask,
+            edit_start_sigma=1.0,
+            return_trajectory=True,
+        )
+        self.assertEqual(scheduler.requested_sigmas, [1.0, 0.75, 0.5, 0.25])
+        self.assertEqual(output.effective_sigmas[0], 1.0)
+        self.assertIsNotNone(output.trajectory)
+        self.assertTrue(torch.equal(output.trajectory[0], noise))
+
+    def test_sigma_one_remains_exactly_the_legacy_pure_noise_path(self):
+        source, noise, prompt, mask = make_inputs()
+        default_sampler = self.make_sampler()
+        explicit_sampler = self.make_sampler()
+        explicit_sampler.unet.load_state_dict(default_sampler.unet.state_dict())
+        default = default_sampler(
+            source_latents=source,
+            noise_latents=noise,
+            prompt_embeds=prompt,
+            prompt_attention_mask=mask,
+            return_trajectory=True,
+        )
+        explicit = explicit_sampler(
+            source_latents=source,
+            noise_latents=noise,
+            prompt_embeds=prompt,
+            prompt_attention_mask=mask,
+            edit_start_sigma=1.0,
+            return_trajectory=True,
+        )
+        self.assertTrue(torch.equal(default.latents, explicit.latents))
+        self.assertTrue(torch.equal(default.trajectory[0], noise))
+        self.assertTrue(torch.equal(explicit.trajectory[0], noise))
+
+    def test_invalid_source_anchor_contract_fails_closed(self):
+        sampler = self.make_sampler()
+        source, noise, prompt, mask = make_inputs()
+        kwargs = {
+            "source_latents": source,
+            "noise_latents": noise,
+            "prompt_embeds": prompt,
+            "prompt_attention_mask": mask,
+        }
+        for value in (0.0, -0.1, 1.1, float("nan")):
+            with self.subTest(value=value), self.assertRaises(ValueError):
+                sampler(**kwargs, edit_start_sigma=value)
+        with self.assertRaises(TypeError):
+            sampler(**kwargs, edit_start_sigma=True)
+        with self.assertRaisesRegex(ValueError, "Explicit sigmas"):
+            sampler(**kwargs, edit_start_sigma=0.5, sigmas=[0.5, 0.375, 0.25, 0.125])
+
     def test_non_reentrant_checkpoint_preserves_gradients(self):
         sampler = self.make_sampler(checkpoint_unet=True)
         source, noise, prompt, mask = make_inputs()
@@ -256,6 +402,61 @@ class DifferentiableSamplerContractTest(unittest.TestCase):
                 self.assertEqual(unet.call_input_requires_grad, [False, False, False, False])
                 self.assertEqual(scheduler.step_grad_enabled, [True, True, True, True])
                 self.assertIsNone(source.grad)
+
+    def test_drtune_stateful_keeps_source_path_and_selected_parameter_only(self):
+        for selected_step in range(4):
+            with self.subTest(selected_step=selected_step):
+                source, noise, prompt, mask = make_inputs()
+                unet = StepwiseDreamLiteUNet()
+                scheduler = MockFlowScheduler()
+                sampler = DifferentiableDreamLiteMobileSampler(unet=unet, scheduler=scheduler)
+                output = sampler(
+                    source_latents=source,
+                    noise_latents=noise,
+                    prompt_embeds=prompt,
+                    prompt_attention_mask=mask,
+                    gradient_mode="drtune_stateful",
+                    selected_step_indices=(selected_step,),
+                )
+                output.latents.square().mean().backward()
+
+                self.assertIsNotNone(source.grad)
+                self.assertGreater(source.grad.norm().item(), 0.0)
+                nonzero = unet.gains.grad.ne(0).nonzero().flatten().tolist()
+                self.assertEqual(nonzero, [selected_step])
+                self.assertEqual(
+                    unet.call_input_requires_grad,
+                    [index == selected_step for index in range(4)],
+                )
+                self.assertEqual(scheduler.step_grad_enabled, [True, True, True, True])
+
+    def test_drtune_stateful_forward_is_bitwise_equal_to_full(self):
+        source, noise, prompt, mask = make_inputs()
+        reference_unet = StepwiseDreamLiteUNet()
+        reference = DifferentiableDreamLiteMobileSampler(
+            unet=reference_unet,
+            scheduler=MockFlowScheduler(),
+        )(
+            source_latents=source,
+            noise_latents=noise,
+            prompt_embeds=prompt,
+            prompt_attention_mask=mask,
+        ).latents
+        for selected in ((0,), (3,), (0, 2), (1, 3)):
+            unet = StepwiseDreamLiteUNet()
+            unet.load_state_dict(reference_unet.state_dict())
+            observed = DifferentiableDreamLiteMobileSampler(
+                unet=unet,
+                scheduler=MockFlowScheduler(),
+            )(
+                source_latents=source,
+                noise_latents=noise,
+                prompt_embeds=prompt,
+                prompt_attention_mask=mask,
+                gradient_mode="drtune_stateful",
+                selected_step_indices=selected,
+            ).latents
+            self.assertTrue(torch.equal(reference, observed))
 
     def test_drtune_selected_step_checkpoint_keeps_parameter_gradients(self):
         source, noise, prompt, mask = make_inputs()

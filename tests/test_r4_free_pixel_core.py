@@ -213,6 +213,27 @@ class R4FreePixelCoreTest(unittest.TestCase):
         updater(source, "event", "episode-seed", "turn-seed", presentation_index=1)
         self.assertFalse(torch.equal(pipeline.unet.target_inputs[4], expected_noise))
 
+    def test_r5_fixed_event_noise_ignores_presentation_index(self):
+        pipeline, updater = self.make_updater()
+        source = torch.zeros(1, 4, 2, 2)
+        updater(
+            source,
+            "event",
+            "episode-seed",
+            "turn-seed",
+            presentation_index=1,
+            noise_include_presentation_index=False,
+        )
+        updater(
+            source,
+            "event",
+            "episode-seed",
+            "turn-seed",
+            presentation_index=99,
+            noise_include_presentation_index=False,
+        )
+        self.assertTrue(torch.equal(pipeline.unet.target_inputs[0], pipeline.unet.target_inputs[4]))
+
     def test_presentation_index_and_persistent_state_fail_closed(self):
         _, updater = self.make_updater()
         source = torch.zeros(1, 4, 2, 2)

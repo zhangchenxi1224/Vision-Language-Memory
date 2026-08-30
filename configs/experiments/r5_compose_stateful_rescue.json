@@ -1,0 +1,170 @@
+{
+  "schema": "vision_memory.r5-compose-preregistration.v1",
+  "protocol": "R5-Compose",
+  "decision_date": "2026-08-29",
+  "status": "fixed_before_any_r5_optimizer_step",
+  "objective": "Determine whether state carrier and temporal credit assignment rescue compositional recurrent visual memory.",
+  "instance": {
+    "platform": "Inspire",
+    "name": "vlm-dreamlite-full-h200x2-20260720",
+    "accelerators": 2,
+    "accelerator": "NVIDIA H200 141GB"
+  },
+  "mechanism": {
+    "gradient_mode": "drtune_stateful",
+    "selected_unet_input_detached": false,
+    "nonselected_unet_parameter_gradients": false,
+    "scheduler_in_autograd": true,
+    "persistent_state_arms": [
+      "float_rgb",
+      "latent"
+    ],
+    "tbptt_horizon_arms": [
+      2,
+      4
+    ],
+    "noise_key": [
+      "global_seed",
+      "source_episode_id",
+      "source_turn_id"
+    ],
+    "presentation_index_in_noise": false,
+    "noop_policy": "hard_identity_same_tensor",
+    "state_target": null,
+    "teacher_image": null,
+    "canonical_canvas": null
+  },
+  "gradient_fidelity": {
+    "segments": 24,
+    "reference": "full_gradient",
+    "candidates": {
+      "K1": [
+        [0],
+        [1],
+        [2],
+        [3]
+      ],
+      "K2": [
+        [0, 2],
+        [1, 3]
+      ]
+    },
+    "selection": "highest_median_cosine_among_eligible_counts",
+    "minimum_positive_fraction": 0.75,
+    "preferred_median_cosine": 0.3,
+    "maximum_median_norm_ratio": 20.0,
+    "maximum_q95_norm_ratio": 50.0,
+    "fallback": {
+      "persistent_state": "latent",
+      "tbptt_horizon": 2,
+      "gradient_mode": "full",
+      "selected_step_count": 0
+    }
+  },
+  "curriculum": {
+    "families": {
+      "F1": "SET A -> QUERY A",
+      "F2": "SET A -> SET B -> QUERY A",
+      "F3": "SET A=a -> OVERWRITE A=b -> QUERY A",
+      "F4": "SET A=a -> CLEAR A -> QUERY A",
+      "F5": "SET A -> SET B -> OVERWRITE B -> QUERY A",
+      "F6": "SET A -> SET B -> OVERWRITE A -> QUERY B"
+    },
+    "steps_0_63": {
+      "F1": 0.5,
+      "F2": 0.5
+    },
+    "steps_64_255": {
+      "F1": 0.25,
+      "F2": 0.25,
+      "F3": 0.3,
+      "F4": 0.2
+    },
+    "steps_256_639_per_step": {
+      "F1": 2,
+      "F2": 2,
+      "F3": 2,
+      "F4": 1,
+      "F5_or_F6_alternating": 1
+    },
+    "gradient_accumulation": 8,
+    "total_optimizer_steps": 640,
+    "total_micro_segments": 5120
+  },
+  "optimization": {
+    "optimizer": "AdamW",
+    "lora_rank": 4,
+    "weight_decay": 0.0001,
+    "gradient_clip": 10.0,
+    "learning_rate": {
+      "steps_0_15": "linear_1e-5_to_3e-5",
+      "steps_16_639": "cosine_3e-5_to_1e-5"
+    },
+    "ema_decay": 0.995,
+    "primary_endpoint": "ema_step640",
+    "secondary_endpoint": "raw_step640",
+    "checkpoint_every": 64,
+    "best_dev_selection": false
+  },
+  "pilots": {
+    "optimizer_steps": 128,
+    "seed": 0,
+    "arms": [
+      "float_rgb_h2",
+      "latent_h2",
+      "float_rgb_h4",
+      "latent_h4"
+    ],
+    "technical_gates": {
+      "no_nan_or_inf": true,
+      "state_gradient_nonzero_fraction": 0.95,
+      "hard_noop_exact_identity": true
+    },
+    "mechanism_gate": "endpoint_delayed_ce_below_m0_and_below_reset",
+    "ranking": [
+      "lowest_delayed_dev_ce",
+      "lowest_formal_dev_ce",
+      "highest_gap4_margin",
+      "shortest_wall_clock"
+    ]
+  },
+  "main": {
+    "seeds": [
+      0,
+      1
+    ],
+    "optimizer_steps": 640,
+    "health_eval_every": 64,
+    "health_eval_use": "resource_protection_only",
+    "resource_stop": "two_consecutive_health_ce_values_over_130_percent_of_m0"
+  },
+  "evaluation": {
+    "formal_select": 32,
+    "formal_final": 128,
+    "mechanism_select": 32,
+    "mechanism_final": 128,
+    "choice_views": "reverse_cyclic4",
+    "controls": [
+      "normal",
+      "reset",
+      "cross_episode_swap",
+      "temporal_swap",
+      "updater_disabled"
+    ],
+    "bootstrap_iterations": 10000,
+    "bootstrap_unit": "episode_or_composed_segment"
+  },
+  "excluded_changes": [
+    "larger_lora_rank",
+    "reader_adapter",
+    "teacher_image",
+    "canonical_target",
+    "feature_target",
+    "PCGrad",
+    "multi_reader",
+    "black_box_api",
+    "large_lr_sweep",
+    "1024_step_training",
+    "full_test_ood"
+  ]
+}

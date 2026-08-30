@@ -1,0 +1,110 @@
+{
+  "schema": "vision_memory.r8-common-descent-preregistration.v1",
+  "protocol": "R8-CommonDescent-Bottleneck",
+  "research_target": "A recurrent picture state that carries event history through the frozen VLM image interface.",
+  "diagnostic_question": "After source anchoring and equal-unit aggregation both fail, does forcing the pre-AdamW aggregate to be a common first-order descent direction for all eight current micro-segments restore hard8 learnability?",
+  "parent_evidence": {
+    "r7_training_commit": "c720f6b28e3ce6ef4e8f838a576d3b042d35cd58",
+    "r7_archive_sha256": "12f1296b613958287d8d6e231e5dc26e40a6201da5cf6c50ce76588290aa4990",
+    "r7_raw_summary_sha256": "1c78f9e4d10c6d2e0ffee5b9764120306f13687f13aa1bffecf2779c66e14096",
+    "r7_balanced_summary_sha256": "e80c2f88dfe127693f4328294d92877480ce6abc14d6515809df420b98220185",
+    "r7_selected_segments_sha256": "eeade3e006791aeea87aa12cf897956d34b4e2c3769c162db494e42fb7828ea6",
+    "r7_decision": "reject_unit_balance_as_sufficient_test_conflict_projection",
+    "raw_hard8_delta_ce": -0.08054004609584808,
+    "balanced_hard8_delta_ce": -0.07744300365447998,
+    "raw_accuracy_delta": 0.0,
+    "balanced_accuracy_delta": 0.0,
+    "raw_clip_rate": 0.0625,
+    "balanced_clip_rate": 0.3203125,
+    "balanced_minimum_raw_applied_cosine": -0.5080744624137878,
+    "observed_negative_pairwise_gradient_fraction": 0.42857142857142855
+  },
+  "single_changed_variable": {
+    "name": "micro_segment_gradient_aggregation",
+    "raw-mean-control": "g_raw=(1/8)*sum_i(g_i)",
+    "common-descent-projected-norm-matched": "d=argmin_v 0.5*||v-g_raw||^2 subject to dot(g_i,v)>=0 for i=1..8; g_applied=d*||g_raw||/||d||",
+    "common_execution": "Both arms compute all eight per-segment gradients independently in the same deterministic order.",
+    "solver": "Normalize each constraint by ||g_i||, enumerate all 2^8 active sets in ascending bitmask order, solve each KKT system in float64 on CPU, choose minimum projection distance and smallest-mask tie break.",
+    "magnitude_control": "The projected direction is positively rescaled to the raw-mean L2 norm before the unchanged global clip=10 operation.",
+    "scope_caveat": "The common-descent inequality is exact in pre-AdamW gradient geometry; Adam moments, diagonal preconditioning, weight decay, and finite step size can change the realized parameter-update geometry.",
+    "fail_closed": [
+      "every micro-gradient is finite and nonzero",
+      "the raw and projected aggregates are finite and nonzero",
+      "a numerically feasible active set exists",
+      "the projection does not collapse to zero",
+      "every projected micro cosine is at least -1e-5",
+      "relative norm-match error is at most 1e-5",
+      "at least one raw step violates a micro constraint and at least one projected step changes direction",
+      "exactly 128 optimizer-step receipts are present"
+    ]
+  },
+  "fixed_contract": {
+    "dataset": "formal-v1 fixed train/dev files and R5 deterministic split",
+    "train_sha256": "24327edc39e0d133df5150dc1aab4f55c6cf5b05ccfca9025ad90c5accc6d184",
+    "dev_sha256": "8b167df38022a631d4e631d3c0d66e9fca74171f4224fec436030d6650047303",
+    "train_subset": "the exact R6/R7 hard8: two deterministic segments from each of F2/F3/F5/F6",
+    "selected_segments_sha256": "eeade3e006791aeea87aa12cf897956d34b4e2c3769c162db494e42fb7828ea6",
+    "optimizer_steps": 128,
+    "micro_segments_per_step": 8,
+    "persistent_state": "latent",
+    "source_anchor_effective_start_sigma": 0.5,
+    "source_anchor_effective_schedule": [0.5, 0.375, 0.25, 0.125],
+    "tbptt_horizon": 4,
+    "gradient_mode": "full",
+    "diffusion_steps": 4,
+    "noise_key": ["global_seed", "source_episode_id", "source_turn_id"],
+    "noop": "hard graph-preserving identity",
+    "updater": "DreamLite-mobile U-Net LoRA rank 4; base frozen",
+    "reader": "Qwen3-VL-4B-Instruct frozen",
+    "loss": "four-choice listwise CE",
+    "optimizer": "AdamW",
+    "weight_decay": 0.0001,
+    "gradient_clip": 10.0,
+    "learning_rate_schedule": "R5 640-step schedule prefix: 16-step 1e-5 to 3e-5 warmup then cosine toward 1e-5",
+    "ema_decay": 0.995,
+    "primary_endpoint": "EMA step128",
+    "checkpoint_every": 32,
+    "choice_views": "reverse-cyclic4",
+    "seed": 0
+  },
+  "paired_diagnostics": [
+    "per-step raw versus applied gradient cosine and norm-match error",
+    "per-step raw and projected minimum micro cosine, violating-micro count, active set, and projection distance",
+    "per-step micro-gradient norm ratio and negative pairwise cosine fraction",
+    "hard8 train endpoint versus arm-specific M0",
+    "fixed formal-select-32 and mechanism-select-32 endpoint versus arm-specific M0",
+    "normal/reset difference-in-differences from M0 to endpoint",
+    "cross-episode and temporal state swaps on hard8"
+  ],
+  "hard8_learnability_gate": {
+    "technical_gate": true,
+    "relative_ce_change_at_most": -0.2,
+    "improved_pair_units_at_least": "7/8",
+    "paired_bootstrap_ce_ci95_upper_below_zero": true,
+    "accuracy_delta_at_least": 0.2,
+    "state_dependence_difference_in_differences_estimate_below_zero": true
+  },
+  "fixed_dev_generalization_gate": {
+    "formal_select_32_endpoint_vs_m0_ci95_upper_below_zero": true,
+    "mechanism_select_32_endpoint_vs_m0_ci95_upper_below_zero": true,
+    "mechanism_state_dependence_difference_in_differences_ci95_upper_below_zero": true
+  },
+  "interpretation_rules": {
+    "projected_pass_raw_fail": "Support destructive batch directions as a primary local bottleneck; advance source anchoring plus common-descent projection to the unchanged fixed full-data pilot.",
+    "both_fail": "Reject batch conflict as a sufficient explanation; run an eight-segment individual-learnability decomposition on the identical transitions before changing rank, data volume, Reader, or loss.",
+    "both_pass": "Conflict projection is not necessary for local learnability; fixed-dev evidence and simplicity select the advancing law.",
+    "raw_pass_projected_fail": "Reject common-descent projection and retain raw aggregation.",
+    "projected_technical_fail": "Make no scientific decision; repair projection feasibility or implementation and rerun in a fresh root."
+  },
+  "false_positive_guard": {
+    "diagnostic_can_claim_formal_success": false,
+    "formal_success_still_requires": [
+      "fixed full training schedule",
+      "predeclared endpoint",
+      "at least two consistent seeds",
+      "ID and OOD evaluation",
+      "normal better than reset and state swaps",
+      "endpoint improvement over its own M0 with paired uncertainty"
+    ]
+  }
+}

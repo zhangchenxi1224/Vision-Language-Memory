@@ -1,0 +1,89 @@
+{
+  "role": "post-hoc uncertainty audit only; not used for arm selection or checkpoint selection",
+  "runs": {
+    "pilot-latent-h2-full": {
+      "formal_select_32|ema_vs_m0": {
+        "ci95": [
+          -0.24390794322825937,
+          0.644066629481192
+        ],
+        "definition": "mean_ce(ema_step128,normal)-mean_ce(m0,normal)",
+        "estimate": 0.1664865290125213,
+        "fraction_below_zero": 0.2343,
+        "iterations": 10000,
+        "negative_is_better_for_first_term": true,
+        "pair_units": 32,
+        "seed": 2818019571
+      },
+      "mechanism_select_32|ema_vs_m0": {
+        "ci95": [
+          -0.9535718848928809,
+          1.865552170481532
+        ],
+        "definition": "mean_ce(ema_step128,normal)-mean_ce(m0,normal)",
+        "estimate": 0.5523511543869972,
+        "fraction_below_zero": 0.2089,
+        "iterations": 10000,
+        "negative_is_better_for_first_term": true,
+        "pair_units": 32,
+        "seed": 2921263752
+      },
+      "mechanism_select_32|normal_vs_reset": {
+        "ci95": [
+          -13.09490684485063,
+          -5.836635676631705
+        ],
+        "definition": "mean_ce(ema_step128,normal)-mean_ce(ema_step128,reset)",
+        "estimate": -9.388432206586003,
+        "fraction_below_zero": 1.0,
+        "iterations": 10000,
+        "negative_is_better_for_first_term": true,
+        "pair_units": 32,
+        "seed": 1834455574
+      }
+    },
+    "rescue-latent-h4-k0-tau05": {
+      "formal_select_32|ema_vs_m0": {
+        "ci95": [
+          -0.3283780221672108,
+          0.46788884070701864
+        ],
+        "definition": "mean_ce(ema_step128,normal)-mean_ce(m0,normal)",
+        "estimate": 0.06204732134938232,
+        "fraction_below_zero": 0.3813,
+        "iterations": 10000,
+        "negative_is_better_for_first_term": true,
+        "pair_units": 32,
+        "seed": 2923997853
+      },
+      "mechanism_select_32|ema_vs_m0": {
+        "ci95": [
+          -1.1119888911023736,
+          0.4414868479594585
+        ],
+        "definition": "mean_ce(ema_step128,normal)-mean_ce(m0,normal)",
+        "estimate": -0.2732463926076889,
+        "fraction_below_zero": 0.7536,
+        "iterations": 10000,
+        "negative_is_better_for_first_term": true,
+        "pair_units": 32,
+        "seed": 535724248
+      },
+      "mechanism_select_32|normal_vs_reset": {
+        "ci95": [
+          -10.659553055418655,
+          -4.208079492114486
+        ],
+        "definition": "mean_ce(ema_step128,normal)-mean_ce(ema_step128,reset)",
+        "estimate": -7.228770395740867,
+        "fraction_below_zero": 1.0,
+        "iterations": 10000,
+        "negative_is_better_for_first_term": true,
+        "pair_units": 32,
+        "seed": 1617018196
+      }
+    }
+  },
+  "schema": "vision_memory.r5-compose-posthoc-paired-endpoint-audit.v1",
+  "status": "completed"
+}

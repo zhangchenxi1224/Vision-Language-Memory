@@ -1,0 +1,104 @@
+{
+  "schema": "vision_memory.r7-gradient-balance-preregistration.v1",
+  "protocol": "R7-GradientBalance-Bottleneck",
+  "research_target": "A recurrent picture state that carries event history through the frozen VLM image interface.",
+  "diagnostic_question": "After source anchoring repairs gradient scale, does raw micro-segment aggregation still prevent hard8 learning through norm dominance and cancellation?",
+  "parent_evidence": {
+    "r6_commit": "e1ab129ae86a39814a9ce0ce17ac06965f2e835c",
+    "r6_selected_segments_sha256": "eeade3e006791aeea87aa12cf897956d34b4e2c3769c162db494e42fb7828ea6",
+    "r6_decision": "reject_sigma_as_sufficient_test_gradient_balancing",
+    "source_anchor_clip_rate": 0.0625,
+    "source_anchor_negative_pairwise_gradient_cosine_fraction": 0.42857142857142855,
+    "source_anchor_raw_vs_unit_balanced_cosine": 0.920172891982485
+  },
+  "single_changed_variable": {
+    "name": "micro_segment_gradient_aggregation",
+    "raw-mean-control": "g_raw=(1/8)*sum_i(g_i)",
+    "unit-balanced-norm-matched": "u=(1/8)*sum_i(g_i/||g_i||); g_applied=u*||g_raw||/||u||",
+    "common_execution": "Both arms compute the eight per-segment gradients independently in the same deterministic order.",
+    "magnitude_control": "The applied unit-balanced gradient must match the raw-mean global L2 norm before the unchanged clip=10 operation.",
+    "fail_closed": [
+      "every micro-gradient is finite and nonzero",
+      "the aggregate is finite and nonzero",
+      "relative norm-match error is at most 1e-5",
+      "the unit-balanced intervention changes direction on at least one optimizer step"
+    ]
+  },
+  "fixed_contract": {
+    "dataset": "formal-v1 fixed train/dev files and R5 deterministic split",
+    "train_sha256": "24327edc39e0d133df5150dc1aab4f55c6cf5b05ccfca9025ad90c5accc6d184",
+    "dev_sha256": "8b167df38022a631d4e631d3c0d66e9fca74171f4224fec436030d6650047303",
+    "train_subset": "the exact R6 hard8: two deterministic segments from each of F2/F3/F5/F6",
+    "selected_segments_sha256": "eeade3e006791aeea87aa12cf897956d34b4e2c3769c162db494e42fb7828ea6",
+    "optimizer_steps": 128,
+    "micro_segments_per_step": 8,
+    "persistent_state": "latent",
+    "source_anchor_effective_start_sigma": 0.5,
+    "source_anchor_effective_schedule": [
+      0.5,
+      0.375,
+      0.25,
+      0.125
+    ],
+    "tbptt_horizon": 4,
+    "gradient_mode": "full",
+    "diffusion_steps": 4,
+    "noise_key": [
+      "global_seed",
+      "source_episode_id",
+      "source_turn_id"
+    ],
+    "noop": "hard graph-preserving identity",
+    "updater": "DreamLite-mobile U-Net LoRA rank 4; base frozen",
+    "reader": "Qwen3-VL-4B-Instruct frozen",
+    "loss": "four-choice listwise CE",
+    "optimizer": "AdamW",
+    "weight_decay": 0.0001,
+    "gradient_clip": 10.0,
+    "learning_rate_schedule": "R5 640-step schedule prefix: 16-step 1e-5 to 3e-5 warmup then cosine toward 1e-5",
+    "ema_decay": 0.995,
+    "primary_endpoint": "EMA step128",
+    "checkpoint_every": 32,
+    "choice_views": "reverse-cyclic4",
+    "seed": 0
+  },
+  "paired_diagnostics": [
+    "per-step raw versus applied gradient cosine and norm-match error",
+    "per-step micro-gradient norm ratio and negative pairwise cosine fraction",
+    "hard8 train endpoint versus arm-specific M0",
+    "fixed formal-select-32 endpoint versus arm-specific M0",
+    "fixed mechanism-select-32 endpoint versus arm-specific M0",
+    "normal/reset difference-in-differences from M0 to endpoint",
+    "cross-episode and temporal state swaps on hard8"
+  ],
+  "hard8_learnability_gate": {
+    "technical_gate": true,
+    "relative_ce_change_at_most": -0.2,
+    "improved_pair_units_at_least": "7/8",
+    "paired_bootstrap_ce_ci95_upper_below_zero": true,
+    "accuracy_delta_at_least": 0.2,
+    "state_dependence_difference_in_differences_estimate_below_zero": true
+  },
+  "fixed_dev_generalization_gate": {
+    "formal_select_32_endpoint_vs_m0_ci95_upper_below_zero": true,
+    "mechanism_select_32_endpoint_vs_m0_ci95_upper_below_zero": true,
+    "mechanism_state_dependence_difference_in_differences_ci95_upper_below_zero": true
+  },
+  "interpretation_rules": {
+    "unit_pass_raw_fail": "Support norm-dominance as a primary local failure cause; advance source-anchor plus unit balancing to the unchanged fixed full-data pilot.",
+    "both_fail": "Reject unit balancing as sufficient; next test deterministic conflict projection on the identical hard8 before changing rank, data volume, Reader, or loss.",
+    "both_pass": "Aggregation is not necessary for local learnability; fixed-dev evidence and simplicity select the advancing law.",
+    "raw_pass_unit_fail": "Reject unit balancing and retain raw aggregation."
+  },
+  "false_positive_guard": {
+    "diagnostic_can_claim_formal_success": false,
+    "formal_success_still_requires": [
+      "fixed full training schedule",
+      "predeclared endpoint",
+      "at least two consistent seeds",
+      "ID and OOD evaluation",
+      "normal better than reset and state swaps",
+      "endpoint improvement over its own M0 with paired uncertainty"
+    ]
+  }
+}
