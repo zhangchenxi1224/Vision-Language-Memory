@@ -16,6 +16,13 @@ raw = importlib.util.module_from_spec(SPEC)
 sys.modules[SPEC.name] = raw
 SPEC.loader.exec_module(raw)
 
+RENDER_SCRIPT = ROOT / "scripts" / "reporting" / "render_r10_raw_endpoint_attribution.py"
+RENDER_SPEC = importlib.util.spec_from_file_location("r10_raw_renderer_under_test", RENDER_SCRIPT)
+assert RENDER_SPEC is not None and RENDER_SPEC.loader is not None
+renderer = importlib.util.module_from_spec(RENDER_SPEC)
+sys.modules[RENDER_SPEC.name] = renderer
+RENDER_SPEC.loader.exec_module(renderer)
+
 
 class R10RawEndpointAttributionTest(unittest.TestCase):
     def _args(self, directory: str):
@@ -69,6 +76,17 @@ class R10RawEndpointAttributionTest(unittest.TestCase):
         self.assertIn("not allowed to replace that endpoint", plan)
         self.assertIn("all eight immutable R10 F1 targets", plan)
         self.assertIn("before any raw endpoint was evaluated", plan)
+
+    def test_locked_attribution_decisions(self):
+        self.assertEqual(renderer._decision(8)[0], "ema_lag_is_sufficient_endpoint_bottleneck")
+        self.assertEqual(
+            renderer._decision(3)[0],
+            "ema_contributes_but_updater_remains_insufficient_run_vae_latent_oracle",
+        )
+        self.assertEqual(
+            renderer._decision(0)[0],
+            "ema_is_not_sufficient_explanation_run_vae_latent_oracle",
+        )
 
 
 if __name__ == "__main__":
