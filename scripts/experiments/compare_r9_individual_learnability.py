@@ -194,7 +194,7 @@ def _decision(pass_count: int) -> tuple[str, str]:
         )
     return (
         "reject_batch_aggregation_reopen_recurrent_alignment_and_temporal_credit",
-        "No transition is learnable alone at its original coefficient; simultaneous aggregation is not the sufficient bottleneck, so the recurrent visual alignment/update law and temporal credit path must be reopened against the single-step SET positive control.",
+        "No transition is learnable alone at its original coefficient; simultaneous aggregation is not the sufficient bottleneck. The archived single-step SET endpoint is not a valid positive control, so direct-pixel and one-step DreamLite visual-alignment lower bounds must be established before recurrence is changed again.",
     )
 
 
