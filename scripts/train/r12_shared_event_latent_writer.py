@@ -1047,7 +1047,14 @@ def _run(args: argparse.Namespace) -> dict[str, Any]:
             delta_rms - R12_LATENT_RMS_SOFT_LIMIT
         ).square()
         coefficient_penalty = R12_COEFFICIENT_L2_PENALTY * coefficients.square().mean()
-        objective = ce + latent_penalty + coefficient_penalty
+        # Reader CE lives on the Reader GPU while writer regularizers live on
+        # the writer GPU. Cross-device ``to`` remains differentiable and keeps
+        # the preregistered scalar objective unchanged.
+        objective = (
+            ce
+            + latent_penalty.to(device=ce.device)
+            + coefficient_penalty.to(device=ce.device)
+        )
         if not torch.isfinite(objective):
             raise RuntimeError("R12 objective became non-finite.")
         (objective / R12_GRADIENT_ACCUMULATION).backward()
