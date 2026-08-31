@@ -193,36 +193,68 @@ def select_entity_disjoint_dev_f1(
             f"R12 dev pool requires {expected_value_count} target values, got {len(target_values)}."
         )
 
-    used_entities: set[str] = set()
+    cells = [
+        (split, value, (rank + offset) % 4)
+        for split, offset in (("select", 0), ("final", 1))
+        for rank, value in enumerate(target_values)
+    ]
+    candidate_segments: dict[tuple[str, str, int], list[R5Segment]] = {}
+    for split, value, position in cells:
+        candidate_segments[(split, value, position)] = sorted(
+            (
+                segment
+                for segment in values
+                if target_value(segment) == value and segment.query.target_index == position
+            ),
+            key=lambda segment: (
+                _digest(seed, f"dev-{split}", value, position, segment.segment_id),
+                segment.segment_id,
+            ),
+        )
+
+    # A deterministic augmenting-path matching avoids the order-dependent
+    # failures of a greedy picker when one dev entity supplies several values.
+    entity_to_cell: dict[str, tuple[str, str, int]] = {}
+
+    def assign(cell: tuple[str, str, int], seen: set[str]) -> bool:
+        for segment in candidate_segments[cell]:
+            entity = segment.query_entity_id
+            if entity in seen:
+                continue
+            seen.add(entity)
+            incumbent = entity_to_cell.get(entity)
+            if incumbent is None or assign(incumbent, seen):
+                entity_to_cell[entity] = cell
+                return True
+        return False
+
+    matching_order = sorted(
+        cells,
+        key=lambda cell: (
+            len({segment.query_entity_id for segment in candidate_segments[cell]}),
+            _digest(seed, "dev-matching-order", *cell),
+            cell,
+        ),
+    )
+    for cell in matching_order:
+        if not candidate_segments[cell] or not assign(cell, set()):
+            raise ValueError(f"R12 cannot satisfy entity-disjoint dev cell {cell}.")
+
+    cell_to_entity = {cell: entity for entity, cell in entity_to_cell.items()}
+    if len(cell_to_entity) != len(cells):
+        raise RuntimeError("R12 dev entity matching is incomplete.")
     outputs: dict[str, list[R5Segment]] = {"select": [], "final": []}
     for split, offset in (("select", 0), ("final", 1)):
         for rank, value in enumerate(target_values):
-            position = (rank + offset) % 4
-            candidates = sorted(
-                (
+            cell = (split, value, (rank + offset) % 4)
+            entity = cell_to_entity[cell]
+            outputs[split].append(
+                next(
                     segment
-                    for segment in values
-                    if target_value(segment) == value and segment.query.target_index == position
-                ),
-                key=lambda segment: (
-                    _digest(seed, f"dev-{split}", value, position, segment.segment_id),
-                    segment.segment_id,
-                ),
-            )
-            candidate = next(
-                (
-                    segment
-                    for segment in candidates
-                    if segment.query_entity_id not in used_entities
-                ),
-                None,
-            )
-            if candidate is None:
-                raise ValueError(
-                    f"R12 cannot satisfy entity-disjoint dev {split} cell {(value, position)}."
+                    for segment in candidate_segments[cell]
+                    if segment.query_entity_id == entity
                 )
-            used_entities.add(candidate.query_entity_id)
-            outputs[split].append(candidate)
+            )
 
     select = tuple(outputs["select"])
     final = tuple(outputs["final"])
