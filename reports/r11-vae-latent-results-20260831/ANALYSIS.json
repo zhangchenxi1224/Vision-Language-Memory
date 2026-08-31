@@ -1,0 +1,494 @@
+{
+  "aggregation_git_commit": "ef29c7704f76a5a419ac95b68d9329f37deb9512",
+  "decision": "replace_semantic_editor_with_shared_event_to_latent_writer",
+  "formal_success_claim": false,
+  "formal_success_reason": "R11 independently optimizes one answer-supervised latent per fixed target. It does not train or evaluate a shared event-to-memory writer on held-out ID/OOD data.",
+  "reason": "All eight independently optimized VAE latents pass the fixed causal Reader gate. The frozen VAE representation can carry the code; the next bottleneck test is a shared event-to-latent writer with held-out F1 targets, not further semantic-prompt or EMA tuning.",
+  "schema": "vision_memory.r11-vae-latent-rendered-analysis.v1",
+  "selected_segments_sha256": "6198beb3a3758fd7df912c6956bc05eac0ace8603708f37147826c65a4d61845",
+  "source_training_git_commit": "f4a018f3c4eef453fff3367b049ea732332e8c37",
+  "status": "completed",
+  "target_pass_count": 8,
+  "targets": [
+    {
+      "git_commit": "f4a018f3c4eef453fff3367b049ea732332e8c37",
+      "implementation_revision": "direct-vae-latent-fp32-v1",
+      "inventory_sha256": "4baf3ed5fd6406ba35f5055700e760b7015625bb2df449b5d8d1365236f6d631",
+      "launch_sha256": "447bed3b97d608afd4cb2af012a23e9b0ef2dd0a96a833e6e20d92f5343a1438",
+      "passed": true,
+      "source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11/r11-vae-latent-f4a018f-20260831/target-00",
+      "summary_sha256": "e9ba26c72a9aee4c14ec168e214c38bb4c152eabb516fad7c0a30fe0bd87f832",
+      "target_family": "F1",
+      "target_index": 0,
+      "target_segment_id": "r5-f1-8015bf53a4067aaa7e882288",
+      "target_statistics": {
+        "accuracy_delta": 1.0,
+        "bootstrap_ci_reason": "one independent target; choice views are deterministic, not independent units",
+        "bootstrap_ci_used": false,
+        "condition_mean_ce": {
+          "m0": {
+            "normal": 15.098970413208008,
+            "reset": 15.098970413208008
+          },
+          "raw_latent_step256": {
+            "normal": 0.00027180618053535,
+            "reset": 15.098970413208008
+          }
+        },
+        "delta_ce": -15.098698607027472,
+        "endpoint": "raw_latent_step256",
+        "endpoint_normal_accuracy": 1.0,
+        "endpoint_normal_mean_ce": 0.00027180618053535,
+        "improved_choice_views": 4,
+        "m0_normal_accuracy": 0.0,
+        "m0_normal_mean_ce": 15.098970413208008,
+        "normal_reset_difference_in_differences": -15.098698607027472,
+        "per_view_delta_ce": {
+          "0": -14.624818103504367,
+          "1": -15.020677102002082,
+          "2": -14.749848742038012,
+          "3": -15.999450480565429
+        },
+        "relative_change": -0.9999819983632594,
+        "suite": "r11_f1_vae_latent",
+        "target_segment_id": "r5-f1-8015bf53a4067aaa7e882288"
+      },
+      "terminal_sha256": "92af25f1e7cf8ca58a073f11a9b6d81e52cc72e06507646053257f9ce3db8a92",
+      "training_diagnostics": {
+        "final_image_saturation_fraction": 0.0,
+        "final_latent_delta_norm": 75.97787233065513,
+        "final_loss": 0.0003014206886291504,
+        "first_loss": 13.770842552185059,
+        "minimum_gradient_norm": 0.00041879165987787105,
+        "minimum_loss": 0.00012575788423419,
+        "training_view_counts": {
+          "0": 64,
+          "1": 64,
+          "2": 64,
+          "3": 64
+        }
+      },
+      "wall_clock_seconds": 192.98977203201503
+    },
+    {
+      "git_commit": "f4a018f3c4eef453fff3367b049ea732332e8c37",
+      "implementation_revision": "direct-vae-latent-fp32-v1",
+      "inventory_sha256": "be5239110d0b8bca765b8bcf902cb7a4c83f4564c29c292c2d63ff7d60ace4ce",
+      "launch_sha256": "1b3d73757b0a13aa51637fc3bc89a23925c4a2b18f45d61342987ab689dd8fae",
+      "passed": true,
+      "source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11/r11-vae-latent-f4a018f-20260831/target-01",
+      "summary_sha256": "013ce5c5fcdff04e6dcbbe888f423632dca9f05fd50d3009572b5ab786e7d4bb",
+      "target_family": "F1",
+      "target_index": 1,
+      "target_segment_id": "r5-f1-392d41fd097d069c42218e0a",
+      "target_statistics": {
+        "accuracy_delta": 1.0,
+        "bootstrap_ci_reason": "one independent target; choice views are deterministic, not independent units",
+        "bootstrap_ci_used": false,
+        "condition_mean_ce": {
+          "m0": {
+            "normal": 27.697927474975586,
+            "reset": 27.697927474975586
+          },
+          "raw_latent_step256": {
+            "normal": 0.0001769560039974749,
+            "reset": 27.697927474975586
+          }
+        },
+        "delta_ce": -27.69775051897159,
+        "endpoint": "raw_latent_step256",
+        "endpoint_normal_accuracy": 1.0,
+        "endpoint_normal_mean_ce": 0.0001769560039974749,
+        "improved_choice_views": 4,
+        "m0_normal_accuracy": 0.0,
+        "m0_normal_mean_ce": 27.697927474975586,
+        "normal_reset_difference_in_differences": -27.69775051897159,
+        "per_view_delta_ce": {
+          "0": -24.374903564923443,
+          "1": -29.208213337522466,
+          "2": -25.54144525527954,
+          "3": -31.666439918160904
+        },
+        "relative_change": -0.9999936112185954,
+        "suite": "r11_f1_vae_latent",
+        "target_segment_id": "r5-f1-392d41fd097d069c42218e0a"
+      },
+      "terminal_sha256": "4708e3d6cf0956e461d746b3651e01ef0eddc49674423ff44922a7846f6e7d95",
+      "training_diagnostics": {
+        "final_image_saturation_fraction": 5.404154459635416e-06,
+        "final_latent_delta_norm": 87.38857806542164,
+        "final_loss": 0.00019381940364837646,
+        "first_loss": 26.708362579345703,
+        "minimum_gradient_norm": 0.00032668692990823193,
+        "minimum_loss": 7.045082747936249e-05,
+        "training_view_counts": {
+          "0": 64,
+          "1": 64,
+          "2": 64,
+          "3": 64
+        }
+      },
+      "wall_clock_seconds": 203.59826140850782
+    },
+    {
+      "git_commit": "f4a018f3c4eef453fff3367b049ea732332e8c37",
+      "implementation_revision": "direct-vae-latent-fp32-v1",
+      "inventory_sha256": "b07af030f305c83046a8966c198a10f24fc1db4e14226f0cac3311f31635b1a4",
+      "launch_sha256": "a9e30e349b38fff0c00c3bf449de137374f269ecdd3a8d34a841b07be1cab7fd",
+      "passed": true,
+      "source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11/r11-vae-latent-f4a018f-20260831/target-02",
+      "summary_sha256": "4744128775a9ab70ca7274bf1b12dc0c783fe6e1fd2f8d7761bdc5211c4849e8",
+      "target_family": "F1",
+      "target_index": 2,
+      "target_segment_id": "r5-f1-1aee01c0f3e7684c05c9122c",
+      "target_statistics": {
+        "accuracy_delta": 1.0,
+        "bootstrap_ci_reason": "one independent target; choice views are deterministic, not independent units",
+        "bootstrap_ci_used": false,
+        "condition_mean_ce": {
+          "m0": {
+            "normal": 31.182291507720947,
+            "reset": 31.182291507720947
+          },
+          "raw_latent_step256": {
+            "normal": 0.0002388647844782099,
+            "reset": 31.182291507720947
+          }
+        },
+        "delta_ce": -31.18205264293647,
+        "endpoint": "raw_latent_step256",
+        "endpoint_normal_accuracy": 1.0,
+        "endpoint_normal_mean_ce": 0.0002388647844782099,
+        "improved_choice_views": 4,
+        "m0_normal_accuracy": 0.0,
+        "m0_normal_mean_ce": 31.182291507720947,
+        "normal_reset_difference_in_differences": -31.18205264293647,
+        "per_view_delta_ce": {
+          "0": -31.791249215602875,
+          "1": -31.687365651130676,
+          "2": -29.624918583373073,
+          "3": -31.62467712163925
+        },
+        "relative_change": -0.9999923397296052,
+        "suite": "r11_f1_vae_latent",
+        "target_segment_id": "r5-f1-1aee01c0f3e7684c05c9122c"
+      },
+      "terminal_sha256": "10a3e87a0f02e0fcc5f3667aa7f246d4d2f164ddb55cdbb8fba4551f94537263",
+      "training_diagnostics": {
+        "final_image_saturation_fraction": 0.0,
+        "final_latent_delta_norm": 78.5160733917643,
+        "final_loss": 6.21061772108078e-05,
+        "first_loss": 31.0,
+        "minimum_gradient_norm": 0.00023949942269695297,
+        "minimum_loss": 5.841080565005541e-05,
+        "training_view_counts": {
+          "0": 64,
+          "1": 64,
+          "2": 64,
+          "3": 64
+        }
+      },
+      "wall_clock_seconds": 197.33227687049657
+    },
+    {
+      "git_commit": "f4a018f3c4eef453fff3367b049ea732332e8c37",
+      "implementation_revision": "direct-vae-latent-fp32-v1",
+      "inventory_sha256": "f3ff97570644895c44fb8099b725f75682b14832f2d634af744dc5ab094b50cd",
+      "launch_sha256": "7259f4a4e7f87f9e2c6b568e0dc957df546e5e6a9cbc125bf328752cee49c69c",
+      "passed": true,
+      "source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11/r11-vae-latent-f4a018f-20260831/target-03",
+      "summary_sha256": "58250ca07cefceed158436b1631952e40b4cfcea2f56bcdaf9b209c662014e40",
+      "target_family": "F1",
+      "target_index": 3,
+      "target_segment_id": "r5-f1-807090710dd4c077a97348ba",
+      "target_statistics": {
+        "accuracy_delta": 1.0,
+        "bootstrap_ci_reason": "one independent target; choice views are deterministic, not independent units",
+        "bootstrap_ci_used": false,
+        "condition_mean_ce": {
+          "m0": {
+            "normal": 34.895833015441895,
+            "reset": 34.895833015441895
+          },
+          "raw_latent_step256": {
+            "normal": 0.00021269560420478228,
+            "reset": 34.895833015441895
+          }
+        },
+        "delta_ce": -34.89562031983769,
+        "endpoint": "raw_latent_step256",
+        "endpoint_normal_accuracy": 1.0,
+        "endpoint_normal_mean_ce": 0.00021269560420478228,
+        "improved_choice_views": 4,
+        "m0_normal_accuracy": 0.0,
+        "m0_normal_mean_ce": 34.895833015441895,
+        "normal_reset_difference_in_differences": -34.89562031983769,
+        "per_view_delta_ce": {
+          "0": -36.72871695179492,
+          "1": -32.624931099417154,
+          "2": -36.89561953418888,
+          "3": -33.3332136939498
+        },
+        "relative_change": -0.9999939048423314,
+        "suite": "r11_f1_vae_latent",
+        "target_segment_id": "r5-f1-807090710dd4c077a97348ba"
+      },
+      "terminal_sha256": "65f46d7e6b8bb40a1f06eec93e06cb8fe6213d2fd8d01ae55fb8c6e51f932704",
+      "training_diagnostics": {
+        "final_image_saturation_fraction": 1.430511474609375e-05,
+        "final_latent_delta_norm": 76.83574469898149,
+        "final_loss": 0.00010477937757968903,
+        "first_loss": 34.08333206176758,
+        "minimum_gradient_norm": 0.0004474574327219676,
+        "minimum_loss": 8.487341256113723e-05,
+        "training_view_counts": {
+          "0": 64,
+          "1": 64,
+          "2": 64,
+          "3": 64
+        }
+      },
+      "wall_clock_seconds": 199.4052995722741
+    },
+    {
+      "git_commit": "f4a018f3c4eef453fff3367b049ea732332e8c37",
+      "implementation_revision": "direct-vae-latent-fp32-v1",
+      "inventory_sha256": "a9d8b74bc1cc1d55d39867d6c1349fe762433a91fa98859270b0e741542c71d7",
+      "launch_sha256": "aa04d18ef0d1ea4454817c6bea5a962839f89e397c226b0cb7cbbad6361b93af",
+      "passed": true,
+      "source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11/r11-vae-latent-f4a018f-20260831/target-04",
+      "summary_sha256": "45f8eebdd708c8d1ec63085750717faeb566803ab5c54c889e4d1cae7d282e58",
+      "target_family": "F1",
+      "target_index": 4,
+      "target_segment_id": "r5-f1-02c8aa9dc3523351c4d5f9c7",
+      "target_statistics": {
+        "accuracy_delta": 1.0,
+        "bootstrap_ci_reason": "one independent target; choice views are deterministic, not independent units",
+        "bootstrap_ci_used": false,
+        "condition_mean_ce": {
+          "m0": {
+            "normal": 33.18229150772095,
+            "reset": 33.18229150772095
+          },
+          "raw_latent_step256": {
+            "normal": 0.00028360230498947203,
+            "reset": 33.18229150772095
+          }
+        },
+        "delta_ce": -33.18200790541596,
+        "endpoint": "raw_latent_step256",
+        "endpoint_normal_accuracy": 1.0,
+        "endpoint_normal_mean_ce": 0.00028360230498947203,
+        "improved_choice_views": 4,
+        "m0_normal_accuracy": 0.0,
+        "m0_normal_mean_ce": 33.18229150772095,
+        "normal_reset_difference_in_differences": -33.18200790541596,
+        "per_view_delta_ce": {
+          "0": -28.291604282392655,
+          "1": -37.4999505293672,
+          "2": -30.874934198334813,
+          "3": -36.061542611569166
+        },
+        "relative_change": -0.9999914532031363,
+        "suite": "r11_f1_vae_latent",
+        "target_segment_id": "r5-f1-02c8aa9dc3523351c4d5f9c7"
+      },
+      "terminal_sha256": "28487e214d10ea50cffa72ea8ab215a1751f0976e19299cbd044f1f4f7bbc57f",
+      "training_diagnostics": {
+        "final_image_saturation_fraction": 0.0,
+        "final_latent_delta_norm": 76.12659738954233,
+        "final_loss": 0.00010811537504196167,
+        "first_loss": 35.125,
+        "minimum_gradient_norm": 0.00030158978992421567,
+        "minimum_loss": 5.781487561762333e-05,
+        "training_view_counts": {
+          "0": 64,
+          "1": 64,
+          "2": 64,
+          "3": 64
+        }
+      },
+      "wall_clock_seconds": 188.11658831685781
+    },
+    {
+      "git_commit": "f4a018f3c4eef453fff3367b049ea732332e8c37",
+      "implementation_revision": "direct-vae-latent-fp32-v1",
+      "inventory_sha256": "af042a3f80820ec396fdc684f50e98dbfcae0f9c2c0956d090fea8a1ac5bf5a9",
+      "launch_sha256": "1d1b2f0aa02d94439ff8012b7619a1ff74355c4daed05aad5fc041c1bdd5f7a2",
+      "passed": true,
+      "source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11/r11-vae-latent-f4a018f-20260831/target-05",
+      "summary_sha256": "88b3ffa4dfc454adc12dbdf057c20b1f85082fbf118704d970cb054d9c4cd54a",
+      "target_family": "F1",
+      "target_index": 5,
+      "target_segment_id": "r5-f1-11dddf29efebc033a995ab92",
+      "target_statistics": {
+        "accuracy_delta": 1.0,
+        "bootstrap_ci_reason": "one independent target; choice views are deterministic, not independent units",
+        "bootstrap_ci_used": false,
+        "condition_mean_ce": {
+          "m0": {
+            "normal": 17.50260305404663,
+            "reset": 17.50260305404663
+          },
+          "raw_latent_step256": {
+            "normal": 0.0008488260209560394,
+            "reset": 17.50260305404663
+          }
+        },
+        "delta_ce": -17.501754228025675,
+        "endpoint": "raw_latent_step256",
+        "endpoint_normal_accuracy": 1.0,
+        "endpoint_normal_mean_ce": 0.0008488260209560394,
+        "improved_choice_views": 4,
+        "m0_normal_accuracy": 0.0,
+        "m0_normal_mean_ce": 17.50260305404663,
+        "normal_reset_difference_in_differences": -17.501754228025675,
+        "per_view_delta_ce": {
+          "0": -18.332146406173706,
+          "1": -16.363893508911133,
+          "2": -17.644448280334473,
+          "3": -17.666528716683388
+        },
+        "relative_change": -0.9999515028696969,
+        "suite": "r11_f1_vae_latent",
+        "target_segment_id": "r5-f1-11dddf29efebc033a995ab92"
+      },
+      "terminal_sha256": "6f7bee6f360c1dcb183906b0d2cf4a51f4b4db1d964e5855e7c0fc270a362711",
+      "training_diagnostics": {
+        "final_image_saturation_fraction": 3.4968058268229165e-06,
+        "final_latent_delta_norm": 79.36639684573636,
+        "final_loss": 0.0003697201609611511,
+        "first_loss": 17.21875,
+        "minimum_gradient_norm": 0.00085234761465437,
+        "minimum_loss": 0.000293925404548645,
+        "training_view_counts": {
+          "0": 64,
+          "1": 64,
+          "2": 64,
+          "3": 64
+        }
+      },
+      "wall_clock_seconds": 210.898719554767
+    },
+    {
+      "git_commit": "f4a018f3c4eef453fff3367b049ea732332e8c37",
+      "implementation_revision": "direct-vae-latent-fp32-v1",
+      "inventory_sha256": "8eb2dd3b141f03d1ace04205e86a52fff4dd60a6fa9d7a33db7c75d3062a9bcf",
+      "launch_sha256": "cb735a76085ec0fb745887490a5661fabdef504fd804de80b9e8c5b09203d49e",
+      "passed": true,
+      "source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11/r11-vae-latent-f4a018f-20260831/target-06",
+      "summary_sha256": "875a68c7098476b262a2b25fc1f89861da0a4a5bb0cd5b0a6bbc8dbc813bdbca",
+      "target_family": "F1",
+      "target_index": 6,
+      "target_segment_id": "r5-f1-de4899e05b0aa7f3d8373171",
+      "target_statistics": {
+        "accuracy_delta": 1.0,
+        "bootstrap_ci_reason": "one independent target; choice views are deterministic, not independent units",
+        "bootstrap_ci_used": false,
+        "condition_mean_ce": {
+          "m0": {
+            "normal": 13.291670560836792,
+            "reset": 13.291670560836792
+          },
+          "raw_latent_step256": {
+            "normal": 0.0001925051910802722,
+            "reset": 13.291670560836792
+          }
+        },
+        "delta_ce": -13.291478055645712,
+        "endpoint": "raw_latent_step256",
+        "endpoint_normal_accuracy": 1.0,
+        "endpoint_normal_mean_ce": 0.0001925051910802722,
+        "improved_choice_views": 4,
+        "m0_normal_accuracy": 0.0,
+        "m0_normal_mean_ce": 13.291670560836792,
+        "normal_reset_difference_in_differences": -13.291478055645712,
+        "per_view_delta_ce": {
+          "0": -14.249731093645096,
+          "1": -13.416547902394086,
+          "2": -12.624914888292551,
+          "3": -12.874718338251114
+        },
+        "relative_change": -0.9999855168550711,
+        "suite": "r11_f1_vae_latent",
+        "target_segment_id": "r5-f1-de4899e05b0aa7f3d8373171"
+      },
+      "terminal_sha256": "abe4cc9d8e4f8c744c96bcc8b07485778aa3d919cbafb274279b4ab82ca8abc6",
+      "training_diagnostics": {
+        "final_image_saturation_fraction": 0.0,
+        "final_latent_delta_norm": 78.67759669339394,
+        "final_loss": 0.00018644332885742188,
+        "first_loss": 13.437503814697266,
+        "minimum_gradient_norm": 0.0008003800298028468,
+        "minimum_loss": 0.00010346993803977966,
+        "training_view_counts": {
+          "0": 64,
+          "1": 64,
+          "2": 64,
+          "3": 64
+        }
+      },
+      "wall_clock_seconds": 191.27037579007447
+    },
+    {
+      "git_commit": "f4a018f3c4eef453fff3367b049ea732332e8c37",
+      "implementation_revision": "direct-vae-latent-fp32-v1",
+      "inventory_sha256": "d689719d4d65afdf09a158ce11533c036265f5e3af735ce403ae3abb59b3c038",
+      "launch_sha256": "1273ed3248d38ad10a2eaf400aeaf18565e77926ffa2814dd7f72a1774f0b91f",
+      "passed": true,
+      "source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11/r11-vae-latent-f4a018f-20260831/target-07",
+      "summary_sha256": "49761ee528dbd2fdfcb1043a3ee2f96b03abcf782c85e403df2ef1d48438ca0e",
+      "target_family": "F1",
+      "target_index": 7,
+      "target_segment_id": "r5-f1-850189e424efde62468b2ef9",
+      "target_statistics": {
+        "accuracy_delta": 1.0,
+        "bootstrap_ci_reason": "one independent target; choice views are deterministic, not independent units",
+        "bootstrap_ci_used": false,
+        "condition_mean_ce": {
+          "m0": {
+            "normal": 35.31770896911621,
+            "reset": 35.31770896911621
+          },
+          "raw_latent_step256": {
+            "normal": 7.959769573062658e-05,
+            "reset": 35.31770896911621
+          }
+        },
+        "delta_ce": -35.31762937142048,
+        "endpoint": "raw_latent_step256",
+        "endpoint_normal_accuracy": 1.0,
+        "endpoint_normal_mean_ce": 7.959769573062658e-05,
+        "improved_choice_views": 4,
+        "m0_normal_accuracy": 0.0,
+        "m0_normal_mean_ce": 35.31770896911621,
+        "normal_reset_difference_in_differences": -35.31762937142048,
+        "per_view_delta_ce": {
+          "0": -33.79164135502651,
+          "1": -37.3749577999115,
+          "2": -35.18736875988543,
+          "3": -34.91654957085848
+        },
+        "relative_change": -0.9999977462384154,
+        "suite": "r11_f1_vae_latent",
+        "target_segment_id": "r5-f1-850189e424efde62468b2ef9"
+      },
+      "terminal_sha256": "8ed5609b521576a32670a0a948a88f7a80f3cbdd5e53d095061431f461190ebc",
+      "training_diagnostics": {
+        "final_image_saturation_fraction": 0.0,
+        "final_latent_delta_norm": 75.85015469982986,
+        "final_loss": 0.00011062063276767731,
+        "first_loss": 36.29166793823242,
+        "minimum_gradient_norm": 7.733984761490535e-05,
+        "minimum_loss": 2.6821624487638474e-05,
+        "training_view_counts": {
+          "0": 64,
+          "1": 64,
+          "2": 64,
+          "3": 64
+        }
+      },
+      "wall_clock_seconds": 202.57760088704526
+    }
+  ]
+}
