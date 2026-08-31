@@ -45,7 +45,7 @@ The matched constant control uses the identical parameters and optimizer but rep
 Each train-audit, dev-select, and dev-final target is evaluated on four disjoint reverse-cyclic views under:
 
 - `normal`: image from its own event;
-- `reset`: exact blank `127/255` image;
+- `reset`: the unchanged frozen-VAE decode of the posterior-mean latent encoded from exact blank `127/255`, matching R11;
 - `donor`: image from a fixed different-value event in the same split.
 
 The existing R10/R11 target gate is unchanged: at least 20% CE reduction from M0, all four views improve, accuracy rises by at least 0.25, and normal/reset difference-in-differences is negative. R12 adds the same-strength donor gate: normal must beat donor CE by at least 20%, win all four views, improve accuracy by at least 0.25, and have negative normal/donor difference-in-differences.

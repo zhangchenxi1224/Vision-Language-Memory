@@ -139,7 +139,7 @@
     "choice_views": "four fixed reverse-cyclic views",
     "conditions": {
       "normal": "image generated from the target's own event",
-      "reset": "uniform 127/255 initial image",
+      "reset": "unchanged frozen-VAE decode of the posterior-mean latent encoded from uniform RGB 127/255, matching R11",
       "donor": "image generated from a fixed different-target-value event in the same split"
     },
     "m0_and_endpoint_required": true,
