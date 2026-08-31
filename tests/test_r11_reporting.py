@@ -82,6 +82,11 @@ class R11ReportingTest(unittest.TestCase):
     def test_moving_mean_uses_only_past_and_current_values(self):
         self.assertEqual(renderer._moving_mean([1.0, 3.0, 5.0], window=2), [1.0, 2.0, 4.0])
 
+    def test_json_domain_normalizes_integer_view_keys_losslessly(self):
+        in_memory = {"per_view_delta_ce": {0: -1.0, 1: -2.0}}
+        serialized = json.loads(json.dumps(in_memory, sort_keys=True))
+        self.assertEqual(serialized, {"per_view_delta_ce": {"0": -1.0, "1": -2.0}})
+
     def test_success_boundary_remains_diagnostic(self):
         source = (ROOT / "scripts" / "experiments" / "compare_r11_vae_latent.py").read_text(
             encoding="utf-8"

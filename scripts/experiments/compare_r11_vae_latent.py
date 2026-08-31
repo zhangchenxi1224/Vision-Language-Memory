@@ -248,9 +248,13 @@ def _validate_evaluation(root: Path, segment_id: str, summary: Mapping[str, Any]
         target_segment_id=segment_id,
         endpoint="raw_latent_step256",
     )
-    if recomputed != summary.get("target_statistics"):
+    # The in-memory statistic uses integer view keys; JSON necessarily stores object
+    # keys as strings. Compare the canonical JSON-domain value so this check remains
+    # strict without treating that lossless serialization boundary as scientific drift.
+    serialized = json.loads(json.dumps(recomputed, sort_keys=True))
+    if serialized != summary.get("target_statistics"):
         raise ValueError(f"R11 stored/recomputed target statistics differ: {root}")
-    return recomputed
+    return serialized
 
 
 def _validate_target(root: Path, index: int) -> dict[str, Any]:
