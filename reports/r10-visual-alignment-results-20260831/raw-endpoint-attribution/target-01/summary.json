@@ -1,0 +1,81 @@
+{
+  "artifacts": {
+    "manifest_sha256": "d44404d833a13a2b5c6037b217d7aa5d151bd6b95d50d80ff80c7e434f43b8de",
+    "rows_sha256": "5596ecab3634630f402891cbacf4dff9f47e8617cb9205fceed24e4be2b366ff",
+    "state_image_sha256": "e79ec5d24c9d8a7e640610c6d4a7adcfc9d3e6a5bec8e25bea0df5046df2ba66"
+  },
+  "cannot_replace_preregistered_ema_endpoint": true,
+  "existing_ema_gate": false,
+  "existing_ema_statistics": {
+    "accuracy_delta": 0.0,
+    "bootstrap_ci_reason": "one independent target; choice views are deterministic, not independent units",
+    "bootstrap_ci_used": false,
+    "condition_mean_ce": {
+      "ema_step128": {
+        "normal": 27.291678428649902,
+        "reset": 27.89063549041748
+      },
+      "m0": {
+        "normal": 27.687509059906006,
+        "reset": 27.89063549041748
+      }
+    },
+    "delta_ce": -0.3958306312561035,
+    "endpoint": "ema_step128",
+    "endpoint_normal_accuracy": 0.0,
+    "endpoint_normal_mean_ce": 27.291678428649902,
+    "improved_choice_views": 4,
+    "m0_normal_accuracy": 0.0,
+    "m0_normal_mean_ce": 27.687509059906006,
+    "normal_reset_difference_in_differences": -0.3958306312561035,
+    "per_view_delta_ce": {
+      "0": -0.29166603088378906,
+      "1": -0.5416641235351562,
+      "2": -0.3333282470703125,
+      "3": -0.41666412353515625
+    },
+    "relative_change": -0.014296361236385224,
+    "suite": "r10_f1_single_target",
+    "target_segment_id": "r5-f1-392d41fd097d069c42218e0a"
+  },
+  "formal_success_claim": false,
+  "raw_descriptive_gate": false,
+  "raw_minus_ema_normal_ce": -1.515622615814209,
+  "raw_statistics": {
+    "accuracy_delta": 0.0,
+    "bootstrap_ci_reason": "one independent target; choice views are deterministic, not independent units",
+    "bootstrap_ci_used": false,
+    "condition_mean_ce": {
+      "m0": {
+        "normal": 27.687509059906006,
+        "reset": 27.89063549041748
+      },
+      "raw_step128_attribution": {
+        "normal": 25.776055812835693,
+        "reset": 27.89063549041748
+      }
+    },
+    "delta_ce": -1.9114532470703125,
+    "endpoint": "raw_step128_attribution",
+    "endpoint_normal_accuracy": 0.0,
+    "endpoint_normal_mean_ce": 25.776055812835693,
+    "improved_choice_views": 4,
+    "m0_normal_accuracy": 0.0,
+    "m0_normal_mean_ce": 27.687509059906006,
+    "normal_reset_difference_in_differences": -1.9114532470703125,
+    "per_view_delta_ce": {
+      "0": -2.0833282470703125,
+      "1": -2.0416622161865234,
+      "2": -2.333322525024414,
+      "3": -1.1875
+    },
+    "relative_change": -0.06903666353425297,
+    "suite": "r10_f1_single_target",
+    "target_segment_id": "r5-f1-392d41fd097d069c42218e0a"
+  },
+  "schema": "vision_memory.r10-raw-endpoint-attribution-summary.v1",
+  "status": "completed_attribution",
+  "target_index": 1,
+  "target_segment_id": "r5-f1-392d41fd097d069c42218e0a",
+  "technical_gate": true
+}

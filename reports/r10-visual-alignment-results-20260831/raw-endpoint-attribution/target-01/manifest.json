@@ -1,0 +1,57 @@
+{
+  "analysis_git_commit": "05814af7bd8adada14327f708c713f1ee1eea19d",
+  "cannot_replace_preregistered_ema_endpoint": true,
+  "data_sha256": {
+    "dev": "8b167df38022a631d4e631d3c0d66e9fca74171f4224fec436030d6650047303",
+    "train": "24327edc39e0d133df5150dc1aab4f55c6cf5b05ccfca9025ad90c5accc6d184"
+  },
+  "determinism": {
+    "cuda_matmul_allow_tf32": false,
+    "cudnn_allow_tf32": false,
+    "cudnn_benchmark": false,
+    "cudnn_deterministic": true,
+    "deterministic_algorithms": true,
+    "deterministic_warn_only": false,
+    "environment": {
+      "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+      "MKL_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "PYTHONHASHSEED": "0",
+      "TOKENIZERS_PARALLELISM": "false"
+    },
+    "float32_matmul_precision": "highest",
+    "sdpa": {
+      "cudnn": false,
+      "flash": false,
+      "math": true,
+      "memory_efficient": false
+    },
+    "seed": 0
+  },
+  "environment": {
+    "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+    "HF_HUB_OFFLINE": "1",
+    "MKL_NUM_THREADS": "1",
+    "OMP_NUM_THREADS": "1",
+    "PYTHONHASHSEED": "0",
+    "TOKENIZERS_PARALLELISM": "false",
+    "TRANSFORMERS_OFFLINE": "1",
+    "VLM_DREAMLITE_SNAPSHOT_MANIFEST_SHA256": "1bcf41b170c4b4a806bac6701cbdf4fabd5c3c53fa67415d065ab95ce2703159",
+    "VLM_READER_SNAPSHOT_MANIFEST_SHA256": "159a504daaae6dc412535978f087150a0eb8e50164afd70a8a17f83906f1127c"
+  },
+  "formal_success_claim": false,
+  "host": "vlm-r3-h200x2-live-20260717--12dbdf351444-qpyvhhxoe6",
+  "python": "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+  "schema": "vision_memory.r10-raw-endpoint-attribution-manifest.v1",
+  "selected_segments_sha256": "6198beb3a3758fd7df912c6956bc05eac0ace8603708f37147826c65a4d61845",
+  "source_evaluation_rows_sha256": "f7d22f87e5204f214e9a772693e16aabbb9fbb7acc6bc42adebc006b9b5315a1",
+  "source_inventory_sha256": "fb63d988d6877f13401d6826ef0320457af5f36b0052b0a44f9ab6342fbfbab8",
+  "source_raw_endpoint_sha256": "eebc792147f1bd1d3892550cfd5a1b864db3786af56009a0ff51dff1fdb41833",
+  "source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r10/r10-visual-alignment-ba86e2c-20260831/dreamlite-single-set/target-01",
+  "source_summary_sha256": "04c2ea3dff8936a20e1871cb8cde8bd8c0c0769f6725cac4bac00ef56ac6ca67",
+  "source_terminal_sha256": "aa7f2c7713a653e62ad3078beff2fa4e5f013a98fdc7d674955badf1d04df988",
+  "source_training_git_commit": "ba86e2c5b6a4d55f97ba386ad135fea546a22dbf",
+  "status": "completed",
+  "target_index": 1,
+  "target_segment_id": "r5-f1-392d41fd097d069c42218e0a"
+}
