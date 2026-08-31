@@ -1,0 +1,81 @@
+{
+  "schema": "vision_memory.r11-vae-latent-reachability-config.v1",
+  "protocol": "R11-VAE-Latent-Reachability",
+  "status": "preregistered_after_complete_r10_and_raw_attribution",
+  "activation": {
+    "required_r10_pixel_pass_count": 8,
+    "required_r10_dreamlite_ema_pass_count_max": 7,
+    "required_raw_endpoint_pass_count_max": 7,
+    "observed_activation_counts": {
+      "pixel": 8,
+      "dreamlite_ema": 0,
+      "dreamlite_raw": 0
+    }
+  },
+  "fixed_data": {
+    "train_sha256": "24327edc39e0d133df5150dc1aab4f55c6cf5b05ccfca9025ad90c5accc6d184",
+    "dev_sha256": "8b167df38022a631d4e631d3c0d66e9fca74171f4224fec436030d6650047303"
+  },
+  "target_selection": {
+    "family": "F1",
+    "target_count": 8,
+    "target_ids": [
+      "r5-f1-8015bf53a4067aaa7e882288",
+      "r5-f1-392d41fd097d069c42218e0a",
+      "r5-f1-1aee01c0f3e7684c05c9122c",
+      "r5-f1-807090710dd4c077a97348ba",
+      "r5-f1-02c8aa9dc3523351c4d5f9c7",
+      "r5-f1-11dddf29efebc033a995ab92",
+      "r5-f1-de4899e05b0aa7f3d8373171",
+      "r5-f1-850189e424efde62468b2ef9"
+    ],
+    "selected_segment_payload_sha256": "6198beb3a3758fd7df912c6956bc05eac0ace8603708f37147826c65a4d61845"
+  },
+  "oracle": {
+    "independent_run_per_target": true,
+    "trainable": "one unconstrained fp32 DreamLite model-space latent tensor",
+    "initialization": "posterior-mean VAE encoding of exact uniform RGB 127/255",
+    "decode": "unchanged frozen DreamLite VAE, model-latent scale/shift, unit RGB clamp",
+    "dreamlite_unet_used": false,
+    "semantic_prompt_used": false,
+    "event_noise_used": false,
+    "reader": "frozen Qwen3-VL-4B-Instruct",
+    "optimizer": "Adam",
+    "learning_rate": 0.05,
+    "weight_decay": 0.0,
+    "schedule": "constant",
+    "optimizer_steps": 256,
+    "checkpoints": [0, 64, 128, 192, 256],
+    "primary_endpoint": "raw latent step256",
+    "seed": 0,
+    "strict_determinism": true
+  },
+  "choice_views": {
+    "training": "four forward-cyclic views, exactly 64 exposures each",
+    "endpoint": "four disjoint fixed reverse-cyclic views",
+    "controls": ["normal", "reset"]
+  },
+  "per_target_gate": {
+    "technical_gate": true,
+    "relative_normal_ce_change_at_endpoint_lte": -0.2,
+    "improved_fixed_choice_views": 4,
+    "accuracy_delta_gte": 0.25,
+    "normal_reset_difference_in_differences_lt": 0.0
+  },
+  "arm_gate": {
+    "required_target_passes": 8,
+    "total_targets": 8,
+    "partial_pass_counts_are_diagnostic_only": true
+  },
+  "locked_interpretation": {
+    "latent_8": "The VAE state representation can carry readable codes. Replace the semantic DreamLite editor with a direct event-to-latent writer, then require shared held-out F1 success.",
+    "latent_1_to_7": "VAE-space readability is target-dependent. Attribute fixed target/token properties before designing a shared writer.",
+    "latent_0": "The readable codes found by direct pixels are outside the demonstrated VAE-decodable region. Bypass or augment the VAE with an image-space residual codec.",
+    "technical_failure": "Rerun only invalid targets in fresh roots and make no scientific inference from them."
+  },
+  "success_boundary": {
+    "diagnostic_only": true,
+    "cannot_establish_full_picture_memory_success": true,
+    "formal_success_still_requires": "shared learned writing, held-out ID/OOD evaluation, multiple seeds, recurrence, and causal state controls"
+  }
+}
