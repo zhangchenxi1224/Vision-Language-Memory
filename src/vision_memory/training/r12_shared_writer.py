@@ -179,8 +179,10 @@ def select_entity_disjoint_dev_f1(
 ) -> tuple[tuple[R5Segment, ...], tuple[R5Segment, ...]]:
     """Select one dev-select and one sealed dev-final item per target value.
 
-    All selected entities are globally unique.  Choice positions are exactly
-    balanced within each split and shifted by one between select and final.
+    All selected entities are globally unique and choice positions are exactly
+    balanced within each split.  Position assignment is solved jointly with the
+    entity constraint because real dev entities do not populate every
+    target-value/position cell.
     """
 
     values = _validate_pool(pool)
@@ -193,68 +195,110 @@ def select_entity_disjoint_dev_f1(
             f"R12 dev pool requires {expected_value_count} target values, got {len(target_values)}."
         )
 
-    cells = [
-        (split, value, (rank + offset) % 4)
-        for split, offset in (("select", 0), ("final", 1))
-        for rank, value in enumerate(target_values)
-    ]
-    candidate_segments: dict[tuple[str, str, int], list[R5Segment]] = {}
-    for split, value, position in cells:
-        candidate_segments[(split, value, position)] = sorted(
-            (
-                segment
-                for segment in values
-                if target_value(segment) == value and segment.query.target_index == position
-            ),
+    if expected_value_count % 4:
+        raise ValueError("R12 dev target-value count must be divisible by four.")
+    cells = [(split, value) for split in ("select", "final") for value in target_values]
+    candidate_segments: dict[tuple[str, str], tuple[R5Segment, ...]] = {}
+    for split, value in cells:
+        ordered = sorted(
+            (segment for segment in values if target_value(segment) == value),
             key=lambda segment: (
-                _digest(seed, f"dev-{split}", value, position, segment.segment_id),
+                _digest(
+                    seed,
+                    f"dev-{split}",
+                    value,
+                    segment.query.target_index,
+                    segment.segment_id,
+                ),
                 segment.segment_id,
             ),
         )
+        # Multiple episode variants can expose the same entity/value/position.
+        # Keep one deterministic representative so they do not bias the search.
+        unique: dict[tuple[str, int], R5Segment] = {}
+        for segment in ordered:
+            unique.setdefault((segment.query_entity_id, segment.query.target_index), segment)
+        candidate_segments[(split, value)] = tuple(unique.values())
 
-    # A deterministic augmenting-path matching avoids the order-dependent
-    # failures of a greedy picker when one dev entity supplies several values.
-    entity_to_cell: dict[str, tuple[str, str, int]] = {}
+    used_entities: set[str] = set()
+    remaining = {
+        split: {position: expected_value_count // 4 for position in range(4)}
+        for split in ("select", "final")
+    }
+    assignment: dict[tuple[str, str], R5Segment] = {}
 
-    def assign(cell: tuple[str, str, int], seen: set[str]) -> bool:
-        for segment in candidate_segments[cell]:
-            entity = segment.query_entity_id
-            if entity in seen:
-                continue
-            seen.add(entity)
-            incumbent = entity_to_cell.get(entity)
-            if incumbent is None or assign(incumbent, seen):
-                entity_to_cell[entity] = cell
+    def options(cell: tuple[str, str]) -> list[R5Segment]:
+        split, _value = cell
+        return [
+            segment
+            for segment in candidate_segments[cell]
+            if segment.query_entity_id not in used_entities
+            and remaining[split][segment.query.target_index] > 0
+        ]
+
+    def forward_feasible(unassigned: Sequence[tuple[str, str]]) -> bool:
+        for cell in unassigned:
+            if not options(cell):
+                return False
+        for split in ("select", "final"):
+            split_cells = [cell for cell in unassigned if cell[0] == split]
+            for position in range(4):
+                eligible = sum(
+                    any(
+                        segment.query_entity_id not in used_entities
+                        and segment.query.target_index == position
+                        for segment in candidate_segments[cell]
+                    )
+                    for cell in split_cells
+                )
+                if eligible < remaining[split][position]:
+                    return False
+        return True
+
+    def solve() -> bool:
+        if len(assignment) == len(cells):
+            return all(
+                remaining[split][position] == 0
+                for split in ("select", "final")
+                for position in range(4)
+            )
+        unassigned = [cell for cell in cells if cell not in assignment]
+        ranked = sorted(
+            unassigned,
+            key=lambda cell: (
+                len(options(cell)),
+                _digest(seed, "dev-search-cell", *cell),
+                cell,
+            ),
+        )
+        cell = ranked[0]
+        candidates = sorted(
+            options(cell),
+            key=lambda segment: (
+                -remaining[cell[0]][segment.query.target_index],
+                _digest(seed, "dev-search-candidate", *cell, segment.segment_id),
+                segment.segment_id,
+            ),
+        )
+        for segment in candidates:
+            position = segment.query.target_index
+            assignment[cell] = segment
+            used_entities.add(segment.query_entity_id)
+            remaining[cell[0]][position] -= 1
+            rest = [value for value in unassigned if value != cell]
+            if forward_feasible(rest) and solve():
                 return True
+            remaining[cell[0]][position] += 1
+            used_entities.remove(segment.query_entity_id)
+            del assignment[cell]
         return False
 
-    matching_order = sorted(
-        cells,
-        key=lambda cell: (
-            len({segment.query_entity_id for segment in candidate_segments[cell]}),
-            _digest(seed, "dev-matching-order", *cell),
-            cell,
-        ),
-    )
-    for cell in matching_order:
-        if not candidate_segments[cell] or not assign(cell, set()):
-            raise ValueError(f"R12 cannot satisfy entity-disjoint dev cell {cell}.")
-
-    cell_to_entity = {cell: entity for entity, cell in entity_to_cell.items()}
-    if len(cell_to_entity) != len(cells):
-        raise RuntimeError("R12 dev entity matching is incomplete.")
-    outputs: dict[str, list[R5Segment]] = {"select": [], "final": []}
-    for split, offset in (("select", 0), ("final", 1)):
-        for rank, value in enumerate(target_values):
-            cell = (split, value, (rank + offset) % 4)
-            entity = cell_to_entity[cell]
-            outputs[split].append(
-                next(
-                    segment
-                    for segment in candidate_segments[cell]
-                    if segment.query_entity_id == entity
-                )
-            )
+    if not solve():
+        raise ValueError("R12 cannot satisfy the joint entity-disjoint/balanced dev selection.")
+    outputs = {
+        split: [assignment[(split, value)] for value in target_values]
+        for split in ("select", "final")
+    }
 
     select = tuple(outputs["select"])
     final = tuple(outputs["final"])
