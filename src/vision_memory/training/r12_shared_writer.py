@@ -40,14 +40,23 @@ R12_BASIS_OUTPUT_NORM = 80.0
 R12_WRITER_LEARNING_RATE = 1e-3
 R12_WEIGHT_DECAY = 1e-4
 R12_LATENT_RMS_SOFT_LIMIT = 0.50
+R12_LATENT_RMS_PENALTY = 0.10
+R12_COEFFICIENT_L2_PENALTY = 1e-4
 
-# These are filled by the model-free selection lock step before any R12 model
-# outcome is observed.  A training entrypoint must fail closed while any value is
-# unset; tests can explicitly request an unlocked synthetic selection.
-R12_TRAIN_SELECTION_SHA256: str | None = None
-R12_TRAIN_AUDIT_SHA256: str | None = None
-R12_DEV_SELECT_SHA256: str | None = None
-R12_DEV_FINAL_SHA256: str | None = None
+# Locked by the model-free selection audit before any R12 model outcome was
+# observed. Tests can explicitly request an unlocked synthetic selection.
+R12_TRAIN_SELECTION_SHA256: str | None = (
+    "07ce170b749b1394550cce6a8e0e9586d3110180d94104a8646de2c222936d62"
+)
+R12_TRAIN_AUDIT_SHA256: str | None = (
+    "a6de78197328dbb9a24d56ef65e3fd0ba9abf7bbb42782ad1e7fe32fe9dabc4f"
+)
+R12_DEV_SELECT_SHA256: str | None = (
+    "e744484cf7f52d794c437d9af5f6e41b75aedd748ceb763fa6897429f410901c"
+)
+R12_DEV_FINAL_SHA256: str | None = (
+    "0bd95da0d884a44f852bacbd0e3f441b1e68241d8ad0ce28930d7ec06491f0b8"
+)
 
 
 def target_value(segment: R5Segment) -> str:
@@ -520,6 +529,8 @@ __all__ = [
     "R12_EPOCHS",
     "R12_GRADIENT_ACCUMULATION",
     "R12_LATENT_RMS_SOFT_LIMIT",
+    "R12_LATENT_RMS_PENALTY",
+    "R12_COEFFICIENT_L2_PENALTY",
     "R12_MICRO_STEPS",
     "R12_OPTIMIZER_STEPS",
     "R12_PROTOCOL",

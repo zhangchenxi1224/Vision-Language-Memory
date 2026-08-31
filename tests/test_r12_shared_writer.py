@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import sys
+import json
 import unittest
 from collections import Counter
 from pathlib import Path
@@ -76,6 +77,24 @@ def balanced_pool(*, value_count: int, copies_per_cell: int, prefix: str) -> tup
 
 
 class R12SharedWriterContractTest(unittest.TestCase):
+    def test_machine_readable_preregistration_locks_scope_and_false_positive_controls(self):
+        config = json.loads(
+            (
+                ROOT
+                / "configs"
+                / "experiments"
+                / "r12_shared_event_latent_writer.json"
+            ).read_text(encoding="utf-8")
+        )
+        self.assertEqual(config["optimization"]["optimizer_steps"], 1152)
+        self.assertEqual(config["fixed_data"]["train"]["count"], 144)
+        self.assertEqual(config["fixed_data"]["dev_final"]["count"], 24)
+        self.assertEqual(config["information_boundary"]["writer_input"], ["visible event_text"])
+        self.assertIn("donor", config["evaluation"]["conditions"])
+        self.assertEqual(config["arm_gate"]["conditioned_required_dev_final_passes"], 24)
+        self.assertTrue(config["arm_gate"]["constant_control_dev_final_arm_gate_must_be_false"])
+        self.assertTrue(config["success_boundary"]["diagnostic_only"])
+
     def test_train_selection_is_stable_balanced_and_unique_entity(self):
         pool = balanced_pool(value_count=36, copies_per_cell=2, prefix="train")
         selected, audit = select_balanced_train_f1(pool, enforce_locked=False)
