@@ -1,0 +1,112 @@
+{
+  "aggregation_git_commit": "169e78348ce3e9e1bc179ec9e65221bc084da389",
+  "conditioned_aggregates": {
+    "dev_final": {
+      "endpoint_donor_accuracy": 0.28125,
+      "endpoint_donor_mean_ce": 1.3733046709870298,
+      "endpoint_normal_accuracy": 0.2916666666666667,
+      "endpoint_normal_mean_ce": 1.3683375328158338,
+      "m0_normal_accuracy": 0.0,
+      "m0_normal_mean_ce": 24.358342245221138,
+      "target_pass_count": 0,
+      "targets": 24
+    },
+    "dev_select": {
+      "endpoint_donor_accuracy": 0.2708333333333333,
+      "endpoint_donor_mean_ce": 1.3488892524813612,
+      "endpoint_normal_accuracy": 0.3125,
+      "endpoint_normal_mean_ce": 1.3585612929115694,
+      "m0_normal_accuracy": 0.0,
+      "m0_normal_mean_ce": 25.00755041340987,
+      "target_pass_count": 0,
+      "targets": 24
+    },
+    "train_audit": {
+      "endpoint_donor_accuracy": 0.5,
+      "endpoint_donor_mean_ce": 1.1406853661562006,
+      "endpoint_normal_accuracy": 0.5069444444444444,
+      "endpoint_normal_mean_ce": 1.1405382874525256,
+      "m0_normal_accuracy": 0.0,
+      "m0_normal_mean_ce": 23.94902253482077,
+      "target_pass_count": 0,
+      "targets": 36
+    }
+  },
+  "constant_control_aggregates": {
+    "dev_final": {
+      "endpoint_donor_accuracy": 0.2708333333333333,
+      "endpoint_donor_mean_ce": 1.421969138396283,
+      "endpoint_normal_accuracy": 0.2708333333333333,
+      "endpoint_normal_mean_ce": 1.421969138396283,
+      "m0_normal_accuracy": 0.0,
+      "m0_normal_mean_ce": 24.358342245221138,
+      "target_pass_count": 0,
+      "targets": 24
+    },
+    "dev_select": {
+      "endpoint_donor_accuracy": 0.2604166666666667,
+      "endpoint_donor_mean_ce": 1.4313063483374815,
+      "endpoint_normal_accuracy": 0.2604166666666667,
+      "endpoint_normal_mean_ce": 1.4313063483374815,
+      "m0_normal_accuracy": 0.0,
+      "m0_normal_mean_ce": 25.00755041340987,
+      "target_pass_count": 0,
+      "targets": 24
+    },
+    "train_audit": {
+      "endpoint_donor_accuracy": 0.3472222222222222,
+      "endpoint_donor_mean_ce": 1.3764307124333248,
+      "endpoint_normal_accuracy": 0.3472222222222222,
+      "endpoint_normal_mean_ce": 1.3764307124333248,
+      "m0_normal_accuracy": 0.0,
+      "m0_normal_mean_ce": 23.94902253482077,
+      "target_pass_count": 0,
+      "targets": 36
+    }
+  },
+  "decision": "diagnose_shared_writer_fit_boundary",
+  "formal_success_claim": false,
+  "formal_success_reason": "R12 is a one-seed, one-SET shared-writer diagnostic; formal Picture Memory success still requires recurrent composition, overwrite/clear/interference, fixed full ID/OOD evaluation, multiple seeds, and causal state controls.",
+  "posthoc_collapse_localization": {
+    "attention": {
+      "attention_query_norm": 1.8017308412895232,
+      "max_weight_max": 0.07242584973573685,
+      "max_weight_mean": 0.06947569040736805,
+      "normalized_entropy_mean": 0.988092198347052,
+      "normalized_entropy_min": 0.9869642853736877
+    },
+    "coefficient_anchor": {
+      "common_event_coefficient_norm": 0.832938161850789,
+      "event_coefficient_norm_mean": 0.8338273258136101,
+      "event_residual_from_common_norm_max": 0.14301157516671748,
+      "event_residual_from_common_norm_mean": 0.039242087870723884,
+      "event_residual_from_common_to_total_norm_ratio_mean": 0.046750880913395375,
+      "event_residual_from_zero_norm_max": 0.9055362356298303,
+      "event_residual_from_zero_norm_mean": 0.7637100659154671,
+      "event_residual_to_total_norm_ratio_mean": 0.915610693216179,
+      "event_to_common_coefficient_cosine_mean": 0.9999635691810598,
+      "event_to_common_coefficient_cosine_min": 0.9998186670859799,
+      "event_to_zero_coefficient_cosine_mean": 0.7059332657595183,
+      "event_to_zero_coefficient_cosine_min": 0.6943004850229488,
+      "zero_input_coefficient_norm": 0.10442781382710702
+    },
+    "interpretation": "Frozen event states retain target-value information, but the learned coefficient head compresses most of it into a dominant event-independent visual code. This is post-hoc localization, not a changed R12 outcome.",
+    "uniform_token_mean_ridge_accuracy": {
+      "dev_final": 0.9583333333333334,
+      "dev_select": 0.8333333333333334,
+      "train": 1.0,
+      "train_audit": 1.0
+    },
+    "writer_coefficient_ridge_accuracy": {
+      "dev_final": 0.20833333333333334,
+      "dev_select": 0.20833333333333334,
+      "train": 0.7847222222222222,
+      "train_audit": 0.7222222222222222
+    }
+  },
+  "r12_diagnostic_gate": false,
+  "reason": "The conditioned writer did not fit every held-in F1 target; localize event representation, coefficient mapping, and shared latent-basis limitations before expanding scope.",
+  "renderer_sha256": "cb953486b34a3a7e08b20d2a6c70ca4b7e3a17c36ec218cba3005218f0e28702",
+  "schema": "vision_memory.r12-shared-writer-rendered-analysis.v1",
+  "status": "completed"
+}

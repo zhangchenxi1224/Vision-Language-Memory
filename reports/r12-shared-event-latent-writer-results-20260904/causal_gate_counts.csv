@@ -1,0 +1,49 @@
+arm,split,criterion,criterion_label,passed_targets,targets
+conditioned,train_audit,m0_ce,normal CE ≤ 80% M0,36,36
+conditioned,train_audit,m0_views,normal improves 4/4 vs M0,36,36
+conditioned,train_audit,m0_acc,normal accuracy Δ ≥ .25,26,36
+conditioned,train_audit,reset_did,normal/reset DiD < 0,36,36
+conditioned,train_audit,donor_ce,normal CE ≤ 80% donor,0,36
+conditioned,train_audit,donor_views,normal beats donor 4/4,7,36
+conditioned,train_audit,donor_acc,normal-donor accuracy ≥ .25,3,36
+conditioned,train_audit,donor_did,normal/donor DiD < 0,21,36
+conditioned,dev_select,m0_ce,normal CE ≤ 80% M0,24,24
+conditioned,dev_select,m0_views,normal improves 4/4 vs M0,24,24
+conditioned,dev_select,m0_acc,normal accuracy Δ ≥ .25,12,24
+conditioned,dev_select,reset_did,normal/reset DiD < 0,24,24
+conditioned,dev_select,donor_ce,normal CE ≤ 80% donor,0,24
+conditioned,dev_select,donor_views,normal beats donor 4/4,3,24
+conditioned,dev_select,donor_acc,normal-donor accuracy ≥ .25,4,24
+conditioned,dev_select,donor_did,normal/donor DiD < 0,9,24
+conditioned,dev_final,m0_ce,normal CE ≤ 80% M0,24,24
+conditioned,dev_final,m0_views,normal improves 4/4 vs M0,24,24
+conditioned,dev_final,m0_acc,normal accuracy Δ ≥ .25,12,24
+conditioned,dev_final,reset_did,normal/reset DiD < 0,24,24
+conditioned,dev_final,donor_ce,normal CE ≤ 80% donor,0,24
+conditioned,dev_final,donor_views,normal beats donor 4/4,3,24
+conditioned,dev_final,donor_acc,normal-donor accuracy ≥ .25,1,24
+conditioned,dev_final,donor_did,normal/donor DiD < 0,12,24
+constant-control,train_audit,m0_ce,normal CE ≤ 80% M0,36,36
+constant-control,train_audit,m0_views,normal improves 4/4 vs M0,36,36
+constant-control,train_audit,m0_acc,normal accuracy Δ ≥ .25,22,36
+constant-control,train_audit,reset_did,normal/reset DiD < 0,36,36
+constant-control,train_audit,donor_ce,normal CE ≤ 80% donor,0,36
+constant-control,train_audit,donor_views,normal beats donor 4/4,0,36
+constant-control,train_audit,donor_acc,normal-donor accuracy ≥ .25,0,36
+constant-control,train_audit,donor_did,normal/donor DiD < 0,0,36
+constant-control,dev_select,m0_ce,normal CE ≤ 80% M0,24,24
+constant-control,dev_select,m0_views,normal improves 4/4 vs M0,24,24
+constant-control,dev_select,m0_acc,normal accuracy Δ ≥ .25,14,24
+constant-control,dev_select,reset_did,normal/reset DiD < 0,24,24
+constant-control,dev_select,donor_ce,normal CE ≤ 80% donor,0,24
+constant-control,dev_select,donor_views,normal beats donor 4/4,0,24
+constant-control,dev_select,donor_acc,normal-donor accuracy ≥ .25,0,24
+constant-control,dev_select,donor_did,normal/donor DiD < 0,0,24
+constant-control,dev_final,m0_ce,normal CE ≤ 80% M0,24,24
+constant-control,dev_final,m0_views,normal improves 4/4 vs M0,24,24
+constant-control,dev_final,m0_acc,normal accuracy Δ ≥ .25,14,24
+constant-control,dev_final,reset_did,normal/reset DiD < 0,24,24
+constant-control,dev_final,donor_ce,normal CE ≤ 80% donor,0,24
+constant-control,dev_final,donor_views,normal beats donor 4/4,0,24
+constant-control,dev_final,donor_acc,normal-donor accuracy ≥ .25,0,24
+constant-control,dev_final,donor_did,normal/donor DiD < 0,0,24
