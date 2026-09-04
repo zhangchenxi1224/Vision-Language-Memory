@@ -284,6 +284,17 @@ def _endpoint_figure(path: Path, endpoint_rows: Sequence[Mapping[str, Any]]) -> 
         axis.set_xticks(x, split_labels, rotation=12)
         axis.grid(axis="y", alpha=0.18)
         axis.legend(fontsize=7)
+    axes[1, 0].set_ylim(0.0, max(comparison.SPLIT_COUNTS.values()) * 1.08)
+    if all(int(row["target_pass_count"]) == 0 for row in endpoint_rows):
+        axes[1, 0].text(
+            0.5,
+            0.5,
+            "0 targets passed in either arm",
+            transform=axes[1, 0].transAxes,
+            ha="center",
+            va="center",
+            fontsize=10,
+        )
     axes[1, 1].axhline(-0.20, color="black", linestyle="--", linewidth=0.9, label="gate -0.20")
     axes[1, 1].axhline(0.0, color="black", linewidth=0.6)
     figure.suptitle("R12 fixed endpoint and causal-control results")
@@ -397,7 +408,7 @@ def _image_contact_sheet(path: Path, roots: Mapping[str, Path], result: Mapping[
             image_path = roots[arm] / "run" / "images" / "endpoint" / split / condition / f"{segment_id}.png"
             axes[row_index, column].imshow(plt.imread(image_path))
             axes[row_index, column].set_title(
-                f"{arm} · {split} · {condition}\nvalue={target['target_value']}"
+                f"{arm} · {split} · {condition}\nquery target={target['target_value']}"
             )
             axes[row_index, column].axis("off")
     figure.suptitle("R12 endpoint visual codes: own-event normal vs fixed donor")
