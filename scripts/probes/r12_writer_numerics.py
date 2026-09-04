@@ -27,6 +27,7 @@ from vision_memory.data import CYCLIC4  # noqa: E402
 
 SCHEMA = "vision_memory.r12-static-backward-downscale-preflight.v1"
 BACKWARD_LOSS_DIVISOR = 1024.0
+ALLOWED_BACKWARD_LOSS_DIVISORS = tuple(float(2**exponent) for exponent in range(10, 23, 2))
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -40,6 +41,13 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--dreamlite-device", default="cuda:0")
     parser.add_argument("--reader-device", default="cuda:1")
+    parser.add_argument(
+        "--backward-loss-divisor",
+        type=float,
+        choices=ALLOWED_BACKWARD_LOSS_DIVISORS,
+        default=BACKWARD_LOSS_DIVISOR,
+        help="Diagnostic power-of-two divisor; the formal trainer remains separately locked.",
+    )
     return parser
 
 
@@ -69,6 +77,21 @@ def _nonfinite_optimizer_state_counts(
                     (~torch.isfinite(value)).sum()
                 )
     return counts
+
+
+def _tensor_gradient_statistics(value: torch.Tensor | None) -> dict[str, Any]:
+    if value is None:
+        return {"present": False, "nonfinite": None, "max_abs_finite": None}
+    detached = value.detach()
+    finite = torch.isfinite(detached)
+    finite_values = detached[finite]
+    return {
+        "present": True,
+        "nonfinite": int((~finite).sum()),
+        "max_abs_finite": (
+            float(finite_values.abs().max()) if finite_values.numel() else None
+        ),
+    }
 
 
 def _run(cli: argparse.Namespace) -> dict[str, Any]:
@@ -154,6 +177,7 @@ def _run(cli: argparse.Namespace) -> dict[str, Any]:
             require_grad=True,
             deterministic_ce=True,
         )
+        divisor = float(cli.backward_loss_divisor)
         micro_records = []
         for unit in micros:
             token_states, mask = trainer._tokens(
@@ -184,7 +208,7 @@ def _run(cli: argparse.Namespace) -> dict[str, Any]:
             (
                 objective
                 / trainer.R12_GRADIENT_ACCUMULATION
-                / BACKWARD_LOSS_DIVISOR
+                / divisor
             ).backward()
             bad_parameters = {
                 name: int((~torch.isfinite(parameter.grad)).sum())
@@ -196,22 +220,28 @@ def _run(cli: argparse.Namespace) -> dict[str, Any]:
                     "global_micro_index": unit.global_micro_index,
                     "segment_id": unit.segment.segment_id,
                     "ce": float(output.loss.detach()),
-                    "latent_gradient_nonfinite": int((~torch.isfinite(latent.grad)).sum()),
-                    "image_gradient_nonfinite": int((~torch.isfinite(image.grad)).sum()),
+                    "latent_gradient": _tensor_gradient_statistics(latent.grad),
+                    "image_gradient": _tensor_gradient_statistics(image.grad),
                     "writer_nonfinite_parameters": bad_parameters,
                 }
             )
-            if bad_parameters:
+            if (
+                bad_parameters
+                or micro_records[-1]["latent_gradient"]["nonfinite"]
+                or micro_records[-1]["image_gradient"]["nonfinite"]
+            ):
                 raise RuntimeError(
-                    f"R12 scaled preflight produced non-finite gradients: {bad_parameters}"
+                    "R12 scaled preflight produced non-finite gradients at "
+                    f"micro {unit.global_micro_index}: "
+                    f"{json.dumps(micro_records[-1], sort_keys=True)}"
                 )
         scaled = trainer._gradient_statistics(writer)
         for parameter in writer.parameters():
             if parameter.grad is not None:
-                parameter.grad.mul_(BACKWARD_LOSS_DIVISOR)
+                parameter.grad.mul_(divisor)
         unscaled = trainer._gradient_statistics(writer)
         ratio = unscaled["gradient_norm"] / scaled["gradient_norm"]
-        if not math.isclose(ratio, BACKWARD_LOSS_DIVISOR, rel_tol=1e-7, abs_tol=1e-7):
+        if not math.isclose(ratio, divisor, rel_tol=1e-7, abs_tol=1e-7):
             raise RuntimeError(f"R12 exact gradient unscale ratio drifted: {ratio}")
         pre_step_parameters = {
             name: parameter.detach().clone()
@@ -263,7 +293,7 @@ def _run(cli: argparse.Namespace) -> dict[str, Any]:
             "source_commit": validation["git_commit"],
             "host": platform.node(),
             "strict_determinism": determinism,
-            "backward_loss_divisor": BACKWARD_LOSS_DIVISOR,
+            "backward_loss_divisor": divisor,
             "gradient_accumulation": trainer.R12_GRADIENT_ACCUMULATION,
             "micro_records": micro_records,
             "scaled_gradient_norm": scaled["gradient_norm"],
@@ -294,7 +324,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             "schema": SCHEMA,
             "status": "failed",
             "host": platform.node(),
-            "backward_loss_divisor": BACKWARD_LOSS_DIVISOR,
+            "backward_loss_divisor": float(args.backward_loss_divisor),
             "error_type": type(exc).__name__,
             "error": str(exc),
         }
