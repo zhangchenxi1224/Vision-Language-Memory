@@ -1,0 +1,49 @@
+split,criterion,criterion_label,passed_targets,targets
+train_audit,m0_ce,normal CE <= 80% M0,36,36
+train_audit,m0_views,normal improves 4/4 vs M0,36,36
+train_audit,m0_acc,normal accuracy delta >= .25,33,36
+train_audit,reset_did,normal/reset DiD < 0,36,36
+train_audit,donor_ce,normal CE <= 80% donor,28,36
+train_audit,donor_views,normal beats donor 4/4,27,36
+train_audit,donor_acc,normal-donor accuracy >= .25,26,36
+train_audit,donor_did,normal/donor DiD < 0,30,36
+train_audit,base_ce,normal CE <= 80% base,31,36
+train_audit,base_views,normal beats base 4/4,31,36
+train_audit,base_acc,normal-base accuracy >= .25,21,36
+train_audit,base_did,normal/base DiD < 0,33,36
+dev_select,m0_ce,normal CE <= 80% M0,24,24
+dev_select,m0_views,normal improves 4/4 vs M0,24,24
+dev_select,m0_acc,normal accuracy delta >= .25,9,24
+dev_select,reset_did,normal/reset DiD < 0,24,24
+dev_select,donor_ce,normal CE <= 80% donor,6,24
+dev_select,donor_views,normal beats donor 4/4,6,24
+dev_select,donor_acc,normal-donor accuracy >= .25,4,24
+dev_select,donor_did,normal/donor DiD < 0,11,24
+dev_select,base_ce,normal CE <= 80% base,7,24
+dev_select,base_views,normal beats base 4/4,6,24
+dev_select,base_acc,normal-base accuracy >= .25,7,24
+dev_select,base_did,normal/base DiD < 0,10,24
+dev_replay,m0_ce,normal CE <= 80% M0,24,24
+dev_replay,m0_views,normal improves 4/4 vs M0,24,24
+dev_replay,m0_acc,normal accuracy delta >= .25,9,24
+dev_replay,reset_did,normal/reset DiD < 0,24,24
+dev_replay,donor_ce,normal CE <= 80% donor,17,24
+dev_replay,donor_views,normal beats donor 4/4,17,24
+dev_replay,donor_acc,normal-donor accuracy >= .25,6,24
+dev_replay,donor_did,normal/donor DiD < 0,19,24
+dev_replay,base_ce,normal CE <= 80% base,9,24
+dev_replay,base_views,normal beats base 4/4,8,24
+dev_replay,base_acc,normal-base accuracy >= .25,6,24
+dev_replay,base_did,normal/base DiD < 0,11,24
+dev_final,m0_ce,normal CE <= 80% M0,24,24
+dev_final,m0_views,normal improves 4/4 vs M0,24,24
+dev_final,m0_acc,normal accuracy delta >= .25,16,24
+dev_final,reset_did,normal/reset DiD < 0,24,24
+dev_final,donor_ce,normal CE <= 80% donor,13,24
+dev_final,donor_views,normal beats donor 4/4,14,24
+dev_final,donor_acc,normal-donor accuracy >= .25,9,24
+dev_final,donor_did,normal/donor DiD < 0,16,24
+dev_final,base_ce,normal CE <= 80% base,13,24
+dev_final,base_views,normal beats base 4/4,12,24
+dev_final,base_acc,normal-base accuracy >= .25,14,24
+dev_final,base_did,normal/base DiD < 0,14,24

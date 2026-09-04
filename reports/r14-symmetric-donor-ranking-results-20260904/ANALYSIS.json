@@ -1,0 +1,271 @@
+{
+  "config_sha256": "10a2b92665e94289afe305b888c0768efa031951df49bad4fa946070e39c6f14",
+  "criterion_pass_counts": {
+    "dev_final": {
+      "base_acc": 14,
+      "base_ce": 13,
+      "base_did": 14,
+      "base_views": 12,
+      "donor_acc": 9,
+      "donor_ce": 13,
+      "donor_did": 16,
+      "donor_views": 14,
+      "m0_acc": 16,
+      "m0_ce": 24,
+      "m0_views": 24,
+      "reset_did": 24
+    },
+    "dev_replay": {
+      "base_acc": 6,
+      "base_ce": 9,
+      "base_did": 11,
+      "base_views": 8,
+      "donor_acc": 6,
+      "donor_ce": 17,
+      "donor_did": 19,
+      "donor_views": 17,
+      "m0_acc": 9,
+      "m0_ce": 24,
+      "m0_views": 24,
+      "reset_did": 24
+    },
+    "dev_select": {
+      "base_acc": 7,
+      "base_ce": 7,
+      "base_did": 10,
+      "base_views": 6,
+      "donor_acc": 4,
+      "donor_ce": 6,
+      "donor_did": 11,
+      "donor_views": 6,
+      "m0_acc": 9,
+      "m0_ce": 24,
+      "m0_views": 24,
+      "reset_did": 24
+    },
+    "train_audit": {
+      "base_acc": 21,
+      "base_ce": 31,
+      "base_did": 33,
+      "base_views": 31,
+      "donor_acc": 26,
+      "donor_ce": 28,
+      "donor_did": 30,
+      "donor_views": 27,
+      "m0_acc": 33,
+      "m0_ce": 36,
+      "m0_views": 36,
+      "reset_did": 36
+    }
+  },
+  "decision": "symmetric_donor_ranking_did_not_fit_fixed_f1_boundary",
+  "endpoint_aggregates": {
+    "dev_final": {
+      "base_accuracy": 0.21875,
+      "base_ce": 1.3982959028022985,
+      "donor_accuracy": 0.3229166666666667,
+      "donor_ce": 3.006190547903922,
+      "m0_accuracy": 0.0,
+      "m0_ce": 24.963118771711986,
+      "normal_accuracy": 0.5,
+      "normal_accuracy_delta_vs_base": 0.28125,
+      "normal_accuracy_delta_vs_donor": 0.17708333333333331,
+      "normal_ce": 1.7901917868827393,
+      "normal_relative_ce_vs_base": 0.2802667756481654,
+      "normal_relative_ce_vs_donor": -0.4044982317800987,
+      "required_target_pass_count": 24,
+      "reset_accuracy": 0.0,
+      "reset_ce": 24.963118771711986,
+      "split": "dev_final",
+      "target_pass_count": 7,
+      "targets": 24
+    },
+    "dev_replay": {
+      "base_accuracy": 0.2916666666666667,
+      "base_ce": 1.3679710555200775,
+      "donor_accuracy": 0.2916666666666667,
+      "donor_ce": 4.164141195845635,
+      "m0_accuracy": 0.0,
+      "m0_ce": 24.358342245221138,
+      "normal_accuracy": 0.3229166666666667,
+      "normal_accuracy_delta_vs_base": 0.03125,
+      "normal_accuracy_delta_vs_donor": 0.03125,
+      "normal_ce": 2.062556039500729,
+      "normal_relative_ce_vs_base": 0.5077483044526723,
+      "normal_relative_ce_vs_donor": -0.5046863344695316,
+      "required_target_pass_count": 24,
+      "reset_accuracy": 0.0,
+      "reset_ce": 24.358342245221138,
+      "split": "dev_replay",
+      "target_pass_count": 4,
+      "targets": 24
+    },
+    "dev_select": {
+      "base_accuracy": 0.2916666666666667,
+      "base_ce": 1.3533110652739804,
+      "donor_accuracy": 0.3125,
+      "donor_ce": 2.4686593274539823,
+      "m0_accuracy": 0.0,
+      "m0_ce": 25.00755041340987,
+      "normal_accuracy": 0.25,
+      "normal_accuracy_delta_vs_base": -0.041666666666666685,
+      "normal_accuracy_delta_vs_donor": -0.0625,
+      "normal_ce": 2.7152604164245226,
+      "normal_relative_ce_vs_base": 1.0063830748881175,
+      "normal_relative_ce_vs_donor": 0.09989271756863638,
+      "required_target_pass_count": 24,
+      "reset_accuracy": 0.0,
+      "reset_ce": 25.00755041340987,
+      "split": "dev_select",
+      "target_pass_count": 1,
+      "targets": 24
+    },
+    "train_audit": {
+      "base_accuracy": 0.5,
+      "base_ce": 1.139950920517246,
+      "donor_accuracy": 0.3402777777777778,
+      "donor_ce": 1.8688914268033032,
+      "m0_accuracy": 0.0,
+      "m0_ce": 23.94902253482077,
+      "normal_accuracy": 0.8680555555555556,
+      "normal_accuracy_delta_vs_base": 0.3680555555555556,
+      "normal_accuracy_delta_vs_donor": 0.5277777777777778,
+      "normal_ce": 0.4451520501348164,
+      "normal_relative_ce_vs_base": -0.609498933574411,
+      "normal_relative_ce_vs_donor": -0.7618095713049319,
+      "required_target_pass_count": 36,
+      "reset_accuracy": 0.0,
+      "reset_ce": 23.94902253482077,
+      "split": "train_audit",
+      "target_pass_count": 17,
+      "targets": 36
+    }
+  },
+  "feature_pooling_audit": {
+    "attention_max": {
+      "maximum": 0.07242584973573685,
+      "mean": 0.0694645396951172,
+      "minimum": 0.06570854038000107
+    },
+    "feature_count": 216,
+    "interpretation": "Frozen token pooling is nearly uniform; this is a secondary representation hypothesis, not a causal result.",
+    "normalized_attention_entropy": {
+      "maximum": 0.9892256855964661,
+      "mean": 0.9881205765737427,
+      "minimum": 0.9869642853736877
+    },
+    "schema": "vision_memory.r14-frozen-feature-pooling-audit.v1"
+  },
+  "final_center_constraints": {
+    "train_mean_residual_coefficient_max_abs": 1.9619862712261238e-07,
+    "train_mean_residual_delta_max_abs": 1.0248423905068194e-06
+  },
+  "first_principles_interpretation": {
+    "identified_mechanism": "The objective was symmetric only over an epoch: just 44/2304 pair-epoch directions shared an optimizer update, with median lag 11. Each event also saw one fixed negative, while 0/36 train-audit evaluation donor identities and 0/36 donor target values overlapped that negative.",
+    "meaning_of_unreadable_images": "Noise-like images remain valid machine-oriented visual codes, but visual appearance alone is neither success nor failure; causal attribution and held-out generalization decide the claim.",
+    "next_action": "Use update-synchronous bidirectional pair loss and deterministic rotating negatives while preserving the R14 writer, Reader-call budget, optimizer, endpoint, data, and normal/reset/donor/base gates.",
+    "what_failed": "Only 17/36 train-audit and 1/24, 4/24, 7/24 held-out targets passed every causal gate. This is a scientific failure, not a full Picture Memory result.",
+    "what_worked": "The objective learned the fixed training contrast: last-64 own CE fell while donor CE rose and 60.9% of late micro-steps satisfied the ln(4) margin."
+  },
+  "fixed_base_latent_sha256": "51fcc191ac3914ebdbfe07a914d95a51c20458de9a4352de999d7cb8c3595fb5",
+  "formal_success_claim": false,
+  "git_commit": "b0e7abc9ce737ed0d80832c56ff773b187bb47ad",
+  "negative_coverage_audit": {
+    "evaluation_donor_target_value_overlap_count": 0,
+    "exact_evaluation_donor_overlap_count": 0,
+    "maximum_unique_training_donor_items_per_event": 1,
+    "minimum_unique_training_donor_items_per_event": 1,
+    "schema": "vision_memory.r14-negative-coverage-audit.v1",
+    "train_audit_relation_count": 36,
+    "train_event_count": 144
+  },
+  "pair_update_lag_audit": {
+    "maximum_optimizer_step_lag": 35,
+    "mean_optimizer_step_lag": 11.97048611111111,
+    "median_optimizer_step_lag": 11.0,
+    "p90_optimizer_step_lag": 25.0,
+    "pair_epoch_instances": 2304,
+    "same_optimizer_update_count": 44,
+    "same_optimizer_update_fraction": 0.019097222222222224,
+    "schema": "vision_memory.r14-pair-update-lag-audit.v1"
+  },
+  "renderer_sha256": "d87d1f50ce120303cf92fb08d7fd6e5033a245d9c04939e754c8810b7d9e5792",
+  "required_target_pass_counts": {
+    "dev_final": 24,
+    "dev_replay": 24,
+    "dev_select": 24,
+    "train_audit": 36
+  },
+  "schema": "vision_memory.r14-symmetric-donor-rendered-analysis.v1",
+  "scientific_arm_gate": false,
+  "source_sha256": {
+    "artifact_inventory": "a54dfe079ec00ce34a30dc42c88086ce75a93061f9065bd44ec3fdb37271c9ab",
+    "complete_archive": "41669e4d3c5395b7227d9e9b599d4e679a629a1bf6cd9fbe152d3fba7c4ac138",
+    "manifest": "ec84c48901054a16ab57690f7cc229c7a72b0caac1061a24863a8ce32dae0adc",
+    "report_source_archive": "78ab19df89ce00ab5ac990c4edb067e784af14725276c8e1e5335ac1d36b8137",
+    "summary": "08eeef536ae046734f0512b4eaa36f8ba7e5511726b0d5f58c50575981657f5f",
+    "technical_gate": "b87a388a171937d050ecd3fe5571e491b0ce5226bd90db483a0f220ab1d61455",
+    "terminal": "30a47f4949ed058660baca6e32ab15119094ef5e58f9377dc3958bc38f442b0b"
+  },
+  "split_target_pass_counts": {
+    "dev_final": 7,
+    "dev_replay": 4,
+    "dev_select": 1,
+    "train_audit": 17
+  },
+  "status": "completed",
+  "technical_gate": true,
+  "training": {
+    "all_micro_ranking_satisfied_fraction": 0.4479166666666667,
+    "first_64_mean_donor_ce": 1.1264884578995407,
+    "first_64_mean_own_ce": 1.1859317873604596,
+    "first_64_ranking_satisfied_fraction": 0.0,
+    "gradient_clipped_steps": 0,
+    "last_64_mean_donor_ce": 2.9833297724835575,
+    "last_64_mean_own_ce": 0.6152969462709734,
+    "last_64_ranking_satisfied_fraction": 0.609375,
+    "maximum_gradient_norm": 353.2029151802547,
+    "micro_steps": 4608,
+    "optimizer_steps": 1152,
+    "optimizer_steps_gradient_norm_gt_10": 635,
+    "reader_calls": 9216
+  },
+  "visual_code_representative_pixel_differences": [
+    {
+      "donor_base_pixel_rms": 0.08152451146974506,
+      "normal_base_mean_abs": 0.10336072577560707,
+      "normal_base_pixel_rms": 0.14338108328434337,
+      "normal_donor_pixel_rms": 0.11828514052387469,
+      "segment_id": "r5-f1-ee59008270e04ddeb87f5940",
+      "split": "train_audit",
+      "target_value": "tacos"
+    },
+    {
+      "donor_base_pixel_rms": 0.09671746437359845,
+      "normal_base_mean_abs": 0.12715975856993303,
+      "normal_base_pixel_rms": 0.1725229693767423,
+      "normal_donor_pixel_rms": 0.13067207136777562,
+      "segment_id": "r5-f1-e1fb95a44d70110ed3edaaa4",
+      "split": "dev_select",
+      "target_value": "purple"
+    },
+    {
+      "donor_base_pixel_rms": 0.04615927184815702,
+      "normal_base_mean_abs": 0.12354460610843843,
+      "normal_base_pixel_rms": 0.16726133781855756,
+      "normal_donor_pixel_rms": 0.16219015315726878,
+      "segment_id": "r5-f1-a3e0a264c6669d943382da4f",
+      "split": "dev_replay",
+      "target_value": "purple"
+    },
+    {
+      "donor_base_pixel_rms": 0.08777263981040728,
+      "normal_base_mean_abs": 0.09496852647967469,
+      "normal_base_pixel_rms": 0.1309090358790245,
+      "normal_donor_pixel_rms": 0.08836225162585812,
+      "segment_id": "r5-f1-865bcf071bbf554889ae9c0a",
+      "split": "dev_final",
+      "target_value": "blues"
+    }
+  ]
+}

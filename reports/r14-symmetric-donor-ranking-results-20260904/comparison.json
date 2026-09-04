@@ -1,0 +1,35 @@
+{
+  "formal_success_claim": false,
+  "interpretation": "R14 changed only 3/-0/-1/+1 target gates versus R13. Fixed-donor ranking produced no robust held-out improvement and did not solve shared causal generalization.",
+  "next_preregistered_test": "Use update-synchronous bidirectional pair loss and deterministic rotating negatives while preserving the R14 writer, Reader-call budget, optimizer, endpoint, data, and normal/reset/donor/base gates.",
+  "r13_analysis_path": "C:\\Users\\Expedition\\vlm-r14-delivery\\reports\\r13-centered-residual-writer-results-20260904\\ANALYSIS.json",
+  "r13_analysis_sha256": "6ff26b8c88267b6b286847b600522fabaa6111d9aba001472c77afb9f91edfbb",
+  "schema": "vision_memory.r13-r14-comparison.v1",
+  "status": "completed",
+  "target_pass_counts": {
+    "dev_final": {
+      "delta": 1,
+      "r13_centered_residual": 6,
+      "r14_symmetric_fixed_donor": 7,
+      "required": 24
+    },
+    "dev_replay": {
+      "delta": -1,
+      "r13_centered_residual": 5,
+      "r14_symmetric_fixed_donor": 4,
+      "required": 24
+    },
+    "dev_select": {
+      "delta": 0,
+      "r13_centered_residual": 1,
+      "r14_symmetric_fixed_donor": 1,
+      "required": 24
+    },
+    "train_audit": {
+      "delta": 3,
+      "r13_centered_residual": 14,
+      "r14_symmetric_fixed_donor": 17,
+      "required": 36
+    }
+  }
+}
