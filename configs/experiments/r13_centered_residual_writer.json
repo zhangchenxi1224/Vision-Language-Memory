@@ -9,7 +9,7 @@
     "r12_results_git_commit": "061f4dc6223da0e7476f904df1a74c5e2e6546c3",
     "r12_comparison_sha256": "1b9dcec847be50de39e4b9e572c952686f0c84660a65437bdb0206570527d6a1",
     "r12_collapse_audit_sha256": "65a219e49b1587dbeb94e0ec7557b45550b42e82557b377866611a360e37cd9e",
-    "source_decomposition_preregistration_sha256": "d2a7d9c4bc8f76f31358d9909f034a146f6d3116083ee2b7f8e49c46e41e8ae7",
+    "source_decomposition_preregistration_sha256": "0877b22641b104ee57a030d9b08156602f2345474145ef4af08dc69c5ef2f64a",
     "conditioned_source_sha256": {
       "terminal": "835d469eb331877272412206168731012d11fe56f2adc88f25dcc49c97b7142f",
       "summary": "a7f5b109c9074b631ddc5f7507435353099133e6de39318a5eb72e9ef7fa2a63",
@@ -29,8 +29,9 @@
       "r12_micro_metrics_sha256": "8882f1173d1302ed18d3f5e3bb8ad7b5891f2f4c02eaa7d11adac37032897a16",
       "train_ids_sha256": "4dcc520b4351095bd0243c33e86a16f39196e03da33a6424453641f0a2e49733",
       "train_features_sha256": "2532c503717e7bf7438d21ad2a56ce0ae43879321f42a9d2fbb99ea1429fe865",
-      "source_anchor_coefficients_sha256": "0a4106c709e1926601aa4e9730ad436251cbc6c97d1ded47d6d00bbf2986e2ae",
-      "common_delta_sha256": "24f6c45521d37e88dc0471060f51cec92dcadbed44582b24dcc2c9ba401b672a"
+      "source_anchor_coefficients_sha256": "93f7de196f335429dfb3c8aaef44a835bb734926b5b1143f7f7cb6036b241f66",
+      "common_delta_sha256": "8292303879f522d0fb590e7f8045c69bec67e9ac04ccdc476177747912c27d7c",
+      "derivation_cpu_threads": {"OMP_NUM_THREADS": "1", "MKL_NUM_THREADS": "1"}
     }
   },
   "fixed_data": {
@@ -92,7 +93,7 @@
     "initialization": "exact algebraic decomposition of the R12 conditioned step-1152 endpoint",
     "initial_latent_sha256": "719e92867b60546b21b281cfc633ab782c8ce2274bfb41c6b3cee6d673e74eaa",
     "fixed_base": "blank latent plus the R12 conditioned mean training coefficient projected through the R12 endpoint basis",
-    "fixed_base_latent_sha256": "11281993533d2db0fcab6b890908bdddc986996552034fe57c8c4f5a432825e8",
+    "fixed_base_latent_sha256": "51fcc191ac3914ebdbfe07a914d95a51c20458de9a4352de999d7cb8c3595fb5",
     "fixed_base_trainable": false,
     "feature_extractor": "frozen R12 conditioned step-1152 token LayerNorm and attention pooling",
     "feature_extractor_trainable": false,

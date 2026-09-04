@@ -75,7 +75,7 @@ class R13CenteredResidualContractTest(unittest.TestCase):
         self.assertTrue(config["success_boundary"]["diagnostic_only"])
         self.assertEqual(
             config["writer"]["fixed_base_latent_sha256"],
-            "11281993533d2db0fcab6b890908bdddc986996552034fe57c8c4f5a432825e8",
+            "51fcc191ac3914ebdbfe07a914d95a51c20458de9a4352de999d7cb8c3595fb5",
         )
         source_prereg = ROOT / "reports" / "r13-source-decomposition-preregistration-20260904.json"
         self.assertEqual(

@@ -1,6 +1,6 @@
 # R13 mean-centered conditional residual writer preregistration
 
-Status: locked after the complete R12 paired result and source-only decomposition audit, before any R13 model execution or fresh-final Reader output.
+Status: re-locked after the complete R12 paired result and a source-only technical preflight correction, before any R13 Reader inference, optimization, or fresh-final model output.
 
 ## Why R13 is the next minimal experiment
 
@@ -24,14 +24,14 @@ The R12 conditioned step-1152 writer is decomposed algebraically. Let `c(e)` be 
 
 At R13 step 0, `z_R13(e)` reconstructs the R12 conditioned endpoint for every source event up to a preregistered maximum absolute tolerance of `1e-5`. The 144-event reduction order is fixed to canonical segment-ID order so floating-point hashes are platform-stable. The common base is then frozen. During training, the coefficient network and basis may change, but `mean_train(c(e)-mean_train c(e))` is recomputed differentiably on every forward and must remain within `1e-6`; its projected mean latent residual must remain within `1e-5`. Thus neither parameter block can move the average training image.
 
-Source-only preregistration hashes were derived inside the locked formal H200 runtime (`torch 2.7.0a0+ecf3bae40a.nv25.02`):
+Source-only preregistration hashes were derived inside the exact locked formal H200 controller environment (`torch 2.7.0a0+ecf3bae40a.nv25.02`, `OMP_NUM_THREADS=1`, `MKL_NUM_THREADS=1`). The first technical launch stopped at the fixed-base hash check before Reader inference or optimization because the earlier source-only audit had used the same runtime with default CPU thread counts. An A/B rerun isolated CPU BLAS reduction order as the sole cause; two repetitions under the exact controller environment were bitwise identical. No data, model, architecture, objective, schedule, endpoint, or gate changed.
 
 - R12 conditioned step-1152 checkpoint: `d34091ed...067f9`
 - R12 event cache: `5cfc2380...6f49c`
 - R12 train features: `2532c503...fe865`
-- source mean coefficients: `0a4106c7...e2ae`
-- common latent delta: `24f6c455...672a`
-- frozen base latent: `11281993...25e8`
+- source mean coefficients: `93f7de19...1f66`
+- common latent delta: `82923038...d7c`
+- frozen base latent: `51fcc191...5fb5`
 
 No Reader inference or R13 optimization was used to derive these hashes.
 
