@@ -1,0 +1,173 @@
+{
+  "schema": "vision_memory.r11-new-frozen-dreamlite-oracle-phase1a-config.v1",
+  "protocol": "R11-New-Frozen-DreamLite-Oracle-Phase1A",
+  "status": "preregistered_before_any_r11_new_model_outcome",
+  "phase": "phase1a_query_level_frozen_dreamlite_bridge_oracle",
+  "parent_evidence": {
+    "canonical_r11_comparison_sha256": "f8b048f9cbe9fd4df9460043297904b5c9d476f386d6844d12fd4a5f8f636bb5",
+    "canonical_r11_target_passes": 8,
+    "canonical_r11_total_targets": 8,
+    "canonical_r11_is_not_phase1a": true
+  },
+  "deployment": {
+    "target_instance": "vlm-r3-h200x2-live-20260717",
+    "result_storage": "inspire_ssd",
+    "output_root_prefix": "/inspire/ssd/",
+    "minimum_free_bytes": 53687091200,
+    "fresh_output_root_required": true,
+    "duplicate_process_lock_required": true
+  },
+  "fixed_data": {
+    "train_sha256": "24327edc39e0d133df5150dc1aab4f55c6cf5b05ccfca9025ad90c5accc6d184",
+    "dev_sha256": "8b167df38022a631d4e631d3c0d66e9fca74171f4224fec436030d6650047303"
+  },
+  "target_selection": {
+    "family": "F1",
+    "independent_run_per_target": true,
+    "target_count": 8,
+    "target_ids": [
+      "r5-f1-8015bf53a4067aaa7e882288",
+      "r5-f1-392d41fd097d069c42218e0a",
+      "r5-f1-1aee01c0f3e7684c05c9122c",
+      "r5-f1-807090710dd4c077a97348ba",
+      "r5-f1-02c8aa9dc3523351c4d5f9c7",
+      "r5-f1-11dddf29efebc033a995ab92",
+      "r5-f1-de4899e05b0aa7f3d8373171",
+      "r5-f1-850189e424efde62468b2ef9"
+    ],
+    "selected_segment_payload_sha256": "6198beb3a3758fd7df912c6956bc05eac0ace8603708f37147826c65a4d61845"
+  },
+  "source_state": {
+    "rgb_numerator": 127,
+    "rgb_denominator": 255,
+    "encoding": "frozen VAE posterior mean in DreamLite model-latent scale/shift",
+    "persistent_state": "latent",
+    "reset": "decode the unchanged blank source latent"
+  },
+  "oracle_variable": {
+    "name": "x_T_fp32",
+    "meaning": "DreamLite initial noise tensor x_T",
+    "count": 1,
+    "storage_dtype": "torch.float32",
+    "forward_dtype": "DreamLite compute dtype",
+    "initialization": "Gaussian from make_event_generator",
+    "seed": 0,
+    "noise_key": ["global_seed", "source_episode_id", "source_turn_id"],
+    "unconstrained": true
+  },
+  "dreamlite_path": {
+    "execution": "complete frozen base DreamLite source-anchored edit path",
+    "dreamlite_inputs": ["source_latent", "event_text", "x_T"],
+    "unet_executed_and_frozen": true,
+    "condition_encoder_executed_and_frozen": true,
+    "scheduler_executed_and_fixed": true,
+    "vae_decoder_executed_and_frozen": true,
+    "reader_executed_and_frozen": true,
+    "lora_trainable_parameters": 0,
+    "diffusion_steps": 4,
+    "effective_start_sigma": 0.5,
+    "effective_sigma_schedule": [0.5, 0.375, 0.25, 0.125],
+    "initial_flow_state": "0.5*source_latent + 0.5*x_T"
+  },
+  "optimization": {
+    "optimizer": "Adam",
+    "learning_rate": 0.05,
+    "weight_decay": 0.0,
+    "schedule": "constant",
+    "optimizer_steps": 256,
+    "gradient_clipping": null,
+    "checkpoint_steps": [0, 64, 128, 192, 256],
+    "primary_endpoint": "raw_x_T_step256",
+    "best_checkpoint_selection_forbidden": true,
+    "strict_determinism": true
+  },
+  "choice_views": {
+    "training_family": [[0, 1, 2, 3], [1, 2, 3, 0], [2, 3, 0, 1], [3, 0, 1, 2]],
+    "training_exposures_per_view": 64,
+    "endpoint_family": [[3, 2, 1, 0], [2, 1, 0, 3], [1, 0, 3, 2], [0, 3, 2, 1]],
+    "endpoint_views": 4
+  },
+  "information_boundary": {
+    "dreamlite_inputs": ["source_latent", "event_text", "x_T"],
+    "noise_key": ["global_seed", "source_episode_id", "source_turn_id"],
+    "reader_loss_inputs": ["decoded_endpoint", "query_text", "answer_choices", "target_index"],
+    "forbidden_dreamlite_or_noise_inputs": [
+      "query_text",
+      "answer_choices",
+      "answer_text",
+      "target_index",
+      "segment_id",
+      "item_id",
+      "per_item_embedding"
+    ]
+  },
+  "evaluation": {
+    "m0": "full frozen DreamLite endpoint before optimizing x_T",
+    "endpoint": "raw_x_T_step256",
+    "conditions": ["normal", "reset"],
+    "reset": "blank source decode",
+    "raw_endpoint_only": true
+  },
+  "per_target_gate": {
+    "technical_gate": true,
+    "relative_normal_ce_change_at_endpoint_lte": -0.2,
+    "improved_fixed_reverse_choice_views": 4,
+    "accuracy_delta_gte": 0.25,
+    "normal_reset_difference_in_differences_lt": 0.0
+  },
+  "arm_gate": {
+    "required_target_passes": 8,
+    "total_targets": 8,
+    "partial_pass_counts_are_diagnostic_only": true
+  },
+  "mvp_route": {
+    "sequence": ["phase1a", "phase2", "phase3a", "phase3b"],
+    "phase1b_required_before_phase2": false,
+    "phase1b_status": "deferred_future_state_level_confirmation",
+    "phase2_uses_existing_train_split_only": true,
+    "phase2_full_train_coverage_required": false,
+    "phase2_supervision_scope": "query_level",
+    "phase2_candidate_filter": "locked_train_sha_build_r5_family_pools_pairing_seed0_f1_single_event_unique_segment_id",
+    "phase2_selection_protocol": "reuse_r10_f1_hash_order_v1",
+    "phase2_selection_seed": 20260831,
+    "phase2_selection_key": "sha256('R10-VisualAlignment-LowerBound' + unit-separator + '20260831' + unit-separator + 'F1' + unit-separator + segment_id), then segment_id",
+    "phase2_phase1a_first8_reused": true,
+    "phase2_membership_locked_before_any_phase1a_outcome": true,
+    "phase2_candidate_count": 7504,
+    "phase2_bank8_ids_sha256": "08c25bbb753e7ffb3a0fd760d0bbf079b113f1db12be9eba4af1505ad57e86ff",
+    "phase2_bank8_payload_sha256": "6198beb3a3758fd7df912c6956bc05eac0ace8603708f37147826c65a4d61845",
+    "phase2_bank64_ids_sha256": "5cbd99fdc537f67cba311ed39144516735d0da149e87095565118b162a872fcc",
+    "phase2_bank64_payload_sha256": "d7d3a3d12182fd3169c5b9b5127617f9c1c5b81462a94c2d8afccb256973d98a",
+    "phase2_bank128_ids_sha256": "c762b52c2b71ba8b977b6bec339a9586ef000440021c8bdf38bef28006d99f37",
+    "phase2_bank128_payload_sha256": "6b817ffdc488df1925294aa6169e8d33cb738877432fb9da46b2844aec6a3665",
+    "phase2_required_technical_passes": "all_selected_items",
+    "phase2_required_oracle_passes": "all_selected_items",
+    "phase2_failed_item_replacement_forbidden": true,
+    "phase2_technical_retry_same_id_only": true,
+    "phase3_requires_complete_selected_bank": true,
+    "phase2_minimum_bank_size": 64,
+    "phase2_optional_bank_size": 128,
+    "phase2_calibration_items": 8,
+    "phase2_bank64_is_bank128_prefix": true,
+    "phase2_default_size_if_clock_unreliable": 64,
+    "program_planning_window_hours": 30.0,
+    "program_clock_start_event": "phase1a_technical_preflight_controller_launch",
+    "phase3_and_reporting_reserve_hours": 9.0,
+    "phase2_projection_safety_factor": 1.15,
+    "phase2_projection_statistic": "p90_wall_clock_seconds_first_8",
+    "phase2_projection_p90_method": "nearest_rank_ceil_0p90_n8",
+    "phase2_projection_remaining_items_formula": "N-8",
+    "phase2_projected_remaining_items_for_128": 120,
+    "phase2_expand_to_128_if_projected_total_hours_lte": 30.0,
+    "phase2_minimum64_even_if_window_infeasible": true,
+    "phase2_size_decision_before_item_9": true,
+    "phase3_initial_claim": "locked_training_subset_learnability_diagnostic"
+  },
+  "success_boundary": {
+    "query_level_diagnostic_only": true,
+    "full_chain_reachability_only": true,
+    "scientific_success_gate": false,
+    "cannot_substitute_canonical_r11_results": true,
+    "cannot_establish_state_level_or_shared_writer_success": true
+  }
+}
