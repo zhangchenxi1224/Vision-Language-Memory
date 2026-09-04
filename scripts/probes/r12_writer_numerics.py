@@ -1,4 +1,4 @@
-"""R12 two-GPU numerical preflight for exact static backward downscaling."""
+"""R12 two-GPU numerical preflight for the exact fixed scalar objective."""
 
 from __future__ import annotations
 
@@ -25,9 +25,11 @@ from scripts.train import r12_shared_event_latent_writer as trainer  # noqa: E40
 from vision_memory.data import CYCLIC4  # noqa: E402
 
 
-SCHEMA = "vision_memory.r12-static-backward-downscale-preflight.v1"
-BACKWARD_LOSS_DIVISOR = 1024.0
-ALLOWED_BACKWARD_LOSS_DIVISORS = tuple(float(2**exponent) for exponent in range(10, 23, 2))
+SCHEMA = "vision_memory.r12-objective-numerics-preflight.v2"
+BACKWARD_LOSS_DIVISOR = 1.0
+ALLOWED_BACKWARD_LOSS_DIVISORS = (1.0,) + tuple(
+    float(2**exponent) for exponent in range(10, 23, 2)
+)
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -193,9 +195,7 @@ def _run(cli: argparse.Namespace) -> dict[str, Any]:
                 segment=unit.segment,
                 permutation=CYCLIC4[unit.forward_cyclic_training_view],
             )
-            latent_penalty = trainer.R12_LATENT_RMS_PENALTY * torch.relu(
-                diagnostics["delta_rms"] - trainer.R12_LATENT_RMS_SOFT_LIMIT
-            ).square()
+            latent_penalty = trainer._latent_rms_penalty(diagnostics["delta"])
             coefficient_penalty = (
                 trainer.R12_COEFFICIENT_L2_PENALTY
                 * diagnostics["coefficients"].square().mean()
@@ -294,6 +294,7 @@ def _run(cli: argparse.Namespace) -> dict[str, Any]:
             "host": platform.node(),
             "strict_determinism": determinism,
             "backward_loss_divisor": divisor,
+            "stable_rms_penalty_value_equivalent": True,
             "gradient_accumulation": trainer.R12_GRADIENT_ACCUMULATION,
             "micro_records": micro_records,
             "scaled_gradient_norm": scaled["gradient_norm"],

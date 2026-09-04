@@ -173,7 +173,7 @@ def _validate_args(args: argparse.Namespace) -> dict[str, Any]:
     if (
         config.get("schema") != "vision_memory.r12-shared-event-latent-writer-config.v1"
         or config.get("status")
-        != "preregistered_after_complete_r11_before_any_r12_model_outcome"
+        != "preregistered_with_numerical_amendment_after_failed_preflight_before_any_r12_model_outcome"
     ):
         raise ValueError("R12 machine-readable preregistration is invalid.")
     observed_data = {"train": _sha256(args.train), "dev": _sha256(args.dev)}
@@ -375,6 +375,22 @@ class SharedEventLatentWriter(nn.Module):
             "delta_rms": delta.square().mean().sqrt(),
             "basis_norms": flat_basis.double().norm(dim=1).float(),
         }
+
+
+def _latent_rms_penalty(delta: Tensor) -> Tensor:
+    """Evaluate the locked thresholded RMS penalty without a zero-RMS singularity.
+
+    For ``m = mean(delta**2)`` and ``L = R12_LATENT_RMS_SOFT_LIMIT``, this is
+    value-identical to ``lambda * relu(sqrt(m) - L)**2``.  Clamping ``m`` to
+    ``L**2`` only on the already-zero branch gives that branch an exact zero
+    gradient instead of allowing autograd to form ``0 * d(sqrt)(0)``.
+    """
+
+    mean_square = delta.square().mean()
+    penalty_rms = mean_square.clamp_min(R12_LATENT_RMS_SOFT_LIMIT**2).sqrt()
+    return R12_LATENT_RMS_PENALTY * (
+        penalty_rms - R12_LATENT_RMS_SOFT_LIMIT
+    ).square()
 
 
 def _embedding_cache(
@@ -739,6 +755,12 @@ def _manifest(
             "optimizer_steps": R12_OPTIMIZER_STEPS,
             "checkpoint_steps": list(R12_CHECKPOINT_STEPS),
             "gradient_clipping": None,
+            "backward_loss_divisor": validation["config"]["optimization"][
+                "backward_loss_divisor"
+            ],
+            "latent_rms_penalty_implementation": validation["config"]["optimization"][
+                "latent_rms_penalty_implementation"
+            ],
             "primary_endpoint": f"shared_step{R12_OPTIMIZER_STEPS}",
             "best_checkpoint_selection_forbidden": True,
         },
@@ -1043,9 +1065,7 @@ def _run(args: argparse.Namespace) -> dict[str, Any]:
             raise RuntimeError("R12 Reader returned an invalid scalar CE.")
         delta_rms = diagnostics["delta_rms"]
         coefficients = diagnostics["coefficients"]
-        latent_penalty = R12_LATENT_RMS_PENALTY * torch.relu(
-            delta_rms - R12_LATENT_RMS_SOFT_LIMIT
-        ).square()
+        latent_penalty = _latent_rms_penalty(diagnostics["delta"])
         coefficient_penalty = R12_COEFFICIENT_L2_PENALTY * coefficients.square().mean()
         # Reader CE lives on the Reader GPU while writer regularizers live on
         # the writer GPU. Cross-device ``to`` remains differentiable and keeps

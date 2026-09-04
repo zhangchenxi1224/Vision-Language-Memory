@@ -63,3 +63,27 @@ The conditioned arm passes only at `36/36` train audit, `24/24` dev select, and 
 | Technical failure | Rerun only the invalid arm in a fresh root; make no scientific conclusion. |
 
 Even a full R12 pass is not final Picture Memory success. The project goal still requires recurrent composition, overwrite/clear/interference, fixed full ID/OOD evaluation, multiple seeds, and causal state controls.
+
+## Technical numerical amendment — 2026-09-04
+
+Status: locked after failed numerical preflights and before any R12 training or model-outcome evaluation.
+
+The first complete backward preflight failed even with a `/1024` loss divisor. A layer-by-layer rerun on the first locked micro-step established that the Reader-to-image gradient and frozen-VAE-to-latent gradient were both finite, while every writer parameter gradient was non-finite. The cause is the implementation of the inactive latent regularizer at the exact initialization `delta=0`: autograd evaluates the singular derivative of `sqrt(mean(delta^2))` and can form `0 × infinity`, even though the thresholded penalty is mathematically zero in a neighborhood of that point.
+
+The symbolic objective is unchanged. Let `m=mean(delta^2)` and `L=0.50`. The original term
+
+`0.10·relu(sqrt(m)−L)^2`
+
+is evaluated as
+
+`0.10·(sqrt(max(m,L^2))−L)^2`.
+
+These expressions have exactly the same scalar value: both are zero when `m≤L^2`, and both equal `0.10·(sqrt(m)−L)^2` when `m>L^2`. The stable form additionally gives the inactive branch its correct zero gradient instead of traversing `d(sqrt)(0)`. No data, model, writer input, LR, optimizer, schedule, checkpoint, gate, or endpoint changes. Gradient clipping remains forbidden, and the locked backward loss divisor is `1.0` (no scaling).
+
+Evidence SHA-256:
+
+- failed full `/1024` preflight JSON: `c9fa9d6f0df7c5fbfae0514d0ac2a040b24d3931f7b1081100ee5f61778e3531`;
+- localized `/1024` failure JSON: `8d0045a0bf71a86103f384ca7e36599620575e79102cb4c5b5a07672b3804285`;
+- localized failure log: `668045b021a391b52140f4dec2d999b0f0a36c74f0b951ac10cfb92b9e527c7e`.
+
+Formal R12 may start only after a clean-commit no-scaling preflight proves four accumulated micro-steps finite, exact unscale ratio `1.0`, a nonzero finite optimizer update, finite post-step writer/Adam/latent/image state, and unchanged frozen Reader/VAE parameters.
