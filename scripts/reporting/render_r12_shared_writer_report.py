@@ -457,6 +457,8 @@ def render(conditioned_root: Path, control_root: Path, output_dir: Path) -> dict
     analysis = {
         "schema": "vision_memory.r12-shared-writer-rendered-analysis.v1",
         "status": "completed",
+        "aggregation_git_commit": result["aggregation_git_commit"],
+        "renderer_sha256": _sha256(Path(__file__).resolve()),
         "decision": result["decision"],
         "reason": result["reason"],
         "r12_diagnostic_gate": result["r12_diagnostic_gate"],

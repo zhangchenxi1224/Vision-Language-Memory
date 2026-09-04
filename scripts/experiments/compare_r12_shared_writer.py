@@ -7,6 +7,7 @@ import hashlib
 import json
 import math
 import os
+import subprocess
 from collections import Counter
 from pathlib import Path
 from typing import Any, Iterable, Mapping, Sequence
@@ -25,6 +26,7 @@ MANIFEST_SCHEMA = "vision_memory.r12-shared-event-latent-writer-manifest.v1"
 TECHNICAL_SCHEMA = "vision_memory.r12-shared-event-latent-writer-technical-gate.v1"
 TERMINAL_SCHEMA = "vision_memory.r12-shared-writer-arm-terminal.v1"
 INVENTORY_SCHEMA = "vision_memory.r12-shared-writer-arm-inventory.v1"
+ROOT = Path(__file__).resolve().parents[2]
 
 
 def _load(path: Path) -> dict[str, Any]:
@@ -54,6 +56,17 @@ def _write_json(path: Path, value: Any) -> None:
     temporary = path.with_suffix(path.suffix + ".tmp")
     temporary.write_text(json.dumps(value, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     os.replace(temporary, path)
+
+
+def _git(*args: str) -> str:
+    return subprocess.run(
+        ["git", *args],
+        cwd=ROOT,
+        check=True,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    ).stdout.strip()
 
 
 def _validate_inventory(root: Path) -> dict[str, Any]:
@@ -363,6 +376,9 @@ def _markdown_table(headers: Sequence[str], rows: Sequence[Sequence[str]]) -> st
 def compare(conditioned_root: Path, control_root: Path, output_dir: Path) -> dict[str, Any]:
     if output_dir.exists() and any(output_dir.iterdir()):
         raise ValueError("R12 comparison refuses a non-empty output directory.")
+    aggregation_commit = _git("rev-parse", "HEAD")
+    if _git("status", "--porcelain"):
+        raise ValueError("R12 comparison requires a clean aggregation worktree.")
     conditioned = _validate_arm(conditioned_root, "conditioned")
     control = _validate_arm(control_root, "constant-control")
     _paired_invariants(conditioned, control)
@@ -374,6 +390,8 @@ def compare(conditioned_root: Path, control_root: Path, output_dir: Path) -> dic
     result = {
         "schema": "vision_memory.r12-shared-writer-comparison.v1",
         "status": "completed",
+        "aggregation_git_commit": aggregation_commit,
+        "aggregation_script_sha256": _sha256(Path(__file__).resolve()),
         "decision": decision,
         "reason": reason,
         "r12_diagnostic_gate": diagnostic_gate,
