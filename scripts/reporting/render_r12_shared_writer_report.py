@@ -468,6 +468,7 @@ def render(conditioned_root: Path, control_root: Path, output_dir: Path) -> dict
             "uniform_token_mean_ridge_accuracy": token_probe,
             "writer_coefficient_ridge_accuracy": coefficient_probe,
             "attention": collapse_result["attention"],
+            "coefficient_anchor": collapse_result["coefficient_anchor"],
             "interpretation": (
                 "Frozen event states retain target-value information, but the learned coefficient head compresses most of it into a dominant event-independent visual code. This is post-hoc localization, not a changed R12 outcome."
             ),

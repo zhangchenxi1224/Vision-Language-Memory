@@ -134,7 +134,7 @@ def _labels(
 
 def _writer_representations(
     state: Mapping[str, Tensor], cache: Mapping[str, Tensor], segment_ids: Sequence[str]
-) -> tuple[dict[str, Tensor], dict[str, float]]:
+) -> tuple[dict[str, Tensor], dict[str, float], dict[str, float]]:
     weight = state["token_norm.weight"].float()
     bias = state["token_norm.bias"].float()
     query = state["attention_query"].float()
@@ -166,12 +166,31 @@ def _writer_representations(
         normalized_entropy = entropy / math.log(max(2, attention.numel()))
         attention_entropies.append(float(normalized_entropy))
         attention_maxima.append(float(attention.max()))
+    attention_pool_tensor = torch.stack(attention_pools)
     coefficient_tensor = torch.stack(coefficients)
     latent_codes = 80.0 * coefficient_tensor @ unit_basis
+    zero_hidden = functional.gelu(first_bias)
+    zero_raw = functional.linear(zero_hidden, final_weight, final_bias)
+    zero_coefficients = 2.0 * torch.tanh(zero_raw / 2.0)
+    residual_from_zero = coefficient_tensor - zero_coefficients.unsqueeze(0)
+    coefficient_norms = coefficient_tensor.double().norm(dim=1)
+    residual_norms = residual_from_zero.double().norm(dim=1)
+    zero_cosines = functional.cosine_similarity(
+        coefficient_tensor.double(), zero_coefficients.double().unsqueeze(0), dim=1
+    )
+    common_pool = attention_pool_tensor.mean(dim=0)
+    common_hidden = functional.gelu(functional.linear(common_pool, first_weight, first_bias))
+    common_raw = functional.linear(common_hidden, final_weight, final_bias)
+    common_coefficients = 2.0 * torch.tanh(common_raw / 2.0)
+    residual_from_common = coefficient_tensor - common_coefficients.unsqueeze(0)
+    common_residual_norms = residual_from_common.double().norm(dim=1)
+    common_cosines = functional.cosine_similarity(
+        coefficient_tensor.double(), common_coefficients.double().unsqueeze(0), dim=1
+    )
     return (
         {
             "uniform_token_mean": torch.stack(token_means),
-            "learned_attention_pool": torch.stack(attention_pools),
+            "learned_attention_pool": attention_pool_tensor,
             "coefficients": coefficient_tensor,
             "latent_delta_flat": latent_codes,
         },
@@ -181,6 +200,25 @@ def _writer_representations(
             "max_weight_mean": sum(attention_maxima) / len(attention_maxima),
             "max_weight_max": max(attention_maxima),
             "attention_query_norm": float(query.double().norm()),
+        },
+        {
+            "zero_input_coefficient_norm": float(zero_coefficients.double().norm()),
+            "event_coefficient_norm_mean": float(coefficient_norms.mean()),
+            "event_residual_from_zero_norm_mean": float(residual_norms.mean()),
+            "event_residual_from_zero_norm_max": float(residual_norms.max()),
+            "event_residual_to_total_norm_ratio_mean": float(
+                (residual_norms / coefficient_norms.clamp_min(1e-12)).mean()
+            ),
+            "event_to_zero_coefficient_cosine_mean": float(zero_cosines.mean()),
+            "event_to_zero_coefficient_cosine_min": float(zero_cosines.min()),
+            "common_event_coefficient_norm": float(common_coefficients.double().norm()),
+            "event_residual_from_common_norm_mean": float(common_residual_norms.mean()),
+            "event_residual_from_common_norm_max": float(common_residual_norms.max()),
+            "event_residual_from_common_to_total_norm_ratio_mean": float(
+                (common_residual_norms / coefficient_norms.clamp_min(1e-12)).mean()
+            ),
+            "event_to_common_coefficient_cosine_mean": float(common_cosines.mean()),
+            "event_to_common_coefficient_cosine_min": float(common_cosines.min()),
         },
     )
 
@@ -285,7 +323,9 @@ def analyze(
     )
     labels, split_ids = _labels(summary, micro_metrics_path, cache)
     segment_ids = sorted(cache)
-    representations, attention = _writer_representations(state, cache, segment_ids)
+    representations, attention, coefficient_anchor = _writer_representations(
+        state, cache, segment_ids
+    )
     representation_audit = {}
     for name, values in representations.items():
         split_diversity = {}
@@ -321,6 +361,7 @@ def analyze(
         },
         "split_counts": {split: len(split_ids[split]) for split in SPLITS},
         "attention": attention,
+        "coefficient_anchor": coefficient_anchor,
         "representations": representation_audit,
     }
     _write_json(output_path, result)
