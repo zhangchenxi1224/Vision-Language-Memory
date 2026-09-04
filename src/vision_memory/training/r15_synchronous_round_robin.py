@@ -145,6 +145,79 @@ def _balanced_member_shifts(*, epochs: int, member_count: int) -> tuple[int, ...
     return shifts
 
 
+def _balanced_odd_edge_orientations(
+    rounds: Sequence[Sequence[tuple[str, str]]],
+    shifts: Sequence[int],
+    *,
+    targets: Sequence[str],
+    member_count: int,
+    seed: int,
+) -> dict[tuple[int, str, str], tuple[str, str]]:
+    """Orient odd-offset edges so every target receives +1 and -1 equally.
+
+    With four members, an offset-one matching gives the left endpoint +1 but
+    the right endpoint -1.  The union of the 18 odd-offset perfect matchings
+    is an even-degree multigraph.  Deterministic Euler orientation therefore
+    gives every target nine outgoing (+1) and nine incoming (-1) incidences.
+    """
+
+    if member_count == 2:
+        return {}
+    if member_count != 4:
+        raise ValueError("R15 balanced odd-offset orientation supports two or four members.")
+    edges: dict[tuple[int, str, str], tuple[str, str]] = {}
+    adjacency: dict[str, list[tuple[int, str, str]]] = defaultdict(list)
+    for round_zero, (round_pairs, shift) in enumerate(zip(rounds, shifts, strict=True)):
+        if shift % 2 == 0:
+            continue
+        for first, second in round_pairs:
+            low, high = sorted((first, second))
+            key = (round_zero, low, high)
+            if key in edges:
+                raise RuntimeError("R15 odd-offset edge instance was duplicated.")
+            edges[key] = (low, high)
+            adjacency[low].append(key)
+            adjacency[high].append(key)
+    degrees = {target: len(adjacency[target]) for target in targets}
+    if len(set(degrees.values())) != 1 or any(degree <= 0 or degree % 2 for degree in degrees.values()):
+        raise RuntimeError(f"R15 odd-offset graph is not positive even-regular: {degrees}")
+
+    unused = set(edges)
+    orientations: dict[tuple[int, str, str], tuple[str, str]] = {}
+    ordered_targets = sorted(targets, key=lambda value: (_digest(seed, "euler-start", value), value))
+    while unused:
+        start = next(target for target in ordered_targets if any(edge in unused for edge in adjacency[target]))
+        vertex_stack = [start]
+        traversal_stack: list[tuple[tuple[int, str, str], str, str]] = []
+        component: list[tuple[tuple[int, str, str], str, str]] = []
+        while vertex_stack:
+            vertex = vertex_stack[-1]
+            candidates = [edge for edge in adjacency[vertex] if edge in unused]
+            if candidates:
+                edge = min(
+                    candidates,
+                    key=lambda value: (_digest(seed, "euler-edge", vertex, *value), value),
+                )
+                unused.remove(edge)
+                first, second = edges[edge]
+                other = second if vertex == first else first
+                vertex_stack.append(other)
+                traversal_stack.append((edge, vertex, other))
+            else:
+                vertex_stack.pop()
+                if traversal_stack:
+                    component.append(traversal_stack.pop())
+        for edge, source, destination in component:
+            orientations[edge] = (source, destination)
+
+    outgoing = Counter(source for source, _destination in orientations.values())
+    incoming = Counter(destination for _source, destination in orientations.values())
+    expected = next(iter(degrees.values())) // 2
+    if any(outgoing[target] != expected or incoming[target] != expected for target in targets):
+        raise RuntimeError(f"R15 Euler orientation lost per-target odd-offset balance: out={outgoing}, in={incoming}")
+    return orientations
+
+
 @dataclass(frozen=True)
 class R15PairTrainingUnit:
     global_pair_index: int
@@ -200,12 +273,28 @@ def build_synchronous_round_robin_schedule(
         raise ValueError("R15 epochs must preserve exact four-view balance.")
     base_rounds = round_robin_target_rounds(targets, seed=seed)
     shifts = _balanced_member_shifts(epochs=epochs, member_count=member_count)
+    scheduled_rounds = tuple(base_rounds[index % len(base_rounds)] for index in range(epochs))
+    odd_orientations = _balanced_odd_edge_orientations(
+        scheduled_rounds,
+        shifts,
+        targets=targets,
+        member_count=member_count,
+        seed=seed,
+    )
     units: list[R15PairTrainingUnit] = []
     for epoch_zero in range(epochs):
-        round_pairs = base_rounds[epoch_zero % len(base_rounds)]
+        round_pairs = scheduled_rounds[epoch_zero]
         shift = shifts[epoch_zero]
         for member_rank in range(member_count):
-            for value_pair_index, (left_target, right_target) in enumerate(round_pairs):
+            for value_pair_index, pair in enumerate(round_pairs):
+                left_target, right_target = pair
+                if member_count == 4 and shift % 2:
+                    low, high = sorted(pair)
+                    receives_one, receives_three = odd_orientations[(epoch_zero, low, high)]
+                    if shift == 1:
+                        left_target, right_target = receives_one, receives_three
+                    else:
+                        left_target, right_target = receives_three, receives_one
                 left = groups[left_target][member_rank]
                 right_rank = (member_rank + shift) % member_count
                 right = groups[right_target][right_rank]

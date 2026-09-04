@@ -58,6 +58,16 @@ class R15SynchronousRoundRobinTest(unittest.TestCase):
         self.assertEqual(R15_CHECKPOINT_STEPS, (0, 324, 648, 972, 1296))
         self.assertEqual(R15_BACKWARD_LOSS_DIVISOR, 4.0)
 
+    def test_locked_shape_schedule_satisfies_every_balance_contract(self) -> None:
+        segments = tuple(_segment(f"target-{target:02d}", member) for target in range(36) for member in range(4))
+        schedule = build_synchronous_round_robin_schedule(segments)
+        audit = synchronous_schedule_audit(segments, schedule)
+        self.assertTrue(audit["passed"], audit["checks"])
+        self.assertEqual(audit["pair_micro_steps"], R15_PAIR_MICRO_STEPS)
+        self.assertEqual(audit["optimizer_steps"], R15_OPTIMIZER_STEPS)
+        self.assertTrue(audit["checks"]["balanced_donor_member_ranks"])
+        self.assertTrue(audit["checks"]["repeat_event_pairs_disjoint"])
+
     def test_one_factorization_covers_every_value_pair_once(self) -> None:
         rounds = round_robin_target_rounds(("alpha", "beta", "gamma", "delta"))
         self.assertEqual(len(rounds), 3)
