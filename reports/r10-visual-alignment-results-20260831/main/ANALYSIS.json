@@ -1,0 +1,800 @@
+{
+  "arm_pass_counts": {
+    "direct-pixel-oracle": 8,
+    "dreamlite-single-set": 0
+  },
+  "arms": {
+    "direct-pixel-oracle": {
+      "failed_target_indices": [],
+      "pass_count": 8,
+      "passed_target_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "targets": [
+        {
+          "arm": "direct-pixel-oracle",
+          "clip_rate": null,
+          "git_commit": "ba86e2c5b6a4d55f97ba386ad135fea546a22dbf",
+          "implementation_revision": "direct-pixel-logit-v1",
+          "inventory_sha256": "ddff4b448ae3c182dc2f32406527eae1b5818be18a661cc64cf3e9b55ca1757e",
+          "passed": true,
+          "source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r10/r10-visual-alignment-ba86e2c-20260831/direct-pixel-oracle/target-00",
+          "summary_sha256": "96afe3ec5544e886a47841b303f3039fd338127865126e4ac3e1d48533eea0bd",
+          "target_family": "F1",
+          "target_index": 0,
+          "target_segment_id": "r5-f1-8015bf53a4067aaa7e882288",
+          "target_statistics": {
+            "accuracy_delta": 1.0,
+            "bootstrap_ci_reason": "one independent target; choice views are deterministic, not independent units",
+            "bootstrap_ci_used": false,
+            "condition_mean_ce": {
+              "m0": {
+                "normal": 15.091156959533691,
+                "reset": 15.091156959533691
+              },
+              "raw_step128": {
+                "normal": 0.0003754922072403133,
+                "reset": 15.091156959533691
+              }
+            },
+            "delta_ce": -15.090781467326451,
+            "endpoint": "raw_step128",
+            "endpoint_normal_accuracy": 1.0,
+            "endpoint_normal_mean_ce": 0.0003754922072403133,
+            "improved_choice_views": 4,
+            "m0_normal_accuracy": 0.0,
+            "m0_normal_mean_ce": 15.091156959533691,
+            "normal_reset_difference_in_differences": -15.090781467326451,
+            "per_view_delta_ce": {
+              "0": -14.780931405723095,
+              "1": -14.916418940993026,
+              "2": -14.72869123518467,
+              "3": -15.937084287405014
+            },
+            "relative_change": -0.9999751183949483,
+            "suite": "r10_f1_single_target",
+            "target_segment_id": "r5-f1-8015bf53a4067aaa7e882288"
+          },
+          "terminal_sha256": "540267765bd2984cd22d5c6e3b710090106b52b77224f487ec549f377d623091",
+          "wall_clock_seconds": 127.89538613613695
+        },
+        {
+          "arm": "direct-pixel-oracle",
+          "clip_rate": null,
+          "git_commit": "ba86e2c5b6a4d55f97ba386ad135fea546a22dbf",
+          "implementation_revision": "direct-pixel-logit-v1",
+          "inventory_sha256": "57f5283aa5d3983020bca99eda85b9c4da85a925882f1905ba3616d5cd0a7dac",
+          "passed": true,
+          "source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r10/r10-visual-alignment-ba86e2c-20260831/direct-pixel-oracle/target-01",
+          "summary_sha256": "311b707600d7112c377038796dd1f8b30421861c26040482ed11b1513888ee2a",
+          "target_family": "F1",
+          "target_index": 1,
+          "target_segment_id": "r5-f1-392d41fd097d069c42218e0a",
+          "target_statistics": {
+            "accuracy_delta": 1.0,
+            "bootstrap_ci_reason": "one independent target; choice views are deterministic, not independent units",
+            "bootstrap_ci_used": false,
+            "condition_mean_ce": {
+              "m0": {
+                "normal": 27.677093982696533,
+                "reset": 27.677093982696533
+              },
+              "raw_step128": {
+                "normal": 0.0003191248688381165,
+                "reset": 27.677093982696533
+              }
+            },
+            "delta_ce": -27.676774857827695,
+            "endpoint": "raw_step128",
+            "endpoint_normal_accuracy": 1.0,
+            "endpoint_normal_mean_ce": 0.0003191248688381165,
+            "improved_choice_views": 4,
+            "m0_normal_accuracy": 0.0,
+            "m0_normal_mean_ce": 27.677093982696533,
+            "normal_reset_difference_in_differences": -27.676774857827695,
+            "per_view_delta_ce": {
+              "0": -23.833217032253742,
+              "1": -29.207926716655493,
+              "2": -25.74974897503853,
+              "3": -31.916206707363017
+            },
+            "relative_change": -0.9999884697118477,
+            "suite": "r10_f1_single_target",
+            "target_segment_id": "r5-f1-392d41fd097d069c42218e0a"
+          },
+          "terminal_sha256": "cd75da674d100ade4f14c34ff69f259c373dddcd3f617cbb7c9acf2974eb6db4",
+          "wall_clock_seconds": 127.58399552665651
+        },
+        {
+          "arm": "direct-pixel-oracle",
+          "clip_rate": null,
+          "git_commit": "ba86e2c5b6a4d55f97ba386ad135fea546a22dbf",
+          "implementation_revision": "direct-pixel-logit-v1",
+          "inventory_sha256": "7587c4c4d439bdf86c2b0f3b6175c23fe3cf913b912326ee30cd37602503499a",
+          "passed": true,
+          "source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r10/r10-visual-alignment-ba86e2c-20260831/direct-pixel-oracle/target-02",
+          "summary_sha256": "a54a801ae8433265b63b5c32a2e6933a7cebd9d78939b92cb5bd0057fb733d2a",
+          "target_family": "F1",
+          "target_index": 2,
+          "target_segment_id": "r5-f1-1aee01c0f3e7684c05c9122c",
+          "target_statistics": {
+            "accuracy_delta": 1.0,
+            "bootstrap_ci_reason": "one independent target; choice views are deterministic, not independent units",
+            "bootstrap_ci_used": false,
+            "condition_mean_ce": {
+              "m0": {
+                "normal": 30.203125,
+                "reset": 30.203125
+              },
+              "raw_step128": {
+                "normal": 0.0012245660182088614,
+                "reset": 30.203125
+              }
+            },
+            "delta_ce": -30.20190043398179,
+            "endpoint": "raw_step128",
+            "endpoint_normal_accuracy": 1.0,
+            "endpoint_normal_mean_ce": 0.0012245660182088614,
+            "improved_choice_views": 4,
+            "m0_normal_accuracy": 0.0,
+            "m0_normal_mean_ce": 30.203125,
+            "normal_reset_difference_in_differences": -30.20190043398179,
+            "per_view_delta_ce": {
+              "0": -30.93512114882469,
+              "1": -30.623712293803692,
+              "2": -28.499631234444678,
+              "3": -30.749137058854103
+            },
+            "relative_change": -0.9999594556517509,
+            "suite": "r10_f1_single_target",
+            "target_segment_id": "r5-f1-1aee01c0f3e7684c05c9122c"
+          },
+          "terminal_sha256": "644c9a2e76f5b8e732267240645f65eef5f3e13fd162f3266a144ab36f3a5e2f",
+          "wall_clock_seconds": 130.38755342829973
+        },
+        {
+          "arm": "direct-pixel-oracle",
+          "clip_rate": null,
+          "git_commit": "ba86e2c5b6a4d55f97ba386ad135fea546a22dbf",
+          "implementation_revision": "direct-pixel-logit-v1",
+          "inventory_sha256": "ff9a50f596817fef5f5fa26ce872ad9419bfeb07a9c5c703541b53e8febc7451",
+          "passed": true,
+          "source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r10/r10-visual-alignment-ba86e2c-20260831/direct-pixel-oracle/target-03",
+          "summary_sha256": "8e1bbb04ae14aea6e9c525c773344d6330112df88dfb198b74514eef8df2f855",
+          "target_family": "F1",
+          "target_index": 3,
+          "target_segment_id": "r5-f1-807090710dd4c077a97348ba",
+          "target_statistics": {
+            "accuracy_delta": 1.0,
+            "bootstrap_ci_reason": "one independent target; choice views are deterministic, not independent units",
+            "bootstrap_ci_used": false,
+            "condition_mean_ce": {
+              "m0": {
+                "normal": 33.994791984558105,
+                "reset": 33.994791984558105
+              },
+              "raw_step128": {
+                "normal": 0.0005543642328120768,
+                "reset": 33.994791984558105
+              }
+            },
+            "delta_ce": -33.99423762032529,
+            "endpoint": "raw_step128",
+            "endpoint_normal_accuracy": 1.0,
+            "endpoint_normal_mean_ce": 0.0005543642328120768,
+            "improved_choice_views": 4,
+            "m0_normal_accuracy": 0.0,
+            "m0_normal_mean_ce": 33.994791984558105,
+            "normal_reset_difference_in_differences": -33.99423762032529,
+            "per_view_delta_ce": {
+              "0": -35.93579152226448,
+              "1": -31.499800940277055,
+              "2": -36.24982549296692,
+              "3": -32.29153252579272
+            },
+            "relative_change": -0.9999836926717168,
+            "suite": "r10_f1_single_target",
+            "target_segment_id": "r5-f1-807090710dd4c077a97348ba"
+          },
+          "terminal_sha256": "bea22e98cc06c5ac068c5cced0b2027f81f621600bd9dd9d6c85227dbaabf502",
+          "wall_clock_seconds": 134.92375941947103
+        },
+        {
+          "arm": "direct-pixel-oracle",
+          "clip_rate": null,
+          "git_commit": "ba86e2c5b6a4d55f97ba386ad135fea546a22dbf",
+          "implementation_revision": "direct-pixel-logit-v1",
+          "inventory_sha256": "6e902b10511394b56eabd6e6c101b8bdb17a0124c866e2f1d15307e76d4a8abc",
+          "passed": true,
+          "source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r10/r10-visual-alignment-ba86e2c-20260831/direct-pixel-oracle/target-04",
+          "summary_sha256": "18186b9638009dfb62066ee29078042d906aa7fed05c007c2a37cc97ac0486de",
+          "target_family": "F1",
+          "target_index": 4,
+          "target_segment_id": "r5-f1-02c8aa9dc3523351c4d5f9c7",
+          "target_statistics": {
+            "accuracy_delta": 1.0,
+            "bootstrap_ci_reason": "one independent target; choice views are deterministic, not independent units",
+            "bootstrap_ci_used": false,
+            "condition_mean_ce": {
+              "m0": {
+                "normal": 32.18749952316284,
+                "reset": 32.18749952316284
+              },
+              "raw_step128": {
+                "normal": 0.0010983122047036886,
+                "reset": 32.18749952316284
+              }
+            },
+            "delta_ce": -32.18640121095814,
+            "endpoint": "raw_step128",
+            "endpoint_normal_accuracy": 1.0,
+            "endpoint_normal_mean_ce": 0.0010983122047036886,
+            "improved_choice_views": 4,
+            "m0_normal_accuracy": 0.0,
+            "m0_normal_mean_ce": 32.18749952316284,
+            "normal_reset_difference_in_differences": -32.18640121095814,
+            "per_view_delta_ce": {
+              "0": -27.582881551235914,
+              "1": -36.31197656970471,
+              "2": -29.665818691253662,
+              "3": -35.184928031638265
+            },
+            "relative_change": -0.9999658776785717,
+            "suite": "r10_f1_single_target",
+            "target_segment_id": "r5-f1-02c8aa9dc3523351c4d5f9c7"
+          },
+          "terminal_sha256": "ecb4373339b1646a9161148d5cedcc1db75403d0c0025e72f034492e5ac4a95e",
+          "wall_clock_seconds": 101.35287491604686
+        },
+        {
+          "arm": "direct-pixel-oracle",
+          "clip_rate": null,
+          "git_commit": "ba86e2c5b6a4d55f97ba386ad135fea546a22dbf",
+          "implementation_revision": "direct-pixel-logit-v1",
+          "inventory_sha256": "5bc1b84dabc27451c056653df8385fe48176deebd7aba31b8dc17d875d4960c5",
+          "passed": true,
+          "source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r10/r10-visual-alignment-ba86e2c-20260831/direct-pixel-oracle/target-05",
+          "summary_sha256": "feaf8659fb02c86fffb17e0dab6ff78951a210a621b1bf00400cfb8397956e6c",
+          "target_family": "F1",
+          "target_index": 5,
+          "target_segment_id": "r5-f1-11dddf29efebc033a995ab92",
+          "target_statistics": {
+            "accuracy_delta": 1.0,
+            "bootstrap_ci_reason": "one independent target; choice views are deterministic, not independent units",
+            "bootstrap_ci_used": false,
+            "condition_mean_ce": {
+              "m0": {
+                "normal": 17.601562023162842,
+                "reset": 17.601562023162842
+              },
+              "raw_step128": {
+                "normal": 0.0003840746358036995,
+                "reset": 17.601562023162842
+              }
+            },
+            "delta_ce": -17.601177948527038,
+            "endpoint": "raw_step128",
+            "endpoint_normal_accuracy": 1.0,
+            "endpoint_normal_mean_ce": 0.0003840746358036995,
+            "improved_choice_views": 4,
+            "m0_normal_accuracy": 0.0,
+            "m0_normal_mean_ce": 17.601562023162842,
+            "normal_reset_difference_in_differences": -17.601177948527038,
+            "per_view_delta_ce": {
+              "0": -18.447359120473266,
+              "1": -16.46838504076004,
+              "2": -17.83300250209868,
+              "3": -17.655965130776167
+            },
+            "relative_change": -0.999978179514108,
+            "suite": "r10_f1_single_target",
+            "target_segment_id": "r5-f1-11dddf29efebc033a995ab92"
+          },
+          "terminal_sha256": "0d3ccee0af276a49584e81438cd564a8833e50c2adbdaf13a248c0035efa8746",
+          "wall_clock_seconds": 118.19463309831917
+        },
+        {
+          "arm": "direct-pixel-oracle",
+          "clip_rate": null,
+          "git_commit": "ba86e2c5b6a4d55f97ba386ad135fea546a22dbf",
+          "implementation_revision": "direct-pixel-logit-v1",
+          "inventory_sha256": "d7209a845ca87b884d928aa02b4391cf6a66cfbd361f9a9c31cb7e865052e96b",
+          "passed": true,
+          "source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r10/r10-visual-alignment-ba86e2c-20260831/direct-pixel-oracle/target-06",
+          "summary_sha256": "07ac91995c760484781c41ed6153d0c851ab826b8f8f55bce460360a4e2cb585",
+          "target_family": "F1",
+          "target_index": 6,
+          "target_segment_id": "r5-f1-de4899e05b0aa7f3d8373171",
+          "target_statistics": {
+            "accuracy_delta": 1.0,
+            "bootstrap_ci_reason": "one independent target; choice views are deterministic, not independent units",
+            "bootstrap_ci_used": false,
+            "condition_mean_ce": {
+              "m0": {
+                "normal": 13.164066791534424,
+                "reset": 13.164066791534424
+              },
+              "raw_step128": {
+                "normal": 0.0004014918813481927,
+                "reset": 13.164066791534424
+              }
+            },
+            "delta_ce": -13.163665299653076,
+            "endpoint": "raw_step128",
+            "endpoint_normal_accuracy": 1.0,
+            "endpoint_normal_mean_ce": 0.0004014918813481927,
+            "improved_choice_views": 4,
+            "m0_normal_accuracy": 0.0,
+            "m0_normal_mean_ce": 13.164066791534424,
+            "normal_reset_difference_in_differences": -13.163665299653076,
+            "per_view_delta_ce": {
+              "0": -14.176451407372952,
+              "1": -13.312022445257753,
+              "2": -12.645571984350681,
+              "3": -12.520615361630917
+            },
+            "relative_change": -0.9999695009234072,
+            "suite": "r10_f1_single_target",
+            "target_segment_id": "r5-f1-de4899e05b0aa7f3d8373171"
+          },
+          "terminal_sha256": "615d5eb1abe6cedc24c648e0ed921c8d963b9147b424aedb6cbd228bcb26eb2c",
+          "wall_clock_seconds": 126.02878110203892
+        },
+        {
+          "arm": "direct-pixel-oracle",
+          "clip_rate": null,
+          "git_commit": "ba86e2c5b6a4d55f97ba386ad135fea546a22dbf",
+          "implementation_revision": "direct-pixel-logit-v1",
+          "inventory_sha256": "dfd9000189500290ad7433f3bac8777cde8e438efe550c2c19cf3d5462219a85",
+          "passed": true,
+          "source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r10/r10-visual-alignment-ba86e2c-20260831/direct-pixel-oracle/target-07",
+          "summary_sha256": "97d5514595c398edc6f8a0f9fe3d075f124692870926d93b9657aa42c7ac8884",
+          "target_family": "F1",
+          "target_index": 7,
+          "target_segment_id": "r5-f1-850189e424efde62468b2ef9",
+          "target_statistics": {
+            "accuracy_delta": 1.0,
+            "bootstrap_ci_reason": "one independent target; choice views are deterministic, not independent units",
+            "bootstrap_ci_used": false,
+            "condition_mean_ce": {
+              "m0": {
+                "normal": 34.625000953674316,
+                "reset": 34.625000953674316
+              },
+              "raw_step128": {
+                "normal": 0.00043618769268505275,
+                "reset": 34.625000953674316
+              }
+            },
+            "delta_ce": -34.62456476598163,
+            "endpoint": "raw_step128",
+            "endpoint_normal_accuracy": 1.0,
+            "endpoint_normal_mean_ce": 0.00043618769268505275,
+            "improved_choice_views": 4,
+            "m0_normal_accuracy": 0.0,
+            "m0_normal_mean_ce": 34.625000953674316,
+            "normal_reset_difference_in_differences": -34.62456476598163,
+            "per_view_delta_ce": {
+              "0": -32.79154575616121,
+              "1": -36.603955410653725,
+              "2": -34.97820769180544,
+              "3": -34.12455020530615
+            },
+            "relative_change": -0.9999874025218579,
+            "suite": "r10_f1_single_target",
+            "target_segment_id": "r5-f1-850189e424efde62468b2ef9"
+          },
+          "terminal_sha256": "9701819359235a0a46893f0f768917118586dd6fd58e49af4f9efe7cbaa70d2e",
+          "wall_clock_seconds": 127.33054170198739
+        }
+      ]
+    },
+    "dreamlite-single-set": {
+      "failed_target_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "pass_count": 0,
+      "passed_target_indices": [],
+      "targets": [
+        {
+          "arm": "dreamlite-single-set",
+          "clip_rate": 0.0859375,
+          "git_commit": "ba86e2c5b6a4d55f97ba386ad135fea546a22dbf",
+          "implementation_revision": "dreamlite-single-set-full-gradient-v1",
+          "inventory_sha256": "e50d2222953158eb7d3adac266bf8132fbeba8be408163a18cf87b0cb41f7c6a",
+          "passed": false,
+          "source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r10/r10-visual-alignment-ba86e2c-20260831/dreamlite-single-set/target-00",
+          "summary_sha256": "49d11875e8d4952769578ace1013e71930f05b8e3a67d173f63ccde8fbd79950",
+          "target_family": "F1",
+          "target_index": 0,
+          "target_segment_id": "r5-f1-8015bf53a4067aaa7e882288",
+          "target_statistics": {
+            "accuracy_delta": 0.0,
+            "bootstrap_ci_reason": "one independent target; choice views are deterministic, not independent units",
+            "bootstrap_ci_used": false,
+            "condition_mean_ce": {
+              "ema_step128": {
+                "normal": 15.309903860092163,
+                "reset": 15.145846128463745
+              },
+              "m0": {
+                "normal": 15.283860683441162,
+                "reset": 15.145846128463745
+              }
+            },
+            "delta_ce": 0.026043176651000977,
+            "endpoint": "ema_step128",
+            "endpoint_normal_accuracy": 0.0,
+            "endpoint_normal_mean_ce": 15.309903860092163,
+            "improved_choice_views": 1,
+            "m0_normal_accuracy": 0.0,
+            "m0_normal_mean_ce": 15.283860683441162,
+            "normal_reset_difference_in_differences": 0.026043176651000977,
+            "per_view_delta_ce": {
+              "0": 0.02083301544189453,
+              "1": 0.02083301544189453,
+              "2": -0.10416126251220703,
+              "3": 0.16666793823242188
+            },
+            "relative_change": 0.0017039658493627208,
+            "suite": "r10_f1_single_target",
+            "target_segment_id": "r5-f1-8015bf53a4067aaa7e882288"
+          },
+          "terminal_sha256": "1fe4e1bd97aeaa33308d8a492969f437e81ed949c5dac6365823f09b7a5504d5",
+          "wall_clock_seconds": 412.06747775990516
+        },
+        {
+          "arm": "dreamlite-single-set",
+          "clip_rate": 0.59375,
+          "git_commit": "ba86e2c5b6a4d55f97ba386ad135fea546a22dbf",
+          "implementation_revision": "dreamlite-single-set-full-gradient-v1",
+          "inventory_sha256": "fb63d988d6877f13401d6826ef0320457af5f36b0052b0a44f9ab6342fbfbab8",
+          "passed": false,
+          "source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r10/r10-visual-alignment-ba86e2c-20260831/dreamlite-single-set/target-01",
+          "summary_sha256": "04c2ea3dff8936a20e1871cb8cde8bd8c0c0769f6725cac4bac00ef56ac6ca67",
+          "target_family": "F1",
+          "target_index": 1,
+          "target_segment_id": "r5-f1-392d41fd097d069c42218e0a",
+          "target_statistics": {
+            "accuracy_delta": 0.0,
+            "bootstrap_ci_reason": "one independent target; choice views are deterministic, not independent units",
+            "bootstrap_ci_used": false,
+            "condition_mean_ce": {
+              "ema_step128": {
+                "normal": 27.291678428649902,
+                "reset": 27.89063549041748
+              },
+              "m0": {
+                "normal": 27.687509059906006,
+                "reset": 27.89063549041748
+              }
+            },
+            "delta_ce": -0.3958306312561035,
+            "endpoint": "ema_step128",
+            "endpoint_normal_accuracy": 0.0,
+            "endpoint_normal_mean_ce": 27.291678428649902,
+            "improved_choice_views": 4,
+            "m0_normal_accuracy": 0.0,
+            "m0_normal_mean_ce": 27.687509059906006,
+            "normal_reset_difference_in_differences": -0.3958306312561035,
+            "per_view_delta_ce": {
+              "0": -0.29166603088378906,
+              "1": -0.5416641235351562,
+              "2": -0.3333282470703125,
+              "3": -0.41666412353515625
+            },
+            "relative_change": -0.014296361236385224,
+            "suite": "r10_f1_single_target",
+            "target_segment_id": "r5-f1-392d41fd097d069c42218e0a"
+          },
+          "terminal_sha256": "aa7f2c7713a653e62ad3078beff2fa4e5f013a98fdc7d674955badf1d04df988",
+          "wall_clock_seconds": 445.8161274753511
+        },
+        {
+          "arm": "dreamlite-single-set",
+          "clip_rate": 0.2734375,
+          "git_commit": "ba86e2c5b6a4d55f97ba386ad135fea546a22dbf",
+          "implementation_revision": "dreamlite-single-set-full-gradient-v1",
+          "inventory_sha256": "81b9a4ab73bcc98bf5500826449ac42c35be283359a4530f0e5789749b92d493",
+          "passed": false,
+          "source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r10/r10-visual-alignment-ba86e2c-20260831/dreamlite-single-set/target-02",
+          "summary_sha256": "dc0b93d0076bbcc5687d1577265651ba18cc5ae30673c937396bd8e09ba7854b",
+          "target_family": "F1",
+          "target_index": 2,
+          "target_segment_id": "r5-f1-1aee01c0f3e7684c05c9122c",
+          "target_statistics": {
+            "accuracy_delta": 0.0,
+            "bootstrap_ci_reason": "one independent target; choice views are deterministic, not independent units",
+            "bootstrap_ci_used": false,
+            "condition_mean_ce": {
+              "ema_step128": {
+                "normal": 30.494791507720947,
+                "reset": 30.927083015441895
+              },
+              "m0": {
+                "normal": 30.937499523162842,
+                "reset": 30.927083015441895
+              }
+            },
+            "delta_ce": -0.44270801544189453,
+            "endpoint": "ema_step128",
+            "endpoint_normal_accuracy": 0.0,
+            "endpoint_normal_mean_ce": 30.494791507720947,
+            "improved_choice_views": 4,
+            "m0_normal_accuracy": 0.0,
+            "m0_normal_mean_ce": 30.937499523162842,
+            "normal_reset_difference_in_differences": -0.44270801544189453,
+            "per_view_delta_ce": {
+              "0": -0.1875,
+              "1": -0.875,
+              "2": -0.125,
+              "3": -0.5833320617675781
+            },
+            "relative_change": -0.014309754255040552,
+            "suite": "r10_f1_single_target",
+            "target_segment_id": "r5-f1-1aee01c0f3e7684c05c9122c"
+          },
+          "terminal_sha256": "71d386977119c89e5395674ac13c2864c17d3c3fc3723d60758a104ca9edfbdf",
+          "wall_clock_seconds": 388.41195659991354
+        },
+        {
+          "arm": "dreamlite-single-set",
+          "clip_rate": 0.1484375,
+          "git_commit": "ba86e2c5b6a4d55f97ba386ad135fea546a22dbf",
+          "implementation_revision": "dreamlite-single-set-full-gradient-v1",
+          "inventory_sha256": "164b095ca6bebcd2cc7a9f5b7133678bfdb0b700523384674c75c7d853069df9",
+          "passed": false,
+          "source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r10/r10-visual-alignment-ba86e2c-20260831/dreamlite-single-set/target-03",
+          "summary_sha256": "4502e6058d22fa149ea4ea50ff4c4d1ff24df99cae42c0d45e76dfe0f8f0fe75",
+          "target_family": "F1",
+          "target_index": 3,
+          "target_segment_id": "r5-f1-807090710dd4c077a97348ba",
+          "target_statistics": {
+            "accuracy_delta": 0.0,
+            "bootstrap_ci_reason": "one independent target; choice views are deterministic, not independent units",
+            "bootstrap_ci_used": false,
+            "condition_mean_ce": {
+              "ema_step128": {
+                "normal": 35.30208396911621,
+                "reset": 34.958333015441895
+              },
+              "m0": {
+                "normal": 35.291666984558105,
+                "reset": 34.958333015441895
+              }
+            },
+            "delta_ce": 0.010416984558105469,
+            "endpoint": "ema_step128",
+            "endpoint_normal_accuracy": 0.0,
+            "endpoint_normal_mean_ce": 35.30208396911621,
+            "improved_choice_views": 2,
+            "m0_normal_accuracy": 0.0,
+            "m0_normal_mean_ce": 35.291666984558105,
+            "normal_reset_difference_in_differences": 0.010416984558105469,
+            "per_view_delta_ce": {
+              "0": -0.08333206176757812,
+              "1": 0.041667938232421875,
+              "2": -0.2916679382324219,
+              "3": 0.375
+            },
+            "relative_change": 0.0002951683909593328,
+            "suite": "r10_f1_single_target",
+            "target_segment_id": "r5-f1-807090710dd4c077a97348ba"
+          },
+          "terminal_sha256": "341252bb5a734012ec4c2fbd98ff975180b71fae1e14d76bda5906ce941fe41b",
+          "wall_clock_seconds": 441.0616992749274
+        },
+        {
+          "arm": "dreamlite-single-set",
+          "clip_rate": 0.078125,
+          "git_commit": "ba86e2c5b6a4d55f97ba386ad135fea546a22dbf",
+          "implementation_revision": "dreamlite-single-set-full-gradient-v1",
+          "inventory_sha256": "e94f3953ca49bc0092b22be0421c99dd816729b40317d1c922d8cbe2505c6745",
+          "passed": false,
+          "source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r10/r10-visual-alignment-ba86e2c-20260831/dreamlite-single-set/target-04",
+          "summary_sha256": "ee5eb484664a42c49762175f610e0c86686a7b2bca936886a82d1d57eb92f57d",
+          "target_family": "F1",
+          "target_index": 4,
+          "target_segment_id": "r5-f1-02c8aa9dc3523351c4d5f9c7",
+          "target_statistics": {
+            "accuracy_delta": 0.0,
+            "bootstrap_ci_reason": "one independent target; choice views are deterministic, not independent units",
+            "bootstrap_ci_used": false,
+            "condition_mean_ce": {
+              "ema_step128": {
+                "normal": 33.22916650772095,
+                "reset": 32.99479150772095
+              },
+              "m0": {
+                "normal": 33.5,
+                "reset": 32.99479150772095
+              }
+            },
+            "delta_ce": -0.27083349227905273,
+            "endpoint": "ema_step128",
+            "endpoint_normal_accuracy": 0.0,
+            "endpoint_normal_mean_ce": 33.22916650772095,
+            "improved_choice_views": 4,
+            "m0_normal_accuracy": 0.0,
+            "m0_normal_mean_ce": 33.5,
+            "normal_reset_difference_in_differences": -0.27083349227905273,
+            "per_view_delta_ce": {
+              "0": -0.375,
+              "1": -0.4375,
+              "2": -0.16666603088378906,
+              "3": -0.10416793823242188
+            },
+            "relative_change": -0.008084581859076234,
+            "suite": "r10_f1_single_target",
+            "target_segment_id": "r5-f1-02c8aa9dc3523351c4d5f9c7"
+          },
+          "terminal_sha256": "4f8a04769f9594c8dee4b5e930944ce408024798322f71120d18e5fad45fc30c",
+          "wall_clock_seconds": 406.05849956255406
+        },
+        {
+          "arm": "dreamlite-single-set",
+          "clip_rate": 0.0234375,
+          "git_commit": "ba86e2c5b6a4d55f97ba386ad135fea546a22dbf",
+          "implementation_revision": "dreamlite-single-set-full-gradient-v1",
+          "inventory_sha256": "3ab985187b3db5852bce8f963916c73e94d1b28d3671f15e11d26a1341cc0c7a",
+          "passed": false,
+          "source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r10/r10-visual-alignment-ba86e2c-20260831/dreamlite-single-set/target-05",
+          "summary_sha256": "bae8d777a85b8fd122eca08ef92179f40c4cea45213a122c9e1e01dfd4eef681",
+          "target_family": "F1",
+          "target_index": 5,
+          "target_segment_id": "r5-f1-11dddf29efebc033a995ab92",
+          "target_statistics": {
+            "accuracy_delta": 0.0,
+            "bootstrap_ci_reason": "one independent target; choice views are deterministic, not independent units",
+            "bootstrap_ci_used": false,
+            "condition_mean_ce": {
+              "ema_step128": {
+                "normal": 17.406249523162842,
+                "reset": 17.505207538604736
+              },
+              "m0": {
+                "normal": 17.453124523162842,
+                "reset": 17.505207538604736
+              }
+            },
+            "delta_ce": -0.046875,
+            "endpoint": "ema_step128",
+            "endpoint_normal_accuracy": 0.0,
+            "endpoint_normal_mean_ce": 17.406249523162842,
+            "improved_choice_views": 2,
+            "m0_normal_accuracy": 0.0,
+            "m0_normal_mean_ce": 17.453124523162842,
+            "normal_reset_difference_in_differences": -0.046875,
+            "per_view_delta_ce": {
+              "0": 0.125,
+              "1": -0.30208396911621094,
+              "2": 0.10416603088378906,
+              "3": -0.11458206176757812
+            },
+            "relative_change": -0.002685765516529104,
+            "suite": "r10_f1_single_target",
+            "target_segment_id": "r5-f1-11dddf29efebc033a995ab92"
+          },
+          "terminal_sha256": "aa67857073ac395aefbc96e96d1bdc929db1cadbbfd8a89c621238109cd27f65",
+          "wall_clock_seconds": 426.3613678570837
+        },
+        {
+          "arm": "dreamlite-single-set",
+          "clip_rate": 0.03125,
+          "git_commit": "ba86e2c5b6a4d55f97ba386ad135fea546a22dbf",
+          "implementation_revision": "dreamlite-single-set-full-gradient-v1",
+          "inventory_sha256": "7bd0686e3cc9156ae9d5b9cea63972385ca72163652ea5136e58efe1193f89ee",
+          "passed": false,
+          "source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r10/r10-visual-alignment-ba86e2c-20260831/dreamlite-single-set/target-06",
+          "summary_sha256": "81ce12196c9a59999cfbd6fcbd8090e7636bc1a9b17827d456a7881d55eabb5e",
+          "target_family": "F1",
+          "target_index": 6,
+          "target_segment_id": "r5-f1-de4899e05b0aa7f3d8373171",
+          "target_statistics": {
+            "accuracy_delta": 0.0,
+            "bootstrap_ci_reason": "one independent target; choice views are deterministic, not independent units",
+            "bootstrap_ci_used": false,
+            "condition_mean_ce": {
+              "ema_step128": {
+                "normal": 13.304691076278687,
+                "reset": 13.276045799255371
+              },
+              "m0": {
+                "normal": 13.343753814697266,
+                "reset": 13.276045799255371
+              }
+            },
+            "delta_ce": -0.0390627384185791,
+            "endpoint": "ema_step128",
+            "endpoint_normal_accuracy": 0.0,
+            "endpoint_normal_mean_ce": 13.304691076278687,
+            "improved_choice_views": 2,
+            "m0_normal_accuracy": 0.0,
+            "m0_normal_mean_ce": 13.343753814697266,
+            "normal_reset_difference_in_differences": -0.0390627384185791,
+            "per_view_delta_ce": {
+              "0": -0.09375190734863281,
+              "1": -0.1874990463256836,
+              "2": 0.0625,
+              "3": 0.0625
+            },
+            "relative_change": -0.0029274174989315505,
+            "suite": "r10_f1_single_target",
+            "target_segment_id": "r5-f1-de4899e05b0aa7f3d8373171"
+          },
+          "terminal_sha256": "3c9d0058210e7e386b2c079763dd137797ddb53bf23c962e0e73c275d68d6203",
+          "wall_clock_seconds": 396.3043757257983
+        },
+        {
+          "arm": "dreamlite-single-set",
+          "clip_rate": 0.1953125,
+          "git_commit": "ba86e2c5b6a4d55f97ba386ad135fea546a22dbf",
+          "implementation_revision": "dreamlite-single-set-full-gradient-v1",
+          "inventory_sha256": "9879cf301112f3011c15178e99c980ecad2fc42480e176785be6487eff9b659e",
+          "passed": false,
+          "source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r10/r10-visual-alignment-ba86e2c-20260831/dreamlite-single-set/target-07",
+          "summary_sha256": "6cbf1cc4e9bb42543988c7f50683986d5bc4bf650bb81ba9c2063beba54a387a",
+          "target_family": "F1",
+          "target_index": 7,
+          "target_segment_id": "r5-f1-850189e424efde62468b2ef9",
+          "target_statistics": {
+            "accuracy_delta": 0.0,
+            "bootstrap_ci_reason": "one independent target; choice views are deterministic, not independent units",
+            "bootstrap_ci_used": false,
+            "condition_mean_ce": {
+              "ema_step128": {
+                "normal": 35.796875953674316,
+                "reset": 35.510416984558105
+              },
+              "m0": {
+                "normal": 35.765625,
+                "reset": 35.510416984558105
+              }
+            },
+            "delta_ce": 0.031250953674316406,
+            "endpoint": "ema_step128",
+            "endpoint_normal_accuracy": 0.0,
+            "endpoint_normal_mean_ce": 35.796875953674316,
+            "improved_choice_views": 1,
+            "m0_normal_accuracy": 0.0,
+            "m0_normal_mean_ce": 35.765625,
+            "normal_reset_difference_in_differences": 0.031250953674316406,
+            "per_view_delta_ce": {
+              "0": 0.0,
+              "1": -0.041667938232421875,
+              "2": 0.14583587646484375,
+              "3": 0.02083587646484375
+            },
+            "relative_change": 0.0008737706575605575,
+            "suite": "r10_f1_single_target",
+            "target_segment_id": "r5-f1-850189e424efde62468b2ef9"
+          },
+          "terminal_sha256": "a8604ad1276aab9863abe5720a8530bbc1ad86276e9ff5ccae797d4fbda7f95e",
+          "wall_clock_seconds": 423.36724695935845
+        }
+      ]
+    }
+  },
+  "decision": "redesign_dreamlite_updater_only",
+  "formal_success_claim": false,
+  "formal_success_reason": "R10 is a one-seed per-target visual read/write lower-bound diagnostic; formal success still requires shared training, held-out ID/OOD evaluation, multiple seeds, and causal controls.",
+  "git_commit": "ba86e2c5b6a4d55f97ba386ad135fea546a22dbf",
+  "reason": "The frozen Reader/image channel is usable on all eight targets, but the current DreamLite updater does not pass all eight. Restrict the next repair to updater parameterization, conditioning, and optimization.",
+  "schema": "vision_memory.r10-visual-alignment-rendered-analysis.v1",
+  "selected_segments_sha256": "6198beb3a3758fd7df912c6956bc05eac0ace8603708f37147826c65a4d61845",
+  "status": "completed"
+}

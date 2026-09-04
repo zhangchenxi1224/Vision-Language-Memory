@@ -11,6 +11,9 @@ from collections import Counter
 from pathlib import Path
 from typing import Any, Mapping, Sequence
 
+import torch
+from torch import Tensor
+
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "src"))
 sys.path.insert(0, str(ROOT))
@@ -28,6 +31,14 @@ AGGREGATION_SCHEMA = "vision_memory.r9-single-target-gradient-step.v1"
 OPTIMIZER_STEPS = 128
 TARGET_COEFFICIENT = 1.0 / 8.0
 SELECTED_SEGMENTS_SHA256 = r8.R8_SELECTED_SEGMENTS_SHA256
+
+
+def _cosine(first: Tensor, second: Tensor) -> float:
+    """Return a checked cosine without relying on another protocol's private API."""
+    denominator = first.double().norm() * second.double().norm()
+    if float(denominator) == 0.0:
+        raise ValueError("R9 gradient cosine received a zero vector.")
+    return float(torch.dot(first.double(), second.double()) / denominator)
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -262,7 +273,7 @@ def _run_optimizer_step(
             "applied_norm_before_clip": applied_norm,
             "expected_applied_norm": expected_norm,
             "scale_relative_error": scale_error,
-            "raw_vs_applied_cosine": r8._cosine(raw, applied),
+            "raw_vs_applied_cosine": _cosine(raw, applied),
             "active_parameter_tensors": sum(activity),
             "total_parameter_tensors": len(activity),
         },

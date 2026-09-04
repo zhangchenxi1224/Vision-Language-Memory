@@ -1,0 +1,631 @@
+{
+  "analysis_git_commit": "05814af7bd8adada14327f708c713f1ee1eea19d",
+  "cannot_replace_preregistered_ema_endpoint": true,
+  "decision": "ema_is_not_sufficient_explanation_run_vae_latent_oracle",
+  "ema_pass_count": 0,
+  "formal_success_claim": false,
+  "raw_pass_count": 0,
+  "reason": "No raw step128 target passes. EMA lag is not a sufficient explanation; test whether the VAE latent space itself contains readable codes before redesigning the writer.",
+  "schema": "vision_memory.r10-raw-endpoint-attribution-analysis.v1",
+  "selected_segments_sha256": "6198beb3a3758fd7df912c6956bc05eac0ace8603708f37147826c65a4d61845",
+  "source_training_git_commit": "ba86e2c5b6a4d55f97ba386ad135fea546a22dbf",
+  "status": "completed",
+  "targets": [
+    {
+      "attribution_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r10/r10-visual-alignment-ba86e2c-20260831/raw-endpoint-attribution-05814af/target-00",
+      "ema_gate": false,
+      "ema_statistics": {
+        "accuracy_delta": 0.0,
+        "bootstrap_ci_reason": "one independent target; choice views are deterministic, not independent units",
+        "bootstrap_ci_used": false,
+        "condition_mean_ce": {
+          "ema_step128": {
+            "normal": 15.309903860092163,
+            "reset": 15.145846128463745
+          },
+          "m0": {
+            "normal": 15.283860683441162,
+            "reset": 15.145846128463745
+          }
+        },
+        "delta_ce": 0.026043176651000977,
+        "endpoint": "ema_step128",
+        "endpoint_normal_accuracy": 0.0,
+        "endpoint_normal_mean_ce": 15.309903860092163,
+        "improved_choice_views": 1,
+        "m0_normal_accuracy": 0.0,
+        "m0_normal_mean_ce": 15.283860683441162,
+        "normal_reset_difference_in_differences": 0.026043176651000977,
+        "per_view_delta_ce": {
+          "0": 0.02083301544189453,
+          "1": 0.02083301544189453,
+          "2": -0.10416126251220703,
+          "3": 0.16666793823242188
+        },
+        "relative_change": 0.0017039658493627208,
+        "suite": "r10_f1_single_target",
+        "target_segment_id": "r5-f1-8015bf53a4067aaa7e882288"
+      },
+      "inventory_sha256": "c381153d8eeb9ed3e97bae34c198bbba9ef7d93affae09ecb7cebd9125166cd8",
+      "raw_descriptive_gate": false,
+      "raw_minus_ema_normal_ce": -0.18489599227905273,
+      "raw_statistics": {
+        "accuracy_delta": 0.0,
+        "bootstrap_ci_reason": "one independent target; choice views are deterministic, not independent units",
+        "bootstrap_ci_used": false,
+        "condition_mean_ce": {
+          "m0": {
+            "normal": 15.283860683441162,
+            "reset": 15.145846128463745
+          },
+          "raw_step128_attribution": {
+            "normal": 15.12500786781311,
+            "reset": 15.145846128463745
+          }
+        },
+        "delta_ce": -0.15885281562805176,
+        "endpoint": "raw_step128_attribution",
+        "endpoint_normal_accuracy": 0.0,
+        "endpoint_normal_mean_ce": 15.12500786781311,
+        "improved_choice_views": 4,
+        "m0_normal_accuracy": 0.0,
+        "m0_normal_mean_ce": 15.283860683441162,
+        "normal_reset_difference_in_differences": -0.15885281562805176,
+        "per_view_delta_ce": {
+          "0": -0.17708301544189453,
+          "1": -0.26041603088378906,
+          "2": -0.18749713897705078,
+          "3": -0.010415077209472656
+        },
+        "relative_change": -0.010393500629075736,
+        "suite": "r10_f1_single_target",
+        "target_segment_id": "r5-f1-8015bf53a4067aaa7e882288"
+      },
+      "source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r10/r10-visual-alignment-ba86e2c-20260831/dreamlite-single-set/target-00",
+      "state_image_sha256": "92bae9b45955fac69de4e9e2e5188eec863f9f96217de06c63f4dce523cd3e4a",
+      "summary_sha256": "573f8fd0265342119181cedad4a0bf223224334a668fb6744d8a765307b54b21",
+      "target_index": 0,
+      "target_segment_id": "r5-f1-8015bf53a4067aaa7e882288",
+      "terminal_sha256": "6449ba5ad832e1cb6792feda3ddda6ca7b35592b326006238f0930b7b4222517"
+    },
+    {
+      "attribution_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r10/r10-visual-alignment-ba86e2c-20260831/raw-endpoint-attribution-05814af/target-01",
+      "ema_gate": false,
+      "ema_statistics": {
+        "accuracy_delta": 0.0,
+        "bootstrap_ci_reason": "one independent target; choice views are deterministic, not independent units",
+        "bootstrap_ci_used": false,
+        "condition_mean_ce": {
+          "ema_step128": {
+            "normal": 27.291678428649902,
+            "reset": 27.89063549041748
+          },
+          "m0": {
+            "normal": 27.687509059906006,
+            "reset": 27.89063549041748
+          }
+        },
+        "delta_ce": -0.3958306312561035,
+        "endpoint": "ema_step128",
+        "endpoint_normal_accuracy": 0.0,
+        "endpoint_normal_mean_ce": 27.291678428649902,
+        "improved_choice_views": 4,
+        "m0_normal_accuracy": 0.0,
+        "m0_normal_mean_ce": 27.687509059906006,
+        "normal_reset_difference_in_differences": -0.3958306312561035,
+        "per_view_delta_ce": {
+          "0": -0.29166603088378906,
+          "1": -0.5416641235351562,
+          "2": -0.3333282470703125,
+          "3": -0.41666412353515625
+        },
+        "relative_change": -0.014296361236385224,
+        "suite": "r10_f1_single_target",
+        "target_segment_id": "r5-f1-392d41fd097d069c42218e0a"
+      },
+      "inventory_sha256": "72a5d58156fe8d1741fca708292bc3fa0af6df7b03343d8c61ec04d72a54dec1",
+      "raw_descriptive_gate": false,
+      "raw_minus_ema_normal_ce": -1.515622615814209,
+      "raw_statistics": {
+        "accuracy_delta": 0.0,
+        "bootstrap_ci_reason": "one independent target; choice views are deterministic, not independent units",
+        "bootstrap_ci_used": false,
+        "condition_mean_ce": {
+          "m0": {
+            "normal": 27.687509059906006,
+            "reset": 27.89063549041748
+          },
+          "raw_step128_attribution": {
+            "normal": 25.776055812835693,
+            "reset": 27.89063549041748
+          }
+        },
+        "delta_ce": -1.9114532470703125,
+        "endpoint": "raw_step128_attribution",
+        "endpoint_normal_accuracy": 0.0,
+        "endpoint_normal_mean_ce": 25.776055812835693,
+        "improved_choice_views": 4,
+        "m0_normal_accuracy": 0.0,
+        "m0_normal_mean_ce": 27.687509059906006,
+        "normal_reset_difference_in_differences": -1.9114532470703125,
+        "per_view_delta_ce": {
+          "0": -2.0833282470703125,
+          "1": -2.0416622161865234,
+          "2": -2.333322525024414,
+          "3": -1.1875
+        },
+        "relative_change": -0.06903666353425297,
+        "suite": "r10_f1_single_target",
+        "target_segment_id": "r5-f1-392d41fd097d069c42218e0a"
+      },
+      "source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r10/r10-visual-alignment-ba86e2c-20260831/dreamlite-single-set/target-01",
+      "state_image_sha256": "e79ec5d24c9d8a7e640610c6d4a7adcfc9d3e6a5bec8e25bea0df5046df2ba66",
+      "summary_sha256": "d6da44e678933aa065130347eb3436c1658eb20eab702ddf10779d0d631c4696",
+      "target_index": 1,
+      "target_segment_id": "r5-f1-392d41fd097d069c42218e0a",
+      "terminal_sha256": "5592ff47d0d5b79f40914ed4b94c9cad1212362c98021ad6f9c2281ac7eceec7"
+    },
+    {
+      "attribution_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r10/r10-visual-alignment-ba86e2c-20260831/raw-endpoint-attribution-05814af/target-02",
+      "ema_gate": false,
+      "ema_statistics": {
+        "accuracy_delta": 0.0,
+        "bootstrap_ci_reason": "one independent target; choice views are deterministic, not independent units",
+        "bootstrap_ci_used": false,
+        "condition_mean_ce": {
+          "ema_step128": {
+            "normal": 30.494791507720947,
+            "reset": 30.927083015441895
+          },
+          "m0": {
+            "normal": 30.937499523162842,
+            "reset": 30.927083015441895
+          }
+        },
+        "delta_ce": -0.44270801544189453,
+        "endpoint": "ema_step128",
+        "endpoint_normal_accuracy": 0.0,
+        "endpoint_normal_mean_ce": 30.494791507720947,
+        "improved_choice_views": 4,
+        "m0_normal_accuracy": 0.0,
+        "m0_normal_mean_ce": 30.937499523162842,
+        "normal_reset_difference_in_differences": -0.44270801544189453,
+        "per_view_delta_ce": {
+          "0": -0.1875,
+          "1": -0.875,
+          "2": -0.125,
+          "3": -0.5833320617675781
+        },
+        "relative_change": -0.014309754255040552,
+        "suite": "r10_f1_single_target",
+        "target_segment_id": "r5-f1-1aee01c0f3e7684c05c9122c"
+      },
+      "inventory_sha256": "9ab3f08fc0c0d8cf8d47a2e3462c70beabd111438a34c2aa2921332928dbb3b7",
+      "raw_descriptive_gate": false,
+      "raw_minus_ema_normal_ce": -0.2656254768371582,
+      "raw_statistics": {
+        "accuracy_delta": 0.0,
+        "bootstrap_ci_reason": "one independent target; choice views are deterministic, not independent units",
+        "bootstrap_ci_used": false,
+        "condition_mean_ce": {
+          "m0": {
+            "normal": 30.937499523162842,
+            "reset": 30.927083015441895
+          },
+          "raw_step128_attribution": {
+            "normal": 30.22916603088379,
+            "reset": 30.927083015441895
+          }
+        },
+        "delta_ce": -0.7083334922790527,
+        "endpoint": "raw_step128_attribution",
+        "endpoint_normal_accuracy": 0.0,
+        "endpoint_normal_mean_ce": 30.22916603088379,
+        "improved_choice_views": 4,
+        "m0_normal_accuracy": 0.0,
+        "m0_normal_mean_ce": 30.937499523162842,
+        "normal_reset_difference_in_differences": -0.7083334922790527,
+        "per_view_delta_ce": {
+          "0": -0.20833396911621094,
+          "1": -1.166666030883789,
+          "2": -0.9583339691162109,
+          "3": -0.5
+        },
+        "relative_change": -0.02289562838615078,
+        "suite": "r10_f1_single_target",
+        "target_segment_id": "r5-f1-1aee01c0f3e7684c05c9122c"
+      },
+      "source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r10/r10-visual-alignment-ba86e2c-20260831/dreamlite-single-set/target-02",
+      "state_image_sha256": "0aabe4ac1a1504333e4f8f985e0615b0b42e3b5c999bff4095637d5da34c5f72",
+      "summary_sha256": "aa27ae8b3b1939b4ecd315cc66c50f11f021016758e2d8828c2c42427926973d",
+      "target_index": 2,
+      "target_segment_id": "r5-f1-1aee01c0f3e7684c05c9122c",
+      "terminal_sha256": "982d16d9c761c4f422f4de25f4a65c17dbd8e2eed5dc0c26a27cc38a381668f5"
+    },
+    {
+      "attribution_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r10/r10-visual-alignment-ba86e2c-20260831/raw-endpoint-attribution-05814af/target-03",
+      "ema_gate": false,
+      "ema_statistics": {
+        "accuracy_delta": 0.0,
+        "bootstrap_ci_reason": "one independent target; choice views are deterministic, not independent units",
+        "bootstrap_ci_used": false,
+        "condition_mean_ce": {
+          "ema_step128": {
+            "normal": 35.30208396911621,
+            "reset": 34.958333015441895
+          },
+          "m0": {
+            "normal": 35.291666984558105,
+            "reset": 34.958333015441895
+          }
+        },
+        "delta_ce": 0.010416984558105469,
+        "endpoint": "ema_step128",
+        "endpoint_normal_accuracy": 0.0,
+        "endpoint_normal_mean_ce": 35.30208396911621,
+        "improved_choice_views": 2,
+        "m0_normal_accuracy": 0.0,
+        "m0_normal_mean_ce": 35.291666984558105,
+        "normal_reset_difference_in_differences": 0.010416984558105469,
+        "per_view_delta_ce": {
+          "0": -0.08333206176757812,
+          "1": 0.041667938232421875,
+          "2": -0.2916679382324219,
+          "3": 0.375
+        },
+        "relative_change": 0.0002951683909593328,
+        "suite": "r10_f1_single_target",
+        "target_segment_id": "r5-f1-807090710dd4c077a97348ba"
+      },
+      "inventory_sha256": "4d635c20384918c88172c46e9eb8e1daf18c5e6165a484593aaa34413fdcb975",
+      "raw_descriptive_gate": false,
+      "raw_minus_ema_normal_ce": -2.1250009536743164,
+      "raw_statistics": {
+        "accuracy_delta": 0.0,
+        "bootstrap_ci_reason": "one independent target; choice views are deterministic, not independent units",
+        "bootstrap_ci_used": false,
+        "condition_mean_ce": {
+          "m0": {
+            "normal": 35.291666984558105,
+            "reset": 34.958333015441895
+          },
+          "raw_step128_attribution": {
+            "normal": 33.177083015441895,
+            "reset": 34.958333015441895
+          }
+        },
+        "delta_ce": -2.114583969116211,
+        "endpoint": "raw_step128_attribution",
+        "endpoint_normal_accuracy": 0.0,
+        "endpoint_normal_mean_ce": 33.177083015441895,
+        "improved_choice_views": 4,
+        "m0_normal_accuracy": 0.0,
+        "m0_normal_mean_ce": 35.291666984558105,
+        "normal_reset_difference_in_differences": -2.114583969116211,
+        "per_view_delta_ce": {
+          "0": -2.2291641235351562,
+          "1": -2.291667938232422,
+          "2": -2.479167938232422,
+          "3": -1.4583358764648438
+        },
+        "relative_change": -0.05991737284729137,
+        "suite": "r10_f1_single_target",
+        "target_segment_id": "r5-f1-807090710dd4c077a97348ba"
+      },
+      "source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r10/r10-visual-alignment-ba86e2c-20260831/dreamlite-single-set/target-03",
+      "state_image_sha256": "33ff8d51105465abaaee71f463a3eac1dda1e3d261fc2262ce13fb9278dbeb5c",
+      "summary_sha256": "8afc693466ce10e56f650b75d4de297632154ccecae3265be5d7ed5c75a84597",
+      "target_index": 3,
+      "target_segment_id": "r5-f1-807090710dd4c077a97348ba",
+      "terminal_sha256": "7f2f878b329cc0d5b07abf6027b798ea9649131f1055d7c5fbb0b58a43822326"
+    },
+    {
+      "attribution_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r10/r10-visual-alignment-ba86e2c-20260831/raw-endpoint-attribution-05814af/target-04",
+      "ema_gate": false,
+      "ema_statistics": {
+        "accuracy_delta": 0.0,
+        "bootstrap_ci_reason": "one independent target; choice views are deterministic, not independent units",
+        "bootstrap_ci_used": false,
+        "condition_mean_ce": {
+          "ema_step128": {
+            "normal": 33.22916650772095,
+            "reset": 32.99479150772095
+          },
+          "m0": {
+            "normal": 33.5,
+            "reset": 32.99479150772095
+          }
+        },
+        "delta_ce": -0.27083349227905273,
+        "endpoint": "ema_step128",
+        "endpoint_normal_accuracy": 0.0,
+        "endpoint_normal_mean_ce": 33.22916650772095,
+        "improved_choice_views": 4,
+        "m0_normal_accuracy": 0.0,
+        "m0_normal_mean_ce": 33.5,
+        "normal_reset_difference_in_differences": -0.27083349227905273,
+        "per_view_delta_ce": {
+          "0": -0.375,
+          "1": -0.4375,
+          "2": -0.16666603088378906,
+          "3": -0.10416793823242188
+        },
+        "relative_change": -0.008084581859076234,
+        "suite": "r10_f1_single_target",
+        "target_segment_id": "r5-f1-02c8aa9dc3523351c4d5f9c7"
+      },
+      "inventory_sha256": "c487240737215605e9cba47fa556bba42d21fcb788b616ec2fb4b2957e9b8f2b",
+      "raw_descriptive_gate": false,
+      "raw_minus_ema_normal_ce": -0.8020834922790527,
+      "raw_statistics": {
+        "accuracy_delta": 0.0,
+        "bootstrap_ci_reason": "one independent target; choice views are deterministic, not independent units",
+        "bootstrap_ci_used": false,
+        "condition_mean_ce": {
+          "m0": {
+            "normal": 33.5,
+            "reset": 32.99479150772095
+          },
+          "raw_step128_attribution": {
+            "normal": 32.427083015441895,
+            "reset": 32.99479150772095
+          }
+        },
+        "delta_ce": -1.0729169845581055,
+        "endpoint": "raw_step128_attribution",
+        "endpoint_normal_accuracy": 0.0,
+        "endpoint_normal_mean_ce": 32.427083015441895,
+        "improved_choice_views": 4,
+        "m0_normal_accuracy": 0.0,
+        "m0_normal_mean_ce": 33.5,
+        "normal_reset_difference_in_differences": -1.0729169845581055,
+        "per_view_delta_ce": {
+          "0": -1.125,
+          "1": -1.2708358764648438,
+          "2": -0.9583320617675781,
+          "3": -0.9375
+        },
+        "relative_change": -0.0320273726733763,
+        "suite": "r10_f1_single_target",
+        "target_segment_id": "r5-f1-02c8aa9dc3523351c4d5f9c7"
+      },
+      "source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r10/r10-visual-alignment-ba86e2c-20260831/dreamlite-single-set/target-04",
+      "state_image_sha256": "e4b8a9644eb30a3c10629a3df1a8123899ac7f029bce8e66f3c8ba22f650dce5",
+      "summary_sha256": "211f9fff1aaaab42f8ac4bc738a98932a519611f88fe4f3e16c189c0226415bb",
+      "target_index": 4,
+      "target_segment_id": "r5-f1-02c8aa9dc3523351c4d5f9c7",
+      "terminal_sha256": "10a9cb29cfe476db68c89a513ea5c3a4292760c4916eb3a0c84089d7ede5bcae"
+    },
+    {
+      "attribution_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r10/r10-visual-alignment-ba86e2c-20260831/raw-endpoint-attribution-05814af/target-05",
+      "ema_gate": false,
+      "ema_statistics": {
+        "accuracy_delta": 0.0,
+        "bootstrap_ci_reason": "one independent target; choice views are deterministic, not independent units",
+        "bootstrap_ci_used": false,
+        "condition_mean_ce": {
+          "ema_step128": {
+            "normal": 17.406249523162842,
+            "reset": 17.505207538604736
+          },
+          "m0": {
+            "normal": 17.453124523162842,
+            "reset": 17.505207538604736
+          }
+        },
+        "delta_ce": -0.046875,
+        "endpoint": "ema_step128",
+        "endpoint_normal_accuracy": 0.0,
+        "endpoint_normal_mean_ce": 17.406249523162842,
+        "improved_choice_views": 2,
+        "m0_normal_accuracy": 0.0,
+        "m0_normal_mean_ce": 17.453124523162842,
+        "normal_reset_difference_in_differences": -0.046875,
+        "per_view_delta_ce": {
+          "0": 0.125,
+          "1": -0.30208396911621094,
+          "2": 0.10416603088378906,
+          "3": -0.11458206176757812
+        },
+        "relative_change": -0.002685765516529104,
+        "suite": "r10_f1_single_target",
+        "target_segment_id": "r5-f1-11dddf29efebc033a995ab92"
+      },
+      "inventory_sha256": "8c06a5729f2bad8b81ea87154297e320e5303b94fb806c2c586ce15f124a2d82",
+      "raw_descriptive_gate": false,
+      "raw_minus_ema_normal_ce": 0.07552051544189453,
+      "raw_statistics": {
+        "accuracy_delta": 0.0,
+        "bootstrap_ci_reason": "one independent target; choice views are deterministic, not independent units",
+        "bootstrap_ci_used": false,
+        "condition_mean_ce": {
+          "m0": {
+            "normal": 17.453124523162842,
+            "reset": 17.505207538604736
+          },
+          "raw_step128_attribution": {
+            "normal": 17.481770038604736,
+            "reset": 17.505207538604736
+          }
+        },
+        "delta_ce": 0.02864551544189453,
+        "endpoint": "raw_step128_attribution",
+        "endpoint_normal_accuracy": 0.0,
+        "endpoint_normal_mean_ce": 17.481770038604736,
+        "improved_choice_views": 2,
+        "m0_normal_accuracy": 0.0,
+        "m0_normal_mean_ce": 17.453124523162842,
+        "normal_reset_difference_in_differences": 0.02864551544189453,
+        "per_view_delta_ce": {
+          "0": 0.020832061767578125,
+          "1": -0.0625,
+          "2": 0.1875,
+          "3": -0.03125
+        },
+        "relative_change": 0.0016412829349770064,
+        "suite": "r10_f1_single_target",
+        "target_segment_id": "r5-f1-11dddf29efebc033a995ab92"
+      },
+      "source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r10/r10-visual-alignment-ba86e2c-20260831/dreamlite-single-set/target-05",
+      "state_image_sha256": "f7cc2949ea76b5962def4f468e3dbf8ca8e66e22b46de84b56a96ae038e95c0a",
+      "summary_sha256": "f6244ec96217096a991e24aa9033cb996073462df904da5635ff52b779b75cb3",
+      "target_index": 5,
+      "target_segment_id": "r5-f1-11dddf29efebc033a995ab92",
+      "terminal_sha256": "fe6458cf1b42153a73276759b1eaee6eb26a64ac3106698445cda804af9808df"
+    },
+    {
+      "attribution_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r10/r10-visual-alignment-ba86e2c-20260831/raw-endpoint-attribution-05814af/target-06",
+      "ema_gate": false,
+      "ema_statistics": {
+        "accuracy_delta": 0.0,
+        "bootstrap_ci_reason": "one independent target; choice views are deterministic, not independent units",
+        "bootstrap_ci_used": false,
+        "condition_mean_ce": {
+          "ema_step128": {
+            "normal": 13.304691076278687,
+            "reset": 13.276045799255371
+          },
+          "m0": {
+            "normal": 13.343753814697266,
+            "reset": 13.276045799255371
+          }
+        },
+        "delta_ce": -0.0390627384185791,
+        "endpoint": "ema_step128",
+        "endpoint_normal_accuracy": 0.0,
+        "endpoint_normal_mean_ce": 13.304691076278687,
+        "improved_choice_views": 2,
+        "m0_normal_accuracy": 0.0,
+        "m0_normal_mean_ce": 13.343753814697266,
+        "normal_reset_difference_in_differences": -0.0390627384185791,
+        "per_view_delta_ce": {
+          "0": -0.09375190734863281,
+          "1": -0.1874990463256836,
+          "2": 0.0625,
+          "3": 0.0625
+        },
+        "relative_change": -0.0029274174989315505,
+        "suite": "r10_f1_single_target",
+        "target_segment_id": "r5-f1-de4899e05b0aa7f3d8373171"
+      },
+      "inventory_sha256": "8f1d052b2cd6088977e6400b39c277965d9ed632d2b5cfb2b095c33f4dee96da",
+      "raw_descriptive_gate": false,
+      "raw_minus_ema_normal_ce": -0.015624046325683594,
+      "raw_statistics": {
+        "accuracy_delta": 0.0,
+        "bootstrap_ci_reason": "one independent target; choice views are deterministic, not independent units",
+        "bootstrap_ci_used": false,
+        "condition_mean_ce": {
+          "m0": {
+            "normal": 13.343753814697266,
+            "reset": 13.276045799255371
+          },
+          "raw_step128_attribution": {
+            "normal": 13.289067029953003,
+            "reset": 13.276045799255371
+          }
+        },
+        "delta_ce": -0.054686784744262695,
+        "endpoint": "raw_step128_attribution",
+        "endpoint_normal_accuracy": 0.0,
+        "endpoint_normal_mean_ce": 13.289067029953003,
+        "improved_choice_views": 3,
+        "m0_normal_accuracy": 0.0,
+        "m0_normal_mean_ce": 13.343753814697266,
+        "normal_reset_difference_in_differences": -0.054686784744262695,
+        "per_view_delta_ce": {
+          "0": -0.010416984558105469,
+          "1": -0.2708320617675781,
+          "2": 0.08333396911621094,
+          "3": -0.020832061767578125
+        },
+        "relative_change": -0.004098305881814812,
+        "suite": "r10_f1_single_target",
+        "target_segment_id": "r5-f1-de4899e05b0aa7f3d8373171"
+      },
+      "source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r10/r10-visual-alignment-ba86e2c-20260831/dreamlite-single-set/target-06",
+      "state_image_sha256": "e5687a5c655916940b40d0314a03f82b22e61151f1e385fb86119d64bf1f7ab7",
+      "summary_sha256": "b007e6cf14e25093036c794a7ea239e0e07ae36c434a881c5565d7dfd96c8d85",
+      "target_index": 6,
+      "target_segment_id": "r5-f1-de4899e05b0aa7f3d8373171",
+      "terminal_sha256": "3c9b9ae7f0bedf511f813c9997908d125abcb9d1d0e9581f8837ddedcd95e00f"
+    },
+    {
+      "attribution_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r10/r10-visual-alignment-ba86e2c-20260831/raw-endpoint-attribution-05814af/target-07",
+      "ema_gate": false,
+      "ema_statistics": {
+        "accuracy_delta": 0.0,
+        "bootstrap_ci_reason": "one independent target; choice views are deterministic, not independent units",
+        "bootstrap_ci_used": false,
+        "condition_mean_ce": {
+          "ema_step128": {
+            "normal": 35.796875953674316,
+            "reset": 35.510416984558105
+          },
+          "m0": {
+            "normal": 35.765625,
+            "reset": 35.510416984558105
+          }
+        },
+        "delta_ce": 0.031250953674316406,
+        "endpoint": "ema_step128",
+        "endpoint_normal_accuracy": 0.0,
+        "endpoint_normal_mean_ce": 35.796875953674316,
+        "improved_choice_views": 1,
+        "m0_normal_accuracy": 0.0,
+        "m0_normal_mean_ce": 35.765625,
+        "normal_reset_difference_in_differences": 0.031250953674316406,
+        "per_view_delta_ce": {
+          "0": 0.0,
+          "1": -0.041667938232421875,
+          "2": 0.14583587646484375,
+          "3": 0.02083587646484375
+        },
+        "relative_change": 0.0008737706575605575,
+        "suite": "r10_f1_single_target",
+        "target_segment_id": "r5-f1-850189e424efde62468b2ef9"
+      },
+      "inventory_sha256": "157be1ae17f2e643da055361cebcab30b7ca37ba2a75a8db9e9e5eae455d5e12",
+      "raw_descriptive_gate": false,
+      "raw_minus_ema_normal_ce": -0.08854198455810547,
+      "raw_statistics": {
+        "accuracy_delta": 0.0,
+        "bootstrap_ci_reason": "one independent target; choice views are deterministic, not independent units",
+        "bootstrap_ci_used": false,
+        "condition_mean_ce": {
+          "m0": {
+            "normal": 35.765625,
+            "reset": 35.510416984558105
+          },
+          "raw_step128_attribution": {
+            "normal": 35.70833396911621,
+            "reset": 35.510416984558105
+          }
+        },
+        "delta_ce": -0.05729103088378906,
+        "endpoint": "raw_step128_attribution",
+        "endpoint_normal_accuracy": 0.0,
+        "endpoint_normal_mean_ce": 35.70833396911621,
+        "improved_choice_views": 3,
+        "m0_normal_accuracy": 0.0,
+        "m0_normal_mean_ce": 35.765625,
+        "normal_reset_difference_in_differences": -0.05729103088378906,
+        "per_view_delta_ce": {
+          "0": -0.16666793823242188,
+          "1": -0.375,
+          "2": -0.47916412353515625,
+          "3": 0.7916679382324219
+        },
+        "relative_change": -0.0016018462108180476,
+        "suite": "r10_f1_single_target",
+        "target_segment_id": "r5-f1-850189e424efde62468b2ef9"
+      },
+      "source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r10/r10-visual-alignment-ba86e2c-20260831/dreamlite-single-set/target-07",
+      "state_image_sha256": "97b92502aa9c077055b3587477dd558339e438e00152121f6993f0233accfad7",
+      "summary_sha256": "fa430dc4cfdd11548f1152015a33c3a88c28288680262b62d9aa9fa1515eb418",
+      "target_index": 7,
+      "target_segment_id": "r5-f1-850189e424efde62468b2ef9",
+      "terminal_sha256": "33f0de4837123441a033613d1a0ddf2118e4bd7901ae5d3322069b9e194c3654"
+    }
+  ]
+}

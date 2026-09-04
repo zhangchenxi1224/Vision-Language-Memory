@@ -1,0 +1,178 @@
+{
+  "schema": "vision_memory.r12-shared-event-latent-writer-config.v1",
+  "protocol": "R12-Shared-Event-Latent-Writer",
+  "status": "preregistered_after_complete_r11_before_any_r12_model_outcome",
+  "activation": {
+    "required_parent_schema": "vision_memory.r11-vae-latent-reachability-comparison.v1",
+    "required_parent_sha256": "f8b048f9cbe9fd4df9460043297904b5c9d476f386d6844d12fd4a5f8f636bb5",
+    "required_parent_target_pass_count": 8,
+    "required_parent_decision": "replace_semantic_editor_with_shared_event_to_latent_writer",
+    "source_training_git_commit": "f4a018f3c4eef453fff3367b049ea732332e8c37",
+    "source_aggregation_git_commit": "ef29c7704f76a5a419ac95b68d9329f37deb9512"
+  },
+  "fixed_data": {
+    "train_sha256": "24327edc39e0d133df5150dc1aab4f55c6cf5b05ccfca9025ad90c5accc6d184",
+    "dev_sha256": "8b167df38022a631d4e631d3c0d66e9fca74171f4224fec436030d6650047303",
+    "family": "F1",
+    "selection_seed": 20260831,
+    "train_pool_count": 7504,
+    "dev_pool_count": 744,
+    "train": {
+      "count": 144,
+      "construction": "one unique-entity segment for each of 36 target values x four target choice positions",
+      "unique_entities": 144,
+      "unique_target_values": 36,
+      "target_index_counts": {"0": 36, "1": 36, "2": 36, "3": 36},
+      "payload_sha256": "07ce170b749b1394550cce6a8e0e9586d3110180d94104a8646de2c222936d62"
+    },
+    "train_audit": {
+      "count": 36,
+      "construction": "one held-in training segment per target value",
+      "unique_entities": 36,
+      "unique_target_values": 36,
+      "target_index_counts": {"0": 9, "1": 9, "2": 9, "3": 9},
+      "payload_sha256": "a6de78197328dbb9a24d56ef65e3fd0ba9abf7bbb42782ad1e7fe32fe9dabc4f"
+    },
+    "dev_select": {
+      "count": 24,
+      "construction": "one segment per dev target value with globally unique entities",
+      "unique_entities": 24,
+      "unique_target_values": 24,
+      "target_index_counts": {"0": 6, "1": 6, "2": 6, "3": 6},
+      "payload_sha256": "e744484cf7f52d794c437d9af5f6e41b75aedd748ceb763fa6897429f410901c"
+    },
+    "dev_final": {
+      "count": 24,
+      "construction": "one sealed segment per dev target value; entities disjoint from dev-select",
+      "unique_entities": 24,
+      "unique_target_values": 24,
+      "target_index_counts": {"0": 6, "1": 6, "2": 6, "3": 6},
+      "payload_sha256": "0bd95da0d884a44f852bacbd0e3f441b1e68241d8ad0ce28930d7ec06491f0b8"
+    },
+    "entity_overlap_counts": {
+      "train_dev_select": 0,
+      "train_dev_final": 0,
+      "dev_select_dev_final": 0
+    },
+    "dev_target_values_are_subset_of_train": true
+  },
+  "information_boundary": {
+    "writer_input": ["visible event_text"],
+    "writer_forbidden_inputs": [
+      "query text",
+      "answer choices",
+      "target index",
+      "answer text extracted from QuerySpec",
+      "segment ID",
+      "entity-specific trainable embedding",
+      "per-item latent"
+    ],
+    "training_loss_may_use": ["frozen Reader CE for the associated query and target"],
+    "dev_select_used_for_optimization": false,
+    "dev_final_used_for_optimization_or_checkpoint_selection": false,
+    "best_checkpoint_selection_forbidden": true
+  },
+  "event_encoder": {
+    "model": "frozen DreamLite-mobile internal Qwen3-VL-2B",
+    "mode": "generate",
+    "input": "event_text only through the unchanged DreamLite generate template",
+    "trainable": false,
+    "cache_batch_size": 8,
+    "cache_dtype": "float32 on CPU",
+    "writer_pooling": "trainable single-query attention over frozen token states"
+  },
+  "writer": {
+    "shared_across_all_items": true,
+    "initial_state": "posterior-mean VAE model latent of uniform RGB 127/255",
+    "output": "initial latent plus event-conditioned residual",
+    "coefficient_network": "LayerNorm(2048), learned attention query, Linear(2048,512), GELU, Linear(512,48), bounded 2*tanh(raw/2)",
+    "basis_count": 48,
+    "basis_normalization": "unit L2 per basis at every forward",
+    "basis_output_norm": 80.0,
+    "basis_initialization": {
+      "first_eight": "normalized exact R11 endpoint-minus-step0 latent deltas in target-index order",
+      "remaining_forty": "seed-0 deterministic Gaussian vectors orthogonalized against preceding bases",
+      "all_basis_parameters_trainable": true
+    },
+    "dreamlite_unet_executed": false,
+    "semantic_edit_prompt_used": false,
+    "event_noise_used": false,
+    "vae": "unchanged frozen DreamLite VAE",
+    "reader": "unchanged frozen Qwen3-VL-4B-Instruct"
+  },
+  "r11_basis_sources": [
+    {"target_index": 0, "endpoint_raw_sha256": "4ad1bba39b35f4177dbcb5a019b8e5b34dd7fc6d51244111aa009ff49d953e76", "step0_sha256": "fd26943681dd075abc99de5e5f803ae74d2ba44e5ad2626efd0c82e6c0dadf03", "manifest_sha256": "8617f769915b8fae41c912c54c46a6be62c47903797e81e211c0e431aba403dd"},
+    {"target_index": 1, "endpoint_raw_sha256": "d359291de63bb5232325b2e7a9294ff3d861287c06e63da2ab6ebe42eab036b9", "step0_sha256": "fe7ba433fe48eb5e5225a52d7ffcde078031970a6c4e11118c2eb1e68c1d1b15", "manifest_sha256": "91defd9c38c64047673ad2cf7a6de90c5627333c3a674b5d457def2d1541d107"},
+    {"target_index": 2, "endpoint_raw_sha256": "569d37d94fd78d1b9e49a9387d1461ed046745ec2a5b864d62c3c01ed1a4d00b", "step0_sha256": "2e5a6fb2ef36bc8082dd9f39e4c71f15f0dd4f1a92eccd6d92a51ea7da2050d5", "manifest_sha256": "446d4c77c69333ca2c044c5bb63200de10f92e46234fe486af3432e7eb61a5be"},
+    {"target_index": 3, "endpoint_raw_sha256": "e306317f63c9402cad7ee328dae7c7f4203e265173a498544777e131def869fc", "step0_sha256": "d460d9b436773c7aeadb72435c56d7a9d6ba8c6f384dd39ab04468c4656ba8ea", "manifest_sha256": "96c8bd5237073cf1170d0b58bf31fcf61afb3b4fccddc14b38d9f161a6a54bf0"},
+    {"target_index": 4, "endpoint_raw_sha256": "0b69eb08fe3a43688a64a82d378ba6f4909b3eb382130fb2886349b08e2494a0", "step0_sha256": "40670bc1b72c93dc1afd1c188eb7d37a842aff6755af878aadf045029c1fa76f", "manifest_sha256": "6cc23b2f383bc23f10cf2f75de032d084963bbb8a74b7b0fa867ca9276cf6c19"},
+    {"target_index": 5, "endpoint_raw_sha256": "c1c469a7b299a0da46a13ecf93b941e4dcee1f6ca8b93ca33d03b76d6abaa34c", "step0_sha256": "ed846154d599988d766d00c93d18bc979c18e75122a8dc57f079733923c08196", "manifest_sha256": "1787748ed2d057e59cb7014349170eafccbaccbcd560e0e7f342d3bccc584754"},
+    {"target_index": 6, "endpoint_raw_sha256": "bcc687a047a080361414ed1198097dbb625637e127b91dcd072a0d9fa4867a4f", "step0_sha256": "dd8f9ef1e5d9a174d35d2a574c87dfae63ada0642eaee25ed5651da34d4724bf", "manifest_sha256": "6df4b7a52c58a218c4eeb918a337a03c46d2b0b9fae59c0ca9d077eb1d4a1666"},
+    {"target_index": 7, "endpoint_raw_sha256": "6cba67fb2c4e1d9a807530d3bf2116eba13cb77f6d769a2f1ee0eef31199c25e", "step0_sha256": "f4e46baca1a65a2dd1aac423b5c77b84b5c12ee2062a705ec9a9f29a094eeb5c", "manifest_sha256": "6ff5bd02e4ad0610d558f82597164c85ea1018e2f778afe1a95d0043d5496987"}
+  ],
+  "arms": {
+    "conditioned": "actual frozen event token states",
+    "constant_control": "identical writer and trainable parameterization, but event token states are replaced by zero before pooling"
+  },
+  "optimization": {
+    "optimizer": "AdamW",
+    "writer_learning_rate": 0.001,
+    "basis_learning_rate": 0.001,
+    "network_weight_decay": 0.0001,
+    "basis_weight_decay": 0.0,
+    "schedule": "constant",
+    "epochs": 32,
+    "train_segments_per_epoch": 144,
+    "micro_steps": 4608,
+    "gradient_accumulation": 4,
+    "optimizer_steps": 1152,
+    "gradient_clipping": null,
+    "choice_views": "each segment receives each forward-cyclic view exactly eight times",
+    "objective": "Reader CE + 0.10*relu(latent_delta_rms-0.50)^2 + 1e-4*mean(coefficient^2)",
+    "checkpoints": [0, 288, 576, 864, 1152],
+    "primary_endpoint": "raw shared writer step1152",
+    "seed": 0,
+    "strict_determinism": true
+  },
+  "evaluation": {
+    "splits": ["train_audit", "dev_select", "dev_final"],
+    "choice_views": "four fixed reverse-cyclic views",
+    "conditions": {
+      "normal": "image generated from the target's own event",
+      "reset": "unchanged frozen-VAE decode of the posterior-mean latent encoded from uniform RGB 127/255, matching R11",
+      "donor": "image generated from a fixed different-target-value event in the same split"
+    },
+    "m0_and_endpoint_required": true,
+    "dev_final_is_sealed_until_fixed_endpoint": true
+  },
+  "per_target_gate": {
+    "technical_gate": true,
+    "relative_normal_ce_change_vs_m0_lte": -0.2,
+    "normal_improves_all_reverse_views_vs_m0": 4,
+    "normal_accuracy_delta_vs_m0_gte": 0.25,
+    "normal_reset_difference_in_differences_lt": 0.0,
+    "relative_normal_ce_vs_donor_lte": -0.2,
+    "normal_better_than_donor_all_reverse_views": 4,
+    "normal_accuracy_delta_vs_donor_gte": 0.25,
+    "normal_donor_difference_in_differences_lt": 0.0
+  },
+  "arm_gate": {
+    "conditioned_required_train_audit_passes": 36,
+    "conditioned_required_dev_select_passes": 24,
+    "conditioned_required_dev_final_passes": 24,
+    "constant_control_dev_final_arm_gate_must_be_false": true,
+    "partial_counts_are_diagnostic_only": true
+  },
+  "locked_interpretation": {
+    "conditioned_all_pass_constant_fails": "A single event-conditioned writer has learned causal one-SET visual writing on held-out entities; advance to recurrent SET/OVERWRITE/CLEAR state algebra without returning to semantic DreamLite tuning.",
+    "train_pass_dev_fail": "The writer memorizes held-in events or values but does not generalize through the frozen event representation; improve the shared text-to-code mapping before recurrence.",
+    "train_fail": "The 48-dimensional shared latent dictionary, optimization, or event pooling cannot fit the known F1 boundary; inspect gradient routing, coefficient collapse, and basis movement before expanding scope.",
+    "normal_pass_donor_fail": "A universal image or query prior is responsible; this is a false positive and cannot advance.",
+    "technical_failure": "Rerun only the invalid arm in a fresh root and make no scientific inference."
+  },
+  "success_boundary": {
+    "diagnostic_only": true,
+    "cannot_establish_full_picture_memory_success": true,
+    "formal_success_still_requires": "shared recurrence, overwrite/clear/interference, fixed full ID/OOD evaluation, multiple seeds, and causal state controls"
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "schema": "vision_memory.r10-visual-alignment-lower-bound-config.v1",
+  "protocol": "R10-VisualAlignment-LowerBound",
+  "status": "conditional_preregistered_after_partial_r9",
+  "authored_context": {
+    "r9_completed_target_indices_seen": [0, 1, 2],
+    "r9_pass_count_seen": 0,
+    "r9_target_indices_not_yet_seen": [3, 4, 5, 6, 7],
+    "remaining_r9_outcomes_must_not_change_this_config": true
+  },
+  "activation": {
+    "activate_if_valid_r9_pass_count_is_at_most": 7,
+    "skip_if_valid_r9_pass_count_is": 8,
+    "reason": "The archived single-step SET positive-control premise is unsupported; when any R9 target remains unlearned, locate the missing visual read/write lower bound before another recurrent-memory change."
+  },
+  "fixed_data": {
+    "train_sha256": "24327edc39e0d133df5150dc1aab4f55c6cf5b05ccfca9025ad90c5accc6d184",
+    "dev_sha256": "8b167df38022a631d4e631d3c0d66e9fca74171f4224fec436030d6650047303"
+  },
+  "target_selection": {
+    "family": "F1",
+    "pool_count": 7504,
+    "selection_seed": 20260831,
+    "ordering_key": "sha256('R10-VisualAlignment-LowerBound\\x1f20260831\\x1fF1\\x1f' + segment_id), then segment_id",
+    "target_count": 8,
+    "target_ids": [
+      "r5-f1-8015bf53a4067aaa7e882288",
+      "r5-f1-392d41fd097d069c42218e0a",
+      "r5-f1-1aee01c0f3e7684c05c9122c",
+      "r5-f1-807090710dd4c077a97348ba",
+      "r5-f1-02c8aa9dc3523351c4d5f9c7",
+      "r5-f1-11dddf29efebc033a995ab92",
+      "r5-f1-de4899e05b0aa7f3d8373171",
+      "r5-f1-850189e424efde62468b2ef9"
+    ],
+    "selected_segment_payload_sha256": "6198beb3a3758fd7df912c6956bc05eac0ace8603708f37147826c65a4d61845",
+    "outcome_independent": true
+  },
+  "shared_contract": {
+    "independent_run_per_target": true,
+    "optimizer_steps": 128,
+    "choice_views": "four forward-cyclic training views, exactly 32 exposures each; four disjoint fixed reverse-cyclic evaluation views",
+    "evaluation": "M0 and fixed endpoint under all four held-out reverse-cyclic views for normal and reset",
+    "best_checkpoint_selection_forbidden": true,
+    "checkpoints": [0, 32, 64, 96, 128],
+    "reader": "frozen Qwen3-VL-4B-Instruct",
+    "reader_loss": "four-choice listwise CE",
+    "reader_resize_contract": "r3-qwen-reader-1024-to-256-bicubic-antialias-cpu-adjoint.v1",
+    "resolution": 1024,
+    "seed": 0,
+    "strict_determinism": true
+  },
+  "arms": {
+    "direct-pixel-oracle": {
+      "scientific_role": "capacity oracle only; not a deployable memory method and never a formal success claim",
+      "initial_state": "uniform RGB 127/255",
+      "parameterization": "one unconstrained 1024x1024 RGB logit tensor; image=sigmoid(logits)",
+      "optimizer": "Adam",
+      "learning_rate": 0.05,
+      "weight_decay": 0.0,
+      "schedule": "constant",
+      "primary_endpoint": "raw pixel logits at step128",
+      "dreamlite_used": false
+    },
+    "dreamlite-single-set": {
+      "scientific_role": "tests whether the current DreamLite updater can write a visual code once the base task is reduced to one SET",
+      "persistent_state": "latent",
+      "tbptt_horizon": 4,
+      "gradient_mode": "full",
+      "source_anchor_effective_sigma_schedule": [0.5, 0.375, 0.25, 0.125],
+      "trainable": "DreamLite-mobile U-Net rank-4 LoRA only",
+      "gradient_coefficient": 1.0,
+      "optimizer": "AdamW",
+      "learning_rate": "unchanged R5 640-step prefix: 1e-5 to 3e-5 warmup, then cosine",
+      "weight_decay": 0.0001,
+      "gradient_clip": 10.0,
+      "ema_decay": 0.995,
+      "primary_endpoint": "EMA step128"
+    }
+  },
+  "per_target_gate": {
+    "technical_gate": true,
+    "relative_normal_ce_change_at_endpoint_lte": -0.2,
+    "improved_fixed_choice_views": 4,
+    "accuracy_delta_gte": 0.25,
+    "normal_reset_difference_in_differences_lt": 0.0
+  },
+  "arm_gate": {
+    "required_target_passes": 8,
+    "total_targets": 8,
+    "partial_pass_counts_are_diagnostic_only": true
+  },
+  "locked_interpretation": {
+    "pixel_8_dreamlite_8": "The frozen visual channel and one-step DreamLite write are supported. Advance to a shared multi-item F1 train/held-out-dev alignment experiment before recurrence.",
+    "pixel_8_dreamlite_0_to_7": "The Reader/image channel is usable, but DreamLite parameterization, conditioning, or update optimization is the bottleneck. Redesign only the updater side.",
+    "pixel_1_to_7": "Visual-channel learnability is target-dependent. Diagnose fixed option/token/query properties before claiming a general visual code.",
+    "pixel_0": "The current differentiable Reader/loss/preprocessing interface has not demonstrated a readable pixel code. Test a post-resize pixel/token oracle before changing recurrence.",
+    "technical_failure": "Rerun only invalid targets in fresh roots; make no scientific inference from invalid targets."
+  },
+  "success_boundary": {
+    "diagnostic_only": true,
+    "cannot_establish_full_picture_memory_success": true,
+    "formal_success_still_requires": "shared training, held-out ID/OOD evaluation, multiple seeds, and causal state controls at a fixed endpoint"
+  }
+}
