@@ -7,6 +7,7 @@ import hashlib
 import json
 import math
 import os
+from collections import Counter
 from pathlib import Path
 from typing import Any, Iterable, Mapping, Sequence
 
@@ -64,6 +65,8 @@ def _validate_inventory(root: Path) -> dict[str, Any]:
     if not isinstance(entries, list):
         raise ValueError(f"R12 inventory artifacts are missing: {root}")
     listed = {str(entry.get("path")): entry for entry in entries if isinstance(entry, Mapping)}
+    if len(listed) != len(entries):
+        raise ValueError(f"R12 inventory contains duplicate or invalid entries: {root}")
     observed = {
         path.relative_to(root).as_posix(): path
         for path in root.rglob("*")
@@ -91,6 +94,14 @@ def _required_artifacts() -> set[str]:
         "run/r12_shared_writer_summary.json",
         "run/micro_metrics.jsonl",
         "run/optimizer_metrics.jsonl",
+        "run/environment.txt",
+        "run/runtime.json",
+        "run/schedule_audit.json",
+        "run/selection_audit.json",
+        "run/event_embedding_cache.pt",
+        "run/event_embedding_audit.json",
+        "run/r11_basis_audit.json",
+        "run/images/reset.png",
     }
     for step in EXPECTED_CHECKPOINT_STEPS:
         required.add(f"run/checkpoints/step-{step:04d}.pt")
@@ -121,6 +132,12 @@ def _validate_evaluation_rows(root: Path, split: str, rows: Sequence[Mapping[str
     }
     if len(cells) != len(rows):
         raise ValueError(f"R12 duplicate evaluation cells: {root}:{split}")
+    target_cell_counts = Counter(
+        (str(row.get("pair_unit")), str(row.get("checkpoint")), str(row.get("condition")))
+        for row in rows
+    )
+    if set(target_cell_counts.values()) != {4}:
+        raise ValueError(f"R12 per-target evaluation cells are incomplete: {root}:{split}")
     targets = {cell[0] for cell in cells}
     checkpoints = {cell[1] for cell in cells}
     conditions = {cell[2] for cell in cells}
@@ -151,12 +168,27 @@ def _validate_arm(root: Path, expected_arm: str) -> dict[str, Any]:
     summary = _load(summary_path)
     manifest = _load(manifest_path)
     technical = _load(technical_path)
+    expected_execution_checks = {
+        "child_exit_zero",
+        "summary_schema",
+        "summary_completed",
+        "summary_commit_matches",
+        "summary_arm_matches",
+        "fixed_execution_matches",
+        "selection_hashes_match",
+        "technical_gate_passed",
+        "formal_success_not_claimed",
+        "manifest_matches",
+    }
+    execution_checks = terminal.get("execution_checks")
     if (
         terminal.get("schema") != TERMINAL_SCHEMA
         or terminal.get("status") != "completed_diagnostic"
         or terminal.get("passed") is not True
         or terminal.get("arm") != expected_arm
-        or not all(terminal.get("execution_checks", {}).values())
+        or not isinstance(execution_checks, Mapping)
+        or set(execution_checks) != expected_execution_checks
+        or not all(execution_checks.values())
     ):
         raise ValueError(f"R12 invalid controller terminal: {expected_arm}")
     expected_hashes = {
@@ -205,6 +237,22 @@ def _validate_arm(root: Path, expected_arm: str) -> dict[str, Any]:
             raise ValueError(f"R12 {split} pass count does not match statistics: {expected_arm}")
         rows = _jsonl(root / "run" / f"{split}_evaluation_rows.jsonl")
         _validate_evaluation_rows(root, split, rows)
+        for value in values:
+            segment_id = str(value["target_segment_id"])
+            for condition in ("normal", "donor"):
+                image_path = (
+                    root
+                    / "run"
+                    / "images"
+                    / "endpoint"
+                    / split
+                    / condition
+                    / f"{segment_id}.png"
+                )
+                if not image_path.is_file():
+                    raise ValueError(
+                        f"R12 endpoint image is missing: {expected_arm}:{split}:{condition}:{segment_id}"
+                    )
     arm_gate = bool(summary["gates"]["arm_gate"])
     if terminal.get("scientific_arm_gate") is not arm_gate:
         raise ValueError(f"R12 controller/scientific gate mismatch: {expected_arm}")
