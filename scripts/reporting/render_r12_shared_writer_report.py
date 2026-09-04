@@ -530,6 +530,69 @@ def render(conditioned_root: Path, control_root: Path, output_dir: Path) -> dict
         )
     )
     (output_dir / "REPORT.md").write_text(report, encoding="utf-8")
+    conditioned_endpoint = result["aggregates"]["conditioned"]
+    control_endpoint = result["aggregates"]["constant-control"]
+    report_zh = "\n".join(
+        (
+            "# R12 共享事件到视觉 latent 写入器：双臂结果",
+            "",
+            f"**判定：** `{result['decision']}`",
+            "",
+            "## 固定因果门槛",
+            "",
+            "| 实验臂 | train-audit | dev-select | sealed dev-final | 总门槛 |",
+            "| --- | ---: | ---: | ---: | --- |",
+            (
+                f"| conditioned | {condition_counts['train_audit']}/36 | "
+                f"{condition_counts['dev_select']}/24 | {condition_counts['dev_final']}/24 | "
+                f"{'通过' if result['arms']['conditioned']['gates']['arm_gate'] else '未通过'} |"
+            ),
+            (
+                f"| constant-control | {control_counts['train_audit']}/36 | "
+                f"{control_counts['dev_select']}/24 | {control_counts['dev_final']}/24 | "
+                f"{'通过' if result['arms']['constant-control']['gates']['arm_gate'] else '未通过'} |"
+            ),
+            "",
+            "## 核心事实",
+            "",
+            (
+                "conditioned 的平均 CE（M0→normal→donor）分别为："
+                f"train-audit {conditioned_endpoint['train_audit']['m0_normal_mean_ce']:.3f}→"
+                f"{conditioned_endpoint['train_audit']['endpoint_normal_mean_ce']:.3f}→"
+                f"{conditioned_endpoint['train_audit']['endpoint_donor_mean_ce']:.3f}；"
+                f"dev-select {conditioned_endpoint['dev_select']['m0_normal_mean_ce']:.3f}→"
+                f"{conditioned_endpoint['dev_select']['endpoint_normal_mean_ce']:.3f}→"
+                f"{conditioned_endpoint['dev_select']['endpoint_donor_mean_ce']:.3f}；"
+                f"dev-final {conditioned_endpoint['dev_final']['m0_normal_mean_ce']:.3f}→"
+                f"{conditioned_endpoint['dev_final']['endpoint_normal_mean_ce']:.3f}→"
+                f"{conditioned_endpoint['dev_final']['endpoint_donor_mean_ce']:.3f}。"
+            ),
+            (
+                "constant-control 的 normal CE 为："
+                f"train-audit {control_endpoint['train_audit']['endpoint_normal_mean_ce']:.3f}、"
+                f"dev-select {control_endpoint['dev_select']['endpoint_normal_mean_ce']:.3f}、"
+                f"dev-final {control_endpoint['dev_final']['endpoint_normal_mean_ce']:.3f}。"
+            ),
+            "",
+            "## 第一性原理归因",
+            "",
+            (
+                "冻结事件表征仍能预测目标值：线性探针在 train-audit/dev-select/dev-final 上为 "
+                f"{token_probe['train_audit']:.1%}/{token_probe['dev_select']:.1%}/"
+                f"{token_probe['dev_final']:.1%}。"
+            ),
+            (
+                "经过写入器系数头后降为 "
+                f"{coefficient_probe['train_audit']:.1%}/{coefficient_probe['dev_select']:.1%}/"
+                f"{coefficient_probe['dev_final']:.1%}。事件特异信息主要在表征到视觉码的映射阶段丢失，"
+                "而不是冻结事件编码器中不存在。"
+            ),
+            "",
+            "R12 仅是单步 SET 诊断，不能作为完整 Picture Memory 成功。下一轮必须保持现有 normal/reset/donor 门槛，并结构性消除事件无关通用视觉码捷径。",
+            "",
+        )
+    )
+    (output_dir / "REPORT.zh-CN.md").write_text(report_zh, encoding="utf-8")
     conclusion = "\n".join(
         (
             "# R12 first-principles conclusion",
