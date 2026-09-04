@@ -496,6 +496,24 @@ def render(conditioned_root: Path, control_root: Path, output_dir: Path) -> dict
             "source_sha256": result["source_sha256"],
         },
     )
+    _write_json(
+        output_dir / "SOURCE_DELIVERY.json",
+        {
+            "schema": "vision_memory.r12-shared-writer-source-delivery.v1",
+            "status": "completed",
+            "formal_success_claim": False,
+            "arms": {
+                arm: {
+                    "source_root": str(root.resolve()),
+                    "launch": _load(root / "launch.json"),
+                    "terminal": _load(root / "terminal.json"),
+                    "technical_gate": _load(root / "run" / "technical_gate.json"),
+                    "artifact_inventory": _load(root / "artifact_inventory.json"),
+                }
+                for arm, root in roots.items()
+            },
+        },
+    )
 
     condition_counts = result["arms"]["conditioned"]["gates"]["split_target_pass_counts"]
     control_counts = result["arms"]["constant-control"]["gates"]["split_target_pass_counts"]
