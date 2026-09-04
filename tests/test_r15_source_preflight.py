@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import importlib.util
+import hashlib
+import json
 from pathlib import Path
 
 
@@ -39,3 +41,31 @@ def test_r15_preflight_parser_requires_train_and_output() -> None:
     assert args.train == Path("train.jsonl")
     assert args.output == Path("receipt.json")
     assert args.expected_schedule_sha256 is None
+
+
+def test_r15_config_binds_preregistration_schedule_and_fixed_gate() -> None:
+    config_path = ROOT / "configs" / "experiments" / "r15_synchronous_round_robin.json"
+    config = json.loads(config_path.read_text(encoding="utf-8"))
+    preregistration = ROOT / config["preregistration"]["path"]
+    preregistration_sha256 = hashlib.sha256(preregistration.read_bytes().replace(b"\r\n", b"\n")).hexdigest()
+    assert config["status"] == "preregistered_before_any_r15_model_outcome"
+    assert preregistration_sha256 == config["preregistration"]["sha256"]
+    assert (
+        config["training_schedule"]["schedule_sha256"]
+        == config["model_free_preflight"]["schedule_sha256"]
+        == "2495ce15ed5242b88f1d88b6caed29694a6340a9982c3870b1720004cf75ffb8"
+    )
+    assert config["optimization"]["pair_gradient_accumulation"] == 2
+    assert config["optimization"]["backward_loss_divisor"] == 4.0
+    assert config["optimization"]["additional_accumulation_divisor"] is None
+    assert config["optimization"]["checkpoints"] == [0, 324, 648, 972, 1296]
+    assert config["arm_gate"] == {
+        "required_train_audit_passes": 36,
+        "required_dev_select_passes": 24,
+        "required_dev_replay_passes": 24,
+        "required_dev_final_passes": 24,
+        "partial_counts_are_diagnostic_only": True,
+        "formal_success_claim": False,
+    }
+    assert config["success_boundary"]["diagnostic_only"] is True
+    assert config["success_boundary"]["cannot_establish_full_picture_memory_success"] is True
