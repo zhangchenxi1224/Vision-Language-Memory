@@ -1,0 +1,56 @@
+{
+  "schema": "vision_memory.r15-synchronous-round-robin-schedule-preflight-delivery.v1",
+  "status": "completed_source_only",
+  "passed": true,
+  "formal_success_claim": false,
+  "scientific_outcome_observed": false,
+  "model_calls": 0,
+  "reader_calls_executed": 0,
+  "formal_train_sha256": "24327edc39e0d133df5150dc1aab4f55c6cf5b05ccfca9025ad90c5accc6d184",
+  "train_selection_sha256": "07ce170b749b1394550cce6a8e0e9586d3110180d94104a8646de2c222936d62",
+  "initial_failed_attempt": {
+    "git_commit": "8659283f1b8aab100d858ea918549ad21858facf",
+    "status": "failed_closed_before_output",
+    "failed_check": "balanced_donor_member_ranks",
+    "other_schedule_checks": "passed",
+    "model_calls": 0,
+    "diagnosis": "A global cyclic member shift changes sign at the two endpoints of odd-shift pairs, so globally balanced shifts do not imply per-event donor-member balance."
+  },
+  "corrected_attempt": {
+    "git_commit": "97bfc8338912ba58eccc29e46c1fc02ba00bb918",
+    "intervention": "deterministic Euler orientation of the 18 odd-shift perfect matchings, giving every target nine +1 and nine -1 incidences",
+    "remote_artifact": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r15/preflight-97bfc83-20260905/schedule_preflight.json",
+    "artifact_bytes": 1640429,
+    "artifact_sha256": "5ac6c3fea168ecc8f0b265d5200004a6233b8ef45387921b7d26e4bd1d8f02b2",
+    "byte_identical_recomputations": 2,
+    "schedule_sha256": "2495ce15ed5242b88f1d88b6caed29694a6340a9982c3870b1720004cf75ffb8"
+  },
+  "locked_counts": {
+    "target_values": 36,
+    "members_per_target_value": 4,
+    "complete_value_pairs": 630,
+    "rounds": 36,
+    "pair_micro_steps": 2592,
+    "directional_examples": 5184,
+    "reader_calls_planned": 10368,
+    "optimizer_steps": 1296,
+    "checkpoints": [0, 324, 648, 972, 1296]
+  },
+  "passed_checks": [
+    "formal_train_file_hash",
+    "fixed_train_selection",
+    "fixed_train_audit_selection",
+    "complete_value_pair_factorization",
+    "every_wrong_target_seen",
+    "unique_donor_identity_each_round",
+    "balanced_donor_member_ranks",
+    "balanced_choice_views",
+    "repeat_value_round_zero",
+    "repeat_event_pairs_disjoint",
+    "repeat_member_shift_plus_one",
+    "optimizer_atomic_distinct_pairs",
+    "no_cross_round_accumulation",
+    "single_loss_scaling"
+  ],
+  "interpretation": "The executable schedule now satisfies the preregistered structural contrast conditions on the exact 144-event formal selection. This is only a model-free technical result and provides no evidence that the writer will learn or generalize."
+}

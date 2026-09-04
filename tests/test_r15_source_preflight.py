@@ -69,3 +69,18 @@ def test_r15_config_binds_preregistration_schedule_and_fixed_gate() -> None:
     }
     assert config["success_boundary"]["diagnostic_only"] is True
     assert config["success_boundary"]["cannot_establish_full_picture_memory_success"] is True
+
+
+def test_delivered_source_preflight_matches_locked_config() -> None:
+    config = json.loads(
+        (ROOT / "configs" / "experiments" / "r15_synchronous_round_robin.json").read_text(encoding="utf-8")
+    )
+    report = json.loads(
+        (ROOT / "reports" / "r15-synchronous-round-robin-schedule-preflight-20260905.json").read_text(encoding="utf-8")
+    )
+    assert report["passed"] is True
+    assert report["model_calls"] == report["reader_calls_executed"] == 0
+    assert report["scientific_outcome_observed"] is False
+    assert report["corrected_attempt"]["schedule_sha256"] == config["training_schedule"]["schedule_sha256"]
+    assert report["corrected_attempt"]["artifact_sha256"] == config["model_free_preflight"]["artifact_sha256"]
+    assert report["locked_counts"]["optimizer_steps"] == config["optimization"]["checkpoints"][-1]
