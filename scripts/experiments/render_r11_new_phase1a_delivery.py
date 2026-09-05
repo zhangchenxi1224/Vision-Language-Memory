@@ -169,6 +169,12 @@ def render(report_dir: Path) -> None:
             if any(row["gradient_clipping_applied"] is not False for row in metrics):
                 raise ValueError(f"Target {index} unexpectedly applied gradient clipping.")
             metrics_by_target[index] = metrics
+            controller_terminal = json.loads(_read_member(archive, f"{source_name}/terminal.json").decode("utf-8"))
+            if (
+                controller_terminal.get("schema") != "vision_memory.r11-new-phase1a-target-terminal.v1"
+                or controller_terminal.get("technical_completed") is not True
+            ):
+                raise ValueError(f"Target {index} controller terminal is not valid.")
 
             losses = np.asarray([row["loss_before_step"] for row in metrics], dtype=np.float64)
             gradients = np.asarray([row["gradient_norm"] for row in metrics], dtype=np.float64)
@@ -190,7 +196,8 @@ def render(report_dir: Path) -> None:
                     "endpoint_normal_accuracy": stats["endpoint_normal_accuracy"],
                     "accuracy_delta": stats["accuracy_delta"],
                     "normal_reset_did": stats["normal_reset_difference_in_differences"],
-                    "wall_clock_seconds": target["wall_clock_seconds"],
+                    "trainer_wall_clock_seconds": target["wall_clock_seconds"],
+                    "controller_elapsed_seconds": controller_terminal["elapsed_seconds"],
                 }
             )
             training_rows.append(

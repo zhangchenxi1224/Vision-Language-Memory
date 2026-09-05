@@ -32,9 +32,9 @@
 - 四个 forward-cyclic training views，每个 view恰好出现 64 次；
 - checkpoint：`0, 64, 128, 192, 256`；
 - primary endpoint：原始 step 256，禁止事后选择 best checkpoint；
-- endpoint 用四个独立 reverse-cyclic choice views 审计，并保留 normal/reset 因果对照。
+- endpoint 用同一 query 的四个固定 reverse-cyclic choice 排列审计；它们不是四个独立统计样本，并保留 normal/reset 对照。
 
-总计保存并独立复算 `2,048` 条连续 optimizer receipts 与 `128` 条 endpoint evaluation rows。8 个有效 target 的 controller wall-clock 合计 `3,736.772` 秒（`62.280` 分钟），nearest-rank p90 为 `473.723` 秒/target。
+总计保存并独立复算 `2,048` 条连续 optimizer receipts 与 `128` 条 endpoint evaluation rows。8 个 trainer summary 的 wall-clock 合计 `3,736.772` 秒（`62.280` 分钟），p90 为 `473.723` 秒；8 个 controller terminal 的 `elapsed_seconds` 合计 `4,089.579` 秒（`68.160` 分钟），p90 为 `525.500` 秒。预注册第 24.4 节若执行规模预算，必须使用后者，不能把 trainer 内部计时冒充 controller wall-clock。
 
 ## 3. 预注册门槛与结果
 
@@ -66,7 +66,7 @@
 
 - 浅色线是每一步真实 `training-view CE`，深色线只是 trailing 16-step mean；没有替换原始值。
 - 四种 training choice view 每四步循环一次，因此规则性波动不等于随机数据噪声。
-- 多个通过目标出现“先进入低 loss 区域、随后被较大梯度推出、后来再恢复”的非单调轨迹。
+- 多个通过目标出现“先进入低 loss 区域、随后回升、后来再恢复”的非单调轨迹；回升与梯度变化共现，但未经受控回放，不能断言是梯度将参数推出。
 - Target 1 和 7 的 CE 明显下降，但 step 256 的正确答案概率仍没有超过错误选项，accuracy 没跨过门槛。
 - 训练 loss 不是正式 endpoint gate；正式结论来自固定 raw step 256 的独立 reverse-cyclic rows。
 
@@ -94,14 +94,15 @@
 严格解释边界：
 
 - 通过目标说明冻结 Reader 在固定审计 views 下能从 endpoint 取得目标答案；
-- normal/reset DiD 支持正常更新路径具有因果作用；
+- normal/reset DiD 只比较生成 endpoint 与未更新 blank source decode，支持图像 endpoint 相对 blank 参与了改善，但不证明 event 语义因果；
+- 本轮没有 constant-code 或 donor-code 对照，不能排除 event-agnostic/query-specific code；
 - 但这仍可能是 query/Reader-specific code，而不是状态语义；
 - 人类不可读本身既不是失败，也不是成功证据；
 - 尚未证明跨 query、跨模型、held-out、OOD、长期递归、OVERWRITE/CLEAR 或共享 writer 能力。
 
 ## 7. 第一性原理归因与下一步
 
-已有证据排除了“完全没有梯度”和“冻结 Reader 完全无法读取任何视觉 code”。Target 1/7 的 4/4 CE 均改善且 reset 对照不支持无条件图片假阳性，但 accuracy 未跨过离散决策边界。
+已有证据排除了“完全没有梯度”和“冻结 Reader 完全无法读取任何视觉 code”。Target 1/7 的 4/4 CE 均改善且 accuracy 未跨过离散决策边界；normal/reset 仅表明改善不能由未更新 blank baseline 解释，不能排除 constant/donor/event-agnostic code。
 
 仍待区分：
 
@@ -140,7 +141,7 @@ Target 1 首次目录 `target-01` 因两个手抄 snapshot hash 多出字符，�
 ## 9. 本地复核
 
 ```bash
-sha256sum -c reports/r11-new-phase1a-results-20260905/ARCHIVE_SHA256SUMS.txt
+(cd reports/r11-new-phase1a-results-20260905 && sha256sum -c ARCHIVE_SHA256SUMS.txt)
 python scripts/experiments/render_r11_new_phase1a_delivery.py
 ```
 
