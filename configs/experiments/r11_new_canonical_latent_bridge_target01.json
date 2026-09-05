@@ -1,0 +1,209 @@
+{
+  "schema": "vision_memory.r11-new-canonical-latent-bridge-config.v1",
+  "protocol": "R11-New-Canonical-Latent-Bridge-Distance-Target01",
+  "status": "preregistered_before_any_bridge_optimization_result",
+  "purpose": "Distinguish frozen-DreamLite path reachability from Reader-CE optimization failure.",
+  "parent_phase1a": {
+    "training_source_commit": "2cde77ece6f020ab8c747d7c73e19dac4d8fba1b",
+    "corrected_delivery_parent_commit": "e2e60126285486d42386b4cd670b419334dd06db",
+    "comparison_sha256": "f3764a83ee8bc31cc7895fd33d494d4ea3be0c187c8cc9b0f6a85a4cf257843d",
+    "raw_artifacts_sha256": "c1e36f92766c98f245917a9009dc9061a07729842dbef6c7b97ad18889edfbba",
+    "selected_segments_sha256": "6198beb3a3758fd7df912c6956bc05eac0ace8603708f37147826c65a4d61845",
+    "engineering_gate": true,
+    "query_level_pass_count": 6,
+    "total_targets": 8,
+    "failed_target_indices": [
+      1,
+      7
+    ],
+    "decision": "run_canonical_r11_latent_bridge_distance_diagnostic",
+    "phase2_allowed": false
+  },
+  "target_selection": {
+    "rule": "lowest_numeric_failed_target_index_from_immutable_phase1a_aggregation",
+    "target_index": 1,
+    "target_segment_id": "r5-f1-392d41fd097d069c42218e0a",
+    "no_post_result_target_selection": true,
+    "target_07_deferred_until_target_01_decision": true
+  },
+  "canonical_teacher": {
+    "source_experiment": "canonical R11 direct VAE-latent reachability",
+    "source_git_commit": "f4a018f3c4eef453fff3367b049ea732332e8c37",
+    "artifact_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11/r11-vae-latent-f4a018f-20260831/target-01/run/endpoint_raw.pt",
+    "file_sha256": "d359291de63bb5232325b2e7a9294ff3d861287c06e63da2ab6ebe42eab036b9",
+    "schema": "vision_memory.r11-vae-latent-endpoint.v1",
+    "tensor_key": "latent_fp32",
+    "tensor_sha256": "6857afeffd37124bb196ab7c6607580c57c950d72d760ca6b49f8cc00bdef3f1",
+    "shape": [
+      1,
+      4,
+      128,
+      128
+    ],
+    "dtype": "torch.float32",
+    "finite": true,
+    "mean": -0.08217206597328186,
+    "population_std": 0.6546660661697388,
+    "rms": 0.6598029136657715,
+    "minimum": -1.8861125707626343,
+    "maximum": 1.7701853513717651,
+    "reference_reverse_cyclic_accuracy": 1,
+    "reference_reverse_cyclic_mean_ce": 0.000176956004,
+    "reference_evaluation_rows_sha256": "d2c81e5282860a4e13ee2642841a3a01688733c81dbf1c1da8d949136de0ce26"
+  },
+  "exact_parity_bindings": {
+    "phase1a_valid_source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-phase1a-2cde77e-20260905-round02/target-01-retry01",
+    "initial_x_T_fp32_sha256": "c970092e2afca24ededea1aec2892bd6bd54ba0dd2193522dab22af10ac1d991",
+    "initial_z_t_fp32_sha256": "11c7216fe2a70f0caa314d182b2c176b4f50c78f2d081f5aa0271184e5c8e659",
+    "blank_source_rgb_sha256": "a3b784da71eaa113fb4d9d71502a7a3526ba0d41e2d42ed96fe79111ca3dba65",
+    "source_latents_fp32_sha256": "719e92867b60546b21b281cfc633ab782c8ce2274bfb41c6b3cee6d673e74eaa",
+    "event_text_sha256": "f170a7e2dfe0070fbd160c09d29dbcf897ddbf5f75929a3ee4af84cf627965bb",
+    "condition_prompt_embeds_sha256": "473bd457d6fff070a71b119a19d950b8d094cfaf6f126ceb817330eb01263a60",
+    "condition_attention_mask_sha256": "4f941a468150ea22f64ac4f7304e9a94a3dd1c721d07dd7f8ebd10185fbe2ea9",
+    "dreamlite_snapshot_manifest_sha256": "1bcf41b170c4b4a806bac6701cbdf4fabd5c3c53fa67415d065ab95ce2703159",
+    "reader_snapshot_manifest_sha256": "159a504daaae6dc412535978f087150a0eb8e50164afd70a8a17f83906f1127c"
+  },
+  "single_changed_factor": {
+    "factor": "training_objective",
+    "phase1a_value": "Qwen Reader listwise choice cross-entropy on one forward-cyclic view per step",
+    "bridge_value": "mean elementwise FP32 MSE between frozen-DreamLite endpoint z_t and fixed canonical R11 latent z_R11_star",
+    "formula": "mean((Phi_DL(x_T; blank_source_latent, event_text) - z_R11_star)^2)",
+    "reader_gradient_calls_during_optimization": 0,
+    "rationale": "Dense latent supervision separates path reachability from the discontinuous answer-decision landscape."
+  },
+  "unchanged_contract": {
+    "train_sha256": "24327edc39e0d133df5150dc1aab4f55c6cf5b05ccfca9025ad90c5accc6d184",
+    "dev_sha256": "8b167df38022a631d4e631d3c0d66e9fca74171f4224fec436030d6650047303",
+    "source_state": "RGB 127/255 encoded by frozen DreamLite VAE posterior mean",
+    "dreamlite_inputs": [
+      "source_latent",
+      "event_text",
+      "x_T"
+    ],
+    "only_trainable": "x_T_fp32",
+    "x_T_initialization": "same event-noise generator with seed 0 and source episode/turn key",
+    "dreamlite_path": "complete frozen source-anchored DreamLite-mobile edit path",
+    "diffusion_steps": 4,
+    "effective_start_sigma": 0.5,
+    "effective_sigma_schedule": [
+      0.5,
+      0.375,
+      0.25,
+      0.125
+    ],
+    "optimizer": "Adam",
+    "learning_rate": 0.05,
+    "weight_decay": 0,
+    "schedule": "constant",
+    "optimizer_steps": 256,
+    "gradient_clipping": null,
+    "checkpoint_steps": [
+      0,
+      64,
+      128,
+      192,
+      256
+    ],
+    "primary_endpoint": "raw_step_256",
+    "best_checkpoint_selection_forbidden": true,
+    "seed": 0,
+    "strict_determinism": true,
+    "dreamlite_device": "cuda:0",
+    "reader_device": "cuda:1"
+  },
+  "preflight_gate": {
+    "optimizer_steps": 0,
+    "full_forward_calls": 1,
+    "backward_calls": 1,
+    "require_exact_teacher_file_and_tensor_hashes": true,
+    "require_exact_parity_hashes": true,
+    "require_only_x_T_fp32_trainable": true,
+    "require_four_dreamlite_steps": true,
+    "require_finite_nonzero_x_T_gradient": true,
+    "require_all_model_parameters_frozen_and_without_gradients": true,
+    "teacher_replay": {
+      "fixed_reverse_cyclic_permutations_of_same_query": 4,
+      "all_four_correct": true,
+      "mean_ce_lte": 0.001
+    },
+    "scientific_or_bridge_result_evaluated": false
+  },
+  "formal_metrics": {
+    "per_step": [
+      "mse_before_step",
+      "rmse_before_step",
+      "l2_distance_before_step",
+      "mse_ratio_to_m0",
+      "l2_distance_ratio_to_m0",
+      "teacher_normalized_rmse",
+      "x_T_gradient_norm",
+      "x_T_gradient_nonzero_fraction",
+      "x_T_update_norm",
+      "four_step_trajectory_stats"
+    ],
+    "endpoint_reader_audit": "same four fixed reverse-cyclic permutations of the same target-01 query at m0, raw step 256, and teacher",
+    "endpoint_conditions": [
+      "normal",
+      "reset"
+    ],
+    "permutations_are_not_independent_statistical_units": true
+  },
+  "formal_technical_gate": {
+    "optimizer_receipts_exact": 256,
+    "optimizer_steps_contiguous": true,
+    "four_dreamlite_steps_every_receipt": true,
+    "finite_nonzero_x_T_gradient_every_receipt": true,
+    "only_x_T_fp32_trainable": true,
+    "model_snapshots_unchanged": true,
+    "no_gradient_clipping": true,
+    "exact_checkpoint_hash_triplets": [
+      0,
+      64,
+      128,
+      192,
+      256
+    ],
+    "exact_parity_hashes_at_step_0": true,
+    "teacher_hashes_unchanged": true,
+    "raw_artifact_inventory_complete": true
+  },
+  "primary_bridge_gate": {
+    "endpoint": "raw_step_256_only",
+    "technical_gate": true,
+    "teacher_replay_gate": true,
+    "mse_ratio_to_m0_lte": 0.01,
+    "l2_distance_ratio_to_m0_lte": 0.1,
+    "teacher_normalized_rmse_lte": 0.1,
+    "endpoint_reverse_cyclic_accuracy_eq": 1,
+    "interpretation": "At least 99% MSE reduction, 90% L2 contraction, error RMS no more than 10% of teacher population std, and all four fixed reader permutations correct."
+  },
+  "decision_table": {
+    "distance_pass_and_reader_pass": "Frozen path empirically reaches the readable teacher neighborhood under the locked budget; prioritize QA-objective optimization as the next single-factor cause.",
+    "distance_pass_and_reader_fail": "Distance threshold is not sufficient for reader transfer; run a preregistered local teacher-neighborhood robustness diagnostic before optimizer tuning.",
+    "distance_fail_and_reader_pass": "A readable endpoint is empirically reachable under dense guidance although the exact teacher was not closely matched; prioritize QA-objective optimization.",
+    "distance_fail_and_reader_fail": "Known teacher was not reached under the locked solver budget; next change exactly one of budget, scheduler, or initialization and do not claim mathematical non-reachability."
+  },
+  "interpretation_boundaries": {
+    "diagnostic_only": true,
+    "formal_success_always_false": true,
+    "phase2_remains_blocked": true,
+    "no_state_level_claim": true,
+    "no_shared_writer_claim": true,
+    "no_id_ood_claim": true,
+    "no_human_readability_claim": true,
+    "no_mathematical_reachability_claim_from_failure": true,
+    "no_best_checkpoint_rescue": true,
+    "no_post_result_threshold_change": true
+  },
+  "deployment": {
+    "instance": "vlm-r3-h200x2-live-20260717",
+    "workspace": "分布式训练空间",
+    "output_storage": "/inspire/ssd/",
+    "fresh_output_root_required": true,
+    "clean_detached_git_checkout_required": true,
+    "suite_lock_required": true,
+    "technical_preflight_before_formal": true,
+    "implementation_commit_must_be_pushed_before_remote_checkout": true,
+    "independent_post_run_aggregation_required": true
+  }
+}
