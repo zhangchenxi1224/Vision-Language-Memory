@@ -1,0 +1,131 @@
+{
+  "aggregate_result": {
+    "decision": "run_canonical_r11_latent_bridge_distance_diagnostic",
+    "engineering_gate": true,
+    "failed_target_indices": [
+      1,
+      7
+    ],
+    "formal_success": false,
+    "phase1a_query_level_reachability_gate": false,
+    "query_level_target_pass_count": 6
+  },
+  "archives": {
+    "aggregation-v1.tar.gz": {
+      "bytes": 43814,
+      "entries": 4,
+      "sha256": "64d0cf0dbdfbb9842052a8e1d884a9a6c4da19918cd5f6eb5fe46fbb5112a8ac"
+    },
+    "targets-00-01-retry.tar.gz": {
+      "bytes": 23366402,
+      "entries": 90,
+      "sha256": "67582d05b634f9639b57aebd51f19a7d6ae376b30980e710fbe44d0a3e17a89b"
+    },
+    "targets-02-03.tar.gz": {
+      "bytes": 22745949,
+      "entries": 84,
+      "sha256": "06fc9632ef7858ddd0a02f20e311ebac2bff05b2e9db2c4d5a28630feacf0663"
+    },
+    "targets-04-05.tar.gz": {
+      "bytes": 21873812,
+      "entries": 84,
+      "sha256": "1051dba9d63b837650c0f3979faa30318bfd0867e09e3e3c3d9aaf70017ac4af"
+    },
+    "targets-06-07.tar.gz": {
+      "bytes": 24568404,
+      "entries": 84,
+      "sha256": "238ddf1f137ba2a974fbd7e52c9f4e513c35a3d41ba3104c61a80ba98aa4f44c"
+    }
+  },
+  "generated_artifacts": {
+    "checkpoint_image_montage.png": {
+      "bytes": 2439564,
+      "sha256": "b16d009c234408767cd061c93fa63fb8653200d3750f97230b3d7fc22b63d1b4"
+    },
+    "endpoint_gate_summary.png": {
+      "bytes": 97503,
+      "sha256": "89d9449195c8a559606b3de8fc4d621cd79a92f989a53c2c0533396fb35b5b27"
+    },
+    "gradient_norm_trajectories.png": {
+      "bytes": 530924,
+      "sha256": "ebd2e12474726fbca45f63c59b7e529fab1a147249186b99dd2f8f51b9e095b2"
+    },
+    "per_target_results.csv": {
+      "bytes": 2608,
+      "sha256": "f17edc7ddebf42f7f8ba9481514981f300d9ad222fa30047cb6d2ad6fa6ece71"
+    },
+    "render_environment.txt": {
+      "bytes": 230,
+      "sha256": "212976a3581b23958778944bef762539026d1a4d5ce279fae3bb2cdfc173d937"
+    },
+    "training_diagnostics.json": {
+      "bytes": 4430,
+      "sha256": "72851ac9030eb88bc924bcd7970af7cb9f94150d4b6546891967d06babc90520"
+    },
+    "training_loss_trajectories.png": {
+      "bytes": 517675,
+      "sha256": "307531f2c7bc489561cd5e8f2d019d191fe408a51867c2c750c3c7df257a770f"
+    }
+  },
+  "generator": {
+    "path": "scripts/experiments/render_r11_new_phase1a_delivery.py",
+    "sha256": "fb521e0d5289c30c037195e7aa86183df2be841b52295fb17e48932ec7a75f40"
+  },
+  "invalid_attempt_preserved": {
+    "classification": "technical failure before model load / optimizer step 0",
+    "root": "target-01",
+    "scientifically_counted": false,
+    "target_index": 1
+  },
+  "official_aggregation": {
+    "RAW_ARTIFACTS.json": {
+      "bytes": 55653,
+      "sha256": "c1e36f92766c98f245917a9009dc9061a07729842dbef6c7b97ad18889edfbba"
+    },
+    "REPORT.md": {
+      "bytes": 2570,
+      "sha256": "1e24fa4f4fed99b09cf30746f9923543b8648d1bc1035400e3dcd3d85253b9bf"
+    },
+    "comparison.json": {
+      "bytes": 76828,
+      "sha256": "f3764a83ee8bc31cc7895fd33d494d4ea3be0c187c8cc9b0f6a85a4cf257843d"
+    }
+  },
+  "schema": "vision_memory.r11-new-phase1a-delivery-manifest.v1",
+  "scientific_source": "independently recomputed raw artifacts",
+  "training_source_commit": "2cde77ece6f020ab8c747d7c73e19dac4d8fba1b",
+  "valid_target_source_mapping": {
+    "0": {
+      "archive": "targets-00-01-retry.tar.gz",
+      "root": "target-00"
+    },
+    "1": {
+      "archive": "targets-00-01-retry.tar.gz",
+      "root": "target-01-retry01"
+    },
+    "2": {
+      "archive": "targets-02-03.tar.gz",
+      "root": "target-02"
+    },
+    "3": {
+      "archive": "targets-02-03.tar.gz",
+      "root": "target-03"
+    },
+    "4": {
+      "archive": "targets-04-05.tar.gz",
+      "root": "target-04"
+    },
+    "5": {
+      "archive": "targets-04-05.tar.gz",
+      "root": "target-05"
+    },
+    "6": {
+      "archive": "targets-06-07.tar.gz",
+      "root": "target-06"
+    },
+    "7": {
+      "archive": "targets-06-07.tar.gz",
+      "root": "target-07"
+    }
+  }
+}
