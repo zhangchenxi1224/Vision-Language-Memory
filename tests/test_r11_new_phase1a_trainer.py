@@ -30,6 +30,8 @@ trainer = load_script(
     "scripts/train/r11_new_frozen_dreamlite_oracle.py",
 )
 
+OBSERVED_FP32_SIGMAS = (0.4999999701976776, 0.375, 0.25, 0.1249999925494194)
+
 
 class FakeScheduler:
     config = {
@@ -99,7 +101,14 @@ class FakeTextEncoder(nn.Module):
         self.weight = nn.Parameter(torch.ones(()))
 
 
-def make_oracle(*, checkpoint_unet: bool = True):
+class ObservedFP32Scheduler(FakeScheduler):
+    def set_timesteps(self, *, sigmas, device, mu):
+        super().set_timesteps(sigmas=sigmas, device=device, mu=mu)
+        self.sigmas = torch.tensor((*OBSERVED_FP32_SIGMAS, 0.0), device=device, dtype=torch.float32)
+        self.timesteps = self.sigmas[:-1] * 1000.0
+
+
+def make_oracle(*, checkpoint_unet: bool = True, observed_fp32: bool = False):
     unet = FakeUNet()
     vae = FakeVAE()
     text_encoder = FakeTextEncoder()
@@ -107,7 +116,7 @@ def make_oracle(*, checkpoint_unet: bool = True):
     initial_x_t = torch.randn((1, 3, 4, 4), generator=torch.Generator().manual_seed(7))
     oracle = trainer.FrozenDreamLiteOracle(
         unet=unet,
-        scheduler=FakeScheduler(),
+        scheduler=ObservedFP32Scheduler() if observed_fp32 else FakeScheduler(),
         vae=vae,
         text_encoder=text_encoder,
         source_latents=source,
@@ -212,8 +221,53 @@ class R11NewPhase1ATrainerTest(unittest.TestCase):
             self.assertEqual(len(record["checkpoint_sha256"]), 64)
             self.assertEqual(len(record["png_sha256"]), 64)
 
+    def test_observed_fp32_sigma_survives_forward_checkpoint_and_receipt(self):
+        oracle, _unet, _vae, _text_encoder = make_oracle(checkpoint_unet=False, observed_fp32=True)
+        optimizer = torch.optim.Adam((oracle.x_T_fp32,), lr=0.05, weight_decay=0.0)
+        output = oracle()
+        self.assertEqual(output.effective_sigmas, OBSERVED_FP32_SIGMAS)
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            record, _ = trainer._save_checkpoint(
+                step=0,
+                oracle=oracle,
+                optimizer=optimizer,
+                manifest_sha256="1" * 64,
+                condition_sha256="2" * 64,
+                output_dir=root,
+                output=output,
+            )
+            checkpoint = root / "checkpoints" / "step-000.pt"
+            payload = torch.load(checkpoint, map_location="cpu", weights_only=False)
+            self.assertEqual(record["effective_sigmas"], list(OBSERVED_FP32_SIGMAS))
+            self.assertEqual(payload["effective_sigmas"], list(OBSERVED_FP32_SIGMAS))
+            self.assertTrue(trainer._verify_checkpoint_record(record, expected_step=0))
+
+            # Both observations remain within tolerance, but copies of one
+            # observation must still match exactly even after valid rehashing.
+            payload["effective_sigmas"][0] = 0.5
+            self.assertTrue(trainer.phase1a_effective_sigmas_match(payload["effective_sigmas"]))
+            torch.save(payload, checkpoint)
+            record["checkpoint_bytes"] = checkpoint.stat().st_size
+            record["checkpoint_sha256"] = trainer._sha256(checkpoint)
+            self.assertFalse(trainer._verify_checkpoint_record(record, expected_step=0))
+
+        segment = SimpleNamespace(
+            segment_id=trainer.R11_NEW_TARGET_IDS[0],
+            query=SimpleNamespace(text="color?", choices=("red", "blue", "green", "yellow"), target_index=0),
+        )
+        receipt = trainer._train_step(
+            step_zero=0,
+            oracle=oracle,
+            optimizer=optimizer,
+            reader_fn=lambda image, *_args: SimpleNamespace(loss=image.square().mean()),
+            segment=segment,
+        )
+        self.assertEqual(receipt["effective_sigmas"], list(OBSERVED_FP32_SIGMAS))
+        self.assertEqual(receipt["effective_sigma_schedule"], list(OBSERVED_FP32_SIGMAS))
+
     def test_formal_technical_gate_delegates_to_locked_core_and_checks_artifacts(self):
-        oracle, _unet, _vae, _text_encoder = make_oracle(checkpoint_unet=False)
+        oracle, _unet, _vae, _text_encoder = make_oracle(checkpoint_unet=False, observed_fp32=True)
         reader = nn.Linear(2, 2).requires_grad_(False)
         optimizer = torch.optim.Adam((oracle.x_T_fp32,), lr=0.05, weight_decay=0.0)
         target_id = trainer.R11_NEW_TARGET_IDS[0]
@@ -233,7 +287,7 @@ class R11NewPhase1ATrainerTest(unittest.TestCase):
                 "trajectory_points": 5,
                 "full_dreamlite_forward_executed": True,
                 "denoiser_steps_executed": 4,
-                "effective_sigma_schedule": [0.5, 0.375, 0.25, 0.125],
+                "effective_sigma_schedule": list(OBSERVED_FP32_SIGMAS),
                 "gradient_clipping_applied": False,
             }
             for row in schedule
@@ -307,9 +361,7 @@ class R11NewPhase1ATrainerTest(unittest.TestCase):
             )
 
     def test_pipeline_loader_is_direct_and_contains_no_peft_path(self):
-        source = (ROOT / "scripts" / "train" / "r11_new_frozen_dreamlite_oracle.py").read_text(
-            encoding="utf-8"
-        )
+        source = (ROOT / "scripts" / "train" / "r11_new_frozen_dreamlite_oracle.py").read_text(encoding="utf-8")
         self.assertIn("DreamLiteMobilePipeline.from_pretrained", source)
         self.assertNotIn("r5._load_pipeline", source)
         self.assertNotIn("from peft", source)
@@ -427,9 +479,7 @@ class R11NewPhase1ATrainerTest(unittest.TestCase):
                         "git_commit": "c" * 40,
                         "target_index": 0,
                         "target_segment_id": trainer.R11_NEW_TARGET_IDS[0],
-                        "fixed_contract": {
-                            "primary_endpoint": trainer.R11_NEW_PRIMARY_ENDPOINT
-                        },
+                        "fixed_contract": {"primary_endpoint": trainer.R11_NEW_PRIMARY_ENDPOINT},
                     },
                 )
                 return {

@@ -66,6 +66,7 @@ from vision_memory.training.r11_new_oracle import (  # noqa: E402
     R11_NEW_TARGET_IDS,
     R11_NEW_WEIGHT_DECAY,
     build_phase1a_schedule,
+    phase1a_effective_sigmas_match,
     phase1a_target_gate,
     phase1a_target_statistics,
     phase1a_technical_gate,
@@ -95,6 +96,7 @@ EDIT_START_SIGMA = R11_NEW_EFFECTIVE_START_SIGMA
 EFFECTIVE_SIGMAS = R11_NEW_EFFECTIVE_SIGMA_SCHEDULE
 EXPECTED_VIEW_COUNTS = {0: 64, 1: 64, 2: 64, 3: 64}
 CONFIG_PATH = ROOT / "configs" / "experiments" / "r11_new_frozen_dreamlite_oracle_phase1a.json"
+
 
 def _posterior_mean(output: Any) -> Tensor:
     direct = getattr(output, "latents", None)
@@ -209,13 +211,9 @@ class FrozenDreamLiteOracle(nn.Module):
         )
         if result.trajectory is None or len(result.trajectory) != NUM_DENOISING_STEPS + 1:
             raise RuntimeError("R11_new requires an exact five-point, four-step DreamLite trajectory.")
-        if len(result.effective_sigmas) != NUM_DENOISING_STEPS or any(
-            not math.isclose(observed, expected, rel_tol=2e-6, abs_tol=2e-6)
-            for observed, expected in zip(result.effective_sigmas, EFFECTIVE_SIGMAS, strict=True)
-        ):
+        if not phase1a_effective_sigmas_match(result.effective_sigmas):
             raise RuntimeError(
-                "R11_new effective schedule drifted: "
-                f"expected={EFFECTIVE_SIGMAS}, observed={result.effective_sigmas}"
+                f"R11_new effective schedule drifted: expected={EFFECTIVE_SIGMAS}, observed={result.effective_sigmas}"
             )
         image = decode_model_latents_unit_interval(self.vae, result.latents, clamp=True)
         return OracleForward(
@@ -276,18 +274,11 @@ def _validate_args(args: argparse.Namespace) -> None:
     fixed_data = config["fixed_data"]
     observed_data = {"train_sha256": r5.sha256_file(args.train), "dev_sha256": r5.sha256_file(args.dev)}
     if observed_data != fixed_data:
-        raise ValueError(
-            "R11_new data binding drifted: "
-            f"expected={fixed_data}, observed={observed_data}"
-        )
+        raise ValueError(f"R11_new data binding drifted: expected={fixed_data}, observed={observed_data}")
     if args.output_dir.exists():
         if not args.output_dir.is_dir():
             raise ValueError("R11_new output path exists and is not a directory.")
-        unexpected = [
-            path.name
-            for path in args.output_dir.iterdir()
-            if path.name != ".r11_new_output_owner.json"
-        ]
+        unexpected = [path.name for path in args.output_dir.iterdir() if path.name != ".r11_new_output_owner.json"]
         if unexpected:
             raise ValueError("R11_new refuses a non-empty output directory.")
     if r8.git_value("status", "--porcelain") and not args.allow_dirty:
@@ -659,10 +650,10 @@ def _verify_checkpoint_record(record: Mapping[str, Any], *, expected_step: int) 
         and tensors == record.get("tensor_sha256")
         and tensors.get("x_T_fp32") == canonical_tensor_sha256(payload["x_T_fp32"])
         and tensors.get("z_t_fp32") == canonical_tensor_sha256(payload["z_t_fp32"])
-        and tensors.get("trajectory_fp32")
-        == [canonical_tensor_sha256(value) for value in trajectory]
-        and list(payload.get("effective_sigmas", ())) == list(EFFECTIVE_SIGMAS)
-        and list(record.get("effective_sigmas", ())) == list(EFFECTIVE_SIGMAS)
+        and tensors.get("trajectory_fp32") == [canonical_tensor_sha256(value) for value in trajectory]
+        and phase1a_effective_sigmas_match(payload.get("effective_sigmas"))
+        and phase1a_effective_sigmas_match(record.get("effective_sigmas"))
+        and payload.get("effective_sigmas") == record.get("effective_sigmas")
     )
 
 
@@ -702,7 +693,11 @@ def _train_step(
     nonzero_fraction = float((gradient != 0).double().mean())
     if gradient_norm <= 0.0 or nonzero_fraction <= 0.0:
         raise RuntimeError("R11_new x_T received a zero gradient.")
-    if any(parameter.grad is not None for module in (oracle.unet, oracle.vae, oracle.text_encoder) for parameter in module.parameters()):
+    if any(
+        parameter.grad is not None
+        for module in (oracle.unet, oracle.vae, oracle.text_encoder)
+        for parameter in module.parameters()
+    ):
         raise RuntimeError("A frozen DreamLite parameter unexpectedly received a gradient.")
     x_before = oracle.x_T_fp32.detach().clone()
     optimizer.step()
@@ -771,7 +766,7 @@ def _technical_gate(
         for field in ("loss_before_step", "gradient_norm", "gradient_nonzero_fraction", "x_T_update_norm")
     )
     schedule_valid = all(
-        list(row.get("effective_sigma_schedule", ())) == list(EFFECTIVE_SIGMAS)
+        phase1a_effective_sigmas_match(row.get("effective_sigma_schedule"))
         and int(row.get("denoiser_steps_executed", -1)) == NUM_DENOISING_STEPS
         and int(row.get("trajectory_points", -1)) == NUM_DENOISING_STEPS + 1
         and bool(row.get("full_dreamlite_forward_executed"))
@@ -799,9 +794,7 @@ def _technical_gate(
         "image_checkpoint_steps_observed": sorted(checkpoint_map),
         "trainable_parameter_names": trainable,
         "trainable_parameter_dtypes": {
-            name: str(parameter.dtype)
-            for name, parameter in oracle.named_parameters()
-            if parameter.requires_grad
+            name: str(parameter.dtype) for name, parameter in oracle.named_parameters() if parameter.requires_grad
         },
         "frozen_components": {
             "dreamlite_unet": _all_frozen(oracle.unet),
@@ -860,9 +853,7 @@ def _technical_gate(
         "snapshots_unchanged": snapshots_unchanged,
         "finite_metrics": finite,
         "minimum_gradient_norm": min(float(row["gradient_norm"]) for row in metrics),
-        "minimum_gradient_nonzero_fraction": min(
-            float(row["gradient_nonzero_fraction"]) for row in metrics
-        ),
+        "minimum_gradient_nonzero_fraction": min(float(row["gradient_nonzero_fraction"]) for row in metrics),
     }
 
 
@@ -1012,7 +1003,9 @@ def _manifest(
     }
 
 
-def _load_runtime(args: argparse.Namespace) -> tuple[Any, Any, nn.Module, FrozenDreamLiteOracle, Tensor, dict[str, Any]]:
+def _load_runtime(
+    args: argparse.Namespace,
+) -> tuple[Any, Any, nn.Module, FrozenDreamLiteOracle, Tensor, dict[str, Any]]:
     if not torch.cuda.is_available():
         raise RuntimeError("R11_new Phase 1A requires CUDA.")
     updater_device = torch.device(args.dreamlite_device)
@@ -1132,9 +1125,7 @@ def _preflight(
             effective_sigmas=output.effective_sigmas,
         ),
     )
-    observed_bindings = {
-        name: verify_snapshot_binding(binding) for name, binding in snapshot_bindings.items()
-    }
+    observed_bindings = {name: verify_snapshot_binding(binding) for name, binding in snapshot_bindings.items()}
     snapshots_unchanged = observed_bindings == dict(snapshot_bindings)
     _atomic_json(
         args.output_dir / "model_snapshot_verification_end.json",
@@ -1165,9 +1156,7 @@ def _preflight(
         "optimizer_steps": 0,
         "loss": float(loss.detach()),
         "gradient_norm": float(gradient.double().norm()) if gradient is not None else None,
-        "gradient_nonzero_fraction": (
-            float((gradient != 0).double().mean()) if gradient is not None else None
-        ),
+        "gradient_nonzero_fraction": (float((gradient != 0).double().mean()) if gradient is not None else None),
         "trajectory_points": len(output.trajectory),
         "dreamlite_denoising_steps": len(output.trajectory) - 1,
         "effective_sigmas": list(output.effective_sigmas),
@@ -1285,9 +1274,7 @@ def _formal(
     shutil.copyfile(endpoint_checkpoint, args.output_dir / "endpoint_raw.pt")
     shutil.copyfile(endpoint_png, args.output_dir / "endpoint_raw.png")
 
-    observed_bindings = {
-        name: verify_snapshot_binding(binding) for name, binding in snapshot_bindings.items()
-    }
+    observed_bindings = {name: verify_snapshot_binding(binding) for name, binding in snapshot_bindings.items()}
     snapshots_unchanged = observed_bindings == dict(snapshot_bindings)
     snapshot_end = {
         "schema": "vision_memory.r11-new-phase1a-model-snapshot-end.v1",
@@ -1315,11 +1302,7 @@ def _formal(
         target_segment_id=target.segment_id,
         endpoint=endpoint_label,
     )
-    reachability_gate = (
-        phase1a_target_gate(statistics, technical_gate=True)
-        if bool(technical["passed"])
-        else None
-    )
+    reachability_gate = phase1a_target_gate(statistics, technical_gate=True) if bool(technical["passed"]) else None
     return {
         "schema": SUMMARY_SCHEMA,
         "status": "completed",
@@ -1477,11 +1460,7 @@ def _write_report(
                 f"- optimizer receipts：`{_markdown_scalar(summary.get('optimizer_steps'))}`",
                 f"- technical gate：`{str(technical).lower()}`",
                 "- query-level reachability gate："
-                + (
-                    f"`{str(reachability).lower()}`"
-                    if type(reachability) is bool
-                    else "未评估（技术门失败）"
-                ),
+                + (f"`{str(reachability).lower()}`" if type(reachability) is bool else "未评估（技术门失败）"),
                 f"- endpoint relative CE change：`{_markdown_scalar(statistics.get('relative_change'))}`",
                 f"- improved reverse-cyclic views：`{_markdown_scalar(statistics.get('improved_choice_views'))}/4`",
                 f"- accuracy delta：`{_markdown_scalar(statistics.get('accuracy_delta'))}`",
@@ -1497,10 +1476,7 @@ def _write_report(
             "| --- | ---: | --- |",
         ]
     )
-    lines.extend(
-        f"| `{_markdown_scalar(row['path'])}` | {row['bytes']} | `{row['sha256']}` |"
-        for row in artifact_rows
-    )
+    lines.extend(f"| `{_markdown_scalar(row['path'])}` | {row['bytes']} | `{row['sha256']}` |" for row in artifact_rows)
     lines.extend(
         [
             "",
@@ -1549,10 +1525,7 @@ def _write_failure_report(*, args: argparse.Namespace, error: Exception) -> None
         "| 路径 | 字节数 | SHA-256 |",
         "| --- | ---: | --- |",
     ]
-    lines.extend(
-        f"| `{_markdown_scalar(row['path'])}` | {row['bytes']} | `{row['sha256']}` |"
-        for row in rows
-    )
+    lines.extend(f"| `{_markdown_scalar(row['path'])}` | {row['bytes']} | `{row['sha256']}` |" for row in rows)
     lines.append("")
     destination = args.output_dir / "REPORT.md"
     temporary = destination.with_suffix(".md.tmp")
@@ -1640,9 +1613,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         owns_output = True
         _validate_args(args)
         summary = _run(args)
-        technical_gate = bool(
-            summary.get("passed", summary.get("gates", {}).get("technical_gate", False))
-        )
+        technical_gate = bool(summary.get("passed", summary.get("gates", {}).get("technical_gate", False)))
         _atomic_json(
             args.output_dir / "terminal.json",
             {
@@ -1652,12 +1623,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 "technical_gate": technical_gate,
                 "diagnostic_evaluated": bool(
                     technical_gate
-                    and type(
-                        summary.get("gates", {}).get(
-                            "phase1a_query_level_reachability_gate"
-                        )
-                    )
-                    is bool
+                    and type(summary.get("gates", {}).get("phase1a_query_level_reachability_gate")) is bool
                 ),
                 "formal_success_gate": False,
             },

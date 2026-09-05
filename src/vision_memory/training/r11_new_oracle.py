@@ -30,9 +30,7 @@ from vision_memory.training.r10_alignment import (
 R11_NEW_CONFIG_SCHEMA = "vision_memory.r11-new-frozen-dreamlite-oracle-phase1a-config.v1"
 R11_NEW_PROTOCOL = "R11-New-Frozen-DreamLite-Oracle-Phase1A"
 R11_NEW_STATUS = "preregistered_before_any_r11_new_model_outcome"
-R11_NEW_PARENT_R11_COMPARISON_SHA256 = (
-    "f8b048f9cbe9fd4df9460043297904b5c9d476f386d6844d12fd4a5f8f636bb5"
-)
+R11_NEW_PARENT_R11_COMPARISON_SHA256 = "f8b048f9cbe9fd4df9460043297904b5c9d476f386d6844d12fd4a5f8f636bb5"
 R11_NEW_TARGET_IDS = R10_TARGET_IDS
 R11_NEW_TARGETS_PAYLOAD_SHA256 = R10_SELECTED_SEGMENTS_SHA256
 R11_NEW_TRAIN_SHA256 = "24327edc39e0d133df5150dc1aab4f55c6cf5b05ccfca9025ad90c5accc6d184"
@@ -131,13 +129,10 @@ def validate_information_boundary(
             f"expected {R11_NEW_DREAMLITE_INPUTS}, observed {observed_dreamlite}."
         )
     if observed_noise != R11_NEW_NOISE_KEY:
-        raise ValueError(
-            f"R11_new noise key drifted: expected {R11_NEW_NOISE_KEY}, observed {observed_noise}."
-        )
+        raise ValueError(f"R11_new noise key drifted: expected {R11_NEW_NOISE_KEY}, observed {observed_noise}.")
     if observed_reader != R11_NEW_READER_LOSS_INPUTS:
         raise ValueError(
-            "R11_new Reader-loss inputs drifted: "
-            f"expected {R11_NEW_READER_LOSS_INPUTS}, observed {observed_reader}."
+            f"R11_new Reader-loss inputs drifted: expected {R11_NEW_READER_LOSS_INPUTS}, observed {observed_reader}."
         )
     if leaked:
         raise ValueError(f"R11_new supervision leaked into DreamLite/noise inputs: {leaked}.")
@@ -340,6 +335,25 @@ def validate_phase1a_config(config: Mapping[str, Any]) -> dict[str, Any]:
     }
 
 
+def phase1a_effective_sigmas_match(observed: object) -> bool:
+    """Validate raw scheduler observations using the existing forward tolerance.
+
+    The nominal config remains exact.  Scheduler shift inversion round-trips
+    through FP32, so observations need the same numeric comparison already
+    used by the frozen forward path; never round or replace the raw values.
+    """
+
+    if not isinstance(observed, (list, tuple)) or len(observed) != R11_NEW_DIFFUSION_STEPS:
+        return False
+    return all(
+        isinstance(value, (int, float))
+        and not isinstance(value, bool)
+        and math.isfinite(value)
+        and math.isclose(value, expected, rel_tol=2e-6, abs_tol=2e-6)
+        for value, expected in zip(observed, R11_NEW_EFFECTIVE_SIGMA_SCHEDULE, strict=True)
+    )
+
+
 def phase1a_technical_gate(
     receipts: Sequence[Mapping[str, Any]],
     *,
@@ -376,8 +390,7 @@ def phase1a_technical_gate(
                 and nonzero_fraction > 0.0
                 and bool(row["full_dreamlite_forward_executed"])
                 and int(row["denoiser_steps_executed"]) == R11_NEW_DIFFUSION_STEPS
-                and tuple(float(value) for value in row["effective_sigma_schedule"])
-                == R11_NEW_EFFECTIVE_SIGMA_SCHEDULE
+                and phase1a_effective_sigmas_match(row["effective_sigma_schedule"])
             )
         except (KeyError, TypeError, ValueError):
             row_valid = False
@@ -504,6 +517,7 @@ __all__ = [
     "expected_phase1a_config",
     "locked_event_noise_seed",
     "phase1a_arm_gate",
+    "phase1a_effective_sigmas_match",
     "phase1a_target_gate",
     "phase1a_target_statistics",
     "phase1a_technical_gate",

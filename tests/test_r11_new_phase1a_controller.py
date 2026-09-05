@@ -31,6 +31,7 @@ controller = load_script(
     "r11_new_phase1a_controller_under_test",
     "scripts/inspire/run_r11_new_phase1a_target.py",
 )
+FLOAT32_EFFECTIVE_SIGMAS = [0.4999999701976776, 0.375, 0.25, 0.1249999925494194]
 
 
 class R11NewPhase1AControllerTest(unittest.TestCase):
@@ -532,7 +533,11 @@ class R11NewPhase1AControllerTest(unittest.TestCase):
             encoding="utf-8",
         )
 
-    def _materialize_preflight_run(self, run: Path) -> tuple[dict, dict]:
+    def _materialize_preflight_run(
+        self, run: Path, *, effective_sigmas: list[float] | None = None
+    ) -> tuple[dict, dict]:
+        if effective_sigmas is None:
+            effective_sigmas = list(controller.core.R11_NEW_EFFECTIVE_SIGMA_SCHEDULE)
         run.mkdir()
         (run / ".r11_new_output_owner.json").write_text(
             json.dumps(
@@ -680,9 +685,7 @@ class R11NewPhase1AControllerTest(unittest.TestCase):
                 "x_T_fp32": x_t,
                 "z_t_fp32": z_t,
                 "trajectory_fp32": trajectory,
-                "effective_sigmas": list(
-                    controller.core.R11_NEW_EFFECTIVE_SIGMA_SCHEDULE
-                ),
+                "effective_sigmas": effective_sigmas,
                 "optimizer": {"state": {}, "param_groups": []},
                 "manifest_sha256": controller._sha256(run / controller.MANIFEST_FILE),
                 "condition_artifact_sha256": condition_record["sha256"],
@@ -703,7 +706,7 @@ class R11NewPhase1AControllerTest(unittest.TestCase):
             "png_bytes": png_path.stat().st_size,
             "png_sha256": controller._sha256(png_path),
             "trajectory_points": controller.core.R11_NEW_DIFFUSION_STEPS + 1,
-            "effective_sigmas": list(controller.core.R11_NEW_EFFECTIVE_SIGMA_SCHEDULE),
+            "effective_sigmas": effective_sigmas,
             "tensor_sha256": tensor_hashes,
         }
         checkpoint_record_path = run / "checkpoint_hashes" / "step-000.json"
@@ -722,7 +725,7 @@ class R11NewPhase1AControllerTest(unittest.TestCase):
             "gradient_nonzero_fraction": 0.75,
             "trajectory_points": controller.core.R11_NEW_DIFFUSION_STEPS + 1,
             "dreamlite_denoising_steps": controller.core.R11_NEW_DIFFUSION_STEPS,
-            "effective_sigmas": list(controller.core.R11_NEW_EFFECTIVE_SIGMA_SCHEDULE),
+            "effective_sigmas": effective_sigmas,
             "trainable_parameter_names": ["x_T_fp32"],
             "all_models_frozen": True,
             "snapshots_unchanged": True,
@@ -803,6 +806,80 @@ class R11NewPhase1AControllerTest(unittest.TestCase):
         self.assertTrue(all(checks.values()), checks)
         self.assertFalse(diagnostic["evaluated"])
 
+    def test_preflight_accepts_raw_float32_scheduler_observations(self):
+        run = self.root / "float32-preflight"
+        summary, manifest = self._materialize_preflight_run(
+            run, effective_sigmas=FLOAT32_EFFECTIVE_SIGMAS
+        )
+        checks, diagnostic = controller._assess_run(
+            args=SimpleNamespace(**{**vars(self.args), "mode": "technical-preflight"}),
+            validated={"config_sha256": "config-sha"},
+            run_dir=run,
+            child_exit_code=0,
+        )
+        self.assertTrue(all(checks.values()), checks)
+        self.assertFalse(diagnostic["evaluated"])
+        self.assertEqual(summary["effective_sigmas"], FLOAT32_EFFECTIVE_SIGMAS)
+        self.assertEqual(
+            manifest["fixed_contract"]["effective_sigmas"],
+            list(controller.core.R11_NEW_EFFECTIVE_SIGMA_SCHEDULE),
+        )
+
+    def test_preflight_rejects_invalid_runtime_sigmas(self):
+        cases = {
+            "beyond-tolerance": [0.49999, 0.375, 0.25, 0.125],
+            "wrong-length": [0.5, 0.375, 0.25],
+            "nan": [float("nan"), 0.375, 0.25, 0.125],
+        }
+        for name, sigmas in cases.items():
+            with self.subTest(name=name):
+                run = self.root / f"invalid-sigmas-{name}"
+                self._materialize_preflight_run(run, effective_sigmas=sigmas)
+                checks, diagnostic = controller._assess_run(
+                    args=SimpleNamespace(**{**vars(self.args), "mode": "technical-preflight"}),
+                    validated={"config_sha256": "config-sha"},
+                    run_dir=run,
+                    child_exit_code=0,
+                )
+                self.assertFalse(checks["preflight_summary_technical_fields"], checks)
+                self.assertFalse(checks["preflight_checkpoint_artifact"], checks)
+                self.assertFalse(diagnostic["evaluated"])
+
+    def test_preflight_rejects_different_in_tolerance_record_and_payload_sigmas(self):
+        run = self.root / "mismatched-raw-sigmas"
+        summary, _manifest = self._materialize_preflight_run(
+            run, effective_sigmas=FLOAT32_EFFECTIVE_SIGMAS
+        )
+        checkpoint = run / "checkpoints" / "step-000.pt"
+        payload = torch.load(checkpoint, map_location="cpu", weights_only=False)
+        payload["effective_sigmas"] = list(controller.core.R11_NEW_EFFECTIVE_SIGMA_SCHEDULE)
+        self.assertTrue(controller.core.phase1a_effective_sigmas_match(payload["effective_sigmas"]))
+        self.assertTrue(controller.core.phase1a_effective_sigmas_match(summary["effective_sigmas"]))
+        self.assertNotEqual(payload["effective_sigmas"], summary["effective_sigmas"])
+        torch.save(payload, checkpoint)
+        # Re-sign all file bindings so the raw sigma disagreement is the failure.
+        record = summary["checkpoint"]
+        record["checkpoint_sha256"] = controller._sha256(checkpoint)
+        record["checkpoint_bytes"] = checkpoint.stat().st_size
+        (run / "checkpoint_hashes" / "step-000.json").write_text(
+            json.dumps(record), encoding="utf-8"
+        )
+        for filename in (controller.SUMMARY_FILE, controller.PREFLIGHT_FILE):
+            (run / filename).write_text(json.dumps(summary), encoding="utf-8")
+        self._write_trainer_inventory(run)
+        checks, diagnostic = controller._assess_run(
+            args=SimpleNamespace(**{**vars(self.args), "mode": "technical-preflight"}),
+            validated={"config_sha256": "config-sha"},
+            run_dir=run,
+            child_exit_code=0,
+        )
+        self.assertFalse(checks["preflight_checkpoint_artifact"], checks)
+        self.assertTrue(
+            all(value for key, value in checks.items() if key != "preflight_checkpoint_artifact"),
+            checks,
+        )
+        self.assertFalse(diagnostic["evaluated"])
+
     def test_preflight_summary_and_manifest_tampering_fail_independent_checks(self):
         summary_mutations = {
             "zero-gradient": ("gradient_norm", 0.0),
@@ -837,6 +914,9 @@ class R11NewPhase1AControllerTest(unittest.TestCase):
                 self.assertIsNone(diagnostic["phase1a_query_level_reachability_gate"])
 
         manifest_mutations = {
+            "nominal-sigma-declaration": lambda value: value["fixed_contract"].update(
+                {"effective_sigmas": FLOAT32_EFFECTIVE_SIGMAS}
+            ),
             "source-contract": lambda value: value.update(
                 {"source_contract_verified": False}
             ),

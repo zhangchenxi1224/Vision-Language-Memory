@@ -28,6 +28,7 @@ def _load_script():
 comparison = _load_script()
 core = comparison.core
 EXPECTED_COMMIT = "a" * 40
+FLOAT32_EFFECTIVE_SIGMAS = [0.4999999701976776, 0.375, 0.25, 0.1249999925494194]
 
 
 def _sha(path: Path) -> str:
@@ -77,7 +78,9 @@ def _stat_block(*, saturation: bool = False) -> dict[str, object]:
     return result
 
 
-def _metrics(index: int) -> list[dict[str, object]]:
+def _metrics(index: int, *, effective_sigmas: list[float] | None = None) -> list[dict[str, object]]:
+    if effective_sigmas is None:
+        effective_sigmas = list(core.R11_NEW_EFFECTIVE_SIGMA_SCHEDULE)
     target_id = core.R11_NEW_TARGET_IDS[index]
     rows = []
     for scheduled in core.build_phase1a_schedule(index):
@@ -106,10 +109,10 @@ def _metrics(index: int) -> list[dict[str, object]]:
                 "trajectory_before_step": trajectory,
                 "trajectory_points": core.R11_NEW_DIFFUSION_STEPS + 1,
                 "dreamlite_denoising_steps": core.R11_NEW_DIFFUSION_STEPS,
-                "effective_sigmas": list(core.R11_NEW_EFFECTIVE_SIGMA_SCHEDULE),
+                "effective_sigmas": effective_sigmas,
                 "full_dreamlite_forward_executed": True,
                 "denoiser_steps_executed": core.R11_NEW_DIFFUSION_STEPS,
-                "effective_sigma_schedule": list(core.R11_NEW_EFFECTIVE_SIGMA_SCHEDULE),
+                "effective_sigma_schedule": effective_sigmas,
                 "gradient_mode": "full",
                 "gradient_clipping_applied": False,
                 "learning_rate": core.R11_NEW_LEARNING_RATE,
@@ -248,7 +251,10 @@ def _make_target(
     preflight_terminal: Path,
     target0_formal_terminal: Path | None,
     passing: bool = True,
+    effective_sigmas: list[float] | None = None,
 ) -> None:
+    if effective_sigmas is None:
+        effective_sigmas = list(core.R11_NEW_EFFECTIVE_SIGMA_SCHEDULE)
     target_id = core.R11_NEW_TARGET_IDS[index]
     run = root / "run"
     for directory in (run / "checkpoints", run / "images", run / "checkpoint_hashes", run / "condition"):
@@ -279,7 +285,7 @@ def _make_target(
             "png_bytes": image.stat().st_size,
             "png_sha256": _sha(image),
             "trajectory_points": core.R11_NEW_DIFFUSION_STEPS + 1,
-            "effective_sigmas": list(core.R11_NEW_EFFECTIVE_SIGMA_SCHEDULE),
+            "effective_sigmas": effective_sigmas,
             "tensor_sha256": {
                 "x_T_fp32": tensor_hash,
                 "z_t_fp32": tensor_hash,
@@ -422,7 +428,7 @@ def _make_target(
                 "x_T_fp32": x_t,
                 "z_t_fp32": z_t,
                 "trajectory_fp32": trajectory,
-                "effective_sigmas": list(core.R11_NEW_EFFECTIVE_SIGMA_SCHEDULE),
+                "effective_sigmas": effective_sigmas,
                 "optimizer": {},
                 "manifest_sha256": manifest_sha,
                 "condition_artifact_sha256": condition_sha,
@@ -440,14 +446,14 @@ def _make_target(
             "png_bytes": image.stat().st_size,
             "png_sha256": _sha(image),
             "trajectory_points": core.R11_NEW_DIFFUSION_STEPS + 1,
-            "effective_sigmas": list(core.R11_NEW_EFFECTIVE_SIGMA_SCHEDULE),
+            "effective_sigmas": effective_sigmas,
             "tensor_sha256": tensor_hashes,
         }
         _write_json(run / "checkpoint_hashes" / f"step-{step:03d}.json", record)
     (run / "endpoint_raw.pt").write_bytes((run / "checkpoints" / "step-256.pt").read_bytes())
     (run / "endpoint_raw.png").write_bytes((run / "images" / "step-256.png").read_bytes())
 
-    metrics = _metrics(index)
+    metrics = _metrics(index, effective_sigmas=effective_sigmas)
     _write_jsonl(run / "metrics.jsonl", metrics)
     evaluation = _evaluation(index, passing=passing)
     _write_jsonl(run / "target_evaluation_rows.jsonl", evaluation)
@@ -616,7 +622,9 @@ def _make_target(
     _inventory(root, comparison.CONTROLLER_INVENTORY_SCHEMA, count=False)
 
 
-def _make_suite(root: Path, *, failing_index: int | None = None) -> None:
+def _make_suite(
+    root: Path, *, failing_index: int | None = None, effective_sigmas: list[float] | None = None
+) -> None:
     root.mkdir(parents=True)
     preflight_terminal = _make_prerequisite_terminal(
         root.parent / f"{root.name}-technical-preflight",
@@ -630,6 +638,7 @@ def _make_suite(root: Path, *, failing_index: int | None = None) -> None:
             preflight_terminal=preflight_terminal,
             target0_formal_terminal=target0_terminal,
             passing=index != failing_index,
+            effective_sigmas=effective_sigmas,
         )
 
 
@@ -661,6 +670,82 @@ def _resign(root: Path) -> None:
 
 
 class R11NewPhase1AComparisonTest(unittest.TestCase):
+    def test_raw_float32_scheduler_observations_survive_full_recomputation(self):
+        with tempfile.TemporaryDirectory() as directory:
+            workspace = Path(directory)
+            run_root = workspace / "runs"
+            _make_suite(run_root, effective_sigmas=FLOAT32_EFFECTIVE_SIGMAS)
+            result = comparison.compare(run_root, workspace / "report", expected_commit=EXPECTED_COMMIT)
+            self.assertTrue(result["engineering_gate"])
+            self.assertTrue(result["phase1a_query_level_reachability_gate"])
+            self.assertFalse(result["formal_success"])
+            self.assertFalse(result["scientific_success_claim"])
+            run = run_root / "target-00" / "run"
+            payload = torch.load(run / "checkpoints" / "step-000.pt", weights_only=False)
+            self.assertEqual(payload["effective_sigmas"], FLOAT32_EFFECTIVE_SIGMAS)
+            manifest = comparison._load(run / "manifest.json")
+            self.assertEqual(
+                manifest["fixed_contract"]["effective_sigmas"], list(core.R11_NEW_EFFECTIVE_SIGMA_SCHEDULE)
+            )
+
+    def test_checkpoint_rejects_invalid_runtime_sigmas(self):
+        cases = {
+            "beyond-tolerance": [0.49999, 0.375, 0.25, 0.125],
+            "wrong-length": [0.5, 0.375, 0.25],
+            "nan": [float("nan"), 0.375, 0.25, 0.125],
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            workspace = Path(directory)
+            prerequisite = _make_prerequisite_terminal(
+                workspace / "preflight", mode="technical-preflight"
+            )
+            for name, sigmas in cases.items():
+                with self.subTest(name=name):
+                    target = workspace / name
+                    _make_target(
+                        target, 0, preflight_terminal=prerequisite,
+                        target0_formal_terminal=None, effective_sigmas=sigmas,
+                    )
+                    run = target / "run"
+                    with self.assertRaisesRegex(ValueError, "checkpoint/hash record validation failed"):
+                        comparison._validate_checkpoint_artifacts(
+                            run,
+                            manifest_sha256=_sha(run / "manifest.json"),
+                            condition_sha256=_sha(run / "condition" / "official_full_condition.pt"),
+                        )
+
+    def test_checkpoint_rejects_different_in_tolerance_record_and_payload_sigmas(self):
+        with tempfile.TemporaryDirectory() as directory:
+            workspace = Path(directory)
+            prerequisite = _make_prerequisite_terminal(
+                workspace / "preflight", mode="technical-preflight"
+            )
+            target = workspace / "target-00"
+            _make_target(
+                target, 0, preflight_terminal=prerequisite,
+                target0_formal_terminal=None, effective_sigmas=FLOAT32_EFFECTIVE_SIGMAS,
+            )
+            run = target / "run"
+            checkpoint = run / "checkpoints" / "step-000.pt"
+            payload = torch.load(checkpoint, map_location="cpu", weights_only=False)
+            payload["effective_sigmas"] = list(core.R11_NEW_EFFECTIVE_SIGMA_SCHEDULE)
+            torch.save(payload, checkpoint)
+            record_path = run / "checkpoint_hashes" / "step-000.json"
+            record = comparison._load(record_path)
+            self.assertTrue(core.phase1a_effective_sigmas_match(payload["effective_sigmas"]))
+            self.assertTrue(core.phase1a_effective_sigmas_match(record["effective_sigmas"]))
+            self.assertNotEqual(payload["effective_sigmas"], record["effective_sigmas"])
+            # Valid file hashes cannot make two different raw observations agree.
+            record["checkpoint_bytes"] = checkpoint.stat().st_size
+            record["checkpoint_sha256"] = _sha(checkpoint)
+            _write_json(record_path, record)
+            with self.assertRaisesRegex(ValueError, "checkpoint tensor hashes/payload drifted"):
+                comparison._validate_checkpoint_artifacts(
+                    run,
+                    manifest_sha256=_sha(run / "manifest.json"),
+                    condition_sha256=_sha(run / "condition" / "official_full_condition.pt"),
+                )
+
     def test_valid_eight_of_eight_proceeds_to_phase2_but_never_claims_success(self):
         with tempfile.TemporaryDirectory() as directory:
             workspace = Path(directory)

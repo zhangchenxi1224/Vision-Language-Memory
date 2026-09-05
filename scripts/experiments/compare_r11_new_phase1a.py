@@ -35,9 +35,7 @@ from vision_memory.repro import canonical_tensor_sha256  # noqa: E402
 from vision_memory.training import r11_new_oracle as core  # noqa: E402
 
 
-CONFIG_PATH = (
-    ROOT / "configs" / "experiments" / "r11_new_frozen_dreamlite_oracle_phase1a.json"
-)
+CONFIG_PATH = ROOT / "configs" / "experiments" / "r11_new_frozen_dreamlite_oracle_phase1a.json"
 TRAINER_PATH = ROOT / "scripts" / "train" / "r11_new_frozen_dreamlite_oracle.py"
 
 CONTROLLER_LAUNCH_SCHEMA = "vision_memory.r11-new-phase1a-target-launch.v1"
@@ -64,9 +62,7 @@ EXPECTED_MODEL_MANIFEST_SHA256 = {
 EXPECTED_ENVIRONMENT = {
     "PYTHONHASHSEED": "0",
     "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
-    "VLM_DREAMLITE_SNAPSHOT_MANIFEST_SHA256": EXPECTED_MODEL_MANIFEST_SHA256[
-        "dreamlite_mobile"
-    ],
+    "VLM_DREAMLITE_SNAPSHOT_MANIFEST_SHA256": EXPECTED_MODEL_MANIFEST_SHA256["dreamlite_mobile"],
     "VLM_READER_SNAPSHOT_MANIFEST_SHA256": EXPECTED_MODEL_MANIFEST_SHA256["qwen_reader"],
     "HF_HUB_OFFLINE": "1",
     "TRANSFORMERS_OFFLINE": "1",
@@ -213,8 +209,7 @@ def _validate_inventory(
     }
     if names != actual:
         raise ValueError(
-            "R11_new inventory/file-set mismatch: "
-            f"missing={sorted(actual - names)}, stale={sorted(names - actual)}"
+            f"R11_new inventory/file-set mismatch: missing={sorted(actual - names)}, stale={sorted(names - actual)}"
         )
     missing = sorted(required - names)
     if missing:
@@ -225,30 +220,31 @@ def _validate_inventory(
 
 
 def _run_required_artifacts() -> set[str]:
-    checkpoints = {
-        f"checkpoints/step-{step:03d}.pt" for step in core.R11_NEW_CHECKPOINT_STEPS
-    }
+    checkpoints = {f"checkpoints/step-{step:03d}.pt" for step in core.R11_NEW_CHECKPOINT_STEPS}
     images = {f"images/step-{step:03d}.png" for step in core.R11_NEW_CHECKPOINT_STEPS}
-    hashes = {
-        f"checkpoint_hashes/step-{step:03d}.json" for step in core.R11_NEW_CHECKPOINT_STEPS
-    }
-    return {
-        ".r11_new_output_owner.json",
-        "environment.txt",
-        "runtime.json",
-        "model_snapshot_verification_start.json",
-        "model_snapshot_verification_end.json",
-        "condition/official_full_condition.pt",
-        "manifest.json",
-        "metrics.jsonl",
-        "target_evaluation_rows.jsonl",
-        "endpoint_raw.pt",
-        "endpoint_raw.png",
-        "technical_gate.json",
-        "r11_new_phase1a_summary.json",
-        "terminal.json",
-        "REPORT.md",
-    } | checkpoints | images | hashes
+    hashes = {f"checkpoint_hashes/step-{step:03d}.json" for step in core.R11_NEW_CHECKPOINT_STEPS}
+    return (
+        {
+            ".r11_new_output_owner.json",
+            "environment.txt",
+            "runtime.json",
+            "model_snapshot_verification_start.json",
+            "model_snapshot_verification_end.json",
+            "condition/official_full_condition.pt",
+            "manifest.json",
+            "metrics.jsonl",
+            "target_evaluation_rows.jsonl",
+            "endpoint_raw.pt",
+            "endpoint_raw.png",
+            "technical_gate.json",
+            "r11_new_phase1a_summary.json",
+            "terminal.json",
+            "REPORT.md",
+        }
+        | checkpoints
+        | images
+        | hashes
+    )
 
 
 def _controller_required_artifacts() -> set[str]:
@@ -305,9 +301,7 @@ def _validate_prerequisite_binding(
     terminal_path = terminal_path.resolve()
     inventory_path = inventory_path.resolve()
     if expected_terminal_path is not None and terminal_path != expected_terminal_path.resolve():
-        raise ValueError(
-            f"R11_new {context} must bind this aggregation's target-00 terminal."
-        )
+        raise ValueError(f"R11_new {context} must bind this aggregation's target-00 terminal.")
     expected_inventory_path = terminal_path.parent / "artifact_inventory.json"
     if (
         terminal_path.name != "terminal.json"
@@ -367,11 +361,7 @@ def _validate_prerequisite_binding(
     inventory = _load(inventory_path)
     inventory_rows = inventory.get("artifacts")
     terminal_rows = (
-        [
-            row
-            for row in inventory_rows
-            if isinstance(row, Mapping) and row.get("path") == "terminal.json"
-        ]
+        [row for row in inventory_rows if isinstance(row, Mapping) and row.get("path") == "terminal.json"]
         if isinstance(inventory_rows, list)
         else []
     )
@@ -477,9 +467,7 @@ def _validate_checkpoint_artifacts(
         record_path = record_dir / f"step-{step:03d}.json"
         record = _load(record_path)
         tensor_hashes = record.get("tensor_sha256")
-        trajectory_hashes = (
-            tensor_hashes.get("trajectory_fp32") if isinstance(tensor_hashes, Mapping) else None
-        )
+        trajectory_hashes = tensor_hashes.get("trajectory_fp32") if isinstance(tensor_hashes, Mapping) else None
         checkpoint_suffix = f"/checkpoints/step-{step:03d}.pt"
         png_suffix = f"/images/step-{step:03d}.png"
         checkpoint_record_path = str(record.get("checkpoint_path", "")).replace("\\", "/")
@@ -501,8 +489,7 @@ def _validate_checkpoint_artifacts(
             and record.get("checkpoint_sha256") == _sha256(checkpoint)
             and record.get("png_sha256") == _sha256(image)
             and record.get("trajectory_points") == core.R11_NEW_DIFFUSION_STEPS + 1
-            and list(record.get("effective_sigmas", ()))
-            == list(core.R11_NEW_EFFECTIVE_SIGMA_SCHEDULE)
+            and core.phase1a_effective_sigmas_match(record.get("effective_sigmas"))
             and isinstance(tensor_hashes, Mapping)
             and set(tensor_hashes) == {"x_T_fp32", "z_t_fp32", "trajectory_fp32"}
             and isinstance(trajectory_hashes, list)
@@ -536,15 +523,16 @@ def _validate_checkpoint_artifacts(
             and payload.get("optimizer_step") == step
             and payload.get("manifest_sha256") == manifest_sha256
             and payload.get("condition_artifact_sha256") == condition_sha256
-            and list(payload.get("effective_sigmas", ()))
-            == list(core.R11_NEW_EFFECTIVE_SIGMA_SCHEDULE)
+            and core.phase1a_effective_sigmas_match(payload.get("effective_sigmas"))
+            # Keep raw observation binding exact; nominal-schedule tolerance
+            # must not conceal a changed checkpoint record or tensor payload.
+            and payload.get("effective_sigmas") == record.get("effective_sigmas")
             and isinstance(payload.get("optimizer"), Mapping)
             and isinstance(payload_hashes, Mapping)
             and payload_hashes == tensor_hashes
             and payload_hashes.get("x_T_fp32") == canonical_tensor_sha256(x_t)
             and payload_hashes.get("z_t_fp32") == canonical_tensor_sha256(z_t)
-            and payload_hashes.get("trajectory_fp32")
-            == [canonical_tensor_sha256(value) for value in trajectory]
+            and payload_hashes.get("trajectory_fp32") == [canonical_tensor_sha256(value) for value in trajectory]
         )
         if not tensors_valid:
             raise ValueError(f"R11_new checkpoint tensor hashes/payload drifted: {checkpoint}")
@@ -560,9 +548,8 @@ def _validate_checkpoint_artifacts(
 
     endpoint_pt = run_dir / "endpoint_raw.pt"
     endpoint_png = run_dir / "endpoint_raw.png"
-    if (
-        _sha256(endpoint_pt) != _sha256(checkpoint_dir / "step-256.pt")
-        or _sha256(endpoint_png) != _sha256(image_dir / "step-256.png")
+    if _sha256(endpoint_pt) != _sha256(checkpoint_dir / "step-256.pt") or _sha256(endpoint_png) != _sha256(
+        image_dir / "step-256.png"
     ):
         raise ValueError(f"R11_new raw endpoint is not the fixed step-256 checkpoint: {run_dir}")
     return {
@@ -588,9 +575,7 @@ def _finite_stat_block(value: Any, *, context: str) -> None:
 def _validate_receipts(run_dir: Path, *, target_id: str) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     rows = _load_jsonl(run_dir / "metrics.jsonl")
     if len(rows) != core.R11_NEW_OPTIMIZER_STEPS:
-        raise ValueError(
-            f"R11_new target lacks exact 256 raw optimizer receipts: {run_dir} ({len(rows)})"
-        )
+        raise ValueError(f"R11_new target lacks exact 256 raw optimizer receipts: {run_dir} ({len(rows)})")
     for position, row in enumerate(rows, start=1):
         try:
             numeric = {
@@ -643,13 +628,9 @@ def _validate_receipts(run_dir: Path, *, target_id: str) -> tuple[list[dict[str,
         "final_loss": float(rows[-1]["loss_before_step"]),
         "minimum_loss": min(float(row["loss_before_step"]) for row in rows),
         "minimum_gradient_norm": min(float(row["gradient_norm"]) for row in rows),
-        "minimum_gradient_nonzero_fraction": min(
-            float(row["gradient_nonzero_fraction"]) for row in rows
-        ),
+        "minimum_gradient_nonzero_fraction": min(float(row["gradient_nonzero_fraction"]) for row in rows),
         "final_x_T_update_norm": float(rows[-1]["x_T_update_norm"]),
-        "final_image_saturation_fraction": float(
-            rows[-1]["image_before_step"]["saturation_fraction"]
-        ),
+        "final_image_saturation_fraction": float(rows[-1]["image_before_step"]["saturation_fraction"]),
     }
     return rows, diagnostics
 
@@ -951,13 +932,11 @@ def _validate_summary_and_terminals(
         or launch.get("git_dirty") is not False
         or launch.get("target_index") != target_index
         or launch.get("target_segment_id") != target_id
-        or launch.get("data_sha256")
-        != {"train": core.R11_NEW_TRAIN_SHA256, "dev": core.R11_NEW_DEV_SHA256}
+        or launch.get("data_sha256") != {"train": core.R11_NEW_TRAIN_SHA256, "dev": core.R11_NEW_DEV_SHA256}
         or launch.get("environment") != EXPECTED_ENVIRONMENT
         or launch.get("config_sha256") != config_sha256
         or launch.get("trainer_sha256") != trainer_sha256
-        or launch.get("canonical_r11_comparison_sha256")
-        != core.R11_NEW_PARENT_R11_COMPARISON_SHA256
+        or launch.get("canonical_r11_comparison_sha256") != core.R11_NEW_PARENT_R11_COMPARISON_SHA256
         or not isinstance(storage, Mapping)
         or storage.get("passed") is not True
         or storage.get("minimum_free_bytes") != core.R11_NEW_MINIMUM_FREE_BYTES
@@ -971,8 +950,7 @@ def _validate_summary_and_terminals(
         or not isinstance(snapshot_manifests, Mapping)
         or snapshot_manifests.get("dreamlite", {}).get("manifest_sha256")
         != EXPECTED_MODEL_MANIFEST_SHA256["dreamlite_mobile"]
-        or snapshot_manifests.get("reader", {}).get("manifest_sha256")
-        != EXPECTED_MODEL_MANIFEST_SHA256["qwen_reader"]
+        or snapshot_manifests.get("reader", {}).get("manifest_sha256") != EXPECTED_MODEL_MANIFEST_SHA256["qwen_reader"]
     ):
         raise ValueError(f"R11_new controller launch contract drifted: target {target_index}")
     prerequisites = _validate_launch_prerequisites(
@@ -1067,9 +1045,7 @@ def _validate_summary_and_terminals(
         "schema": technical.get("schema") == TECHNICAL_GATE_SCHEMA,
         "stored_pass": technical.get("passed") is True,
         "core_audit": technical.get("core_audit") == _expected_core_audit(),
-        "core_recompute": all(
-            _same_json(technical.get(key), value) for key, value in recomputed_technical.items()
-        ),
+        "core_recompute": all(_same_json(technical.get(key), value) for key, value in recomputed_technical.items()),
         "optimizer_steps": technical.get("optimizer_steps_exact") is True,
         "four_step_schedule": technical.get("four_step_schedule_exact") is True,
         "checkpoint_hashes": technical.get("checkpoint_hashes_valid") is True,
@@ -1328,13 +1304,8 @@ def compare(run_root: Path, output_dir: Path, *, expected_commit: str) -> dict[s
     ]
     prerequisite_audits = [target.pop("_validated_prerequisites") for target in targets]
     shared_preflight = prerequisite_audits[0]["preflight"]
-    if any(
-        not _same_json(audit.get("preflight"), shared_preflight)
-        for audit in prerequisite_audits[1:]
-    ):
-        raise ValueError(
-            "R11_new all formal targets must bind one identical technical-preflight prerequisite."
-        )
+    if any(not _same_json(audit.get("preflight"), shared_preflight) for audit in prerequisite_audits[1:]):
+        raise ValueError("R11_new all formal targets must bind one identical technical-preflight prerequisite.")
     if {target["source_training_git_commit"] for target in targets} != {expected_commit}:
         raise ValueError("R11_new immutable source commit drifted across targets.")
     arm_gate = core.phase1a_arm_gate(targets)
@@ -1377,9 +1348,7 @@ def compare(run_root: Path, output_dir: Path, *, expected_commit: str) -> dict[s
         "phase1a_query_level_reachability_gate": bool(arm_gate["passed"]),
         "arm_gate": arm_gate,
         "target_pass_count": pass_count,
-        "passed_target_indices": [
-            target["target_index"] for target in targets if target["target_reachability_gate"]
-        ],
+        "passed_target_indices": [target["target_index"] for target in targets if target["target_reachability_gate"]],
         "failed_target_indices": [
             target["target_index"] for target in targets if not target["target_reachability_gate"]
         ],
@@ -1418,9 +1387,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         json.dumps(
             {
                 "engineering_gate": result["engineering_gate"],
-                "phase1a_query_level_reachability_gate": result[
-                    "phase1a_query_level_reachability_gate"
-                ],
+                "phase1a_query_level_reachability_gate": result["phase1a_query_level_reachability_gate"],
                 "target_pass_count": result["target_pass_count"],
                 "decision": result["decision"],
                 "formal_success": False,

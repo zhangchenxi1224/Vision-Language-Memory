@@ -1444,3 +1444,17 @@ Phase 3A 通过时，只能报告：
 - Picture Memory 已达到最终可复现科学成功。
 
 这些结论需要未来重新激活 Phase 1B，并完成 held-out、多 seed、因果 controls、rollout 与 sealed confirmatory run。
+
+## 25. Phase 0 工程纠错：运行时 sigma 数值校验一致性
+
+首轮真实 technical-preflight 使用提交 `a6cba6d508ecd864ba07d391733a546d2937f980`，执行一次 backward、零 optimizer steps 后被技术门拒绝。实际 scheduler 返回 `[0.4999999701976776, 0.375, 0.25, 0.1249999925494194]`；checkpoint 保存了这些未经舍入的实测值，但后续校验使用了与名义十进制列表的精确等值，和同一提交中 sampler/forward 已有的浮点校验不一致。
+
+这次修复只统一工程校验，不改变第 23、24 节的科学定义：
+
+- 配置与 manifest 中的名义 sigma 仍精确锁定为 `[0.5, 0.375, 0.25, 0.125]`。
+- 运行时实测 sigma 与名义值比较，统一继承首次运行前即存在的 `math.isclose(rel_tol=2e-6, abs_tol=2e-6)`；长度必须为 4，各项必须为有限数值，禁止布尔值。
+- checkpoint、receipt、summary 中继续保存实测原值，禁止 round、替换为名义常量或改写旧产物。
+- 同一运行的 payload、hash record 等对同一实测序列的声明必须精确相同；容差不能用来掩盖跨产物不一致。
+- DreamLite、scheduler 计算、source interpolation、优化器、256 步预算、数据、reset/choice-view 控制与科学门均保持原定义。
+- 首轮终态继续保留为技术失败，reachability 未评估。修复须单元测试、提交推送，并在新目录重新进行 target 0 technical-preflight；不能直接将旧失败目录改判通过。
+- 30 小时规划时钟继续以首次预检 controller 的 `started_at_utc=2026-09-05T07:18:59.891307+00:00` 为起点，工程诊断与重跑耗时计入预算。

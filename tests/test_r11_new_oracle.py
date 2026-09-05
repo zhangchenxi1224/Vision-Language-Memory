@@ -26,6 +26,7 @@ from vision_memory.training.r11_new_oracle import (  # noqa: E402
     build_phase1a_schedule,
     locked_event_noise_seed,
     phase1a_arm_gate,
+    phase1a_effective_sigmas_match,
     phase1a_target_gate,
     phase1a_target_statistics,
     phase1a_technical_gate,
@@ -80,12 +81,46 @@ def valid_receipts(target_index: int = 0) -> list[dict[str, object]]:
 
 
 class R11NewOracleContractTest(unittest.TestCase):
+    def test_runtime_sigma_tolerance_preserves_raw_values_and_rejects_drift(self) -> None:
+        observed = [0.4999999701976776, 0.375, 0.25, 0.1249999925494194]
+        original = list(observed)
+        self.assertTrue(phase1a_effective_sigmas_match(observed))
+        self.assertTrue(phase1a_effective_sigmas_match(tuple(observed)))
+        self.assertEqual(observed, original)
+        receipts = valid_receipts()
+        for row in receipts:
+            row["effective_sigma_schedule"] = list(observed)
+        self.assertTrue(
+            phase1a_technical_gate(receipts, target_segment_id=R11_NEW_TARGET_IDS[0], audit=valid_audit())["passed"]
+        )
+        invalid = (
+            [0.50001, 0.375, 0.25, 0.125],
+            [float("nan"), 0.375, 0.25, 0.125],
+            [float("inf"), 0.375, 0.25, 0.125],
+            [True, 0.375, 0.25, 0.125],
+            ["0.5", 0.375, 0.25, 0.125],
+            [0.5, 0.375, 0.25],
+            [0.5, 0.375, 0.25, 0.125, 0.0],
+            None,
+        )
+        for sigmas in invalid:
+            with self.subTest(sigmas=sigmas):
+                self.assertFalse(phase1a_effective_sigmas_match(sigmas))
+                receipts[-1]["effective_sigma_schedule"] = sigmas
+                self.assertFalse(
+                    phase1a_technical_gate(receipts, target_segment_id=R11_NEW_TARGET_IDS[0], audit=valid_audit())[
+                        "passed"
+                    ]
+                )
+
     def test_machine_config_is_exactly_the_immutable_contract(self) -> None:
         path = ROOT / "configs" / "experiments" / "r11_new_frozen_dreamlite_oracle_phase1a.json"
         config = json.loads(path.read_text(encoding="utf-8"))
         report = validate_phase1a_config(config)
         self.assertTrue(report["passed"])
-        self.assertEqual(config["parent_evidence"]["canonical_r11_comparison_sha256"], R11_NEW_PARENT_R11_COMPARISON_SHA256)
+        self.assertEqual(
+            config["parent_evidence"]["canonical_r11_comparison_sha256"], R11_NEW_PARENT_R11_COMPARISON_SHA256
+        )
         self.assertTrue(config["parent_evidence"]["canonical_r11_is_not_phase1a"])
         self.assertEqual(config["target_selection"]["target_ids"], list(R11_NEW_TARGET_IDS))
         self.assertEqual(config["target_selection"]["selected_segment_payload_sha256"], R11_NEW_TARGETS_PAYLOAD_SHA256)
@@ -115,9 +150,7 @@ class R11NewOracleContractTest(unittest.TestCase):
             "sha256('R10-VisualAlignment-LowerBound' + unit-separator + '20260831' + unit-separator + 'F1' + unit-separator + segment_id), then segment_id",
         )
         self.assertTrue(config["mvp_route"]["phase2_phase1a_first8_reused"])
-        self.assertTrue(
-            config["mvp_route"]["phase2_membership_locked_before_any_phase1a_outcome"]
-        )
+        self.assertTrue(config["mvp_route"]["phase2_membership_locked_before_any_phase1a_outcome"])
         self.assertEqual(config["mvp_route"]["phase2_candidate_count"], 7504)
         self.assertEqual(
             config["mvp_route"]["phase2_bank8_ids_sha256"],
@@ -231,7 +264,10 @@ class R11NewOracleContractTest(unittest.TestCase):
                 Counter({0: 64, 1: 64, 2: 64, 3: 64}),
             )
             for row in schedule:
-                self.assertEqual(row.permutation, ((0, 1, 2, 3), (1, 2, 3, 0), (2, 3, 0, 1), (3, 0, 1, 2))[row.forward_cyclic_training_view])
+                self.assertEqual(
+                    row.permutation,
+                    ((0, 1, 2, 3), (1, 2, 3, 0), (2, 3, 0, 1), (3, 0, 1, 2))[row.forward_cyclic_training_view],
+                )
         with self.assertRaises((TypeError, ValueError)):
             build_phase1a_schedule(True)
         with self.assertRaises(ValueError):

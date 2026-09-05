@@ -38,9 +38,7 @@ from vision_memory.repro import canonical_tensor_sha256  # noqa: E402
 
 
 TRAINER = ROOT / "scripts" / "train" / "r11_new_frozen_dreamlite_oracle.py"
-CONFIG_PATH = (
-    ROOT / "configs" / "experiments" / "r11_new_frozen_dreamlite_oracle_phase1a.json"
-)
+CONFIG_PATH = ROOT / "configs" / "experiments" / "r11_new_frozen_dreamlite_oracle_phase1a.json"
 SUMMARY_FILE = "r11_new_phase1a_summary.json"
 PREFLIGHT_FILE = "technical_preflight.json"
 METRICS_FILE = "metrics.jsonl"
@@ -77,12 +75,8 @@ CANONICAL_R11_DECISION = "replace_semantic_editor_with_shared_event_to_latent_wr
 EXPECTED_ENVIRONMENT = {
     "PYTHONHASHSEED": "0",
     "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
-    "VLM_DREAMLITE_SNAPSHOT_MANIFEST_SHA256": (
-        "1bcf41b170c4b4a806bac6701cbdf4fabd5c3c53fa67415d065ab95ce2703159"
-    ),
-    "VLM_READER_SNAPSHOT_MANIFEST_SHA256": (
-        "159a504daaae6dc412535978f087150a0eb8e50164afd70a8a17f83906f1127c"
-    ),
+    "VLM_DREAMLITE_SNAPSHOT_MANIFEST_SHA256": ("1bcf41b170c4b4a806bac6701cbdf4fabd5c3c53fa67415d065ab95ce2703159"),
+    "VLM_READER_SNAPSHOT_MANIFEST_SHA256": ("159a504daaae6dc412535978f087150a0eb8e50164afd70a8a17f83906f1127c"),
     "HF_HUB_OFFLINE": "1",
     "TRANSFORMERS_OFFLINE": "1",
     "OMP_NUM_THREADS": "1",
@@ -188,9 +182,7 @@ def _deployment_audit(
     try:
         resolved_output.relative_to(resolved_root)
     except ValueError as exc:
-        raise ValueError(
-            f"R11_new output root must be under {resolved_root}, observed {resolved_output}."
-        ) from exc
+        raise ValueError(f"R11_new output root must be under {resolved_root}, observed {resolved_output}.") from exc
     existing_parent = resolved_output
     while not existing_parent.exists():
         parent = existing_parent.parent
@@ -308,9 +300,7 @@ def _validate_snapshot_manifest(model_dir: Path, *, env_name: str) -> dict[str, 
         raise ValueError(f"R11_new model snapshot manifest is missing: {model_dir}")
     observed = _sha256(manifest)
     if observed != expected:
-        raise ValueError(
-            f"R11_new {env_name} mismatch: expected {expected}, observed {observed}."
-        )
+        raise ValueError(f"R11_new {env_name} mismatch: expected {expected}, observed {observed}.")
     expected_sidecar = f"{observed}  {manifest.name}"
     if sidecar.read_text(encoding="utf-8").strip() != expected_sidecar:
         raise ValueError(f"R11_new model snapshot manifest sidecar mismatch: {sidecar}")
@@ -340,10 +330,7 @@ def _validate_r11_comparison(path: Path) -> dict[str, Any]:
     }
     observed = {key: comparison.get(key) for key in expected}
     if observed != expected:
-        raise ValueError(
-            "R11_new canonical R11 comparison content drifted: "
-            f"expected {expected}, observed {observed}."
-        )
+        raise ValueError(f"R11_new canonical R11 comparison content drifted: expected {expected}, observed {observed}.")
     return comparison
 
 
@@ -358,8 +345,7 @@ def _validate_prior_terminal(
 ) -> dict[str, Any]:
     if path is None or not path.is_file() or path.name != "terminal.json":
         raise ValueError(
-            f"R11_new requires a prior {expected_mode} target-{expected_target_index:02d} "
-            "controller terminal.json."
+            f"R11_new requires a prior {expected_mode} target-{expected_target_index:02d} controller terminal.json."
         )
     terminal = _load(path)
     checks = terminal.get("execution_checks")
@@ -398,11 +384,11 @@ def _validate_prior_terminal(
         raise ValueError(f"R11_new prerequisite inventory is missing: {inventory_path}")
     inventory = _load(inventory_path)
     artifacts = inventory.get("artifacts")
-    terminal_rows = [
-        row
-        for row in artifacts
-        if isinstance(row, Mapping) and row.get("path") == "terminal.json"
-    ] if isinstance(artifacts, list) else []
+    terminal_rows = (
+        [row for row in artifacts if isinstance(row, Mapping) and row.get("path") == "terminal.json"]
+        if isinstance(artifacts, list)
+        else []
+    )
     if not (
         inventory.get("schema") == INVENTORY_SCHEMA
         and len(terminal_rows) == 1
@@ -498,9 +484,7 @@ def _validate(args: argparse.Namespace) -> dict[str, Any]:
     if not _COMMIT_RE.fullmatch(head):
         raise ValueError(f"R11_new observed Git HEAD is not a full lowercase commit: {head!r}")
     if head != args.expected_commit:
-        raise ValueError(
-            f"R11_new controller commit mismatch: expected {args.expected_commit}, got {head}"
-        )
+        raise ValueError(f"R11_new controller commit mismatch: expected {args.expected_commit}, got {head}")
     dirty = _git("status", "--porcelain")
     if dirty:
         raise ValueError("R11_new controller requires a clean experiment snapshot.")
@@ -517,9 +501,7 @@ def _validate(args: argparse.Namespace) -> dict[str, Any]:
     observed_data = {"train": _sha256(args.train), "dev": _sha256(args.dev)}
     expected_data = {"train": core.R11_NEW_TRAIN_SHA256, "dev": core.R11_NEW_DEV_SHA256}
     if observed_data != expected_data:
-        raise ValueError(
-            f"R11_new fixed data SHA mismatch: expected {expected_data}, observed {observed_data}."
-        )
+        raise ValueError(f"R11_new fixed data SHA mismatch: expected {expected_data}, observed {observed_data}.")
 
     drift = {
         name: {"expected": expected, "observed": os.environ.get(name)}
@@ -530,12 +512,8 @@ def _validate(args: argparse.Namespace) -> dict[str, Any]:
         raise ValueError(f"R11_new strict environment drift: {drift}")
 
     snapshots = {
-        "dreamlite": _validate_snapshot_manifest(
-            args.dreamlite, env_name="VLM_DREAMLITE_SNAPSHOT_MANIFEST_SHA256"
-        ),
-        "reader": _validate_snapshot_manifest(
-            args.reader, env_name="VLM_READER_SNAPSHOT_MANIFEST_SHA256"
-        ),
+        "dreamlite": _validate_snapshot_manifest(args.dreamlite, env_name="VLM_DREAMLITE_SNAPSHOT_MANIFEST_SHA256"),
+        "reader": _validate_snapshot_manifest(args.reader, env_name="VLM_READER_SNAPSHOT_MANIFEST_SHA256"),
     }
     comparison = _validate_r11_comparison(args.r11_comparison)
     if not CONFIG_PATH.is_file():
@@ -631,8 +609,7 @@ def _manifest_checks(
     dreamlite_snapshot = snapshots.get("dreamlite_mobile") if isinstance(snapshots, Mapping) else None
     reader_snapshot = snapshots.get("qwen_reader") if isinstance(snapshots, Mapping) else None
     return {
-        "manifest_schema": isinstance(manifest, Mapping)
-        and manifest.get("schema") == MANIFEST_SCHEMA,
+        "manifest_schema": isinstance(manifest, Mapping) and manifest.get("schema") == MANIFEST_SCHEMA,
         "manifest_mode": isinstance(manifest, Mapping) and manifest.get("mode") == args.mode,
         "manifest_commit": isinstance(manifest, Mapping)
         and manifest.get("git_commit") == args.expected_commit
@@ -652,10 +629,8 @@ def _manifest_checks(
         and manifest["information_boundary"].get("passed") is True,
         "manifest_snapshot_hashes": isinstance(dreamlite_snapshot, Mapping)
         and isinstance(reader_snapshot, Mapping)
-        and dreamlite_snapshot.get("manifest_sha256")
-        == EXPECTED_ENVIRONMENT["VLM_DREAMLITE_SNAPSHOT_MANIFEST_SHA256"]
-        and reader_snapshot.get("manifest_sha256")
-        == EXPECTED_ENVIRONMENT["VLM_READER_SNAPSHOT_MANIFEST_SHA256"],
+        and dreamlite_snapshot.get("manifest_sha256") == EXPECTED_ENVIRONMENT["VLM_DREAMLITE_SNAPSHOT_MANIFEST_SHA256"]
+        and reader_snapshot.get("manifest_sha256") == EXPECTED_ENVIRONMENT["VLM_READER_SNAPSHOT_MANIFEST_SHA256"],
     }
 
 
@@ -667,8 +642,7 @@ def _summary_base_checks(
     return {
         "summary_schema": isinstance(summary, Mapping) and summary.get("schema") == SUMMARY_SCHEMA,
         "summary_mode": isinstance(summary, Mapping) and summary.get("mode") == args.mode,
-        "summary_commit": isinstance(summary, Mapping)
-        and summary.get("git_commit") == args.expected_commit,
+        "summary_commit": isinstance(summary, Mapping) and summary.get("git_commit") == args.expected_commit,
         "summary_target": isinstance(summary, Mapping)
         and summary.get("target_index") == args.target_index
         and summary.get("target_segment_id") == core.R11_NEW_TARGET_IDS[args.target_index],
@@ -709,8 +683,7 @@ def _checkpoint_artifacts_valid(run_dir: Path) -> bool:
             or record.get("checkpoint_sha256") != _sha256(checkpoint)
             or record.get("png_sha256") != _sha256(image)
             or record.get("trajectory_points") != core.R11_NEW_DIFFUSION_STEPS + 1
-            or list(record.get("effective_sigmas", ()))
-            != list(core.R11_NEW_EFFECTIVE_SIGMA_SCHEDULE)
+            or not core.phase1a_effective_sigmas_match(record.get("effective_sigmas"))
         ):
             return False
     return True
@@ -754,9 +727,9 @@ def _evaluation_rows_valid(rows: Sequence[Mapping[str, Any]], *, target_id: str)
             alternatives = [value for index, value in enumerate(logits) if index != ordered_target]
             expected_margin = logits[ordered_target] - max(alternatives)
             maximum = max(logits)
-            expected_ce = maximum + math.log(
-                sum(math.exp(value - maximum) for value in logits)
-            ) - logits[ordered_target]
+            expected_ce = (
+                maximum + math.log(sum(math.exp(value - maximum) for value in logits)) - logits[ordered_target]
+            )
             valid = bool(
                 row.get("schema") == EVALUATION_SCHEMA
                 and row.get("suite") == EVALUATION_SUITE
@@ -837,11 +810,7 @@ def _finite_scalar(value: Any, *, positive: bool = False, at_most_one: bool = Fa
         number = float(value)
     except (TypeError, ValueError):
         return False
-    return bool(
-        math.isfinite(number)
-        and (not positive or number > 0.0)
-        and (not at_most_one or number <= 1.0)
-    )
+    return bool(math.isfinite(number) and (not positive or number > 0.0) and (not at_most_one or number <= 1.0))
 
 
 def _preflight_fixed_contract_valid(manifest: Mapping[str, Any] | None) -> bool:
@@ -892,8 +861,7 @@ def _preflight_information_boundary_valid(manifest: Mapping[str, Any] | None) ->
         return False
     return bool(
         recomputed.get("passed") is True
-        and information.get("schema")
-        == "vision_memory.r11-new-phase1a-information-boundary.v1"
+        and information.get("schema") == "vision_memory.r11-new-phase1a-information-boundary.v1"
         and information.get("passed") is True
         and information.get("leaked_fields") == []
         and information.get("conditioner_input_names") == ["source_latent", "event_text"]
@@ -933,7 +901,8 @@ def _preflight_condition_artifact_valid(
     payload_hashes = payload.get("tensor_sha256") if isinstance(payload, Mapping) else None
     return bool(
         file_valid
-        and set(record) == {
+        and set(record)
+        == {
             "path",
             "sha256",
             "bytes",
@@ -948,10 +917,7 @@ def _preflight_condition_artifact_valid(
         and record.get("recompute_matches") is True
         and isinstance(tensor_hashes, Mapping)
         and set(tensor_hashes) == {"prompt_embeds", "attention_mask"}
-        and all(
-            isinstance(value, str) and _HEX64_RE.fullmatch(value)
-            for value in tensor_hashes.values()
-        )
+        and all(isinstance(value, str) and _HEX64_RE.fullmatch(value) for value in tensor_hashes.values())
         and isinstance(payload, Mapping)
         and set(payload)
         == {
@@ -1004,9 +970,7 @@ def _preflight_checkpoint_artifact_valid(
     except Exception:
         return False
     tensor_hashes = record.get("tensor_sha256")
-    trajectory_hashes = (
-        tensor_hashes.get("trajectory_fp32") if isinstance(tensor_hashes, Mapping) else None
-    )
+    trajectory_hashes = tensor_hashes.get("trajectory_fp32") if isinstance(tensor_hashes, Mapping) else None
     x_t = payload.get("x_T_fp32") if isinstance(payload, Mapping) else None
     z_t = payload.get("z_t_fp32") if isinstance(payload, Mapping) else None
     trajectory = payload.get("trajectory_fp32") if isinstance(payload, Mapping) else None
@@ -1034,8 +998,7 @@ def _preflight_checkpoint_artifact_valid(
         and record.get("schema") == CHECKPOINT_HASH_SCHEMA
         and record.get("optimizer_step") == 0
         and record.get("trajectory_points") == core.R11_NEW_DIFFUSION_STEPS + 1
-        and list(record.get("effective_sigmas", ()))
-        == list(core.R11_NEW_EFFECTIVE_SIGMA_SCHEDULE)
+        and core.phase1a_effective_sigmas_match(record.get("effective_sigmas"))
         and isinstance(tensor_hashes, Mapping)
         and set(tensor_hashes) == {"x_T_fp32", "z_t_fp32", "trajectory_fp32"}
         and isinstance(trajectory_hashes, list)
@@ -1054,8 +1017,10 @@ def _preflight_checkpoint_artifact_valid(
         and payload.get("optimizer_step") == 0
         and payload.get("manifest_sha256") == manifest_sha256
         and payload.get("condition_artifact_sha256") == condition_sha256
-        and list(payload.get("effective_sigmas", ()))
-        == list(core.R11_NEW_EFFECTIVE_SIGMA_SCHEDULE)
+        and core.phase1a_effective_sigmas_match(payload.get("effective_sigmas"))
+        # Tolerance applies only to observed versus nominal schedule. Two
+        # representations of the same observation must still agree exactly.
+        and payload.get("effective_sigmas") == record.get("effective_sigmas")
         and isinstance(payload.get("optimizer"), Mapping)
         and isinstance(x_t, torch.Tensor)
         and isinstance(z_t, torch.Tensor)
@@ -1065,17 +1030,14 @@ def _preflight_checkpoint_artifact_valid(
         and isinstance(trajectory, (tuple, list))
         and len(trajectory) == core.R11_NEW_DIFFUSION_STEPS + 1
         and all(
-            isinstance(value, torch.Tensor)
-            and value.dtype == torch.float32
-            and value.shape == x_t.shape
+            isinstance(value, torch.Tensor) and value.dtype == torch.float32 and value.shape == x_t.shape
             for value in trajectory
         )
         and isinstance(payload_hashes, Mapping)
         and dict(payload_hashes) == dict(tensor_hashes)
         and payload_hashes.get("x_T_fp32") == canonical_tensor_sha256(x_t)
         and payload_hashes.get("z_t_fp32") == canonical_tensor_sha256(z_t)
-        and payload_hashes.get("trajectory_fp32")
-        == [canonical_tensor_sha256(value) for value in trajectory]
+        and payload_hashes.get("trajectory_fp32") == [canonical_tensor_sha256(value) for value in trajectory]
     )
 
 
@@ -1125,8 +1087,7 @@ def _preflight_start_runtime_valid(
         isinstance(manifest, Mapping)
         and start.get("schema") == "vision_memory.r11-new-phase1a-model-snapshot-start.v1"
         and _json_equivalent(start.get("bindings"), manifest.get("model_snapshot_payloads_start"))
-        and set(runtime)
-        == {"python", "platform", "packages", "cuda_available", "torch_cuda", "gpu_names"}
+        and set(runtime) == {"python", "platform", "packages", "cuda_available", "torch_cuda", "gpu_names"}
         and runtime.get("cuda_available") is True
         and isinstance(runtime.get("packages"), Mapping)
         and isinstance(runtime.get("gpu_names"), list)
@@ -1155,8 +1116,7 @@ def _preflight_start_runtime_valid(
         and determinism.get("cuda_matmul_allow_tf32") is False
         and determinism.get("cudnn_allow_tf32") is False
         and determinism.get("float32_matmul_precision") == "highest"
-        and determinism.get("sdpa")
-        == {"flash": False, "memory_efficient": False, "cudnn": False, "math": True}
+        and determinism.get("sdpa") == {"flash": False, "memory_efficient": False, "cudnn": False, "math": True}
     )
 
 
@@ -1231,13 +1191,10 @@ def _preflight_evidence_checks(
         and summary.get("optimizer_steps") == 0
         and _finite_scalar(summary.get("loss"))
         and _finite_scalar(summary.get("gradient_norm"), positive=True)
-        and _finite_scalar(
-            summary.get("gradient_nonzero_fraction"), positive=True, at_most_one=True
-        )
+        and _finite_scalar(summary.get("gradient_nonzero_fraction"), positive=True, at_most_one=True)
         and summary.get("trajectory_points") == core.R11_NEW_DIFFUSION_STEPS + 1
         and summary.get("dreamlite_denoising_steps") == core.R11_NEW_DIFFUSION_STEPS
-        and list(summary.get("effective_sigmas", ()))
-        == list(core.R11_NEW_EFFECTIVE_SIGMA_SCHEDULE)
+        and core.phase1a_effective_sigmas_match(summary.get("effective_sigmas"))
         and summary.get("trainable_parameter_names") == ["x_T_fp32"]
         and summary.get("all_models_frozen") is True
         and summary.get("snapshots_unchanged") is True
@@ -1271,20 +1228,13 @@ def _preflight_evidence_checks(
         and isinstance(summary, Mapping)
         and _json_equivalent(preflight_summary, summary),
         "preflight_manifest_contract": manifest_contract,
-        "preflight_condition_artifact": _preflight_condition_artifact_valid(
-            manifest, run_dir=run_dir
-        ),
-        "preflight_checkpoint_artifact": _preflight_checkpoint_artifact_valid(
-            summary, manifest, run_dir=run_dir
-        ),
+        "preflight_condition_artifact": _preflight_condition_artifact_valid(manifest, run_dir=run_dir),
+        "preflight_checkpoint_artifact": _preflight_checkpoint_artifact_valid(summary, manifest, run_dir=run_dir),
         "preflight_snapshot_end": _preflight_snapshot_end_valid(manifest, run_dir=run_dir),
         "preflight_start_runtime": _preflight_start_runtime_valid(manifest, run_dir=run_dir),
         "preflight_trainer_terminal": _preflight_trainer_terminal_valid(run_dir=run_dir),
-        "preflight_forbidden_formal_artifacts_absent": not any(
-            path.exists() for path in forbidden_artifacts
-        ),
-        "preflight_report_present": (run_dir / "REPORT.md").is_file()
-        and (run_dir / "REPORT.md").stat().st_size > 0,
+        "preflight_forbidden_formal_artifacts_absent": not any(path.exists() for path in forbidden_artifacts),
+        "preflight_report_present": (run_dir / "REPORT.md").is_file() and (run_dir / "REPORT.md").stat().st_size > 0,
         "preflight_trainer_inventory": _preflight_trainer_inventory_valid(run_dir=run_dir),
     }
 
@@ -1307,10 +1257,8 @@ def _assess_run(
         gate = _reachability_gate(summary)
         checks.update(
             {
-                "preflight_summary_schema": isinstance(summary, Mapping)
-                and summary.get("schema") == SUMMARY_SCHEMA,
-                "preflight_summary_mode": isinstance(summary, Mapping)
-                and summary.get("mode") == "technical-preflight",
+                "preflight_summary_schema": isinstance(summary, Mapping) and summary.get("schema") == SUMMARY_SCHEMA,
+                "preflight_summary_mode": isinstance(summary, Mapping) and summary.get("mode") == "technical-preflight",
                 "preflight_completed_technical": isinstance(summary, Mapping)
                 and summary.get("status") == "completed_technical"
                 and summary.get("passed") is True,
@@ -1352,8 +1300,7 @@ def _assess_run(
                 audit=technical["core_audit"],
             )
             technical_core_matches = all(
-                _json_equivalent(technical.get(key), value)
-                for key, value in recomputed_technical.items()
+                _json_equivalent(technical.get(key), value) for key, value in recomputed_technical.items()
             )
         except (KeyError, TypeError, ValueError):
             recomputed_technical = None
@@ -1386,9 +1333,7 @@ def _assess_run(
     checks.update(
         {
             "formal_completed": isinstance(summary, Mapping) and summary.get("status") == "completed",
-            "formal_receipts_exact": _formal_receipts_valid(
-                rows, target_id=core.R11_NEW_TARGET_IDS[args.target_index]
-            ),
+            "formal_receipts_exact": _formal_receipts_valid(rows, target_id=core.R11_NEW_TARGET_IDS[args.target_index]),
             "formal_optimizer_steps_exact": isinstance(summary, Mapping)
             and summary.get("optimizer_steps") == core.R11_NEW_OPTIMIZER_STEPS,
             "formal_checkpoints_exact": checkpoint_steps == list(core.R11_NEW_CHECKPOINT_STEPS)
@@ -1409,9 +1354,7 @@ def _assess_run(
             "formal_statistics_recomputed": isinstance(summary, Mapping)
             and recomputed_statistics is not None
             and _json_equivalent(summary.get("target_statistics"), recomputed_statistics),
-            "formal_gate_recomputed": type(gate) is bool
-            and type(recomputed_gate) is bool
-            and gate is recomputed_gate,
+            "formal_gate_recomputed": type(gate) is bool and type(recomputed_gate) is bool and gate is recomputed_gate,
             "formal_artifact_hashes_bound": _declared_artifacts_valid(summary, run_dir=run_dir),
             "formal_diagnostic_boolean": type(gate) is bool,
             "formal_success_false": isinstance(summary, Mapping)
@@ -1431,11 +1374,7 @@ def _assess_run(
         diagnostic = {
             "evaluated": True,
             "phase1a_query_level_reachability_gate": gate,
-            "result": (
-                "query_level_reachability_passed"
-                if gate is True
-                else "query_level_reachability_not_found"
-            ),
+            "result": ("query_level_reachability_passed" if gate is True else "query_level_reachability_not_found"),
         }
     return checks, diagnostic
 
@@ -1577,9 +1516,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     except (OSError, RuntimeError, ValueError) as exc:
         checks["suite_lock_released"] = False
         release_error = f"suite lock release failure: {exc}"
-        execution_error = (
-            release_error if execution_error is None else f"{execution_error}; {release_error}"
-        )
+        execution_error = release_error if execution_error is None else f"{execution_error}; {release_error}"
 
     technical_completed = all(checks.values())
     if not technical_completed:
@@ -1606,12 +1543,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         "started_at_utc": started_at,
         "finished_at_utc": _utc_now(),
         "elapsed_seconds": time.monotonic() - started,
-        "summary_sha256": _sha256(run_dir / SUMMARY_FILE)
-        if (run_dir / SUMMARY_FILE).is_file()
-        else None,
-        "manifest_sha256": _sha256(run_dir / MANIFEST_FILE)
-        if (run_dir / MANIFEST_FILE).is_file()
-        else None,
+        "summary_sha256": _sha256(run_dir / SUMMARY_FILE) if (run_dir / SUMMARY_FILE).is_file() else None,
+        "manifest_sha256": _sha256(run_dir / MANIFEST_FILE) if (run_dir / MANIFEST_FILE).is_file() else None,
         "technical_gate_sha256": _sha256(run_dir / TECHNICAL_GATE_FILE)
         if (run_dir / TECHNICAL_GATE_FILE).is_file()
         else None,
