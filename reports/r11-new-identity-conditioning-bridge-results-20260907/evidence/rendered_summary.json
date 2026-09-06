@@ -1,0 +1,108 @@
+{
+  "absolute_improvement_vs_parent": {
+    "endpoint_mse": 0.00044979900121688843,
+    "endpoint_reader_mean_ce": 0.12499936583652627
+  },
+  "bridge_distance_gate": false,
+  "endpoint": {
+    "l2_distance": 85.41441371520676,
+    "l2_distance_ratio_to_m0": 0.7093842368516723,
+    "m0_mse": 0.22121742367744446,
+    "m0_rmse": 0.47033756354074513,
+    "mse": 0.11132235825061798,
+    "mse_ratio_to_m0": 0.5032259954936295,
+    "relative_mse_change": -0.49677400450637055,
+    "rmse": 0.3336500535750264,
+    "teacher_normalized_rmse": 0.5096492254854694,
+    "teacher_population_std": 0.6546660661697388,
+    "tensor_numel": 65536
+  },
+  "endpoint_reader_transfer_gate": false,
+  "formal_success": false,
+  "git_commit": "5b8495128cc408c713e0d5c5d7e4486c12c518a9",
+  "image_statistics": [
+    {
+      "high_frequency_rms": 0.006706009841906749,
+      "image": "canonical_r11_target01.png",
+      "mean": 0.48773537804098693,
+      "pixel_mse_to_teacher_png": 0.0,
+      "std": 0.09333506312821298,
+      "total_variation": 0.006556854843701084
+    },
+    {
+      "high_frequency_rms": 0.0016156402004239017,
+      "image": "step-000.png",
+      "mean": 0.4481442008922303,
+      "pixel_mse_to_teacher_png": 0.009335312922153964,
+      "std": 0.024583300624152423,
+      "total_variation": 0.00031673845307917856
+    },
+    {
+      "high_frequency_rms": 0.000734499167098704,
+      "image": "step-064.png",
+      "mean": 0.5033163569331948,
+      "pixel_mse_to_teacher_png": 0.008310818533461689,
+      "std": 0.013052057689593291,
+      "total_variation": 0.00033586614783987997
+    },
+    {
+      "high_frequency_rms": 0.0007930873249876998,
+      "image": "step-128.png",
+      "mean": 0.4995793062097886,
+      "pixel_mse_to_teacher_png": 0.00810850702950882,
+      "std": 0.012974982932400386,
+      "total_variation": 0.0003847282767986626
+    },
+    {
+      "high_frequency_rms": 0.0008152792905400842,
+      "image": "step-192.png",
+      "mean": 0.4989940481248245,
+      "pixel_mse_to_teacher_png": 0.00799488958847396,
+      "std": 0.01317538716726223,
+      "total_variation": 0.0004116968477069869
+    },
+    {
+      "high_frequency_rms": 0.0008296990850046981,
+      "image": "step-256.png",
+      "mean": 0.4992183024587195,
+      "pixel_mse_to_teacher_png": 0.007967233761723006,
+      "std": 0.013334609098600325,
+      "total_variation": 0.00041379947781898616
+    }
+  ],
+  "interpretation": "diagnostic_only_no_picture_memory_success_claim",
+  "parent": {
+    "endpoint_mse": 0.11177215725183487,
+    "reader_accuracy": 0,
+    "reader_mean_ce": 25.765637596946004
+  },
+  "phase2_allowed": false,
+  "reader": {
+    "accuracy": 0.0,
+    "all_four_correct": false,
+    "checkpoint": "raw_step_256",
+    "condition": "normal",
+    "mean_ce": 25.640638231109477,
+    "per_view_ce": [
+      21.041684403303123,
+      27.083344170711253,
+      23.33335128572834,
+      31.104173064695196
+    ],
+    "permutations_are_independent_statistical_units": false,
+    "row_count": 4
+  },
+  "relative_improvement_vs_parent": {
+    "endpoint_mse": 0.004024249082027143,
+    "endpoint_reader_mean_ce": 0.004851398121478723
+  },
+  "schema": "vision_memory.r11-new-identity-conditioning-rendered-summary.v1",
+  "secondary_conditioning_audit": {
+    "absolute_endpoint_mse_improves_parent": true,
+    "eligible": true,
+    "endpoint_reader_ce_improves_parent": true,
+    "passed": true
+  },
+  "teacher_replay_gate": true,
+  "technical_gate": true
+}

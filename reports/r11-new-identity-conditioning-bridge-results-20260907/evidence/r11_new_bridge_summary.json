@@ -1,0 +1,146 @@
+{
+  "answer_independent_writer_usable": false,
+  "artifacts": {
+    "endpoint_png_sha256": "8c11ab4007d16bbf49cad40f1f3107d1026b696c5e31f8c886e0addf10919690",
+    "endpoint_raw_sha256": "bd51f050eb900c1d9cb35d43d6015a2237b963aa40f1a93f4285621a2865dc2e",
+    "evaluation_rows_sha256": "6f0c326a7c5a3c3c7bb8110c56fe551cdc2d7a09a60d712e531844742fa2f770",
+    "manifest_sha256": "004f0ce8475c1ae63115ea9faa67bba18cabfcff34914fb8fcf79b0157e28dac",
+    "metrics_sha256": "03aa57e376563e9783ac0c3fe2a3d60d8c1bf8af2bf181cb787bfce0fe70155c",
+    "technical_gate_sha256": "8986595ccb583399c7e4741f58d58574d6a9769445c150be1af4843d5b349159"
+  },
+  "checkpoint_steps_observed": [
+    0,
+    64,
+    128,
+    192,
+    256
+  ],
+  "decision": "distance_fail_reader_fail_preregister_one_discriminating_diagnostic",
+  "endpoint_distance_statistics": {
+    "l2_distance": 85.41441371520676,
+    "l2_distance_ratio_to_m0": 0.7093842368516723,
+    "m0_mse": 0.22121742367744446,
+    "m0_rmse": 0.47033756354074513,
+    "mse": 0.11132235825061798,
+    "mse_ratio_to_m0": 0.5032259954936295,
+    "relative_mse_change": -0.49677400450637055,
+    "rmse": 0.3336500535750264,
+    "teacher_normalized_rmse": 0.5096492254854694,
+    "teacher_population_std": 0.6546660661697388,
+    "tensor_numel": 65536
+  },
+  "endpoint_reader_statistics": {
+    "accuracy": 0.0,
+    "all_four_correct": false,
+    "checkpoint": "raw_step_256",
+    "condition": "normal",
+    "mean_ce": 25.640638231109477,
+    "per_view_ce": [
+      21.041684403303123,
+      27.083344170711253,
+      23.33335128572834,
+      31.104173064695196
+    ],
+    "permutations_are_independent_statistical_units": false,
+    "row_count": 4
+  },
+  "formal_success_gate": false,
+  "full_success_claim_allowed": false,
+  "gates": {
+    "bridge_diagnostic_gate": false,
+    "bridge_distance_gate": false,
+    "endpoint_reader_transfer_gate": false,
+    "formal_success_gate": false,
+    "teacher_replay_gate": true,
+    "technical_gate": true
+  },
+  "git_commit": "5b8495128cc408c713e0d5c5d7e4486c12c518a9",
+  "implementation_revision": "canonical-r11-latent-mse-identity-condition-source-init-target01-v1",
+  "initialization_teacher_assisted": false,
+  "m0_reader_statistics": {
+    "accuracy": 0.0,
+    "all_four_correct": false,
+    "checkpoint": "m0",
+    "condition": "normal",
+    "mean_ce": 27.697925772511482,
+    "per_view_ce": [
+      24.000008338748813,
+      28.958341458816975,
+      25.166681876290895,
+      32.66667141618924
+    ],
+    "permutations_are_independent_statistical_units": false,
+    "row_count": 4
+  },
+  "mode": "formal",
+  "optimization_teacher_supervised": true,
+  "optimizer_steps": 256,
+  "phase2_allowed": false,
+  "primary_endpoint": "raw_step_256",
+  "protocol": "R11-New-Identity-Conditioning-Bridge-Source-Init-Target01",
+  "schema": "vision_memory.r11-new-canonical-latent-bridge-summary.v1",
+  "secondary_solver_hypothesis_audit": {
+    "absolute_endpoint_mse_improves_parent": true,
+    "eligible": true,
+    "endpoint_reader_ce_improves_parent": true,
+    "passed": true
+  },
+  "secondary_solver_hypothesis_decision": "distance_fail_reader_fail_secondary_condition_improves",
+  "status": "completed",
+  "target_index": 1,
+  "target_segment_id": "r5-f1-392d41fd097d069c42218e0a",
+  "teacher_replay_statistics": {
+    "accuracy": 1.0,
+    "all_four_correct": true,
+    "checkpoint": "canonical_teacher",
+    "condition": "teacher",
+    "mean_ce": 0.00017690610513911291,
+    "per_view_ce": [
+      0.00010211342703511954,
+      0.00012818916408861934,
+      0.00024359093460701864,
+      0.00023373089482569415
+    ],
+    "permutations_are_independent_statistical_units": false,
+    "row_count": 4
+  },
+  "technical_gate": {
+    "actual_conditioning_text_binding_valid": true,
+    "artifact_contract_valid": true,
+    "checkpoint_hashes_valid": true,
+    "checkpoint_steps_observed": [
+      0,
+      64,
+      128,
+      192,
+      256
+    ],
+    "condition_artifact_valid": true,
+    "finite_metrics": true,
+    "finite_nonzero_gradient_every_step": true,
+    "formal_success_gate": false,
+    "four_step_schedule_exact": true,
+    "frozen_gradients_absent": true,
+    "gradient_clipping_absent": true,
+    "identity_condition_probe_binding_valid": true,
+    "minimum_gradient_nonzero_fraction": 0.998931884765625,
+    "minimum_gradient_norm": 0.00015584019200673232,
+    "only_x_T_fp32_trainable": true,
+    "optimizer_contract_valid": true,
+    "optimizer_lr_schedule_exact": true,
+    "optimizer_step_records": 256,
+    "passed": true,
+    "receipts_exact": true,
+    "schema": "vision_memory.r11-new-canonical-latent-bridge-technical-gate.v1",
+    "snapshots_unchanged": true,
+    "source_only_initialization_artifact_valid": true,
+    "step0_parity_valid": true,
+    "steps_contiguous": true,
+    "teacher_binding_valid": true,
+    "trainable_parameter_names": [
+      "x_T_fp32"
+    ],
+    "trajectory_point0_binding_valid_every_checkpoint": true
+  },
+  "wall_clock_seconds": 266.6369353123009
+}

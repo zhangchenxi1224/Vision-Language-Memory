@@ -1,0 +1,186 @@
+{
+  "answer_independent_writer_usable": false,
+  "bridge_diagnostic_gate": false,
+  "bridge_distance_gate": false,
+  "checkpoint_distance_statistics": {
+    "0": {
+      "l2_distance": 120.40641626643075,
+      "l2_distance_ratio_to_m0": 1.0,
+      "m0_mse": 0.22121742367744446,
+      "m0_rmse": 0.47033756354074513,
+      "mse": 0.22121742367744446,
+      "mse_ratio_to_m0": 1.0,
+      "relative_mse_change": 0.0,
+      "rmse": 0.47033756354074513,
+      "teacher_normalized_rmse": 0.7184388925067612,
+      "teacher_population_std": 0.6546660661697388,
+      "tensor_numel": 65536
+    },
+    "128": {
+      "l2_distance": 86.77377477257313,
+      "l2_distance_ratio_to_m0": 0.7206740094362033,
+      "m0_mse": 0.22121742367744446,
+      "m0_rmse": 0.47033756354074513,
+      "mse": 0.11489392071962357,
+      "mse_ratio_to_m0": 0.5193710278768529,
+      "relative_mse_change": -0.48062897212314715,
+      "rmse": 0.3389600577053638,
+      "teacher_normalized_rmse": 0.517760237197753,
+      "teacher_population_std": 0.6546660661697388,
+      "tensor_numel": 65536
+    },
+    "192": {
+      "l2_distance": 85.72956092963209,
+      "l2_distance_ratio_to_m0": 0.7120015991501064,
+      "m0_mse": 0.22121742367744446,
+      "m0_rmse": 0.47033756354074513,
+      "mse": 0.11214534938335419,
+      "mse_ratio_to_m0": 0.5069462771923089,
+      "relative_mse_change": -0.4930537228076911,
+      "rmse": 0.33488109738137534,
+      "teacher_normalized_rmse": 0.5115296403564453,
+      "teacher_population_std": 0.6546660661697388,
+      "tensor_numel": 65536
+    },
+    "256": {
+      "l2_distance": 85.41441371520676,
+      "l2_distance_ratio_to_m0": 0.7093842368516723,
+      "m0_mse": 0.22121742367744446,
+      "m0_rmse": 0.47033756354074513,
+      "mse": 0.11132235825061798,
+      "mse_ratio_to_m0": 0.5032259954936295,
+      "relative_mse_change": -0.49677400450637055,
+      "rmse": 0.3336500535750264,
+      "teacher_normalized_rmse": 0.5096492254854694,
+      "teacher_population_std": 0.6546660661697388,
+      "tensor_numel": 65536
+    },
+    "64": {
+      "l2_distance": 87.90371152573707,
+      "l2_distance_ratio_to_m0": 0.7300583660859656,
+      "m0_mse": 0.22121742367744446,
+      "m0_rmse": 0.47033756354074513,
+      "mse": 0.1179056167602539,
+      "mse_ratio_to_m0": 0.5329852178921098,
+      "relative_mse_change": -0.46701478210789016,
+      "rmse": 0.3433738731474104,
+      "teacher_normalized_rmse": 0.5245023239960968,
+      "teacher_population_std": 0.6546660661697388,
+      "tensor_numel": 65536
+    }
+  },
+  "decision": "distance_fail_reader_fail_preregister_one_discriminating_diagnostic",
+  "endpoint_distance_statistics": {
+    "l2_distance": 85.41441371520676,
+    "l2_distance_ratio_to_m0": 0.7093842368516723,
+    "m0_mse": 0.22121742367744446,
+    "m0_rmse": 0.47033756354074513,
+    "mse": 0.11132235825061798,
+    "mse_ratio_to_m0": 0.5032259954936295,
+    "relative_mse_change": -0.49677400450637055,
+    "rmse": 0.3336500535750264,
+    "teacher_normalized_rmse": 0.5096492254854694,
+    "teacher_population_std": 0.6546660661697388,
+    "tensor_numel": 65536
+  },
+  "endpoint_reader_statistics": {
+    "accuracy": 0.0,
+    "all_four_correct": false,
+    "checkpoint": "raw_step_256",
+    "condition": "normal",
+    "mean_ce": 25.640638231109477,
+    "per_view_ce": [
+      21.041684403303123,
+      27.083344170711253,
+      23.33335128572834,
+      31.104173064695196
+    ],
+    "permutations_are_independent_statistical_units": false,
+    "row_count": 4
+  },
+  "endpoint_reader_transfer_gate": false,
+  "endpoint_reset_statistics": {
+    "accuracy": 0.0,
+    "all_four_correct": false,
+    "checkpoint": "raw_step_256",
+    "condition": "reset",
+    "mean_ce": 27.697927217990824,
+    "per_view_ce": [
+      24.37500533794217,
+      29.208341387042786,
+      25.541688817176173,
+      31.66667332980217
+    ],
+    "permutations_are_independent_statistical_units": false,
+    "row_count": 4
+  },
+  "engineering_gate": true,
+  "formal_success": false,
+  "git_commit": "5b8495128cc408c713e0d5c5d7e4486c12c518a9",
+  "initialization_teacher_assisted": false,
+  "interpretation": "diagnostic_only",
+  "m0_reader_statistics": {
+    "accuracy": 0.0,
+    "all_four_correct": false,
+    "checkpoint": "m0",
+    "condition": "normal",
+    "mean_ce": 27.697925772511482,
+    "per_view_ce": [
+      24.000008338748813,
+      28.958341458816975,
+      25.166681876290895,
+      32.66667141618924
+    ],
+    "permutations_are_independent_statistical_units": false,
+    "row_count": 4
+  },
+  "m0_reset_statistics": {
+    "accuracy": 0.0,
+    "all_four_correct": false,
+    "checkpoint": "m0",
+    "condition": "reset",
+    "mean_ce": 27.697927217990824,
+    "per_view_ce": [
+      24.37500533794217,
+      29.208341387042786,
+      25.541688817176173,
+      31.66667332980217
+    ],
+    "permutations_are_independent_statistical_units": false,
+    "row_count": 4
+  },
+  "optimization_teacher_supervised": true,
+  "optimizer_steps": 256,
+  "phase2_allowed": false,
+  "primary_endpoint": "raw_step_256",
+  "protocol": "R11-New-Identity-Conditioning-Bridge-Source-Init-Target01",
+  "raw_artifacts_sha256": "b143cb435241aa9912a1cc7dbbd99f5861c7388f49de473117a6cd8d222e6771",
+  "schema": "vision_memory.r11-new-canonical-latent-bridge-comparison.v1",
+  "scientific_success_claim": false,
+  "secondary_solver_hypothesis_audit": {
+    "absolute_endpoint_mse_improves_parent": true,
+    "eligible": true,
+    "endpoint_reader_ce_improves_parent": true,
+    "passed": true
+  },
+  "secondary_solver_hypothesis_decision": "distance_fail_reader_fail_secondary_condition_improves",
+  "status": "completed",
+  "target_index": 1,
+  "target_segment_id": "r5-f1-392d41fd097d069c42218e0a",
+  "teacher_replay_gate": true,
+  "teacher_replay_statistics": {
+    "accuracy": 1.0,
+    "all_four_correct": true,
+    "checkpoint": "canonical_teacher",
+    "condition": "teacher",
+    "mean_ce": 0.00017690610513911291,
+    "per_view_ce": [
+      0.00010211342703511954,
+      0.00012818916408861934,
+      0.00024359093460701864,
+      0.00023373089482569415
+    ],
+    "permutations_are_independent_statistical_units": false,
+    "row_count": 4
+  }
+}

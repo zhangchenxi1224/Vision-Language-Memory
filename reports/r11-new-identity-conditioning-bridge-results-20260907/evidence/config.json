@@ -1,0 +1,353 @@
+{
+  "schema": "vision_memory.r11-new-identity-conditioning-bridge-config.v1",
+  "protocol": "R11-New-Identity-Conditioning-Bridge-Source-Init-Target01",
+  "status": "preregistered_after_condition_only_probe_and_resource_migration_before_any_identity_full_chain_forward",
+  "purpose": "Isolate the fixed no-changes native edit-conditioning text versus the closed original-event source-only arm; all optimization, target, initialization and evaluation contracts are unchanged.",
+  "parent_bridge": {
+    "training_git_commit": "e0a43c43f893ac19c6976ecd4c84ea3dc2b23006",
+    "delivery_git_commit": "a9f9e1226f2c593e0a2c89797ba966f54871d0b9",
+    "source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-source-init-e0a43c4-20260907-round01",
+    "comparison_sha256": "f7ec5913ac6dcd40860428e3c3ab929f8559752173599ffeae8cc0b01d1db09c",
+    "raw_artifacts_sha256": "2889f183c04df70c2763010b863914e378ffb1a0c85a1d8ca0f6a22ac150d4d7",
+    "config_sha256": "2bdf0e0b45e2c0b22d4c04711c0be11c5e9b94fc30d7ee70ed1aa3cb219b1702",
+    "formal_manifest_sha256": "02905cfa89f7cca0eebaa4d763c99264c128278deef0f12885823982fabbec35",
+    "protocol": "R11-New-Canonical-Latent-Bridge-Source-Only-Init-Target01",
+    "technical_gate": true,
+    "teacher_replay_gate": true,
+    "bridge_distance_gate": false,
+    "endpoint_reader_transfer_gate": false,
+    "formal_success": false,
+    "phase2_allowed": false,
+    "endpoint_mse": 0.11177215725183487,
+    "endpoint_reader_mean_ce": 25.765637596946004,
+    "endpoint_reader_accuracy": 0,
+    "role": "sole_primary_and_secondary_comparator_same_source_only_initialization"
+  },
+  "parent_phase1a": {
+    "training_source_commit": "2cde77ece6f020ab8c747d7c73e19dac4d8fba1b",
+    "corrected_delivery_parent_commit": "e2e60126285486d42386b4cd670b419334dd06db",
+    "comparison_sha256": "f3764a83ee8bc31cc7895fd33d494d4ea3be0c187c8cc9b0f6a85a4cf257843d",
+    "raw_artifacts_sha256": "c1e36f92766c98f245917a9009dc9061a07729842dbef6c7b97ad18889edfbba",
+    "selected_segments_sha256": "6198beb3a3758fd7df912c6956bc05eac0ace8603708f37147826c65a4d61845",
+    "engineering_gate": true,
+    "query_level_pass_count": 6,
+    "total_targets": 8,
+    "failed_target_indices": [
+      1,
+      7
+    ],
+    "phase2_allowed": false
+  },
+  "target_selection": {
+    "rule": "same preregistered lowest-index Phase1A failure and same canonical R11 teacher as both parent bridges",
+    "target_index": 1,
+    "target_segment_id": "r5-f1-392d41fd097d069c42218e0a",
+    "target_07_deferred": true,
+    "no_post_result_target_selection": true
+  },
+  "canonical_teacher": {
+    "artifact_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11/r11-vae-latent-f4a018f-20260831/target-01/run/endpoint_raw.pt",
+    "file_sha256": "d359291de63bb5232325b2e7a9294ff3d861287c06e63da2ab6ebe42eab036b9",
+    "tensor_sha256": "6857afeffd37124bb196ab7c6607580c57c950d72d760ca6b49f8cc00bdef3f1",
+    "shape": [
+      1,
+      4,
+      128,
+      128
+    ],
+    "dtype": "torch.float32",
+    "population_std": 0.6546660661697388,
+    "reference_reverse_cyclic_accuracy": 1,
+    "reference_reverse_cyclic_mean_ce": 0.000176956004
+  },
+  "single_changed_solver_factor": {
+    "factor": "actual_conditioning_text",
+    "parent_value": "R3 Train Standard Templates 03: For the indigo desk train 001123, remember that the preferred music is ambient.",
+    "new_value": "no changes",
+    "actual_conditioning_text_sha256": "44f9161c3a252925f55022d60f68918abf8fdc1a9a3fadbf5ab766549f6b3461",
+    "full_prompt": "[Edit]: A diptych with two side-by-side images of the same scene. Compared to the right side, the left one has no changes",
+    "full_prompt_sha256": "4620b977a7aff51c9ee9a6e2901555b39ee4a3e4bd705d1402818acf330d22e6",
+    "mode": "edit",
+    "official_template_unchanged": true,
+    "explicitly_unchanged": "source-only x_T initialization, optimizer, schedule, budget, teacher-MSE objective, original target/event/query/answers as immutable data, source, model snapshots, denoising/sigma path, Reader/reset, endpoint and primary gates",
+    "original_event_preserved_as_provenance": true,
+    "conditioning_input_names": [
+      "fixed_source_latents",
+      "fixed_identity_text"
+    ],
+    "conditioning_forbidden_content": [
+      "query",
+      "answer",
+      "choices",
+      "canonical_teacher",
+      "target_index",
+      "sample_id"
+    ],
+    "initialization_teacher_assisted": false,
+    "conditioning_teacher_assisted": false,
+    "optimization_teacher_supervised": true,
+    "answer_independent_writer_usable": false,
+    "hypothesis": "This one fixed conditioning-text intervention may improve both raw256 absolute endpoint MSE and Reader CE versus the closed source-only/original-event arm, without establishing event-to-state learning or mathematical identity."
+  },
+  "initialization_binding": {
+    "artifact_schema": "vision_memory.r11-new-source-only-initialization.v1",
+    "artifact_filename": "source_only_initialization.pt",
+    "source_latents_fp32_sha256": "719e92867b60546b21b281cfc633ab782c8ce2274bfb41c6b3cee6d673e74eaa",
+    "nominal_effective_sigma_schedule": [
+      0.5,
+      0.375,
+      0.25,
+      0.125
+    ],
+    "actual_sigma_must_come_from_scheduler_setup": true,
+    "reconstruction_operator_order": "source_compute.mul(1-actual_sigma).add(x_T_init_fp32.to(compute_dtype), alpha=actual_sigma), exactly matching the sampler",
+    "artifact_required_before_first_forward": true,
+    "artifact_must_store": [
+      "source_latents_fp32",
+      "x_T_init_fp32",
+      "reconstructed_start_state_compute"
+    ],
+    "teacher_tensor_forbidden_in_initialization_artifact": true,
+    "metadata_must_store": [
+      "formula",
+      "reconstruction_operator_order",
+      "nominal_effective_sigmas",
+      "actual_effective_sigmas",
+      "actual_effective_sigma0",
+      "parameter_dtype",
+      "compute_dtype",
+      "compute_device_type",
+      "shape",
+      "initial_x_t_equals_source",
+      "initialization_teacher_assisted",
+      "tensor_sha256"
+    ],
+    "independent_recomputation_required": true,
+    "initial_x_t_equals_source": true,
+    "trajectory_point0_must_match_artifact": true,
+    "trajectory_point0_binding_valid_every_checkpoint": true,
+    "compute_device_type": "cuda",
+    "compute_dtype": "torch.bfloat16",
+    "no_cpu_fallback_for_cuda_recomputation": true,
+    "no_teacher_neighborhood_threshold": true
+  },
+  "unchanged_contract": {
+    "train_sha256": "24327edc39e0d133df5150dc1aab4f55c6cf5b05ccfca9025ad90c5accc6d184",
+    "dev_sha256": "8b167df38022a631d4e631d3c0d66e9fca74171f4224fec436030d6650047303",
+    "training_objective": "mean elementwise FP32 MSE between frozen-DreamLite endpoint z_t and fixed canonical R11 latent",
+    "source_state": "RGB 127/255 encoded by frozen DreamLite VAE posterior mean",
+    "only_trainable": "x_T_fp32",
+    "dreamlite_path": "complete frozen source-anchored DreamLite-mobile edit path",
+    "diffusion_steps": 4,
+    "effective_sigma_schedule": [
+      0.5,
+      0.375,
+      0.25,
+      0.125
+    ],
+    "optimizer": "Adam",
+    "base_learning_rate": 0.05,
+    "learning_rate_schedule": "lr=0.05 for updates 1..128; lr=0.025*(1+cos(pi*(u-128)/128)) for updates 129..256",
+    "weight_decay": 0,
+    "optimizer_steps": 256,
+    "gradient_clipping": null,
+    "checkpoint_steps": [
+      0,
+      64,
+      128,
+      192,
+      256
+    ],
+    "primary_endpoint": "raw_step_256",
+    "m0_definition": "the unoptimized endpoint after the complete four-step DreamLite path using the fixed identity conditioning and the unchanged source-only x_T initialization; new M0, never old-arm M0",
+    "best_checkpoint_selection_forbidden": true,
+    "global_determinism_seed": 0,
+    "strict_determinism": true,
+    "dreamlite_device": "cuda:0",
+    "reader_device": "cuda:1"
+  },
+  "preflight_gate": {
+    "optimizer_steps": 0,
+    "full_forward_calls": 1,
+    "backward_calls": 1,
+    "require_exact_teacher_file_and_tensor_hashes": true,
+    "require_exact_source_and_initialization_artifact_recomputation": true,
+    "require_only_x_T_fp32_trainable": true,
+    "require_four_dreamlite_steps": true,
+    "require_finite_nonzero_x_T_gradient": true,
+    "require_all_model_parameters_frozen_and_without_gradients": true,
+    "teacher_replay": {
+      "fixed_reverse_cyclic_permutations": 4,
+      "all_four_correct": true,
+      "mean_ce_lte": 0.001
+    },
+    "bridge_result_evaluated": false,
+    "require_initial_x_t_equals_source": true,
+    "require_native_mul_add_trajectory_point0_binding": true,
+    "require_initializer_excludes_teacher_query_answer_choices": true,
+    "require_identity_condition_probe_artifacts_valid": true,
+    "require_reencoded_condition_matches_locked_probe_before_first_forward": true
+  },
+  "formal_technical_gate": {
+    "optimizer_receipts_exact": 256,
+    "optimizer_steps_contiguous": true,
+    "optimizer_lr_schedule_exact_per_receipt": true,
+    "trajectory_point0_binding_valid_every_checkpoint": true,
+    "four_dreamlite_steps_every_receipt": true,
+    "finite_nonzero_x_T_gradient_every_receipt": true,
+    "only_x_T_fp32_trainable": true,
+    "model_snapshots_unchanged": true,
+    "no_gradient_clipping": true,
+    "exact_checkpoint_hash_triplets": [
+      0,
+      64,
+      128,
+      192,
+      256
+    ],
+    "source_only_initialization_artifact_valid": true,
+    "identity_condition_probe_binding_valid": true,
+    "original_event_and_actual_condition_metadata_separate": true
+  },
+  "primary_bridge_gate": {
+    "endpoint": "raw_step_256_only",
+    "technical_gate": true,
+    "teacher_replay_gate": true,
+    "mse_ratio_to_m0_lte": 0.01,
+    "l2_distance_ratio_to_m0_lte": 0.1,
+    "teacher_normalized_rmse_lte": 0.1,
+    "endpoint_reverse_cyclic_accuracy_eq": 1
+  },
+  "decision_table": {
+    "distance_pass_reader_pass": "Only fixed-identity teacher-MSE bridge diagnostic passes; separately preregister restoring original event and a uniform original-QA solver without per-sample canonical teacher, then revalidate all fixed eight targets.",
+    "distance_pass_reader_fail": "Distance alone did not secure Reader transfer; separately preregister teacher-neighborhood Reader robustness.",
+    "distance_fail_reader_pass": "Readable endpoint exists for this fixed identity condition but the distance contract failed; separately preregister original-QA validation, no Phase2 permission.",
+    "distance_fail_reader_fail_secondary_condition_improves": "Fixed conditioning intervention helped both metrics but remains insufficient; inspect actual trajectory, then separately preregister one discriminating diagnostic.",
+    "distance_fail_reader_fail_secondary_condition_not_improve": "This fixed intervention did not improve both metrics; inspect actual trajectory, then separately preregister one discriminating diagnostic. No claim that all conditioning is ineffective or outputs are unreachable."
+  },
+  "interpretation_boundaries": {
+    "diagnostic_only": true,
+    "initialization_teacher_assisted": false,
+    "conditioning_teacher_assisted": false,
+    "optimization_teacher_supervised": true,
+    "answer_independent_writer_usable": false,
+    "formal_success_always_false": true,
+    "phase2_remains_blocked": true,
+    "no_shared_writer_claim": true,
+    "no_event_to_state_learning_claim": true,
+    "no_id_ood_claim": true,
+    "no_reachability_theorem_from_one_failure": true,
+    "no_dominant_bottleneck_claim_from_one_success": true,
+    "no_identity_mapping_claim_from_no_changes_prompt": true,
+    "source_only_parent_is_sole_comparator": true,
+    "teacher_reference_descriptive_only": true,
+    "replaced_parent_parity_only": "actual condition embeddings/mask, and the resulting newly measured complete-path M0; original event/source/data/model/teacher/source-only initialization contracts unchanged",
+    "no_best_checkpoint_rescue": true,
+    "no_post_result_threshold_prompt_or_initialization_change": true,
+    "no_patchwork_phase1a_8of8": true
+  },
+  "deployment": {
+    "instance": "vlm-r11-identity-h200x4-20260907",
+    "workspace": "分布式训练空间",
+    "compute_group": "开发区-H200-3号机房-2-cuda12.8版本",
+    "quota": "4,80,900",
+    "image": "ngc-pytorch:25.02-cuda12.8.0-py3",
+    "shared_memory_gib": 128,
+    "priority": 4,
+    "auto_stop_after_minutes": 360,
+    "physical_resource": "4x NVIDIA H200, 80 CPU, 900 GiB",
+    "runtime_cuda_visible_devices": "0,1",
+    "runtime_visible_gpu_count": 2,
+    "resource_migration_is_operational_not_scientific_factor": true,
+    "unused_physical_gpus_must_not_enter_this_single_target_run": true,
+    "output_storage": "/inspire/ssd/",
+    "fresh_output_root_required": true,
+    "clean_detached_git_checkout_required": true,
+    "suite_lock_required": true,
+    "technical_preflight_before_formal": true,
+    "implementation_commit_must_be_pushed_before_remote_checkout": true,
+    "independent_post_run_aggregation_required": true
+  },
+  "teacher_matched_reference": {
+    "role": "descriptive_only_not_the_secondary_comparator",
+    "training_git_commit": "5bffcb9a1605c7cdef77df1126daca6f9578bdda",
+    "delivery_git_commit": "8b904d82d17ff36fb44c80e08696ed767445f38e",
+    "source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-teacher-init-5bffcb9-20260906-round01",
+    "comparison_sha256": "f66650cd6f66cbdf54c0694e8c55aa18c6ad3497ad487f8f7cb620f107d1d8ed",
+    "raw_artifacts_sha256": "2af2d9a0b6124e450a7b3658352bd1c6e58d7cede2ddcec384064e1dae9d909a",
+    "config_sha256": "3168134145c8e715c9d134d00f25e2152c589d75730474c323dee1be2d13cf2f",
+    "technical_gate": true,
+    "teacher_replay_gate": true,
+    "bridge_distance_gate": false,
+    "endpoint_reader_transfer_gate": false,
+    "endpoint_mse": 0.06570044904947281,
+    "endpoint_reader_mean_ce": 10.97591445709591,
+    "formal_success": false,
+    "phase2_allowed": false
+  },
+  "condition_probe_binding": {
+    "protocol": "R11-New-Identity-Condition-Technical-Probe-Target01",
+    "config_file_sha256": "5f1db61ac1e7db179dd3cb39c463c891b3b7aba056fafbe9d6618066f4eab73e",
+    "training_git_commit": "55c355f769c21ceb9b86e5090cdafa4090751d21",
+    "delivery_git_commit": "66d20121ad2277429b8f61ce7666a636c345b70e",
+    "source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-identity-probe-55c355f-20260907-round01/probe",
+    "manifest_sha256": "6dc0652d6d1750c51341a55849757bcc3fa86b201a451eb020803e0912e0aaa2",
+    "result_sha256": "e414b9ed035f102a9ef7838da6948071e9e735ee6bdb39b2965c164c3ec02ecf",
+    "terminal_sha256": "6bd19ec3398edf5f869b018575a9a3da33b238abd0dc58b321af706d3e942b55",
+    "inventory_sha256": "85ad0e79b98626ccb63ef760b09b9ee02d20720500ece5df79cd8ad54b37e087",
+    "raw_archive_sha256": "fb77f5bac2d3c96816b5451254ea5fdb9288c7792f3b69f37f9af1b44f68206f",
+    "source_artifact": {
+      "path": "source.pt",
+      "sha256": "2748d0db1fef2efba90bfc8b0ed52c0bf71c7407733ce1b0b800020128efbb16",
+      "bytes": 6555236
+    },
+    "condition_artifact": {
+      "path": "condition.pt",
+      "sha256": "e36ffb8d19d6b366929cdbed399901950ce985c117c36c34c3e27f59fda7627e",
+      "bytes": 1205174
+    },
+    "repeat_artifact": {
+      "path": "condition-repeat.pt",
+      "sha256": "41324904494b5ce540d0ed02246a2de9494baee228b1c6938d81ac9033804f59",
+      "bytes": 1205216
+    },
+    "prompt_embeds": {
+      "sha256": "dbb23b166711849739432ba815002e889253da78e099e59c7adbd351a8fb9f4d",
+      "shape": [
+        1,
+        293,
+        2048
+      ],
+      "dtype": "torch.bfloat16"
+    },
+    "attention_mask": {
+      "sha256": "c3325ac723d7cc08cba37d46e1710b5067019e47236ef55c41c66cba27c519f1",
+      "shape": [
+        1,
+        293
+      ],
+      "dtype": "torch.int64"
+    },
+    "original_event_text_sha256": "f170a7e2dfe0070fbd160c09d29dbcf897ddbf5f75929a3ee4af84cf627965bb",
+    "full_target_canonical_sha256": "88519df63d542fc50b16d076913dc9a1698d7184e4633a85fb9b5dffb6b2bbfb",
+    "engineering_gate": true,
+    "condition_encoder_calls": 2,
+    "full_dreamlite_forward_calls": 0,
+    "reader_forward_calls": 0,
+    "backward_calls": 0,
+    "optimizer_steps": 0,
+    "first_pair_only_no_restart_selection": true,
+    "reencode_twice_each_full_run_before_first_full_forward": true,
+    "repeat_tensors_bitwise_equal_required": true,
+    "probe_tensors_exact_match_required": true,
+    "source_probe_teacher_reader_not_loaded": true,
+    "original_event_and_actual_condition_metadata_separate": true
+  },
+  "secondary_conditioning_hypothesis_audit": {
+    "scientific_success_gate": false,
+    "eligibility": "technical gate and teacher replay pass while both primary distance and Reader gates fail",
+    "absolute_endpoint_mse_improves_parent": "raw step256 MSE < 0.11177215725183487",
+    "endpoint_reader_ce_improves_parent": "raw step256 mean CE < 25.765637596946004",
+    "interpretation": "Strict improvement in both metrics against the source-only/original-event comparator is a non-rescuing single-target conditioning diagnostic; not event-to-state learning, formal success, or significance."
+  }
+}

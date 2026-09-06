@@ -1,0 +1,410 @@
+{
+  "answer_independent_writer_usable": false,
+  "bridge_diagnostic_only": true,
+  "condition_artifact": {
+    "bytes": 1205450,
+    "event_text_sha256": "f170a7e2dfe0070fbd160c09d29dbcf897ddbf5f75929a3ee4af84cf627965bb",
+    "metadata": {
+      "actual_conditioning_text": "no changes",
+      "actual_conditioning_text_sha256": "44f9161c3a252925f55022d60f68918abf8fdc1a9a3fadbf5ab766549f6b3461",
+      "conditioner_input_names": [
+        "fixed_source_latents",
+        "fixed_identity_text"
+      ],
+      "full_prompt": "[Edit]: A diptych with two side-by-side images of the same scene. Compared to the right side, the left one has no changes",
+      "full_prompt_sha256": "4620b977a7aff51c9ee9a6e2901555b39ee4a3e4bd705d1402818acf330d22e6",
+      "mode": "edit",
+      "original_event_is_provenance_only": true,
+      "original_event_text": "R3 Train Standard Templates 03: For the indigo desk train 001123, remember that the preferred music is ambient.",
+      "original_event_text_sha256": "f170a7e2dfe0070fbd160c09d29dbcf897ddbf5f75929a3ee4af84cf627965bb",
+      "probe_manifest_sha256": "6dc0652d6d1750c51341a55849757bcc3fa86b201a451eb020803e0912e0aaa2",
+      "source_latents_fp32_sha256": "719e92867b60546b21b281cfc633ab782c8ce2274bfb41c6b3cee6d673e74eaa"
+    },
+    "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-identity-condition-5b84951-20260907-round01/formal/run/condition/official_full_condition.pt",
+    "recompute_matches": true,
+    "repeat": {
+      "bytes": 1205462,
+      "event_text_sha256": "f170a7e2dfe0070fbd160c09d29dbcf897ddbf5f75929a3ee4af84cf627965bb",
+      "metadata": {
+        "actual_conditioning_text": "no changes",
+        "actual_conditioning_text_sha256": "44f9161c3a252925f55022d60f68918abf8fdc1a9a3fadbf5ab766549f6b3461",
+        "conditioner_input_names": [
+          "fixed_source_latents",
+          "fixed_identity_text"
+        ],
+        "full_prompt": "[Edit]: A diptych with two side-by-side images of the same scene. Compared to the right side, the left one has no changes",
+        "full_prompt_sha256": "4620b977a7aff51c9ee9a6e2901555b39ee4a3e4bd705d1402818acf330d22e6",
+        "mode": "edit",
+        "original_event_is_provenance_only": true,
+        "original_event_text": "R3 Train Standard Templates 03: For the indigo desk train 001123, remember that the preferred music is ambient.",
+        "original_event_text_sha256": "f170a7e2dfe0070fbd160c09d29dbcf897ddbf5f75929a3ee4af84cf627965bb",
+        "probe_manifest_sha256": "6dc0652d6d1750c51341a55849757bcc3fa86b201a451eb020803e0912e0aaa2",
+        "source_latents_fp32_sha256": "719e92867b60546b21b281cfc633ab782c8ce2274bfb41c6b3cee6d673e74eaa"
+      },
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-identity-condition-5b84951-20260907-round01/formal/run/condition/identity_condition_repeat.pt",
+      "sha256": "0f49afc89912e7a58816b4d7a614b9f4306980930d0129fe45504351c5107c2f",
+      "tensor_sha256": {
+        "attention_mask": "c3325ac723d7cc08cba37d46e1710b5067019e47236ef55c41c66cba27c519f1",
+        "prompt_embeds": "dbb23b166711849739432ba815002e889253da78e099e59c7adbd351a8fb9f4d"
+      }
+    },
+    "sha256": "57ee56d8c3d6b3169b1b54846ef24faa501632be223e49e78dcf7a14ab125c20",
+    "tensor_sha256": {
+      "attention_mask": "c3325ac723d7cc08cba37d46e1710b5067019e47236ef55c41c66cba27c519f1",
+      "prompt_embeds": "dbb23b166711849739432ba815002e889253da78e099e59c7adbd351a8fb9f4d"
+    }
+  },
+  "dev_sha256": "8b167df38022a631d4e631d3c0d66e9fca74171f4224fec436030d6650047303",
+  "fixed_contract": {
+    "best_checkpoint_selection_forbidden": true,
+    "checkpoint_steps": [
+      0,
+      64,
+      128,
+      192,
+      256
+    ],
+    "dreamlite_device": "cuda:0",
+    "dreamlite_path": "complete frozen source-anchored four-step path",
+    "effective_sigmas": [
+      0.5,
+      0.375,
+      0.25,
+      0.125
+    ],
+    "gradient_clipping": null,
+    "learning_rate": 0.05,
+    "learning_rate_schedule": {
+      "formula": "0.05 for u<=128; 0.025*(1+cos(pi*(u-128)/128)) otherwise",
+      "intervention_first_update": 129,
+      "name": "constant_then_post128_cosine_to_zero"
+    },
+    "m0_definition": "the unoptimized endpoint after the complete four-step DreamLite path using the fixed identity conditioning and the unchanged source-only x_T initialization; new M0, never old-arm M0",
+    "only_trainable": "x_T_fp32",
+    "optimizer": "Adam",
+    "optimizer_steps": 256,
+    "primary_endpoint": "raw_step_256",
+    "reader_device": "cuda:1",
+    "reader_gradient_calls_during_optimization": 0,
+    "weight_decay": 0.0
+  },
+  "formal_success_gate": false,
+  "git_commit": "5b8495128cc408c713e0d5c5d7e4486c12c518a9",
+  "git_dirty": false,
+  "identity_condition_probe_binding": {
+    "inventory_sha256": "85ad0e79b98626ccb63ef760b09b9ee02d20720500ece5df79cd8ad54b37e087",
+    "manifest_sha256": "6dc0652d6d1750c51341a55849757bcc3fa86b201a451eb020803e0912e0aaa2",
+    "passed": true,
+    "probe_commit": "55c355f769c21ceb9b86e5090cdafa4090751d21",
+    "result_sha256": "e414b9ed035f102a9ef7838da6948071e9e735ee6bdb39b2965c164c3ec02ecf",
+    "schema": "vision_memory.r11-new-identity-bridge-probe-binding.v1",
+    "source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-identity-probe-55c355f-20260907-round01/probe",
+    "tensor_sha256": {
+      "attention_mask": "c3325ac723d7cc08cba37d46e1710b5067019e47236ef55c41c66cba27c519f1",
+      "prompt_embeds": "dbb23b166711849739432ba815002e889253da78e099e59c7adbd351a8fb9f4d"
+    },
+    "terminal_sha256": "6bd19ec3398edf5f869b018575a9a3da33b238abd0dc58b321af706d3e942b55"
+  },
+  "implementation_revision": "canonical-r11-latent-mse-identity-condition-source-init-target01-v1",
+  "information_boundary": {
+    "answer_independent_writer_usable": false,
+    "canonical_teacher_used_by_initialization_and_dense_loss": false,
+    "canonical_teacher_used_only_by_dense_loss": true,
+    "choices_used_only_by_frozen_reader_loss": true,
+    "conditioner_input_names": [
+      "fixed_source_latents",
+      "fixed_identity_text"
+    ],
+    "conditioning_teacher_assisted": false,
+    "dreamlite_inputs": [
+      "source_latent",
+      "event_text",
+      "x_T"
+    ],
+    "event_source_episode_id_sha256": "2ab8b6c9301be74713d60e5aadf90fd4d15ee7d2a4212b6782753a6f106fdce6",
+    "event_source_turn_id": 2,
+    "event_to_state_learning_evaluated": false,
+    "fixed_identity_text_used_as_condition": true,
+    "forbidden_writer_key_violations": [],
+    "formal_success": false,
+    "initialization_teacher_assisted": false,
+    "leaked_fields": [],
+    "noise_key": [
+      "global_seed",
+      "source_episode_id",
+      "source_turn_id"
+    ],
+    "optimization_teacher_supervised": true,
+    "oracle_initialization_key_names": [
+      "source_latents"
+    ],
+    "original_event_retained_for_provenance_only": true,
+    "original_event_used_as_condition": false,
+    "passed": true,
+    "phase2_allowed": false,
+    "query_used_only_by_frozen_reader_loss": true,
+    "reader_gradient_calls_during_optimization": 0,
+    "reader_loss_inputs": [
+      "decoded_endpoint",
+      "query_text",
+      "answer_choices",
+      "target_index"
+    ],
+    "reader_used_only_for_fixed_audit": true,
+    "sampler_input_names": [
+      "source_latents",
+      "identity_prompt_embeds",
+      "identity_prompt_attention_mask",
+      "x_T_fp32",
+      "fixed_scheduler"
+    ],
+    "schema": "vision_memory.r11-new-phase1a-information-boundary.v1",
+    "target_index_used_only_by_frozen_reader_loss": true,
+    "teacher_assisted_initialization": false
+  },
+  "initial_x_T_fp32": {
+    "distribution": "source-only deterministic initialization",
+    "dtype": "torch.float32",
+    "sha256": "719e92867b60546b21b281cfc633ab782c8ce2274bfb41c6b3cee6d673e74eaa",
+    "shape": [
+      1,
+      4,
+      128,
+      128
+    ]
+  },
+  "initialization_binding": {
+    "actual_effective_sigma0": 0.4999999701976776,
+    "actual_effective_sigmas": [
+      0.4999999701976776,
+      0.375,
+      0.25,
+      0.1249999925494194
+    ],
+    "artifact_bytes": 658350,
+    "artifact_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-identity-condition-5b84951-20260907-round01/formal/run/initialization/source_only_initialization.pt",
+    "artifact_sha256": "a2ebd6f488a4c7a97af66337e0766239685c06743b3c71ae96d4f9be78e68f57",
+    "compute_device_type": "cuda",
+    "compute_dtype": "torch.bfloat16",
+    "formula": "x_T_init_fp32=source_latents_fp32.clone()",
+    "initial_x_t_equals_source": true,
+    "initialization_teacher_assisted": false,
+    "nominal_effective_sigmas": [
+      0.5,
+      0.375,
+      0.25,
+      0.125
+    ],
+    "parameter_dtype": "torch.float32",
+    "passed": true,
+    "reconstruction_operator_order": "source_compute.mul(1-actual_sigma).add(x_T_init_fp32.to(compute_dtype), alpha=actual_sigma)",
+    "schema": "vision_memory.r11-new-source-only-initialization.v1",
+    "shape": [
+      1,
+      4,
+      128,
+      128
+    ],
+    "tensor_sha256": {
+      "reconstructed_start_state_compute": "6ad0d37ee42a280efb0ca331d2002793ccd4f088e81ef182fa3201d8fe973d79",
+      "source_latents_fp32": "719e92867b60546b21b281cfc633ab782c8ce2274bfb41c6b3cee6d673e74eaa",
+      "x_T_init_fp32": "719e92867b60546b21b281cfc633ab782c8ce2274bfb41c6b3cee6d673e74eaa"
+    }
+  },
+  "initialization_teacher_assisted": false,
+  "mode": "formal",
+  "model_snapshot_payloads_start": {
+    "dreamlite_mobile": {
+      "file_count": 27,
+      "manifest_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-mobile/.snapshot_manifest.json",
+      "manifest_sha256": "1bcf41b170c4b4a806bac6701cbdf4fabd5c3c53fa67415d065ab95ce2703159",
+      "model_dir": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-mobile",
+      "passed": true,
+      "repo_id": "carlofkl/DreamLite-mobile",
+      "revision": "6695c3f4be230f0493fa5dbf78be3bc4d3bb2ab4",
+      "snapshot_payload_sha256": "3fb839f465793b01ecafc4df433031a063dd7b395a050960cde57c2807031337",
+      "total_bytes": 5071894300
+    },
+    "qwen_reader": {
+      "file_count": 14,
+      "manifest_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct/.snapshot_manifest.json",
+      "manifest_sha256": "159a504daaae6dc412535978f087150a0eb8e50164afd70a8a17f83906f1127c",
+      "model_dir": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+      "passed": true,
+      "repo_id": "Qwen/Qwen3-VL-4B-Instruct",
+      "revision": "ebb281ec70b05090aa6165b016eac8ec08e71b17",
+      "snapshot_payload_sha256": "45be3ffb00017b02bffa79f4f8e6f301760ac50c0bb78b2c4e5a7fe8aa3d52c6",
+      "total_bytes": 8887292732
+    }
+  },
+  "optimization_teacher_supervised": true,
+  "parent_phase1a": {
+    "comparison_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-phase1a-2cde77e-20260905-round02/phase1a-aggregation-v1/comparison.json",
+    "comparison_sha256": "f3764a83ee8bc31cc7895fd33d494d4ea3be0c187c8cc9b0f6a85a4cf257843d",
+    "raw_artifacts_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-phase1a-2cde77e-20260905-round02/phase1a-aggregation-v1/RAW_ARTIFACTS.json",
+    "raw_artifacts_sha256": "c1e36f92766c98f245917a9009dc9061a07729842dbef6c7b97ad18889edfbba",
+    "step0_checkpoint_sha256": "ee5e2f73edb47e33714fc211f6cb58065e66d21bdeb3cc4bc0ef9ff6cc46f464",
+    "target_inventory_sha256": "fe1feb338528545d93e1adc5387805c3cb686c15b3dbeb8591fad999c3663a57",
+    "target_manifest_sha256": "cd5b740f1f60b32bfb3b8ccf8ba2cfe84bb4ea9c650649810c07d9d9b3972184",
+    "target_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-phase1a-2cde77e-20260905-round02/target-01-retry01",
+    "target_terminal_sha256": "36098620d06dcd8a6b7c670b287057fd0515fcb5ad5d399cf968e8196dc8b473"
+  },
+  "parity_checks": {
+    "expected": {
+      "blank_source_rgb_sha256": "a3b784da71eaa113fb4d9d71502a7a3526ba0d41e2d42ed96fe79111ca3dba65",
+      "condition_attention_mask_sha256": "c3325ac723d7cc08cba37d46e1710b5067019e47236ef55c41c66cba27c519f1",
+      "condition_prompt_embeds_sha256": "dbb23b166711849739432ba815002e889253da78e099e59c7adbd351a8fb9f4d",
+      "event_text_sha256": "f170a7e2dfe0070fbd160c09d29dbcf897ddbf5f75929a3ee4af84cf627965bb",
+      "source_latents_fp32_sha256": "719e92867b60546b21b281cfc633ab782c8ce2274bfb41c6b3cee6d673e74eaa",
+      "target_index": 1,
+      "target_segment_id": "r5-f1-392d41fd097d069c42218e0a"
+    },
+    "observed": {
+      "blank_source_rgb_sha256": "a3b784da71eaa113fb4d9d71502a7a3526ba0d41e2d42ed96fe79111ca3dba65",
+      "condition_attention_mask_sha256": "c3325ac723d7cc08cba37d46e1710b5067019e47236ef55c41c66cba27c519f1",
+      "condition_prompt_embeds_sha256": "dbb23b166711849739432ba815002e889253da78e099e59c7adbd351a8fb9f4d",
+      "event_text_sha256": "f170a7e2dfe0070fbd160c09d29dbcf897ddbf5f75929a3ee4af84cf627965bb",
+      "initial_x_T_fp32_sha256": "719e92867b60546b21b281cfc633ab782c8ce2274bfb41c6b3cee6d673e74eaa",
+      "initial_z_t_fp32_sha256": "8d0f7ea6f4266ed6a32179262f79c7c32d6d95d86b0880e24cee884d9b8c95ea",
+      "source_latents_fp32_sha256": "719e92867b60546b21b281cfc633ab782c8ce2274bfb41c6b3cee6d673e74eaa",
+      "target_index": 1,
+      "target_segment_id": "r5-f1-392d41fd097d069c42218e0a"
+    },
+    "passed": true,
+    "source_only_initialization_artifact_valid": true
+  },
+  "phase2_allowed": false,
+  "preregistered_config_canonical_sha256": "9ecd610e7c001d001af38cd04d4950f8470d3d8cfef7a6315cbd8ef40fd76f17",
+  "preregistered_config_file_sha256": "e4d375f10796d70f64ed91e201aebdbaa6a3939d5c7e37fd90f7034525fa60c8",
+  "preregistered_config_path": "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory-identity-condition-5b84951-20260907/configs/experiments/r11_new_identity_conditioning_bridge_target01.json",
+  "protocol": "R11-New-Identity-Conditioning-Bridge-Source-Init-Target01",
+  "schema": "vision_memory.r11-new-canonical-latent-bridge-manifest.v1",
+  "selected_segment_ids": [
+    "r5-f1-8015bf53a4067aaa7e882288",
+    "r5-f1-392d41fd097d069c42218e0a",
+    "r5-f1-1aee01c0f3e7684c05c9122c",
+    "r5-f1-807090710dd4c077a97348ba",
+    "r5-f1-02c8aa9dc3523351c4d5f9c7",
+    "r5-f1-11dddf29efebc033a995ab92",
+    "r5-f1-de4899e05b0aa7f3d8373171",
+    "r5-f1-850189e424efde62468b2ef9"
+  ],
+  "selected_segments_sha256": "6198beb3a3758fd7df912c6956bc05eac0ace8603708f37147826c65a4d61845",
+  "single_changed_factor": {
+    "actual_conditioning_text_sha256": "44f9161c3a252925f55022d60f68918abf8fdc1a9a3fadbf5ab766549f6b3461",
+    "answer_independent_writer_usable": false,
+    "conditioning_teacher_assisted": false,
+    "factor": "actual_conditioning_text",
+    "from": "R3 Train Standard Templates 03: For the indigo desk train 001123, remember that the preferred music is ambient.",
+    "full_prompt_sha256": "4620b977a7aff51c9ee9a6e2901555b39ee4a3e4bd705d1402818acf330d22e6",
+    "initialization_teacher_assisted": false,
+    "optimization_teacher_supervised": true,
+    "to": "no changes"
+  },
+  "source_latents": {
+    "device": "cuda:0",
+    "dtype": "torch.bfloat16",
+    "sha256": "719e92867b60546b21b281cfc633ab782c8ce2274bfb41c6b3cee6d673e74eaa",
+    "shape": [
+      1,
+      4,
+      128,
+      128
+    ]
+  },
+  "source_rgb": {
+    "dtype": "torch.bfloat16",
+    "sha256": "a3b784da71eaa113fb4d9d71502a7a3526ba0d41e2d42ed96fe79111ca3dba65",
+    "shape": [
+      1,
+      3,
+      1024,
+      1024
+    ],
+    "value": "127/255"
+  },
+  "strict_determinism": {
+    "cuda_matmul_allow_tf32": false,
+    "cudnn_allow_tf32": false,
+    "cudnn_benchmark": false,
+    "cudnn_deterministic": true,
+    "deterministic_algorithms": true,
+    "deterministic_warn_only": false,
+    "environment": {
+      "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+      "MKL_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "PYTHONHASHSEED": "0",
+      "TOKENIZERS_PARALLELISM": "false"
+    },
+    "float32_matmul_precision": "highest",
+    "sdpa": {
+      "cudnn": false,
+      "flash": false,
+      "math": true,
+      "memory_efficient": false
+    },
+    "seed": 0
+  },
+  "target_index": 1,
+  "target_segment": {
+    "cross_slot_interference": false,
+    "events": [
+      {
+        "entity_id": "r3-train-semantic-001123-entity",
+        "event_kind": "set",
+        "event_text": "R3 Train Standard Templates 03: For the indigo desk train 001123, remember that the preferred music is ambient.",
+        "source_episode_id": "r3-train-semantic-001123-s0-clean",
+        "source_turn_index": 2
+      }
+    ],
+    "family": "F1",
+    "query": {
+      "choices": [
+        "no active preference",
+        "ambient",
+        "blues",
+        "jazz"
+      ],
+      "comparison_id": "r3-train-semantic-001123:s0:delayed",
+      "target_index": 1,
+      "target_token_count": 1,
+      "text": "R3 Train Standard Templates 03: At this later check, what is the current music preference for the indigo desk train 001123? Choose exactly one option."
+    },
+    "query_entity_id": "r3-train-semantic-001123-entity",
+    "query_gap": 1,
+    "query_source_episode_id": "r3-train-semantic-001123-s0-clean",
+    "query_turn_index": 3,
+    "schema": "vision_memory.r5-compose-segments.v1",
+    "segment_id": "r5-f1-392d41fd097d069c42218e0a",
+    "stale_target_text": null,
+    "target_event_kind": "set",
+    "target_event_position": 0
+  },
+  "target_segment_id": "r5-f1-392d41fd097d069c42218e0a",
+  "teacher": {
+    "copied_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-identity-condition-5b84951-20260907-round01/formal/run/teacher/canonical_r11_target01.pt",
+    "copied_sha256": "d359291de63bb5232325b2e7a9294ff3d861287c06e63da2ab6ebe42eab036b9",
+    "decoded_image_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-identity-condition-5b84951-20260907-round01/formal/run/teacher/canonical_r11_target01.png",
+    "decoded_image_sha256": "d677f86e813ca1fcafe0251f3535dfe405b6cd84f104ae54b61e0a9850006092",
+    "dtype": "torch.float32",
+    "file_sha256": "d359291de63bb5232325b2e7a9294ff3d861287c06e63da2ab6ebe42eab036b9",
+    "finite": true,
+    "maximum": 1.7701853513717651,
+    "mean": -0.08217207342386246,
+    "minimum": -1.8861125707626343,
+    "population_std": 0.6546660661697388,
+    "rms": 0.6598029136657715,
+    "schema": "vision_memory.r11-vae-latent-endpoint.v1",
+    "shape": [
+      1,
+      4,
+      128,
+      128
+    ],
+    "source_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11/r11-vae-latent-f4a018f-20260831/target-01/run/endpoint_raw.pt",
+    "tensor_key": "latent_fp32",
+    "tensor_sha256": "6857afeffd37124bb196ab7c6607580c57c950d72d760ca6b49f8cc00bdef3f1"
+  },
+  "train_sha256": "24327edc39e0d133df5150dc1aab4f55c6cf5b05ccfca9025ad90c5accc6d184"
+}
