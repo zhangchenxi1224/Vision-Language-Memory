@@ -29,7 +29,12 @@ from vision_memory.training import r11_new_bridge as core  # noqa: E402
 
 
 TRAINER = ROOT / "scripts" / "train" / "r11_new_canonical_latent_bridge.py"
-CONFIG = ROOT / "configs" / "experiments" / "r11_new_canonical_latent_bridge_target01.json"
+CONFIG = (
+    ROOT
+    / "configs"
+    / "experiments"
+    / "r11_new_canonical_latent_bridge_target01_post128_cosine.json"
+)
 SUMMARY_FILE = "r11_new_bridge_summary.json"
 PREFLIGHT_FILE = "technical_preflight.json"
 METRICS_FILE = "metrics.jsonl"
@@ -42,7 +47,7 @@ LOCK_SCHEMA = "vision_memory.r11-new-canonical-latent-bridge-suite-lock.v1"
 EXPECTED_HOST_PREFIX = "vlm-r3-h200x2-live-20260717"
 INSPIRE_SSD_ROOT = Path("/inspire/ssd")
 MINIMUM_FREE_BYTES = 50 * 1024**3
-LOCK_PATH = Path("/tmp/vision-memory-r11-new-canonical-latent-bridge.lock")
+LOCK_PATH = Path("/tmp/vision-memory-r11-new-canonical-latent-bridge-post128-cosine.lock")
 _COMMIT_RE = re.compile(r"^[0-9a-f]{40}$")
 _HEX64_RE = re.compile(r"^[0-9a-f]{64}$")
 
@@ -569,6 +574,16 @@ def _validate_child(run: Path, *, mode: str, expected_commit: str) -> dict[str, 
                 for reader in (False, True)
             },
             "diagnostic_boolean": isinstance(summary.get("gates", {}).get("bridge_diagnostic_gate"), bool),
+            "schedule_audit_exact": summary.get("secondary_solver_hypothesis_decision")
+            == core.bridge_schedule_hypothesis_decision(
+                distance_pass=bool(
+                    summary.get("gates", {}).get("bridge_distance_gate")
+                ),
+                reader_transfer_pass=bool(
+                    summary.get("gates", {}).get("endpoint_reader_transfer_gate")
+                ),
+                audit=summary.get("secondary_solver_hypothesis_audit", {}),
+            ),
         }
         artifact_checks = _validate_hash_binding(summary, run)
     if not all(mode_checks.values()):

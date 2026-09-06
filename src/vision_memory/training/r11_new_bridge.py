@@ -1,4 +1,4 @@
-"""Pure contracts for the preregistered R11_new canonical-latent bridge diagnostic."""
+"""Pure contracts for the post-step-128 LR-schedule bridge diagnostic."""
 
 from __future__ import annotations
 
@@ -10,10 +10,10 @@ from typing import Any, Mapping, Sequence
 from vision_memory.data import REVERSE_CYCLIC4
 
 
-BRIDGE_PROTOCOL = "R11-New-Canonical-Latent-Bridge-Distance-Target01"
-BRIDGE_CONFIG_SCHEMA = "vision_memory.r11-new-canonical-latent-bridge-config.v1"
-BRIDGE_CONFIG_FILE_SHA256 = "ab00453511cb43265a3e3d2af6aa11c8d0aa2cf6e9ca5baf44c8695d4a8bcde0"
-BRIDGE_CONFIG_CANONICAL_SHA256 = "08996fd26b5661d4a2314c2340cedf5f4b3a57a89f2d8dacaaa8c1770d8dbd68"
+BRIDGE_PROTOCOL = "R11-New-Canonical-Latent-Bridge-Post128-Cosine-Target01"
+BRIDGE_CONFIG_SCHEMA = "vision_memory.r11-new-canonical-latent-bridge-lr-schedule-config.v1"
+BRIDGE_CONFIG_FILE_SHA256 = "c9794f5197f6c62f2f84af3cf0db9aee0ff225b4649004967f52d1424a247dc5"
+BRIDGE_CONFIG_CANONICAL_SHA256 = "5e6110d8bc02d3495f4ce621ed01dacd8fe9922b4b4a23cfd8c7f2dc7b51985d"
 BRIDGE_TARGET_INDEX = 1
 BRIDGE_TARGET_SEGMENT_ID = "r5-f1-392d41fd097d069c42218e0a"
 BRIDGE_TEACHER_FILE_SHA256 = "d359291de63bb5232325b2e7a9294ff3d861287c06e63da2ab6ebe42eab036b9"
@@ -29,6 +29,23 @@ BRIDGE_L2_RATIO_MAX = 0.1
 BRIDGE_TEACHER_NRMSE_MAX = 0.1
 BRIDGE_TEACHER_REPLAY_MEAN_CE_MAX = 0.001
 BRIDGE_PRIMARY_ENDPOINT = "raw_step_256"
+BRIDGE_BASE_LEARNING_RATE = 0.05
+BRIDGE_LR_INTERVENTION_FIRST_UPDATE = 129
+BRIDGE_LR_COSINE_DENOMINATOR = 128
+BRIDGE_PARENT_ENDPOINT_MSE_RATIO = 0.8105615501236992
+BRIDGE_PARENT_STEP128_PNG_SHA256 = "ccfff48bf0bc8cb2ff38cfeb8cbefb845a90ac80deeab3de26326f7b0faf7bd0"
+BRIDGE_PARENT_STEP128_OPTIMIZER_SHA256 = "b26457294d573890ba6d7ebf220eb0b4e7dec844338be48186893a6b17ad8004"
+BRIDGE_PARENT_STEP128_TENSOR_SHA256 = {
+    "x_T_fp32": "482724b2a7ac88624c054a543c8267ae0a318f67177206c1a7d9a2c3ac364ddb",
+    "z_t_fp32": "34125c8426d0eccf9eca70578c164673d263f592e05bbd2a8b4161be239a5f93",
+    "trajectory_fp32": [
+        "7e7a69ae62ab788b35cb7e0d984bd5ccb992f406074b84f3c02e0db3ef4c249d",
+        "5b366db05dccd59a605e1d07d4e74b51dd0dce4740f743602e8c5fa88c8dc08a",
+        "6c76df63f60f19a36d64d309877e9e3a5d49c51ee9608de65f911dd369b7f900",
+        "5a6a3ec5fdafca390c8571addca3dab1933dfe00667f313dcfff67193888f242",
+        "34125c8426d0eccf9eca70578c164673d263f592e05bbd2a8b4161be239a5f93",
+    ],
+}
 
 
 def canonical_json_sha256(value: Any) -> str:
@@ -48,7 +65,89 @@ def validate_bridge_config(config: Mapping[str, Any]) -> dict[str, Any]:
         raise ValueError("R11_new bridge target index drifted.")
     if config["target_selection"]["target_segment_id"] != BRIDGE_TARGET_SEGMENT_ID:
         raise ValueError("R11_new bridge target segment drifted.")
+    changed = config.get("single_changed_solver_factor", {})
+    if (
+        changed.get("factor") != "optimizer_learning_rate_schedule"
+        or changed.get("explicitly_not_changed")
+        != "DreamLite diffusion scheduler, sigma schedule, or denoising step count"
+        or changed.get("intervention_first_update") != BRIDGE_LR_INTERVENTION_FIRST_UPDATE
+    ):
+        raise ValueError("R11_new bridge LR-schedule intervention drifted.")
     return dict(config)
+
+
+def bridge_optimizer_learning_rate(update_index: int) -> float:
+    """Return the preregistered optimizer LR for one 1-indexed update."""
+
+    if isinstance(update_index, bool) or not isinstance(update_index, int):
+        raise TypeError("R11_new bridge update index must be an integer.")
+    if update_index < 1 or update_index > BRIDGE_OPTIMIZER_STEPS:
+        raise ValueError("R11_new bridge update index is outside 1..256.")
+    if update_index < BRIDGE_LR_INTERVENTION_FIRST_UPDATE:
+        return BRIDGE_BASE_LEARNING_RATE
+    progress = (update_index - 128) / BRIDGE_LR_COSINE_DENOMINATOR
+    return 0.5 * BRIDGE_BASE_LEARNING_RATE * (1.0 + math.cos(math.pi * progress))
+
+
+def bridge_schedule_hypothesis_audit(
+    *,
+    step128_mse_ratio: float,
+    endpoint_mse_ratio: float,
+    technical_gate: bool,
+    teacher_replay_gate: bool,
+    pre_intervention_parity: bool,
+    distance_pass: bool,
+    reader_transfer_pass: bool,
+) -> dict[str, bool]:
+    """Evaluate the secondary, non-rescuing LR-schedule hypothesis audit."""
+
+    values = (step128_mse_ratio, endpoint_mse_ratio)
+    if any(not math.isfinite(float(value)) or float(value) < 0.0 for value in values):
+        raise ValueError("R11_new bridge schedule audit received an invalid MSE ratio.")
+    eligible = bool(
+        technical_gate
+        and teacher_replay_gate
+        and pre_intervention_parity
+        and not distance_pass
+        and not reader_transfer_pass
+    )
+    non_rebound = endpoint_mse_ratio <= step128_mse_ratio
+    beats_parent = endpoint_mse_ratio < BRIDGE_PARENT_ENDPOINT_MSE_RATIO
+    return {
+        "eligible": eligible,
+        "post128_non_rebound": non_rebound,
+        "beats_parent_endpoint": beats_parent,
+        "passed": bool(eligible and non_rebound and beats_parent),
+    }
+
+
+def bridge_schedule_hypothesis_decision(
+    *,
+    distance_pass: bool,
+    reader_transfer_pass: bool,
+    audit: Mapping[str, Any],
+) -> str:
+    primary = bridge_decision(
+        distance_pass=distance_pass,
+        reader_transfer_pass=reader_transfer_pass,
+    )
+    if distance_pass or reader_transfer_pass:
+        return f"primary_branch_{primary}"
+    if audit.get("passed") is True:
+        return "distance_fail_reader_fail_secondary_schedule_pass"
+    return "distance_fail_reader_fail_secondary_schedule_fail"
+
+
+def bridge_pre_intervention_parity(record: Mapping[str, Any]) -> bool:
+    """Check the exact semantic state before the first changed update."""
+
+    return bool(
+        record.get("optimizer_step") == 128
+        and record.get("tensor_sha256") == BRIDGE_PARENT_STEP128_TENSOR_SHA256
+        and record.get("optimizer_state_sha256")
+        == BRIDGE_PARENT_STEP128_OPTIMIZER_SHA256
+        and record.get("png_sha256") == BRIDGE_PARENT_STEP128_PNG_SHA256
+    )
 
 
 def bridge_distance_statistics(
@@ -203,6 +302,8 @@ def bridge_technical_gate(audit: Mapping[str, Any]) -> bool:
         "frozen_gradients_absent",
         "snapshots_unchanged",
         "optimizer_contract_valid",
+        "optimizer_lr_schedule_exact",
+        "pre_intervention_step128_parity_valid",
         "gradient_clipping_absent",
         "checkpoint_hashes_valid",
         "condition_artifact_valid",

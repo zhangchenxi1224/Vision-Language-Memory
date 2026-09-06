@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import copy
 import json
 import math
 import sys
@@ -109,6 +110,52 @@ def test_train_step_is_dense_mse_only_and_updates_x_t() -> None:
     assert not torch.equal(before, oracle.x_T_fp32.detach())
     assert oracle.x_T_fp32.grad is None
     assert all(parameter.grad is None for parameter in reader.parameters())
+
+
+def test_train_step_executes_exact_schedule_through_zero_lr_update_256() -> None:
+    oracle = _ToyOracle()
+    reader = _reader()
+    optimizer = torch.optim.Adam((oracle.x_T_fp32,), lr=trainer.LEARNING_RATE)
+    metrics = [
+        trainer._train_step(
+            step_zero=step_zero,
+            oracle=oracle,
+            optimizer=optimizer,
+            teacher=torch.zeros(1),
+            m0_mse=4.0,
+            reader=reader,
+        )
+        for step_zero in range(256)
+    ]
+    assert metrics[127]["learning_rate"] == trainer.LEARNING_RATE
+    assert metrics[128]["learning_rate"] == trainer.core.bridge_optimizer_learning_rate(129)
+    assert metrics[191]["learning_rate"] == pytest.approx(0.025, rel=0.0, abs=1e-16)
+    assert metrics[255]["learning_rate"] == pytest.approx(0.0, rel=0.0, abs=1e-16)
+    assert metrics[255]["gradient_norm"] > 0.0
+    assert metrics[255]["x_T_update_norm"] == 0.0
+    assert float(optimizer.state[oracle.x_T_fp32]["step"].item()) == 256.0
+
+
+def test_optimizer_state_contract_binds_state_key_counter_and_group_param() -> None:
+    parameter_state = {
+        "step": torch.tensor(256.0),
+        "exp_avg": torch.zeros((1, 4, 128, 128), dtype=torch.float32),
+        "exp_avg_sq": torch.zeros((1, 4, 128, 128), dtype=torch.float32),
+    }
+    valid = {
+        "state": {0: parameter_state},
+        "param_groups": [{"lr": 0.0, "params": [0]}],
+    }
+    assert trainer._optimizer_state_matches_step(valid, expected_step=256)
+    wrong_counter = copy.deepcopy(valid)
+    wrong_counter["state"][0]["step"] = torch.tensor(255.0)
+    assert not trainer._optimizer_state_matches_step(wrong_counter, expected_step=256)
+    wrong_key = copy.deepcopy(valid)
+    wrong_key["state"] = {1: wrong_key["state"].pop(0)}
+    assert not trainer._optimizer_state_matches_step(wrong_key, expected_step=256)
+    wrong_group_param = copy.deepcopy(valid)
+    wrong_group_param["param_groups"][0]["params"] = [1]
+    assert not trainer._optimizer_state_matches_step(wrong_group_param, expected_step=256)
 
 
 def test_preflight_reuses_the_single_registered_forward(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -228,6 +275,81 @@ def test_formal_saves_teacher_rows_and_stops_before_step_zero_on_replay_failure(
     saved = (output_dir / "evaluation_rows.jsonl").read_text(encoding="utf-8").splitlines()
     assert len(saved) == 4
     assert not (output_dir / "metrics.jsonl").exists()
+
+
+def test_formal_blocks_before_update_129_when_step128_prefix_differs(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    oracle = _ToyOracle()
+    reader = _reader()
+    output_dir = tmp_path / "formal"
+    output_dir.mkdir()
+    (output_dir / "manifest.json").write_text("{}\n", encoding="utf-8")
+    initial_output = oracle()
+    monkeypatch.setattr(trainer, "OPTIMIZER_STEPS", 129)
+    monkeypatch.setattr(trainer, "CHECKPOINT_STEPS", (0, 128, 129))
+    monkeypatch.setattr(
+        trainer,
+        "decode_model_latents_unit_interval",
+        lambda *_args, **_kwargs: torch.zeros(1, 1, 1, 1),
+    )
+    monkeypatch.setattr(
+        trainer,
+        "_evaluation_rows",
+        lambda **_kwargs: [{"evidence": index} for index in range(4)],
+    )
+    monkeypatch.setattr(
+        trainer.core,
+        "reader_checkpoint_statistics",
+        lambda *_args, **_kwargs: {
+            "row_count": 4,
+            "all_four_correct": True,
+            "mean_ce": 0.0,
+        },
+    )
+    calls: list[int] = []
+
+    def fake_train_step(*, step_zero: int, **_kwargs: object) -> dict:
+        calls.append(step_zero + 1)
+        if step_zero + 1 >= 129:
+            pytest.fail("the changed LR update ran before prefix parity was accepted")
+        return {
+            "optimizer_step": step_zero + 1,
+            "mse": 1.0,
+            "mse_ratio_to_m0": 1.0,
+            "gradient_norm": 1.0,
+        }
+
+    def fake_save_checkpoint(*, step: int, **_kwargs: object) -> tuple[dict, SimpleNamespace]:
+        return (
+            {
+                "optimizer_step": step,
+                "tensor_sha256": {},
+                "optimizer_state_sha256": "0" * 64,
+                "png_sha256": "0" * 64,
+            },
+            initial_output,
+        )
+
+    monkeypatch.setattr(trainer, "_train_step", fake_train_step)
+    monkeypatch.setattr(trainer, "_save_checkpoint", fake_save_checkpoint)
+    with pytest.raises(RuntimeError, match="blocking before the first changed LR update 129"):
+        trainer._formal(
+            args=SimpleNamespace(output_dir=output_dir),
+            oracle=oracle,
+            reader=reader,
+            eval_reader=object(),
+            target=object(),
+            source_latents=torch.zeros(1),
+            teacher=torch.zeros(1),
+            teacher_image=torch.zeros(1),
+            initial_output=initial_output,
+            optimizer=torch.optim.Adam((oracle.x_T_fp32,), lr=trainer.LEARNING_RATE),
+            manifest={"condition_artifact": {"sha256": "condition"}},
+            snapshot_bindings={},
+        )
+    assert calls == list(range(1, 129))
 
 
 def test_formal_technical_failure_never_emits_scientific_decision(

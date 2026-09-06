@@ -22,14 +22,19 @@ sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "src"))
 
 from scripts.inspire import run_r11_new_canonical_latent_bridge as controller  # noqa: E402
-from vision_memory.repro import canonical_tensor_sha256  # noqa: E402
+from vision_memory.repro import canonical_object_sha256, canonical_tensor_sha256  # noqa: E402
 from vision_memory.training import r11_new_bridge as core  # noqa: E402
 from vision_memory.training.r11_new_oracle import (  # noqa: E402
     phase1a_effective_sigmas_match,
 )
 
 
-CONFIG = ROOT / "configs" / "experiments" / "r11_new_canonical_latent_bridge_target01.json"
+CONFIG = (
+    ROOT
+    / "configs"
+    / "experiments"
+    / "r11_new_canonical_latent_bridge_target01_post128_cosine.json"
+)
 COMPARISON_SCHEMA = "vision_memory.r11-new-canonical-latent-bridge-comparison.v1"
 RAW_SCHEMA = "vision_memory.r11-new-canonical-latent-bridge-raw-artifacts.v1"
 INVENTORY_SCHEMA = "vision_memory.r11-new-canonical-latent-bridge-aggregation-inventory.v1"
@@ -346,6 +351,7 @@ def _validate_manifest(
     parity = manifest.get("parity_checks")
     fixed = manifest.get("fixed_contract")
     information = manifest.get("information_boundary")
+    changed = manifest.get("single_changed_factor")
     if (
         manifest.get("schema") != TRAINER_MANIFEST_SCHEMA
         or manifest.get("protocol") != core.BRIDGE_PROTOCOL
@@ -364,6 +370,13 @@ def _validate_manifest(
         or parity.get("passed") is not True
         or parity.get("observed") != parity.get("expected")
         or not isinstance(fixed, Mapping)
+        or changed
+        != {
+            "factor": "optimizer_learning_rate_schedule",
+            "from": "constant lr=0.05 for optimizer updates 1..256",
+            "to": "lr=0.05 through update 128, then fixed cosine decay to 0.0 at update 256",
+            "explicitly_not": "DreamLite diffusion scheduler or sigma schedule",
+        }
         or not isinstance(information, Mapping)
         or information.get("passed") is not True
         or information.get("canonical_teacher_used_only_by_dense_loss") is not True
@@ -383,6 +396,12 @@ def _validate_manifest(
             rel_tol=0.0,
             abs_tol=0.0,
         ),
+        "learning_rate_schedule": fixed.get("learning_rate_schedule")
+        == {
+            "name": "constant_then_post128_cosine_to_zero",
+            "intervention_first_update": core.BRIDGE_LR_INTERVENTION_FIRST_UPDATE,
+            "formula": "0.05 for u<=128; 0.025*(1+cos(pi*(u-128)/128)) otherwise",
+        },
         "weight_decay": _equal_float(
             fixed.get("weight_decay"),
             expected_fixed["weight_decay"],
@@ -488,7 +507,12 @@ def _validate_metrics(path: Path) -> tuple[list[dict[str, Any]], dict[str, Any]]
             for row in rows
         ),
         "optimizer": all(
-            _equal_float(row.get("learning_rate"), 0.05, rel_tol=0.0, abs_tol=0.0)
+            _equal_float(
+                row.get("learning_rate"),
+                core.bridge_optimizer_learning_rate(int(row["optimizer_step"])),
+                rel_tol=0.0,
+                abs_tol=0.0,
+            )
             and _equal_float(row.get("weight_decay"), 0.0, rel_tol=0.0, abs_tol=0.0)
             for row in rows
         ),
@@ -545,6 +569,8 @@ def _validate_checkpoint(
     z_t = payload.get("z_t_fp32")
     trajectory = payload.get("trajectory_fp32")
     hashes = payload.get("tensor_sha256")
+    optimizer_payload = payload.get("optimizer")
+    optimizer_state_sha256 = canonical_object_sha256(optimizer_payload)
     if (
         payload.get("schema") != TRAINER_CHECKPOINT_SCHEMA
         or payload.get("optimizer_step") != step
@@ -572,6 +598,12 @@ def _validate_checkpoint(
         or payload.get("manifest_sha256") != manifest_sha256
         or payload.get("condition_artifact_sha256") != condition_sha256
         or not isinstance(payload.get("optimizer"), Mapping)
+        or not _optimizer_state_matches_step(
+            optimizer_payload,
+            expected_step=step,
+        )
+        or payload.get("optimizer_state_sha256") != optimizer_state_sha256
+        or record.get("optimizer_state_sha256") != optimizer_state_sha256
         or not isinstance(hashes, Mapping)
     ):
         raise ValueError(f"Bridge checkpoint tensor payload contract drifted at step {step}.")
@@ -613,8 +645,55 @@ def _validate_checkpoint(
         "record_path": str(record_path.resolve()),
         "record_sha256": _sha256(record_path),
         "tensor_sha256": observed_hashes,
+        "optimizer_state_sha256": optimizer_state_sha256,
         "distance_statistics": distance,
     }
+
+
+def _optimizer_state_matches_step(value: Any, *, expected_step: int) -> bool:
+    if not isinstance(value, Mapping):
+        return False
+    state = value.get("state")
+    groups = value.get("param_groups")
+    if not isinstance(state, Mapping) or not isinstance(groups, list) or len(groups) != 1:
+        return False
+    group = groups[0]
+    expected_lr = (
+        core.BRIDGE_BASE_LEARNING_RATE
+        if expected_step == 0
+        else core.bridge_optimizer_learning_rate(expected_step)
+    )
+    if (
+        not isinstance(group, Mapping)
+        or group.get("params") != [0]
+        or not _equal_float(group.get("lr"), expected_lr, rel_tol=0.0, abs_tol=0.0)
+    ):
+        return False
+    if expected_step == 0:
+        return not state
+    if set(state) != {0}:
+        return False
+    parameter_state = state[0]
+    if not isinstance(parameter_state, Mapping) or set(parameter_state) != {
+        "step",
+        "exp_avg",
+        "exp_avg_sq",
+    }:
+        return False
+    step_value = parameter_state["step"]
+    moments = (parameter_state["exp_avg"], parameter_state["exp_avg_sq"])
+    return bool(
+        isinstance(step_value, Tensor)
+        and step_value.numel() == 1
+        and float(step_value.item()) == float(expected_step)
+        and all(
+            isinstance(moment, Tensor)
+            and moment.dtype == torch.float32
+            and tuple(moment.shape) == (1, 4, 128, 128)
+            and torch.isfinite(moment).all()
+            for moment in moments
+        )
+    )
 
 
 def _reader_row_matches_target(row: Mapping[str, Any], target_segment: Mapping[str, Any]) -> bool:
@@ -653,7 +732,7 @@ def _validate_rows(path: Path, *, target_segment: Mapping[str, Any]) -> dict[str
     groups = {(row.get("checkpoint"), row.get("condition")) for row in rows}
     common = all(
         row.get("schema") == "vision_memory.r5-compose-causal-evaluation.v1"
-        and row.get("suite") == "r11_new_target01_canonical_latent_bridge"
+        and row.get("suite") == controller.trainer.SUITE
         and row.get("item_id") == core.BRIDGE_TARGET_SEGMENT_ID
         and row.get("pair_unit") == core.BRIDGE_TARGET_SEGMENT_ID
         and row.get("donor_item_id") is None
@@ -912,6 +991,17 @@ def compare(
         for step in core.BRIDGE_CHECKPOINT_STEPS
     ]
     checkpoint_by_step = {row["optimizer_step"]: row for row in checkpoints}
+    step128 = checkpoint_by_step[128]
+    pre_intervention_parity = core.bridge_pre_intervention_parity(
+        {
+            "optimizer_step": 128,
+            "tensor_sha256": step128["tensor_sha256"],
+            "optimizer_state_sha256": step128["optimizer_state_sha256"],
+            "png_sha256": step128["image_sha256"],
+        }
+    )
+    if not pre_intervention_parity:
+        raise ValueError("Bridge post-step-128 intervention prefix differs from its parent baseline.")
     step0_distance = checkpoint_by_step[0]["distance_statistics"]
     if not _equal_float(step0_distance["mse"], metrics_record["m0_mse"]) or not _equal_float(
         step0_distance["mse_ratio_to_m0"], 1.0
@@ -946,6 +1036,22 @@ def compare(
         distance_pass=distance_gate,
         reader_transfer_pass=reader_gate,
     )
+    schedule_audit = core.bridge_schedule_hypothesis_audit(
+        step128_mse_ratio=float(
+            checkpoint_by_step[128]["distance_statistics"]["mse_ratio_to_m0"]
+        ),
+        endpoint_mse_ratio=float(endpoint_distance["mse_ratio_to_m0"]),
+        technical_gate=engineering_gate,
+        teacher_replay_gate=teacher_gate,
+        pre_intervention_parity=pre_intervention_parity,
+        distance_pass=distance_gate,
+        reader_transfer_pass=reader_gate,
+    )
+    schedule_decision = core.bridge_schedule_hypothesis_decision(
+        distance_pass=distance_gate,
+        reader_transfer_pass=reader_gate,
+        audit=schedule_audit,
+    )
     technical = _load(formal_run / "technical_gate.json")
     summary = _load(formal_run / controller.SUMMARY_FILE)
     expected_gates = {
@@ -963,6 +1069,8 @@ def compare(
         or technical.get("optimizer_step_records") != core.BRIDGE_OPTIMIZER_STEPS
         or technical.get("checkpoint_steps_observed") != list(core.BRIDGE_CHECKPOINT_STEPS)
         or technical.get("trainable_parameter_names") != ["x_T_fp32"]
+        or technical.get("optimizer_lr_schedule_exact") is not True
+        or technical.get("pre_intervention_step128_parity_valid") is not True
         or not _equal_float(technical.get("minimum_gradient_norm"), technical.get("minimum_gradient_norm"))
         or float(technical.get("minimum_gradient_norm", 0.0)) <= 0.0
         or not _equal_float(
@@ -978,6 +1086,8 @@ def compare(
         or summary.get("technical_gate") != technical
         or summary.get("gates") != expected_gates
         or summary.get("decision") != decision
+        or summary.get("secondary_solver_hypothesis_audit") != schedule_audit
+        or summary.get("secondary_solver_hypothesis_decision") != schedule_decision
         or summary.get("formal_success_gate") is not False
         or summary.get("full_success_claim_allowed") is not False
         or summary.get("phase2_allowed") is not False
@@ -1063,6 +1173,8 @@ def compare(
             str(row["optimizer_step"]): row["distance_statistics"] for row in checkpoints
         },
         "decision": decision,
+        "secondary_solver_hypothesis_audit": schedule_audit,
+        "secondary_solver_hypothesis_decision": schedule_decision,
         "phase2_allowed": False,
         "formal_success": False,
         "scientific_success_claim": False,

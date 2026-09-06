@@ -1,0 +1,218 @@
+{
+  "schema": "vision_memory.r11-new-canonical-latent-bridge-lr-schedule-config.v1",
+  "protocol": "R11-New-Canonical-Latent-Bridge-Post128-Cosine-Target01",
+  "status": "preregistered_before_any_post128_cosine_optimization_result",
+  "purpose": "Test whether the baseline bridge's post-step-128 rebound is caused by the constant optimizer learning-rate schedule while preserving an exact pre-intervention trajectory.",
+  "parent_bridge": {
+    "source_training_git_commit": "f83519b2863c13747425157f4cd56e55684c12e9",
+    "delivery_git_commit": "9758d3965513b1b719aab8cf4460e9a4fca02df4",
+    "source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-bridge-f83519b-20260906-round01",
+    "comparison_sha256": "77bde91bcf43f177adb32a76dddb047b85487ba572daf4f2c4a6206456a060b7",
+    "raw_artifacts_sha256": "1b7048e74bdd70c101d960e25c2b3fed91da686116ee6623445041b2a290ac12",
+    "config_sha256": "ab00453511cb43265a3e3d2af6aa11c8d0aa2cf6e9ca5baf44c8695d4a8bcde0",
+    "technical_gate": true,
+    "teacher_replay_gate": true,
+    "bridge_distance_gate": false,
+    "endpoint_reader_transfer_gate": false,
+    "formal_success": false,
+    "phase2_allowed": false,
+    "endpoint_mse_ratio_to_m0": 0.8105615501236992,
+    "endpoint_reader_accuracy": 0.0,
+    "decision": "distance_fail_reader_fail_change_one_solver_factor"
+  },
+  "parent_phase1a": {
+    "training_source_commit": "2cde77ece6f020ab8c747d7c73e19dac4d8fba1b",
+    "corrected_delivery_parent_commit": "e2e60126285486d42386b4cd670b419334dd06db",
+    "comparison_sha256": "f3764a83ee8bc31cc7895fd33d494d4ea3be0c187c8cc9b0f6a85a4cf257843d",
+    "raw_artifacts_sha256": "c1e36f92766c98f245917a9009dc9061a07729842dbef6c7b97ad18889edfbba",
+    "selected_segments_sha256": "6198beb3a3758fd7df912c6956bc05eac0ace8603708f37147826c65a4d61845",
+    "engineering_gate": true,
+    "query_level_pass_count": 6,
+    "total_targets": 8,
+    "failed_target_indices": [
+      1,
+      7
+    ],
+    "decision": "run_canonical_r11_latent_bridge_distance_diagnostic",
+    "phase2_allowed": false
+  },
+  "target_selection": {
+    "rule": "same preregistered lowest-index Phase1A failure used by the parent bridge",
+    "target_index": 1,
+    "target_segment_id": "r5-f1-392d41fd097d069c42218e0a",
+    "target_07_deferred": true,
+    "no_post_result_target_selection": true
+  },
+  "canonical_teacher": {
+    "artifact_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11/r11-vae-latent-f4a018f-20260831/target-01/run/endpoint_raw.pt",
+    "file_sha256": "d359291de63bb5232325b2e7a9294ff3d861287c06e63da2ab6ebe42eab036b9",
+    "tensor_sha256": "6857afeffd37124bb196ab7c6607580c57c950d72d760ca6b49f8cc00bdef3f1",
+    "shape": [
+      1,
+      4,
+      128,
+      128
+    ],
+    "dtype": "torch.float32",
+    "population_std": 0.6546660661697388,
+    "reference_reverse_cyclic_accuracy": 1.0,
+    "reference_reverse_cyclic_mean_ce": 0.000176956004
+  },
+  "exact_parity_bindings": {
+    "phase1a_valid_source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-phase1a-2cde77e-20260905-round02/target-01-retry01",
+    "initial_x_T_fp32_sha256": "c970092e2afca24ededea1aec2892bd6bd54ba0dd2193522dab22af10ac1d991",
+    "initial_z_t_fp32_sha256": "11c7216fe2a70f0caa314d182b2c176b4f50c78f2d081f5aa0271184e5c8e659",
+    "blank_source_rgb_sha256": "a3b784da71eaa113fb4d9d71502a7a3526ba0d41e2d42ed96fe79111ca3dba65",
+    "source_latents_fp32_sha256": "719e92867b60546b21b281cfc633ab782c8ce2274bfb41c6b3cee6d673e74eaa",
+    "event_text_sha256": "f170a7e2dfe0070fbd160c09d29dbcf897ddbf5f75929a3ee4af84cf627965bb",
+    "condition_prompt_embeds_sha256": "473bd457d6fff070a71b119a19d950b8d094cfaf6f126ceb817330eb01263a60",
+    "condition_attention_mask_sha256": "4f941a468150ea22f64ac4f7304e9a94a3dd1c721d07dd7f8ebd10185fbe2ea9",
+    "dreamlite_snapshot_manifest_sha256": "1bcf41b170c4b4a806bac6701cbdf4fabd5c3c53fa67415d065ab95ce2703159",
+    "reader_snapshot_manifest_sha256": "159a504daaae6dc412535978f087150a0eb8e50164afd70a8a17f83906f1127c"
+  },
+  "single_changed_solver_factor": {
+    "factor": "optimizer_learning_rate_schedule",
+    "explicitly_not_changed": "DreamLite diffusion scheduler, sigma schedule, or denoising step count",
+    "parent_value": "constant lr=0.05 for optimizer updates 1..256",
+    "new_value": "lr=0.05 for updates 1..128; cosine decay from 0.05 to 0.0 for updates 129..256",
+    "formula": "lr(u)=0.05 for 1<=u<=128; lr(u)=0.025*(1+cos(pi*(u-128)/128)) for 129<=u<=256",
+    "intervention_first_update": 129,
+    "last_update_learning_rate": 0.0,
+    "last_update_contract": "Update 256 still executes forward, backward, and Adam.step with lr=0.0; its gradient must remain finite and nonzero, while a zero x_T update is allowed.",
+    "hypothesis": "A deterministic optimizer LR decay after the exact baseline step-128 state may prevent the observed late rebound; this is a hypothesis, not a conclusion."
+  },
+  "pre_intervention_baseline_binding": {
+    "optimizer_step": 128,
+    "checkpoint_sha256": "4c02cc86343da96ebd0307b23281a02e1bb7f78547e88b3fc24105153365864a",
+    "png_sha256": "ccfff48bf0bc8cb2ff38cfeb8cbefb845a90ac80deeab3de26326f7b0faf7bd0",
+    "optimizer_state_canonical_sha256": "b26457294d573890ba6d7ebf220eb0b4e7dec844338be48186893a6b17ad8004",
+    "tensor_sha256": {
+      "x_T_fp32": "482724b2a7ac88624c054a543c8267ae0a318f67177206c1a7d9a2c3ac364ddb",
+      "z_t_fp32": "34125c8426d0eccf9eca70578c164673d263f592e05bbd2a8b4161be239a5f93",
+      "trajectory_fp32": [
+        "7e7a69ae62ab788b35cb7e0d984bd5ccb992f406074b84f3c02e0db3ef4c249d",
+        "5b366db05dccd59a605e1d07d4e74b51dd0dce4740f743602e8c5fa88c8dc08a",
+        "6c76df63f60f19a36d64d309877e9e3a5d49c51ee9608de65f911dd369b7f900",
+        "5a6a3ec5fdafca390c8571addca3dab1933dfe00667f313dcfff67193888f242",
+        "34125c8426d0eccf9eca70578c164673d263f592e05bbd2a8b4161be239a5f93"
+      ]
+    },
+    "mse_ratio_to_m0": 0.7737632777116902
+  },
+  "unchanged_contract": {
+    "train_sha256": "24327edc39e0d133df5150dc1aab4f55c6cf5b05ccfca9025ad90c5accc6d184",
+    "dev_sha256": "8b167df38022a631d4e631d3c0d66e9fca74171f4224fec436030d6650047303",
+    "training_objective": "mean elementwise FP32 MSE between frozen-DreamLite endpoint z_t and fixed canonical R11 latent",
+    "source_state": "RGB 127/255 encoded by frozen DreamLite VAE posterior mean",
+    "only_trainable": "x_T_fp32",
+    "x_T_initialization": "same event-noise generator with seed 0 and source episode/turn key",
+    "dreamlite_path": "complete frozen source-anchored DreamLite-mobile edit path",
+    "diffusion_steps": 4,
+    "effective_sigma_schedule": [
+      0.5,
+      0.375,
+      0.25,
+      0.125
+    ],
+    "optimizer": "Adam",
+    "learning_rate": 0.05,
+    "weight_decay": 0.0,
+    "optimizer_steps": 256,
+    "gradient_clipping": null,
+    "checkpoint_steps": [
+      0,
+      64,
+      128,
+      192,
+      256
+    ],
+    "primary_endpoint": "raw_step_256",
+    "best_checkpoint_selection_forbidden": true,
+    "seed": 0,
+    "strict_determinism": true,
+    "dreamlite_device": "cuda:0",
+    "reader_device": "cuda:1"
+  },
+  "preflight_gate": {
+    "optimizer_steps": 0,
+    "full_forward_calls": 1,
+    "backward_calls": 1,
+    "require_exact_teacher_file_and_tensor_hashes": true,
+    "require_exact_step0_parity_hashes": true,
+    "require_only_x_T_fp32_trainable": true,
+    "require_four_dreamlite_steps": true,
+    "require_finite_nonzero_x_T_gradient": true,
+    "require_all_model_parameters_frozen_and_without_gradients": true,
+    "teacher_replay": {
+      "fixed_reverse_cyclic_permutations": 4,
+      "all_four_correct": true,
+      "mean_ce_lte": 0.001
+    },
+    "bridge_result_evaluated": false
+  },
+  "formal_technical_gate": {
+    "optimizer_receipts_exact": 256,
+    "optimizer_steps_contiguous": true,
+    "optimizer_lr_schedule_exact_per_receipt": true,
+    "pre_intervention_step128_semantic_hashes_exact": true,
+    "pre_intervention_step128_optimizer_state_hash_exact": true,
+    "pre_intervention_step128_png_hash_exact": true,
+    "block_before_update129_if_pre_intervention_parity_fails": true,
+    "four_dreamlite_steps_every_receipt": true,
+    "finite_nonzero_x_T_gradient_every_receipt": true,
+    "only_x_T_fp32_trainable": true,
+    "model_snapshots_unchanged": true,
+    "no_gradient_clipping": true,
+    "exact_checkpoint_hash_triplets": [
+      0,
+      64,
+      128,
+      192,
+      256
+    ]
+  },
+  "primary_bridge_gate": {
+    "endpoint": "raw_step_256_only",
+    "technical_gate": true,
+    "teacher_replay_gate": true,
+    "mse_ratio_to_m0_lte": 0.01,
+    "l2_distance_ratio_to_m0_lte": 0.1,
+    "teacher_normalized_rmse_lte": 0.1,
+    "endpoint_reverse_cyclic_accuracy_eq": 1.0
+  },
+  "secondary_solver_hypothesis_audit": {
+    "scientific_success_gate": false,
+    "eligibility": "technical gate, teacher replay, and pre-intervention step128 parity pass; primary distance and Reader gates both fail",
+    "post128_non_rebound": "raw step256 MSE ratio <= exact step128 MSE ratio",
+    "beats_parent_endpoint": "raw step256 MSE ratio < 0.8105615501236992",
+    "interpretation": "Only an endpoint-level secondary diagnosis; it does not claim the entire post128 trajectory is monotonic and cannot rescue a failed primary bridge gate."
+  },
+  "decision_table": {
+    "distance_pass_reader_pass": "Dense guidance reaches a Reader-readable teacher neighborhood; prioritize the original QA objective as the next single-factor bottleneck.",
+    "distance_pass_reader_fail": "Primary bridge branch takes precedence; test local teacher-neighborhood Reader robustness.",
+    "distance_fail_reader_pass": "Primary bridge branch takes precedence; prioritize the original QA objective.",
+    "distance_fail_reader_fail_secondary_schedule_pass": "Decay prevents endpoint rebound but is insufficient; retain the schedule and change only budget or initialization in a new preregistration.",
+    "distance_fail_reader_fail_secondary_schedule_fail": "The schedule hypothesis is unsupported; revert it and change exactly one of budget or initialization."
+  },
+  "interpretation_boundaries": {
+    "diagnostic_only": true,
+    "formal_success_always_false": true,
+    "phase2_remains_blocked": true,
+    "no_shared_writer_claim": true,
+    "no_id_ood_claim": true,
+    "no_mathematical_non_reachability_claim_from_failure": true,
+    "no_best_checkpoint_rescue": true,
+    "no_post_result_threshold_or_schedule_change": true
+  },
+  "deployment": {
+    "instance": "vlm-r3-h200x2-live-20260717",
+    "workspace": "分布式训练空间",
+    "output_storage": "/inspire/ssd/",
+    "fresh_output_root_required": true,
+    "clean_detached_git_checkout_required": true,
+    "suite_lock_required": true,
+    "technical_preflight_before_formal": true,
+    "implementation_commit_must_be_pushed_before_remote_checkout": true,
+    "independent_post_run_aggregation_required": true
+  }
+}

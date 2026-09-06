@@ -118,6 +118,15 @@ def _make_formal(run: Path, *, bridge_gate: bool = False) -> dict:
     _write_jsonl(run / controller.ROWS_FILE, [{"row": index} for index in range(20)])
     (run / "endpoint_raw.pt").write_bytes(b"endpoint")
     (run / "endpoint_raw.png").write_bytes(b"png")
+    schedule_audit = controller.core.bridge_schedule_hypothesis_audit(
+        step128_mse_ratio=0.7737632777116902,
+        endpoint_mse_ratio=0.80,
+        technical_gate=True,
+        teacher_replay_gate=True,
+        pre_intervention_parity=True,
+        distance_pass=bridge_gate,
+        reader_transfer_pass=bridge_gate,
+    )
     summary = {
         "schema": controller.trainer.SUMMARY_SCHEMA,
         "status": "completed",
@@ -134,6 +143,12 @@ def _make_formal(run: Path, *, bridge_gate: bool = False) -> dict:
         "decision": controller.core.bridge_decision(
             distance_pass=bridge_gate,
             reader_transfer_pass=bridge_gate,
+        ),
+        "secondary_solver_hypothesis_audit": schedule_audit,
+        "secondary_solver_hypothesis_decision": controller.core.bridge_schedule_hypothesis_decision(
+            distance_pass=bridge_gate,
+            reader_transfer_pass=bridge_gate,
+            audit=schedule_audit,
         ),
         "checkpoint_steps_observed": list(controller.core.BRIDGE_CHECKPOINT_STEPS),
         "formal_success_gate": False,

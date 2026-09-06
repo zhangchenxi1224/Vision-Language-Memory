@@ -32,14 +32,19 @@ from scripts.train import dreamlite_r5_compose as r5  # noqa: E402
 from scripts.train import dreamlite_r7_gradient_balance as r8  # noqa: E402
 from scripts.train import r11_new_frozen_dreamlite_oracle as phase1a  # noqa: E402
 from vision_memory.dreamlite.latent_codec import decode_model_latents_unit_interval  # noqa: E402
-from vision_memory.repro import canonical_tensor_sha256  # noqa: E402
+from vision_memory.repro import canonical_object_sha256, canonical_tensor_sha256  # noqa: E402
 from vision_memory.training import r11_new_bridge as core  # noqa: E402
 
 
-CONFIG_PATH = ROOT / "configs" / "experiments" / "r11_new_canonical_latent_bridge_target01.json"
+CONFIG_PATH = (
+    ROOT
+    / "configs"
+    / "experiments"
+    / "r11_new_canonical_latent_bridge_target01_post128_cosine.json"
+)
 PROTOCOL = core.BRIDGE_PROTOCOL
-IMPLEMENTATION_REVISION = "canonical-r11-latent-mse-target01-v1"
-SUITE = "r11_new_target01_canonical_latent_bridge"
+IMPLEMENTATION_REVISION = "canonical-r11-latent-mse-post128-cosine-target01-v1"
+SUITE = "r11_new_target01_canonical_latent_bridge_post128_cosine"
 MANIFEST_SCHEMA = "vision_memory.r11-new-canonical-latent-bridge-manifest.v1"
 METRICS_SCHEMA = "vision_memory.r11-new-canonical-latent-bridge-metrics.v1"
 CHECKPOINT_SCHEMA = "vision_memory.r11-new-canonical-latent-bridge-checkpoint.v1"
@@ -52,7 +57,7 @@ OWNER_SCHEMA = "vision_memory.r11-new-canonical-latent-bridge-output-owner.v1"
 
 OPTIMIZER_STEPS = core.BRIDGE_OPTIMIZER_STEPS
 CHECKPOINT_STEPS = core.BRIDGE_CHECKPOINT_STEPS
-LEARNING_RATE = phase1a.LEARNING_RATE
+LEARNING_RATE = core.BRIDGE_BASE_LEARNING_RATE
 WEIGHT_DECAY = phase1a.WEIGHT_DECAY
 
 
@@ -345,6 +350,7 @@ def _checkpoint_payload(
         "trajectory_fp32": trajectory,
         "effective_sigmas": list(output.effective_sigmas),
         "optimizer": optimizer.state_dict(),
+        "optimizer_state_sha256": canonical_object_sha256(optimizer.state_dict()),
         "distance_statistics": distance,
         "teacher_tensor_sha256": core.BRIDGE_TEACHER_TENSOR_SHA256,
         "manifest_sha256": manifest_sha256,
@@ -399,9 +405,61 @@ def _save_checkpoint(
         "effective_sigmas": list(output.effective_sigmas),
         "distance_statistics": payload["distance_statistics"],
         "tensor_sha256": payload["tensor_sha256"],
+        "optimizer_state_sha256": payload["optimizer_state_sha256"],
     }
     phase1a._atomic_json(output_dir / "checkpoint_hashes" / f"step-{step:03d}.json", record)
     return record, output
+
+
+def _optimizer_state_matches_step(value: Any, *, expected_step: int) -> bool:
+    if not isinstance(value, Mapping):
+        return False
+    state = value.get("state")
+    groups = value.get("param_groups")
+    if not isinstance(state, Mapping) or not isinstance(groups, list) or len(groups) != 1:
+        return False
+    group = groups[0]
+    expected_lr = (
+        LEARNING_RATE
+        if expected_step == 0
+        else core.bridge_optimizer_learning_rate(expected_step)
+    )
+    if (
+        not isinstance(group, Mapping)
+        or group.get("params") != [0]
+        or not math.isclose(
+            float(group.get("lr", math.nan)),
+            expected_lr,
+            rel_tol=0.0,
+            abs_tol=0.0,
+        )
+    ):
+        return False
+    if expected_step == 0:
+        return not state
+    if set(state) != {0}:
+        return False
+    parameter_state = state[0]
+    if not isinstance(parameter_state, Mapping) or set(parameter_state) != {
+        "step",
+        "exp_avg",
+        "exp_avg_sq",
+    }:
+        return False
+    step_value = parameter_state["step"]
+    if not isinstance(step_value, Tensor) or step_value.numel() != 1:
+        return False
+    moments = (parameter_state["exp_avg"], parameter_state["exp_avg_sq"])
+    return bool(
+        float(step_value.item()) == float(expected_step)
+        and all(
+            isinstance(moment, Tensor)
+            and moment.dtype == torch.float32
+            and tuple(moment.shape) == (1, 4, 128, 128)
+            and torch.isfinite(moment).all()
+            for moment in moments
+        )
+    )
 
 
 def _verify_checkpoint_record(
@@ -435,6 +493,13 @@ def _verify_checkpoint_record(
         or hashes.get("x_T_fp32") != canonical_tensor_sha256(payload["x_T_fp32"].float())
         or hashes.get("z_t_fp32") != canonical_tensor_sha256(payload["z_t_fp32"].float())
         or hashes.get("trajectory_fp32") != [canonical_tensor_sha256(value.float()) for value in trajectory]
+        or payload.get("optimizer_state_sha256")
+        != canonical_object_sha256(payload.get("optimizer"))
+        or record.get("optimizer_state_sha256") != payload.get("optimizer_state_sha256")
+        or not _optimizer_state_matches_step(
+            payload.get("optimizer"),
+            expected_step=expected_step,
+        )
         or not phase1a.phase1a_effective_sigmas_match(payload.get("effective_sigmas"))
         or payload.get("effective_sigmas") != record.get("effective_sigmas")
         or payload.get("teacher_tensor_sha256") != core.BRIDGE_TEACHER_TENSOR_SHA256
@@ -463,6 +528,11 @@ def _train_step(
     m0_mse: float,
     reader: nn.Module,
 ) -> dict[str, Any]:
+    update_index = step_zero + 1
+    learning_rate = core.bridge_optimizer_learning_rate(update_index)
+    if len(optimizer.param_groups) != 1:
+        raise RuntimeError("R11_new bridge optimizer param-group count drifted.")
+    optimizer.param_groups[0]["lr"] = learning_rate
     optimizer.zero_grad(set_to_none=True)
     output = oracle()
     loss = (output.z_t.float() - teacher).square().mean()
@@ -491,7 +561,7 @@ def _train_step(
     return {
         "schema": METRICS_SCHEMA,
         "kind": "optimizer_step",
-        "optimizer_step": step_zero + 1,
+        "optimizer_step": update_index,
         "target_index": core.BRIDGE_TARGET_INDEX,
         "target_segment_id": core.BRIDGE_TARGET_SEGMENT_ID,
         "objective": "canonical_r11_latent_fp32_mean_mse",
@@ -511,7 +581,7 @@ def _train_step(
         "full_dreamlite_forward_executed": True,
         "gradient_mode": "full",
         "gradient_clipping_applied": False,
-        "learning_rate": LEARNING_RATE,
+        "learning_rate": learning_rate,
         "weight_decay": WEIGHT_DECAY,
         "reader_gradient_calls": 0,
         "teacher_tensor_sha256": core.BRIDGE_TEACHER_TENSOR_SHA256,
@@ -594,7 +664,8 @@ def _technical_gate(
     optimizer_valid = bool(
         type(optimizer) is torch.optim.Adam
         and len(optimizer.param_groups) == 1
-        and float(optimizer.param_groups[0]["lr"]) == LEARNING_RATE
+        and float(optimizer.param_groups[0]["lr"])
+        == core.bridge_optimizer_learning_rate(OPTIMIZER_STEPS)
         and float(optimizer.param_groups[0]["weight_decay"]) == WEIGHT_DECAY
         and len(optimizer.param_groups[0]["params"]) == 1
         and optimizer.param_groups[0]["params"][0] is oracle.x_T_fp32
@@ -604,6 +675,17 @@ def _technical_gate(
         step0.get("x_T_fp32") == core.BRIDGE_INITIAL_X_T_SHA256
         and step0.get("z_t_fp32") == core.BRIDGE_INITIAL_Z_T_SHA256
         and manifest.get("parity_checks", {}).get("passed") is True
+    )
+    step128 = checkpoint_map.get(128, {})
+    step128_parity = core.bridge_pre_intervention_parity(step128)
+    lr_schedule = all(
+        math.isclose(
+            float(row.get("learning_rate", math.nan)),
+            core.bridge_optimizer_learning_rate(int(row["optimizer_step"])),
+            rel_tol=0.0,
+            abs_tol=0.0,
+        )
+        for row in metrics
     )
     teacher_binding = bool(
         manifest.get("teacher", {}).get("file_sha256") == core.BRIDGE_TEACHER_FILE_SHA256
@@ -621,6 +703,8 @@ def _technical_gate(
         "frozen_gradients_absent": frozen,
         "snapshots_unchanged": snapshots_unchanged,
         "optimizer_contract_valid": optimizer_valid,
+        "optimizer_lr_schedule_exact": lr_schedule,
+        "pre_intervention_step128_parity_valid": step128_parity,
         "gradient_clipping_absent": all(row.get("gradient_clipping_applied") is False for row in metrics),
         "checkpoint_hashes_valid": checkpoint_hashes_valid,
         "condition_artifact_valid": phase1a._verify_condition_record(manifest["condition_artifact"]),
@@ -738,9 +822,10 @@ def _manifest(
         "condition_artifact": dict(context["condition_record"]),
         "information_boundary": information_boundary,
         "single_changed_factor": {
-            "factor": "training_objective",
-            "from": "Reader listwise choice CE",
-            "to": "canonical R11 endpoint latent FP32 mean MSE",
+            "factor": "optimizer_learning_rate_schedule",
+            "from": "constant lr=0.05 for optimizer updates 1..256",
+            "to": "lr=0.05 through update 128, then fixed cosine decay to 0.0 at update 256",
+            "explicitly_not": "DreamLite diffusion scheduler or sigma schedule",
         },
         "fixed_contract": {
             "only_trainable": "x_T_fp32",
@@ -748,6 +833,11 @@ def _manifest(
             "effective_sigmas": list(phase1a.EFFECTIVE_SIGMAS),
             "optimizer": "Adam",
             "learning_rate": LEARNING_RATE,
+            "learning_rate_schedule": {
+                "name": "constant_then_post128_cosine_to_zero",
+                "intervention_first_update": core.BRIDGE_LR_INTERVENTION_FIRST_UPDATE,
+                "formula": "0.05 for u<=128; 0.025*(1+cos(pi*(u-128)/128)) otherwise",
+            },
             "weight_decay": WEIGHT_DECAY,
             "optimizer_steps": OPTIMIZER_STEPS if args.mode == "formal" else 0,
             "gradient_clipping": None,
@@ -952,6 +1042,11 @@ def _formal(
                 output_dir=args.output_dir,
             )
             checkpoint_records.append(checkpoint)
+            if step == 128 and not core.bridge_pre_intervention_parity(checkpoint):
+                raise RuntimeError(
+                    "R11_new bridge prefix parity failed after update 128; "
+                    "blocking before the first changed LR update 129."
+                )
             if step == OPTIMIZER_STEPS:
                 endpoint_output = snapshot
         print(
@@ -1011,6 +1106,25 @@ def _formal(
     reader_gate = core.endpoint_reader_transfer_gate(endpoint_reader)
     bridge_gate = bool(technical["passed"] and teacher_gate and distance_gate and reader_gate)
     decision = core.bridge_decision(distance_pass=distance_gate, reader_transfer_pass=reader_gate)
+    checkpoint_map = {int(row["optimizer_step"]): row for row in checkpoint_records}
+    schedule_audit = core.bridge_schedule_hypothesis_audit(
+        step128_mse_ratio=float(
+            checkpoint_map[128]["distance_statistics"]["mse_ratio_to_m0"]
+        ),
+        endpoint_mse_ratio=float(distance["mse_ratio_to_m0"]),
+        technical_gate=bool(technical["passed"]),
+        teacher_replay_gate=teacher_gate,
+        pre_intervention_parity=bool(
+            technical["pre_intervention_step128_parity_valid"]
+        ),
+        distance_pass=distance_gate,
+        reader_transfer_pass=reader_gate,
+    )
+    schedule_decision = core.bridge_schedule_hypothesis_decision(
+        distance_pass=distance_gate,
+        reader_transfer_pass=reader_gate,
+        audit=schedule_audit,
+    )
     return {
         "schema": SUMMARY_SCHEMA,
         "status": "completed",
@@ -1036,6 +1150,8 @@ def _formal(
             "formal_success_gate": False,
         },
         "decision": decision,
+        "secondary_solver_hypothesis_audit": schedule_audit,
+        "secondary_solver_hypothesis_decision": schedule_decision,
         "phase2_allowed": False,
         "formal_success_gate": False,
         "full_success_claim_allowed": False,

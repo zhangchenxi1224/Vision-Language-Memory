@@ -57,7 +57,7 @@ def _metric(step: int, *, mse: float = 1.0) -> dict:
         "effective_sigmas": list(comparison.EXPECTED_SIGMAS),
         "full_dreamlite_forward_executed": True,
         "gradient_clipping_applied": False,
-        "learning_rate": 0.05,
+        "learning_rate": comparison.core.bridge_optimizer_learning_rate(step),
         "weight_decay": 0.0,
         "reader_gradient_calls": 0,
         "teacher_tensor_sha256": comparison.core.BRIDGE_TEACHER_TENSOR_SHA256,
@@ -99,7 +99,7 @@ def _reader_rows(path: Path) -> list[dict]:
             rows.append(
                 {
                     "schema": "vision_memory.r5-compose-causal-evaluation.v1",
-                    "suite": "r11_new_target01_canonical_latent_bridge",
+                    "suite": comparison.controller.trainer.SUITE,
                     "item_id": comparison.core.BRIDGE_TARGET_SEGMENT_ID,
                     "pair_unit": comparison.core.BRIDGE_TARGET_SEGMENT_ID,
                     "donor_item_id": None,
@@ -155,16 +155,34 @@ def test_checkpoint_tensor_distance_and_hashes_are_recomputed(tmp_path: Path) ->
     )
     manifest_sha = "1" * 64
     condition_sha = "2" * 64
+    checkpoint_step = 256
+    optimizer_state = {
+        "state": {
+            0: {
+                "step": torch.tensor(float(checkpoint_step)),
+                "exp_avg": torch.zeros_like(teacher),
+                "exp_avg_sq": torch.zeros_like(teacher),
+            }
+        },
+        "param_groups": [
+            {
+                "lr": comparison.core.bridge_optimizer_learning_rate(checkpoint_step),
+                "params": [0],
+            }
+        ],
+    }
+    optimizer_state_sha256 = comparison.canonical_object_sha256(optimizer_state)
     payload = {
         "schema": comparison.TRAINER_CHECKPOINT_SCHEMA,
-        "optimizer_step": 64,
+        "optimizer_step": checkpoint_step,
         "objective": "canonical_r11_latent_fp32_mean_mse",
         "x_T_fp32": x_t,
         "z_t_fp32": z_t,
         "trajectory_fp32": trajectory,
         "effective_sigmas": list(comparison.EXPECTED_SIGMAS),
-        "optimizer": {},
-        "distance_statistics": distance,
+        "optimizer": optimizer_state,
+        "optimizer_state_sha256": optimizer_state_sha256,
+        "distance_statistics": dict(distance),
         "teacher_tensor_sha256": comparison.core.BRIDGE_TEACHER_TENSOR_SHA256,
         "manifest_sha256": manifest_sha,
         "condition_artifact_sha256": condition_sha,
@@ -174,27 +192,28 @@ def test_checkpoint_tensor_distance_and_hashes_are_recomputed(tmp_path: Path) ->
             "trajectory_fp32": [canonical_tensor_sha256(value) for value in trajectory],
         },
     }
-    checkpoint = run / "checkpoints" / "step-064.pt"
+    checkpoint = run / "checkpoints" / "step-256.pt"
     torch.save(payload, checkpoint)
-    image = run / "images" / "step-064.png"
+    image = run / "images" / "step-256.png"
     image.write_bytes(b"png")
     record = {
         "schema": comparison.TRAINER_CHECKPOINT_HASH_SCHEMA,
-        "optimizer_step": 64,
+        "optimizer_step": checkpoint_step,
         "checkpoint_bytes": checkpoint.stat().st_size,
         "checkpoint_sha256": comparison._sha256(checkpoint),
         "png_bytes": image.stat().st_size,
         "png_sha256": comparison._sha256(image),
         "trajectory_points": 5,
         "effective_sigmas": list(comparison.EXPECTED_SIGMAS),
-        "distance_statistics": distance,
+        "distance_statistics": dict(distance),
         "tensor_sha256": payload["tensor_sha256"],
+        "optimizer_state_sha256": optimizer_state_sha256,
     }
-    record_path = run / "checkpoint_hashes" / "step-064.json"
+    record_path = run / "checkpoint_hashes" / "step-256.json"
     _write_json(record_path, record)
     validated = comparison._validate_checkpoint(
         run,
-        step=64,
+        step=checkpoint_step,
         teacher=teacher,
         m0_mse=1.0,
         manifest_sha256=manifest_sha,
@@ -206,7 +225,24 @@ def test_checkpoint_tensor_distance_and_hashes_are_recomputed(tmp_path: Path) ->
     with pytest.raises(ValueError, match="distance arithmetic"):
         comparison._validate_checkpoint(
             run,
-            step=64,
+            step=checkpoint_step,
+            teacher=teacher,
+            m0_mse=1.0,
+            manifest_sha256=manifest_sha,
+            condition_sha256=condition_sha,
+        )
+    record["distance_statistics"] = distance
+    payload["optimizer"]["state"][0]["step"] = torch.tensor(255.0)
+    payload["optimizer_state_sha256"] = comparison.canonical_object_sha256(payload["optimizer"])
+    torch.save(payload, checkpoint)
+    record["checkpoint_bytes"] = checkpoint.stat().st_size
+    record["checkpoint_sha256"] = comparison._sha256(checkpoint)
+    record["optimizer_state_sha256"] = payload["optimizer_state_sha256"]
+    _write_json(record_path, record)
+    with pytest.raises(ValueError, match="tensor payload contract"):
+        comparison._validate_checkpoint(
+            run,
+            step=checkpoint_step,
             teacher=teacher,
             m0_mse=1.0,
             manifest_sha256=manifest_sha,
@@ -431,6 +467,8 @@ def test_compare_integration_never_promotes_bridge_pass_to_scientific_success(
                 "frozen_gradients_absent",
                 "snapshots_unchanged",
                 "optimizer_contract_valid",
+                "optimizer_lr_schedule_exact",
+                "pre_intervention_step128_parity_valid",
                 "gradient_clipping_absent",
                 "checkpoint_hashes_valid",
                 "condition_artifact_valid",
@@ -448,6 +486,15 @@ def test_compare_integration_never_promotes_bridge_pass_to_scientific_success(
         "bridge_diagnostic_gate": True,
         "formal_success_gate": False,
     }
+    schedule_audit = comparison.core.bridge_schedule_hypothesis_audit(
+        step128_mse_ratio=1.0,
+        endpoint_mse_ratio=float(distance["mse_ratio_to_m0"]),
+        technical_gate=True,
+        teacher_replay_gate=True,
+        pre_intervention_parity=True,
+        distance_pass=True,
+        reader_transfer_pass=True,
+    )
     summary = {
         "schema": comparison.TRAINER_SUMMARY_SCHEMA,
         "status": "completed",
@@ -459,6 +506,12 @@ def test_compare_integration_never_promotes_bridge_pass_to_scientific_success(
         "decision": comparison.core.bridge_decision(
             distance_pass=True,
             reader_transfer_pass=True,
+        ),
+        "secondary_solver_hypothesis_audit": schedule_audit,
+        "secondary_solver_hypothesis_decision": comparison.core.bridge_schedule_hypothesis_decision(
+            distance_pass=True,
+            reader_transfer_pass=True,
+            audit=schedule_audit,
         ),
         "endpoint_distance_statistics": distance,
         "endpoint_reader_statistics": teacher_stats,
@@ -557,14 +610,22 @@ def test_compare_integration_never_promotes_bridge_pass_to_scientific_success(
         "_validate_metrics",
         lambda _path: (metric_rows, {"m0_mse": 1.0}),
     )
-    monkeypatch.setattr(
-        comparison,
-        "_validate_checkpoint",
-        lambda _run, *, step, **_kwargs: {
+    def checkpoint_record(_run: Path, *, step: int, **_kwargs: object) -> dict:
+        record = {
             "optimizer_step": step,
             "distance_statistics": distance if step == 256 else step0_distance,
-        },
-    )
+        }
+        if step == 128:
+            record.update(
+                {
+                    "tensor_sha256": comparison.core.BRIDGE_PARENT_STEP128_TENSOR_SHA256,
+                    "optimizer_state_sha256": comparison.core.BRIDGE_PARENT_STEP128_OPTIMIZER_SHA256,
+                    "image_sha256": comparison.core.BRIDGE_PARENT_STEP128_PNG_SHA256,
+                }
+            )
+        return record
+
+    monkeypatch.setattr(comparison, "_validate_checkpoint", checkpoint_record)
     monkeypatch.setattr(
         comparison,
         "_validate_rows",

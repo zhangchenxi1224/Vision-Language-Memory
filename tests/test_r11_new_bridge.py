@@ -15,7 +15,12 @@ from vision_memory.data import REVERSE_CYCLIC4  # noqa: E402
 from vision_memory.training import r11_new_bridge as bridge  # noqa: E402
 
 
-CONFIG = ROOT / "configs" / "experiments" / "r11_new_canonical_latent_bridge_target01.json"
+CONFIG = (
+    ROOT
+    / "configs"
+    / "experiments"
+    / "r11_new_canonical_latent_bridge_target01_post128_cosine.json"
+)
 
 
 def _config() -> dict:
@@ -50,6 +55,96 @@ def test_preregistered_config_is_exact() -> None:
     config = _config()
     assert bridge.validate_bridge_config(config) == config
     assert bridge.canonical_json_sha256(config) == bridge.BRIDGE_CONFIG_CANONICAL_SHA256
+
+
+def test_post128_optimizer_lr_schedule_is_exact() -> None:
+    assert all(
+        bridge.bridge_optimizer_learning_rate(update) == bridge.BRIDGE_BASE_LEARNING_RATE
+        for update in range(1, 129)
+    )
+    assert bridge.bridge_optimizer_learning_rate(129) == pytest.approx(
+        0.025 * (1.0 + math.cos(math.pi / 128.0)),
+        rel=0.0,
+        abs=0.0,
+    )
+    assert bridge.bridge_optimizer_learning_rate(192) == pytest.approx(0.025, rel=0.0, abs=1e-16)
+    assert bridge.bridge_optimizer_learning_rate(256) == pytest.approx(0.0, rel=0.0, abs=1e-16)
+
+
+@pytest.mark.parametrize("update", [True, 1.0, "1"])
+def test_optimizer_lr_schedule_rejects_non_integer_indices(update: object) -> None:
+    with pytest.raises(TypeError):
+        bridge.bridge_optimizer_learning_rate(update)  # type: ignore[arg-type]
+
+
+@pytest.mark.parametrize("update", [0, 257])
+def test_optimizer_lr_schedule_rejects_out_of_range_indices(update: int) -> None:
+    with pytest.raises(ValueError):
+        bridge.bridge_optimizer_learning_rate(update)
+
+
+def test_pre_intervention_parity_requires_every_parent_anchor() -> None:
+    record = {
+        "optimizer_step": 128,
+        "tensor_sha256": copy.deepcopy(bridge.BRIDGE_PARENT_STEP128_TENSOR_SHA256),
+        "optimizer_state_sha256": bridge.BRIDGE_PARENT_STEP128_OPTIMIZER_SHA256,
+        "png_sha256": bridge.BRIDGE_PARENT_STEP128_PNG_SHA256,
+    }
+    assert bridge.bridge_pre_intervention_parity(record)
+    for key in tuple(record):
+        mutated = copy.deepcopy(record)
+        mutated[key] = 127 if key == "optimizer_step" else "0" * 64
+        assert not bridge.bridge_pre_intervention_parity(mutated), key
+
+
+@pytest.mark.parametrize(
+    ("distance", "reader", "endpoint", "expected"),
+    [
+        (True, True, 0.001, "primary_branch_distance_pass_reader_pass_prioritize_qa_objective"),
+        (True, False, 0.001, "primary_branch_distance_pass_reader_fail_test_teacher_neighborhood"),
+        (False, True, 0.70, "primary_branch_distance_fail_reader_pass_prioritize_qa_objective"),
+        (False, False, 0.70, "distance_fail_reader_fail_secondary_schedule_pass"),
+        (False, False, 0.80, "distance_fail_reader_fail_secondary_schedule_fail"),
+    ],
+)
+def test_schedule_hypothesis_is_secondary_and_non_rescuing(
+    distance: bool,
+    reader: bool,
+    endpoint: float,
+    expected: str,
+) -> None:
+    audit = bridge.bridge_schedule_hypothesis_audit(
+        step128_mse_ratio=0.7737632777116902,
+        endpoint_mse_ratio=endpoint,
+        technical_gate=True,
+        teacher_replay_gate=True,
+        pre_intervention_parity=True,
+        distance_pass=distance,
+        reader_transfer_pass=reader,
+    )
+    assert bridge.bridge_schedule_hypothesis_decision(
+        distance_pass=distance,
+        reader_transfer_pass=reader,
+        audit=audit,
+    ) == expected
+
+
+def test_schedule_hypothesis_fails_on_rebound_even_if_it_beats_parent() -> None:
+    audit = bridge.bridge_schedule_hypothesis_audit(
+        step128_mse_ratio=0.7737632777116902,
+        endpoint_mse_ratio=0.80,
+        technical_gate=True,
+        teacher_replay_gate=True,
+        pre_intervention_parity=True,
+        distance_pass=False,
+        reader_transfer_pass=False,
+    )
+    assert audit == {
+        "eligible": True,
+        "post128_non_rebound": False,
+        "beats_parent_endpoint": True,
+        "passed": False,
+    }
 
 
 @pytest.mark.parametrize(
@@ -180,6 +275,8 @@ def test_technical_gate_requires_every_contract() -> None:
         "frozen_gradients_absent",
         "snapshots_unchanged",
         "optimizer_contract_valid",
+        "optimizer_lr_schedule_exact",
+        "pre_intervention_step128_parity_valid",
         "gradient_clipping_absent",
         "checkpoint_hashes_valid",
         "condition_artifact_valid",
