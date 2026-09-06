@@ -1,0 +1,88 @@
+{
+  "config_sha256": "3f65185444e7c711571cc7cf19c56ee0e52937912e83bbb1403c319ee8a7f536",
+  "formal_success": false,
+  "git_commit": "d0aa3558073167b09f4ddc6087829c94ff32f436",
+  "image_hashes": {
+    "4": "e01417e411d4f9ab8a4d83dfb8a1a58b2b63478cae71362aedc440cc626f8632",
+    "7": "b112f2f2478eb9f0c0135bc314f2b3cd55c127d30fcd1e3df739eb1710997307",
+    "reset": "a3b784da71eaa113fb4d9d71502a7a3526ba0d41e2d42ed96fe79111ca3dba65"
+  },
+  "inputs": {
+    "4": {
+      "endpoint": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11/r11-vae-latent-f4a018f-20260831/target-04/run/endpoint_raw.pt",
+      "endpoint_sha256": "0b69eb08fe3a43688a64a82d378ba6f4909b3eb382130fb2886349b08e2494a0",
+      "manifest": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11/r11-vae-latent-f4a018f-20260831/target-04/run/manifest.json",
+      "manifest_sha256": "6cc23b2f383bc23f10cf2f75de032d084963bbb8a74b7b0fa867ca9276cf6c19"
+    },
+    "7": {
+      "endpoint": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11/r11-vae-latent-f4a018f-20260831/target-07/run/endpoint_raw.pt",
+      "endpoint_sha256": "6cba67fb2c4e1d9a807530d3bf2116eba13cb77f6d769a2f1ee0eef31199c25e",
+      "manifest": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11/r11-vae-latent-f4a018f-20260831/target-07/run/manifest.json",
+      "manifest_sha256": "6ff5bd02e4ad0610d558f82597164c85ea1018e2f778afe1a95d0043d5496987"
+    }
+  },
+  "model_snapshots": {
+    "dreamlite_mobile": {
+      "file_count": 27,
+      "manifest_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-mobile/.snapshot_manifest.json",
+      "manifest_sha256": "1bcf41b170c4b4a806bac6701cbdf4fabd5c3c53fa67415d065ab95ce2703159",
+      "model_dir": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-mobile",
+      "passed": true,
+      "repo_id": "carlofkl/DreamLite-mobile",
+      "revision": "6695c3f4be230f0493fa5dbf78be3bc4d3bb2ab4",
+      "snapshot_payload_sha256": "3fb839f465793b01ecafc4df433031a063dd7b395a050960cde57c2807031337",
+      "total_bytes": 5071894300
+    },
+    "qwen_reader": {
+      "file_count": 14,
+      "manifest_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct/.snapshot_manifest.json",
+      "manifest_sha256": "159a504daaae6dc412535978f087150a0eb8e50164afd70a8a17f83906f1127c",
+      "model_dir": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+      "passed": true,
+      "repo_id": "Qwen/Qwen3-VL-4B-Instruct",
+      "revision": "ebb281ec70b05090aa6165b016eac8ec08e71b17",
+      "snapshot_payload_sha256": "45be3ffb00017b02bffa79f4f8e6f301760ac50c0bb78b2c4e5a7fe8aa3d52c6",
+      "total_bytes": 8887292732
+    }
+  },
+  "phase2_allowed": false,
+  "protocol": "R11-New-Teacher47-Swap-Diagnostic",
+  "reader_metric": "teacher-forced mean-token-NLL listwise CE",
+  "schema": "vision_memory.r11-new-teacher-swap-manifest.v1",
+  "script_sha256": "acdce1782292dc727489f1a4469cbabf678d7d3f315214749e597d232cac823f",
+  "teacher_rgb_bitwise_replay": {
+    "4": true,
+    "7": true
+  },
+  "trainable_parameters": [],
+  "unet_used": false,
+  "validation": {
+    "deployment": {
+      "disk_free_bytes": 906164699136,
+      "disk_usage_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new",
+      "hostname": "vlm-r11-identity-h200x4-20260907--be5a66e9128b-lzfotstnvy",
+      "minimum_free_bytes": 53687091200,
+      "output_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-teacher47-d0aa355-20260907-round02",
+      "passed": true,
+      "required_hostname_prefix": "vlm-r11-identity-h200x4-20260907",
+      "ssd_root": "/inspire/ssd"
+    },
+    "environment": {
+      "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+      "CUDA_VISIBLE_DEVICES": "0,1",
+      "HF_HUB_OFFLINE": "1",
+      "MKL_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTHONHASHSEED": "0",
+      "TOKENIZERS_PARALLELISM": "false",
+      "TRANSFORMERS_OFFLINE": "1",
+      "VLM_DREAMLITE_SNAPSHOT_MANIFEST_SHA256": "1bcf41b170c4b4a806bac6701cbdf4fabd5c3c53fa67415d065ab95ce2703159",
+      "VLM_READER_SNAPSHOT_MANIFEST_SHA256": "159a504daaae6dc412535978f087150a0eb8e50164afd70a8a17f83906f1127c"
+    },
+    "git_clean": true,
+    "git_commit": "d0aa3558073167b09f4ddc6087829c94ff32f436",
+    "git_detached": true,
+    "other_compute_pids": []
+  }
+}

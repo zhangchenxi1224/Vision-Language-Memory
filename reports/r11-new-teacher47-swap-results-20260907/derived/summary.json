@@ -1,0 +1,195 @@
+{
+  "comparison": {
+    "d0_diagnostic_gate": true,
+    "decision": "eligible_for_d1_implementation_and_preflight",
+    "distinguishability_gate": true,
+    "formal_success": false,
+    "phase2_allowed": false,
+    "protocol": "R11-New-Teacher47-Swap-Diagnostic",
+    "raw_row_recomputation_passed": true,
+    "row_count": 24,
+    "schema": "vision_memory.r11-new-teacher-swap-comparison.v1",
+    "shared_training_allowed": false,
+    "targets": [
+      {
+        "contrasts": {
+          "donor": {
+            "accuracy_gap": 1.0,
+            "improved_views": 4,
+            "passed": true,
+            "relative_ce_improvement": 0.999984644368196
+          },
+          "reset": {
+            "accuracy_gap": 1.0,
+            "improved_views": 4,
+            "passed": true,
+            "relative_ce_improvement": 0.9999912047094764
+          }
+        },
+        "distinguishability_gate": true,
+        "scores": {
+          "donor": {
+            "accuracy": 0.0,
+            "mean_ce": 18.46894407272339
+          },
+          "own": {
+            "accuracy": 1.0,
+            "mean_ce": 0.00028360230498947203
+          },
+          "reset": {
+            "accuracy": 0.0,
+            "mean_ce": 32.24479103088379
+          }
+        },
+        "target_index": 4,
+        "teacher_replay_gate": true
+      },
+      {
+        "contrasts": {
+          "donor": {
+            "accuracy_gap": 1.0,
+            "improved_views": 4,
+            "passed": true,
+            "relative_ce_improvement": 0.9999944181003502
+          },
+          "reset": {
+            "accuracy_gap": 1.0,
+            "improved_views": 4,
+            "passed": true,
+            "relative_ce_improvement": 0.9999977037373524
+          }
+        },
+        "distinguishability_gate": true,
+        "scores": {
+          "donor": {
+            "accuracy": 0.0,
+            "mean_ce": 14.254626274108887
+          },
+          "own": {
+            "accuracy": 1.0,
+            "mean_ce": 7.956789340823889e-05
+          },
+          "reset": {
+            "accuracy": 0.0,
+            "mean_ce": 34.651041984558105
+          }
+        },
+        "target_index": 7,
+        "teacher_replay_gate": true
+      }
+    ],
+    "teacher_replay_gate": true
+  },
+  "image_statistics": {
+    "image-4.png": {
+      "mean": 0.4918513298034668,
+      "mean_total_variation": 0.005801152437925339,
+      "sha256": "c1bab3e678c1b5bb93a492a924ec9d8cf47a6e1f4e8916a7dfe346da26c9a8fe",
+      "shape": [
+        1024,
+        1024,
+        3
+      ],
+      "std": 0.0882396399974823
+    },
+    "image-7.png": {
+      "mean": 0.49236294627189636,
+      "mean_total_variation": 0.005755065940320492,
+      "sha256": "15041e64ad20b012cef6ec9c42093c5e7d21c508244e6ba2ee76b387d1fb7314",
+      "shape": [
+        1024,
+        1024,
+        3
+      ],
+      "std": 0.09080624580383301
+    },
+    "image-reset.png": {
+      "mean": 0.49803921580314636,
+      "mean_total_variation": 0.0,
+      "sha256": "e392336c6c78f01506a6c600d5fa3772edb377480ec0b40241511283ac6e65c3",
+      "shape": [
+        1024,
+        1024,
+        3
+      ],
+      "std": 0.0
+    }
+  },
+  "prediction_indices_by_cell": {
+    "target-4/donor": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "target-4/own": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "target-4/reset": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "target-7/donor": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "target-7/own": [
+      2,
+      2,
+      2,
+      2
+    ],
+    "target-7/reset": [
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "prediction_labels_by_cell": {
+    "target-4/donor": [
+      "green",
+      "green",
+      "green",
+      "green"
+    ],
+    "target-4/own": [
+      "blue",
+      "blue",
+      "blue",
+      "blue"
+    ],
+    "target-4/reset": [
+      "no active preference",
+      "no active preference",
+      "no active preference",
+      "no active preference"
+    ],
+    "target-7/donor": [
+      "blue",
+      "blue",
+      "blue",
+      "blue"
+    ],
+    "target-7/own": [
+      "green",
+      "green",
+      "green",
+      "green"
+    ],
+    "target-7/reset": [
+      "no active preference",
+      "no active preference",
+      "no active preference",
+      "no active preference"
+    ]
+  },
+  "schema": "vision_memory.r11-new-teacher-swap-derived-summary.v1"
+}

@@ -1,0 +1,97 @@
+{
+  "all_parameters_frozen": true,
+  "comparison": {
+    "d0_diagnostic_gate": true,
+    "decision": "eligible_for_d1_implementation_and_preflight",
+    "distinguishability_gate": true,
+    "formal_success": false,
+    "phase2_allowed": false,
+    "protocol": "R11-New-Teacher47-Swap-Diagnostic",
+    "raw_row_recomputation_passed": true,
+    "row_count": 24,
+    "schema": "vision_memory.r11-new-teacher-swap-comparison.v1",
+    "shared_training_allowed": false,
+    "targets": [
+      {
+        "contrasts": {
+          "donor": {
+            "accuracy_gap": 1.0,
+            "improved_views": 4,
+            "passed": true,
+            "relative_ce_improvement": 0.999984644368196
+          },
+          "reset": {
+            "accuracy_gap": 1.0,
+            "improved_views": 4,
+            "passed": true,
+            "relative_ce_improvement": 0.9999912047094764
+          }
+        },
+        "distinguishability_gate": true,
+        "scores": {
+          "donor": {
+            "accuracy": 0.0,
+            "mean_ce": 18.46894407272339
+          },
+          "own": {
+            "accuracy": 1.0,
+            "mean_ce": 0.00028360230498947203
+          },
+          "reset": {
+            "accuracy": 0.0,
+            "mean_ce": 32.24479103088379
+          }
+        },
+        "target_index": 4,
+        "teacher_replay_gate": true
+      },
+      {
+        "contrasts": {
+          "donor": {
+            "accuracy_gap": 1.0,
+            "improved_views": 4,
+            "passed": true,
+            "relative_ce_improvement": 0.9999944181003502
+          },
+          "reset": {
+            "accuracy_gap": 1.0,
+            "improved_views": 4,
+            "passed": true,
+            "relative_ce_improvement": 0.9999977037373524
+          }
+        },
+        "distinguishability_gate": true,
+        "scores": {
+          "donor": {
+            "accuracy": 0.0,
+            "mean_ce": 14.254626274108887
+          },
+          "own": {
+            "accuracy": 1.0,
+            "mean_ce": 7.956789340823889e-05
+          },
+          "reset": {
+            "accuracy": 0.0,
+            "mean_ce": 34.651041984558105
+          }
+        },
+        "target_index": 7,
+        "teacher_replay_gate": true
+      }
+    ],
+    "teacher_replay_gate": true
+  },
+  "counters": {
+    "optimizer_steps": 0,
+    "reader_forward_calls": 96,
+    "unet_forward_calls": 0
+  },
+  "elapsed_seconds": 35.45384852960706,
+  "engineering_gate": true,
+  "formal_success": false,
+  "git_commit": "d0aa3558073167b09f4ddc6087829c94ff32f436",
+  "phase2_allowed": false,
+  "protocol": "R11-New-Teacher47-Swap-Diagnostic",
+  "schema": "vision_memory.r11-new-teacher-swap-result.v1",
+  "snapshots_unchanged": true
+}

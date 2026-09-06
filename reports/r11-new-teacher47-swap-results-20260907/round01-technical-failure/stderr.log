@@ -1,0 +1,11 @@
+Loading pipeline components...:   0%|                    | 0/6 [00:00<?, ?it/s]Loading pipeline components...:  17%|██          | 1/6 [00:00<00:01,  3.96it/s]Loading pipeline components...:  67%|████████    | 4/6 [00:01<00:00,  2.97it/s]Loading pipeline components...:  83%|██████████  | 5/6 [00:01<00:00,  3.51it/s]Loading pipeline components...: 100%|████████████| 6/6 [00:02<00:00,  2.82it/s]Loading pipeline components...: 100%|████████████| 6/6 [00:02<00:00,  2.99it/s]
+`torch_dtype` is deprecated! Use `dtype` instead!
+Loading checkpoint shards:   0%|                         | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|████████▌        | 1/2 [00:01<00:01,  1.03s/it]Loading checkpoint shards: 100%|█████████████████| 2/2 [00:01<00:00,  1.23it/s]Loading checkpoint shards: 100%|█████████████████| 2/2 [00:01<00:00,  1.18it/s]
+Traceback (most recent call last):
+  File "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory-teacher47-08687bb-20260907/scripts/experiments/audit_r11_teacher47.py", line 235, in main
+    run_gpu(args, config, validation, args.output_root)
+  File "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory-teacher47-08687bb-20260907/scripts/experiments/audit_r11_teacher47.py", line 175, in run_gpu
+    core.require(counters == {"unet_forward_calls": 0, "reader_forward_calls": 96, "optimizer_steps": 0},
+  File "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory-teacher47-08687bb-20260907/src/vision_memory/training/r11_teacher_swap.py", line 23, in require
+    raise ValueError(message)
+ValueError: Unexpected forward counts.
