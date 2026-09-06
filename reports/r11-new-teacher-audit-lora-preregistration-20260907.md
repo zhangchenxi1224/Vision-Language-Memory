@@ -41,6 +41,20 @@ Teacher 重放门槛：两条 own 条件各 4/4 正确，平均 listwise CE ≤ 
 
 这是静态配对审计，不报告训练 DiD。如果技术无效，修工程后使用新目录重跑同一审计；如果 own 重放或区分力不通过，不进入 LoRA 拟合，不改门槛或挑选另一对来冒充本轮通过。
 
+### Round 01 技术终止与唯一修复
+
+预注册提交 `08687bb57f59eb9246fbe3f448485a84fdcca67d` 的 Round 01 在 24/24 receipts 产生后被 forward-count 守门截停：评分实现调用 `reader.model(...)`，但计数钩子挂在未被调用的外层 `reader(...)`，因此计数误报并形成 `technical_failed` 终态。两条 canonical RGB 均逐位重放成功，但本轮没有生成 `result.json`，不构成有效 D0；donor/reset logits 和效果值未被查看、未用于修改设计。
+
+唯一允许的 Round 02 修复是把钩子移到实际执行的 `reader.model`，并在守门前保存 observed/expected execution counts。配置、两条样本、三种图像条件、四个排列、96 次候选前向、所有数值门槛和停止规则完全不变；Round 01 原目录只读保留并作为失败产物交付。
+
+Round 02 修复后、重新读取任何远端结果前的实现哈希：
+
+- config bytes SHA-256（不变）：`3d11e602d8ac70cc3716ad375db92fe7c83fc8ba2c13d692d3e063d3f477ef1f`
+- core SHA-256：`5bbfb32af5b215024035ebd728a85d4750b1b662242165ed3b95ed591d1a361c`
+- runner SHA-256：`acdce1782292dc727489f1a4469cbabf678d7d3f315214749e597d232cac823f`
+- tests SHA-256：`faf3ae727074ba971c5ce64dd25b71936e64ad979d0272ae55f637ea2be00c0f`
+- 联合回归：`86 passed, 0 failed, 0 errors, 0 skipped`；JUnit SHA-256：`e98da606f597554ce6eb3ce9e1147d521545d859fa393c7fa949f55b4576d1e1`。
+
 即使 D0 通过，也只排除这两个现成不同实体、同槽同候选样本之间的一种通用读取捷径，不证明完整 state 语义、事件因果性或长期记忆。
 
 ## D1：条件激活的单样本 LoRA 诊断（当前尚未部署）

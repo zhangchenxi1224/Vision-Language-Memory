@@ -171,4 +171,7 @@ def test_runner_uses_current_host_contract_and_contains_no_training_step() -> No
     assert '"unet_forward_calls": 0' in source
     assert '"optimizer_steps": 0' in source
     assert "forbidden_unet" in source
-    assert '"reader_forward_calls": 96' in source
+    assert 'config["expected_reader_forward_calls"]' in source
+    assert "reader.model.register_forward_pre_hook(count_reader)" in source
+    assert "reader.register_forward_pre_hook(count_reader)" not in source
+    assert 'root / "execution-counts.json"' in source

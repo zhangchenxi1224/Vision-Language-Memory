@@ -115,7 +115,10 @@ def run_gpu(args: argparse.Namespace, config: dict, validation: dict, root: Path
 
         core.require(frozen(), "All pipeline and Reader parameters must be frozen.")
         unet_hook = pipe.unet.register_forward_pre_hook(forbidden_unet)
-        reader_hook = reader.register_forward_pre_hook(count_reader)
+        # The scorer intentionally calls ``reader.model(...)`` and then
+        # ``reader.lm_head(...)`` rather than ``reader(...)``.  Count the
+        # module that actually executes each candidate forward.
+        reader_hook = reader.model.register_forward_pre_hook(count_reader)
         try:
             with torch.no_grad():
                 images = {key: decode_model_latents_unit_interval(pipe.vae,
@@ -172,8 +175,11 @@ def run_gpu(args: argparse.Namespace, config: dict, validation: dict, root: Path
             unet_hook.remove()
             reader_hook.remove()
         comparison = core.aggregate(rows, config, hashes)
-        core.require(counters == {"unet_forward_calls": 0, "reader_forward_calls": 96, "optimizer_steps": 0},
-                     "Unexpected forward counts.")
+        expected_counters = {"unet_forward_calls": config["guardrails"]["unet_forward_calls"],
+            "reader_forward_calls": config["expected_reader_forward_calls"],
+            "optimizer_steps": config["guardrails"]["optimizer_steps"]}
+        atomic(root / "execution-counts.json", {"observed": counters, "expected": expected_counters})
+        core.require(counters == expected_counters, f"Unexpected forward counts: {counters} != {expected_counters}.")
         # Re-hash parents after scoring; originals must not be rewritten.
         for target in config["targets"]:
             validate_teacher(config, target)

@@ -151,8 +151,9 @@ def audit_delivery(root: Path, config: Mapping[str, Any]) -> dict[str, Any]:
                 and p.name != "artifact_inventory.json"}
     require(observed == listed and inventory["artifact_count"] == len(listed), "Incomplete inventory.")
     require({"manifest.json", "result.json", "terminal.json", "receipts.jsonl", "REPORT.md", "images.pt",
-             "environment.txt", "runtime.json", "config.json", "snapshots-end.json"}.issubset(listed),
-            "Required artifacts missing.")
+             "environment.txt", "runtime.json", "config.json", "snapshots-end.json",
+             "execution-counts.json"}.issubset(listed),
+             "Required artifacts missing.")
     manifest = json.loads((root / "manifest.json").read_text(encoding="utf-8"))
     terminal = json.loads((root / "terminal.json").read_text(encoding="utf-8"))
     result = json.loads((root / "result.json").read_text(encoding="utf-8"))
@@ -164,8 +165,12 @@ def audit_delivery(root: Path, config: Mapping[str, Any]) -> dict[str, Any]:
     require(terminal["manifest_sha256"] == sha256_file(root / "manifest.json")
             and terminal["result_sha256"] == sha256_file(root / "result.json"), "Terminal artifact mismatch.")
     require(result["snapshots_unchanged"] is True and result["all_parameters_frozen"] is True, "Frozen evidence missing.")
-    require(result["counters"] == {"unet_forward_calls": 0, "reader_forward_calls": 96, "optimizer_steps": 0},
-            "Execution counts invalid.")
+    expected_counters = {"unet_forward_calls": config["guardrails"]["unet_forward_calls"],
+        "reader_forward_calls": config["expected_reader_forward_calls"],
+        "optimizer_steps": config["guardrails"]["optimizer_steps"]}
+    execution_counts = json.loads((root / "execution-counts.json").read_text(encoding="utf-8"))
+    require(execution_counts == {"observed": expected_counters, "expected": expected_counters}
+            and result["counters"] == expected_counters, "Execution counts invalid.")
     from vision_memory.repro import canonical_tensor_sha256
 
     images = torch.load(root / "images.pt", map_location="cpu", weights_only=True)
