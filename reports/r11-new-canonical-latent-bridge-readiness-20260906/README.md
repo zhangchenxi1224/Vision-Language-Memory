@@ -10,7 +10,7 @@
 - pytest 终端计时为 `119.91s`；JUnit testsuite 计时为 `119.894s`。两者来源不同，保留原值，不混用。
 - JUnit：`pytest-junit.xml`，15,239 bytes，SHA-256 `b7cfc6f881df23a5437d29c42a31bbf3ff11e7d103c0742b39a8e7e3dd1040ba`。
 - 测试运行于本地 CPU 环境，只验证代码、门槛、控制器、聚合器与防篡改契约；它**不等于** H200 模型加载、梯度或 teacher replay 预检。
-- GPU 实验源码已通过 GitHub 同步，并在共享盘准备 clean detached checkout；实验输出 fresh-root 在检查时不存在，因此没有隐藏的 optimizer 输出。
+- GPU 实验源码已通过 GitHub 同步，并在共享盘准备 clean detached checkout；检查时该指定实验输出 fresh-root 不存在，故仅能确认该指定路径下没有训练产物，不外推其他路径。
 
 ## 原始测试命令
 
@@ -27,7 +27,7 @@ exit_code=0
 
 ## 测试环境
 
-以下是测试完成后、同一 clean worktree 和 Python executable 上的只读环境探针；原始 JUnit 没有内嵌这些版本，因此不将其冒充为 JUnit 自证字段。
+以下是测试完成后在同一 clean worktree 中运行的只读环境探针；原始测试命令只记录 `python`，未单独记录 resolved executable，因此表中 executable 仅是测试后探针解析值，不冒充测试开始时的原子绑定。
 
 | 字段 | 值 |
 | --- | --- |
