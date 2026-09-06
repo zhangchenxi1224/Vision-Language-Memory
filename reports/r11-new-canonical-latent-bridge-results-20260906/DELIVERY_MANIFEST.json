@@ -1,0 +1,92 @@
+{
+  "aggregate_result": {
+    "bridge_diagnostic_gate": false,
+    "bridge_distance_gate": false,
+    "decision": "distance_fail_reader_fail_change_one_solver_factor",
+    "endpoint_reader_transfer_gate": false,
+    "engineering_gate": true,
+    "formal_success": false,
+    "phase2_allowed": false,
+    "teacher_replay_gate": true
+  },
+  "archives": {
+    "aggregation-v1.tar.gz": {
+      "bytes": 30616,
+      "entries": 6,
+      "sha256": "660dbf3ffdbe4d85892d40ebf877ce973ce7e554f5d85e683c93548d96e32d27"
+    },
+    "formal-target01.tar.gz": {
+      "bytes": 13751400,
+      "entries": 45,
+      "sha256": "17d34f9920c8f828041845ff482cbf7e99950ba4dece83b477a1a8387a0f61cc"
+    },
+    "technical-preflight.tar.gz": {
+      "bytes": 5512321,
+      "entries": 30,
+      "sha256": "33df13dea63030866dc7e658c6815baa0922603bd8bfc764a9680c1e25981760"
+    }
+  },
+  "generated_artifacts": {
+    "ARCHIVE_SHA256SUMS.txt": {
+      "bytes": 327,
+      "sha256": "8dd26b946a68964e017cc255f6cd5fb2c69a213121922f9c93baadd84c1ac1a5"
+    },
+    "checkpoint_image_montage.png": {
+      "bytes": 473538,
+      "sha256": "eb2ad03497cfaeee77a48feb069c1697a9325d63c017989f4c9237e8711a7442"
+    },
+    "distance_trajectory.png": {
+      "bytes": 101985,
+      "sha256": "4e4ae69e009130bfaa9b9d7f9b83d60cf2b410faa54bf5e9ad980c2af7ccfb49"
+    },
+    "optimizer_diagnostics.png": {
+      "bytes": 144442,
+      "sha256": "0bc94f532ea3851f8d5369d761bd13e532b9c60e22d7e2000e2e77333fd5442f"
+    },
+    "reader_transfer_summary.png": {
+      "bytes": 56936,
+      "sha256": "85ab09d212228bb11356f7f0803072e73857a244f4bb29ce2184774cb8def7f9"
+    },
+    "render_environment.txt": {
+      "bytes": 230,
+      "sha256": "e723aac94f40e24a9fb82a44b0a3f81ff837175fe1cb5322c6a8f31c7a1e4ea8"
+    },
+    "training_diagnostics.json": {
+      "bytes": 4749,
+      "sha256": "3d46dd229d7e781d7c7e36c40d7ae3fcfa4c098a62204dab6831a721bda04078"
+    }
+  },
+  "generator": {
+    "path": "scripts/experiments/render_r11_new_canonical_latent_bridge_delivery.py",
+    "sha256": "ab8f767fc35064fe7b08deadfb1c28d5068b044d03751c9f23b19250a21d8ea5"
+  },
+  "official_aggregation": {
+    "RAW_ARTIFACTS.json": {
+      "bytes": 20820,
+      "sha256": "1b7048e74bdd70c101d960e25c2b3fed91da686116ee6623445041b2a290ac12"
+    },
+    "REPORT.md": {
+      "bytes": 925,
+      "sha256": "438d5ba4a0260222d402e98fa9b4123059df7e32938b67a650746510d5725e21"
+    },
+    "artifact_inventory.json": {
+      "bytes": 739,
+      "sha256": "1c6d58d4dc59b66f38bafab23dbb78632307f91cfb66be71f5815aaa68cdafe8"
+    },
+    "comparison.json": {
+      "bytes": 5691,
+      "sha256": "77bde91bcf43f177adb32a76dddb047b85487ba572daf4f2c4a6206456a060b7"
+    },
+    "distance_trajectory.csv": {
+      "bytes": 50375,
+      "sha256": "8ce9dc5a68327f5b01619f01e40be6142c5751f8968228e066f0e330d4412833"
+    }
+  },
+  "report_document": {
+    "bytes": 3888,
+    "sha256": "4cfea52e9407f4035a0d190acbada418d64ec73efe91be2afa47d5735afeeddd"
+  },
+  "schema": "vision_memory.r11-new-canonical-latent-bridge-delivery-manifest.v1",
+  "scientific_source": "independently recomputed raw artifacts",
+  "training_source_commit": "f83519b2863c13747425157f4cd56e55684c12e9"
+}

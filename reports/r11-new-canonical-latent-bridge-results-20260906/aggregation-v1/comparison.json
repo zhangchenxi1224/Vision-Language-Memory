@@ -1,0 +1,176 @@
+{
+  "bridge_diagnostic_gate": false,
+  "bridge_distance_gate": false,
+  "checkpoint_distance_statistics": {
+    "0": {
+      "l2_distance": 90.19667096475901,
+      "l2_distance_ratio_to_m0": 1.0,
+      "m0_mse": 0.12413695454597473,
+      "m0_rmse": 0.3523307459560899,
+      "mse": 0.12413695454597473,
+      "mse_ratio_to_m0": 1.0,
+      "relative_mse_change": 0.0,
+      "rmse": 0.3523307459560899,
+      "teacher_normalized_rmse": 0.5381839141556165,
+      "teacher_population_std": 0.6546660661697388,
+      "tensor_numel": 65536
+    },
+    "128": {
+      "l2_distance": 79.34043292593631,
+      "l2_distance_ratio_to_m0": 0.8796381515780736,
+      "m0_mse": 0.12413695454597473,
+      "m0_rmse": 0.3523307459560899,
+      "mse": 0.0960526168346405,
+      "mse_ratio_to_m0": 0.7737632777116902,
+      "relative_mse_change": -0.22623672228830982,
+      "rmse": 0.3099235661169387,
+      "teacher_normalized_rmse": 0.4734071034568992,
+      "teacher_population_std": 0.6546660661697388,
+      "tensor_numel": 65536
+    },
+    "192": {
+      "l2_distance": 83.83455677795553,
+      "l2_distance_ratio_to_m0": 0.9294639800033281,
+      "m0_mse": 0.12413695454597473,
+      "m0_rmse": 0.3523307459560899,
+      "mse": 0.10724232345819473,
+      "mse_ratio_to_m0": 0.8639032901236272,
+      "relative_mse_change": -0.1360967098763728,
+      "rmse": 0.3274787374138888,
+      "teacher_normalized_rmse": 0.5002225628248488,
+      "teacher_population_std": 0.6546660661697388,
+      "tensor_numel": 65536
+    },
+    "256": {
+      "l2_distance": 81.20513785507971,
+      "l2_distance_ratio_to_m0": 0.900311918239284,
+      "m0_mse": 0.12413695454597473,
+      "m0_rmse": 0.3523307459560899,
+      "mse": 0.10062064230442047,
+      "mse_ratio_to_m0": 0.8105615501236992,
+      "relative_mse_change": -0.18943844987630076,
+      "rmse": 0.3172075697464051,
+      "teacher_normalized_rmse": 0.4845333921189693,
+      "teacher_population_std": 0.6546660661697388,
+      "tensor_numel": 65536
+    },
+    "64": {
+      "l2_distance": 80.55741171382836,
+      "l2_distance_ratio_to_m0": 0.8931306538497764,
+      "m0_mse": 0.12413695454597473,
+      "m0_rmse": 0.3523307459560899,
+      "mse": 0.09902185946702957,
+      "mse_ratio_to_m0": 0.7976823648461292,
+      "relative_mse_change": -0.2023176351538708,
+      "rmse": 0.314677389507142,
+      "teacher_normalized_rmse": 0.48066855114123774,
+      "teacher_population_std": 0.6546660661697388,
+      "tensor_numel": 65536
+    }
+  },
+  "decision": "distance_fail_reader_fail_change_one_solver_factor",
+  "endpoint_distance_statistics": {
+    "l2_distance": 81.20513785507971,
+    "l2_distance_ratio_to_m0": 0.900311918239284,
+    "m0_mse": 0.12413695454597473,
+    "m0_rmse": 0.3523307459560899,
+    "mse": 0.10062064230442047,
+    "mse_ratio_to_m0": 0.8105615501236992,
+    "relative_mse_change": -0.18943844987630076,
+    "rmse": 0.3172075697464051,
+    "teacher_normalized_rmse": 0.4845333921189693,
+    "teacher_population_std": 0.6546660661697388,
+    "tensor_numel": 65536
+  },
+  "endpoint_reader_statistics": {
+    "accuracy": 0.0,
+    "all_four_correct": false,
+    "checkpoint": "raw_step_256",
+    "condition": "normal",
+    "mean_ce": 26.093762203727927,
+    "per_view_ce": [
+      22.000012535266976,
+      27.12501206332673,
+      23.33335227954049,
+      31.91667193677751
+    ],
+    "permutations_are_independent_statistical_units": false,
+    "row_count": 4
+  },
+  "endpoint_reader_transfer_gate": false,
+  "endpoint_reset_statistics": {
+    "accuracy": 0.0,
+    "all_four_correct": false,
+    "checkpoint": "raw_step_256",
+    "condition": "reset",
+    "mean_ce": 27.697927217990824,
+    "per_view_ce": [
+      24.37500533794217,
+      29.208341387042786,
+      25.541688817176173,
+      31.66667332980217
+    ],
+    "permutations_are_independent_statistical_units": false,
+    "row_count": 4
+  },
+  "engineering_gate": true,
+  "formal_success": false,
+  "git_commit": "f83519b2863c13747425157f4cd56e55684c12e9",
+  "interpretation": "diagnostic_only",
+  "m0_reader_statistics": {
+    "accuracy": 0.0,
+    "all_four_correct": false,
+    "checkpoint": "m0",
+    "condition": "normal",
+    "mean_ce": 27.92188363320396,
+    "per_view_ce": [
+      24.20834166428495,
+      29.541675199785832,
+      25.333348110896942,
+      32.60416955784812
+    ],
+    "permutations_are_independent_statistical_units": false,
+    "row_count": 4
+  },
+  "m0_reset_statistics": {
+    "accuracy": 0.0,
+    "all_four_correct": false,
+    "checkpoint": "m0",
+    "condition": "reset",
+    "mean_ce": 27.697927217990824,
+    "per_view_ce": [
+      24.37500533794217,
+      29.208341387042786,
+      25.541688817176173,
+      31.66667332980217
+    ],
+    "permutations_are_independent_statistical_units": false,
+    "row_count": 4
+  },
+  "optimizer_steps": 256,
+  "phase2_allowed": false,
+  "primary_endpoint": "raw_step_256",
+  "protocol": "R11-New-Canonical-Latent-Bridge-Distance-Target01",
+  "raw_artifacts_sha256": "1b7048e74bdd70c101d960e25c2b3fed91da686116ee6623445041b2a290ac12",
+  "schema": "vision_memory.r11-new-canonical-latent-bridge-comparison.v1",
+  "scientific_success_claim": false,
+  "status": "completed",
+  "target_index": 1,
+  "target_segment_id": "r5-f1-392d41fd097d069c42218e0a",
+  "teacher_replay_gate": true,
+  "teacher_replay_statistics": {
+    "accuracy": 1.0,
+    "all_four_correct": true,
+    "checkpoint": "canonical_teacher",
+    "condition": "teacher",
+    "mean_ce": 0.00017690610513911291,
+    "per_view_ce": [
+      0.00010211342703511954,
+      0.00012818916408861934,
+      0.00024359093460701864,
+      0.00023373089482569415
+    ],
+    "permutations_are_independent_statistical_units": false,
+    "row_count": 4
+  }
+}
