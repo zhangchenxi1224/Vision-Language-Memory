@@ -1,0 +1,89 @@
+{
+  "schema": "vision_memory.r11-new-source-only-init-readiness.v1",
+  "status": "local_implementation_and_cpu_tests_passed",
+  "base_git_commit": "8b904d82d17ff36fb44c80e08696ed767445f38e",
+  "protocol": "R11-New-Canonical-Latent-Bridge-Source-Only-Init-Target01",
+  "config_canonical_sha256": "cabaed92d8f80871f8a83511dd107b81672ba1b7fb33844a4241d2c0350ed1fe",
+  "tests": {
+    "path": "reports/r11-new-source-only-init-readiness-20260907/pytest-junit.xml",
+    "tests": 564,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": "230.443",
+    "timestamp": "2026-09-07T00:31:20.007561+08:00",
+    "sha256": "8face2e9264f6513f04c2096c3a6648e6f3a8d64aa26f9cf0b6564da23c9b163",
+    "terminal_seconds": 230.68,
+    "command": "D:/st_python/python.exe -X utf8 -B -m pytest tests/test_r11_new_bridge.py tests/test_r11_new_bridge_trainer.py tests/test_r11_new_bridge_controller.py tests/test_compare_r11_new_bridge.py tests/test_r11_new_initialization_backend.py tests/test_r11_new_oracle.py tests/test_r11_new_phase1a_trainer.py tests/test_r11_new_phase1a_controller.py tests/test_compare_r11_new_phase1a.py tests/test_render_r11_new_bridge_teacher_init.py tests/test_r11_new_source_init_bridge.py tests/test_r11_new_source_init_bridge_trainer.py tests/test_r11_new_source_init_bridge_controller.py tests/test_compare_r11_new_source_init_bridge.py tests/test_render_r11_new_source_init_bridge.py -q -p no:cacheprovider --junitxml=reports/r11-new-source-only-init-readiness-20260907/pytest-junit.xml"
+  },
+  "superseded_test_attempts": [
+    {
+      "path": "reports/r11-new-source-only-init-readiness-20260907/pytest-junit-attempt1-pre-controller-hardening.xml",
+      "tests": "506",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "seconds": "199.837",
+      "sha256": "54f8ffa987a9ba41828feeb73d6bf4103ca60aa1b1b47ce9586ea24875de0741",
+      "superseded": true,
+      "not_final_code_evidence": true
+    },
+    {
+      "path": "reports/r11-new-source-only-init-readiness-20260907/pytest-junit-attempt2-pre-parent-binding.xml",
+      "tests": "560",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "seconds": "274.246",
+      "sha256": "df288938f4fbdeeac04adfc38467b280724644d0ea1c8184b4c87d95d187e35a",
+      "superseded": true,
+      "not_final_code_evidence": true
+    }
+  ],
+  "source_sha256": {
+    "configs/experiments/r11_new_canonical_latent_bridge_target01_source_only_init.json": "2bdf0e0b45e2c0b22d4c04711c0be11c5e9b94fc30d7ee70ed1aa3cb219b1702",
+    "reports/r11-new-canonical-latent-bridge-source-only-init-preregistration-20260907.md": "ade7bdfe739dc5ca3ad5569ed0ed2281ec4ce5aa7b6ee377f67d79ffbbf1126d",
+    "src/vision_memory/training/r11_new_source_init_bridge.py": "a035d1f0371e3b619af5adc0f2790f70edc75b0bd8498345e00e456dc6a6d5a3",
+    "scripts/train/r11_new_source_init_bridge.py": "c8ac08c82a9fa893fa260a2fcdf73423e5a2ce506b57d8b3fad7b40a31a39ae8",
+    "scripts/inspire/run_r11_new_source_init_bridge.py": "1fdb535946e55b242e43084ef0aafac3a7bda45594ee17b982c9f99b7a62c20d",
+    "scripts/experiments/compare_r11_new_source_init_bridge.py": "4993c8b69dfc49af63137431e68fc4b4d44caedc2b64d53bed6f73368360be44",
+    "scripts/experiments/render_r11_new_source_init_bridge_delivery.py": "93eee1b2528b024dcf5ec13e792c86092d71ee449a4d36510021adff84db21d4",
+    "tests/test_r11_new_source_init_bridge.py": "b83ed19255e5897ee374e734170c7f0ca873f7f7516bb062a6de29d9e06c99aa",
+    "tests/test_r11_new_source_init_bridge_trainer.py": "2c41074f40534d6e58ea15f5536196cbc029bf1fbf930100cb78c2090de9cae7",
+    "tests/test_r11_new_source_init_bridge_controller.py": "7a6cc4ec82011dd86d9d98d11907667ef246b4148a9a3f3c337058097ac5fa48",
+    "tests/test_compare_r11_new_source_init_bridge.py": "ff1c82c976c08c7b4553595df2a0aa946d454f6a4a7771b9125fdb6f1e8f3ff4",
+    "tests/test_render_r11_new_source_init_bridge.py": "635c432d4c6b103915eddcab5c0982577cf45330746487050b8743c35f8a1c88"
+  },
+  "environment": {
+    "python": "3.13.5",
+    "torch": "2.11.0+cpu",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "test_device": "cpu"
+  },
+  "ruff_passed": true,
+  "git_diff_check_passed": true,
+  "old_tracked_experiment_files_unmodified": true,
+  "source_import_and_config_check": true,
+  "independent_review": {
+    "controllerSha": "1fdb535946e55b242e43084ef0aafac3a7bda45594ee17b982c9f99b7a62c20d",
+    "status": "passed",
+    "fixedTargetTamperRejected": true,
+    "parentHashTamperRejected": true,
+    "otherBlockingFindings": 0
+  },
+  "pre_model_repairs": [
+    "Preflight requires all 11 hard audit flags; recomputes teacher logits and formal terminal hashes.",
+    "Full target content must match the immutable SHA-bound Phase1A parent manifest, including answer."
+  ],
+  "source_only_init_full_model_forwards_at_readiness": 0,
+  "source_only_init_optimizer_steps_at_readiness": 0,
+  "full_model_preflight_at_this_commit": "not_run_yet",
+  "formal_training_at_this_commit": "not_run_yet",
+  "initialization_teacher_assisted": false,
+  "optimization_teacher_supervised": true,
+  "answer_independent_writer_usable": false,
+  "formal_success": false,
+  "phase2_allowed": false,
+  "phase1a_passed_targets": 6,
+  "phase1a_total_targets": 8
+}

@@ -1,0 +1,20 @@
+{
+  "protocol": "R11-New-Canonical-Latent-Bridge-Source-Only-Init-Target01",
+  "modules_imported": [
+    "scripts.train.r11_new_source_init_bridge",
+    "scripts.inspire.run_r11_new_source_init_bridge",
+    "scripts.experiments.compare_r11_new_source_init_bridge",
+    "scripts.experiments.render_r11_new_source_init_bridge_delivery"
+  ],
+  "config_file_sha256": "2bdf0e0b45e2c0b22d4c04711c0be11c5e9b94fc30d7ee70ed1aa3cb219b1702",
+  "config_canonical_sha256": "cabaed92d8f80871f8a83511dd107b81672ba1b7fb33844a4241d2c0350ed1fe",
+  "initializer_signature": ["source_latents", "scheduler", "compute_device", "output_dir"],
+  "initializer_content_input": "source_latents only",
+  "python": "3.13.5",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "torch": "2.11.0+cpu",
+  "model_forwards": 0,
+  "optimizer_steps": 0,
+  "passed": true,
+  "scope": "Import and config binding only; final controller revisions are covered by the final joint JUnit and source hash inventory. No GPU model validation is claimed."
+}
