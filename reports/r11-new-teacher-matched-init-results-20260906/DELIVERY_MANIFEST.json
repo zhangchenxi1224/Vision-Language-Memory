@@ -1,0 +1,52 @@
+{
+  "artifacts": {
+    "README.md": {
+      "bytes": 5197,
+      "sha256": "fe39496caddb75f5684d45ae0e0a612f6f580d604744f1b7dc69989a8dac2ef2"
+    },
+    "checkpoint_images.png": {
+      "bytes": 1511328,
+      "sha256": "a3b17c493d91aa8e9eebfc737d1fa2e8ac04b261e1addf2764c8a3070a9f7398"
+    },
+    "distance_trajectory.png": {
+      "bytes": 96414,
+      "sha256": "0706a10b430c087dcc7a262457fe91a54b2f60a3339201cdc6668ffe7aa3da5c"
+    },
+    "optimizer_diagnostics.png": {
+      "bytes": 125621,
+      "sha256": "580236b76b78821d3f64bd681317aafde664dfa302fd5c84f05f8f93b7d1d7d1"
+    },
+    "reader_transfer.png": {
+      "bytes": 69676,
+      "sha256": "d8d81550266a9ca9cf04d5feafedbae5bce965063f7b8eb99d443b50d16347cc"
+    },
+    "render_environment.json": {
+      "bytes": 244,
+      "sha256": "d6fba91ac007f5940b36dd22341c97d857667e188165f9213e6425e4ffee93b7"
+    },
+    "training_diagnostics.json": {
+      "bytes": 1226226,
+      "sha256": "512825ded80ed63bc75d890c80929cb84bb0bb58b9244e9a20c7a156320b8e35"
+    }
+  },
+  "formal_success": false,
+  "generator": {
+    "path": "scripts/experiments/render_r11_new_canonical_latent_bridge_teacher_init_delivery.py",
+    "sha256": "5c36cbcca3ce75ced849efe82114d53be34f30c7574959f24252404517cbf6c4"
+  },
+  "phase2_allowed": false,
+  "schema": "vision_memory.r11-new-bridge-teacher-init-delivery.v1",
+  "source_comparison_sha256": "f66650cd6f66cbdf54c0694e8c55aa18c6ad3497ad487f8f7cb620f107d1d8ed",
+  "source_raw_artifacts_sha256": "2af2d9a0b6124e450a7b3658352bd1c6e58d7cede2ddcec384064e1dae9d909a",
+  "training_commit": "5bffcb9a1605c7cdef77df1126daca6f9578bdda",
+  "verification_scope": {
+    "all_bound_source_file_bytes_verified": true,
+    "checkpoint_display_statistics": "unchanged hash-bound source record statistics, identical to aggregate declarations",
+    "checkpoint_distance_recomputed_from_tensors": true,
+    "cuda_initializer_evidence": "byte-bound independent CUDA aggregation; no CPU fallback/reconstruction",
+    "cuda_initializer_recomputed_by_this_renderer": false,
+    "local_cpu_reduction_statistics": "separate checkpoints[*].local_cpu_recomputed_distance_statistics; existing tolerance verification only",
+    "optimizer_learning_rate_exact_evidence": "byte-bound independent source-runtime aggregation; original LR plotted unchanged",
+    "reader_statistics_recomputed_from_logits": true
+  }
+}

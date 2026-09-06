@@ -1,0 +1,185 @@
+{
+  "answer_independent_writer_usable": false,
+  "bridge_diagnostic_gate": false,
+  "bridge_distance_gate": false,
+  "checkpoint_distance_statistics": {
+    "0": {
+      "l2_distance": 110.26734645992212,
+      "l2_distance_ratio_to_m0": 1.0,
+      "m0_mse": 0.1855299025774002,
+      "m0_rmse": 0.4307318221090708,
+      "mse": 0.1855299025774002,
+      "mse_ratio_to_m0": 1.0,
+      "relative_mse_change": 0.0,
+      "rmse": 0.4307318221090708,
+      "teacher_normalized_rmse": 0.6579412686366314,
+      "teacher_population_std": 0.6546660661697388,
+      "tensor_numel": 65536
+    },
+    "128": {
+      "l2_distance": 67.76111964790354,
+      "l2_distance_ratio_to_m0": 0.6145166436242488,
+      "m0_mse": 0.1855299025774002,
+      "m0_rmse": 0.4307318221090708,
+      "mse": 0.07006178796291351,
+      "mse_ratio_to_m0": 0.3776307052912121,
+      "relative_mse_change": -0.6223692947087879,
+      "rmse": 0.2646918736246232,
+      "teacher_normalized_rmse": 0.40431586010446297,
+      "teacher_population_std": 0.6546660661697388,
+      "tensor_numel": 65536
+    },
+    "192": {
+      "l2_distance": 66.12992139649229,
+      "l2_distance_ratio_to_m0": 0.5997235221446807,
+      "m0_mse": 0.1855299025774002,
+      "m0_rmse": 0.4307318221090708,
+      "mse": 0.06672922521829605,
+      "mse_ratio_to_m0": 0.35966830301362146,
+      "relative_mse_change": -0.6403316969863786,
+      "rmse": 0.258320005455048,
+      "teacher_normalized_rmse": 0.3945828549911002,
+      "teacher_population_std": 0.6546660661697388,
+      "tensor_numel": 65536
+    },
+    "256": {
+      "l2_distance": 65.61817300798803,
+      "l2_distance_ratio_to_m0": 0.595082543605397,
+      "m0_mse": 0.1855299025774002,
+      "m0_rmse": 0.4307318221090708,
+      "mse": 0.06570044904947281,
+      "mse_ratio_to_m0": 0.3541232337038694,
+      "relative_mse_change": -0.6458767662961307,
+      "rmse": 0.25632098831245326,
+      "teacher_normalized_rmse": 0.3915293636832485,
+      "teacher_population_std": 0.6546660661697388,
+      "tensor_numel": 65536
+    },
+    "64": {
+      "l2_distance": 70.85415671248582,
+      "l2_distance_ratio_to_m0": 0.6425669882084134,
+      "m0_mse": 0.1855299025774002,
+      "m0_rmse": 0.4307318221090708,
+      "mse": 0.07660387456417084,
+      "mse_ratio_to_m0": 0.4128923343352314,
+      "relative_mse_change": -0.5871076656647686,
+      "rmse": 0.2767740496581477,
+      "teacher_normalized_rmse": 0.42277133940586287,
+      "teacher_population_std": 0.6546660661697388,
+      "tensor_numel": 65536
+    }
+  },
+  "decision": "distance_fail_reader_fail_change_one_solver_factor",
+  "endpoint_distance_statistics": {
+    "l2_distance": 65.61817300798803,
+    "l2_distance_ratio_to_m0": 0.595082543605397,
+    "m0_mse": 0.1855299025774002,
+    "m0_rmse": 0.4307318221090708,
+    "mse": 0.06570044904947281,
+    "mse_ratio_to_m0": 0.3541232337038694,
+    "relative_mse_change": -0.6458767662961307,
+    "rmse": 0.25632098831245326,
+    "teacher_normalized_rmse": 0.3915293636832485,
+    "teacher_population_std": 0.6546660661697388,
+    "tensor_numel": 65536
+  },
+  "endpoint_reader_statistics": {
+    "accuracy": 0.0,
+    "all_four_correct": false,
+    "checkpoint": "raw_step_256",
+    "condition": "normal",
+    "mean_ce": 10.97591445709591,
+    "per_view_ce": [
+      5.913413501717301,
+      11.552913244873773,
+      9.928243346904482,
+      16.509087734888084
+    ],
+    "permutations_are_independent_statistical_units": false,
+    "row_count": 4
+  },
+  "endpoint_reader_transfer_gate": false,
+  "endpoint_reset_statistics": {
+    "accuracy": 0.0,
+    "all_four_correct": false,
+    "checkpoint": "raw_step_256",
+    "condition": "reset",
+    "mean_ce": 27.697927217990824,
+    "per_view_ce": [
+      24.37500533794217,
+      29.208341387042786,
+      25.541688817176173,
+      31.66667332980217
+    ],
+    "permutations_are_independent_statistical_units": false,
+    "row_count": 4
+  },
+  "engineering_gate": true,
+  "formal_success": false,
+  "git_commit": "5bffcb9a1605c7cdef77df1126daca6f9578bdda",
+  "interpretation": "diagnostic_only",
+  "m0_reader_statistics": {
+    "accuracy": 0.0,
+    "all_four_correct": false,
+    "checkpoint": "m0",
+    "condition": "normal",
+    "mean_ce": 21.17719748397163,
+    "per_view_ce": [
+      14.91684429202779,
+      24.250027623635447,
+      19.25013881293604,
+      26.291779207287238
+    ],
+    "permutations_are_independent_statistical_units": false,
+    "row_count": 4
+  },
+  "m0_reset_statistics": {
+    "accuracy": 0.0,
+    "all_four_correct": false,
+    "checkpoint": "m0",
+    "condition": "reset",
+    "mean_ce": 27.697927217990824,
+    "per_view_ce": [
+      24.37500533794217,
+      29.208341387042786,
+      25.541688817176173,
+      31.66667332980217
+    ],
+    "permutations_are_independent_statistical_units": false,
+    "row_count": 4
+  },
+  "optimizer_steps": 256,
+  "phase2_allowed": false,
+  "primary_endpoint": "raw_step_256",
+  "protocol": "R11-New-Canonical-Latent-Bridge-Teacher-Matched-Init-Target01",
+  "raw_artifacts_sha256": "2af2d9a0b6124e450a7b3658352bd1c6e58d7cede2ddcec384064e1dae9d909a",
+  "schema": "vision_memory.r11-new-canonical-latent-bridge-comparison.v1",
+  "scientific_success_claim": false,
+  "secondary_solver_hypothesis_audit": {
+    "absolute_endpoint_mse_improves_parent": true,
+    "eligible": true,
+    "endpoint_reader_ce_improves_parent": true,
+    "passed": true
+  },
+  "secondary_solver_hypothesis_decision": "distance_fail_reader_fail_secondary_init_improves",
+  "status": "completed",
+  "target_index": 1,
+  "target_segment_id": "r5-f1-392d41fd097d069c42218e0a",
+  "teacher_assisted_initialization": true,
+  "teacher_replay_gate": true,
+  "teacher_replay_statistics": {
+    "accuracy": 1.0,
+    "all_four_correct": true,
+    "checkpoint": "canonical_teacher",
+    "condition": "teacher",
+    "mean_ce": 0.00017690610513911291,
+    "per_view_ce": [
+      0.00010211342703511954,
+      0.00012818916408861934,
+      0.00024359093460701864,
+      0.00023373089482569415
+    ],
+    "permutations_are_independent_statistical_units": false,
+    "row_count": 4
+  }
+}

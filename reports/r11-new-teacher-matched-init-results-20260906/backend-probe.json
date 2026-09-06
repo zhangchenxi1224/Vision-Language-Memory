@@ -1,0 +1,171 @@
+{
+  "schema": "vision_memory.r11-new-initialization-backend-probe.v1",
+  "executed_at_utc": "2026-09-06T15:12:06.605249+00:00",
+  "evidence_kind": "fresh_execution_of_this_tensor_only_probe",
+  "probe_script_sha256": "d922a0dc3d789b7f275457587549888d0fc8322256925e11a495f934d3b1bacd",
+  "environment": {
+    "torch_version": "2.7.0a0+ecf3bae40a.nv25.02",
+    "torch_cuda_version": "12.8",
+    "platform_system": "Linux",
+    "requested_device": "cuda:0",
+    "actual_compute_device_type": "cuda",
+    "device_name": "NVIDIA H200"
+  },
+  "contract": {
+    "seed": 0,
+    "shape": [
+      1,
+      4,
+      128,
+      128
+    ],
+    "sigma": 0.4999999701976776,
+    "input_generation_device": "cpu",
+    "source_expression": "s=torch.randn(1,4,128,128,dtype=torch.bfloat16).float()",
+    "teacher_expression": "z=torch.randn_like(s)",
+    "inverse_expression": "z.sub(s.mul(1-sigma)).div(sigma)",
+    "start_expression": "s.to(torch.bfloat16).mul(1-sigma).add(x.to(torch.bfloat16),alpha=sigma)",
+    "h0_comparison_uses_same_device_produced_x_T": true,
+    "model_forward_calls": 0,
+    "training_steps": 0,
+    "scientific_parameters_changed": false
+  },
+  "inputs": {
+    "source_fp32": {
+      "shape": [
+        1,
+        4,
+        128,
+        128
+      ],
+      "dtype": "torch.float32",
+      "raw_bytes_sha256": "e2084090a6eb54aec92054c1be2ca8e6fa5b2f349ed8e633ea103321ef611e63"
+    },
+    "teacher_fp32": {
+      "shape": [
+        1,
+        4,
+        128,
+        128
+      ],
+      "dtype": "torch.float32",
+      "raw_bytes_sha256": "591b3e113f94efd2f996cd386922ea70a222c3ca262609fcfbc2f9a8f28e7855"
+    }
+  },
+  "comparisons": {
+    "cpu_vs_device_x_T": {
+      "max_abs_difference": 4.76837158203125e-07,
+      "different_element_count": 27100,
+      "element_count": 65536,
+      "torch_equal": false,
+      "raw_bytes_equal": false,
+      "left": {
+        "shape": [
+          1,
+          4,
+          128,
+          128
+        ],
+        "dtype": "torch.float32",
+        "raw_bytes_sha256": "43a08ba3c699520b174f0da96c5216d75742f3dd57844167eb43c58af399ab0a"
+      },
+      "right": {
+        "shape": [
+          1,
+          4,
+          128,
+          128
+        ],
+        "dtype": "torch.float32",
+        "raw_bytes_sha256": "6973c8edf0621f7deba57ff4b215a295ab1db5fac759c084b7bf689668402628"
+      }
+    },
+    "cpu_vs_device_h0_with_shared_device_x_T": {
+      "max_abs_difference": 0.015625,
+      "different_element_count": 3634,
+      "element_count": 65536,
+      "torch_equal": false,
+      "raw_bytes_equal": false,
+      "left": {
+        "shape": [
+          1,
+          4,
+          128,
+          128
+        ],
+        "dtype": "torch.bfloat16",
+        "raw_bytes_sha256": "e3b5850d99a104ec77bcfc2bc947e52140169bcc86071c15ed42aca056f9ff78"
+      },
+      "right": {
+        "shape": [
+          1,
+          4,
+          128,
+          128
+        ],
+        "dtype": "torch.bfloat16",
+        "raw_bytes_sha256": "666d168ef5412085fb44724d3914f975221a946688105aebead1c44fa9799109"
+      }
+    },
+    "device_repeat_x_T": {
+      "max_abs_difference": 0.0,
+      "different_element_count": 0,
+      "element_count": 65536,
+      "torch_equal": true,
+      "raw_bytes_equal": true,
+      "left": {
+        "shape": [
+          1,
+          4,
+          128,
+          128
+        ],
+        "dtype": "torch.float32",
+        "raw_bytes_sha256": "6973c8edf0621f7deba57ff4b215a295ab1db5fac759c084b7bf689668402628"
+      },
+      "right": {
+        "shape": [
+          1,
+          4,
+          128,
+          128
+        ],
+        "dtype": "torch.float32",
+        "raw_bytes_sha256": "6973c8edf0621f7deba57ff4b215a295ab1db5fac759c084b7bf689668402628"
+      }
+    },
+    "device_repeat_h0": {
+      "max_abs_difference": 0.0,
+      "different_element_count": 0,
+      "element_count": 65536,
+      "torch_equal": true,
+      "raw_bytes_equal": true,
+      "left": {
+        "shape": [
+          1,
+          4,
+          128,
+          128
+        ],
+        "dtype": "torch.bfloat16",
+        "raw_bytes_sha256": "666d168ef5412085fb44724d3914f975221a946688105aebead1c44fa9799109"
+      },
+      "right": {
+        "shape": [
+          1,
+          4,
+          128,
+          128
+        ],
+        "dtype": "torch.bfloat16",
+        "raw_bytes_sha256": "666d168ef5412085fb44724d3914f975221a946688105aebead1c44fa9799109"
+      }
+    }
+  },
+  "interpretation": {
+    "cpu_mode_is_cpu_only_smoke_test": false,
+    "cross_backend_difference_required_for_success": false,
+    "model_or_scientific_result": false,
+    "conclusion_boundary": "This only measures backend arithmetic for fixed toy tensors. It neither evaluates a model nor changes scientific gates; CUDA artifact verification must recompute on its bound CUDA backend."
+  }
+}
