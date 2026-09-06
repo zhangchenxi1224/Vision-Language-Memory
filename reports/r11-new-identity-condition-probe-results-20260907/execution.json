@@ -1,0 +1,32 @@
+{
+  "schema": "vision_memory.r11-new-identity-condition-probe-execution.v1",
+  "probe_commit": "55c355f769c21ceb9b86e5090cdafa4090751d21",
+  "remote_checkout": "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory-identity-probe-55c355f-20260907",
+  "remote_program": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-identity-probe-55c355f-20260907-round01",
+  "remote_output_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-identity-probe-55c355f-20260907-round01/probe",
+  "instance": "vlm-r3-h200x2-live-20260717",
+  "pid": 1920073,
+  "launch_command": "set -eu\ncd '/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory-identity-probe-55c355f-20260907'\ntest \"$(git rev-parse HEAD)\" = '55c355f769c21ceb9b86e5090cdafa4090751d21'\ntest -z \"$(git status --porcelain)\"\ntest -z \"$(nvidia-smi --query-compute-apps=pid --format=csv,noheader)\"\ntest -z \"$(find /tmp -maxdepth 1 -name 'vision-memory-r11-new-*.lock' -print)\"\ntest ! -e '/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-identity-probe-55c355f-20260907-round01'\nmkdir '/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-identity-probe-55c355f-20260907-round01'\nnohup env PYTHONHASHSEED='0' CUBLAS_WORKSPACE_CONFIG=':4096:8' VLM_DREAMLITE_SNAPSHOT_MANIFEST_SHA256='1bcf41b170c4b4a806bac6701cbdf4fabd5c3c53fa67415d065ab95ce2703159' VLM_READER_SNAPSHOT_MANIFEST_SHA256='159a504daaae6dc412535978f087150a0eb8e50164afd70a8a17f83906f1127c' HF_HUB_OFFLINE='1' TRANSFORMERS_OFFLINE='1' OMP_NUM_THREADS='1' MKL_NUM_THREADS='1' TOKENIZERS_PARALLELISM='false' PYTHONDONTWRITEBYTECODE='1' '/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python' -B scripts/experiments/probe_r11_new_identity_condition.py --expected-commit '55c355f769c21ceb9b86e5090cdafa4090751d21' --output-root '/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-identity-probe-55c355f-20260907-round01/probe' > '/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-identity-probe-55c355f-20260907-round01/launcher.log' 2>&1 < /dev/null &\nprintf 'PROBE_PID=%s\\n' \"$!\"",
+  "local_raw_root": "C:/Users/Expedition/r11-new-identity-probe-55c355f-raw-20260907",
+  "archive": {
+    "path": "probe-raw.tar.gz",
+    "bytes": 1926543,
+    "sha256": "fb77f5bac2d3c96816b5451254ea5fdb9288c7792f3b69f37f9af1b44f68206f"
+  },
+  "remote_recheck": {
+    "at_utc": "2026-09-06T18:16:33Z",
+    "compute_processes": [],
+    "suite_locks": [],
+    "original_pid_alive": false,
+    "manifest_sha256": "6dc0652d6d1750c51341a55849757bcc3fa86b201a451eb020803e0912e0aaa2",
+    "result_sha256": "e414b9ed035f102a9ef7838da6948071e9e735ee6bdb39b2965c164c3ec02ecf",
+    "inventory_sha256": "85ad0e79b98626ccb63ef760b09b9ee02d20720500ece5df79cd8ad54b37e087"
+  },
+  "audit_command": "python -B reports/r11-new-identity-condition-probe-results-20260907/audit_local_raw.py --raw-root C:/Users/Expedition/r11-new-identity-probe-55c355f-raw-20260907 --source-parent-raw C:/Users/Expedition/r11-new-source-init-e0a43c4-raw-20260907",
+  "audit_prepass_issue": "First local audit rejected a manually transcribed 65-character result hash from wrapped PTY output; the downloaded terminal and raw result independently agree on the correct 64-character hash. No remote artifact or gate was changed.",
+  "original_30h_start_utc": "2026-09-05T07:18:59.891307+00:00",
+  "phase1a_passed_targets": 6,
+  "phase1a_total_targets": 8,
+  "formal_success": false,
+  "phase2_allowed": false
+}

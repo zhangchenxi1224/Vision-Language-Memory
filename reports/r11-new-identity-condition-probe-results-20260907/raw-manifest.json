@@ -1,0 +1,264 @@
+{
+  "artifacts": {
+    "condition": {
+      "bytes": 1205174,
+      "path": "condition.pt",
+      "sha256": "e36ffb8d19d6b366929cdbed399901950ce985c117c36c34c3e27f59fda7627e",
+      "tensor_dtypes": {
+        "attention_mask": "torch.int64",
+        "prompt_embeds": "torch.bfloat16"
+      },
+      "tensor_sha256": {
+        "attention_mask": "c3325ac723d7cc08cba37d46e1710b5067019e47236ef55c41c66cba27c519f1",
+        "prompt_embeds": "dbb23b166711849739432ba815002e889253da78e099e59c7adbd351a8fb9f4d"
+      },
+      "tensor_shapes": {
+        "attention_mask": [
+          1,
+          293
+        ],
+        "prompt_embeds": [
+          1,
+          293,
+          2048
+        ]
+      }
+    },
+    "repeat": {
+      "bytes": 1205216,
+      "path": "condition-repeat.pt",
+      "sha256": "41324904494b5ce540d0ed02246a2de9494baee228b1c6938d81ac9033804f59",
+      "tensor_dtypes": {
+        "attention_mask": "torch.int64",
+        "prompt_embeds": "torch.bfloat16"
+      },
+      "tensor_sha256": {
+        "attention_mask": "c3325ac723d7cc08cba37d46e1710b5067019e47236ef55c41c66cba27c519f1",
+        "prompt_embeds": "dbb23b166711849739432ba815002e889253da78e099e59c7adbd351a8fb9f4d"
+      },
+      "tensor_shapes": {
+        "attention_mask": [
+          1,
+          293
+        ],
+        "prompt_embeds": [
+          1,
+          293,
+          2048
+        ]
+      }
+    },
+    "source": {
+      "bytes": 6555236,
+      "path": "source.pt",
+      "sha256": "2748d0db1fef2efba90bfc8b0ed52c0bf71c7407733ce1b0b800020128efbb16"
+    }
+  },
+  "condition_metadata": {
+    "actual_conditioning_text": "no changes",
+    "actual_conditioning_text_sha256": "44f9161c3a252925f55022d60f68918abf8fdc1a9a3fadbf5ab766549f6b3461",
+    "compute_device": "cuda:0",
+    "compute_dtype": "torch.bfloat16",
+    "conditioner_input_names": [
+      "fixed_source_latents",
+      "fixed_identity_text"
+    ],
+    "full_prompt": "[Edit]: A diptych with two side-by-side images of the same scene. Compared to the right side, the left one has no changes",
+    "full_prompt_sha256": "4620b977a7aff51c9ee9a6e2901555b39ee4a3e4bd705d1402818acf330d22e6",
+    "mode": "edit",
+    "original_event_text": "R3 Train Standard Templates 03: For the indigo desk train 001123, remember that the preferred music is ambient.",
+    "original_event_text_sha256": "f170a7e2dfe0070fbd160c09d29dbcf897ddbf5f75929a3ee4af84cf627965bb",
+    "original_target_is_provenance_only": true,
+    "source_latents_fp32_sha256": "719e92867b60546b21b281cfc633ab782c8ce2274bfb41c6b3cee6d673e74eaa",
+    "target_segment_canonical_sha256": "88519df63d542fc50b16d076913dc9a1698d7184e4633a85fb9b5dffb6b2bbfb"
+  },
+  "config_sha256": "5f1db61ac1e7db179dd3cb39c463c891b3b7aba056fafbe9d6618066f4eab73e",
+  "counters": {
+    "backward_calls": 0,
+    "condition_encoder_calls": 2,
+    "full_dreamlite_forward_calls": 0,
+    "optimizer_steps": 0,
+    "reader_forward_calls": 0,
+    "unet_forward_calls": 0
+  },
+  "frozen_after": {
+    "gradient_names": [],
+    "modules": {
+      "text_encoder": "Qwen3VLForConditionalGeneration",
+      "unet": "DreamLiteUNetModel",
+      "vae": "AutoencoderTiny"
+    },
+    "parameter_numel": 2519945483,
+    "parameter_tensors": 1834,
+    "passed": true,
+    "trainable_names": []
+  },
+  "frozen_before": {
+    "gradient_names": [],
+    "modules": {
+      "text_encoder": "Qwen3VLForConditionalGeneration",
+      "unet": "DreamLiteUNetModel",
+      "vae": "AutoencoderTiny"
+    },
+    "parameter_numel": 2519945483,
+    "parameter_tensors": 1834,
+    "passed": true,
+    "trainable_names": []
+  },
+  "information_boundary": {
+    "answer_independent_writer_usable": false,
+    "answer_used_as_condition": false,
+    "bridge_result_evaluated": false,
+    "conditioning_teacher_assisted": false,
+    "formal_success": false,
+    "future_optimization_teacher_supervised": true,
+    "initialization_teacher_assisted": false,
+    "phase2_allowed": false,
+    "probe_input_content": [
+      "fixed_source_latents",
+      "fixed_identity_text"
+    ],
+    "query_used_as_condition": false,
+    "reader_loaded": false,
+    "teacher_loaded": false
+  },
+  "model_snapshot_end": {
+    "file_count": 27,
+    "manifest_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-mobile/.snapshot_manifest.json",
+    "manifest_sha256": "1bcf41b170c4b4a806bac6701cbdf4fabd5c3c53fa67415d065ab95ce2703159",
+    "model_dir": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-mobile",
+    "passed": true,
+    "repo_id": "carlofkl/DreamLite-mobile",
+    "revision": "6695c3f4be230f0493fa5dbf78be3bc4d3bb2ab4",
+    "snapshot_payload_sha256": "3fb839f465793b01ecafc4df433031a063dd7b395a050960cde57c2807031337",
+    "total_bytes": 5071894300
+  },
+  "model_snapshot_start": {
+    "file_count": 27,
+    "manifest_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-mobile/.snapshot_manifest.json",
+    "manifest_sha256": "1bcf41b170c4b4a806bac6701cbdf4fabd5c3c53fa67415d065ab95ce2703159",
+    "model_dir": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-mobile",
+    "passed": true,
+    "repo_id": "carlofkl/DreamLite-mobile",
+    "revision": "6695c3f4be230f0493fa5dbf78be3bc4d3bb2ab4",
+    "snapshot_payload_sha256": "3fb839f465793b01ecafc4df433031a063dd7b395a050960cde57c2807031337",
+    "total_bytes": 5071894300
+  },
+  "parent_binding": {
+    "artifacts": {
+      "comparison": {
+        "bytes": 6120,
+        "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-source-init-e0a43c4-20260907-round01/aggregation-v1/comparison.json",
+        "sha256": "f7ec5913ac6dcd40860428e3c3ab929f8559752173599ffeae8cc0b01d1db09c"
+      },
+      "formal_manifest": {
+        "bytes": 14818,
+        "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-source-init-e0a43c4-20260907-round01/formal-target01/run/manifest.json",
+        "sha256": "02905cfa89f7cca0eebaa4d763c99264c128278deef0f12885823982fabbec35"
+      },
+      "phase1a_manifest": {
+        "bytes": 37632,
+        "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-phase1a-2cde77e-20260905-round02/target-01-retry01/run/manifest.json",
+        "sha256": "cd5b740f1f60b32bfb3b8ccf8ba2cfe84bb4ea9c650649810c07d9d9b3972184"
+      },
+      "raw_artifacts": {
+        "bytes": 26745,
+        "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-source-init-e0a43c4-20260907-round01/aggregation-v1/RAW_ARTIFACTS.json",
+        "sha256": "2889f183c04df70c2763010b863914e378ffb1a0c85a1d8ca0f6a22ac150d4d7"
+      }
+    },
+    "original_event_unchanged": true,
+    "target_segment": {
+      "cross_slot_interference": false,
+      "events": [
+        {
+          "entity_id": "r3-train-semantic-001123-entity",
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 03: For the indigo desk train 001123, remember that the preferred music is ambient.",
+          "source_episode_id": "r3-train-semantic-001123-s0-clean",
+          "source_turn_index": 2
+        }
+      ],
+      "family": "F1",
+      "query": {
+        "choices": [
+          "no active preference",
+          "ambient",
+          "blues",
+          "jazz"
+        ],
+        "comparison_id": "r3-train-semantic-001123:s0:delayed",
+        "target_index": 1,
+        "target_token_count": 1,
+        "text": "R3 Train Standard Templates 03: At this later check, what is the current music preference for the indigo desk train 001123? Choose exactly one option."
+      },
+      "query_entity_id": "r3-train-semantic-001123-entity",
+      "query_gap": 1,
+      "query_source_episode_id": "r3-train-semantic-001123-s0-clean",
+      "query_turn_index": 3,
+      "schema": "vision_memory.r5-compose-segments.v1",
+      "segment_id": "r5-f1-392d41fd097d069c42218e0a",
+      "stale_target_text": null,
+      "target_event_kind": "set",
+      "target_event_position": 0
+    },
+    "target_segment_canonical_sha256": "88519df63d542fc50b16d076913dc9a1698d7184e4633a85fb9b5dffb6b2bbfb"
+  },
+  "probe_script_sha256": "cdd76f77fc10ce68a593940d0b6473d6679c17e6950273595a434eb6e2e1ae3e",
+  "protocol": "R11-New-Identity-Condition-Technical-Probe-Target01",
+  "schema": "vision_memory.r11-new-identity-condition-probe-manifest.v1",
+  "strict_determinism": {
+    "cuda_matmul_allow_tf32": false,
+    "cudnn_allow_tf32": false,
+    "cudnn_benchmark": false,
+    "cudnn_deterministic": true,
+    "deterministic_algorithms": true,
+    "deterministic_warn_only": false,
+    "environment": {
+      "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+      "MKL_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "PYTHONHASHSEED": "0",
+      "TOKENIZERS_PARALLELISM": "false"
+    },
+    "float32_matmul_precision": "highest",
+    "sdpa": {
+      "cudnn": false,
+      "flash": false,
+      "math": true,
+      "memory_efficient": false
+    },
+    "seed": 0
+  },
+  "validation": {
+    "deployment": {
+      "disk_free_bytes": 931296968704,
+      "disk_usage_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-identity-probe-55c355f-20260907-round01",
+      "hostname": "vlm-r3-h200x2-live-20260717--12dbdf351444-u6wdktzri5",
+      "minimum_free_bytes": 53687091200,
+      "output_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-identity-probe-55c355f-20260907-round01/probe",
+      "passed": true,
+      "required_hostname_prefix": "vlm-r3-h200x2-live-20260717",
+      "ssd_root": "/inspire/ssd"
+    },
+    "environment": {
+      "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+      "HF_HUB_OFFLINE": "1",
+      "MKL_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTHONHASHSEED": "0",
+      "TOKENIZERS_PARALLELISM": "false",
+      "TRANSFORMERS_OFFLINE": "1",
+      "VLM_DREAMLITE_SNAPSHOT_MANIFEST_SHA256": "1bcf41b170c4b4a806bac6701cbdf4fabd5c3c53fa67415d065ab95ce2703159",
+      "VLM_READER_SNAPSHOT_MANIFEST_SHA256": "159a504daaae6dc412535978f087150a0eb8e50164afd70a8a17f83906f1127c"
+    },
+    "git_commit": "55c355f769c21ceb9b86e5090cdafa4090751d21",
+    "git_detached": true,
+    "git_dirty": false,
+    "gpu_names": [
+      "NVIDIA H200",
+      "NVIDIA H200"
+    ]
+  }
+}

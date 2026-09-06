@@ -1,0 +1,65 @@
+{
+  "artifact_audit": {
+    "attention_mask_equals_old": false,
+    "passed": true,
+    "tensor_sha256": {
+      "attention_mask": "c3325ac723d7cc08cba37d46e1710b5067019e47236ef55c41c66cba27c519f1",
+      "prompt_embeds": "dbb23b166711849739432ba815002e889253da78e099e59c7adbd351a8fb9f4d"
+    }
+  },
+  "bridge_result_evaluated": false,
+  "config_sha256": "5f1db61ac1e7db179dd3cb39c463c891b3b7aba056fafbe9d6618066f4eab73e",
+  "counters": {
+    "backward_calls": 0,
+    "condition_encoder_calls": 2,
+    "full_dreamlite_forward_calls": 0,
+    "optimizer_steps": 0,
+    "reader_forward_calls": 0,
+    "unet_forward_calls": 0
+  },
+  "elapsed_seconds": 17.12318854406476,
+  "engineering_gate": true,
+  "formal_success": false,
+  "full_success": false,
+  "git_commit": "55c355f769c21ceb9b86e5090cdafa4090751d21",
+  "information_boundary": {
+    "answer_independent_writer_usable": false,
+    "answer_used_as_condition": false,
+    "bridge_result_evaluated": false,
+    "conditioning_teacher_assisted": false,
+    "formal_success": false,
+    "future_optimization_teacher_supervised": true,
+    "initialization_teacher_assisted": false,
+    "phase2_allowed": false,
+    "probe_input_content": [
+      "fixed_source_latents",
+      "fixed_identity_text"
+    ],
+    "query_used_as_condition": false,
+    "reader_loaded": false,
+    "teacher_loaded": false
+  },
+  "manifest_sha256": "6dc0652d6d1750c51341a55849757bcc3fa86b201a451eb020803e0912e0aaa2",
+  "next_step": "Only lock raw condition tensor hashes and probe provenance into a separate full-bridge config; test and commit the full implementation, then run fresh full-chain preflight. This probe does not authorize or count as a training step.",
+  "phase2_allowed": false,
+  "protocol": "R11-New-Identity-Condition-Technical-Probe-Target01",
+  "schema": "vision_memory.r11-new-identity-condition-probe-result.v1",
+  "status": "completed",
+  "technical_gate": {
+    "actual_text_and_prompt_exact": true,
+    "all_parameters_frozen_and_no_grad": true,
+    "attention_mask_valid": true,
+    "backward_calls": 0,
+    "condition_encoder_calls": 2,
+    "embedding_differs_from_old_event": true,
+    "embeddings_finite_nonzero": true,
+    "full_dreamlite_forward_calls": 0,
+    "optimizer_steps": 0,
+    "original_target_and_event_unchanged": true,
+    "reader_forward_calls": 0,
+    "repeat_tensors_bitwise_equal": true,
+    "snapshot_hashes_unchanged": true,
+    "source_hashes_exact": true,
+    "unet_forward_calls": 0
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "schema": "vision_memory.r11-new-identity-condition-probe-local-audit.v1",
+  "passed": true,
+  "inventory_files_verified": 14,
+  "archive_sha256": "fb77f5bac2d3c96816b5451254ea5fdb9288c7792f3b69f37f9af1b44f68206f",
+  "manifest_sha256": "6dc0652d6d1750c51341a55849757bcc3fa86b201a451eb020803e0912e0aaa2",
+  "result_sha256": "e414b9ed035f102a9ef7838da6948071e9e735ee6bdb39b2965c164c3ec02ecf",
+  "terminal_sha256": "6bd19ec3398edf5f869b018575a9a3da33b238abd0dc58b321af706d3e942b55",
+  "inventory_sha256": "85ad0e79b98626ccb63ef760b09b9ee02d20720500ece5df79cd8ad54b37e087",
+  "git_commit": "55c355f769c21ceb9b86e5090cdafa4090751d21",
+  "condition_tensor_sha256": {
+    "attention_mask": "c3325ac723d7cc08cba37d46e1710b5067019e47236ef55c41c66cba27c519f1",
+    "prompt_embeds": "dbb23b166711849739432ba815002e889253da78e099e59c7adbd351a8fb9f4d"
+  },
+  "condition_shapes": {
+    "attention_mask": [
+      1,
+      293
+    ],
+    "prompt_embeds": [
+      1,
+      293,
+      2048
+    ]
+  },
+  "condition_dtypes": {
+    "attention_mask": "torch.int64",
+    "prompt_embeds": "torch.bfloat16"
+  },
+  "repeat_bitwise_equal": true,
+  "embedding_differs_from_parent": true,
+  "source_hashes_match": true,
+  "original_target_matches_parent": true,
+  "snapshot_records_match": true,
+  "snapshot_files_rehashed_locally": false,
+  "actual_model_calls_rerun_locally": false,
+  "counts_verified_from_bound_records": {
+    "condition_encoder_calls": 2,
+    "unet_forward_calls": 0,
+    "full_dreamlite_forward_calls": 0,
+    "reader_forward_calls": 0,
+    "backward_calls": 0,
+    "optimizer_steps": 0
+  },
+  "elapsed_seconds": 17.12318854406476,
+  "started_at_utc": "2026-09-06T17:53:10.689795+00:00",
+  "completed_at_utc": "2026-09-06T17:53:28.361476+00:00",
+  "formal_success": false,
+  "phase2_allowed": false
+}
