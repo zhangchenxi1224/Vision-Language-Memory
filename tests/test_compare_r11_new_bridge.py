@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import copy
 import json
 import math
 import sys
@@ -20,6 +21,14 @@ from vision_memory.data import REVERSE_CYCLIC4  # noqa: E402
 from vision_memory.repro import canonical_tensor_sha256  # noqa: E402
 
 
+@pytest.fixture(scope="module", autouse=True)
+def _single_cpu_thread():
+    previous = torch.get_num_threads()
+    torch.set_num_threads(1)
+    yield
+    torch.set_num_threads(previous)
+
+
 def _write_json(path: Path, value: object) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(value, indent=2, sort_keys=True) + "\n", encoding="utf-8")
@@ -37,7 +46,7 @@ def _metric(step: int, *, mse: float = 1.0) -> dict:
     distance = comparison.core.bridge_distance_statistics(
         mse=mse,
         m0_mse=4.0,
-        tensor_numel=16,
+        tensor_numel=65536,
     )
     return {
         "schema": comparison.TRAINER_METRICS_SCHEMA,
@@ -147,7 +156,15 @@ def test_checkpoint_tensor_distance_and_hashes_are_recomputed(tmp_path: Path) ->
     teacher = torch.zeros((1, 4, 128, 128), dtype=torch.float32)
     x_t = torch.ones_like(teacher)
     z_t = torch.full_like(teacher, 0.5)
-    trajectory = tuple(torch.full_like(teacher, float(index)) for index in range(5))
+    source = torch.zeros_like(teacher)
+    trajectory = (z_t.clone(), *[torch.full_like(teacher, float(index)) for index in range(1, 4)], z_t.clone())
+    initialization = {
+        "source_latents_fp32": source,
+        "reconstructed_start_state_compute": z_t.clone(),
+        "actual_effective_sigmas": list(comparison.EXPECTED_SIGMAS),
+        "compute_dtype": "torch.float32",
+        "compute_device_type": "cpu",
+    }
     distance = comparison.core.bridge_distance_statistics(
         mse=0.25,
         m0_mse=1.0,
@@ -180,6 +197,9 @@ def test_checkpoint_tensor_distance_and_hashes_are_recomputed(tmp_path: Path) ->
         "z_t_fp32": z_t,
         "trajectory_fp32": trajectory,
         "effective_sigmas": list(comparison.EXPECTED_SIGMAS),
+        "compute_dtype": "torch.float32",
+        "compute_device_type": "cpu",
+        "trajectory_point0_formula_valid": True,
         "optimizer": optimizer_state,
         "optimizer_state_sha256": optimizer_state_sha256,
         "distance_statistics": dict(distance),
@@ -210,6 +230,8 @@ def test_checkpoint_tensor_distance_and_hashes_are_recomputed(tmp_path: Path) ->
         "optimizer_state_sha256": optimizer_state_sha256,
     }
     record_path = run / "checkpoint_hashes" / "step-256.json"
+    record.update({"compute_dtype": "torch.float32", "compute_device_type": "cpu",
+                   "trajectory_point0_formula_valid": True})
     _write_json(record_path, record)
     validated = comparison._validate_checkpoint(
         run,
@@ -218,8 +240,46 @@ def test_checkpoint_tensor_distance_and_hashes_are_recomputed(tmp_path: Path) ->
         m0_mse=1.0,
         manifest_sha256=manifest_sha,
         condition_sha256=condition_sha,
+        initialization=initialization,
     )
     assert validated["distance_statistics"]["mse"] == pytest.approx(0.25)
+    original_payload = copy.deepcopy(payload)
+    original_record = copy.deepcopy(record)
+    for mutation in ("current_x_t", "start", "final", "actual_sigma", "compute_dtype"):
+        changed = copy.deepcopy(original_payload)
+        if mutation == "current_x_t":
+            changed["x_T_fp32"] += 1.0
+        elif mutation == "start":
+            changed["trajectory_fp32"][0].add_(1.0)
+        elif mutation == "final":
+            changed["trajectory_fp32"][-1].add_(1.0)
+        elif mutation == "actual_sigma":
+            changed["effective_sigmas"][0] = 0.5000001
+        else:
+            changed["compute_dtype"] = "torch.bfloat16"
+        changed["tensor_sha256"] = {
+            "x_T_fp32": canonical_tensor_sha256(changed["x_T_fp32"]),
+            "z_t_fp32": canonical_tensor_sha256(changed["z_t_fp32"]),
+            "trajectory_fp32": [canonical_tensor_sha256(value) for value in changed["trajectory_fp32"]],
+        }
+        torch.save(changed, checkpoint)
+        changed_record = {
+            **original_record,
+            "checkpoint_bytes": checkpoint.stat().st_size,
+            "checkpoint_sha256": comparison._sha256(checkpoint),
+            "tensor_sha256": changed["tensor_sha256"],
+            "effective_sigmas": changed["effective_sigmas"],
+        }
+        _write_json(record_path, changed_record)
+        with pytest.raises(ValueError, match="tensor payload contract|current x_T/trajectory binding"):
+            comparison._validate_checkpoint(
+                run, step=checkpoint_step, teacher=teacher, m0_mse=1.0,
+                manifest_sha256=manifest_sha, condition_sha256=condition_sha,
+                initialization=initialization,
+            )
+    torch.save(payload, checkpoint)
+    record["checkpoint_bytes"] = checkpoint.stat().st_size
+    record["checkpoint_sha256"] = comparison._sha256(checkpoint)
     record["distance_statistics"]["mse"] = 0.0
     _write_json(record_path, record)
     with pytest.raises(ValueError, match="distance arithmetic"):
@@ -230,6 +290,7 @@ def test_checkpoint_tensor_distance_and_hashes_are_recomputed(tmp_path: Path) ->
             m0_mse=1.0,
             manifest_sha256=manifest_sha,
             condition_sha256=condition_sha,
+            initialization=initialization,
         )
     record["distance_statistics"] = distance
     payload["optimizer"]["state"][0]["step"] = torch.tensor(255.0)
@@ -247,6 +308,7 @@ def test_checkpoint_tensor_distance_and_hashes_are_recomputed(tmp_path: Path) ->
             m0_mse=1.0,
             manifest_sha256=manifest_sha,
             condition_sha256=condition_sha,
+            initialization=initialization,
         )
 
 
@@ -330,6 +392,7 @@ def test_preflight_rejects_top_level_pass_with_false_freeze_subgate(
         "only_x_T_fp32_trainable": True,
         "frozen_gradients_absent": True,
         "step0_parity_valid": True,
+        "teacher_matched_initialization_artifact_valid": True,
         "teacher_binding_valid": True,
         "teacher_replay_gate": True,
         "checkpoint_hash_valid": True,
@@ -372,6 +435,7 @@ def test_preflight_rejects_top_level_pass_with_false_freeze_subgate(
         manifest_sha256="1" * 64,
         condition_sha256="2" * 64,
         target_segment=_target_segment(),
+        initialization={},
     )
     assert result["passed"]
     summary["audit"]["frozen_gradients_absent"] = False
@@ -384,6 +448,7 @@ def test_preflight_rejects_top_level_pass_with_false_freeze_subgate(
             manifest_sha256="1" * 64,
             condition_sha256="2" * 64,
             target_segment=_target_segment(),
+            initialization={},
         )
 
 
@@ -468,7 +533,8 @@ def test_compare_integration_never_promotes_bridge_pass_to_scientific_success(
                 "snapshots_unchanged",
                 "optimizer_contract_valid",
                 "optimizer_lr_schedule_exact",
-                "pre_intervention_step128_parity_valid",
+                "teacher_matched_initialization_artifact_valid",
+                "trajectory_point0_binding_valid_every_checkpoint",
                 "gradient_clipping_absent",
                 "checkpoint_hashes_valid",
                 "condition_artifact_valid",
@@ -486,12 +552,11 @@ def test_compare_integration_never_promotes_bridge_pass_to_scientific_success(
         "bridge_diagnostic_gate": True,
         "formal_success_gate": False,
     }
-    schedule_audit = comparison.core.bridge_schedule_hypothesis_audit(
-        step128_mse_ratio=1.0,
-        endpoint_mse_ratio=float(distance["mse_ratio_to_m0"]),
+    schedule_audit = comparison.core.bridge_initialization_hypothesis_audit(
+        endpoint_mse=float(distance["mse"]),
+        endpoint_reader_mean_ce=float(teacher_stats["mean_ce"]),
         technical_gate=True,
         teacher_replay_gate=True,
-        pre_intervention_parity=True,
         distance_pass=True,
         reader_transfer_pass=True,
     )
@@ -508,7 +573,7 @@ def test_compare_integration_never_promotes_bridge_pass_to_scientific_success(
             reader_transfer_pass=True,
         ),
         "secondary_solver_hypothesis_audit": schedule_audit,
-        "secondary_solver_hypothesis_decision": comparison.core.bridge_schedule_hypothesis_decision(
+        "secondary_solver_hypothesis_decision": comparison.core.bridge_initialization_hypothesis_decision(
             distance_pass=True,
             reader_transfer_pass=True,
             audit=schedule_audit,
@@ -523,6 +588,7 @@ def test_compare_integration_never_promotes_bridge_pass_to_scientific_success(
     _write_json(formal_run / comparison.controller.SUMMARY_FILE, summary)
 
     monkeypatch.setattr(comparison, "_validate_config", lambda: {})
+    monkeypatch.setattr(comparison, "_validate_parent_bridge", lambda _config: {})
     monkeypatch.setattr(
         comparison,
         "_validate_parent_target",
@@ -571,8 +637,21 @@ def test_compare_integration_never_promotes_bridge_pass_to_scientific_success(
         comparison,
         "_validate_manifest",
         lambda run, **_kwargs: {
+            "manifest": {
+                "initialization_binding": {"compute_device_type": "cuda"}, "source_latents": {"dtype": "torch.bfloat16"},
+                "parity_checks": {"observed": {"initial_x_T_fp32_sha256": "1" * 64,
+                                               "initial_z_t_fp32_sha256": "2" * 64}},
+            },
             "manifest_sha256": "5" * 64 if run == preflight_run else "6" * 64,
             "condition_sha256": "7" * 64,
+        },
+    )
+    monkeypatch.setattr(
+        comparison,
+        "_validate_initialization",
+        lambda *_args, **_kwargs: {
+            "record": {},
+            "actual_effective_sigmas": list(comparison.EXPECTED_SIGMAS),
         },
     )
     monkeypatch.setattr(
@@ -581,10 +660,14 @@ def test_compare_integration_never_promotes_bridge_pass_to_scientific_success(
         lambda *_args, **_kwargs: {
             "teacher_statistics": teacher_stats,
             "passed": True,
+            "checkpoint": {"tensor_sha256": {"x_T_fp32": "1" * 64, "z_t_fp32": "2" * 64},
+                           "image_sha256": "0" * 64},
         },
     )
     metric_rows = [
         {
+            "effective_sigmas": list(comparison.EXPECTED_SIGMAS),
+            **{
             field: value
             for field, value in zip(
                 (
@@ -602,6 +685,7 @@ def test_compare_integration_never_promotes_bridge_pass_to_scientific_success(
                 ),
                 (step, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.1, step),
             )
+            },
         }
         for step in range(1, 257)
     ]
@@ -614,15 +698,9 @@ def test_compare_integration_never_promotes_bridge_pass_to_scientific_success(
         record = {
             "optimizer_step": step,
             "distance_statistics": distance if step == 256 else step0_distance,
+            "tensor_sha256": {"x_T_fp32": "1" * 64, "z_t_fp32": "2" * 64},
+            "image_sha256": "0" * 64,
         }
-        if step == 128:
-            record.update(
-                {
-                    "tensor_sha256": comparison.core.BRIDGE_PARENT_STEP128_TENSOR_SHA256,
-                    "optimizer_state_sha256": comparison.core.BRIDGE_PARENT_STEP128_OPTIMIZER_SHA256,
-                    "image_sha256": comparison.core.BRIDGE_PARENT_STEP128_PNG_SHA256,
-                }
-            )
         return record
 
     monkeypatch.setattr(comparison, "_validate_checkpoint", checkpoint_record)
@@ -689,14 +767,281 @@ def test_parent_query_and_inventory_cannot_be_resigned_together(
         "BRIDGE_PARENT_TARGET_MANIFEST_SHA256",
         immutable_sha,
     )
-    config = {
-        "exact_parity_bindings": {
-            "phase1a_valid_source_root": str(root),
-        }
-    }
+    monkeypatch.setattr(comparison.core, "BRIDGE_PHASE1A_SOURCE_ROOT", str(root))
+    config = {}
     assert comparison._validate_parent_target(config)["target_segment"] == _target_segment()
     manifest["target_segment"]["query"]["choices"][1] = "tampered-answer"
     _write_json(manifest_path, manifest)
     resign()
     with pytest.raises(ValueError, match="manifest hash drifted"):
         comparison._validate_parent_target(config)
+
+
+def _initialization_fixture(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, dtype: torch.dtype):
+    run = tmp_path / "run"
+    path = run / "initialization" / "teacher_matched_initialization.pt"
+    path.parent.mkdir(parents=True)
+    teacher = torch.linspace(-1.0, 1.0, 65536).reshape(1, 4, 128, 128)
+    source = torch.full_like(teacher, 0.3125)
+    actual = [0.4999999701976776, 0.375, 0.25, 0.1249999925494194]
+    sigma = actual[0]
+    x_t = teacher.sub(source.mul(1.0 - sigma)).div(sigma)
+    start = source.to(dtype).mul(1.0 - sigma).add(x_t.to(dtype), alpha=sigma)
+    std = float(teacher.std(unbiased=False))
+    mse = float((start.float() - teacher).square().mean())
+    tensors = {
+        "source_latents_fp32": source, "teacher_fp32": teacher,
+        "x_T_init_fp32": x_t, "reconstructed_start_state_compute": start,
+    }
+    metadata = {
+        "schema": comparison.INITIALIZATION_SCHEMA,
+        "compute_device_type": "cpu",
+        "formula": comparison.INITIALIZATION_FORMULA,
+        "reconstruction_operator_order": comparison.INITIALIZATION_OPERATOR,
+        "nominal_effective_sigmas": list(comparison.EXPECTED_SIGMAS),
+        "actual_effective_sigmas": actual,
+        "actual_effective_sigma0": sigma,
+        "teacher_population_std": std,
+        "trajectory_point0_teacher_mse": mse,
+        "trajectory_point0_teacher_normalized_rmse": math.sqrt(mse) / std,
+        "tensor_sha256": {key: canonical_tensor_sha256(value) for key, value in tensors.items()},
+    }
+    payload = {**copy.deepcopy(metadata), **tensors}
+    record = {**copy.deepcopy(metadata), "artifact_path": str(path), "passed": True}
+    for key, value in (
+        ("BRIDGE_TEACHER_STD", std),
+        ("BRIDGE_TEACHER_TENSOR_SHA256", canonical_tensor_sha256(teacher)),
+        ("BRIDGE_SOURCE_LATENTS_SHA256", canonical_tensor_sha256(source)),
+    ):
+        monkeypatch.setattr(comparison.core, key, value)
+
+    def resign():
+        torch.save(payload, path)
+        record["artifact_bytes"] = path.stat().st_size
+        record["artifact_sha256"] = comparison._sha256(path)
+
+    resign()
+    return run, record, payload, teacher, resign
+
+
+@pytest.mark.parametrize("dtype", [torch.float32, torch.bfloat16])
+@pytest.mark.parametrize("mutation", [
+    None, "record_sigma", "payload_sigma", "nominal_schedule", "actual_schedule",
+    "record_std", "both_std", "payload_mse", "record_mse", "payload_nrmse",
+    "record_nrmse", "formula", "operator", "x_t", "start", "dtype",
+    "record_backend", "payload_backend", "both_backend",
+])
+def test_initialization_artifact_is_independently_recomputed_after_resigning(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, dtype: torch.dtype, mutation: str | None,
+) -> None:
+    run, record, payload, teacher, resign = _initialization_fixture(tmp_path, monkeypatch, dtype)
+    if mutation == "record_sigma":
+        record["actual_effective_sigma0"] = 0.5
+    elif mutation == "payload_sigma":
+        payload["actual_effective_sigma0"] = 0.5
+    elif mutation in {"nominal_schedule", "actual_schedule"}:
+        key = "nominal_effective_sigmas" if mutation == "nominal_schedule" else "actual_effective_sigmas"
+        for item in (record, payload):
+            item[key][0] = 0.499999
+    elif mutation in {"record_std", "both_std"}:
+        record["teacher_population_std"] = 999.0
+        if mutation == "both_std":
+            payload["teacher_population_std"] = 999.0
+    elif mutation in {"payload_mse", "record_mse", "payload_nrmse", "record_nrmse"}:
+        item = payload if mutation.startswith("payload") else record
+        key = "trajectory_point0_teacher_mse" if mutation.endswith("_mse") else "trajectory_point0_teacher_normalized_rmse"
+        item[key] = 0.5
+    elif mutation in {"formula", "operator"}:
+        key = "formula" if mutation == "formula" else "reconstruction_operator_order"
+        record[key] = payload[key] = "self-consistent but wrong"
+    elif mutation in {"x_t", "start"}:
+        key = "x_T_init_fp32" if mutation == "x_t" else "reconstructed_start_state_compute"
+        payload[key] = payload[key] + 0.125
+        record["tensor_sha256"][key] = payload["tensor_sha256"][key] = canonical_tensor_sha256(payload[key])
+    elif mutation == "dtype":
+        key = "reconstructed_start_state_compute"
+        payload[key] = payload[key].to(torch.bfloat16 if dtype == torch.float32 else torch.float32)
+        record["tensor_sha256"][key] = payload["tensor_sha256"][key] = canonical_tensor_sha256(payload[key])
+    elif mutation in {"record_backend", "payload_backend", "both_backend"}:
+        if mutation != "payload_backend":
+            record["compute_device_type"] = "cuda"
+        if mutation != "record_backend":
+            payload["compute_device_type"] = "cuda"
+    resign()
+    if mutation is None:
+        verified = comparison._validate_initialization(run, record=record, teacher=teacher,
+                                                       compute_dtype=str(dtype), compute_device_type="cpu")
+        assert verified["record"]["passed"] is True
+        assert torch.equal(verified["x_T_init_fp32"], payload["x_T_init_fp32"])
+    else:
+        with pytest.raises(ValueError, match="initialization"):
+            comparison._validate_initialization(run, record=record, teacher=teacher,
+                                                  compute_dtype=str(dtype), compute_device_type="cpu")
+
+
+def test_cuda_initialization_refuses_cpu_fallback(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    run, record, payload, teacher, resign = _initialization_fixture(tmp_path, monkeypatch, torch.bfloat16)
+    record["compute_device_type"] = payload["compute_device_type"] = "cuda"
+    resign()
+    monkeypatch.setattr(torch.cuda, "is_available", lambda: False)
+    with pytest.raises(ValueError, match="CUDA is unavailable"):
+        comparison._validate_initialization(run, record=record, teacher=teacher,
+                                              compute_dtype="torch.bfloat16", compute_device_type="cuda")
+
+
+@pytest.mark.parametrize("mutation", [None, "parity", "nominal_sigma", "m0", "information",
+                                      "source_dtype", "backend", "models", "condition"])
+def test_manifest_keeps_fixed_source_condition_models_and_new_initializer_boundary(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, mutation: str | None,
+) -> None:
+    run = tmp_path / "run"
+    run.mkdir()
+    config = comparison._load(comparison.CONFIG)
+    parity = dict(comparison.core.BRIDGE_UNCHANGED_PARITY_BINDINGS)
+    condition_path = run / "condition" / "official_full_condition.pt"
+    condition_path.parent.mkdir()
+    prompt = torch.ones((1, 4))
+    mask = torch.ones((1, 4), dtype=torch.bool)
+    condition_hashes = {"prompt_embeds": canonical_tensor_sha256(prompt),
+                        "attention_mask": canonical_tensor_sha256(mask)}
+    parity["condition_prompt_embeds_sha256"] = condition_hashes["prompt_embeds"]
+    parity["condition_attention_mask_sha256"] = condition_hashes["attention_mask"]
+    monkeypatch.setattr(comparison.core, "BRIDGE_UNCHANGED_PARITY_BINDINGS", parity)
+    condition_payload = {
+        "schema": "vision_memory.r11-new-phase1a-condition.v1",
+        "prompt_embeds": prompt, "attention_mask": mask,
+        "tensor_sha256": condition_hashes,
+        "event_text_sha256": parity["event_text_sha256"], "recompute_matches": True,
+    }
+    torch.save(condition_payload, condition_path)
+    condition_record = {
+        "sha256": comparison._sha256(condition_path), "bytes": condition_path.stat().st_size,
+        "tensor_sha256": copy.deepcopy(condition_hashes), "event_text_sha256": parity["event_text_sha256"],
+        "recompute_matches": True,
+    }
+    parent = tmp_path / "parent"
+    parent.mkdir()
+    parent_binding = {"target_root": str(parent), "target_inventory_sha256": "9" * 64}
+    for name in ("comparison", "raw_artifacts"):
+        path = parent / f"{name}.json"
+        _write_json(path, {"kind": name})
+        parent_binding[f"{name}_path"] = str(path)
+        parent_binding[f"{name}_sha256"] = comparison._sha256(path)
+        config["parent_phase1a"][f"{name}_sha256"] = comparison._sha256(path)
+    snapshots = {
+        model: {"manifest_sha256": comparison.core.BRIDGE_MODEL_SNAPSHOT_BINDINGS[key]}
+        for model, key in (("dreamlite_mobile", "dreamlite_snapshot_manifest_sha256"),
+                           ("qwen_reader", "reader_snapshot_manifest_sha256"))
+    }
+    manifest = {
+        "schema": comparison.TRAINER_MANIFEST_SCHEMA,
+        "protocol": comparison.core.BRIDGE_PROTOCOL, "mode": "formal",
+        "git_commit": "a" * 40, "git_dirty": False,
+        "preregistered_config_file_sha256": comparison.core.BRIDGE_CONFIG_FILE_SHA256,
+        "preregistered_config_canonical_sha256": comparison.core.BRIDGE_CONFIG_CANONICAL_SHA256,
+        "target_index": comparison.core.BRIDGE_TARGET_INDEX,
+        "target_segment_id": comparison.core.BRIDGE_TARGET_SEGMENT_ID,
+        "target_segment": _target_segment(), "bridge_diagnostic_only": True,
+        "phase2_allowed": False, "formal_success_gate": False,
+        "parity_checks": {"passed": True, "expected": copy.deepcopy(parity),
+                          "observed": {**parity, "initial_x_T_fp32_sha256": "1" * 64,
+                                       "initial_z_t_fp32_sha256": "2" * 64},
+                          "teacher_matched_initialization_artifact_valid": True},
+        "initialization_binding": {"compute_device_type": "cuda", "tensor_sha256": {"x_T_init_fp32": "1" * 64}},
+        "source_latents": {"sha256": comparison.core.BRIDGE_SOURCE_LATENTS_SHA256,
+                           "shape": [1, 4, 128, 128], "dtype": "torch.bfloat16", "device": "cuda:0"},
+        "initial_x_T_fp32": {"sha256": "1" * 64, "shape": [1, 4, 128, 128], "dtype": "torch.float32"},
+        "single_changed_factor": {
+            "factor": "x_T_initialization",
+            "from": "answer-independent event-keyed standard Gaussian with global seed 0",
+            "to": "teacher-state-matched deterministic initialization",
+            "teacher_assisted": True, "answer_independent_writer_usable": False,
+        },
+        "information_boundary": {
+            "passed": True, "canonical_teacher_used_only_by_dense_loss": False,
+            "canonical_teacher_used_by_initialization_and_dense_loss": True,
+            "teacher_assisted_initialization": True, "answer_independent_writer_usable": False,
+            "reader_used_only_for_fixed_audit": True, "reader_gradient_calls_during_optimization": 0,
+        },
+        "fixed_contract": {
+            "only_trainable": "x_T_fp32", "optimizer_steps": 256,
+            "effective_sigmas": list(comparison.EXPECTED_SIGMAS), "optimizer": "Adam",
+            "learning_rate": 0.05, "weight_decay": 0.0, "gradient_clipping": None,
+            "learning_rate_schedule": {"name": "constant_then_post128_cosine_to_zero",
+                                       "intervention_first_update": 129,
+                                       "formula": "0.05 for u<=128; 0.025*(1+cos(pi*(u-128)/128)) otherwise"},
+            "checkpoint_steps": list(comparison.core.BRIDGE_CHECKPOINT_STEPS),
+            "primary_endpoint": comparison.core.BRIDGE_PRIMARY_ENDPOINT,
+            "best_checkpoint_selection_forbidden": True, "reader_gradient_calls_during_optimization": 0,
+            "m0_definition": config["unchanged_contract"]["m0_definition"],
+            "dreamlite_device": "cuda:0", "reader_device": "cuda:1",
+        },
+        "train_sha256": config["unchanged_contract"]["train_sha256"],
+        "dev_sha256": config["unchanged_contract"]["dev_sha256"],
+        "selected_segments_sha256": config["parent_phase1a"]["selected_segments_sha256"],
+        "parent_phase1a": parent_binding,
+        "teacher": {"file_sha256": comparison.core.BRIDGE_TEACHER_FILE_SHA256,
+                    "tensor_sha256": comparison.core.BRIDGE_TEACHER_TENSOR_SHA256,
+                    "copied_sha256": comparison.core.BRIDGE_TEACHER_FILE_SHA256},
+        "condition_artifact": condition_record, "model_snapshot_payloads_start": snapshots,
+    }
+    if mutation == "parity":
+        manifest["parity_checks"]["observed"]["event_text_sha256"] = "3" * 64
+        manifest["parity_checks"]["expected"]["event_text_sha256"] = "3" * 64
+    elif mutation == "nominal_sigma":
+        manifest["fixed_contract"]["effective_sigmas"][0] = 0.499999
+    elif mutation == "m0":
+        manifest["fixed_contract"]["m0_definition"] = "initial teacher state"
+    elif mutation == "information":
+        manifest["information_boundary"]["answer_independent_writer_usable"] = True
+    elif mutation == "source_dtype":
+        manifest["source_latents"]["dtype"] = "torch.float32"
+    elif mutation == "backend":
+        manifest["initialization_binding"]["compute_device_type"] = "cpu"
+    elif mutation == "models":
+        snapshots["qwen_reader"]["manifest_sha256"] = "8" * 64
+    elif mutation == "condition":
+        condition_payload["prompt_embeds"].add_(1.0)
+        condition_payload["tensor_sha256"]["prompt_embeds"] = canonical_tensor_sha256(condition_payload["prompt_embeds"])
+        torch.save(condition_payload, condition_path)
+        condition_record.update({"sha256": comparison._sha256(condition_path),
+                                 "bytes": condition_path.stat().st_size,
+                                 "tensor_sha256": condition_payload["tensor_sha256"]})
+    _write_json(run / "manifest.json", manifest)
+    _write_json(run / "model_snapshot_verification_start.json", {"bindings": snapshots})
+    _write_json(run / "model_snapshot_verification_end.json", {"bindings": snapshots, "passed": True})
+    kwargs = dict(mode="formal", expected_commit="a" * 40, config=config,
+                  parent_target={"target_segment": _target_segment(), "root": str(parent),
+                                 "inventory": {"sha256": "9" * 64}})
+    if mutation is None:
+        assert all(comparison._validate_manifest(run, **kwargs)["fixed_checks"].values())
+    else:
+        with pytest.raises(ValueError, match="Bridge"):
+            comparison._validate_manifest(run, **kwargs)
+
+
+@pytest.mark.parametrize("mutation", [None, "mse", "ce", "formal_success"])
+def test_parent_bridge_keeps_absolute_endpoint_reference_after_resigning(
+    tmp_path: Path, mutation: str | None,
+) -> None:
+    config = comparison._load(comparison.CONFIG)
+    report = ROOT / "reports" / "r11-new-canonical-latent-bridge-post128-cosine-results-20260906" / "aggregation-v1"
+    destination = tmp_path / "parent" / "aggregation-v1"
+    destination.mkdir(parents=True)
+    parent = comparison._load(report / "comparison.json")
+    if mutation == "mse":
+        parent["endpoint_distance_statistics"]["mse"] = 0.0
+    elif mutation == "ce":
+        parent["endpoint_reader_statistics"]["mean_ce"] = 0.0
+    elif mutation == "formal_success":
+        parent["formal_success"] = True
+    _write_json(destination / "comparison.json", parent)
+    (destination / "RAW_ARTIFACTS.json").write_bytes((report / "RAW_ARTIFACTS.json").read_bytes())
+    config["parent_bridge"]["source_root"] = str(destination.parent)
+    config["parent_bridge"]["comparison_sha256"] = comparison._sha256(destination / "comparison.json")
+    comparison._write_inventory(destination)
+    if mutation is None:
+        assert comparison._validate_parent_bridge(config)["training_git_commit"] == "16318e005b496a16b7712ad4ff3cea50e2be34fa"
+    else:
+        with pytest.raises(ValueError, match="endpoint values drifted"):
+            comparison._validate_parent_bridge(config)

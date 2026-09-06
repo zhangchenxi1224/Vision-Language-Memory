@@ -1,0 +1,59 @@
+{
+  "schema": "vision_memory.r11-new-initialization-backend-audit.v1",
+  "date_utc": "2026-09-06",
+  "scope": "Pure tensor backend arithmetic audit; no model forward or training",
+  "historical_h200_observation": {
+    "evidence_kind": "values_transcribed_from_execution_owner_previously_observed_tool_stdout",
+    "not_a_run_of_the_new_probe_script": true,
+    "complete_original_stdout_embedded": false,
+    "original_stdout_artifact_path": null,
+    "torch_version": "2.7.0a0+ecf3bae40a.nv25.02",
+    "device": "H200",
+    "model_forward_calls": 0,
+    "training_steps": 0,
+    "cpu_vs_cuda_x_T_max_abs_difference": 4.76837158203125e-07,
+    "cpu_vs_cuda_h0_with_shared_cuda_x_T_max_abs_difference": 0.015625,
+    "cpu_vs_cuda_h0_with_shared_cuda_x_T_different_element_count": 3634,
+    "element_count": 65536,
+    "cuda_repeat_x_T_equal": true,
+    "cuda_repeat_h0_equal": true
+  },
+  "locked_reproducible_expressions": {
+    "seed": 0,
+    "input_generation_device": "cpu",
+    "source": "s=torch.randn(1,4,128,128,dtype=torch.bfloat16).float()",
+    "teacher": "z=torch.randn_like(s)",
+    "sigma": 0.4999999701976776,
+    "inverse": "f(s,z)=z.sub(s.mul(1-sigma)).div(sigma)",
+    "start": "h(s,x)=s.to(torch.bfloat16).mul(1-sigma).add(x.to(torch.bfloat16),alpha=sigma)",
+    "comparison_order": [
+      "Generate s and z once on CPU and copy identical inputs to CUDA.",
+      "Compare CPU f(s,z) against CUDA f(s,z).",
+      "Copy the same CUDA-produced x_T back to CPU; compare CPU and CUDA h(s,x_T), isolating h0 backend arithmetic.",
+      "Repeat CUDA f and CUDA h using unchanged inputs and test exact tensor/raw-byte equality."
+    ]
+  },
+  "reproduction_entrypoint": {
+    "script": "scripts/experiments/probe_r11_new_initialization_backend.py",
+    "default_device": "cuda:0",
+    "cuda_command": "python scripts/experiments/probe_r11_new_initialization_backend.py --device cuda:0 --output /fresh/nonexistent/path/backend-probe.json",
+    "cpu_smoke_command": "python scripts/experiments/probe_r11_new_initialization_backend.py --device cpu",
+    "outputs": "JSON stdout and optional exclusively-created JSON artifact; no checkpoint or model artifact",
+    "existing_output_rejected": true,
+    "missing_cuda_rejected_without_cpu_fallback": true,
+    "new_script_cuda_rerun_status": "not_run_in_this_subtask",
+    "new_script_cuda_rerun_artifact": null,
+    "cpu_tests_are_not_h200_reproduction": true
+  },
+  "interpretation": {
+    "same_dtype_and_algebra_do_not_imply_cross_backend_bit_identity": true,
+    "production_artifact_verification_uses_bound_actual_compute_device_type": true,
+    "numerical_recomputation_occurs_on_bound_backend_before_cpu_hash_comparison": true,
+    "cpu_mode_requires_no_cross_backend_difference": true,
+    "toy_observation_is_not_model_scientific_result": true,
+    "scientific_gate_or_initialization_parameters_changed": false,
+    "formal_success": false,
+    "phase2_allowed": false,
+    "boundary": "This engineering observation justifies matching the artifact's computation backend during exact numerical verification. It does not justify loosening scientific thresholds, changing the initialization, declaring model failure, or claiming training success."
+  }
+}

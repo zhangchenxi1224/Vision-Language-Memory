@@ -1,4 +1,4 @@
-"""Pure contracts for the post-step-128 LR-schedule bridge diagnostic."""
+"""Pure contracts for the teacher-matched-initialization bridge diagnostic."""
 
 from __future__ import annotations
 
@@ -10,18 +10,36 @@ from typing import Any, Mapping, Sequence
 from vision_memory.data import REVERSE_CYCLIC4
 
 
-BRIDGE_PROTOCOL = "R11-New-Canonical-Latent-Bridge-Post128-Cosine-Target01"
-BRIDGE_CONFIG_SCHEMA = "vision_memory.r11-new-canonical-latent-bridge-lr-schedule-config.v1"
-BRIDGE_CONFIG_FILE_SHA256 = "c9794f5197f6c62f2f84af3cf0db9aee0ff225b4649004967f52d1424a247dc5"
-BRIDGE_CONFIG_CANONICAL_SHA256 = "5e6110d8bc02d3495f4ce621ed01dacd8fe9922b4b4a23cfd8c7f2dc7b51985d"
+BRIDGE_PROTOCOL = "R11-New-Canonical-Latent-Bridge-Teacher-Matched-Init-Target01"
+BRIDGE_CONFIG_SCHEMA = "vision_memory.r11-new-canonical-latent-bridge-teacher-matched-init-config.v1"
+BRIDGE_CONFIG_FILE_SHA256 = "3168134145c8e715c9d134d00f25e2152c589d75730474c323dee1be2d13cf2f"
+BRIDGE_CONFIG_CANONICAL_SHA256 = "ecd84a874f282da48db5498e2db663d7b4f37b0bb4dd2f4f1500d1a4924ca3a7"
 BRIDGE_TARGET_INDEX = 1
 BRIDGE_TARGET_SEGMENT_ID = "r5-f1-392d41fd097d069c42218e0a"
 BRIDGE_TEACHER_FILE_SHA256 = "d359291de63bb5232325b2e7a9294ff3d861287c06e63da2ab6ebe42eab036b9"
 BRIDGE_TEACHER_TENSOR_SHA256 = "6857afeffd37124bb196ab7c6607580c57c950d72d760ca6b49f8cc00bdef3f1"
 BRIDGE_TEACHER_STD = 0.6546660661697388
-BRIDGE_INITIAL_X_T_SHA256 = "c970092e2afca24ededea1aec2892bd6bd54ba0dd2193522dab22af10ac1d991"
-BRIDGE_INITIAL_Z_T_SHA256 = "11c7216fe2a70f0caa314d182b2c176b4f50c78f2d081f5aa0271184e5c8e659"
+BRIDGE_SOURCE_LATENTS_SHA256 = "719e92867b60546b21b281cfc633ab782c8ce2274bfb41c6b3cee6d673e74eaa"
 BRIDGE_PARENT_TARGET_MANIFEST_SHA256 = "cd5b740f1f60b32bfb3b8ccf8ba2cfe84bb4ea9c650649810c07d9d9b3972184"
+BRIDGE_PHASE1A_SOURCE_ROOT = (
+    "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/"
+    "r11-new-phase1a-2cde77e-20260905-round02/target-01-retry01"
+)
+# The intervention replaces x_T / endpoint / optimizer-prefix parity only.
+# Keep these independently locked, not merely observed == manifest-declared.
+BRIDGE_UNCHANGED_PARITY_BINDINGS = {
+    "target_index": BRIDGE_TARGET_INDEX,
+    "target_segment_id": BRIDGE_TARGET_SEGMENT_ID,
+    "blank_source_rgb_sha256": "a3b784da71eaa113fb4d9d71502a7a3526ba0d41e2d42ed96fe79111ca3dba65",
+    "source_latents_fp32_sha256": BRIDGE_SOURCE_LATENTS_SHA256,
+    "event_text_sha256": "f170a7e2dfe0070fbd160c09d29dbcf897ddbf5f75929a3ee4af84cf627965bb",
+    "condition_prompt_embeds_sha256": "473bd457d6fff070a71b119a19d950b8d094cfaf6f126ceb817330eb01263a60",
+    "condition_attention_mask_sha256": "4f941a468150ea22f64ac4f7304e9a94a3dd1c721d07dd7f8ebd10185fbe2ea9",
+}
+BRIDGE_MODEL_SNAPSHOT_BINDINGS = {
+    "dreamlite_snapshot_manifest_sha256": "1bcf41b170c4b4a806bac6701cbdf4fabd5c3c53fa67415d065ab95ce2703159",
+    "reader_snapshot_manifest_sha256": "159a504daaae6dc412535978f087150a0eb8e50164afd70a8a17f83906f1127c",
+}
 BRIDGE_OPTIMIZER_STEPS = 256
 BRIDGE_CHECKPOINT_STEPS = (0, 64, 128, 192, 256)
 BRIDGE_MSE_RATIO_MAX = 0.01
@@ -32,20 +50,10 @@ BRIDGE_PRIMARY_ENDPOINT = "raw_step_256"
 BRIDGE_BASE_LEARNING_RATE = 0.05
 BRIDGE_LR_INTERVENTION_FIRST_UPDATE = 129
 BRIDGE_LR_COSINE_DENOMINATOR = 128
-BRIDGE_PARENT_ENDPOINT_MSE_RATIO = 0.8105615501236992
-BRIDGE_PARENT_STEP128_PNG_SHA256 = "ccfff48bf0bc8cb2ff38cfeb8cbefb845a90ac80deeab3de26326f7b0faf7bd0"
-BRIDGE_PARENT_STEP128_OPTIMIZER_SHA256 = "b26457294d573890ba6d7ebf220eb0b4e7dec844338be48186893a6b17ad8004"
-BRIDGE_PARENT_STEP128_TENSOR_SHA256 = {
-    "x_T_fp32": "482724b2a7ac88624c054a543c8267ae0a318f67177206c1a7d9a2c3ac364ddb",
-    "z_t_fp32": "34125c8426d0eccf9eca70578c164673d263f592e05bbd2a8b4161be239a5f93",
-    "trajectory_fp32": [
-        "7e7a69ae62ab788b35cb7e0d984bd5ccb992f406074b84f3c02e0db3ef4c249d",
-        "5b366db05dccd59a605e1d07d4e74b51dd0dce4740f743602e8c5fa88c8dc08a",
-        "6c76df63f60f19a36d64d309877e9e3a5d49c51ee9608de65f911dd369b7f900",
-        "5a6a3ec5fdafca390c8571addca3dab1933dfe00667f313dcfff67193888f242",
-        "34125c8426d0eccf9eca70578c164673d263f592e05bbd2a8b4161be239a5f93",
-    ],
-}
+BRIDGE_TEACHER_MATCHED_SIGMA = 0.5
+BRIDGE_START_TEACHER_NRMSE_MAX = 0.01
+BRIDGE_PARENT_ENDPOINT_MSE = 0.09553645551204681
+BRIDGE_PARENT_ENDPOINT_READER_CE = 25.536474171257463
 
 
 def canonical_json_sha256(value: Any) -> str:
@@ -57,22 +65,115 @@ def validate_bridge_config(config: Mapping[str, Any]) -> dict[str, Any]:
     """Fail closed on any change to the result-before preregistration."""
 
     if config.get("schema") != BRIDGE_CONFIG_SCHEMA:
-        raise ValueError("R11_new bridge config schema drifted.")
+        raise ValueError("R11_new bridge teacher-matched config schema drifted.")
     observed = canonical_json_sha256(config)
     if observed != BRIDGE_CONFIG_CANONICAL_SHA256:
-        raise ValueError(f"R11_new bridge config differs from the preregistered canonical JSON: {observed}")
+        raise ValueError(
+            "R11_new bridge teacher-matched config differs from the "
+            f"preregistered canonical JSON: {observed}"
+        )
     if config["target_selection"]["target_index"] != BRIDGE_TARGET_INDEX:
         raise ValueError("R11_new bridge target index drifted.")
     if config["target_selection"]["target_segment_id"] != BRIDGE_TARGET_SEGMENT_ID:
         raise ValueError("R11_new bridge target segment drifted.")
     changed = config.get("single_changed_solver_factor", {})
     if (
-        changed.get("factor") != "optimizer_learning_rate_schedule"
-        or changed.get("explicitly_not_changed")
-        != "DreamLite diffusion scheduler, sigma schedule, or denoising step count"
-        or changed.get("intervention_first_update") != BRIDGE_LR_INTERVENTION_FIRST_UPDATE
+        changed.get("factor") != "x_T_initialization"
+        or changed.get("new_value") != "teacher-state-matched deterministic initialization"
+        or changed.get("sigma_start") != BRIDGE_TEACHER_MATCHED_SIGMA
+        or changed.get("teacher_assisted") is not True
+        or changed.get("answer_independent_writer_usable") is not False
     ):
-        raise ValueError("R11_new bridge LR-schedule intervention drifted.")
+        raise ValueError("R11_new bridge teacher-matched initialization drifted.")
+    # The digest locks the entire JSON; these checks additionally fail closed if
+    # an implementation constant drifts while the preregistration stays fixed.
+    expected_sections = {
+        "canonical_teacher": {
+            "file_sha256": BRIDGE_TEACHER_FILE_SHA256,
+            "tensor_sha256": BRIDGE_TEACHER_TENSOR_SHA256,
+            "population_std": BRIDGE_TEACHER_STD,
+            "shape": [1, 4, 128, 128],
+            "dtype": "torch.float32",
+        },
+        "initialization_binding": {
+            "source_latents_fp32_sha256": BRIDGE_SOURCE_LATENTS_SHA256,
+            "teacher_fp32_sha256": BRIDGE_TEACHER_TENSOR_SHA256,
+            "nominal_effective_sigma_schedule": [0.5, 0.375, 0.25, 0.125],
+            "actual_sigma_must_come_from_scheduler_setup": True,
+            "artifact_required_before_first_forward": True,
+            "independent_recomputation_required": True,
+            "trajectory_point0_must_match_artifact": True,
+            "trajectory_point0_teacher_normalized_rmse_lte": BRIDGE_START_TEACHER_NRMSE_MAX,
+        },
+        "unchanged_contract": {
+            "only_trainable": "x_T_fp32",
+            "diffusion_steps": 4,
+            "effective_sigma_schedule": [0.5, 0.375, 0.25, 0.125],
+            "optimizer": "Adam",
+            "base_learning_rate": BRIDGE_BASE_LEARNING_RATE,
+            "weight_decay": 0.0,
+            "optimizer_steps": BRIDGE_OPTIMIZER_STEPS,
+            "gradient_clipping": None,
+            "checkpoint_steps": list(BRIDGE_CHECKPOINT_STEPS),
+            "primary_endpoint": BRIDGE_PRIMARY_ENDPOINT,
+            "best_checkpoint_selection_forbidden": True,
+            "global_determinism_seed": 0,
+            "strict_determinism": True,
+        },
+        "preflight_gate": {
+            "optimizer_steps": 0,
+            "full_forward_calls": 1,
+            "backward_calls": 1,
+            "require_trajectory_point0_teacher_normalized_rmse_lte": BRIDGE_START_TEACHER_NRMSE_MAX,
+            "bridge_result_evaluated": False,
+        },
+        "formal_technical_gate": {
+            "optimizer_receipts_exact": BRIDGE_OPTIMIZER_STEPS,
+            "optimizer_lr_schedule_exact_per_receipt": True,
+            "teacher_matched_initialization_artifact_valid": True,
+            "trajectory_point0_binding_valid_every_checkpoint": True,
+            "exact_checkpoint_hash_triplets": list(BRIDGE_CHECKPOINT_STEPS),
+        },
+        "primary_bridge_gate": {
+            "endpoint": "raw_step_256_only",
+            "technical_gate": True,
+            "teacher_replay_gate": True,
+            "mse_ratio_to_m0_lte": BRIDGE_MSE_RATIO_MAX,
+            "l2_distance_ratio_to_m0_lte": BRIDGE_L2_RATIO_MAX,
+            "teacher_normalized_rmse_lte": BRIDGE_TEACHER_NRMSE_MAX,
+            "endpoint_reverse_cyclic_accuracy_eq": 1.0,
+        },
+        "parent_bridge": {
+            "endpoint_mse": BRIDGE_PARENT_ENDPOINT_MSE,
+            "endpoint_reader_mean_ce": BRIDGE_PARENT_ENDPOINT_READER_CE,
+        },
+        "secondary_initialization_hypothesis_audit": {"scientific_success_gate": False},
+        "interpretation_boundaries": {
+            "diagnostic_only": True,
+            "teacher_assisted_initialization": True,
+            "formal_success_always_false": True,
+            "phase2_remains_blocked": True,
+            "no_shared_writer_claim": True,
+            "no_id_ood_claim": True,
+            "no_reachability_theorem_from_one_failure": True,
+            "no_dominant_bottleneck_claim_from_one_success": True,
+            "no_best_checkpoint_rescue": True,
+            "no_post_result_threshold_or_initialization_change": True,
+        },
+    }
+    if config.get("protocol") != BRIDGE_PROTOCOL:
+        raise ValueError("R11_new bridge config protocol drifted.")
+    for section, expected in expected_sections.items():
+        for key, value in expected.items():
+            observed_value = config[section].get(key)
+            if type(observed_value) is not type(value) or observed_value != value:
+                raise ValueError(f"R11_new bridge config constant mismatch: {section}.{key}.")
+    if config["preflight_gate"]["teacher_replay"] != {
+        "fixed_reverse_cyclic_permutations": 4,
+        "all_four_correct": True,
+        "mean_ce_lte": BRIDGE_TEACHER_REPLAY_MEAN_CE_MAX,
+    }:
+        raise ValueError("R11_new bridge config teacher replay contract drifted.")
     return dict(config)
 
 
@@ -89,39 +190,43 @@ def bridge_optimizer_learning_rate(update_index: int) -> float:
     return 0.5 * BRIDGE_BASE_LEARNING_RATE * (1.0 + math.cos(math.pi * progress))
 
 
-def bridge_schedule_hypothesis_audit(
+def bridge_initialization_hypothesis_audit(
     *,
-    step128_mse_ratio: float,
-    endpoint_mse_ratio: float,
+    endpoint_mse: float,
+    endpoint_reader_mean_ce: float,
     technical_gate: bool,
     teacher_replay_gate: bool,
-    pre_intervention_parity: bool,
     distance_pass: bool,
     reader_transfer_pass: bool,
 ) -> dict[str, bool]:
-    """Evaluate the secondary, non-rescuing LR-schedule hypothesis audit."""
+    """Evaluate the secondary, non-rescuing initialization hypothesis audit."""
 
-    values = (step128_mse_ratio, endpoint_mse_ratio)
-    if any(not math.isfinite(float(value)) or float(value) < 0.0 for value in values):
-        raise ValueError("R11_new bridge schedule audit received an invalid MSE ratio.")
+    values = (endpoint_mse, endpoint_reader_mean_ce)
+    if any(
+        isinstance(value, bool)
+        or not isinstance(value, (int, float))
+        or not math.isfinite(value)
+        or value < 0.0
+        for value in values
+    ):
+        raise ValueError("R11_new bridge initialization audit received an invalid metric.")
     eligible = bool(
-        technical_gate
-        and teacher_replay_gate
-        and pre_intervention_parity
-        and not distance_pass
-        and not reader_transfer_pass
+        technical_gate is True
+        and teacher_replay_gate is True
+        and distance_pass is False
+        and reader_transfer_pass is False
     )
-    non_rebound = endpoint_mse_ratio <= step128_mse_ratio
-    beats_parent = endpoint_mse_ratio < BRIDGE_PARENT_ENDPOINT_MSE_RATIO
+    mse_improves = endpoint_mse < BRIDGE_PARENT_ENDPOINT_MSE
+    reader_ce_improves = endpoint_reader_mean_ce < BRIDGE_PARENT_ENDPOINT_READER_CE
     return {
         "eligible": eligible,
-        "post128_non_rebound": non_rebound,
-        "beats_parent_endpoint": beats_parent,
-        "passed": bool(eligible and non_rebound and beats_parent),
+        "absolute_endpoint_mse_improves_parent": mse_improves,
+        "endpoint_reader_ce_improves_parent": reader_ce_improves,
+        "passed": bool(eligible and mse_improves and reader_ce_improves),
     }
 
 
-def bridge_schedule_hypothesis_decision(
+def bridge_initialization_hypothesis_decision(
     *,
     distance_pass: bool,
     reader_transfer_pass: bool,
@@ -134,20 +239,8 @@ def bridge_schedule_hypothesis_decision(
     if distance_pass or reader_transfer_pass:
         return f"primary_branch_{primary}"
     if audit.get("passed") is True:
-        return "distance_fail_reader_fail_secondary_schedule_pass"
-    return "distance_fail_reader_fail_secondary_schedule_fail"
-
-
-def bridge_pre_intervention_parity(record: Mapping[str, Any]) -> bool:
-    """Check the exact semantic state before the first changed update."""
-
-    return bool(
-        record.get("optimizer_step") == 128
-        and record.get("tensor_sha256") == BRIDGE_PARENT_STEP128_TENSOR_SHA256
-        and record.get("optimizer_state_sha256")
-        == BRIDGE_PARENT_STEP128_OPTIMIZER_SHA256
-        and record.get("png_sha256") == BRIDGE_PARENT_STEP128_PNG_SHA256
-    )
+        return "distance_fail_reader_fail_secondary_init_improves"
+    return "distance_fail_reader_fail_secondary_init_not_improve"
 
 
 def bridge_distance_statistics(
@@ -283,7 +376,7 @@ def endpoint_reader_transfer_gate(statistics: Mapping[str, Any]) -> bool:
 
 def bridge_decision(*, distance_pass: bool, reader_transfer_pass: bool) -> str:
     if distance_pass and reader_transfer_pass:
-        return "distance_pass_reader_pass_prioritize_qa_objective"
+        return "distance_pass_reader_pass_design_answer_independent_initializer"
     if distance_pass:
         return "distance_pass_reader_fail_test_teacher_neighborhood"
     if reader_transfer_pass:
@@ -303,7 +396,8 @@ def bridge_technical_gate(audit: Mapping[str, Any]) -> bool:
         "snapshots_unchanged",
         "optimizer_contract_valid",
         "optimizer_lr_schedule_exact",
-        "pre_intervention_step128_parity_valid",
+        "teacher_matched_initialization_artifact_valid",
+        "trajectory_point0_binding_valid_every_checkpoint",
         "gradient_clipping_absent",
         "checkpoint_hashes_valid",
         "condition_artifact_valid",

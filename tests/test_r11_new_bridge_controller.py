@@ -56,13 +56,24 @@ def _inventory(root: Path, schema: str) -> None:
 
 def _common_child(run: Path, *, mode: str) -> tuple[dict, dict]:
     run.mkdir(parents=True)
+    initialization_path = run / "initialization" / "teacher_matched_initialization.pt"
+    initialization_path.parent.mkdir()
+    initialization_path.write_bytes(b"controller-test-artifact-not-a-tensor-arithmetic-fixture")
     manifest = {
         "schema": controller.trainer.MANIFEST_SCHEMA,
+        "protocol": controller.core.BRIDGE_PROTOCOL,
         "mode": mode,
         "git_commit": COMMIT,
         "git_dirty": False,
         "target_index": controller.core.BRIDGE_TARGET_INDEX,
         "target_segment_id": controller.core.BRIDGE_TARGET_SEGMENT_ID,
+        "initialization_binding": {
+            "schema": controller.trainer.INITIALIZATION_SCHEMA,
+            "passed": True,
+            "artifact_path": str(initialization_path.resolve()),
+            "artifact_bytes": initialization_path.stat().st_size,
+            "artifact_sha256": controller._sha256(initialization_path),
+        },
     }
     terminal = {
         "schema": controller.trainer.TERMINAL_SCHEMA,
@@ -118,12 +129,11 @@ def _make_formal(run: Path, *, bridge_gate: bool = False) -> dict:
     _write_jsonl(run / controller.ROWS_FILE, [{"row": index} for index in range(20)])
     (run / "endpoint_raw.pt").write_bytes(b"endpoint")
     (run / "endpoint_raw.png").write_bytes(b"png")
-    schedule_audit = controller.core.bridge_schedule_hypothesis_audit(
-        step128_mse_ratio=0.7737632777116902,
-        endpoint_mse_ratio=0.80,
+    initialization_audit = controller.core.bridge_initialization_hypothesis_audit(
+        endpoint_mse=0.09,
+        endpoint_reader_mean_ce=25.0,
         technical_gate=True,
         teacher_replay_gate=True,
-        pre_intervention_parity=True,
         distance_pass=bridge_gate,
         reader_transfer_pass=bridge_gate,
     )
@@ -136,6 +146,7 @@ def _make_formal(run: Path, *, bridge_gate: bool = False) -> dict:
         "technical_gate": technical,
         "gates": {
             "technical_gate": True,
+            "teacher_replay_gate": True,
             "bridge_distance_gate": bridge_gate,
             "endpoint_reader_transfer_gate": bridge_gate,
             "bridge_diagnostic_gate": bridge_gate,
@@ -144,11 +155,13 @@ def _make_formal(run: Path, *, bridge_gate: bool = False) -> dict:
             distance_pass=bridge_gate,
             reader_transfer_pass=bridge_gate,
         ),
-        "secondary_solver_hypothesis_audit": schedule_audit,
-        "secondary_solver_hypothesis_decision": controller.core.bridge_schedule_hypothesis_decision(
+        "secondary_solver_hypothesis_audit": initialization_audit,
+        "endpoint_distance_statistics": {"mse": 0.09},
+        "endpoint_reader_statistics": {"mean_ce": 25.0},
+        "secondary_solver_hypothesis_decision": controller.core.bridge_initialization_hypothesis_decision(
             distance_pass=bridge_gate,
             reader_transfer_pass=bridge_gate,
-            audit=schedule_audit,
+            audit=initialization_audit,
         ),
         "checkpoint_steps_observed": list(controller.core.BRIDGE_CHECKPOINT_STEPS),
         "formal_success_gate": False,
@@ -259,6 +272,45 @@ def test_valid_formal_child_can_be_diagnostic_failure(tmp_path: Path) -> None:
     result = controller._validate_child(run, mode="formal", expected_commit=COMMIT)
     assert result["passed"]
     assert result["mode_checks"]["diagnostic_boolean"]
+
+
+@pytest.mark.parametrize("mutation", ["missing", "wrong_protocol", "external_path", "wrong_hash"])
+def test_child_rejects_resigned_initialization_binding_drift(tmp_path: Path, mutation: str) -> None:
+    run = tmp_path / "run"
+    _make_preflight(run)
+    manifest_path = run / "manifest.json"
+    manifest = controller._load(manifest_path)
+    if mutation == "missing":
+        manifest.pop("initialization_binding")
+    elif mutation == "wrong_protocol":
+        manifest["protocol"] = "R11-New-Canonical-Latent-Bridge-Post128-Cosine-Target01"
+    elif mutation == "external_path":
+        original = run / "initialization" / "teacher_matched_initialization.pt"
+        external = tmp_path / "external.pt"
+        external.write_bytes(original.read_bytes())
+        manifest["initialization_binding"]["artifact_path"] = str(external.resolve())
+    else:
+        manifest["initialization_binding"]["artifact_sha256"] = "0" * 64
+    _write_json(manifest_path, manifest)
+    _inventory(run, controller.trainer.INVENTORY_SCHEMA)
+    with pytest.raises(ValueError, match="common contract"):
+        controller._validate_child(run, mode="technical-preflight", expected_commit=COMMIT)
+
+
+@pytest.mark.parametrize("mutation", ["audit", "decision", "endpoint_ce"])
+def test_formal_child_rejects_resigned_secondary_audit_drift(tmp_path: Path, mutation: str) -> None:
+    run = tmp_path / "run"
+    summary = _make_formal(run)
+    if mutation == "audit":
+        summary["secondary_solver_hypothesis_audit"]["passed"] = False
+    elif mutation == "decision":
+        summary["decision"] = controller.core.bridge_decision(distance_pass=True, reader_transfer_pass=True)
+    else:
+        summary["endpoint_reader_statistics"]["mean_ce"] = 26.0
+    _write_json(run / controller.SUMMARY_FILE, summary)
+    _inventory(run, controller.trainer.INVENTORY_SCHEMA)
+    with pytest.raises(ValueError, match="mode contract"):
+        controller._validate_child(run, mode="formal", expected_commit=COMMIT)
 
 
 def test_formal_child_rejects_missing_or_reordered_receipt(

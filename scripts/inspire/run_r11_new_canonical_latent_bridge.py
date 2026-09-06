@@ -33,7 +33,7 @@ CONFIG = (
     ROOT
     / "configs"
     / "experiments"
-    / "r11_new_canonical_latent_bridge_target01_post128_cosine.json"
+    / "r11_new_canonical_latent_bridge_target01_teacher_matched_init.json"
 )
 SUMMARY_FILE = "r11_new_bridge_summary.json"
 PREFLIGHT_FILE = "technical_preflight.json"
@@ -47,7 +47,7 @@ LOCK_SCHEMA = "vision_memory.r11-new-canonical-latent-bridge-suite-lock.v1"
 EXPECTED_HOST_PREFIX = "vlm-r3-h200x2-live-20260717"
 INSPIRE_SSD_ROOT = Path("/inspire/ssd")
 MINIMUM_FREE_BYTES = 50 * 1024**3
-LOCK_PATH = Path("/tmp/vision-memory-r11-new-canonical-latent-bridge-post128-cosine.lock")
+LOCK_PATH = Path("/tmp/vision-memory-r11-new-canonical-latent-bridge-teacher-matched-init.lock")
 _COMMIT_RE = re.compile(r"^[0-9a-f]{40}$")
 _HEX64_RE = re.compile(r"^[0-9a-f]{64}$")
 
@@ -382,7 +382,7 @@ def _validate(args: argparse.Namespace) -> dict[str, Any]:
         or _sha256(args.phase1a_raw_artifacts) != parent["raw_artifacts_sha256"]
     ):
         raise ValueError("Bridge Phase1A parent evidence binding drifted.")
-    expected_target_root = Path(config["exact_parity_bindings"]["phase1a_valid_source_root"])
+    expected_target_root = Path(core.BRIDGE_PHASE1A_SOURCE_ROOT)
     if args.phase1a_target_root.resolve() != expected_target_root.resolve():
         raise ValueError("Bridge Phase1A target root differs from preregistration.")
     expected_teacher = Path(config["canonical_teacher"]["artifact_path"])
@@ -503,6 +503,22 @@ def _validate_hash_binding(summary: Mapping[str, Any], run: Path) -> dict[str, b
     return checks
 
 
+def _validate_initialization_binding(manifest: Mapping[str, Any], run: Path) -> bool:
+    """Bind the pre-forward artifact; tensor arithmetic is audited by the worker and aggregator."""
+    record = manifest.get("initialization_binding")
+    if not isinstance(record, Mapping):
+        return False
+    path = run / "initialization" / "teacher_matched_initialization.pt"
+    return bool(
+        record.get("schema") == trainer.INITIALIZATION_SCHEMA
+        and record.get("passed") is True
+        and Path(str(record.get("artifact_path", ""))).resolve() == path.resolve()
+        and path.is_file()
+        and record.get("artifact_bytes") == path.stat().st_size
+        and record.get("artifact_sha256") == _sha256(path)
+    )
+
+
 def _validate_child(run: Path, *, mode: str, expected_commit: str) -> dict[str, Any]:
     inventory_sha256 = _validate_inventory(run, schema=trainer.INVENTORY_SCHEMA)
     summary = _load(run / SUMMARY_FILE)
@@ -517,6 +533,8 @@ def _validate_child(run: Path, *, mode: str, expected_commit: str) -> dict[str, 
         "summary_mode": summary.get("mode") == mode,
         "manifest_schema": manifest.get("schema") == trainer.MANIFEST_SCHEMA,
         "manifest_mode": manifest.get("mode") == mode,
+        "protocol_exact": manifest.get("protocol") == core.BRIDGE_PROTOCOL,
+        "initialization_artifact_bound": _validate_initialization_binding(manifest, run),
         "commit_exact": manifest.get("git_commit") == expected_commit,
         "manifest_clean": manifest.get("git_dirty") is False,
         "target_exact": (
@@ -556,6 +574,15 @@ def _validate_child(run: Path, *, mode: str, expected_commit: str) -> dict[str, 
         metrics = _load_jsonl(run / METRICS_FILE)
         technical = _load(run / "technical_gate.json")
         observed_steps = [row.get("optimizer_step") for row in metrics]
+        gates = summary.get("gates", {})
+        initialization_audit = core.bridge_initialization_hypothesis_audit(
+            endpoint_mse=summary.get("endpoint_distance_statistics", {}).get("mse"),
+            endpoint_reader_mean_ce=summary.get("endpoint_reader_statistics", {}).get("mean_ce"),
+            technical_gate=gates.get("technical_gate") is True,
+            teacher_replay_gate=gates.get("teacher_replay_gate") is True,
+            distance_pass=gates.get("bridge_distance_gate") is True,
+            reader_transfer_pass=gates.get("endpoint_reader_transfer_gate") is True,
+        )
         mode_checks = {
             "formal_completed": summary.get("status") == "completed",
             "technical_gate_passed": (
@@ -567,22 +594,22 @@ def _validate_child(run: Path, *, mode: str, expected_commit: str) -> dict[str, 
             "steps_contiguous": observed_steps == list(range(1, core.BRIDGE_OPTIMIZER_STEPS + 1)),
             "rows_exact": len(rows) == 20,
             "checkpoints_exact": summary.get("checkpoint_steps_observed") == list(core.BRIDGE_CHECKPOINT_STEPS),
-            "decision_known": summary.get("decision")
-            in {
-                core.bridge_decision(distance_pass=distance, reader_transfer_pass=reader)
-                for distance in (False, True)
-                for reader in (False, True)
-            },
+            "decision_exact": summary.get("decision") == core.bridge_decision(
+                distance_pass=gates.get("bridge_distance_gate") is True,
+                reader_transfer_pass=gates.get("endpoint_reader_transfer_gate") is True,
+            ),
             "diagnostic_boolean": isinstance(summary.get("gates", {}).get("bridge_diagnostic_gate"), bool),
-            "schedule_audit_exact": summary.get("secondary_solver_hypothesis_decision")
-            == core.bridge_schedule_hypothesis_decision(
+            "initialization_audit_exact": summary.get("secondary_solver_hypothesis_audit")
+            == initialization_audit,
+            "initialization_audit_decision_exact": summary.get("secondary_solver_hypothesis_decision")
+            == core.bridge_initialization_hypothesis_decision(
                 distance_pass=bool(
                     summary.get("gates", {}).get("bridge_distance_gate")
                 ),
                 reader_transfer_pass=bool(
                     summary.get("gates", {}).get("endpoint_reader_transfer_gate")
                 ),
-                audit=summary.get("secondary_solver_hypothesis_audit", {}),
+                audit=initialization_audit,
             ),
         }
         artifact_checks = _validate_hash_binding(summary, run)

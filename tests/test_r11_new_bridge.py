@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import copy
+import hashlib
 import json
 import math
 import sys
@@ -19,7 +20,7 @@ CONFIG = (
     ROOT
     / "configs"
     / "experiments"
-    / "r11_new_canonical_latent_bridge_target01_post128_cosine.json"
+    / "r11_new_canonical_latent_bridge_target01_teacher_matched_init.json"
 )
 
 
@@ -55,6 +56,7 @@ def test_preregistered_config_is_exact() -> None:
     config = _config()
     assert bridge.validate_bridge_config(config) == config
     assert bridge.canonical_json_sha256(config) == bridge.BRIDGE_CONFIG_CANONICAL_SHA256
+    assert hashlib.sha256(CONFIG.read_bytes()).hexdigest() == bridge.BRIDGE_CONFIG_FILE_SHA256
 
 
 def test_post128_optimizer_lr_schedule_is_exact() -> None:
@@ -83,77 +85,154 @@ def test_optimizer_lr_schedule_rejects_out_of_range_indices(update: int) -> None
         bridge.bridge_optimizer_learning_rate(update)
 
 
-def test_pre_intervention_parity_requires_every_parent_anchor() -> None:
-    record = {
-        "optimizer_step": 128,
-        "tensor_sha256": copy.deepcopy(bridge.BRIDGE_PARENT_STEP128_TENSOR_SHA256),
-        "optimizer_state_sha256": bridge.BRIDGE_PARENT_STEP128_OPTIMIZER_SHA256,
-        "png_sha256": bridge.BRIDGE_PARENT_STEP128_PNG_SHA256,
+def test_initialization_intervention_preserves_other_parent_bindings() -> None:
+    parent_path = CONFIG.with_name("r11_new_canonical_latent_bridge_target01_post128_cosine.json")
+    parent = json.loads(parent_path.read_text(encoding="utf-8"))
+    bindings = parent["exact_parity_bindings"]
+    assert bridge.BRIDGE_PHASE1A_SOURCE_ROOT == bindings["phase1a_valid_source_root"]
+    assert bridge.BRIDGE_UNCHANGED_PARITY_BINDINGS == {
+        "target_index": parent["target_selection"]["target_index"],
+        "target_segment_id": parent["target_selection"]["target_segment_id"],
+        **{
+            key: bindings[key]
+            for key in (
+                "blank_source_rgb_sha256",
+                "source_latents_fp32_sha256",
+                "event_text_sha256",
+                "condition_prompt_embeds_sha256",
+                "condition_attention_mask_sha256",
+            )
+        },
     }
-    assert bridge.bridge_pre_intervention_parity(record)
-    for key in tuple(record):
-        mutated = copy.deepcopy(record)
-        mutated[key] = 127 if key == "optimizer_step" else "0" * 64
-        assert not bridge.bridge_pre_intervention_parity(mutated), key
+    assert bridge.BRIDGE_MODEL_SNAPSHOT_BINDINGS == {
+        key: bindings[key]
+        for key in ("dreamlite_snapshot_manifest_sha256", "reader_snapshot_manifest_sha256")
+    }
+    assert "initial_x_T_fp32_sha256" not in bridge.BRIDGE_UNCHANGED_PARITY_BINDINGS
+    assert "initial_z_t_fp32_sha256" not in bridge.BRIDGE_UNCHANGED_PARITY_BINDINGS
 
 
 @pytest.mark.parametrize(
     ("distance", "reader", "endpoint", "expected"),
     [
-        (True, True, 0.001, "primary_branch_distance_pass_reader_pass_prioritize_qa_objective"),
+        (True, True, 0.001, "primary_branch_distance_pass_reader_pass_design_answer_independent_initializer"),
         (True, False, 0.001, "primary_branch_distance_pass_reader_fail_test_teacher_neighborhood"),
-        (False, True, 0.70, "primary_branch_distance_fail_reader_pass_prioritize_qa_objective"),
-        (False, False, 0.70, "distance_fail_reader_fail_secondary_schedule_pass"),
-        (False, False, 0.80, "distance_fail_reader_fail_secondary_schedule_fail"),
+        (False, True, 0.07, "primary_branch_distance_fail_reader_pass_prioritize_qa_objective"),
+        (False, False, 0.07, "distance_fail_reader_fail_secondary_init_improves"),
+        (False, False, 0.10, "distance_fail_reader_fail_secondary_init_not_improve"),
     ],
 )
-def test_schedule_hypothesis_is_secondary_and_non_rescuing(
+def test_initialization_hypothesis_is_secondary_and_non_rescuing(
     distance: bool,
     reader: bool,
     endpoint: float,
     expected: str,
 ) -> None:
-    audit = bridge.bridge_schedule_hypothesis_audit(
-        step128_mse_ratio=0.7737632777116902,
-        endpoint_mse_ratio=endpoint,
+    audit = bridge.bridge_initialization_hypothesis_audit(
+        endpoint_mse=endpoint,
+        endpoint_reader_mean_ce=20.0,
         technical_gate=True,
         teacher_replay_gate=True,
-        pre_intervention_parity=True,
         distance_pass=distance,
         reader_transfer_pass=reader,
     )
-    assert bridge.bridge_schedule_hypothesis_decision(
+    assert audit["eligible"] is (not distance and not reader)
+    assert bridge.bridge_initialization_hypothesis_decision(
         distance_pass=distance,
         reader_transfer_pass=reader,
         audit=audit,
     ) == expected
 
 
-def test_schedule_hypothesis_fails_on_rebound_even_if_it_beats_parent() -> None:
-    audit = bridge.bridge_schedule_hypothesis_audit(
-        step128_mse_ratio=0.7737632777116902,
-        endpoint_mse_ratio=0.80,
+@pytest.mark.parametrize(
+    ("mse", "ce", "mse_improves", "ce_improves"),
+    [
+        (bridge.BRIDGE_PARENT_ENDPOINT_MSE, 20.0, False, True),
+        (0.07, bridge.BRIDGE_PARENT_ENDPOINT_READER_CE, True, False),
+        (0.10, 26.0, False, False),
+        (0.07, 20.0, True, True),
+    ],
+)
+def test_initialization_secondary_requires_both_strict_absolute_improvements(
+    mse: float, ce: float, mse_improves: bool, ce_improves: bool,
+) -> None:
+    audit = bridge.bridge_initialization_hypothesis_audit(
+        endpoint_mse=mse,
+        endpoint_reader_mean_ce=ce,
         technical_gate=True,
         teacher_replay_gate=True,
-        pre_intervention_parity=True,
         distance_pass=False,
         reader_transfer_pass=False,
     )
     assert audit == {
         "eligible": True,
-        "post128_non_rebound": False,
-        "beats_parent_endpoint": True,
-        "passed": False,
+        "absolute_endpoint_mse_improves_parent": mse_improves,
+        "endpoint_reader_ce_improves_parent": ce_improves,
+        "passed": mse_improves and ce_improves,
     }
+
+
+@pytest.mark.parametrize("field", ["technical_gate", "teacher_replay_gate"])
+@pytest.mark.parametrize("invalid", [False, None, 1, "true"])
+def test_initialization_secondary_requires_valid_technical_evidence(field: str, invalid: object) -> None:
+    kwargs = {
+        "endpoint_mse": 0.07,
+        "endpoint_reader_mean_ce": 20.0,
+        "technical_gate": True,
+        "teacher_replay_gate": True,
+        "distance_pass": False,
+        "reader_transfer_pass": False,
+    }
+    kwargs[field] = invalid
+    audit = bridge.bridge_initialization_hypothesis_audit(**kwargs)
+    assert audit["eligible"] is False
+    assert audit["passed"] is False
+
+
+@pytest.mark.parametrize("field", ["endpoint_mse", "endpoint_reader_mean_ce"])
+@pytest.mark.parametrize("invalid", [-1.0, float("nan"), float("inf"), True, "0.01", None])
+def test_initialization_secondary_rejects_invalid_metrics(field: str, invalid: object) -> None:
+    kwargs = {
+        "endpoint_mse": 0.07,
+        "endpoint_reader_mean_ce": 20.0,
+        "technical_gate": True,
+        "teacher_replay_gate": True,
+        "distance_pass": False,
+        "reader_transfer_pass": False,
+    }
+    kwargs[field] = invalid
+    with pytest.raises(ValueError, match="invalid metric"):
+        bridge.bridge_initialization_hypothesis_audit(**kwargs)
+
+
+@pytest.mark.parametrize("distance,reader", [(True, True), (True, False), (False, True)])
+def test_primary_branch_precedes_even_a_claimed_secondary_pass(distance: bool, reader: bool) -> None:
+    decision = bridge.bridge_initialization_hypothesis_decision(
+        distance_pass=distance, reader_transfer_pass=reader, audit={"passed": True},
+    )
+    assert decision == "primary_branch_" + bridge.bridge_decision(
+        distance_pass=distance, reader_transfer_pass=reader,
+    )
 
 
 @pytest.mark.parametrize(
     ("path", "value"),
     [
-        (("unchanged_contract", "learning_rate"), 0.01),
+        (("unchanged_contract", "base_learning_rate"), 0.01),
         (("unchanged_contract", "gradient_clipping"), 1.0),
+        (("unchanged_contract", "optimizer_steps"), 512),
+        (("unchanged_contract", "m0_definition"), "the initial trajectory point zero"),
+        (("unchanged_contract", "train_sha256"), "0" * 64),
         (("primary_bridge_gate", "mse_ratio_to_m0_lte"), 0.02),
         (("target_selection", "target_index"), 7),
+        (("canonical_teacher", "tensor_sha256"), "0" * 64),
+        (("single_changed_solver_factor", "teacher_assisted"), False),
+        (("single_changed_solver_factor", "parameterization_dtype"), "torch.bfloat16"),
+        (("initialization_binding", "actual_sigma_must_come_from_scheduler_setup"), False),
+        (("initialization_binding", "reconstruction_operator_order"), "source + sigma * (x_T - source)"),
+        (("initialization_binding", "trajectory_point0_teacher_normalized_rmse_lte"), 0.02),
+        (("formal_technical_gate", "trajectory_point0_binding_valid_every_checkpoint"), False),
+        (("interpretation_boundaries", "formal_success_always_false"), False),
         (("interpretation_boundaries", "phase2_remains_blocked"), False),
     ],
 )
@@ -162,6 +241,12 @@ def test_config_mutations_fail_closed(path: tuple[str, str], value: object) -> N
     config[path[0]][path[1]] = value
     with pytest.raises(ValueError, match="config"):
         bridge.validate_bridge_config(config)
+
+
+def test_config_rejects_implementation_constant_drift(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(bridge, "BRIDGE_START_TEACHER_NRMSE_MAX", 0.02)
+    with pytest.raises(ValueError, match="constant mismatch"):
+        bridge.validate_bridge_config(_config())
 
 
 def test_distance_statistics_and_strict_gate() -> None:
@@ -254,7 +339,7 @@ def test_teacher_replay_mean_ce_is_strict() -> None:
 @pytest.mark.parametrize(
     ("distance", "reader", "expected"),
     [
-        (True, True, "distance_pass_reader_pass_prioritize_qa_objective"),
+        (True, True, "distance_pass_reader_pass_design_answer_independent_initializer"),
         (True, False, "distance_pass_reader_fail_test_teacher_neighborhood"),
         (False, True, "distance_fail_reader_pass_prioritize_qa_objective"),
         (False, False, "distance_fail_reader_fail_change_one_solver_factor"),
@@ -276,7 +361,8 @@ def test_technical_gate_requires_every_contract() -> None:
         "snapshots_unchanged",
         "optimizer_contract_valid",
         "optimizer_lr_schedule_exact",
-        "pre_intervention_step128_parity_valid",
+        "teacher_matched_initialization_artifact_valid",
+        "trajectory_point0_binding_valid_every_checkpoint",
         "gradient_clipping_absent",
         "checkpoint_hashes_valid",
         "condition_artifact_valid",

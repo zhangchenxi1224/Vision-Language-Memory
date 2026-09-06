@@ -40,11 +40,11 @@ CONFIG_PATH = (
     ROOT
     / "configs"
     / "experiments"
-    / "r11_new_canonical_latent_bridge_target01_post128_cosine.json"
+    / "r11_new_canonical_latent_bridge_target01_teacher_matched_init.json"
 )
 PROTOCOL = core.BRIDGE_PROTOCOL
-IMPLEMENTATION_REVISION = "canonical-r11-latent-mse-post128-cosine-target01-v1"
-SUITE = "r11_new_target01_canonical_latent_bridge_post128_cosine"
+IMPLEMENTATION_REVISION = "canonical-r11-latent-mse-teacher-matched-init-target01-v1"
+SUITE = "r11_new_target01_canonical_latent_bridge_teacher_matched_init"
 MANIFEST_SCHEMA = "vision_memory.r11-new-canonical-latent-bridge-manifest.v1"
 METRICS_SCHEMA = "vision_memory.r11-new-canonical-latent-bridge-metrics.v1"
 CHECKPOINT_SCHEMA = "vision_memory.r11-new-canonical-latent-bridge-checkpoint.v1"
@@ -54,6 +54,15 @@ SUMMARY_SCHEMA = "vision_memory.r11-new-canonical-latent-bridge-summary.v1"
 TERMINAL_SCHEMA = "vision_memory.r11-new-canonical-latent-bridge-terminal.v1"
 INVENTORY_SCHEMA = "vision_memory.r11-new-canonical-latent-bridge-artifact-inventory.v1"
 OWNER_SCHEMA = "vision_memory.r11-new-canonical-latent-bridge-output-owner.v1"
+INITIALIZATION_SCHEMA = "vision_memory.r11-new-bridge-teacher-matched-initialization.v1"
+INITIALIZATION_FORMULA = (
+    "x_T_init_fp32=(teacher_fp32-source_latents_fp32.mul("
+    "1-actual_effective_sigma0)).div(actual_effective_sigma0)"
+)
+INITIALIZATION_RECONSTRUCTION_ORDER = (
+    "source_compute.mul(1-actual_sigma).add("
+    "x_T_init_fp32.to(compute_dtype), alpha=actual_sigma)"
+)
 
 OPTIMIZER_STEPS = core.BRIDGE_OPTIMIZER_STEPS
 CHECKPOINT_STEPS = core.BRIDGE_CHECKPOINT_STEPS
@@ -185,6 +194,7 @@ def _validate_parent_evidence(args: argparse.Namespace, config: Mapping[str, Any
         or target.get("technical_gate") is not True
         or target.get("target_reachability_gate") is not False
         or Path(str(target.get("source_root"))).resolve() != args.phase1a_target_root.resolve()
+        or args.phase1a_target_root.resolve() != Path(core.BRIDGE_PHASE1A_SOURCE_ROOT).resolve()
     ):
         raise ValueError("R11_new bridge target-01 parent binding drifted.")
     inventory_sha = _validate_inventory(
@@ -200,14 +210,20 @@ def _validate_parent_evidence(args: argparse.Namespace, config: Mapping[str, Any
         or terminal.get("diagnostic_result", {}).get("phase1a_query_level_reachability_gate") is not False
     ):
         raise ValueError("R11_new bridge parent target terminal drifted.")
+    parent_manifest_path = args.phase1a_target_root / "run" / "manifest.json"
+    if phase1a._sha256(parent_manifest_path) != core.BRIDGE_PARENT_TARGET_MANIFEST_SHA256:
+        raise ValueError("R11_new bridge locked parent target manifest hash drifted.")
     checkpoint = torch.load(
         args.phase1a_target_root / "run" / "checkpoints" / "step-000.pt",
         map_location="cpu",
         weights_only=False,
     )
     if (
-        canonical_tensor_sha256(checkpoint["x_T_fp32"].float()) != core.BRIDGE_INITIAL_X_T_SHA256
-        or canonical_tensor_sha256(checkpoint["z_t_fp32"].float()) != core.BRIDGE_INITIAL_Z_T_SHA256
+        # These are historical parent receipts, not the new initialization.
+        canonical_tensor_sha256(checkpoint["x_T_fp32"].float())
+        != "c970092e2afca24ededea1aec2892bd6bd54ba0dd2193522dab22af10ac1d991"
+        or canonical_tensor_sha256(checkpoint["z_t_fp32"].float())
+        != "11c7216fe2a70f0caa314d182b2c176b4f50c78f2d081f5aa0271184e5c8e659"
     ):
         raise ValueError("R11_new bridge parent step-0 checkpoint parity drifted.")
     return {
@@ -218,6 +234,7 @@ def _validate_parent_evidence(args: argparse.Namespace, config: Mapping[str, Any
         "target_root": str(args.phase1a_target_root.resolve()),
         "target_inventory_sha256": inventory_sha,
         "target_terminal_sha256": phase1a._sha256(args.phase1a_target_root / "terminal.json"),
+        "target_manifest_sha256": core.BRIDGE_PARENT_TARGET_MANIFEST_SHA256,
         "step0_checkpoint_sha256": phase1a._sha256(args.phase1a_target_root / "run" / "checkpoints" / "step-000.pt"),
     }
 
@@ -264,8 +281,11 @@ def _validate_args(args: argparse.Namespace) -> tuple[dict[str, Any], dict[str, 
     for name in ("dreamlite", "reader", "phase1a_target_root"):
         if not getattr(args, name).is_dir():
             raise ValueError(f"R11_new bridge {name} path is not a directory.")
-    if torch.device(args.dreamlite_device) == torch.device(args.reader_device):
-        raise ValueError("R11_new bridge requires distinct DreamLite and Reader devices.")
+    if (
+        torch.device(args.dreamlite_device) != torch.device("cuda:0")
+        or torch.device(args.reader_device) != torch.device("cuda:1")
+    ):
+        raise ValueError("R11_new bridge requires the locked cuda:0 DreamLite / cuda:1 Reader devices.")
     if not args.strict_determinism:
         raise ValueError("R11_new bridge requires strict determinism.")
     if r8.git_value("status", "--porcelain") and not args.allow_dirty:
@@ -326,6 +346,299 @@ def _distance_statistics(output: phase1a.OracleForward, teacher: Tensor, *, m0_m
     )
 
 
+def _reconstruct_start_state(source_compute: Tensor, x_t_fp32: Tensor, *, actual_sigma: float) -> Tensor:
+    """Use the sampler's two operations in its original compute dtype."""
+
+    if (
+        source_compute.shape != x_t_fp32.shape
+        or x_t_fp32.dtype != torch.float32
+        or source_compute.device != x_t_fp32.device
+        or source_compute.dtype not in (torch.float32, torch.bfloat16, torch.float16)
+        or isinstance(actual_sigma, bool)
+        or not isinstance(actual_sigma, (int, float))
+        or not math.isfinite(actual_sigma)
+        or not 0.0 < actual_sigma <= 1.0
+    ):
+        raise ValueError("Bridge start-state reconstruction tensor/sigma contract drifted.")
+    return source_compute.mul(1.0 - actual_sigma).add(
+        x_t_fp32.to(dtype=source_compute.dtype), alpha=actual_sigma
+    )
+
+
+def _teacher_matched_initialization(
+    *,
+    oracle: phase1a.FrozenDreamLiteOracle,
+    source_latents: Tensor,
+    teacher: Tensor,
+    output_dir: Path,
+) -> dict[str, Any]:
+    """Replace only x_T so the sampler's initial mixed state approximates the teacher."""
+
+    if (
+        tuple(source_latents.shape) != (1, 4, 128, 128)
+        or source_latents.shape != teacher.shape
+        or teacher.dtype != torch.float32
+        or source_latents.device != teacher.device
+        or source_latents.device != oracle.source_latents.device
+        or source_latents.device != oracle.x_T_fp32.device
+        or source_latents.device != oracle.initial_x_T_fp32.device
+        or source_latents.dtype != oracle.compute_dtype
+        or oracle.x_T_fp32.dtype != torch.float32
+        or canonical_tensor_sha256(source_latents.detach().float().cpu()) != core.BRIDGE_SOURCE_LATENTS_SHA256
+        or canonical_tensor_sha256(teacher.detach().cpu()) != core.BRIDGE_TEACHER_TENSOR_SHA256
+    ):
+        raise ValueError("Teacher-matched initialization tensor contract drifted.")
+    nominal_sigmas = torch.linspace(
+        phase1a.EDIT_START_SIGMA,
+        phase1a.EDIT_START_SIGMA / phase1a.NUM_DENOISING_STEPS,
+        phase1a.NUM_DENOISING_STEPS,
+    ).tolist()
+    _, effective_sigmas = oracle.sampler._prepare_timesteps(
+        source_latents,
+        phase1a.NUM_DENOISING_STEPS,
+        nominal_sigmas,
+        sigmas_are_effective=True,
+    )
+    if not phase1a.phase1a_effective_sigmas_match(effective_sigmas):
+        raise RuntimeError("Teacher-matched initialization effective schedule drifted.")
+    actual_sigma = float(effective_sigmas[0])
+    if not math.isclose(
+        actual_sigma,
+        core.BRIDGE_TEACHER_MATCHED_SIGMA,
+        rel_tol=2e-6,
+        abs_tol=2e-6,
+    ):
+        raise RuntimeError("Teacher-matched initialization effective sigma drifted.")
+
+    source_fp32 = source_latents.detach().float()
+    teacher_fp32 = teacher.detach().float()
+    x_t_fp32 = teacher_fp32.sub(
+        source_fp32.mul(1.0 - actual_sigma)
+    ).div(actual_sigma)
+    source_compute = source_latents.detach()
+    reconstructed_start = _reconstruct_start_state(source_compute, x_t_fp32, actual_sigma=actual_sigma)
+    start_mse = float(
+        (reconstructed_start.float() - teacher_fp32).square().mean().detach()
+    )
+    start_nrmse = math.sqrt(start_mse) / core.BRIDGE_TEACHER_STD
+    if (
+        not torch.isfinite(x_t_fp32).all()
+        or not torch.isfinite(reconstructed_start).all()
+        or start_nrmse > core.BRIDGE_START_TEACHER_NRMSE_MAX
+    ):
+        raise RuntimeError("Teacher-matched initialization failed its finite-precision gate.")
+
+    with torch.no_grad():
+        oracle.x_T_fp32.copy_(x_t_fp32)
+        oracle.initial_x_T_fp32.copy_(x_t_fp32)
+
+    payload = {
+        "schema": INITIALIZATION_SCHEMA,
+        "compute_device_type": source_latents.device.type,
+        "formula": INITIALIZATION_FORMULA,
+        "reconstruction_operator_order": INITIALIZATION_RECONSTRUCTION_ORDER,
+        "nominal_effective_sigmas": list(phase1a.EFFECTIVE_SIGMAS),
+        "actual_effective_sigmas": list(effective_sigmas),
+        "actual_effective_sigma0": actual_sigma,
+        "source_latents_fp32": source_fp32.detach().cpu(),
+        "teacher_fp32": teacher_fp32.detach().cpu(),
+        "x_T_init_fp32": x_t_fp32.detach().cpu(),
+        "reconstructed_start_state_compute": reconstructed_start.detach().cpu(),
+        "teacher_population_std": core.BRIDGE_TEACHER_STD,
+        "trajectory_point0_teacher_mse": start_mse,
+        "trajectory_point0_teacher_normalized_rmse": start_nrmse,
+        "tensor_sha256": {
+            "source_latents_fp32": canonical_tensor_sha256(source_fp32.detach().cpu()),
+            "teacher_fp32": canonical_tensor_sha256(teacher_fp32.detach().cpu()),
+            "x_T_init_fp32": canonical_tensor_sha256(x_t_fp32.detach().cpu()),
+            "reconstructed_start_state_compute": canonical_tensor_sha256(
+                reconstructed_start.detach().cpu()
+            ),
+        },
+    }
+    artifact_path = output_dir / "initialization" / "teacher_matched_initialization.pt"
+    phase1a._atomic_torch_save(artifact_path, payload)
+    return {
+        "schema": INITIALIZATION_SCHEMA,
+        "compute_device_type": payload["compute_device_type"],
+        "artifact_path": str(artifact_path),
+        "artifact_bytes": artifact_path.stat().st_size,
+        "artifact_sha256": phase1a._sha256(artifact_path),
+        "formula": payload["formula"],
+        "reconstruction_operator_order": payload["reconstruction_operator_order"],
+        "nominal_effective_sigmas": payload["nominal_effective_sigmas"],
+        "actual_effective_sigmas": payload["actual_effective_sigmas"],
+        "actual_effective_sigma0": actual_sigma,
+        "teacher_population_std": core.BRIDGE_TEACHER_STD,
+        "trajectory_point0_teacher_mse": start_mse,
+        "trajectory_point0_teacher_normalized_rmse": start_nrmse,
+        "tensor_sha256": payload["tensor_sha256"],
+        "passed": True,
+    }
+
+
+def _verify_teacher_matched_initialization(
+    record: Mapping[str, Any],
+    *,
+    oracle: phase1a.FrozenDreamLiteOracle,
+    initial_output: phase1a.OracleForward,
+) -> bool:
+    """Verify the initialization before optimization, never against an updated x_T."""
+
+    path = Path(str(record.get("artifact_path", "")))
+    if (
+        record.get("schema") != INITIALIZATION_SCHEMA
+        or record.get("passed") is not True
+        or not path.is_file()
+        or path.stat().st_size != record.get("artifact_bytes")
+        or phase1a._sha256(path) != record.get("artifact_sha256")
+    ):
+        return False
+    payload = torch.load(path, map_location="cpu", weights_only=True)
+    if not isinstance(payload, Mapping):
+        return False
+    source = payload.get("source_latents_fp32")
+    teacher = payload.get("teacher_fp32")
+    x_t = payload.get("x_T_init_fp32")
+    start = payload.get("reconstructed_start_state_compute")
+    hashes = payload.get("tensor_sha256")
+    actual_sigma = payload.get("actual_effective_sigma0")
+    trajectory = initial_output.trajectory
+    actual_sigmas = initial_output.effective_sigmas
+    compute_device = oracle.source_latents.device
+    if (
+        not isinstance(trajectory, (tuple, list))
+        or len(trajectory) != 5
+        or not isinstance(trajectory[0], Tensor)
+        or trajectory[0].device != compute_device
+        or oracle.x_T_fp32.device != compute_device
+        or oracle.initial_x_T_fp32.device != compute_device
+        or payload.get("compute_device_type") != compute_device.type
+        or record.get("compute_device_type") != compute_device.type
+        or not phase1a.phase1a_effective_sigmas_match(actual_sigmas)
+        or payload.get("nominal_effective_sigmas") != list(phase1a.EFFECTIVE_SIGMAS)
+        or record.get("nominal_effective_sigmas") != list(phase1a.EFFECTIVE_SIGMAS)
+        or payload.get("actual_effective_sigmas") != list(actual_sigmas)
+        or record.get("actual_effective_sigmas") != list(actual_sigmas)
+        or payload.get("formula") != INITIALIZATION_FORMULA
+        or record.get("formula") != INITIALIZATION_FORMULA
+        or payload.get("reconstruction_operator_order") != INITIALIZATION_RECONSTRUCTION_ORDER
+        or record.get("reconstruction_operator_order") != INITIALIZATION_RECONSTRUCTION_ORDER
+    ):
+        return False
+    tensors_valid = bool(
+        isinstance(source, Tensor)
+        and isinstance(teacher, Tensor)
+        and isinstance(x_t, Tensor)
+        and isinstance(start, Tensor)
+        and source.dtype == torch.float32
+        and teacher.dtype == torch.float32
+        and x_t.dtype == torch.float32
+        and start.dtype == trajectory[0].dtype == oracle.compute_dtype == oracle.source_latents.dtype
+        and tuple(source.shape) == (1, 4, 128, 128)
+        and tuple(teacher.shape) == tuple(source.shape)
+        and tuple(x_t.shape) == tuple(source.shape)
+        and tuple(start.shape) == tuple(source.shape)
+        and all(torch.isfinite(value).all() for value in (source, teacher, x_t, start))
+        and isinstance(actual_sigma, (int, float))
+        and not isinstance(actual_sigma, bool)
+        and math.isfinite(float(actual_sigma))
+        and float(actual_sigma) == float(actual_sigmas[0])
+        and isinstance(record.get("actual_effective_sigma0"), (int, float))
+        and not isinstance(record.get("actual_effective_sigma0"), bool)
+        and record.get("actual_effective_sigma0") == actual_sigma
+    )
+    if not tensors_valid or not isinstance(hashes, Mapping):
+        return False
+    # BF16 elementwise kernels and FP32 division can differ across CPU/CUDA.
+    # Recompute on the actual sampler backend; keep the final comparison bitwise.
+    source_on_device = source.to(device=compute_device)
+    teacher_on_device = teacher.to(device=compute_device)
+    recomputed_x_t = teacher_on_device.sub(source_on_device.mul(1.0 - float(actual_sigma))).div(
+        float(actual_sigma)
+    )
+    source_compute = source_on_device.to(dtype=start.dtype)
+    recomputed_start = _reconstruct_start_state(
+        source_compute, recomputed_x_t, actual_sigma=float(actual_sigma)
+    )
+    start_mse = float((start.to(device=compute_device).float() - teacher_on_device).square().mean())
+    start_nrmse = math.sqrt(start_mse) / core.BRIDGE_TEACHER_STD
+    expected_metrics = {
+        "teacher_population_std": core.BRIDGE_TEACHER_STD,
+        "trajectory_point0_teacher_mse": start_mse,
+        "trajectory_point0_teacher_normalized_rmse": start_nrmse,
+    }
+    for declared in (payload, record):
+        for key, expected in expected_metrics.items():
+            value = declared.get(key)
+            if (
+                not isinstance(value, (int, float))
+                or isinstance(value, bool)
+                or not math.isfinite(float(value))
+                or not math.isclose(
+                    float(value), expected,
+                    rel_tol=0.0 if key == "teacher_population_std" else 1e-6,
+                    abs_tol=0.0 if key == "teacher_population_std" else 1e-10,
+                )
+            ):
+                return False
+    observed_hashes = {
+        "source_latents_fp32": canonical_tensor_sha256(source),
+        "teacher_fp32": canonical_tensor_sha256(teacher),
+        "x_T_init_fp32": canonical_tensor_sha256(x_t),
+        "reconstructed_start_state_compute": canonical_tensor_sha256(start),
+    }
+    return bool(
+        payload.get("schema") == INITIALIZATION_SCHEMA
+        and payload.get("formula") == record.get("formula")
+        and payload.get("reconstruction_operator_order")
+        == record.get("reconstruction_operator_order")
+        and payload.get("nominal_effective_sigmas")
+        == record.get("nominal_effective_sigmas")
+        and payload.get("actual_effective_sigmas")
+        == record.get("actual_effective_sigmas")
+        and math.isclose(
+            float(actual_sigma),
+            core.BRIDGE_TEACHER_MATCHED_SIGMA,
+            rel_tol=2e-6,
+            abs_tol=2e-6,
+        )
+        and torch.equal(x_t, recomputed_x_t.cpu())
+        and torch.equal(start, recomputed_start.cpu())
+        and observed_hashes == hashes
+        and observed_hashes == record.get("tensor_sha256")
+        and observed_hashes["source_latents_fp32"]
+        == core.BRIDGE_SOURCE_LATENTS_SHA256
+        and observed_hashes["source_latents_fp32"]
+        == canonical_tensor_sha256(oracle.source_latents.detach().float().cpu())
+        and observed_hashes["teacher_fp32"] == core.BRIDGE_TEACHER_TENSOR_SHA256
+        and observed_hashes["x_T_init_fp32"]
+        == canonical_tensor_sha256(oracle.initial_x_T_fp32.detach().cpu())
+        and observed_hashes["x_T_init_fp32"]
+        == canonical_tensor_sha256(oracle.x_T_fp32.detach().cpu())
+        and observed_hashes["reconstructed_start_state_compute"]
+        == canonical_tensor_sha256(initial_output.trajectory[0].detach().cpu())
+        and math.isclose(
+            start_mse,
+            float(record.get("trajectory_point0_teacher_mse", math.nan)),
+            rel_tol=1e-6,
+            abs_tol=1e-10,
+        )
+        and math.isclose(
+            start_nrmse,
+            float(
+                record.get(
+                    "trajectory_point0_teacher_normalized_rmse",
+                    math.nan,
+                )
+            ),
+            rel_tol=1e-6,
+            abs_tol=1e-10,
+        )
+        and start_nrmse <= core.BRIDGE_START_TEACHER_NRMSE_MAX
+    )
+
+
 def _checkpoint_payload(
     *,
     step: int,
@@ -341,6 +654,15 @@ def _checkpoint_payload(
     x_t = oracle.x_T_fp32.detach().float().cpu()
     z_t = output.z_t.detach().float().cpu()
     distance = _distance_statistics(output, teacher, m0_mse=m0_mse)
+    expected_start = _reconstruct_start_state(
+        oracle.source_latents, oracle.x_T_fp32,
+        actual_sigma=float(output.effective_sigmas[0]),
+    )
+    trajectory_point0_formula_valid = bool(
+        output.trajectory[0].device == oracle.source_latents.device
+        and output.trajectory[0].dtype == oracle.source_latents.dtype == oracle.compute_dtype
+        and torch.equal(output.trajectory[0], expected_start)
+    )
     return {
         "schema": CHECKPOINT_SCHEMA,
         "optimizer_step": step,
@@ -349,8 +671,11 @@ def _checkpoint_payload(
         "z_t_fp32": z_t,
         "trajectory_fp32": trajectory,
         "effective_sigmas": list(output.effective_sigmas),
+        "compute_dtype": str(oracle.source_latents.dtype),
+        "compute_device_type": oracle.source_latents.device.type,
         "optimizer": optimizer.state_dict(),
         "optimizer_state_sha256": canonical_object_sha256(optimizer.state_dict()),
+        "trajectory_point0_formula_valid": trajectory_point0_formula_valid,
         "distance_statistics": distance,
         "teacher_tensor_sha256": core.BRIDGE_TEACHER_TENSOR_SHA256,
         "manifest_sha256": manifest_sha256,
@@ -406,6 +731,11 @@ def _save_checkpoint(
         "distance_statistics": payload["distance_statistics"],
         "tensor_sha256": payload["tensor_sha256"],
         "optimizer_state_sha256": payload["optimizer_state_sha256"],
+        "trajectory_point0_formula_valid": payload[
+            "trajectory_point0_formula_valid"
+        ],
+        "compute_dtype": payload["compute_dtype"],
+        "compute_device_type": payload["compute_device_type"],
     }
     phase1a._atomic_json(output_dir / "checkpoint_hashes" / f"step-{step:03d}.json", record)
     return record, output
@@ -468,7 +798,11 @@ def _verify_checkpoint_record(
     expected_step: int,
     teacher_cpu: Tensor,
     m0_mse: float,
+    source_latents_cpu: Tensor,
+    compute_dtype: torch.dtype,
+    compute_device: torch.device,
 ) -> bool:
+    compute_device = torch.device(compute_device)
     pt_path = Path(str(record.get("checkpoint_path", "")))
     png_path = Path(str(record.get("png_path", "")))
     if not pt_path.is_file() or not png_path.is_file():
@@ -480,7 +814,7 @@ def _verify_checkpoint_record(
         or phase1a._sha256(png_path) != record.get("png_sha256")
     ):
         return False
-    payload = torch.load(pt_path, map_location="cpu", weights_only=False)
+    payload = torch.load(pt_path, map_location="cpu", weights_only=True)
     trajectory = payload.get("trajectory_fp32")
     hashes = payload.get("tensor_sha256", {})
     if (
@@ -489,6 +823,19 @@ def _verify_checkpoint_record(
         or record.get("optimizer_step") != expected_step
         or not isinstance(trajectory, (tuple, list))
         or len(trajectory) != 5
+        or payload.get("compute_dtype") != str(compute_dtype)
+        or record.get("compute_dtype") != str(compute_dtype)
+        or payload.get("compute_device_type") != compute_device.type
+        or record.get("compute_device_type") != compute_device.type
+        or payload.get("trajectory_point0_formula_valid") is not True
+        or record.get("trajectory_point0_formula_valid") is not True
+        or any(
+            not isinstance(value, Tensor)
+            or value.dtype != torch.float32
+            or tuple(value.shape) != (1, 4, 128, 128)
+            or not torch.isfinite(value).all()
+            for value in (payload.get("x_T_fp32"), payload.get("z_t_fp32"), *trajectory)
+        )
         or hashes != record.get("tensor_sha256")
         or hashes.get("x_T_fp32") != canonical_tensor_sha256(payload["x_T_fp32"].float())
         or hashes.get("z_t_fp32") != canonical_tensor_sha256(payload["z_t_fp32"].float())
@@ -505,7 +852,16 @@ def _verify_checkpoint_record(
         or payload.get("teacher_tensor_sha256") != core.BRIDGE_TEACHER_TENSOR_SHA256
     ):
         return False
-    mse = float((payload["z_t_fp32"].float() - teacher_cpu).square().mean())
+    if canonical_tensor_sha256(source_latents_cpu.float()) != core.BRIDGE_SOURCE_LATENTS_SHA256:
+        return False
+    expected_start = _reconstruct_start_state(
+        source_latents_cpu.to(device=compute_device, dtype=compute_dtype),
+        payload["x_T_fp32"].to(device=compute_device),
+        actual_sigma=float(payload["effective_sigmas"][0]),
+    )
+    if not torch.equal(trajectory[0], expected_start.float().cpu()) or not torch.equal(trajectory[-1], payload["z_t_fp32"]):
+        return False
+    mse = float((payload["z_t_fp32"].to(device=compute_device) - teacher_cpu.to(device=compute_device)).square().mean())
     recomputed = core.bridge_distance_statistics(
         mse=mse,
         m0_mse=m0_mse,
@@ -600,6 +956,7 @@ def _required_formal_artifacts(output_dir: Path) -> bool:
         "model_snapshot_verification_start.json",
         "model_snapshot_verification_end.json",
         "condition/official_full_condition.pt",
+        "initialization/teacher_matched_initialization.pt",
         "teacher/canonical_r11_target01.pt",
         "teacher/canonical_r11_target01.png",
         "manifest.json",
@@ -626,6 +983,7 @@ def _technical_gate(
     manifest: Mapping[str, Any],
     snapshots_unchanged: bool,
     output_dir: Path,
+    initialization_verified: bool,
 ) -> dict[str, Any]:
     expected_steps = list(range(1, OPTIMIZER_STEPS + 1))
     trainable = [name for name, parameter in oracle.named_parameters() if parameter.requires_grad]
@@ -658,6 +1016,9 @@ def _technical_gate(
             expected_step=step,
             teacher_cpu=teacher_cpu,
             m0_mse=m0_mse,
+            source_latents_cpu=oracle.source_latents.detach().cpu(),
+            compute_dtype=oracle.compute_dtype,
+            compute_device=oracle.source_latents.device,
         )
         for step in CHECKPOINT_STEPS
     )
@@ -670,14 +1031,22 @@ def _technical_gate(
         and len(optimizer.param_groups[0]["params"]) == 1
         and optimizer.param_groups[0]["params"][0] is oracle.x_T_fp32
     )
+    initialization = manifest.get("initialization_binding", {})
+    initialization_path = Path(str(initialization.get("artifact_path", "")))
+    initialization_unchanged = bool(
+        initialization_verified
+        and initialization.get("passed") is True
+        and initialization_path.is_file()
+        and initialization_path.stat().st_size == initialization.get("artifact_bytes")
+        and phase1a._sha256(initialization_path) == initialization.get("artifact_sha256")
+    )
     step0 = checkpoint_map.get(0, {}).get("tensor_sha256", {})
     step0_parity = bool(
-        step0.get("x_T_fp32") == core.BRIDGE_INITIAL_X_T_SHA256
-        and step0.get("z_t_fp32") == core.BRIDGE_INITIAL_Z_T_SHA256
+        initialization_unchanged
+        and step0.get("x_T_fp32") == initialization.get("tensor_sha256", {}).get("x_T_init_fp32")
+        and step0.get("z_t_fp32") == manifest.get("parity_checks", {}).get("observed", {}).get("initial_z_t_fp32_sha256")
         and manifest.get("parity_checks", {}).get("passed") is True
     )
-    step128 = checkpoint_map.get(128, {})
-    step128_parity = core.bridge_pre_intervention_parity(step128)
     lr_schedule = all(
         math.isclose(
             float(row.get("learning_rate", math.nan)),
@@ -704,7 +1073,8 @@ def _technical_gate(
         "snapshots_unchanged": snapshots_unchanged,
         "optimizer_contract_valid": optimizer_valid,
         "optimizer_lr_schedule_exact": lr_schedule,
-        "pre_intervention_step128_parity_valid": step128_parity,
+        "teacher_matched_initialization_artifact_valid": initialization_unchanged,
+        "trajectory_point0_binding_valid_every_checkpoint": checkpoint_hashes_valid,
         "gradient_clipping_absent": all(row.get("gradient_clipping_applied") is False for row in metrics),
         "checkpoint_hashes_valid": checkpoint_hashes_valid,
         "condition_artifact_valid": phase1a._verify_condition_record(manifest["condition_artifact"]),
@@ -730,6 +1100,7 @@ def _parity_checks(
     context: Mapping[str, Any],
     oracle: phase1a.FrozenDreamLiteOracle,
     initial_output: phase1a.OracleForward,
+    initialization_binding: Mapping[str, Any],
 ) -> dict[str, Any]:
     condition = context["condition_record"]
     observed = {
@@ -743,18 +1114,16 @@ def _parity_checks(
         "condition_prompt_embeds_sha256": condition["tensor_sha256"]["prompt_embeds"],
         "condition_attention_mask_sha256": condition["tensor_sha256"]["attention_mask"],
     }
-    expected = {
-        "target_index": core.BRIDGE_TARGET_INDEX,
-        "target_segment_id": core.BRIDGE_TARGET_SEGMENT_ID,
-        "initial_x_T_fp32_sha256": core.BRIDGE_INITIAL_X_T_SHA256,
-        "initial_z_t_fp32_sha256": core.BRIDGE_INITIAL_Z_T_SHA256,
-        "blank_source_rgb_sha256": "a3b784da71eaa113fb4d9d71502a7a3526ba0d41e2d42ed96fe79111ca3dba65",
-        "source_latents_fp32_sha256": "719e92867b60546b21b281cfc633ab782c8ce2274bfb41c6b3cee6d673e74eaa",
-        "event_text_sha256": "f170a7e2dfe0070fbd160c09d29dbcf897ddbf5f75929a3ee4af84cf627965bb",
-        "condition_prompt_embeds_sha256": "473bd457d6fff070a71b119a19d950b8d094cfaf6f126ceb817330eb01263a60",
-        "condition_attention_mask_sha256": "4f941a468150ea22f64ac4f7304e9a94a3dd1c721d07dd7f8ebd10185fbe2ea9",
+    expected = dict(core.BRIDGE_UNCHANGED_PARITY_BINDINGS)
+    initialization_valid = _verify_teacher_matched_initialization(
+        initialization_binding, oracle=oracle, initial_output=initial_output
+    )
+    return {
+        "passed": all(observed[key] == value for key, value in expected.items()) and initialization_valid,
+        "observed": observed,
+        "expected": expected,
+        "teacher_matched_initialization_artifact_valid": initialization_valid,
     }
-    return {"passed": observed == expected, "observed": observed, "expected": expected}
 
 
 def _manifest(
@@ -767,8 +1136,12 @@ def _manifest(
     teacher_record: Mapping[str, Any],
     snapshot_bindings: Mapping[str, Any],
     determinism: Mapping[str, Any] | None,
+    initialization_binding: Mapping[str, Any],
 ) -> dict[str, Any]:
-    parity = _parity_checks(context=context, oracle=oracle, initial_output=initial_output)
+    parity = _parity_checks(
+        context=context, oracle=oracle, initial_output=initial_output,
+        initialization_binding=initialization_binding,
+    )
     if not parity["passed"]:
         raise RuntimeError(f"R11_new bridge step-0 parity failed: {parity}")
     information_boundary = phase1a._writer_information_boundary(context["target"])
@@ -776,7 +1149,10 @@ def _manifest(
         raise RuntimeError("R11_new bridge information boundary failed.")
     information_boundary = {
         **information_boundary,
-        "canonical_teacher_used_only_by_dense_loss": True,
+        "canonical_teacher_used_only_by_dense_loss": False,
+        "canonical_teacher_used_by_initialization_and_dense_loss": True,
+        "teacher_assisted_initialization": True,
+        "answer_independent_writer_usable": False,
         "reader_used_only_for_fixed_audit": True,
         "reader_gradient_calls_during_optimization": 0,
     }
@@ -795,6 +1171,7 @@ def _manifest(
         "target_segment": context["target"].to_dict(),
         "parent_phase1a": dict(parent_binding),
         "teacher": dict(teacher_record),
+        "initialization_binding": dict(initialization_binding),
         "parity_checks": parity,
         "train_sha256": r5.sha256_file(args.train),
         "dev_sha256": r5.sha256_file(args.dev),
@@ -811,10 +1188,11 @@ def _manifest(
         "source_latents": {
             "shape": list(context["source_latents"].shape),
             "dtype": str(context["source_latents"].dtype),
+            "device": str(context["source_latents"].device),
             "sha256": parity["observed"]["source_latents_fp32_sha256"],
         },
         "initial_x_T_fp32": {
-            "distribution": "same Phase1A event-keyed standard Gaussian",
+            "distribution": "teacher-state-matched deterministic initialization",
             "shape": list(oracle.initial_x_T_fp32.shape),
             "dtype": str(oracle.initial_x_T_fp32.dtype),
             "sha256": parity["observed"]["initial_x_T_fp32_sha256"],
@@ -822,12 +1200,15 @@ def _manifest(
         "condition_artifact": dict(context["condition_record"]),
         "information_boundary": information_boundary,
         "single_changed_factor": {
-            "factor": "optimizer_learning_rate_schedule",
-            "from": "constant lr=0.05 for optimizer updates 1..256",
-            "to": "lr=0.05 through update 128, then fixed cosine decay to 0.0 at update 256",
-            "explicitly_not": "DreamLite diffusion scheduler or sigma schedule",
+            "factor": "x_T_initialization",
+            "from": "answer-independent event-keyed standard Gaussian with global seed 0",
+            "to": "teacher-state-matched deterministic initialization",
+            "teacher_assisted": True,
+            "answer_independent_writer_usable": False,
         },
         "fixed_contract": {
+            "dreamlite_device": str(torch.device(args.dreamlite_device)),
+            "reader_device": str(torch.device(args.reader_device)),
             "only_trainable": "x_T_fp32",
             "dreamlite_path": "complete frozen source-anchored four-step path",
             "effective_sigmas": list(phase1a.EFFECTIVE_SIGMAS),
@@ -843,6 +1224,7 @@ def _manifest(
             "gradient_clipping": None,
             "checkpoint_steps": list(CHECKPOINT_STEPS) if args.mode == "formal" else [0],
             "primary_endpoint": core.BRIDGE_PRIMARY_ENDPOINT,
+            "m0_definition": "the unoptimized endpoint after the complete four-step DreamLite path from the new teacher-matched x_T initialization",
             "best_checkpoint_selection_forbidden": True,
             "reader_gradient_calls_during_optimization": 0,
         },
@@ -881,6 +1263,9 @@ def _preflight(
     snapshot_bindings: Mapping[str, Any],
 ) -> dict[str, Any]:
     m0_mse = float((initial_output.z_t.float() - teacher).square().mean().detach())
+    initialization_verified = _verify_teacher_matched_initialization(
+        manifest["initialization_binding"], oracle=oracle, initial_output=initial_output
+    )
     teacher_rows = _evaluation_rows(
         reader_fn=eval_reader,
         segment=target,
@@ -926,6 +1311,7 @@ def _preflight(
         == ["x_T_fp32"],
         "frozen_gradients_absent": frozen,
         "step0_parity_valid": manifest["parity_checks"]["passed"],
+        "teacher_matched_initialization_artifact_valid": initialization_verified,
         "teacher_binding_valid": manifest["teacher"]["tensor_sha256"] == core.BRIDGE_TEACHER_TENSOR_SHA256,
         "teacher_replay_gate": core.teacher_replay_gate(teacher_stats),
         "checkpoint_hash_valid": _verify_checkpoint_record(
@@ -933,6 +1319,9 @@ def _preflight(
             expected_step=0,
             teacher_cpu=teacher.detach().cpu(),
             m0_mse=m0_mse,
+            source_latents_cpu=oracle.source_latents.detach().cpu(),
+            compute_dtype=oracle.compute_dtype,
+            compute_device=oracle.source_latents.device,
         ),
         "snapshots_unchanged": snapshots_unchanged,
     }
@@ -993,6 +1382,11 @@ def _formal(
     )
     if not core.teacher_replay_gate(teacher_stats):
         raise RuntimeError("R11_new bridge formal teacher replay gate failed before optimizer step 0.")
+    initialization_verified = _verify_teacher_matched_initialization(
+        manifest["initialization_binding"], oracle=oracle, initial_output=initial_output
+    )
+    if not initialization_verified:
+        raise RuntimeError("R11_new teacher-matched initialization verification failed before optimizer step 0.")
     m0_rows = _evaluation_rows(
         reader_fn=eval_reader,
         segment=target,
@@ -1042,11 +1436,6 @@ def _formal(
                 output_dir=args.output_dir,
             )
             checkpoint_records.append(checkpoint)
-            if step == 128 and not core.bridge_pre_intervention_parity(checkpoint):
-                raise RuntimeError(
-                    "R11_new bridge prefix parity failed after update 128; "
-                    "blocking before the first changed LR update 129."
-                )
             if step == OPTIMIZER_STEPS:
                 endpoint_output = snapshot
         print(
@@ -1092,6 +1481,7 @@ def _formal(
         manifest=manifest,
         snapshots_unchanged=snapshots_unchanged,
         output_dir=args.output_dir,
+        initialization_verified=initialization_verified,
     )
     phase1a._atomic_json(args.output_dir / "technical_gate.json", technical)
     if technical.get("passed") is not True:
@@ -1106,24 +1496,18 @@ def _formal(
     reader_gate = core.endpoint_reader_transfer_gate(endpoint_reader)
     bridge_gate = bool(technical["passed"] and teacher_gate and distance_gate and reader_gate)
     decision = core.bridge_decision(distance_pass=distance_gate, reader_transfer_pass=reader_gate)
-    checkpoint_map = {int(row["optimizer_step"]): row for row in checkpoint_records}
-    schedule_audit = core.bridge_schedule_hypothesis_audit(
-        step128_mse_ratio=float(
-            checkpoint_map[128]["distance_statistics"]["mse_ratio_to_m0"]
-        ),
-        endpoint_mse_ratio=float(distance["mse_ratio_to_m0"]),
+    initialization_audit = core.bridge_initialization_hypothesis_audit(
+        endpoint_mse=float(distance["mse"]),
+        endpoint_reader_mean_ce=float(endpoint_reader["mean_ce"]),
         technical_gate=bool(technical["passed"]),
         teacher_replay_gate=teacher_gate,
-        pre_intervention_parity=bool(
-            technical["pre_intervention_step128_parity_valid"]
-        ),
         distance_pass=distance_gate,
         reader_transfer_pass=reader_gate,
     )
-    schedule_decision = core.bridge_schedule_hypothesis_decision(
+    initialization_decision = core.bridge_initialization_hypothesis_decision(
         distance_pass=distance_gate,
         reader_transfer_pass=reader_gate,
-        audit=schedule_audit,
+        audit=initialization_audit,
     )
     return {
         "schema": SUMMARY_SCHEMA,
@@ -1150,8 +1534,8 @@ def _formal(
             "formal_success_gate": False,
         },
         "decision": decision,
-        "secondary_solver_hypothesis_audit": schedule_audit,
-        "secondary_solver_hypothesis_decision": schedule_decision,
+        "secondary_solver_hypothesis_audit": initialization_audit,
+        "secondary_solver_hypothesis_decision": initialization_decision,
         "phase2_allowed": False,
         "formal_success_gate": False,
         "full_success_claim_allowed": False,
@@ -1268,6 +1652,10 @@ def _run(
     if phase1a._sha256(teacher_copy) != core.BRIDGE_TEACHER_FILE_SHA256:
         raise RuntimeError("R11_new bridge teacher copy hash drifted.")
     teacher = teacher_cpu.to(device=context["updater_device"], dtype=torch.float32, copy=True)
+    initialization_binding = _teacher_matched_initialization(
+        oracle=oracle, source_latents=source_latents, teacher=teacher,
+        output_dir=args.output_dir,
+    )
     if args.mode == "technical-preflight":
         # The preregistration locks preflight to exactly one full DreamLite
         # forward plus one backward. Keep that graph for the audit rather
@@ -1299,6 +1687,7 @@ def _run(
         teacher_record=teacher_record,
         snapshot_bindings=snapshot_bindings,
         determinism=determinism,
+        initialization_binding=initialization_binding,
     )
     phase1a._atomic_json(args.output_dir / "manifest.json", manifest)
     eval_reader = r8.choice_reader_callable(

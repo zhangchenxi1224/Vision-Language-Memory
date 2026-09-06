@@ -33,7 +33,7 @@ CONFIG = (
     ROOT
     / "configs"
     / "experiments"
-    / "r11_new_canonical_latent_bridge_target01_post128_cosine.json"
+    / "r11_new_canonical_latent_bridge_target01_teacher_matched_init.json"
 )
 COMPARISON_SCHEMA = "vision_memory.r11-new-canonical-latent-bridge-comparison.v1"
 RAW_SCHEMA = "vision_memory.r11-new-canonical-latent-bridge-raw-artifacts.v1"
@@ -48,6 +48,15 @@ TRAINER_PREFLIGHT_SCHEMA = "vision_memory.r11-new-canonical-latent-bridge-prefli
 TRAINER_TERMINAL_SCHEMA = "vision_memory.r11-new-canonical-latent-bridge-terminal.v1"
 TRAINER_INVENTORY_SCHEMA = "vision_memory.r11-new-canonical-latent-bridge-artifact-inventory.v1"
 EXPECTED_SIGMAS = (0.5, 0.375, 0.25, 0.125)
+INITIALIZATION_SCHEMA = "vision_memory.r11-new-bridge-teacher-matched-initialization.v1"
+INITIALIZATION_FORMULA = (
+    "x_T_init_fp32=(teacher_fp32-source_latents_fp32.mul("
+    "1-actual_effective_sigma0)).div(actual_effective_sigma0)"
+)
+INITIALIZATION_OPERATOR = (
+    "source_compute.mul(1-actual_sigma).add("
+    "x_T_init_fp32.to(compute_dtype), alpha=actual_sigma)"
+)
 _COMMIT_RE = re.compile(r"^[0-9a-f]{40}$")
 
 
@@ -186,7 +195,7 @@ def _validate_config() -> dict[str, Any]:
 
 
 def _validate_parent_target(config: Mapping[str, Any]) -> dict[str, Any]:
-    root = Path(config["exact_parity_bindings"]["phase1a_valid_source_root"])
+    root = Path(core.BRIDGE_PHASE1A_SOURCE_ROOT)
     if not root.is_dir():
         raise ValueError(f"Bridge locked Phase1A target root is missing: {root}")
     inventory = _validate_inventory(
@@ -221,6 +230,50 @@ def _validate_parent_target(config: Mapping[str, Any]) -> dict[str, Any]:
         "manifest_path": str(manifest_path.resolve()),
         "manifest_sha256": _sha256(manifest_path),
         "target_segment": dict(segment),
+    }
+
+
+def _validate_parent_bridge(config: Mapping[str, Any]) -> dict[str, Any]:
+    binding = config["parent_bridge"]
+    parent_config = CONFIG.with_name("r11_new_canonical_latent_bridge_target01_post128_cosine.json")
+    root = Path(binding["source_root"]) / "aggregation-v1"
+    comparison_path = root / "comparison.json"
+    raw_path = root / "RAW_ARTIFACTS.json"
+    if (
+        not comparison_path.is_file() or not raw_path.is_file()
+        or _sha256(comparison_path) != binding["comparison_sha256"]
+        or _sha256(raw_path) != binding["raw_artifacts_sha256"]
+        or not parent_config.is_file()
+        or _sha256(parent_config) != binding["config_sha256"]
+    ):
+        raise ValueError("Bridge locked parent comparison/raw artifact hashes drifted.")
+    parent = _load(comparison_path)
+    expected = {
+        "schema": COMPARISON_SCHEMA, "status": "completed",
+        "git_commit": binding["training_git_commit"],
+        "engineering_gate": True, "teacher_replay_gate": True,
+        "bridge_distance_gate": False, "endpoint_reader_transfer_gate": False,
+        "formal_success": False, "phase2_allowed": False,
+        "target_index": core.BRIDGE_TARGET_INDEX,
+        "target_segment_id": core.BRIDGE_TARGET_SEGMENT_ID,
+        "primary_endpoint": core.BRIDGE_PRIMARY_ENDPOINT,
+        "raw_artifacts_sha256": binding["raw_artifacts_sha256"],
+    }
+    if (
+        any(parent.get(key) != value for key, value in expected.items())
+        or not _equal_float(parent.get("endpoint_distance_statistics", {}).get("mse"),
+                            core.BRIDGE_PARENT_ENDPOINT_MSE, rel_tol=0.0, abs_tol=0.0)
+        or not _equal_float(parent.get("endpoint_reader_statistics", {}).get("mean_ce"),
+                            core.BRIDGE_PARENT_ENDPOINT_READER_CE, rel_tol=0.0, abs_tol=0.0)
+    ):
+        raise ValueError("Bridge locked parent diagnostic/endpoint values drifted.")
+    return {
+        "root": str(root.resolve()),
+        "comparison_sha256": _sha256(comparison_path),
+        "raw_artifacts_sha256": _sha256(raw_path),
+        "inventory": _validate_inventory(root, schema=INVENTORY_SCHEMA),
+        "training_git_commit": binding["training_git_commit"],
+        "config_sha256": _sha256(parent_config),
     }
 
 
@@ -303,6 +356,123 @@ def _validate_controller_root(
     }
 
 
+def _validate_initialization(
+    run: Path,
+    *,
+    record: Mapping[str, Any],
+    teacher: Tensor,
+    compute_dtype: str,
+    compute_device_type: str,
+) -> dict[str, Any]:
+    """Recompute the inverse initial mixture independently of trainer booleans."""
+    path = run / "initialization" / "teacher_matched_initialization.pt"
+    if (
+        not path.is_file()
+        or record.get("schema") != INITIALIZATION_SCHEMA
+        or record.get("passed") is not True
+        or record.get("artifact_bytes") != path.stat().st_size
+        or record.get("artifact_sha256") != _sha256(path)
+    ):
+        raise ValueError("Bridge initialization artifact binding drifted.")
+    payload = torch.load(path, map_location="cpu", weights_only=False)
+    if not isinstance(payload, Mapping):
+        raise ValueError("Bridge initialization payload is not a mapping.")
+    names = (
+        "source_latents_fp32", "teacher_fp32", "x_T_init_fp32",
+        "reconstructed_start_state_compute",
+    )
+    tensors = {name: payload.get(name) for name in names}
+    if not all(
+        isinstance(value, Tensor)
+        and tuple(value.shape) == (1, 4, 128, 128)
+        and torch.isfinite(value).all()
+        and (value.dtype in (torch.float32, torch.bfloat16) if name == names[-1]
+             else value.dtype == torch.float32)
+        for name, value in tensors.items()
+    ):
+        raise ValueError("Bridge initialization tensor contract drifted.")
+    source, saved_teacher, x_t, start = (tensors[name] for name in names)
+    if str(start.dtype) != compute_dtype:
+        raise ValueError("Bridge initialization compute dtype differs from the locked model path.")
+    actual = payload.get("actual_effective_sigmas")
+    if (
+        payload.get("schema") != INITIALIZATION_SCHEMA
+        or not _sigmas_exact(actual)
+        or not all(
+            item.get("formula") == INITIALIZATION_FORMULA
+            and item.get("compute_device_type") == compute_device_type
+            and item.get("reconstruction_operator_order") == INITIALIZATION_OPERATOR
+            and item.get("nominal_effective_sigmas") == list(EXPECTED_SIGMAS)
+            and item.get("actual_effective_sigmas") == actual
+            and _equal_float(item.get("actual_effective_sigma0"), actual[0], rel_tol=0.0, abs_tol=0.0)
+            for item in (record, payload)
+        )
+    ):
+        raise ValueError("Bridge initialization sigma/formula metadata drifted.")
+    hashes = {name: canonical_tensor_sha256(value) for name, value in tensors.items()}
+    if (
+        hashes != payload.get("tensor_sha256")
+        or hashes != record.get("tensor_sha256")
+        or hashes["source_latents_fp32"] != core.BRIDGE_SOURCE_LATENTS_SHA256
+        or hashes["teacher_fp32"] != core.BRIDGE_TEACHER_TENSOR_SHA256
+        or not torch.equal(saved_teacher, teacher)
+    ):
+        raise ValueError("Bridge initialization source/teacher/tensor hashes drifted.")
+    sigma = float(actual[0])
+    device = _arithmetic_device(compute_device_type)
+    arithmetic_teacher = teacher.to(device=device)
+    arithmetic_source = source.to(device=device)
+    recomputed_x_t = arithmetic_teacher.sub(arithmetic_source.mul(1.0 - sigma)).div(sigma)
+    recomputed_start = arithmetic_source.to(dtype=start.dtype).mul(1.0 - sigma).add(
+        recomputed_x_t.to(dtype=start.dtype), alpha=sigma,
+    )
+    teacher_std = float(teacher.std(unbiased=False))
+    if not _equal_float(teacher_std, core.BRIDGE_TEACHER_STD, rel_tol=0.0, abs_tol=1e-9):
+        raise ValueError("Bridge initialization fixed teacher standard deviation drifted.")
+    mse = float((recomputed_start.float() - arithmetic_teacher).square().mean())
+    nrmse = math.sqrt(mse) / teacher_std
+    metrics = {
+        "teacher_population_std": teacher_std,
+        "trajectory_point0_teacher_mse": mse,
+        "trajectory_point0_teacher_normalized_rmse": nrmse,
+    }
+    if (
+        not torch.equal(x_t, recomputed_x_t.cpu())
+        or not torch.equal(start, recomputed_start.cpu())
+        or not all(_equal_float(item.get("teacher_population_std"), teacher_std,
+                                rel_tol=0.0, abs_tol=1e-9) for item in (record, payload))
+        or not all(
+            _equal_float(item.get(key), value, rel_tol=1e-6, abs_tol=1e-10)
+            for item in (record, payload) for key, value in metrics.items()
+        )
+        or nrmse > core.BRIDGE_START_TEACHER_NRMSE_MAX
+    ):
+        raise ValueError("Bridge initialization independent arithmetic drifted.")
+    return {
+        "record": {
+            "artifact_path": str(path.resolve()), "artifact_sha256": _sha256(path),
+            "artifact_bytes": path.stat().st_size, "tensor_sha256": hashes,
+            "actual_effective_sigmas": actual, "compute_dtype": str(start.dtype),
+            "compute_device_type": compute_device_type,
+            **metrics, "passed": True,
+        },
+        "source_latents_fp32": source,
+        "x_T_init_fp32": x_t,
+        "reconstructed_start_state_compute": start,
+        "actual_effective_sigmas": actual,
+        "compute_dtype": str(start.dtype),
+        "compute_device_type": compute_device_type,
+    }
+
+
+def _arithmetic_device(compute_device_type: str) -> torch.device:
+    if compute_device_type == "cpu":
+        return torch.device("cpu")
+    if compute_device_type == "cuda" and torch.cuda.is_available():
+        return torch.device("cuda:0")
+    raise ValueError("Bridge initialization/checkpoint reconstruction requires its locked arithmetic backend; CUDA is unavailable or the backend is invalid.")
+
+
 def _load_teacher(formal_run: Path, preflight_run: Path) -> tuple[Tensor, dict[str, Any]]:
     formal_path = formal_run / "teacher" / "canonical_r11_target01.pt"
     preflight_path = preflight_run / "teacher" / "canonical_r11_target01.pt"
@@ -368,18 +538,29 @@ def _validate_manifest(
         or manifest.get("formal_success_gate") is not False
         or not isinstance(parity, Mapping)
         or parity.get("passed") is not True
-        or parity.get("observed") != parity.get("expected")
+        or parity.get("expected") != core.BRIDGE_UNCHANGED_PARITY_BINDINGS
+        or not isinstance(parity.get("observed"), Mapping)
+        or set(parity["observed"]) != set(core.BRIDGE_UNCHANGED_PARITY_BINDINGS) | {
+            "initial_x_T_fp32_sha256", "initial_z_t_fp32_sha256"
+        }
+        or not all(parity["observed"].get(key) == value
+                   for key, value in core.BRIDGE_UNCHANGED_PARITY_BINDINGS.items())
+        or parity.get("teacher_matched_initialization_artifact_valid") is not True
         or not isinstance(fixed, Mapping)
         or changed
         != {
-            "factor": "optimizer_learning_rate_schedule",
-            "from": "constant lr=0.05 for optimizer updates 1..256",
-            "to": "lr=0.05 through update 128, then fixed cosine decay to 0.0 at update 256",
-            "explicitly_not": "DreamLite diffusion scheduler or sigma schedule",
+            "factor": "x_T_initialization",
+            "from": "answer-independent event-keyed standard Gaussian with global seed 0",
+            "to": "teacher-state-matched deterministic initialization",
+            "teacher_assisted": True,
+            "answer_independent_writer_usable": False,
         }
         or not isinstance(information, Mapping)
         or information.get("passed") is not True
-        or information.get("canonical_teacher_used_only_by_dense_loss") is not True
+        or information.get("canonical_teacher_used_only_by_dense_loss") is not False
+        or information.get("canonical_teacher_used_by_initialization_and_dense_loss") is not True
+        or information.get("teacher_assisted_initialization") is not True
+        or information.get("answer_independent_writer_usable") is not False
         or information.get("reader_used_only_for_fixed_audit") is not True
         or information.get("reader_gradient_calls_during_optimization") != 0
     ):
@@ -389,10 +570,13 @@ def _validate_manifest(
         "only_trainable": fixed.get("only_trainable") == "x_T_fp32",
         "steps": fixed.get("optimizer_steps") == (core.BRIDGE_OPTIMIZER_STEPS if mode == "formal" else 0),
         "sigmas": _sigmas_exact(fixed.get("effective_sigmas")),
+        "nominal_sigmas": fixed.get("effective_sigmas") == list(EXPECTED_SIGMAS),
+        "dreamlite_device": fixed.get("dreamlite_device") == expected_fixed["dreamlite_device"],
+        "reader_device": fixed.get("reader_device") == expected_fixed["reader_device"],
         "optimizer": fixed.get("optimizer") == "Adam",
         "learning_rate": _equal_float(
             fixed.get("learning_rate"),
-            expected_fixed["learning_rate"],
+            expected_fixed["base_learning_rate"],
             rel_tol=0.0,
             abs_tol=0.0,
         ),
@@ -414,9 +598,32 @@ def _validate_manifest(
         "primary_endpoint": fixed.get("primary_endpoint") == core.BRIDGE_PRIMARY_ENDPOINT,
         "no_best": fixed.get("best_checkpoint_selection_forbidden") is True,
         "reader_gradient_calls": fixed.get("reader_gradient_calls_during_optimization") == 0,
+        "m0_definition": fixed.get("m0_definition") == expected_fixed["m0_definition"],
+        "train": manifest.get("train_sha256") == expected_fixed["train_sha256"],
+        "dev": manifest.get("dev_sha256") == expected_fixed["dev_sha256"],
+        "selected_segments": manifest.get("selected_segments_sha256")
+        == config["parent_phase1a"]["selected_segments_sha256"],
     }
     if not all(fixed_checks.values()):
         raise ValueError(f"Bridge aggregation {mode} fixed contract drifted: {fixed_checks}")
+    initialization_record = manifest.get("initialization_binding")
+    source_record = manifest.get("source_latents")
+    initial_record = manifest.get("initial_x_T_fp32")
+    if (
+        not isinstance(initialization_record, Mapping)
+        or not isinstance(source_record, Mapping)
+        or not isinstance(initial_record, Mapping)
+        or initialization_record.get("compute_device_type") != "cuda"
+        or source_record.get("sha256") != core.BRIDGE_SOURCE_LATENTS_SHA256
+        or source_record.get("shape") != [1, 4, 128, 128]
+        or source_record.get("dtype") != "torch.bfloat16"
+        or source_record.get("device") != "cuda:0"
+        or initial_record.get("dtype") != "torch.float32"
+        or initial_record.get("shape") != [1, 4, 128, 128]
+        or initial_record.get("sha256") != initialization_record.get("tensor_sha256", {}).get("x_T_init_fp32")
+        or initial_record.get("sha256") != parity["observed"].get("initial_x_T_fp32_sha256")
+    ):
+        raise ValueError("Bridge aggregation source/initialization manifest binding drifted.")
     parent = manifest.get("parent_phase1a")
     expected_parent = config["parent_phase1a"]
     if (
@@ -427,6 +634,11 @@ def _validate_manifest(
         or Path(str(parent.get("target_root", ""))).resolve() != Path(str(parent_target.get("root", ""))).resolve()
     ):
         raise ValueError("Bridge aggregation parent Phase1A binding drifted.")
+    for path_field, hash_field in (("comparison_path", "comparison_sha256"),
+                                   ("raw_artifacts_path", "raw_artifacts_sha256")):
+        artifact_path = Path(str(parent.get(path_field, "")))
+        if not artifact_path.is_file() or _sha256(artifact_path) != expected_parent[hash_field]:
+            raise ValueError("Bridge aggregation parent Phase1A raw evidence bytes drifted.")
     teacher = manifest.get("teacher")
     if (
         not isinstance(teacher, Mapping)
@@ -441,14 +653,41 @@ def _validate_manifest(
         not condition_path.is_file()
         or not isinstance(condition, Mapping)
         or condition.get("sha256") != _sha256(condition_path)
+        or condition.get("bytes") != condition_path.stat().st_size
     ):
         raise ValueError("Bridge aggregation condition artifact binding drifted.")
+    condition_payload = torch.load(condition_path, map_location="cpu", weights_only=False)
+    expected_condition_hashes = {
+        "prompt_embeds": core.BRIDGE_UNCHANGED_PARITY_BINDINGS["condition_prompt_embeds_sha256"],
+        "attention_mask": core.BRIDGE_UNCHANGED_PARITY_BINDINGS["condition_attention_mask_sha256"],
+    }
+    if (
+        condition_payload.get("schema") != "vision_memory.r11-new-phase1a-condition.v1"
+        or not all(isinstance(condition_payload.get(name), Tensor) for name in expected_condition_hashes)
+        or {name: canonical_tensor_sha256(condition_payload[name]) for name in expected_condition_hashes}
+        != expected_condition_hashes
+        or not all(
+            item.get("tensor_sha256") == expected_condition_hashes
+            and item.get("event_text_sha256") == core.BRIDGE_UNCHANGED_PARITY_BINDINGS["event_text_sha256"]
+            and item.get("recompute_matches") is True
+            for item in (condition, condition_payload)
+        )
+    ):
+        raise ValueError("Bridge aggregation condition tensor/event binding drifted.")
     start = _load(run / "model_snapshot_verification_start.json")
     end = _load(run / "model_snapshot_verification_end.json")
     if (
         end.get("passed") is not True
         or start.get("bindings") != end.get("bindings")
         or start.get("bindings") != manifest.get("model_snapshot_payloads_start")
+        or not all(
+            start.get("bindings", {}).get(model, {}).get("manifest_sha256")
+            == core.BRIDGE_MODEL_SNAPSHOT_BINDINGS[key]
+            for model, key in (
+                ("dreamlite_mobile", "dreamlite_snapshot_manifest_sha256"),
+                ("qwen_reader", "reader_snapshot_manifest_sha256"),
+            )
+        )
     ):
         raise ValueError("Bridge aggregation model snapshot start/end binding drifted.")
     return {
@@ -483,6 +722,7 @@ def _validate_metrics(path: Path) -> tuple[list[dict[str, Any]], dict[str, Any]]
         "count": len(rows) == core.BRIDGE_OPTIMIZER_STEPS,
         "steps": [row.get("optimizer_step") for row in rows] == expected_steps,
         "schemas": all(row.get("schema") == TRAINER_METRICS_SCHEMA for row in rows),
+        "tensor_numel": all(row.get("tensor_numel") == 65536 for row in rows),
         "targets": all(
             row.get("target_index") == core.BRIDGE_TARGET_INDEX
             and row.get("target_segment_id") == core.BRIDGE_TARGET_SEGMENT_ID
@@ -546,6 +786,7 @@ def _validate_checkpoint(
     m0_mse: float,
     manifest_sha256: str,
     condition_sha256: str,
+    initialization: Mapping[str, Any],
 ) -> dict[str, Any]:
     checkpoint_path = run / "checkpoints" / f"step-{step:03d}.pt"
     image_path = run / "images" / f"step-{step:03d}.png"
@@ -594,6 +835,12 @@ def _validate_checkpoint(
         )
         or not _sigmas_exact(payload.get("effective_sigmas"))
         or payload.get("effective_sigmas") != record.get("effective_sigmas")
+        or payload.get("effective_sigmas") != initialization["actual_effective_sigmas"]
+        or payload.get("compute_dtype") != initialization["compute_dtype"]
+        or record.get("compute_dtype") != initialization["compute_dtype"]
+        or payload.get("compute_device_type") != initialization["compute_device_type"]
+        or record.get("compute_device_type") != initialization["compute_device_type"]
+        or record.get("trajectory_point0_formula_valid") is not True
         or payload.get("teacher_tensor_sha256") != core.BRIDGE_TEACHER_TENSOR_SHA256
         or payload.get("manifest_sha256") != manifest_sha256
         or payload.get("condition_artifact_sha256") != condition_sha256
@@ -614,6 +861,23 @@ def _validate_checkpoint(
     }
     if hashes != observed_hashes or record.get("tensor_sha256") != observed_hashes:
         raise ValueError(f"Bridge checkpoint tensor hashes drifted at step {step}.")
+    source = initialization["source_latents_fp32"]
+    compute_dtype = initialization["reconstructed_start_state_compute"].dtype
+    sigma = float(payload["effective_sigmas"][0])
+    arithmetic_device = _arithmetic_device(initialization["compute_device_type"])
+    current_start = source.to(device=arithmetic_device, dtype=compute_dtype).mul(1.0 - sigma).add(
+        x_t.to(device=arithmetic_device, dtype=compute_dtype), alpha=sigma,
+    ).float().cpu()
+    if (
+        not torch.equal(trajectory[0], current_start)
+        or not torch.equal(trajectory[-1], z_t)
+        or payload.get("trajectory_point0_formula_valid") is not True
+        or (step == 0 and not torch.equal(x_t, initialization["x_T_init_fp32"]))
+        or (step == 0 and not torch.equal(
+            trajectory[0], initialization["reconstructed_start_state_compute"].float()
+        ))
+    ):
+        raise ValueError(f"Bridge checkpoint current x_T/trajectory binding drifted at step {step}.")
     mse = float((z_t - teacher).square().mean())
     distance = core.bridge_distance_statistics(
         mse=mse,
@@ -631,11 +895,6 @@ def _validate_checkpoint(
         or not all(_equal_float(record_distance[key], value) for key, value in distance.items())
     ):
         raise ValueError(f"Bridge checkpoint distance arithmetic drifted at step {step}.")
-    if step == 0 and (
-        observed_hashes["x_T_fp32"] != core.BRIDGE_INITIAL_X_T_SHA256
-        or observed_hashes["z_t_fp32"] != core.BRIDGE_INITIAL_Z_T_SHA256
-    ):
-        raise ValueError("Bridge checkpoint step-0 parity hashes drifted.")
     return {
         "optimizer_step": step,
         "checkpoint_path": str(checkpoint_path.resolve()),
@@ -647,6 +906,8 @@ def _validate_checkpoint(
         "tensor_sha256": observed_hashes,
         "optimizer_state_sha256": optimizer_state_sha256,
         "distance_statistics": distance,
+        "actual_effective_sigmas": payload["effective_sigmas"],
+        "trajectory_point0_binding_valid": True,
     }
 
 
@@ -781,6 +1042,7 @@ def _validate_preflight(
     manifest_sha256: str,
     condition_sha256: str,
     target_segment: Mapping[str, Any],
+    initialization: Mapping[str, Any],
 ) -> dict[str, Any]:
     summary = _load(run / controller.SUMMARY_FILE)
     report = _load(run / controller.PREFLIGHT_FILE)
@@ -793,6 +1055,7 @@ def _validate_preflight(
         "only_x_T_fp32_trainable",
         "frozen_gradients_absent",
         "step0_parity_valid",
+        "teacher_matched_initialization_artifact_valid",
         "teacher_binding_valid",
         "teacher_replay_gate",
         "checkpoint_hash_valid",
@@ -838,6 +1101,7 @@ def _validate_preflight(
         m0_mse=float(summary["initial_distance_statistics"]["m0_mse"]),
         manifest_sha256=manifest_sha256,
         condition_sha256=condition_sha256,
+        initialization=initialization,
     )
     return {
         "summary_sha256": _sha256(run / controller.SUMMARY_FILE),
@@ -873,7 +1137,7 @@ def _write_report(path: Path, comparison: Mapping[str, Any]) -> None:
     distance = comparison["endpoint_distance_statistics"]
     reader = comparison["endpoint_reader_statistics"]
     lines = [
-        "# R11_new canonical-latent bridge 独立复算报告",
+        "# R11_new teacher-matched initialization bridge 独立复算报告",
         "",
         "## 结论",
         "",
@@ -884,6 +1148,7 @@ def _write_report(path: Path, comparison: Mapping[str, Any]) -> None:
         f"- Bridge diagnostic：`{str(comparison['bridge_diagnostic_gate']).lower()}`",
         "- Picture Memory 正式科学成功：`false`",
         "- Phase 2：仍阻塞。",
+        "- 本轮使用 teacher 辅助初始化，不是答案无关的 writer，也不能补算 Phase 1A 通过。",
         "",
         "## Raw step 256",
         "",
@@ -893,11 +1158,14 @@ def _write_report(path: Path, comparison: Mapping[str, Any]) -> None:
         f"- teacher-normalized RMSE：`{distance['teacher_normalized_rmse']:.12g}`（门槛 <= 0.10）",
         f"- Reader accuracy：`{reader['accuracy']:.6g}`（门槛 = 1.0）",
         f"- 决策：`{comparison['decision']}`",
+        f"- 次级初始化诊断：`{comparison['secondary_solver_hypothesis_decision']}`",
         "",
         "## 证据边界",
         "",
         "本报告从原始 tensor、receipt、checkpoint 和 logits 独立复算，不采信 trainer 的 PASS 字段。",
-        "该实验只区分已知可读 latent 在锁定 DreamLite solver/预算下的经验可达性；",
+        "唯一改动是 x_T 初始化；M0 是新初始化经过完整四步链路后的未优化 endpoint。",
+        "次级诊断只有技术/teacher 通过且两个主门均失败时才评估，且须绝对 endpoint MSE 与 CE 同时严格优于父实验。",
+        "teacher 辅助初始化至多提供该目标、该求解器下的经验初始化敏感性证据，不能挽救主门失败或证明普遍可达/不可达。",
         "无论结果如何，都不证明 shared writer、ID/OOD、递归状态更新或 Picture Memory 正式成功。",
         "",
     ]
@@ -932,6 +1200,7 @@ def compare(
         raise ValueError("Bridge aggregation requires a nonexistent fresh output directory.")
     config = _validate_config()
     parent_target = _validate_parent_target(config)
+    parent_bridge = _validate_parent_bridge(config)
     preflight_controller = _validate_controller_root(
         preflight_root,
         mode="technical-preflight",
@@ -971,12 +1240,31 @@ def compare(
         config=config,
         parent_target=parent_target,
     )
+    preflight_initialization = _validate_initialization(
+        preflight_run,
+        record=preflight_manifest["manifest"]["initialization_binding"],
+        teacher=teacher,
+        compute_dtype=preflight_manifest["manifest"]["source_latents"]["dtype"],
+        compute_device_type=preflight_manifest["manifest"]["initialization_binding"]["compute_device_type"],
+    )
+    formal_initialization = _validate_initialization(
+        formal_run,
+        record=formal_manifest["manifest"]["initialization_binding"],
+        teacher=teacher,
+        compute_dtype=formal_manifest["manifest"]["source_latents"]["dtype"],
+        compute_device_type=formal_manifest["manifest"]["initialization_binding"]["compute_device_type"],
+    )
+    if preflight_initialization["record"] | {"artifact_path": None, "artifact_sha256": None} != (
+        formal_initialization["record"] | {"artifact_path": None, "artifact_sha256": None}
+    ):
+        raise ValueError("Bridge preflight/formal initialization arithmetic differs.")
     preflight = _validate_preflight(
         preflight_run,
         teacher=teacher,
         manifest_sha256=preflight_manifest["manifest_sha256"],
         condition_sha256=preflight_manifest["condition_sha256"],
         target_segment=parent_target["target_segment"],
+        initialization=preflight_initialization,
     )
     metrics, metrics_record = _validate_metrics(formal_run / controller.METRICS_FILE)
     checkpoints = [
@@ -987,26 +1275,36 @@ def compare(
             m0_mse=float(metrics_record["m0_mse"]),
             manifest_sha256=formal_manifest["manifest_sha256"],
             condition_sha256=formal_manifest["condition_sha256"],
+            initialization=formal_initialization,
         )
         for step in core.BRIDGE_CHECKPOINT_STEPS
     ]
     checkpoint_by_step = {row["optimizer_step"]: row for row in checkpoints}
-    step128 = checkpoint_by_step[128]
-    pre_intervention_parity = core.bridge_pre_intervention_parity(
-        {
-            "optimizer_step": 128,
-            "tensor_sha256": step128["tensor_sha256"],
-            "optimizer_state_sha256": step128["optimizer_state_sha256"],
-            "png_sha256": step128["image_sha256"],
-        }
-    )
-    if not pre_intervention_parity:
-        raise ValueError("Bridge post-step-128 intervention prefix differs from its parent baseline.")
+    if not all(
+        row.get("effective_sigmas") == formal_initialization["actual_effective_sigmas"]
+        for row in metrics
+    ):
+        raise ValueError("Bridge receipts disagree with actual initialization/checkpoint sigma schedule.")
     step0_distance = checkpoint_by_step[0]["distance_statistics"]
     if not _equal_float(step0_distance["mse"], metrics_record["m0_mse"]) or not _equal_float(
         step0_distance["mse_ratio_to_m0"], 1.0
     ):
         raise ValueError("Bridge formal step-0 checkpoint disagrees with raw receipt M0.")
+    if (
+        preflight["checkpoint"]["tensor_sha256"] != checkpoint_by_step[0]["tensor_sha256"]
+        or preflight["checkpoint"]["image_sha256"] != checkpoint_by_step[0]["image_sha256"]
+    ):
+        raise ValueError("Bridge full-chain M0 differs between preflight and formal.")
+    for manifest_record, checkpoint_record in (
+        (preflight_manifest, preflight["checkpoint"]),
+        (formal_manifest, checkpoint_by_step[0]),
+    ):
+        observed = manifest_record["manifest"]["parity_checks"]["observed"]
+        if (
+            observed.get("initial_x_T_fp32_sha256") != checkpoint_record["tensor_sha256"]["x_T_fp32"]
+            or observed.get("initial_z_t_fp32_sha256") != checkpoint_record["tensor_sha256"]["z_t_fp32"]
+        ):
+            raise ValueError("Bridge manifest new-initialization M0 hash binding drifted.")
     endpoint_checkpoint = formal_run / "checkpoints" / "step-256.pt"
     endpoint_image = formal_run / "images" / "step-256.png"
     if _sha256(formal_run / "endpoint_raw.pt") != _sha256(endpoint_checkpoint) or _sha256(
@@ -1036,21 +1334,18 @@ def compare(
         distance_pass=distance_gate,
         reader_transfer_pass=reader_gate,
     )
-    schedule_audit = core.bridge_schedule_hypothesis_audit(
-        step128_mse_ratio=float(
-            checkpoint_by_step[128]["distance_statistics"]["mse_ratio_to_m0"]
-        ),
-        endpoint_mse_ratio=float(endpoint_distance["mse_ratio_to_m0"]),
+    initialization_audit = core.bridge_initialization_hypothesis_audit(
+        endpoint_mse=float(endpoint_distance["mse"]),
+        endpoint_reader_mean_ce=float(endpoint_stats["mean_ce"]),
         technical_gate=engineering_gate,
         teacher_replay_gate=teacher_gate,
-        pre_intervention_parity=pre_intervention_parity,
         distance_pass=distance_gate,
         reader_transfer_pass=reader_gate,
     )
-    schedule_decision = core.bridge_schedule_hypothesis_decision(
+    initialization_decision = core.bridge_initialization_hypothesis_decision(
         distance_pass=distance_gate,
         reader_transfer_pass=reader_gate,
-        audit=schedule_audit,
+        audit=initialization_audit,
     )
     technical = _load(formal_run / "technical_gate.json")
     summary = _load(formal_run / controller.SUMMARY_FILE)
@@ -1070,7 +1365,8 @@ def compare(
         or technical.get("checkpoint_steps_observed") != list(core.BRIDGE_CHECKPOINT_STEPS)
         or technical.get("trainable_parameter_names") != ["x_T_fp32"]
         or technical.get("optimizer_lr_schedule_exact") is not True
-        or technical.get("pre_intervention_step128_parity_valid") is not True
+        or technical.get("teacher_matched_initialization_artifact_valid") is not True
+        or technical.get("trajectory_point0_binding_valid_every_checkpoint") is not True
         or not _equal_float(technical.get("minimum_gradient_norm"), technical.get("minimum_gradient_norm"))
         or float(technical.get("minimum_gradient_norm", 0.0)) <= 0.0
         or not _equal_float(
@@ -1078,6 +1374,10 @@ def compare(
             technical.get("minimum_gradient_nonzero_fraction"),
         )
         or float(technical.get("minimum_gradient_nonzero_fraction", 0.0)) <= 0.0
+        or not _equal_float(technical.get("minimum_gradient_norm"),
+                            min(float(row["gradient_norm"]) for row in metrics))
+        or not _equal_float(technical.get("minimum_gradient_nonzero_fraction"),
+                            min(float(row["gradient_nonzero_fraction"]) for row in metrics))
         or summary.get("schema") != TRAINER_SUMMARY_SCHEMA
         or summary.get("status") != "completed"
         or summary.get("mode") != "formal"
@@ -1086,8 +1386,8 @@ def compare(
         or summary.get("technical_gate") != technical
         or summary.get("gates") != expected_gates
         or summary.get("decision") != decision
-        or summary.get("secondary_solver_hypothesis_audit") != schedule_audit
-        or summary.get("secondary_solver_hypothesis_decision") != schedule_decision
+        or summary.get("secondary_solver_hypothesis_audit") != initialization_audit
+        or summary.get("secondary_solver_hypothesis_decision") != initialization_decision
         or summary.get("formal_success_gate") is not False
         or summary.get("full_success_claim_allowed") is not False
         or summary.get("phase2_allowed") is not False
@@ -1130,9 +1430,14 @@ def compare(
         },
         "teacher": teacher_record,
         "locked_parent_target": parent_target,
+        "locked_parent_bridge": parent_bridge,
         "preflight": preflight,
         "metrics": metrics_record,
         "checkpoints": checkpoints,
+        "initialization": {
+            "preflight": preflight_initialization["record"],
+            "formal": formal_initialization["record"],
+        },
         "evaluation_rows": {
             "path": str((formal_run / controller.ROWS_FILE).resolve()),
             "sha256": row_record["sha256"],
@@ -1173,8 +1478,10 @@ def compare(
             str(row["optimizer_step"]): row["distance_statistics"] for row in checkpoints
         },
         "decision": decision,
-        "secondary_solver_hypothesis_audit": schedule_audit,
-        "secondary_solver_hypothesis_decision": schedule_decision,
+        "secondary_solver_hypothesis_audit": initialization_audit,
+        "secondary_solver_hypothesis_decision": initialization_decision,
+        "teacher_assisted_initialization": True,
+        "answer_independent_writer_usable": False,
         "phase2_allowed": False,
         "formal_success": False,
         "scientific_success_claim": False,

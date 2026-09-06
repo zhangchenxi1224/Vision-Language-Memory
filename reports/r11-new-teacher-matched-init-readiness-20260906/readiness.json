@@ -1,0 +1,47 @@
+{
+  "schema": "vision_memory.r11-new-teacher-matched-init-readiness.v1",
+  "status": "local_implementation_and_cpu_tests_passed",
+  "base_git_commit": "398cf72d7d18033f2fceb1a7dd1b7a5ccf5420e7",
+  "protocol": "R11-New-Canonical-Latent-Bridge-Teacher-Matched-Init-Target01",
+  "config_canonical_sha256": "ecd84a874f282da48db5498e2db663d7b4f37b0bb4dd2f4f1500d1a4924ca3a7",
+  "tests": {
+    "tests": 260,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": "238.361",
+    "timestamp": "2026-09-06T23:01:50.858585+08:00",
+    "junit_sha256": "380e4e280fc2a790cdaaeb80e35096f7a618c12494c95e67ffe1bf0cd6072462",
+    "code_sha256": {
+      "tests/test_r11_new_initialization_backend.py": "6953777153300571d1b4c42dfbb59754858f8683b742f2bc6cdde634b4b1a5b4",
+      "scripts/experiments/probe_r11_new_initialization_backend.py": "d922a0dc3d789b7f275457587549888d0fc8322256925e11a495f934d3b1bacd",
+      "tests/test_r11_new_bridge_trainer.py": "9b7b48854cbb2b07d63b0e982043cc4b6fbb7e326c69da033eb0834a5eed454b",
+      "tests/test_r11_new_bridge.py": "1584371d2b259f7eb8361f5cbca03850cf53501dc21b0daf9d9eb4bc3d371127",
+      "src/vision_memory/training/r11_new_bridge.py": "9e1b121370995c419b420cf8b321ed95bbea2d25bed8ed95e80e5a17b08a2a5a",
+      "tests/test_compare_r11_new_bridge.py": "97af30a7b2c5a497c1e8c47f67a69338244569aca8f28c2861d043d2adf2918a",
+      "scripts/inspire/run_r11_new_canonical_latent_bridge.py": "32a6c7000c9a6ad63c7dc81eb0a7dd66dfd53f3ad7f32d0cdb452778d7325ab3",
+      "tests/test_r11_new_bridge_controller.py": "4758b22df603fb54b5dc7f2c92f6489d03ab0cb91f1de3f1a0b8bf6431fb38f0",
+      "scripts/experiments/compare_r11_new_canonical_latent_bridge.py": "b7bd42c985a20a95772d9008b226496c626d9c42c0cd5f380ce344bd22cdae71",
+      "configs/experiments/r11_new_canonical_latent_bridge_target01_teacher_matched_init.json": "3168134145c8e715c9d134d00f25e2152c589d75730474c323dee1be2d13cf2f",
+      "scripts/train/r11_new_canonical_latent_bridge.py": "117ab1cf6d181f4ce0608f45fe02596d5eea2f199a6f83e425890b50cdd0e1f4"
+    },
+    "stdout_terminal": "260 passed in 238.49s (0:03:58)",
+    "command": "D:/st_python/python.exe -X utf8 -B -m pytest tests/test_r11_new_bridge.py tests/test_r11_new_bridge_trainer.py tests/test_r11_new_bridge_controller.py tests/test_compare_r11_new_bridge.py tests/test_r11_new_initialization_backend.py tests/test_r11_new_oracle.py tests/test_r11_new_phase1a_trainer.py tests/test_r11_new_phase1a_controller.py tests/test_compare_r11_new_phase1a.py -q -p no:cacheprovider --junitxml=reports/r11-new-teacher-matched-init-readiness-20260906/pytest-junit.xml"
+  },
+  "environment": {
+    "python": "3.13.5",
+    "torch": "2.11.0",
+    "pytest": "8.4.2",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "test_device": "cpu"
+  },
+  "ruff_passed": true,
+  "git_diff_check_passed": true,
+  "source_only_import_and_config_check": true,
+  "controller_trainer_aggregator_config_paths_match": true,
+  "numeric_backend_scope": "H200 toy tensor evidence only; no model forward. Production artifact recomputation now uses its locked CUDA backend; no scientific threshold was relaxed.",
+  "full_model_preflight_at_this_commit": "not_run_yet",
+  "formal_training_at_this_commit": "not_run_yet",
+  "formal_success": false,
+  "phase2_allowed": false
+}

@@ -1,0 +1,218 @@
+{
+  "schema": "vision_memory.r11-new-canonical-latent-bridge-teacher-matched-init-config.v1",
+  "protocol": "R11-New-Canonical-Latent-Bridge-Teacher-Matched-Init-Target01",
+  "status": "preregistered_before_any_teacher_matched_initialization_forward_or_optimization_result",
+  "purpose": "Test whether teacher-assisted matching of the frozen DreamLite flow's initial state materially improves empirical endpoint recovery, while preserving the successful post-step-128 cosine optimizer schedule.",
+  "parent_bridge": {
+    "training_git_commit": "16318e005b496a16b7712ad4ff3cea50e2be34fa",
+    "delivery_git_commit": "398cf72d7d18033f2fceb1a7dd1b7a5ccf5420e7",
+    "source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-bridge-post128-cosine-16318e0-20260906-round01",
+    "comparison_sha256": "00aff581a78b988658fc868158131e5a61d441fcf90e639e2c268284b1f3adfe",
+    "raw_artifacts_sha256": "143de73292240812e148aed0acefe936d4de01e6d7eb1b83c7fef05b629d8e49",
+    "config_sha256": "c9794f5197f6c62f2f84af3cf0db9aee0ff225b4649004967f52d1424a247dc5",
+    "technical_gate": true,
+    "teacher_replay_gate": true,
+    "bridge_distance_gate": false,
+    "endpoint_reader_transfer_gate": false,
+    "formal_success": false,
+    "phase2_allowed": false,
+    "step128_mse_ratio_to_m0": 0.7737632777116902,
+    "endpoint_mse": 0.09553645551204681,
+    "endpoint_mse_ratio_to_m0": 0.7696052787944336,
+    "endpoint_reader_accuracy": 0.0,
+    "endpoint_reader_mean_ce": 25.536474171257463,
+    "secondary_schedule_audit": "passed_without_rescuing_primary_failure"
+  },
+  "parent_phase1a": {
+    "training_source_commit": "2cde77ece6f020ab8c747d7c73e19dac4d8fba1b",
+    "corrected_delivery_parent_commit": "e2e60126285486d42386b4cd670b419334dd06db",
+    "comparison_sha256": "f3764a83ee8bc31cc7895fd33d494d4ea3be0c187c8cc9b0f6a85a4cf257843d",
+    "raw_artifacts_sha256": "c1e36f92766c98f245917a9009dc9061a07729842dbef6c7b97ad18889edfbba",
+    "selected_segments_sha256": "6198beb3a3758fd7df912c6956bc05eac0ace8603708f37147826c65a4d61845",
+    "engineering_gate": true,
+    "query_level_pass_count": 6,
+    "total_targets": 8,
+    "failed_target_indices": [
+      1,
+      7
+    ],
+    "phase2_allowed": false
+  },
+  "target_selection": {
+    "rule": "same preregistered lowest-index Phase1A failure and same canonical R11 teacher as both parent bridges",
+    "target_index": 1,
+    "target_segment_id": "r5-f1-392d41fd097d069c42218e0a",
+    "target_07_deferred": true,
+    "no_post_result_target_selection": true
+  },
+  "canonical_teacher": {
+    "artifact_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11/r11-vae-latent-f4a018f-20260831/target-01/run/endpoint_raw.pt",
+    "file_sha256": "d359291de63bb5232325b2e7a9294ff3d861287c06e63da2ab6ebe42eab036b9",
+    "tensor_sha256": "6857afeffd37124bb196ab7c6607580c57c950d72d760ca6b49f8cc00bdef3f1",
+    "shape": [
+      1,
+      4,
+      128,
+      128
+    ],
+    "dtype": "torch.float32",
+    "population_std": 0.6546660661697388,
+    "reference_reverse_cyclic_accuracy": 1.0,
+    "reference_reverse_cyclic_mean_ce": 0.000176956004
+  },
+  "single_changed_solver_factor": {
+    "factor": "x_T_initialization",
+    "parent_value": "answer-independent event-keyed standard Gaussian with global seed 0",
+    "new_value": "teacher-state-matched deterministic initialization",
+    "formula": "x_T_init_fp32=(teacher_fp32-source_latents_fp32.mul(1-actual_effective_sigma0)).div(actual_effective_sigma0)",
+    "sigma_start": 0.5,
+    "actual_sigma_source": "the first effective sigma returned by the locked DreamLite scheduler setup for the nominal [0.5, 0.375, 0.25, 0.125] schedule",
+    "parameterization_dtype": "torch.float32; the sampler then casts x_T_init_fp32 to the locked DreamLite updater dtype",
+    "intended_invariant": "the sampler trajectory point 0 approximates the compute-dtype canonical teacher within the locked normalized-RMSE tolerance; bit identity is not claimed",
+    "explicitly_unchanged": "optimizer schedule, optimizer budget, objective, DreamLite diffusion scheduler, sigma schedule, denoising steps, source, event condition, teacher, Reader, models, data, and gates",
+    "teacher_assisted": true,
+    "answer_independent_writer_usable": false,
+    "hypothesis": "If this teacher-assisted initialization passes the unchanged endpoint distance and Reader gates, endpoint recovery is empirically initialization-sensitive under this one target and solver; failure shows only that this intervention is insufficient and does not prove mathematical non-reachability."
+  },
+  "initialization_binding": {
+    "source_latents_fp32_sha256": "719e92867b60546b21b281cfc633ab782c8ce2274bfb41c6b3cee6d673e74eaa",
+    "teacher_fp32_sha256": "6857afeffd37124bb196ab7c6607580c57c950d72d760ca6b49f8cc00bdef3f1",
+    "nominal_effective_sigma_schedule": [
+      0.5,
+      0.375,
+      0.25,
+      0.125
+    ],
+    "actual_sigma_must_come_from_scheduler_setup": true,
+    "reconstruction_operator_order": "source_compute.mul(1-actual_sigma).add(x_T_init_fp32.to(compute_dtype), alpha=actual_sigma), exactly matching the sampler",
+    "artifact_required_before_first_forward": true,
+    "artifact_must_store": [
+      "source_latents_fp32",
+      "teacher_fp32",
+      "x_T_init_fp32",
+      "reconstructed_start_state_compute"
+    ],
+    "independent_recomputation_required": true,
+    "trajectory_point0_must_match_artifact": true,
+    "trajectory_point0_teacher_normalized_rmse_lte": 0.01
+  },
+  "unchanged_contract": {
+    "train_sha256": "24327edc39e0d133df5150dc1aab4f55c6cf5b05ccfca9025ad90c5accc6d184",
+    "dev_sha256": "8b167df38022a631d4e631d3c0d66e9fca74171f4224fec436030d6650047303",
+    "training_objective": "mean elementwise FP32 MSE between frozen-DreamLite endpoint z_t and fixed canonical R11 latent",
+    "source_state": "RGB 127/255 encoded by frozen DreamLite VAE posterior mean",
+    "only_trainable": "x_T_fp32",
+    "dreamlite_path": "complete frozen source-anchored DreamLite-mobile edit path",
+    "diffusion_steps": 4,
+    "effective_sigma_schedule": [
+      0.5,
+      0.375,
+      0.25,
+      0.125
+    ],
+    "optimizer": "Adam",
+    "base_learning_rate": 0.05,
+    "learning_rate_schedule": "lr=0.05 for updates 1..128; lr=0.025*(1+cos(pi*(u-128)/128)) for updates 129..256",
+    "weight_decay": 0.0,
+    "optimizer_steps": 256,
+    "gradient_clipping": null,
+    "checkpoint_steps": [
+      0,
+      64,
+      128,
+      192,
+      256
+    ],
+    "primary_endpoint": "raw_step_256",
+    "m0_definition": "the unoptimized endpoint after the complete four-step DreamLite path from the new teacher-matched x_T initialization",
+    "best_checkpoint_selection_forbidden": true,
+    "global_determinism_seed": 0,
+    "strict_determinism": true,
+    "dreamlite_device": "cuda:0",
+    "reader_device": "cuda:1"
+  },
+  "preflight_gate": {
+    "optimizer_steps": 0,
+    "full_forward_calls": 1,
+    "backward_calls": 1,
+    "require_exact_teacher_file_and_tensor_hashes": true,
+    "require_exact_source_and_initialization_artifact_recomputation": true,
+    "require_trajectory_point0_teacher_normalized_rmse_lte": 0.01,
+    "require_only_x_T_fp32_trainable": true,
+    "require_four_dreamlite_steps": true,
+    "require_finite_nonzero_x_T_gradient": true,
+    "require_all_model_parameters_frozen_and_without_gradients": true,
+    "teacher_replay": {
+      "fixed_reverse_cyclic_permutations": 4,
+      "all_four_correct": true,
+      "mean_ce_lte": 0.001
+    },
+    "bridge_result_evaluated": false
+  },
+  "formal_technical_gate": {
+    "optimizer_receipts_exact": 256,
+    "optimizer_steps_contiguous": true,
+    "optimizer_lr_schedule_exact_per_receipt": true,
+    "teacher_matched_initialization_artifact_valid": true,
+    "trajectory_point0_binding_valid_every_checkpoint": true,
+    "four_dreamlite_steps_every_receipt": true,
+    "finite_nonzero_x_T_gradient_every_receipt": true,
+    "only_x_T_fp32_trainable": true,
+    "model_snapshots_unchanged": true,
+    "no_gradient_clipping": true,
+    "exact_checkpoint_hash_triplets": [
+      0,
+      64,
+      128,
+      192,
+      256
+    ]
+  },
+  "primary_bridge_gate": {
+    "endpoint": "raw_step_256_only",
+    "technical_gate": true,
+    "teacher_replay_gate": true,
+    "mse_ratio_to_m0_lte": 0.01,
+    "l2_distance_ratio_to_m0_lte": 0.1,
+    "teacher_normalized_rmse_lte": 0.1,
+    "endpoint_reverse_cyclic_accuracy_eq": 1.0
+  },
+  "secondary_initialization_hypothesis_audit": {
+    "scientific_success_gate": false,
+    "eligibility": "technical gate and teacher replay pass while both primary distance and Reader gates fail",
+    "absolute_endpoint_mse_improves_parent": "raw step256 MSE < 0.09553645551204681",
+    "endpoint_reader_ce_improves_parent": "raw step256 mean CE < 25.536474171257463",
+    "interpretation": "Descriptive endpoint diagnosis only; it cannot rescue primary failure and teacher assistance cannot count as a usable writer."
+  },
+  "decision_table": {
+    "distance_pass_reader_pass": "Empirical recovery under this teacher-assisted initialization is demonstrated; next test an answer-independent learned initializer or inverse writer under a new preregistration.",
+    "distance_pass_reader_fail": "Primary bridge branch takes precedence; test Reader robustness in the reached teacher neighborhood.",
+    "distance_fail_reader_pass": "Primary bridge branch takes precedence; prioritize the original QA objective.",
+    "distance_fail_reader_fail_secondary_init_improves": "Teacher assistance improves both endpoint MSE and Reader CE but remains insufficient; next isolate an answer-independent initialization or conditioning intervention.",
+    "distance_fail_reader_fail_secondary_init_not_improve": "Teacher-state matching does not resolve the bridge; next use a separately preregistered reachable-teacher control to distinguish optimizer failure from teacher/flow mismatch without claiming non-reachability."
+  },
+  "interpretation_boundaries": {
+    "diagnostic_only": true,
+    "teacher_assisted_initialization": true,
+    "formal_success_always_false": true,
+    "phase2_remains_blocked": true,
+    "no_shared_writer_claim": true,
+    "no_id_ood_claim": true,
+    "no_reachability_theorem_from_one_failure": true,
+    "no_dominant_bottleneck_claim_from_one_success": true,
+    "replaced_parent_parity_only": "old Gaussian x_T, old initial endpoint z_t, and old step128 prefix parity; all source/event/condition/model/data/teacher bindings remain fixed",
+    "no_best_checkpoint_rescue": true,
+    "no_post_result_threshold_or_initialization_change": true
+  },
+  "deployment": {
+    "instance": "vlm-r3-h200x2-live-20260717",
+    "workspace": "分布式训练空间",
+    "output_storage": "/inspire/ssd/",
+    "fresh_output_root_required": true,
+    "clean_detached_git_checkout_required": true,
+    "suite_lock_required": true,
+    "technical_preflight_before_formal": true,
+    "implementation_commit_must_be_pushed_before_remote_checkout": true,
+    "independent_post_run_aggregation_required": true
+  }
+}
