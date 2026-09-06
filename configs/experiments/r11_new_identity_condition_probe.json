@@ -1,0 +1,140 @@
+{
+  "schema": "vision_memory.r11-new-identity-condition-probe-config.v1",
+  "protocol": "R11-New-Identity-Condition-Technical-Probe-Target01",
+  "status": "preregistered_before_any_identity_condition_encoding",
+  "purpose": "Bind the deterministic native identity-prompt conditioning tensors before any new full DreamLite forward; engineering only, not training or reachability.",
+  "parent_source_init": {
+    "source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-source-init-e0a43c4-20260907-round01",
+    "training_git_commit": "e0a43c43f893ac19c6976ecd4c84ea3dc2b23006",
+    "delivery_git_commit": "a9f9e1226f2c593e0a2c89797ba966f54871d0b9",
+    "comparison_sha256": "f7ec5913ac6dcd40860428e3c3ab929f8559752173599ffeae8cc0b01d1db09c",
+    "raw_artifacts_sha256": "2889f183c04df70c2763010b863914e378ffb1a0c85a1d8ca0f6a22ac150d4d7",
+    "config_sha256": "2bdf0e0b45e2c0b22d4c04711c0be11c5e9b94fc30d7ee70ed1aa3cb219b1702",
+    "formal_manifest_sha256": "02905cfa89f7cca0eebaa4d763c99264c128278deef0f12885823982fabbec35",
+    "engineering_gate": true,
+    "teacher_replay_gate": true,
+    "bridge_distance_gate": false,
+    "endpoint_reader_transfer_gate": false,
+    "endpoint_mse": 0.11177215725183487,
+    "endpoint_reader_mean_ce": 25.765637596946004,
+    "formal_success": false,
+    "phase2_allowed": false
+  },
+  "parent_phase1a": {
+    "source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-phase1a-2cde77e-20260905-round02/target-01-retry01",
+    "manifest_sha256": "cd5b740f1f60b32bfb3b8ccf8ba2cfe84bb4ea9c650649810c07d9d9b3972184",
+    "target_index": 1,
+    "target_segment_id": "r5-f1-392d41fd097d069c42218e0a"
+  },
+  "dreamlite": {
+    "path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-mobile",
+    "snapshot_manifest_sha256": "1bcf41b170c4b4a806bac6701cbdf4fabd5c3c53fa67415d065ab95ce2703159",
+    "device": "cuda:0",
+    "dtype": "torch.bfloat16",
+    "base_pipeline_only": true,
+    "all_parameters_frozen": true,
+    "no_new_lora": true,
+    "snapshot_full_verification_before_and_after": true
+  },
+  "source": {
+    "rgb_definition": "phase1a.blank_source_rgb: RGB 127/255, shape [1,3,1024,1024], BF16 on cuda:0",
+    "rgb_sha256": "a3b784da71eaa113fb4d9d71502a7a3526ba0d41e2d42ed96fe79111ca3dba65",
+    "latent_definition": "encode_model_latent frozen VAE posterior mean, same locked model-space scale/shift",
+    "latents_fp32_sha256": "719e92867b60546b21b281cfc633ab782c8ce2274bfb41c6b3cee6d673e74eaa",
+    "latent_shape": [
+      1,
+      4,
+      128,
+      128
+    ]
+  },
+  "condition": {
+    "original_event_text": "R3 Train Standard Templates 03: For the indigo desk train 001123, remember that the preferred music is ambient.",
+    "original_event_text_sha256": "f170a7e2dfe0070fbd160c09d29dbcf897ddbf5f75929a3ee4af84cf627965bb",
+    "actual_conditioning_text": "no changes",
+    "actual_conditioning_text_sha256": "44f9161c3a252925f55022d60f68918abf8fdc1a9a3fadbf5ab766549f6b3461",
+    "full_prompt": "[Edit]: A diptych with two side-by-side images of the same scene. Compared to the right side, the left one has no changes",
+    "full_prompt_sha256": "4620b977a7aff51c9ee9a6e2901555b39ee4a3e4bd705d1402818acf330d22e6",
+    "mode": "edit",
+    "official_template_unchanged": true,
+    "encoder_function": "vision_memory.dreamlite.conditioning.encode_latent_path_condition",
+    "repeat_count": 2,
+    "old_prompt_embeds_sha256": "473bd457d6fff070a71b119a19d950b8d094cfaf6f126ceb817330eb01263a60",
+    "old_attention_mask_sha256": "4f941a468150ea22f64ac4f7304e9a94a3dd1c721d07dd7f8ebd10185fbe2ea9",
+    "new_prompt_embeds_must_differ_from_old": true,
+    "new_mask_may_equal_old": true,
+    "new_tensor_hashes": "Measured once by this engineering probe and locked into a separate immutable full-bridge config before any full-chain forward; never chosen using M0, QA, or optimizer results."
+  },
+  "execution": {
+    "global_seed": 0,
+    "strict_determinism": true,
+    "environment": {
+      "PYTHONHASHSEED": "0",
+      "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+      "VLM_DREAMLITE_SNAPSHOT_MANIFEST_SHA256": "1bcf41b170c4b4a806bac6701cbdf4fabd5c3c53fa67415d065ab95ce2703159",
+      "VLM_READER_SNAPSHOT_MANIFEST_SHA256": "159a504daaae6dc412535978f087150a0eb8e50164afd70a8a17f83906f1127c",
+      "HF_HUB_OFFLINE": "1",
+      "TRANSFORMERS_OFFLINE": "1",
+      "OMP_NUM_THREADS": "1",
+      "MKL_NUM_THREADS": "1",
+      "TOKENIZERS_PARALLELISM": "false",
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "instance": "vlm-r3-h200x2-live-20260717",
+    "workspace": "分布式训练空间",
+    "output_storage": "/inspire/ssd/",
+    "minimum_free_bytes": 53687091200,
+    "clean_detached_checkout_required": true,
+    "expected_full_commit_required": true,
+    "fresh_root_required": true,
+    "suite_lock": "/tmp/vision-memory-r11-new-identity-condition-probe.lock",
+    "cuda_cpu_fallback_forbidden": true
+  },
+  "technical_gate": {
+    "condition_encoder_calls": 2,
+    "unet_forward_calls": 0,
+    "full_dreamlite_forward_calls": 0,
+    "reader_forward_calls": 0,
+    "backward_calls": 0,
+    "optimizer_steps": 0,
+    "source_hashes_exact": true,
+    "original_target_and_event_unchanged": true,
+    "actual_text_and_prompt_exact": true,
+    "repeat_tensors_bitwise_equal": true,
+    "embeddings_finite_nonzero": true,
+    "attention_mask_valid": true,
+    "embedding_differs_from_old_event": true,
+    "all_parameters_frozen_and_no_grad": true,
+    "snapshot_hashes_unchanged": true
+  },
+  "artifacts": {
+    "source": "source.pt",
+    "condition": "condition.pt",
+    "repeat": "condition-repeat.pt",
+    "manifest": "manifest.json",
+    "result": "result.json",
+    "terminal": "terminal.json",
+    "inventory": "artifact_inventory.json",
+    "environment": "environment.txt",
+    "runtime": "runtime.json"
+  },
+  "information_boundary": {
+    "probe_input_content": [
+      "fixed_source_latents",
+      "fixed_identity_text"
+    ],
+    "teacher_loaded": false,
+    "reader_loaded": false,
+    "query_used_as_condition": false,
+    "answer_used_as_condition": false,
+    "conditioning_teacher_assisted": false,
+    "initialization_teacher_assisted": false,
+    "future_optimization_teacher_supervised": true,
+    "answer_independent_writer_usable": false,
+    "bridge_result_evaluated": false,
+    "formal_success": false,
+    "phase2_allowed": false
+  },
+  "next_step_if_pass": "Only lock raw condition tensor hashes and probe provenance into a separate full-bridge config; test and commit the full implementation, then run fresh full-chain preflight. This probe does not authorize or count as a training step.",
+  "next_step_if_fail": "Preserve technical failure; repair engineering or separately preregister a different conditioning intervention. No alternate prompt or scientific conclusion in this probe."
+}

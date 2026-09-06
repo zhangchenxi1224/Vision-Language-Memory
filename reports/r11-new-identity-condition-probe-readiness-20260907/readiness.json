@@ -1,0 +1,48 @@
+{
+  "schema": "vision_memory.r11-new-identity-condition-probe-readiness.v1",
+  "status": "local_implementation_tests_and_independent_review_passed",
+  "base_git_commit": "a9f9e1226f2c593e0a2c89797ba966f54871d0b9",
+  "protocol": "R11-New-Identity-Condition-Technical-Probe-Target01",
+  "config_file_sha256": "5f1db61ac1e7db179dd3cb39c463c891b3b7aba056fafbe9d6618066f4eab73e",
+  "config_canonical_sha256": "d8933ae014c1199302eec0f5cd71ee16446e0df93be22e9a501d6a8c084c0ad4",
+  "source_sha256": {
+    "scripts/experiments/probe_r11_new_identity_condition.py": "cdd76f77fc10ce68a593940d0b6473d6679c17e6950273595a434eb6e2e1ae3e",
+    "tests/test_r11_new_identity_condition_probe.py": "9229013ca6b3888350cff1db85f42dac6ebfce95725b4282174ba3a88141fbd6",
+    "reports/r11-new-identity-conditioning-preregistration-20260907.md": "39832f6a91281a80ac4a3e3ca2b1573cf961c32570bc5c59cea299058b79d4d6"
+  },
+  "tests": {
+    "command": "D:/st_python/python.exe -X utf8 -B -m pytest tests/test_r11_new_identity_condition_probe.py tests/test_r11_new_phase1a_trainer.py tests/test_r11_new_source_init_bridge_controller.py -q -p no:cacheprovider --junitxml=reports/r11-new-identity-condition-probe-readiness-20260907/pytest-junit.xml",
+    "tests": 131,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 46.434,
+    "terminal_seconds": 46.54,
+    "timestamp": "2026-09-07T01:48:16.553921+08:00",
+    "junit_sha256": "6a2a2c75a7bf568314ec706d26ffea8e33d687274c25ace2822fe553e0002f84",
+    "probe_focused_tests": 42
+  },
+  "checks": {
+    "ruff_passed": true,
+    "git_diff_check_passed": true,
+    "independent_scientific_review_passed": true,
+    "independent_implementation_review_passed": true,
+    "actual_parent_metadata_checked": true,
+    "historical_attention_mask_int64_confirmed": true
+  },
+  "premodel_repair": "Inventory or lock-release audit failure downgrades both result and terminal; retained raw invalid tensors and added failure tests.",
+  "at_readiness": {
+    "real_identity_condition_encoder_calls": 0,
+    "unet_forward_calls": 0,
+    "full_dreamlite_forward_calls": 0,
+    "reader_forward_calls": 0,
+    "backward_calls": 0,
+    "optimizer_steps": 0
+  },
+  "formal_success": false,
+  "phase2_allowed": false,
+  "phase1a_passed_targets": 6,
+  "phase1a_total_targets": 8,
+  "original_30h_start_utc": "2026-09-05T07:18:59.891307+00:00",
+  "original_30h_budget_exceeded": true
+}
