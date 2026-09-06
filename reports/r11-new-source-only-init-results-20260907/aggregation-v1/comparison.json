@@ -1,0 +1,186 @@
+{
+  "answer_independent_writer_usable": false,
+  "bridge_diagnostic_gate": false,
+  "bridge_distance_gate": false,
+  "checkpoint_distance_statistics": {
+    "0": {
+      "l2_distance": 120.7737101462897,
+      "l2_distance_ratio_to_m0": 1.0,
+      "m0_mse": 0.22256910800933838,
+      "m0_rmse": 0.47177230525894415,
+      "mse": 0.22256910800933838,
+      "mse_ratio_to_m0": 1.0,
+      "relative_mse_change": 0.0,
+      "rmse": 0.47177230525894415,
+      "teacher_normalized_rmse": 0.720630455186332,
+      "teacher_population_std": 0.6546660661697388,
+      "tensor_numel": 65536
+    },
+    "128": {
+      "l2_distance": 86.95025685970542,
+      "l2_distance_ratio_to_m0": 0.7199435767468357,
+      "m0_mse": 0.22256910800933838,
+      "m0_rmse": 0.47177230525894415,
+      "mse": 0.11536174267530441,
+      "mse_ratio_to_m0": 0.518318753699027,
+      "relative_mse_change": -0.481681246300973,
+      "rmse": 0.3396494408582243,
+      "teacher_normalized_rmse": 0.5188132674195481,
+      "teacher_population_std": 0.6546660661697388,
+      "tensor_numel": 65536
+    },
+    "192": {
+      "l2_distance": 85.85836981895679,
+      "l2_distance_ratio_to_m0": 0.7109028091871901,
+      "m0_mse": 0.22256910800933838,
+      "m0_rmse": 0.47177230525894415,
+      "mse": 0.11248259991407394,
+      "mse_ratio_to_m0": 0.5053828041102384,
+      "relative_mse_change": -0.4946171958897616,
+      "rmse": 0.33538425710529995,
+      "teacher_normalized_rmse": 0.5122982149778068,
+      "teacher_population_std": 0.6546660661697388,
+      "tensor_numel": 65536
+    },
+    "256": {
+      "l2_distance": 85.58679861787243,
+      "l2_distance_ratio_to_m0": 0.7086542138533595,
+      "m0_mse": 0.22256910800933838,
+      "m0_rmse": 0.47177230525894415,
+      "mse": 0.11177215725183487,
+      "mse_ratio_to_m0": 0.5021907948121229,
+      "relative_mse_change": -0.4978092051878771,
+      "rmse": 0.3343234321010642,
+      "teacher_normalized_rmse": 0.5106778086988586,
+      "teacher_population_std": 0.6546660661697388,
+      "tensor_numel": 65536
+    },
+    "64": {
+      "l2_distance": 88.1082791096061,
+      "l2_distance_ratio_to_m0": 0.7295319403774472,
+      "m0_mse": 0.22256910800933838,
+      "m0_rmse": 0.47177230525894415,
+      "mse": 0.11845503002405167,
+      "mse_ratio_to_m0": 0.532216852030883,
+      "relative_mse_change": -0.467783147969117,
+      "rmse": 0.34417296527189883,
+      "teacher_normalized_rmse": 0.5257229342671677,
+      "teacher_population_std": 0.6546660661697388,
+      "tensor_numel": 65536
+    }
+  },
+  "decision": "distance_fail_reader_fail_change_one_solver_factor",
+  "endpoint_distance_statistics": {
+    "l2_distance": 85.58679861787243,
+    "l2_distance_ratio_to_m0": 0.7086542138533595,
+    "m0_mse": 0.22256910800933838,
+    "m0_rmse": 0.47177230525894415,
+    "mse": 0.11177215725183487,
+    "mse_ratio_to_m0": 0.5021907948121229,
+    "relative_mse_change": -0.4978092051878771,
+    "rmse": 0.3343234321010642,
+    "teacher_normalized_rmse": 0.5106778086988586,
+    "teacher_population_std": 0.6546660661697388,
+    "tensor_numel": 65536
+  },
+  "endpoint_reader_statistics": {
+    "accuracy": 0.0,
+    "all_four_correct": false,
+    "checkpoint": "raw_step_256",
+    "condition": "normal",
+    "mean_ce": 25.765637596946004,
+    "per_view_ce": [
+      21.333347750107208,
+      27.33334231178997,
+      23.50001963006908,
+      30.89584069581776
+    ],
+    "permutations_are_independent_statistical_units": false,
+    "row_count": 4
+  },
+  "endpoint_reader_transfer_gate": false,
+  "endpoint_reset_statistics": {
+    "accuracy": 0.0,
+    "all_four_correct": false,
+    "checkpoint": "raw_step_256",
+    "condition": "reset",
+    "mean_ce": 27.697927217990824,
+    "per_view_ce": [
+      24.37500533794217,
+      29.208341387042786,
+      25.541688817176173,
+      31.66667332980217
+    ],
+    "permutations_are_independent_statistical_units": false,
+    "row_count": 4
+  },
+  "engineering_gate": true,
+  "formal_success": false,
+  "git_commit": "e0a43c43f893ac19c6976ecd4c84ea3dc2b23006",
+  "initialization_teacher_assisted": false,
+  "interpretation": "diagnostic_only",
+  "m0_reader_statistics": {
+    "accuracy": 0.0,
+    "all_four_correct": false,
+    "checkpoint": "m0",
+    "condition": "normal",
+    "mean_ce": 27.994799227862153,
+    "per_view_ce": [
+      24.3750071729415,
+      29.000008583899252,
+      25.54167910330524,
+      33.06250205130262
+    ],
+    "permutations_are_independent_statistical_units": false,
+    "row_count": 4
+  },
+  "m0_reset_statistics": {
+    "accuracy": 0.0,
+    "all_four_correct": false,
+    "checkpoint": "m0",
+    "condition": "reset",
+    "mean_ce": 27.697927217990824,
+    "per_view_ce": [
+      24.37500533794217,
+      29.208341387042786,
+      25.541688817176173,
+      31.66667332980217
+    ],
+    "permutations_are_independent_statistical_units": false,
+    "row_count": 4
+  },
+  "optimization_teacher_supervised": true,
+  "optimizer_steps": 256,
+  "phase2_allowed": false,
+  "primary_endpoint": "raw_step_256",
+  "protocol": "R11-New-Canonical-Latent-Bridge-Source-Only-Init-Target01",
+  "raw_artifacts_sha256": "2889f183c04df70c2763010b863914e378ffb1a0c85a1d8ca0f6a22ac150d4d7",
+  "schema": "vision_memory.r11-new-canonical-latent-bridge-comparison.v1",
+  "scientific_success_claim": false,
+  "secondary_solver_hypothesis_audit": {
+    "absolute_endpoint_mse_improves_parent": false,
+    "eligible": true,
+    "endpoint_reader_ce_improves_parent": false,
+    "passed": false
+  },
+  "secondary_solver_hypothesis_decision": "distance_fail_reader_fail_secondary_init_not_improve",
+  "status": "completed",
+  "target_index": 1,
+  "target_segment_id": "r5-f1-392d41fd097d069c42218e0a",
+  "teacher_replay_gate": true,
+  "teacher_replay_statistics": {
+    "accuracy": 1.0,
+    "all_four_correct": true,
+    "checkpoint": "canonical_teacher",
+    "condition": "teacher",
+    "mean_ce": 0.00017690610513911291,
+    "per_view_ce": [
+      0.00010211342703511954,
+      0.00012818916408861934,
+      0.00024359093460701864,
+      0.00023373089482569415
+    ],
+    "permutations_are_independent_statistical_units": false,
+    "row_count": 4
+  }
+}

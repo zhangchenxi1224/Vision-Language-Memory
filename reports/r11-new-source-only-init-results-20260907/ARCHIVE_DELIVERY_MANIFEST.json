@@ -1,0 +1,186 @@
+{
+  "schema": "vision_memory.r11-new-source-init-archive-delivery.v1",
+  "training_commit": "e0a43c43f893ac19c6976ecd4c84ea3dc2b23006",
+  "remote_program_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-source-init-e0a43c4-20260907-round01",
+  "remote_checkout": "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory-source-init-e0a43c4-20260907-retry01",
+  "original_archive_hashes_verified_against_remote": true,
+  "remote_independent_cuda_aggregation_passed": true,
+  "source_inventory_verified_counts": {
+    "technical-preflight": 23,
+    "technical-preflight/run": 18,
+    "formal-target01": 38,
+    "formal-target01/run": 33,
+    "aggregation-v1": 4
+  },
+  "main_training_tests": 564,
+  "renderer_tests_included_in_joint_total": 15,
+  "local_actual_render_and_evidence_recomputation_passed": true,
+  "figures_visually_verified": 4,
+  "full_scientific_success": false,
+  "bridge_diagnostic_pass": false,
+  "secondary_initialization_improvement_pass": false,
+  "initialization_teacher_assisted": false,
+  "optimization_teacher_supervised": true,
+  "answer_independent_writer_usable": false,
+  "phase1a": {
+    "passed": 6,
+    "total": 8,
+    "failed_targets": [
+      1,
+      7
+    ]
+  },
+  "phase2_allowed": false,
+  "preflight": {
+    "started_at_utc": "2026-09-06T16:39:24.626291+00:00",
+    "completed_at_utc": "2026-09-06T16:40:22.530702+00:00",
+    "controller_elapsed_seconds": 57.90054371487349,
+    "full_model_forwards": 1,
+    "backward_calls": 1,
+    "optimizer_steps": 0,
+    "technical_passed": true
+  },
+  "formal": {
+    "started_at_utc": "2026-09-06T16:41:24.402720+00:00",
+    "completed_at_utc": "2026-09-06T16:46:25.548594+00:00",
+    "controller_elapsed_seconds": 301.14318819437176,
+    "optimizer_receipts": 256,
+    "checkpoints": [
+      0,
+      64,
+      128,
+      192,
+      256
+    ],
+    "reader_rows": 20,
+    "technical_passed": true
+  },
+  "deployment_failures": [
+    {
+      "repo": "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory-source-init-e0a43c4-20260907",
+      "error": "git clone with reference failed: pack has 3 unresolved deltas; fetch-pack invalid index-pack output",
+      "modelForwards": 0,
+      "optimizerSteps": 0,
+      "failed_path_retained": false,
+      "incomplete_clone_removed_by_git_itself": true,
+      "valid_scientific_trial": false
+    }
+  ],
+  "remote_final_readonly_audit": {
+    "observed_at_utc": "2026-09-06T16:52:08Z",
+    "gpu_compute_process_list_empty": true,
+    "suite_lock_absent": true,
+    "source_clean": true,
+    "source_head": "e0a43c43f893ac19c6976ecd4c84ea3dc2b23006",
+    "comparison_sha256": "f7ec5913ac6dcd40860428e3c3ab929f8559752173599ffeae8cc0b01d1db09c",
+    "raw_artifacts_sha256": "2889f183c04df70c2763010b863914e378ffb1a0c85a1d8ca0f6a22ac150d4d7",
+    "instance_stopped": false
+  },
+  "next_candidate": {
+    "name": "fixed identity/no-event conditioner input 'no changes'",
+    "status": "read_only_candidate_analysis_only",
+    "preregistered": false,
+    "implemented": false,
+    "started": false,
+    "control": "closed current source-only initialization + original event conditioning arm",
+    "cannot_count_as_phase1a_success": true
+  },
+  "manifest_excludes_itself": true,
+  "artifacts": [
+    {
+      "path": "aggregation-v1/artifact_inventory.json",
+      "bytes": 740,
+      "sha256": "a2b16b81e115ad52a8375f3b6d7ab469de0ca233c7f01a151533db5c796b6659"
+    },
+    {
+      "path": "aggregation-v1/comparison.json",
+      "bytes": 6120,
+      "sha256": "f7ec5913ac6dcd40860428e3c3ab929f8559752173599ffeae8cc0b01d1db09c"
+    },
+    {
+      "path": "aggregation-v1/distance_trajectory.csv",
+      "bytes": 50226,
+      "sha256": "1114cbb9822b3adebb9412d7b8c7aa2cb708a187a68afae7aacc5ebb75ef9303"
+    },
+    {
+      "path": "aggregation-v1/RAW_ARTIFACTS.json",
+      "bytes": 26745,
+      "sha256": "2889f183c04df70c2763010b863914e378ffb1a0c85a1d8ca0f6a22ac150d4d7"
+    },
+    {
+      "path": "aggregation-v1/REPORT.md",
+      "bytes": 1665,
+      "sha256": "98a1c490727caa8cb1c501281fd32c5df1296523ffa94aa2f6f7869458bf0c88"
+    },
+    {
+      "path": "checkpoint_images.png",
+      "bytes": 780587,
+      "sha256": "84cd8f16c64bfd841727c860591580013af8b97e85c8262bab5889f406614855"
+    },
+    {
+      "path": "DELIVERY_MANIFEST.json",
+      "bytes": 2350,
+      "sha256": "15929b08ec2c7642bc92f8bb56af4ba256e4ea8a718fc4f5754e8362c9afb61f"
+    },
+    {
+      "path": "delivery-v1/aggregation-v1.tar.gz",
+      "bytes": 31662,
+      "sha256": "3c4dd658f6b900412faf994e5e43b9818a74b3c3c0f96b55f5df4ba7dfefc66f"
+    },
+    {
+      "path": "delivery-v1/formal-launch.log",
+      "bytes": 153,
+      "sha256": "020e27cb6704902b2ee21029ea803251bc1f156a88255f1636967be06f894544"
+    },
+    {
+      "path": "delivery-v1/formal-target01.tar.gz",
+      "bytes": 13436872,
+      "sha256": "595f40faea99ffb0fe3fc86019e466950869eafb825c2617353b27a311507334"
+    },
+    {
+      "path": "delivery-v1/preflight-launch.log",
+      "bytes": 165,
+      "sha256": "356b9032176c337b5baf70baf990457f59ed97c0a1d5822631c6c5b365fe3182"
+    },
+    {
+      "path": "delivery-v1/technical-preflight.tar.gz",
+      "bytes": 4941145,
+      "sha256": "1969ce7459d2f16201743ba63f3a537a7c946c19c0ac87c60893abd746c8dd63"
+    },
+    {
+      "path": "distance_trajectory.png",
+      "bytes": 103709,
+      "sha256": "257a39a473df75acc2d1427b8e453d2939eacc2784f2571484f8444c30e8077a"
+    },
+    {
+      "path": "EXECUTION.md",
+      "bytes": 7459,
+      "sha256": "861e25a32cb9667983eee994fe73d5ca796da71cf7cbf04a381a5d592f11c49e"
+    },
+    {
+      "path": "optimizer_diagnostics.png",
+      "bytes": 127899,
+      "sha256": "b65f343b3b443a56e407109afea64b343f75a0dfd62d694f64442277e310ca92"
+    },
+    {
+      "path": "reader_transfer.png",
+      "bytes": 70113,
+      "sha256": "2e3dd6862dc074ff3e27ccf86a794ab3c2c13e129f9a038b92a9306c7738ce3c"
+    },
+    {
+      "path": "README.md",
+      "bytes": 5411,
+      "sha256": "be5923b5e09ce90d66963dd6cd56fae03271cbb0ccc0fbb1ad8630b4792f1cdd"
+    },
+    {
+      "path": "render_environment.json",
+      "bytes": 244,
+      "sha256": "d6fba91ac007f5940b36dd22341c97d857667e188165f9213e6425e4ffee93b7"
+    },
+    {
+      "path": "training_diagnostics.json",
+      "bytes": 1226682,
+      "sha256": "6f39dca59773c925e4cf04b8b2037887936bdd9a4bf3a3a4de8baf73c5214634"
+    }
+  ]
+}
