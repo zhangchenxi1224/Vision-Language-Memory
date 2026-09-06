@@ -1,0 +1,47 @@
+{
+  "schema": "vision_memory.r3-qwen-full-history-baseline-implementation-hotfix.v1",
+  "decision_date": "2026-07-22",
+  "status": "prospective_before_any_qwen_full_history_baseline_gpu_prediction",
+  "classification": "orchestration_inventory_counter_hotfix",
+  "parent_commit": "ec43a83f671f8debc1ca14f7dae3975c989e43d8",
+  "failed_operation": "materialize_qwen_history_baseline.py init --dry-run",
+  "failure": "ValueError: Unsupported synthetic turn type 'mixed'",
+  "failure_effect": {
+    "run_root_created": false,
+    "gpu_predictions_created": false,
+    "scientific_results_created": false
+  },
+  "root_cause": "The prospective inventory counter treated a mixed immediate query as unsupported when probe_role was delayed instead of recognizing and skipping it.",
+  "locked_semantics": {
+    "event": {"all": 0, "delayed": 0},
+    "mixed": {"all": 1, "delayed": 0},
+    "query": {"all": 1, "delayed": 1},
+    "transition16_all_query_states": 24,
+    "transition16_delayed_query_states": 16
+  },
+  "unchanged_contract": {
+    "amendment_sha256": "b3e69308c266362f82779860f41dd1e981e480bfeb52b583ec84545dc12ae674",
+    "qwen_revision": "ebb281ec70b05090aa6165b016eac8ec08e71b17",
+    "set8_gate_sha256": "2653c3b5a43c6b11d282397a27a14d94f1daf9e558aea943378bd40c307d94b1",
+    "transition16_gate_sha256": "b9cb3218292e2ae91f54909e8d97436cc2664699dfdf6ca6280a024092a4790a",
+    "formal_manifest_sha256": "089beefa00b9b78149b3d7f4bd40cf802dc2c92a3757c04f30d9534bbdc51215",
+    "formal_dev_sha256": "8b167df38022a631d4e631d3c0d66e9fca74171f4224fec436030d6650047303",
+    "formal_test_id_sha256": "31e910ab878869faf9d6a032d8135eebe29f98d1509114e4fe04f9d95deaf4ff",
+    "formal_test_ood_sha256": "40d80fffaaaee1f9bcdedb7e09c5e7782f577213e0d4187c156d15b590ba23cc"
+  },
+  "forbidden_changes": [
+    "dataset",
+    "prompt",
+    "threshold",
+    "choice_permutation_family",
+    "reader_revision",
+    "condition_matrix",
+    "stage_order"
+  ],
+  "verification": {
+    "related_pytest": "27 passed",
+    "ruff": "passed",
+    "real_transition16_counts": {"all": 24, "delayed": 16}
+  },
+  "deployment_rule": "Create a new exact commit, bundle, formal preflight, DAG plan, and unique run root; retain all ec43a83 failure evidence."
+}

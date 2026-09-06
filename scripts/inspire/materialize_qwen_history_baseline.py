@@ -94,9 +94,11 @@ def _expected_query_states(episodes: Path, *, probe_role: str, limit: int | None
             if not isinstance(turn, Mapping):
                 raise ValueError("Episode turn must be an object")
             turn_type = turn.get("type")
-            if turn_type == "mixed" and probe_role == "all":
-                queries += 1
-            elif turn_type == "query":
+            if turn_type == "mixed":
+                if probe_role == "all":
+                    queries += 1
+                continue
+            if turn_type == "query":
                 queries += 1
             elif turn_type != "event":
                 raise ValueError(f"Unsupported synthetic turn type {turn_type!r}")
