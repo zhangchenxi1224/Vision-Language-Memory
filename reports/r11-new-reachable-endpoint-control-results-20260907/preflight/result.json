@@ -1,0 +1,46 @@
+{
+  "backward_calls": 1,
+  "construction_gate": true,
+  "counters": {
+    "backward_calls": 1,
+    "full_chain_forward_calls": 4,
+    "optimizer_steps": 0,
+    "reader_forward_calls": 0
+  },
+  "elapsed_seconds": 22.621845334768295,
+  "engineering_gate": true,
+  "formal_success": false,
+  "full_chain_forward_calls": 4,
+  "git_commit": "986a1817ab8a4cff300d7ef811d64ebfd146fb19",
+  "gradient_probe": {
+    "gradient_nonzero_fraction": 0.9996795654296875,
+    "gradient_norm": 0.00357502420416338,
+    "loss": 0.02440102957189083
+  },
+  "m0_mse": 0.02440102957189083,
+  "mode": "technical-preflight",
+  "models_frozen": true,
+  "only_student_x_T_trainable": true,
+  "optimizer_steps": 0,
+  "phase2_allowed": false,
+  "preflight_gate": true,
+  "protocol": "R11-New-Reachable-Endpoint-Control-Identity-Target01",
+  "reachable_control_gate": false,
+  "schema": "vision_memory.r11-new-reachable-endpoint-control-result.v1",
+  "snapshots_unchanged": true,
+  "target_record": {
+    "bytes": 1052016,
+    "m0_mse": 0.02440102957189083,
+    "matches_preflight": null,
+    "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-reachable-986a181-20260907-round01-preflight/target/reachable_target.pt",
+    "sha256": "5352fac1cf614c8458d4f61b6ffcbf7b053f8a947dedac1286f80261ba8a772a",
+    "teacher_perturbation_rms": 0.999999999858636,
+    "teacher_replay_bitwise_equal": true,
+    "tensor_sha256": {
+      "normalized_noise_fp32": "a320afe2438b0ee725de4702b7d7bd7a213c08ad306ea05eef699b292f7b4377",
+      "source_only_x_T_init_fp32": "719e92867b60546b21b281cfc633ab782c8ce2274bfb41c6b3cee6d673e74eaa",
+      "teacher_endpoint_fp32": "9e627ec840af943d29e3b40a9a8ab796ce23bf07861cb18801360157c4bea0e9",
+      "teacher_x_T_fp32": "9a5cde0f0f93ba29dc74b2b78878e64dde49a6ec9168cb60f57ad48cdfb31f66"
+    }
+  }
+}

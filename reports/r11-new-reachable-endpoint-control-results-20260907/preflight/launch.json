@@ -1,0 +1,67 @@
+{
+  "owner": {
+    "git_commit": "986a1817ab8a4cff300d7ef811d64ebfd146fb19",
+    "mode": "technical-preflight",
+    "output_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-reachable-986a181-20260907-round01-preflight",
+    "owner_token": "a3e6e4edc6ec4d009be357f7bb27a14a",
+    "pid": 558568,
+    "started_at_utc": "2026-09-06T22:55:27.941813+00:00"
+  },
+  "validation": {
+    "deployment": {
+      "disk_free_bytes": 905361489920,
+      "disk_usage_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new",
+      "hostname": "vlm-r11-identity-h200x4-20260907--be5a66e9128b-lzfotstnvy",
+      "minimum_free_bytes": 53687091200,
+      "output_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-reachable-986a181-20260907-round01-preflight",
+      "passed": true,
+      "required_hostname_prefix": "vlm-r11-identity-h200x4-20260907",
+      "ssd_root": "/inspire/ssd"
+    },
+    "environment": {
+      "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+      "CUDA_VISIBLE_DEVICES": "0,1",
+      "HF_HUB_OFFLINE": "1",
+      "MKL_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTHONHASHSEED": "0",
+      "TOKENIZERS_PARALLELISM": "false",
+      "TRANSFORMERS_OFFLINE": "1",
+      "VLM_DREAMLITE_SNAPSHOT_MANIFEST_SHA256": "1bcf41b170c4b4a806bac6701cbdf4fabd5c3c53fa67415d065ab95ce2703159",
+      "VLM_READER_SNAPSHOT_MANIFEST_SHA256": "159a504daaae6dc412535978f087150a0eb8e50164afd70a8a17f83906f1127c"
+    },
+    "git_clean": true,
+    "git_commit": "986a1817ab8a4cff300d7ef811d64ebfd146fb19",
+    "git_detached": true,
+    "gpu_names": [
+      "NVIDIA H200",
+      "NVIDIA H200"
+    ],
+    "preflight_prerequisite": null,
+    "snapshots": {
+      "dreamlite_mobile": {
+        "file_count": 27,
+        "manifest_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-mobile/.snapshot_manifest.json",
+        "manifest_sha256": "1bcf41b170c4b4a806bac6701cbdf4fabd5c3c53fa67415d065ab95ce2703159",
+        "model_dir": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-mobile",
+        "passed": true,
+        "repo_id": "carlofkl/DreamLite-mobile",
+        "revision": "6695c3f4be230f0493fa5dbf78be3bc4d3bb2ab4",
+        "snapshot_payload_sha256": "3fb839f465793b01ecafc4df433031a063dd7b395a050960cde57c2807031337",
+        "total_bytes": 5071894300
+      },
+      "qwen_reader": {
+        "file_count": 14,
+        "manifest_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct/.snapshot_manifest.json",
+        "manifest_sha256": "159a504daaae6dc412535978f087150a0eb8e50164afd70a8a17f83906f1127c",
+        "model_dir": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+        "passed": true,
+        "repo_id": "Qwen/Qwen3-VL-4B-Instruct",
+        "revision": "ebb281ec70b05090aa6165b016eac8ec08e71b17",
+        "snapshot_payload_sha256": "45be3ffb00017b02bffa79f4f8e6f301760ac50c0bb78b2c4e5a7fe8aa3d52c6",
+        "total_bytes": 8887292732
+      }
+    }
+  }
+}

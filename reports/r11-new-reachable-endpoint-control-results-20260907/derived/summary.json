@@ -1,0 +1,184 @@
+{
+  "archive": {
+    "path": "raw/r11-new-reachable-986a181-20260907-round01.tar.gz",
+    "sha256": "41741aaf7e85022d4a1440a7a0b07ed580151201fec01e10db82205427dc74fb"
+  },
+  "checkpoint_geometry": [
+    {
+      "displacement_cosine_to_teacher_direction": null,
+      "endpoint_mse": 0.024401027709245682,
+      "optimizer_step": 0,
+      "x_T_mse_from_source": 0.0,
+      "x_T_mse_to_teacher": 0.9999999403953552
+    },
+    {
+      "displacement_cosine_to_teacher_direction": 0.12217843569079456,
+      "endpoint_mse": 0.01987309381365776,
+      "optimizer_step": 64,
+      "x_T_mse_from_source": 0.10569016635417938,
+      "x_T_mse_to_teacher": 1.026249647140503
+    },
+    {
+      "displacement_cosine_to_teacher_direction": 0.1261173843871426,
+      "endpoint_mse": 0.01957356557250023,
+      "optimizer_step": 128,
+      "x_T_mse_from_source": 0.13212823867797852,
+      "x_T_mse_to_teacher": 1.0404422283172607
+    },
+    {
+      "displacement_cosine_to_teacher_direction": 0.12019040114008242,
+      "endpoint_mse": 0.019444312900304794,
+      "optimizer_step": 192,
+      "x_T_mse_from_source": 0.15729016065597534,
+      "x_T_mse_to_teacher": 1.061955451965332
+    },
+    {
+      "displacement_cosine_to_teacher_direction": 0.11861669300882328,
+      "endpoint_mse": 0.019383195787668228,
+      "optimizer_step": 256,
+      "x_T_mse_from_source": 0.16278842091560364,
+      "x_T_mse_to_teacher": 1.0670716762542725
+    }
+  ],
+  "formal": {
+    "counters": {
+      "backward_calls": 256,
+      "full_chain_forward_calls": 263,
+      "optimizer_steps": 256,
+      "reader_forward_calls": 0
+    },
+    "decision": "hold_generator_adaptation_fix_optimizer_or_jacobian",
+    "endpoint_distance": {
+      "l2_distance": 35.64122780068926,
+      "l2_ratio_to_m0": 0.8912686191740743,
+      "mse": 0.019383195787668228,
+      "mse_ratio_to_m0": 0.7943597515244611
+    },
+    "engineering_gate": true,
+    "formal_success": false,
+    "loss_minimum": {
+      "optimizer_step": 245,
+      "value": 0.019364112988114357
+    },
+    "m0_mse": 0.02440102957189083,
+    "phase2_allowed": false,
+    "reachable_control_gate": false,
+    "technical_audit": {
+      "finite_nonzero_gradient_every_step": true,
+      "gradient_clipping_absent": true,
+      "minimum_gradient_nonzero_fraction": 0.9990081787109375,
+      "minimum_gradient_norm": 6.248894807772061e-05,
+      "optimizer_lr_schedule_exact": true,
+      "optimizer_receipts": 256,
+      "optimizer_steps_contiguous": true
+    }
+  },
+  "image_statistics": {
+    "reachable-target.png": {
+      "mean": 0.4288567006587982,
+      "mean_total_variation": 0.00035175186349079013,
+      "sha256": "5bbc021956d4c38f69f34a1d06c5137f768e99082f22b4a6369ebf57ce986b07",
+      "shape": [
+        1024,
+        1024,
+        3
+      ],
+      "std": 0.030355030670762062
+    },
+    "student-step-000.png": {
+      "mean": 0.44814419746398926,
+      "mean_total_variation": 0.00031673844205215573,
+      "sha256": "531a6bdab7a6fb7a72359c36b99a5e2f9685d20c6e33535353b36ec115da5355",
+      "shape": [
+        1024,
+        1024,
+        3
+      ],
+      "std": 0.024583298712968826
+    },
+    "student-step-064.png": {
+      "mean": 0.43089818954467773,
+      "mean_total_variation": 0.00027562794275581837,
+      "sha256": "fa8a64fe802a63f68043d5f79c4062c5fef2ab5dadbf7d00d51412c46959f363",
+      "shape": [
+        1024,
+        1024,
+        3
+      ],
+      "std": 0.02731194533407688
+    },
+    "student-step-128.png": {
+      "mean": 0.4306294023990631,
+      "mean_total_variation": 0.000288041599560529,
+      "sha256": "66017ac399001b6fdb3bbfd6044bfaa1b3e36dea78c80cddce5f54f42fcb025e",
+      "shape": [
+        1024,
+        1024,
+        3
+      ],
+      "std": 0.027468102052807808
+    },
+    "student-step-192.png": {
+      "mean": 0.43050360679626465,
+      "mean_total_variation": 0.000290177296847105,
+      "sha256": "48d5d66c32953005f62c46a202babce60390d7d57a0e8bce1aaebfb93106d128",
+      "shape": [
+        1024,
+        1024,
+        3
+      ],
+      "std": 0.027491295710206032
+    },
+    "student-step-256.png": {
+      "mean": 0.4304913580417633,
+      "mean_total_variation": 0.00029474194161593914,
+      "sha256": "04f47e34acecf373b57213023ac649c3fd773ad60d6ae70d7a5fdc8f3cddef87",
+      "shape": [
+        1024,
+        1024,
+        3
+      ],
+      "std": 0.02749727852642536
+    }
+  },
+  "inventories": {
+    "formal": {
+      "artifact_count": 29,
+      "passed": true
+    },
+    "preflight": {
+      "artifact_count": 20,
+      "passed": true
+    }
+  },
+  "preflight": {
+    "counters": {
+      "backward_calls": 1,
+      "full_chain_forward_calls": 4,
+      "optimizer_steps": 0,
+      "reader_forward_calls": 0
+    },
+    "engineering_gate": true,
+    "gradient_probe": {
+      "gradient_nonzero_fraction": 0.9996795654296875,
+      "gradient_norm": 0.00357502420416338,
+      "loss": 0.02440102957189083
+    },
+    "m0_mse": 0.02440102957189083,
+    "preflight_gate": true
+  },
+  "schema": "vision_memory.r11-new-reachable-control-derived-summary.v1",
+  "target_construction_verification": {
+    "interpretation": "Exact seed replay is only an asserted gate under the recorded runtime family; cross-runtime mismatch is reported, never relabeled as exact reproducibility.",
+    "local_platform": "Windows-11-10.0.26200-SP0",
+    "local_runtime_matches_training": false,
+    "local_seed_replay_bitwise_equal": false,
+    "local_seed_replay_max_abs_delta": 2.384185791015625e-07,
+    "local_torch": "2.11.0+cpu",
+    "stored_formula_bitwise_equal": true,
+    "stored_noise_population_rms": 0.9999999998449272,
+    "stored_noise_sha256": "a320afe2438b0ee725de4702b7d7bd7a213c08ad306ea05eef699b292f7b4377",
+    "training_platform": "Linux-5.15.0-119-generic-x86_64-with-glibc2.39",
+    "training_torch": "2.7.0a0+ecf3bae40a.nv25.2"
+  }
+}
