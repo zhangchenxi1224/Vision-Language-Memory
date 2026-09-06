@@ -1,0 +1,105 @@
+{
+  "best_raw_preupdate_completed_updates": 239,
+  "best_raw_preupdate_mse_ratio": 0.7694581121131623,
+  "best_raw_preupdate_receipt": 240,
+  "endpoint_distance_statistics": {
+    "l2_distance": 79.12696852804042,
+    "l2_distance_ratio_to_m0": 0.8772714966271464,
+    "m0_mse": 0.12413695454597473,
+    "m0_rmse": 0.3523307459560899,
+    "mse": 0.09553645551204681,
+    "mse_ratio_to_m0": 0.7696052787944336,
+    "relative_mse_change": -0.23039472120556637,
+    "rmse": 0.3090897208126579,
+    "teacher_normalized_rmse": 0.47213340783195346,
+    "teacher_population_std": 0.6546660661697388,
+    "tensor_numel": 65536
+  },
+  "formal_success": false,
+  "new_endpoint_mse_ratio": 0.7696052787944336,
+  "parent_endpoint_mse_ratio": 0.8105615501236992,
+  "phase2_allowed": false,
+  "prefix_parity": {
+    "canonical_bytes": 363273,
+    "exact": true,
+    "excluded_field": "elapsed_seconds",
+    "new_sha256": "001a486c946c456ff5e2e424f2b98f702a89aea30f99f49bda8e17c9f1fbea00",
+    "parent_sha256": "001a486c946c456ff5e2e424f2b98f702a89aea30f99f49bda8e17c9f1fbea00",
+    "rows": 128,
+    "schema": "vision_memory.r11-new-bridge-post128-prefix-parity.v1"
+  },
+  "primary_decision": "distance_fail_reader_fail_change_one_solver_factor",
+  "reader": {
+    "m0": {
+      "accuracy": 0.0,
+      "all_four_correct": false,
+      "checkpoint": "m0",
+      "condition": "normal",
+      "mean_ce": 27.92188363320396,
+      "per_view_ce": [
+        24.20834166428495,
+        29.541675199785832,
+        25.333348110896942,
+        32.60416955784812
+      ],
+      "permutations_are_independent_statistical_units": false,
+      "row_count": 4
+    },
+    "new_endpoint": {
+      "accuracy": 0.0,
+      "all_four_correct": false,
+      "checkpoint": "raw_step_256",
+      "condition": "normal",
+      "mean_ce": 25.536474171257463,
+      "per_view_ce": [
+        21.333350138363805,
+        27.208344660626448,
+        22.708360887984735,
+        30.895840998054865
+      ],
+      "permutations_are_independent_statistical_units": false,
+      "row_count": 4
+    },
+    "parent_endpoint": {
+      "accuracy": 0.0,
+      "all_four_correct": false,
+      "checkpoint": "raw_step_256",
+      "condition": "normal",
+      "mean_ce": 26.093762203727927,
+      "per_view_ce": [
+        22.000012535266976,
+        27.12501206332673,
+        23.33335227954049,
+        31.91667193677751
+      ],
+      "permutations_are_independent_statistical_units": false,
+      "row_count": 4
+    },
+    "teacher": {
+      "accuracy": 1.0,
+      "all_four_correct": true,
+      "checkpoint": "canonical_teacher",
+      "condition": "teacher",
+      "mean_ce": 0.00017690610513911291,
+      "per_view_ce": [
+        0.00010211342703511954,
+        0.00012818916408861934,
+        0.00024359093460701864,
+        0.00023373089482569415
+      ],
+      "permutations_are_independent_statistical_units": false,
+      "row_count": 4
+    }
+  },
+  "receipt_count": 256,
+  "schema": "vision_memory.r11-new-bridge-post128-cosine-delivery-diagnostics.v1",
+  "secondary_solver_hypothesis_audit": {
+    "beats_parent_endpoint": true,
+    "eligible": true,
+    "passed": true,
+    "post128_non_rebound": true
+  },
+  "secondary_solver_hypothesis_decision": "distance_fail_reader_fail_secondary_schedule_pass",
+  "source_commit": "16318e005b496a16b7712ad4ff3cea50e2be34fa",
+  "step128_mse_ratio": 0.7737632777116902
+}

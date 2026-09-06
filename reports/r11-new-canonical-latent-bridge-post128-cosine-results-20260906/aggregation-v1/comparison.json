@@ -1,0 +1,183 @@
+{
+  "bridge_diagnostic_gate": false,
+  "bridge_distance_gate": false,
+  "checkpoint_distance_statistics": {
+    "0": {
+      "l2_distance": 90.19667096475901,
+      "l2_distance_ratio_to_m0": 1.0,
+      "m0_mse": 0.12413695454597473,
+      "m0_rmse": 0.3523307459560899,
+      "mse": 0.12413695454597473,
+      "mse_ratio_to_m0": 1.0,
+      "relative_mse_change": 0.0,
+      "rmse": 0.3523307459560899,
+      "teacher_normalized_rmse": 0.5381839141556165,
+      "teacher_population_std": 0.6546660661697388,
+      "tensor_numel": 65536
+    },
+    "128": {
+      "l2_distance": 79.34043292593631,
+      "l2_distance_ratio_to_m0": 0.8796381515780736,
+      "m0_mse": 0.12413695454597473,
+      "m0_rmse": 0.3523307459560899,
+      "mse": 0.0960526168346405,
+      "mse_ratio_to_m0": 0.7737632777116902,
+      "relative_mse_change": -0.22623672228830982,
+      "rmse": 0.3099235661169387,
+      "teacher_normalized_rmse": 0.4734071034568992,
+      "teacher_population_std": 0.6546660661697388,
+      "tensor_numel": 65536
+    },
+    "192": {
+      "l2_distance": 79.2247840404125,
+      "l2_distance_ratio_to_m0": 0.8783559658356641,
+      "m0_mse": 0.12413695454597473,
+      "m0_rmse": 0.3523307459560899,
+      "mse": 0.09577280282974243,
+      "mse_ratio_to_m0": 0.7715092027191025,
+      "relative_mse_change": -0.2284907972808975,
+      "rmse": 0.30947181265786133,
+      "teacher_normalized_rmse": 0.4727170517153747,
+      "teacher_population_std": 0.6546660661697388,
+      "tensor_numel": 65536
+    },
+    "256": {
+      "l2_distance": 79.12696852804042,
+      "l2_distance_ratio_to_m0": 0.8772714966271464,
+      "m0_mse": 0.12413695454597473,
+      "m0_rmse": 0.3523307459560899,
+      "mse": 0.09553645551204681,
+      "mse_ratio_to_m0": 0.7696052787944336,
+      "relative_mse_change": -0.23039472120556637,
+      "rmse": 0.3090897208126579,
+      "teacher_normalized_rmse": 0.47213340783195346,
+      "teacher_population_std": 0.6546660661697388,
+      "tensor_numel": 65536
+    },
+    "64": {
+      "l2_distance": 80.55741171382836,
+      "l2_distance_ratio_to_m0": 0.8931306538497764,
+      "m0_mse": 0.12413695454597473,
+      "m0_rmse": 0.3523307459560899,
+      "mse": 0.09902185946702957,
+      "mse_ratio_to_m0": 0.7976823648461292,
+      "relative_mse_change": -0.2023176351538708,
+      "rmse": 0.314677389507142,
+      "teacher_normalized_rmse": 0.48066855114123774,
+      "teacher_population_std": 0.6546660661697388,
+      "tensor_numel": 65536
+    }
+  },
+  "decision": "distance_fail_reader_fail_change_one_solver_factor",
+  "endpoint_distance_statistics": {
+    "l2_distance": 79.12696852804042,
+    "l2_distance_ratio_to_m0": 0.8772714966271464,
+    "m0_mse": 0.12413695454597473,
+    "m0_rmse": 0.3523307459560899,
+    "mse": 0.09553645551204681,
+    "mse_ratio_to_m0": 0.7696052787944336,
+    "relative_mse_change": -0.23039472120556637,
+    "rmse": 0.3090897208126579,
+    "teacher_normalized_rmse": 0.47213340783195346,
+    "teacher_population_std": 0.6546660661697388,
+    "tensor_numel": 65536
+  },
+  "endpoint_reader_statistics": {
+    "accuracy": 0.0,
+    "all_four_correct": false,
+    "checkpoint": "raw_step_256",
+    "condition": "normal",
+    "mean_ce": 25.536474171257463,
+    "per_view_ce": [
+      21.333350138363805,
+      27.208344660626448,
+      22.708360887984735,
+      30.895840998054865
+    ],
+    "permutations_are_independent_statistical_units": false,
+    "row_count": 4
+  },
+  "endpoint_reader_transfer_gate": false,
+  "endpoint_reset_statistics": {
+    "accuracy": 0.0,
+    "all_four_correct": false,
+    "checkpoint": "raw_step_256",
+    "condition": "reset",
+    "mean_ce": 27.697927217990824,
+    "per_view_ce": [
+      24.37500533794217,
+      29.208341387042786,
+      25.541688817176173,
+      31.66667332980217
+    ],
+    "permutations_are_independent_statistical_units": false,
+    "row_count": 4
+  },
+  "engineering_gate": true,
+  "formal_success": false,
+  "git_commit": "16318e005b496a16b7712ad4ff3cea50e2be34fa",
+  "interpretation": "diagnostic_only",
+  "m0_reader_statistics": {
+    "accuracy": 0.0,
+    "all_four_correct": false,
+    "checkpoint": "m0",
+    "condition": "normal",
+    "mean_ce": 27.92188363320396,
+    "per_view_ce": [
+      24.20834166428495,
+      29.541675199785832,
+      25.333348110896942,
+      32.60416955784812
+    ],
+    "permutations_are_independent_statistical_units": false,
+    "row_count": 4
+  },
+  "m0_reset_statistics": {
+    "accuracy": 0.0,
+    "all_four_correct": false,
+    "checkpoint": "m0",
+    "condition": "reset",
+    "mean_ce": 27.697927217990824,
+    "per_view_ce": [
+      24.37500533794217,
+      29.208341387042786,
+      25.541688817176173,
+      31.66667332980217
+    ],
+    "permutations_are_independent_statistical_units": false,
+    "row_count": 4
+  },
+  "optimizer_steps": 256,
+  "phase2_allowed": false,
+  "primary_endpoint": "raw_step_256",
+  "protocol": "R11-New-Canonical-Latent-Bridge-Post128-Cosine-Target01",
+  "raw_artifacts_sha256": "143de73292240812e148aed0acefe936d4de01e6d7eb1b83c7fef05b629d8e49",
+  "schema": "vision_memory.r11-new-canonical-latent-bridge-comparison.v1",
+  "scientific_success_claim": false,
+  "secondary_solver_hypothesis_audit": {
+    "beats_parent_endpoint": true,
+    "eligible": true,
+    "passed": true,
+    "post128_non_rebound": true
+  },
+  "secondary_solver_hypothesis_decision": "distance_fail_reader_fail_secondary_schedule_pass",
+  "status": "completed",
+  "target_index": 1,
+  "target_segment_id": "r5-f1-392d41fd097d069c42218e0a",
+  "teacher_replay_gate": true,
+  "teacher_replay_statistics": {
+    "accuracy": 1.0,
+    "all_four_correct": true,
+    "checkpoint": "canonical_teacher",
+    "condition": "teacher",
+    "mean_ce": 0.00017690610513911291,
+    "per_view_ce": [
+      0.00010211342703511954,
+      0.00012818916408861934,
+      0.00024359093460701864,
+      0.00023373089482569415
+    ],
+    "permutations_are_independent_statistical_units": false,
+    "row_count": 4
+  }
+}

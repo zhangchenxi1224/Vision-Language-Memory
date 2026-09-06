@@ -1,0 +1,97 @@
+{
+  "aggregate_result": {
+    "bridge_diagnostic_gate": false,
+    "bridge_distance_gate": false,
+    "decision": "distance_fail_reader_fail_change_one_solver_factor",
+    "endpoint_reader_transfer_gate": false,
+    "engineering_gate": true,
+    "formal_success": false,
+    "phase2_allowed": false,
+    "secondary_solver_hypothesis_decision": "distance_fail_reader_fail_secondary_schedule_pass",
+    "teacher_replay_gate": true
+  },
+  "archives": {
+    "aggregation-v1.tar.gz": {
+      "bytes": 31125,
+      "entries": 6,
+      "sha256": "c10222d09804ea5d3322937160eb6037ce0b6a3bda7771d0f143fabe8be26cd9"
+    },
+    "formal-target01.tar.gz": {
+      "bytes": 13856599,
+      "entries": 45,
+      "sha256": "0f8ff790a06d5da2275525cab6e8335d0b1679fa7f5d789ba1e2783a8117afc2"
+    },
+    "technical-preflight.tar.gz": {
+      "bytes": 5512436,
+      "entries": 30,
+      "sha256": "e30bd6f58b025b8af4dd58a14d012a41bacd8896e789a6f3a2d2e7a4c9fc2c7a"
+    }
+  },
+  "generated_artifacts": {
+    "ARCHIVE_SHA256SUMS.txt": {
+      "bytes": 306,
+      "sha256": "2783c6f1c2e08cb40f8f34b5b779971e409ccd75c70a6f7238ac334191bc19c1"
+    },
+    "checkpoint_image_montage.png": {
+      "bytes": 485953,
+      "sha256": "f43c99db80aac5f23d7302931b34fa570eff3eb9b8587582daea57e911417944"
+    },
+    "distance_trajectory_comparison.png": {
+      "bytes": 68615,
+      "sha256": "0adbde4f4e5303580d72e793432e5877ff5d9a193429f612b9f170ab7d9ca5b2"
+    },
+    "optimizer_schedule_diagnostics.png": {
+      "bytes": 138829,
+      "sha256": "a4c05ba00832d28d0e89ff017f840c095fc10c4e1e6ffdbdaebaca170b52556d"
+    },
+    "prefix_parity.json": {
+      "bytes": 343,
+      "sha256": "e6dc86b1746fd6c29c58efec604b4ea4e313623c2ce98499bdbae6130ae6af92"
+    },
+    "reader_transfer_summary.png": {
+      "bytes": 57902,
+      "sha256": "0216a30fdc0924ed9bb02bc585fa0030939c3476bc5dde5ab80f84f40dbeeb44"
+    },
+    "render_environment.txt": {
+      "bytes": 230,
+      "sha256": "314ae50d640af80924e52a5cc0bc5818f606a684d3602fe2bd6b217965ee2cfe"
+    },
+    "training_diagnostics.json": {
+      "bytes": 3367,
+      "sha256": "31a4ab461f249bddcb884edcaf1e0173c474a26cea72f2851ee6801dc6285943"
+    }
+  },
+  "generator": {
+    "path": "scripts/experiments/render_r11_new_canonical_latent_bridge_post128_cosine_delivery.py",
+    "sha256": "7325f4283a648a51eef2e9b4aa302282078151dc534b754484c69464d9927416"
+  },
+  "official_aggregation": {
+    "RAW_ARTIFACTS.json": {
+      "bytes": 21932,
+      "sha256": "143de73292240812e148aed0acefe936d4de01e6d7eb1b83c7fef05b629d8e49"
+    },
+    "REPORT.md": {
+      "bytes": 925,
+      "sha256": "132404ad8746af955c8b888b45e4db818247ce75a41a8314891c259a9d17a192"
+    },
+    "artifact_inventory.json": {
+      "bytes": 739,
+      "sha256": "17075b1ec7c3fd1358379d12f2ed03ff617c715109e5cb944d6b2a4a3a33b6f5"
+    },
+    "comparison.json": {
+      "bytes": 5954,
+      "sha256": "00aff581a78b988658fc868158131e5a61d441fcf90e639e2c268284b1f3adfe"
+    },
+    "distance_trajectory.csv": {
+      "bytes": 50456,
+      "sha256": "f168341ea02b5e572eb5f951f34ccdb0cc7e2216df54759faa825206daa2bfd9"
+    }
+  },
+  "report_document": {
+    "bytes": 4055,
+    "sha256": "ff7414e8fbd4d7380d16dbef880ce0acbee93117677030fcf958aa8a41769629"
+  },
+  "schema": "vision_memory.r11-new-bridge-post128-cosine-delivery-manifest.v1",
+  "scientific_source": "independently recomputed raw artifacts",
+  "training_source_commit": "16318e005b496a16b7712ad4ff3cea50e2be34fa"
+}
