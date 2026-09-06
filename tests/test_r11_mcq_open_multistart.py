@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import copy
+import hashlib
 import json
 from pathlib import Path
 import random
@@ -40,6 +41,38 @@ class MultistartTest(unittest.TestCase):
         self.assertTrue(torch.equal(right, item["latent_fp32"]))
         repeated = pilot.make_initial_latent(reference, seed=3, rho=0.1)
         self.assertTrue(torch.equal(right, repeated["latent_fp32"]))
+
+    def test_preregistration_accepts_lf_transport_of_crlf_bytes_and_rejects_content_changes(self):
+        crlf = b'{\r\n  "query": "What color?",\r\n  "steps": 256\r\n}\r\n'
+        expected = hashlib.sha256(crlf).hexdigest()
+        with TemporaryDirectory() as directory:
+            path = Path(directory) / "config.json"
+            path.write_bytes(crlf)
+            binding = pilot.preregistered_config_binding(path, expected)
+            self.assertEqual(binding["matched_line_ending_form"], "raw")
+            lf = crlf.replace(b"\r\n", b"\n")
+            path.write_bytes(lf)
+            binding = pilot.preregistered_config_binding(path, expected)
+            self.assertEqual(binding["matched_line_ending_form"], "lf_to_crlf")
+            self.assertEqual(binding["raw_sha256"], hashlib.sha256(lf).hexdigest())
+            self.assertEqual(binding["preregistered_sha256"], expected)
+            for changed in (lf.replace(b"256", b"255"), lf.replace(b"color", b"colour"),
+                            lf.replace(b'  "steps"', b' "steps"'), lf[:-1]):
+                with self.subTest(changed=changed):
+                    path.write_bytes(changed)
+                    with self.assertRaisesRegex(ValueError, "preregistration"):
+                        pilot.preregistered_config_binding(path, expected)
+            path.write_bytes(lf)
+            summary_path = Path(directory) / "summary.json"
+            summary_path.write_text(json.dumps({"technical_passed": True, "complete_records": True,
+                                               "snapshots_unchanged": True, "all_images_exactly_reproduced": True}))
+            summary_path.with_name("terminal.json").write_text(json.dumps({"status": "completed",
+                                                                          "technical_passed": True}))
+            # Preregistration's CRLF hash may match normalized bytes, but the actual
+            # replay manifest must still bind the exact LF bytes used in that run.
+            summary_path.with_name("manifest.json").write_text(json.dumps({"config_sha256": expected}))
+            with self.assertRaisesRegex(ValueError, "actual configuration source bytes"):
+                pilot.verify_replay_gate(summary_path, path, {"activation": {"stage1_config_sha256": expected}})
 
     def test_noise_direction_rms_and_radius_follow_fp64_preregistration(self):
         reference = torch.linspace(-2, 3, 1024).reshape(1, 4, 16, 16)

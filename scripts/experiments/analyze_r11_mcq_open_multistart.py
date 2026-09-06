@@ -44,7 +44,7 @@ def analyze(source: Path, destination: Path):
     write_csv(destination / "answers.csv", [{key: row[key] for key in
         ("run_id", "init_id", "arm", "condition", "prompt_id", "raw", "truncated")}
         | {"strict_correct": row["scorer"]["strict_correct"]} for row in generations])
-    curves, dispersion, pair_ratios, ending = {}, [], [], {}
+    curves, dispersion, pair_ratios, per_seed, ending = {}, [], [], [], {}
     for arm in ("mcq", "open"):
         curves[arm] = read_rows(source / f"geometry_{arm}.jsonl")
         if [row["optimizer_step"] for row in curves[arm]] != list(range(257)):
@@ -58,6 +58,12 @@ def analyze(source: Path, destination: Path):
                 "own_delta_cosine": row["delta_own_start"]["mean_pairwise_cosine"],
                 "reference_delta_cosine": row["delta_shared_reference"]["mean_pairwise_cosine"]})
             current = np.asarray(raw["rmse_matrix"])
+            for item in row["per_seed"]:
+                per_seed.append({"arm": arm, "step": row["optimizer_step"], "init_id": item["init_id"],
+                    "latent_rms": item["latent_rms"], "latent_l2": item["latent_rms"] * 256,
+                    **{f"{relation}_{metric}": value for relation in
+                       ("to_reference", "to_own_start", "to_same_arm_blank")
+                       for metric, value in item[relation].items()}})
             for i in range(8):
                 for j in range(i + 1, 8):
                     pair_ratios.append({"arm": arm, "step": row["optimizer_step"],
@@ -81,6 +87,7 @@ def analyze(source: Path, destination: Path):
             "last_four_update_rms_min_max": [min(four_last), max(four_last)]}
     write_csv(destination / "dispersion.csv", dispersion)
     write_csv(destination / "pair_distance_ratios.csv", pair_ratios)
+    write_csv(destination / "per_seed_geometry.csv", per_seed)
     probe_table = []
     for arm in ("mcq", "open"):
         for seed in range(8):

@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 from contextlib import contextmanager
 from datetime import datetime, timezone
+import hashlib
 import json
 import math
 from pathlib import Path
@@ -97,6 +98,26 @@ def load_config(path: Path, replay_config: Mapping[str, Any]) -> dict[str, Any]:
     return config
 
 
+def preregistered_config_binding(path: Path, expected_sha256: str) -> dict[str, Any]:
+    """Accept exact preregistered bytes or LF-to-CRLF transport normalization only.
+
+    The actual source-byte hash remains separate and is used for the replay manifest
+    check. No JSON parsing, whitespace trimming or substantive text normalization is
+    allowed to make a preregistration hash match.
+    """
+    raw = path.read_bytes()
+    raw_sha256 = hashlib.sha256(raw).hexdigest()
+    crlf_bytes = raw.replace(b"\r\n", b"\n").replace(b"\n", b"\r\n")
+    if expected_sha256 == raw_sha256:
+        matched_form = "raw"
+    elif expected_sha256 == hashlib.sha256(crlf_bytes).hexdigest():
+        matched_form = "lf_to_crlf"
+    else:
+        raise ValueError("Prerequisite replay configuration hash does not match preregistration or LF-to-CRLF bytes.")
+    return {"raw_sha256": raw_sha256, "preregistered_sha256": expected_sha256,
+            "matched_line_ending_form": matched_form}
+
+
 def verify_replay_gate(summary_path: Path, replay_path: Path, config: Mapping[str, Any]) -> dict[str, Any]:
     summary = json.loads(summary_path.read_text(encoding="utf-8"))
     terminal = json.loads(summary_path.with_name("terminal.json").read_text(encoding="utf-8"))
@@ -105,10 +126,10 @@ def verify_replay_gate(summary_path: Path, replay_path: Path, config: Mapping[st
             or summary.get("snapshots_unchanged") is not True or not summary.get("all_images_exactly_reproduced")
             or terminal.get("status") != "completed" or terminal.get("technical_passed") is not True):
         raise ValueError("Prerequisite replay did not complete its technical gate.")
-    replay_hash = replay.sha256_file(replay_path)
-    if (config["activation"]["stage1_config_sha256"] != replay_hash
-            or manifest["config_sha256"] != replay_hash):
-        raise ValueError("Prerequisite replay configuration hash does not match preregistration.")
+    config_binding = preregistered_config_binding(replay_path, config["activation"]["stage1_config_sha256"])
+    replay_hash = config_binding["raw_sha256"]
+    if manifest["config_sha256"] != replay_hash:
+        raise ValueError("Prerequisite replay manifest hash does not match actual configuration source bytes.")
     def read_rows(name):
         return [json.loads(line) for line in summary_path.with_name(name).read_text(
             encoding="utf-8").splitlines() if line.strip()]
@@ -118,6 +139,7 @@ def verify_replay_gate(summary_path: Path, replay_path: Path, config: Mapping[st
         raise ValueError("All 32 old MCQ anchor views must reproduce before optimization.")
     return {"summary_path": str(summary_path.resolve()), "summary_sha256": replay.sha256_file(summary_path),
             "replay_config_sha256": replay_hash, "technical_passed": True,
+            "config_line_ending_binding": config_binding,
             "model_snapshot_payloads": manifest["model_snapshot_payloads_start"]}
 
 
