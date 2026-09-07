@@ -1,0 +1,256 @@
+{
+  "schema": "vision_memory.r11-new-fp32-prpplus-trust-region-config.v1",
+  "protocol": "R11-New-FP32-PRPPlus-Trust-Region-Target01",
+  "experiment_variant": "prpplus_matched_horizon128",
+  "status": "preregistered_after_delivered_horizon128_strong_capture_before_any_prpplus_dreamlite_forward",
+  "research_question": "Does a deterministic PRP+ nonlinear conjugate direction overcome the matched-budget first-order long tail and reach the unchanged fixed-target loss-ratio threshold within 128 updates?",
+  "causal_role": "Change only the search direction after the first update while holding target, plateau, model, FP32 map, loss, candidate radii, candidate selection, acceptance, horizon, stopping threshold, and evaluation boundaries fixed.",
+  "parent_horizon_result": {
+    "training_commit": "8efeabc1ab548700569bb6110bcacc2e78dba65d",
+    "delivery_commit": "88dddced0656cdc57d29bb9d10907de708cad76c",
+    "source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/r11-new-trust-h128-8efeabc-20260907-round01-formal",
+    "source_archive_path": "/inspire/ssd/project/exploration-topic/czxs26210936/r11-new-trust-h128-8efeabc-20260907-round01.tar.gz",
+    "source_delivery_root": "reports/r11-new-fp32-trust-region-horizon128-results-20260907/formal",
+    "source_archive_sha256": "d907382f050eb7e5a452fe8632f079c746f2d6cd1f9519a667c95dae9e740483",
+    "source_result_sha256": "aa8a0f3c54a730146d00b2444e0acbacabdc930d007ed3876a8a98d83871a6a3",
+    "source_manifest_sha256": "dd0c554b4c862203e53a9b1293fb152c55bbeca1afd0f91a68bd1bfdb8274674",
+    "source_terminal_sha256": "dc92b5ced8f15dde09b1e2e6df0bc5085e164d094ed8a1d9fdfbbdefcb6da361",
+    "source_inventory_sha256": "ef041702b1067898a531da98a5bd81661829747529e5d8ea4c249c4da2012ea5",
+    "source_iteration_metrics_sha256": "f86732d5918a02771b443748babcffae31b3a39261ecc20a846e8c5b72dc89e9",
+    "source_candidate_metrics_sha256": "e304124dc565168fe9a73091b78f2e6f49d569eb4ff1ef48b4f340d991f24c45",
+    "source_tensor_bundle_sha256": "3acebb284de3fbcd526afff01f222584870c747db84d4e052206904fd754f561",
+    "source_final_checkpoint_sha256": "52a9782d017e0e96b85c18917326da6ed16b09011e7d9b96415350500151ab97",
+    "source_external_prefix_audit_sha256": "8cd3f71f329448f46c97a875d1247086e310dc1660124c28a235ce9e95f5941d",
+    "classification": "strong_capture_reached_only",
+    "iteration_count": 128,
+    "accepted_update_count": 128,
+    "final_loss_ratio_to_plateau": 0.05279660988009456,
+    "final_x_T_fp32_sha256": "77e9c2ada335cab9279589c805e8a6e5f057da8edaaef8c7f090de496698d296",
+    "final_endpoint_fp32_sha256": "c2f956b5478fb6f0b1e1f432fa5b6d6e1e47de5e46566b5abd1e4380a21d240d",
+    "stop_reason": "maximum_iterations",
+    "formal_success": false,
+    "phase2_allowed": false
+  },
+  "parent_precision_result": {
+    "training_commit": "27530943dba93d457e0ba0560201cd58dd81ca4b",
+    "delivery_commit": "0653269d4941d005e1b999831a6faae67d192730",
+    "source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-precision-2753094-20260907-round01-formal",
+    "source_archive_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-precision-2753094-20260907-round01.tar.gz",
+    "source_result_sha256": "165d25177bd6a517f305b1fad9dac5ff3655febfa91a6ea5f72b4dca4401f406",
+    "source_manifest_sha256": "b823089eafd6562f7e3e2d72e605b5bdcfa832f0752344ea9c27dc70c7e0caf3",
+    "source_terminal_sha256": "ce3188d23620e7505e90e76646d06dbcb3f249271a641ba0f722550a8ddb7973",
+    "source_inventory_sha256": "7be7b1d219d3f91c5c85ef8428013d94692a185720ecd365cc6f67ea03de5673",
+    "source_gradient_metrics_sha256": "f94a1e7c4e5f126f65998b45fd030f92158bad730001ce7dfa21b91531f09043",
+    "source_archive_sha256": "b4a34fa3e9d3d7f40949b4b6534978e00e552f1baaf2903554dc5ee112def659",
+    "classification": "fp32_restores_capture_and_gradient",
+    "formal_success": false,
+    "phase2_allowed": false,
+    "fp32_capture_width": 0.05,
+    "fp32_to_bf16_capture_widening_factor": 1666.6666666666667,
+    "fp32_gradient_actionable": true
+  },
+  "base_precision_contract": {
+    "config_path": "configs/experiments/r11_new_activation_precision_control_target01.json",
+    "config_byte_sha256": "6fc1caf6e9760c295b25582a804584d6fa326137d48d1b6fcbd6e4146cf89cc5",
+    "config_canonical_sha256": "7d11a0f1bcc2b96bc71ba500410b9a60a092a84204584078558f98451f31c1c3",
+    "reuse_exact_data_models_snapshots_environment_and_deployment": true,
+    "reuse_exact_parent_target_and_plateau": true,
+    "reuse_same_in_memory_bf16_to_fp32_lift": true
+  },
+  "fixed_fp32_anchor": {
+    "teacher_endpoint_fp32_sha256": "73115a188b098f761af77f9df5cde804b0f4665b6914fc5fcc0cdd5ba740e951",
+    "plateau_endpoint_fp32_sha256": "d63e3e481b852f5c71faab4461ebd54610f26705f7d4d458d1f397bc1ddab451",
+    "plateau_mse": 0.000017977445168071426,
+    "gradient_fp32_sha256": "c40db44b55a98ad40ec894b8ad0d91ae0fa48ef158c8338c2fa24e87c20e57ec",
+    "negative_gradient_direction_fp32_sha256": "23bb1ae01455b36dc28d6e00ca6acc195e2d84542932bbb0591ee2fae7a22e9b",
+    "gradient_norm": 0.00025156916969025126,
+    "gradient_nonzero_fraction": 1.0,
+    "overlap_candidate_controls": [
+      {
+        "radius_l2": 0.1,
+        "x_T_fp32_sha256": "a63ca77623e2ee2c0c76b98f53bef2dbf42dd14693e37b52da26640fde608f3c",
+        "endpoint_fp32_sha256": "921ff3ef5af83fc9c0410cceac089c5e2275200c8b8a95abfb61691cf62b3371",
+        "loss_ratio_to_plateau": 0.8152169766791239
+      },
+      {
+        "radius_l2": 0.01,
+        "x_T_fp32_sha256": "dcf9614dacd8bda48c6aceca272b363f230e9a4f631d691f9894dc3bb3a4e89f",
+        "endpoint_fp32_sha256": "707b62464cda7f4290c9b955b0645b0d44259ebc21e4ee533f9a2404b25cf6ac",
+        "loss_ratio_to_plateau": 0.8698530486820824
+      },
+      {
+        "radius_l2": 0.001,
+        "x_T_fp32_sha256": "bc0be895ab5bc19d5933607d853621728787669cae93f888a119d09ac191bcba",
+        "endpoint_fp32_sha256": "ccfb57a2ec766e0b6e0bd7dcfb05cc1d47ffdcf7cd6ae4fbd21e0c2073ae0fae",
+        "loss_ratio_to_plateau": 0.9861155364074711
+      }
+    ]
+  },
+  "parent_first_step_control": {
+    "current_loss": 0.000017977445168071426,
+    "current_x_T_fp32_sha256": "0d9cda8b23bb8e29dc5dda90bad9acf1dfcb7f32e74e91202736b9046b115608",
+    "current_endpoint_fp32_sha256": "d63e3e481b852f5c71faab4461ebd54610f26705f7d4d458d1f397bc1ddab451",
+    "gradient_fp32_sha256": "c40db44b55a98ad40ec894b8ad0d91ae0fa48ef158c8338c2fa24e87c20e57ec",
+    "direction_fp32_sha256": "23bb1ae01455b36dc28d6e00ca6acc195e2d84542932bbb0591ee2fae7a22e9b",
+    "selected_radius_index": 1,
+    "selected_radius_l2": 0.03,
+    "selected_loss": 0.000012357087143755052,
+    "selected_loss_ratio_to_plateau": 0.6873661428655987,
+    "selected_x_T_fp32_sha256": "f118e8b0ae1c87e2700f6efb8b74f894ee2d6fb477e2fd9ffb1c909696a28bea",
+    "selected_endpoint_fp32_sha256": "533a9e58ae7ad2f53a86a436d990ca07aad5cb1f71130f7c86b9c483c581044f",
+    "candidates": [
+      {
+        "radius_l2": 0.1,
+        "candidate_x_T_fp32_sha256": "a63ca77623e2ee2c0c76b98f53bef2dbf42dd14693e37b52da26640fde608f3c",
+        "endpoint_fp32_sha256": "921ff3ef5af83fc9c0410cceac089c5e2275200c8b8a95abfb61691cf62b3371",
+        "loss": 0.000014655518498329911,
+        "loss_ratio_to_plateau": 0.8152169766791239
+      },
+      {
+        "radius_l2": 0.03,
+        "candidate_x_T_fp32_sha256": "f118e8b0ae1c87e2700f6efb8b74f894ee2d6fb477e2fd9ffb1c909696a28bea",
+        "endpoint_fp32_sha256": "533a9e58ae7ad2f53a86a436d990ca07aad5cb1f71130f7c86b9c483c581044f",
+        "loss": 0.000012357087143755052,
+        "loss_ratio_to_plateau": 0.6873661428655987
+      },
+      {
+        "radius_l2": 0.01,
+        "candidate_x_T_fp32_sha256": "dcf9614dacd8bda48c6aceca272b363f230e9a4f631d691f9894dc3bb3a4e89f",
+        "endpoint_fp32_sha256": "707b62464cda7f4290c9b955b0645b0d44259ebc21e4ee533f9a2404b25cf6ac",
+        "loss": 0.0000156377354869619,
+        "loss_ratio_to_plateau": 0.8698530486820824
+      },
+      {
+        "radius_l2": 0.003,
+        "candidate_x_T_fp32_sha256": "9811125dae12315f00f7eaec9c0f79a949b25c4e9b522855fa081131b62390f0",
+        "endpoint_fp32_sha256": "fda80e028c1058d4f00f08bde0d14678b4a303bcbb60aed58eacc2b6ae4c3274",
+        "loss": 0.000017237547581316903,
+        "loss_ratio_to_plateau": 0.9588430068990778
+      },
+      {
+        "radius_l2": 0.001,
+        "candidate_x_T_fp32_sha256": "bc0be895ab5bc19d5933607d853621728787669cae93f888a119d09ac191bcba",
+        "endpoint_fp32_sha256": "ccfb57a2ec766e0b6e0bd7dcfb05cc1d47ffdcf7cd6ae4fbd21e0c2073ae0fae",
+        "loss": 0.000017727837985148653,
+        "loss_ratio_to_plateau": 0.9861155364074711
+      }
+    ]
+  },
+  "algorithm": {
+    "parameterization": "student_x_T_fp32 = fixed_plateau_x_T_fp32 + residual_delta_fp32",
+    "initial_residual_delta": 0.0,
+    "trainable_values": [
+      "residual_delta_fp32"
+    ],
+    "frozen_values": [
+      "DreamLite UNet",
+      "DreamLite VAE",
+      "text encoder",
+      "Reader",
+      "source latents",
+      "prompt embeddings",
+      "scheduler",
+      "teacher endpoint"
+    ],
+    "loss": "mean((DreamLite_fp32(student_x_T)-fixed_fp32_teacher_endpoint)^2)",
+    "direction_method": "Polak-Ribiere-Polyak plus nonlinear conjugate gradient",
+    "initial_raw_direction": "p_0 = -g_0",
+    "gradient_difference": "y_k = g_k - g_(k-1)",
+    "beta_raw": "dot(g_k,y_k)/dot(g_(k-1),g_(k-1)) computed in float64",
+    "beta": "max(0,beta_raw) with no epsilon or upper cap",
+    "raw_recurrence": "p_k = -g_k + beta_k*p_(k-1)",
+    "descent_restart": "if p_k is nonfinite or dot(g_k,p_k)>=0, set beta_k=0 and p_k=-g_k",
+    "candidate_direction": "unit_l2_normalize(p_k) in float32",
+    "gradient_nonzero_fraction_gte": 0.99,
+    "candidate_radii_l2_in_fixed_order": [
+      0.1,
+      0.03,
+      0.01,
+      0.003,
+      0.001
+    ],
+    "candidate_formula": "plateau_x_T + (current_residual_delta + radius * candidate_direction)",
+    "evaluate_all_candidates_every_iteration": true,
+    "selection": "candidate with minimum endpoint loss; ties choose smaller radius",
+    "minimum_relative_improvement_to_accept": 0.000001,
+    "maximum_formal_iterations": 128,
+    "technical_preflight_iterations": 1,
+    "stop_after_loss_ratio_lte": 0.01,
+    "stop_if_no_candidate_is_acceptable": true,
+    "no_torch_optimizer": true,
+    "no_gradient_clipping": true,
+    "teacher_x_T_forbidden_from_update_direction_or_candidate_selection": true,
+    "checkpoint_every_accepted_update": true,
+    "final_independent_replay_required": true
+  },
+  "technical_preflight_gate": {
+    "full_chain_forward_calls": 9,
+    "backward_calls": 1,
+    "candidate_forwards": 5,
+    "parameter_updates": 1,
+    "reader_forward_calls": 0,
+    "first_direction_equals_parent_negative_gradient": true,
+    "all_five_first_candidates_match_parent": true,
+    "first_selection_matches_parent": true,
+    "final_replay_bitwise_equal": true,
+    "all_models_frozen": true,
+    "only_student_x_T_trainable": true
+  },
+  "formal_gate": {
+    "maximum_full_chain_forward_calls": 771,
+    "maximum_backward_calls": 128,
+    "maximum_parameter_updates": 128,
+    "reader_forward_calls": 0,
+    "accepted_losses_strictly_monotone": true,
+    "all_conjugate_directions_independently_reconstructed": true,
+    "all_current_endpoint_replays_bitwise_equal": true,
+    "all_candidate_endpoints_tensors_saved_and_hashed": true,
+    "all_gradients_raw_directions_and_unit_directions_saved_and_hashed": true,
+    "final_replay_bitwise_equal": true,
+    "model_snapshot_files_unchanged": true
+  },
+  "parent_first_step_reproduction_gate": {
+    "external_independent_audit_required_before_accepting_classification": true,
+    "parent_result_inventory_terminal_and_archive_hash_bound": true,
+    "gradient_and_direction_tensor_hashes_exact": true,
+    "all_five_candidate_x_endpoint_loss_and_ratio_values_exact": true,
+    "selected_candidate_exact": true
+  },
+  "fixed_target_success_gate": {
+    "final_loss_ratio_to_fp32_plateau_lte": 0.01,
+    "accepted_update_count_gte": 1,
+    "strict_monotonicity": true,
+    "final_replay_bitwise_equal": true,
+    "classification": "fixed_target_trust_region_success"
+  },
+  "matched_budget_gate": {
+    "parent_final_loss_ratio": 0.05279660988009456,
+    "material_relative_improvement_gte": 0.05,
+    "material_final_loss_ratio_lte": 0.05015677938608983,
+    "same_maximum_updates": 128,
+    "same_maximum_full_chain_forward_calls": 771
+  },
+  "decision_table": {
+    "fixed_target_trust_region_success": "Deliver the single-target result, then preregister multi-target and non-oracle writer feasibility; do not call this Picture Memory success.",
+    "prpplus_material_improvement_only": "Conclude conjugate information helps but does not solve fixed-target optimization; inspect the registered trace and preregister one L-BFGS curvature test on the same target.",
+    "prpplus_no_matched_budget_advantage": "Reject PRP+ as the remedy for this long tail and preregister one limited-memory inverse-curvature test on the same target.",
+    "prpplus_stalled": "Reject this conjugate recurrence and preregister one limited-memory inverse-curvature test; do not change target, precision, loss, or success threshold.",
+    "technical_failure": "Repair only the violated binding, recurrence, replay, counter, precision, or inventory contract and rerun in a fresh directory."
+  },
+  "interpretation_boundaries": {
+    "single_changed_scientific_factor": "search direction: normalized negative gradient -> normalized PRP+ nonlinear conjugate direction after the identical first step",
+    "all_other_horizon128_algorithm_fields_fixed": true,
+    "matched_update_and_forward_budget": true,
+    "single_fixed_self_generated_target": true,
+    "teacher_endpoint_is_oracle_supervision": true,
+    "teacher_x_T_used_only_to_generate_the_frozen_target_endpoint": true,
+    "teacher_x_T_not_used_by_optimizer": true,
+    "reader_not_evaluated": true,
+    "no_event_to_state_learning_claim": true,
+    "no_shared_writer_claim": true,
+    "no_id_ood_claim": true,
+    "formal_picture_memory_success_always_false": true,
+    "phase2_always_false": true,
+    "no_post_result_direction_radius_threshold_iteration_or_loss_change": true
+  }
+}
