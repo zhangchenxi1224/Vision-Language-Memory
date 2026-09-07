@@ -1,0 +1,116 @@
+{
+  "anchors": {
+    "alpha099-start": {
+      "anchor_x_T_fp32_sha256": "d602b83f235ae5c0221d4dca5a0fc1369f1d0da238dbf0c8e26a94d2bd829d2c",
+      "baseline_endpoint_fp32_sha256": "4cd8d5fcffe1a8bee4ceb60c3bc91dac447514e461a42b79866968447d922fae",
+      "baseline_mse": 0.00013531206059269607,
+      "checkpoint_sha256": "623f2eea39f94f3ea8666dc3cc22cb6e707f9befe1cddac4304af9a47a5dd9d2",
+      "directions": {
+        "deterministic-orthogonal-control": {
+          "cosine_to_gradient": -2.3401345375367465e-10,
+          "cosine_to_teacher_residual": 1.0539748763789201e-10,
+          "l2_norm": 1.0000000000302358,
+          "tensor_sha256": "da1b10cdb59df812d945e7675d4b81b500ad23116dfa3b96d01d259364782622"
+        },
+        "negative-adam-preconditioned": {
+          "cosine_to_gradient": -0.35422924447166754,
+          "cosine_to_teacher_residual": 0.15187643388770078,
+          "l2_norm": 1.0000000025085947,
+          "tensor_sha256": "20bb037095ba872b78f3b6d467535d2b7ba357b9bd509257c95804a23c4cedcc"
+        },
+        "negative-autograd": {
+          "cosine_to_gradient": -0.9999999999999971,
+          "cosine_to_teacher_residual": 0.09600955689316581,
+          "l2_norm": 0.999999996398253,
+          "tensor_sha256": "d55f5db14fdfce75f0b92f9f02b9b18b2c330935ce98f1711339495333b9f42b"
+        },
+        "teacher-residual": {
+          "cosine_to_gradient": -0.09600955664481646,
+          "cosine_to_teacher_residual": 0.9999999999999907,
+          "l2_norm": 0.9999999993722166,
+          "tensor_sha256": "c7b1bf45eaffd793bfeebbf49717dbbe75ec6581b9c22e92af991a2b4edf234f"
+        }
+      },
+      "gradient_fp32_sha256": "86447007384b812aeed59047214e237a4bc07f99573dfbeffbe29b4d14d019bb",
+      "gradient_nonzero_fraction": 0.99957275390625,
+      "gradient_norm": 0.0006489048621442366,
+      "quantization": {
+        "bf16_equal_fraction_to_teacher": 0.1473388671875,
+        "bf16_l2_to_teacher": 2.638689826477719,
+        "fp32_l2_to_teacher": 2.5599975547525995
+      }
+    },
+    "lr001-raw256": {
+      "anchor_x_T_fp32_sha256": "0d9cda8b23bb8e29dc5dda90bad9acf1dfcb7f32e74e91202736b9046b115608",
+      "baseline_endpoint_fp32_sha256": "c9339962f2870e8768799eceab22c7bc6004e204e68c55ad7da505ff2ba52586",
+      "baseline_mse": 1.6364127077395096e-05,
+      "checkpoint_sha256": "3d166294353511a33b160f8f97a677de1440e7225245a9057d39a182c2563c80",
+      "directions": {
+        "deterministic-orthogonal-control": {
+          "cosine_to_gradient": -2.541574788392538e-10,
+          "cosine_to_teacher_residual": 1.3716751151518714e-11,
+          "l2_norm": 0.9999999999935788,
+          "tensor_sha256": "d521b6d2c2bcbd577e1f8f63bd1811a2c48101e1ed333d4ed943f1951d8eb86e"
+        },
+        "negative-adam-preconditioned": {
+          "cosine_to_gradient": -0.291936265899909,
+          "cosine_to_teacher_residual": 0.007853800053104078,
+          "l2_norm": 0.9999999998193672,
+          "tensor_sha256": "b81663bf734750d4b3682ef7da1737647f1dc3a5249175e84417a790d5d748ba"
+        },
+        "negative-autograd": {
+          "cosine_to_gradient": -0.9999999999999976,
+          "cosine_to_teacher_residual": 0.0014918891408232712,
+          "l2_norm": 1.000000004242634,
+          "tensor_sha256": "c423c2b54d9e256287ed551136d9066e39d13d355ba0419c8aa660cb2a4a6f63"
+        },
+        "teacher-residual": {
+          "cosine_to_gradient": -0.001491889045935808,
+          "cosine_to_teacher_residual": 0.999999999999995,
+          "l2_norm": 1.0000000006632472,
+          "tensor_sha256": "0f558cfcf84a4063990648c1f9c67be073d38433be0a25da437aa80b4cee1e4a"
+        }
+      },
+      "gradient_fp32_sha256": "e1ee3b3af54c1a96c5d5cb2500ff7a28faa3c776d770ac3b1418c5b274310075",
+      "gradient_nonzero_fraction": 0.999603271484375,
+      "gradient_norm": 0.00016583416288125532,
+      "quantization": {
+        "bf16_equal_fraction_to_teacher": 0.240234375,
+        "bf16_l2_to_teacher": 2.1498957330574484,
+        "fp32_l2_to_teacher": 2.0512112034227754
+      }
+    }
+  },
+  "classification": null,
+  "counters": {
+    "backward_calls": 2,
+    "full_chain_forward_calls": 3,
+    "optimizer_steps": 0,
+    "reader_forward_calls": 0
+  },
+  "elapsed_seconds": 34.329826809465885,
+  "engineering_gate": true,
+  "formal_success": false,
+  "git_commit": "8f696faa1176873045c39dcd8fa910db3e9cb558",
+  "mode": "technical-preflight",
+  "models_frozen": true,
+  "only_student_x_T_trainable": true,
+  "phase2_allowed": false,
+  "preflight_gate": true,
+  "protocol": "R11-New-Local-Direction-Fidelity-Target01",
+  "scan_summary": null,
+  "schema": "vision_memory.r11-new-local-direction-fidelity-result.v1",
+  "snapshots_unchanged": true,
+  "target_record": {
+    "artifact_sha256": "5352fac1cf614c8458d4f61b6ffcbf7b053f8a947dedac1286f80261ba8a772a",
+    "source_parent_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-lr-af00d04-20260907-round02-formal",
+    "teacher_endpoint_replay_bitwise_equal": true,
+    "tensor_sha256": {
+      "normalized_noise_fp32": "a320afe2438b0ee725de4702b7d7bd7a213c08ad306ea05eef699b292f7b4377",
+      "source_only_x_T_init_fp32": "719e92867b60546b21b281cfc633ab782c8ce2274bfb41c6b3cee6d673e74eaa",
+      "teacher_endpoint_fp32": "9e627ec840af943d29e3b40a9a8ab796ce23bf07861cb18801360157c4bea0e9",
+      "teacher_x_T_fp32": "9a5cde0f0f93ba29dc74b2b78878e64dde49a6ec9168cb60f57ad48cdfb31f66"
+    }
+  },
+  "tensor_bundle_sha256": "110eebcb27da421d271550490c64a1cf34ae2d740b441dbf897e83655262220d"
+}

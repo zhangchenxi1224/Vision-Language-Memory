@@ -1,0 +1,659 @@
+{
+  "anchors": {
+    "alpha099-start": {
+      "anchor_x_T_fp32_sha256": "d602b83f235ae5c0221d4dca5a0fc1369f1d0da238dbf0c8e26a94d2bd829d2c",
+      "baseline_endpoint_fp32_sha256": "4cd8d5fcffe1a8bee4ceb60c3bc91dac447514e461a42b79866968447d922fae",
+      "baseline_mse": 0.00013531206059269607,
+      "checkpoint_sha256": "623f2eea39f94f3ea8666dc3cc22cb6e707f9befe1cddac4304af9a47a5dd9d2",
+      "directions": {
+        "deterministic-orthogonal-control": {
+          "cosine_to_gradient": -2.3401345375367465e-10,
+          "cosine_to_teacher_residual": 1.0539748763789201e-10,
+          "l2_norm": 1.0000000000302358,
+          "tensor_sha256": "da1b10cdb59df812d945e7675d4b81b500ad23116dfa3b96d01d259364782622"
+        },
+        "negative-adam-preconditioned": {
+          "cosine_to_gradient": -0.35422924447166754,
+          "cosine_to_teacher_residual": 0.15187643388770078,
+          "l2_norm": 1.0000000025085947,
+          "tensor_sha256": "20bb037095ba872b78f3b6d467535d2b7ba357b9bd509257c95804a23c4cedcc"
+        },
+        "negative-autograd": {
+          "cosine_to_gradient": -0.9999999999999971,
+          "cosine_to_teacher_residual": 0.09600955689316581,
+          "l2_norm": 0.999999996398253,
+          "tensor_sha256": "d55f5db14fdfce75f0b92f9f02b9b18b2c330935ce98f1711339495333b9f42b"
+        },
+        "teacher-residual": {
+          "cosine_to_gradient": -0.09600955664481646,
+          "cosine_to_teacher_residual": 0.9999999999999907,
+          "l2_norm": 0.9999999993722166,
+          "tensor_sha256": "c7b1bf45eaffd793bfeebbf49717dbbe75ec6581b9c22e92af991a2b4edf234f"
+        }
+      },
+      "gradient_fp32_sha256": "86447007384b812aeed59047214e237a4bc07f99573dfbeffbe29b4d14d019bb",
+      "gradient_nonzero_fraction": 0.99957275390625,
+      "gradient_norm": 0.0006489048621442366,
+      "quantization": {
+        "bf16_equal_fraction_to_teacher": 0.1473388671875,
+        "bf16_l2_to_teacher": 2.638689826477719,
+        "fp32_l2_to_teacher": 2.5599975547525995
+      }
+    },
+    "lr001-raw256": {
+      "anchor_x_T_fp32_sha256": "0d9cda8b23bb8e29dc5dda90bad9acf1dfcb7f32e74e91202736b9046b115608",
+      "baseline_endpoint_fp32_sha256": "c9339962f2870e8768799eceab22c7bc6004e204e68c55ad7da505ff2ba52586",
+      "baseline_mse": 1.6364127077395096e-05,
+      "checkpoint_sha256": "3d166294353511a33b160f8f97a677de1440e7225245a9057d39a182c2563c80",
+      "directions": {
+        "deterministic-orthogonal-control": {
+          "cosine_to_gradient": -2.541574788392538e-10,
+          "cosine_to_teacher_residual": 1.3716751151518714e-11,
+          "l2_norm": 0.9999999999935788,
+          "tensor_sha256": "d521b6d2c2bcbd577e1f8f63bd1811a2c48101e1ed333d4ed943f1951d8eb86e"
+        },
+        "negative-adam-preconditioned": {
+          "cosine_to_gradient": -0.291936265899909,
+          "cosine_to_teacher_residual": 0.007853800053104078,
+          "l2_norm": 0.9999999998193672,
+          "tensor_sha256": "b81663bf734750d4b3682ef7da1737647f1dc3a5249175e84417a790d5d748ba"
+        },
+        "negative-autograd": {
+          "cosine_to_gradient": -0.9999999999999976,
+          "cosine_to_teacher_residual": 0.0014918891408232712,
+          "l2_norm": 1.000000004242634,
+          "tensor_sha256": "c423c2b54d9e256287ed551136d9066e39d13d355ba0419c8aa660cb2a4a6f63"
+        },
+        "teacher-residual": {
+          "cosine_to_gradient": -0.001491889045935808,
+          "cosine_to_teacher_residual": 0.999999999999995,
+          "l2_norm": 1.0000000006632472,
+          "tensor_sha256": "0f558cfcf84a4063990648c1f9c67be073d38433be0a25da437aa80b4cee1e4a"
+        }
+      },
+      "gradient_fp32_sha256": "e1ee3b3af54c1a96c5d5cb2500ff7a28faa3c776d770ac3b1418c5b274310075",
+      "gradient_nonzero_fraction": 0.999603271484375,
+      "gradient_norm": 0.00016583416288125532,
+      "quantization": {
+        "bf16_equal_fraction_to_teacher": 0.240234375,
+        "bf16_l2_to_teacher": 2.1498957330574484,
+        "fp32_l2_to_teacher": 2.0512112034227754
+      }
+    }
+  },
+  "archive": {
+    "bytes": 59482929,
+    "path": "raw/r11-new-direction-8f696fa-20260907-round01.tar.gz",
+    "sha256": "02cf6befb4171168d87c4b6512820b73904a05ef20712185177666b1613ea6f3"
+  },
+  "formal_result": {
+    "classification": "plateau_oracle_not_strongly_descending",
+    "counters": {
+      "backward_calls": 2,
+      "full_chain_forward_calls": 115,
+      "optimizer_steps": 0,
+      "reader_forward_calls": 0
+    },
+    "elapsed_seconds": 86.3070441428572,
+    "engineering_gate": true,
+    "formal_success": false,
+    "phase2_allowed": false
+  },
+  "image_statistics": {
+    "alpha-adam-r1.0.png": {
+      "mean": 0.428971529006958,
+      "mean_total_variation": 0.00035399553598836064,
+      "sha256": "a96f15aa7b2ad9283f4b357d0916f466a96ea3e5935dd8a9250ec7d1e13dd753",
+      "shape": [
+        1024,
+        1024,
+        3
+      ],
+      "std": 0.030450981110334396
+    },
+    "alpha-neggrad-r0.3.png": {
+      "mean": 0.4290730953216553,
+      "mean_total_variation": 0.00035382769419811666,
+      "sha256": "d22d519d05c8bbfe57cd9e1932012d15a15a2edb9f8a144f46292b775b7e5a56",
+      "shape": [
+        1024,
+        1024,
+        3
+      ],
+      "std": 0.030278971418738365
+    },
+    "alpha099-start.png": {
+      "mean": 0.42911481857299805,
+      "mean_total_variation": 0.00035422079963609576,
+      "sha256": "1316e88652a73834ce3196320bbdcdabc7ec21c7f17fdae123b53248f2fb1c81",
+      "shape": [
+        1024,
+        1024,
+        3
+      ],
+      "std": 0.03019825369119644
+    },
+    "fixed-target.png": {
+      "mean": 0.4288567006587982,
+      "mean_total_variation": 0.00035175186349079013,
+      "sha256": "5bbc021956d4c38f69f34a1d06c5137f768e99082f22b4a6369ebf57ce986b07",
+      "shape": [
+        1024,
+        1024,
+        3
+      ],
+      "std": 0.030355030670762062
+    },
+    "lr001-raw256.png": {
+      "mean": 0.42887258529663086,
+      "mean_total_variation": 0.0003529479436110705,
+      "sha256": "353263dfc28354b910f7955f37d77bba0cedac7cb819df7c1baa9cbf6adf08ce",
+      "shape": [
+        1024,
+        1024,
+        3
+      ],
+      "std": 0.030365558341145515
+    },
+    "plateau-adam-r0.01.png": {
+      "mean": 0.4288710057735443,
+      "mean_total_variation": 0.00035263411700725555,
+      "sha256": "e2efdc67768d752382755bb8d7e33ef45b47e5ee729b6e24f473f4396520643c",
+      "shape": [
+        1024,
+        1024,
+        3
+      ],
+      "std": 0.030354110524058342
+    },
+    "plateau-neggrad-r0.001.png": {
+      "mean": 0.4288701117038727,
+      "mean_total_variation": 0.0003525392967276275,
+      "sha256": "2c3d9bf25976ecfcf0a8fe75e4117c784ca806e56f5fd9c1459807addb8ee877",
+      "shape": [
+        1024,
+        1024,
+        3
+      ],
+      "std": 0.030359510332345963
+    },
+    "plateau-oracle-r2.0.png": {
+      "mean": 0.4289121627807617,
+      "mean_total_variation": 0.00035167517489753664,
+      "sha256": "db6ac30d7dd8a9fe09ccd225e23a60a2a2de287f94583b55fe6ebd093677f31c",
+      "shape": [
+        1024,
+        1024,
+        3
+      ],
+      "std": 0.030329309403896332
+    }
+  },
+  "inventories": {
+    "formal": {
+      "artifact_count": 136,
+      "inventory_sha256": "307883bf485b4630d2c2242ad36da378db66853fdcf552968ecdecdcb7744db7",
+      "passed": true
+    },
+    "preflight": {
+      "artifact_count": 23,
+      "inventory_sha256": "ed84cf70a09c52d955a4bb541f4957068fa9ccef07a2dc4ad4ef2d9509e6635d",
+      "passed": true
+    }
+  },
+  "local_independent_audits": {
+    "formal": {
+      "artifact_count": 136,
+      "classification": "plateau_oracle_not_strongly_descending",
+      "formal_success": false,
+      "git_commit": "8f696faa1176873045c39dcd8fa910db3e9cb558",
+      "mode": "formal",
+      "passed": true,
+      "phase2_allowed": false,
+      "scan_summary": {
+        "alpha099-start": {
+          "deterministic-orthogonal-control": {
+            "analytic_directional_derivative": -1.5185246827015367e-13,
+            "best_positive_loss": 0.00013055538875050843,
+            "best_positive_loss_ratio": 0.9648466528308535,
+            "best_positive_radius_l2": 0.001,
+            "central_finite_difference": [
+              0.016976773622445762,
+              -0.009945644706021994,
+              0.00016230769688263535,
+              -2.135035174433142e-05,
+              -2.1268982285012804e-05,
+              -4.264766175765544e-06,
+              -3.635275788838044e-06
+            ],
+            "finite_difference_sign_agreement_count": 5,
+            "meaningful_descent": false,
+            "nonzero_finite_difference_count": 7
+          },
+          "negative-adam-preconditioned": {
+            "analytic_directional_derivative": -0.00022986107962797277,
+            "best_positive_loss": 5.265268555376679e-05,
+            "best_positive_loss_ratio": 0.3891204178189043,
+            "best_positive_radius_l2": 1.0,
+            "central_finite_difference": [
+              0.026526686269789934,
+              0.0017158163245767355,
+              -0.00019407598301768303,
+              -0.00013854067219654098,
+              -0.00021991283574607223,
+              -0.00019991504814242944,
+              -0.0001606348014320247
+            ],
+            "finite_difference_sign_agreement_count": 5,
+            "meaningful_descent": true,
+            "nonzero_finite_difference_count": 7
+          },
+          "negative-autograd": {
+            "analytic_directional_derivative": -0.0006489048598070437,
+            "best_positive_loss": 6.898914580233395e-05,
+            "best_positive_loss_ratio": 0.5098521558251835,
+            "best_positive_radius_l2": 0.3,
+            "central_finite_difference": [
+              0.01185289875138551,
+              -0.004171168257016689,
+              -0.0008056493243202567,
+              -0.0006071226744097658,
+              -0.000431709922850132,
+              -0.00023361518833553419,
+              -0.00016106612019939348
+            ],
+            "finite_difference_sign_agreement_count": 6,
+            "meaningful_descent": true,
+            "nonzero_finite_difference_count": 7
+          },
+          "teacher-residual": {
+            "analytic_directional_derivative": -6.230106808002232e-05,
+            "best_positive_loss": 3.204438689863309e-05,
+            "best_positive_loss_ratio": 0.2368184089302295,
+            "best_positive_radius_l2": 2.0,
+            "central_finite_difference": [
+              -0.06434034730773419,
+              0.00391044159187004,
+              0.00029384245863184333,
+              -3.242552338633686e-05,
+              -6.057063728803769e-05,
+              -7.4788218626054e-05,
+              -6.620586827921215e-05
+            ],
+            "finite_difference_sign_agreement_count": 5,
+            "meaningful_descent": true,
+            "nonzero_finite_difference_count": 7
+          }
+        },
+        "lr001-raw256": {
+          "deterministic-orthogonal-control": {
+            "analytic_directional_derivative": -4.214799274304738e-14,
+            "best_positive_loss": 1.572245491843205e-05,
+            "best_positive_loss_ratio": 0.9607878772923101,
+            "best_positive_radius_l2": 0.0001,
+            "central_finite_difference": [
+              -0.0024303244572365656,
+              -0.0006446362021961249,
+              6.955879143788479e-05,
+              6.073969416320324e-06,
+              -7.689322956139222e-07,
+              -1.665343006607145e-06,
+              -5.478505045175552e-07
+            ],
+            "finite_difference_sign_agreement_count": 5,
+            "meaningful_descent": false,
+            "nonzero_finite_difference_count": 7
+          },
+          "negative-adam-preconditioned": {
+            "analytic_directional_derivative": -4.8413006261446e-05,
+            "best_positive_loss": 1.559020165586844e-05,
+            "best_positive_loss_ratio": 0.952705975829549,
+            "best_positive_radius_l2": 0.01,
+            "central_finite_difference": [
+              0.0032669231586623937,
+              0.0010093094715557527,
+              -3.635095708887093e-05,
+              -2.669712557690218e-06,
+              -1.1002430255757645e-06,
+              -3.3005890145432204e-06,
+              -5.163092282600701e-06
+            ],
+            "finite_difference_sign_agreement_count": 5,
+            "meaningful_descent": false,
+            "nonzero_finite_difference_count": 7
+          },
+          "negative-autograd": {
+            "analytic_directional_derivative": -0.0001658341635848286,
+            "best_positive_loss": 1.5699362847954035e-05,
+            "best_positive_loss_ratio": 0.9593767375248908,
+            "best_positive_radius_l2": 0.001,
+            "central_finite_difference": [
+              0.0007576272764708847,
+              -0.00022741369321011007,
+              5.615893314825371e-05,
+              3.342036507092416e-05,
+              1.6114026948343962e-05,
+              2.8861242753919214e-05,
+              1.7061945982277393e-05
+            ],
+            "finite_difference_sign_agreement_count": 1,
+            "meaningful_descent": false,
+            "nonzero_finite_difference_count": 7
+          },
+          "teacher-residual": {
+            "analytic_directional_derivative": -2.4740617120857085e-07,
+            "best_positive_loss": 1.4926688891137019e-05,
+            "best_positive_loss_ratio": 0.912159189459992,
+            "best_positive_radius_l2": 0.0001,
+            "central_finite_difference": [
+              -0.002271881385240704,
+              0.0006289883458521217,
+              -4.911316864308901e-05,
+              -4.257290129316971e-06,
+              -3.84644105603608e-06,
+              -3.0443734431173652e-06,
+              -3.4180202419520356e-06
+            ],
+            "finite_difference_sign_agreement_count": 6,
+            "meaningful_descent": false,
+            "nonzero_finite_difference_count": 7
+          }
+        }
+      }
+    },
+    "preflight": {
+      "artifact_count": 23,
+      "classification": null,
+      "formal_success": false,
+      "git_commit": "8f696faa1176873045c39dcd8fa910db3e9cb558",
+      "mode": "technical-preflight",
+      "passed": true,
+      "phase2_allowed": false,
+      "scan_summary": null
+    }
+  },
+  "observations": {
+    "alpha_start_adam_best_ratio": 0.3891204178189043,
+    "alpha_start_negative_autograd_best_ratio": 0.5098521558251835,
+    "exact_teacher_replay_loss_ratio": 0.0,
+    "interpretation": "At the lr=.001 plateau, neither autograd nor Adam has preregistered actionable descent. The oracle straight path is non-monotone and only becomes exact at the teacher xT; resolve the terminal BF16/Jacobian cliff before any optimizer rerun.",
+    "plateau_adam_best_ratio": 0.952705975829549,
+    "plateau_negative_autograd_best_ratio": 0.9593767375248908,
+    "plateau_oracle_radius_2_bf16_equal_fraction": 0.920684814453125,
+    "plateau_oracle_radius_2_fp32_l2_remaining": 0.05121126823599431,
+    "plateau_oracle_radius_2_ratio": 1.6378811939253963,
+    "plateau_teacher_residual_best_ratio": 0.912159189459992
+  },
+  "plateau_teacher_residual_positive_rows": [
+    {
+      "analytic_directional_derivative": -2.4740617120857085e-07,
+      "anchor": "lr001-raw256",
+      "bf16_equal_fraction_to_teacher": 0.240264892578125,
+      "bf16_l2_to_teacher": 2.1497438332051413,
+      "direction": "teacher-residual",
+      "endpoint_fp32_sha256": "16539d6e99c329bec51e467081fec79320d5ff1efa46862e0b459e36a784cfc4",
+      "fp32_l2_to_teacher": 2.051111200880503,
+      "loss": 1.4926688891137019e-05,
+      "loss_ratio_to_anchor": 0.912159189459992,
+      "protocol": "R11-New-Local-Direction-Fidelity-Target01",
+      "radius_index": 0,
+      "radius_l2": 0.0001,
+      "row_id": "lr001-raw256__teacher-residual__r00__plus",
+      "schema": "vision_memory.r11-new-local-direction-fidelity-scan-row.v1",
+      "sign": "plus"
+    },
+    {
+      "analytic_directional_derivative": -2.4740617120857085e-07,
+      "anchor": "lr001-raw256",
+      "bf16_equal_fraction_to_teacher": 0.2404022216796875,
+      "bf16_l2_to_teacher": 2.1475720557957274,
+      "direction": "teacher-residual",
+      "endpoint_fp32_sha256": "19a04e3e033c65cc067e085d4bfafc99e7bf973ed7d1bc799635841b3003514b",
+      "fp32_l2_to_teacher": 2.0502112085938333,
+      "loss": 1.68044789461419e-05,
+      "loss_ratio_to_anchor": 1.0269095850126397,
+      "protocol": "R11-New-Local-Direction-Fidelity-Target01",
+      "radius_index": 1,
+      "radius_l2": 0.001,
+      "row_id": "lr001-raw256__teacher-residual__r01__plus",
+      "schema": "vision_memory.r11-new-local-direction-fidelity-scan-row.v1",
+      "sign": "plus"
+    },
+    {
+      "analytic_directional_derivative": -2.4740617120857085e-07,
+      "anchor": "lr001-raw256",
+      "bf16_equal_fraction_to_teacher": 0.242431640625,
+      "bf16_l2_to_teacher": 2.1334324929980246,
+      "direction": "teacher-residual",
+      "endpoint_fp32_sha256": "04dbc1270488ffefac35ff79d47498bff70231ea01e1c777f5d117854efbcb60",
+      "fp32_l2_to_teacher": 2.041211236688417,
+      "loss": 1.5066159903653897e-05,
+      "loss_ratio_to_anchor": 0.9206821624152399,
+      "protocol": "R11-New-Local-Direction-Fidelity-Target01",
+      "radius_index": 2,
+      "radius_l2": 0.01,
+      "row_id": "lr001-raw256__teacher-residual__r02__plus",
+      "schema": "vision_memory.r11-new-local-direction-fidelity-scan-row.v1",
+      "sign": "plus"
+    },
+    {
+      "analytic_directional_derivative": -2.4740617120857085e-07,
+      "anchor": "lr001-raw256",
+      "bf16_equal_fraction_to_teacher": 0.2540740966796875,
+      "bf16_l2_to_teacher": 2.0459051663823598,
+      "direction": "teacher-residual",
+      "endpoint_fp32_sha256": "505f6d60408c4f4a67f292974969d024f9bf7c4a15e2d32212d5f1a382c6664f",
+      "fp32_l2_to_teacher": 1.9512112486568014,
+      "loss": 1.6915779269766062e-05,
+      "loss_ratio_to_anchor": 1.0337110674930532,
+      "protocol": "R11-New-Local-Direction-Fidelity-Target01",
+      "radius_index": 3,
+      "radius_l2": 0.1,
+      "row_id": "lr001-raw256__teacher-residual__r03__plus",
+      "schema": "vision_memory.r11-new-local-direction-fidelity-scan-row.v1",
+      "sign": "plus"
+    },
+    {
+      "analytic_directional_derivative": -2.4740617120857085e-07,
+      "anchor": "lr001-raw256",
+      "bf16_equal_fraction_to_teacher": 0.2789764404296875,
+      "bf16_l2_to_teacher": 1.8627147279247254,
+      "direction": "teacher-residual",
+      "endpoint_fp32_sha256": "93ee15477b58bd9e4538d5707120482e9fd0be99496de8d80512155d9f0ca138",
+      "fp32_l2_to_teacher": 1.7512112558665613,
+      "loss": 1.7179841961478814e-05,
+      "loss_ratio_to_anchor": 1.0498477480788158,
+      "protocol": "R11-New-Local-Direction-Fidelity-Target01",
+      "radius_index": 4,
+      "radius_l2": 0.3,
+      "row_id": "lr001-raw256__teacher-residual__r04__plus",
+      "schema": "vision_memory.r11-new-local-direction-fidelity-scan-row.v1",
+      "sign": "plus"
+    },
+    {
+      "analytic_directional_derivative": -2.4740617120857085e-07,
+      "anchor": "lr001-raw256",
+      "bf16_equal_fraction_to_teacher": 0.404449462890625,
+      "bf16_l2_to_teacher": 1.2478438408820878,
+      "direction": "teacher-residual",
+      "endpoint_fp32_sha256": "92c60931a1552d743d9bcb83a09c65132eeee5076ea4467a385081044a2874cd",
+      "fp32_l2_to_teacher": 1.0512112287860522,
+      "loss": 2.0407222109497525e-05,
+      "loss_ratio_to_anchor": 1.2470706205702493,
+      "protocol": "R11-New-Local-Direction-Fidelity-Target01",
+      "radius_index": 5,
+      "radius_l2": 1.0,
+      "row_id": "lr001-raw256__teacher-residual__r05__plus",
+      "schema": "vision_memory.r11-new-local-direction-fidelity-scan-row.v1",
+      "sign": "plus"
+    },
+    {
+      "analytic_directional_derivative": -2.4740617120857085e-07,
+      "anchor": "lr001-raw256",
+      "bf16_equal_fraction_to_teacher": 0.920684814453125,
+      "bf16_l2_to_teacher": 0.24619485539482494,
+      "direction": "teacher-residual",
+      "endpoint_fp32_sha256": "311dd8e603518aa746809fea1f962ce76405a9fa9559852c8f391f496825ba2c",
+      "fp32_l2_to_teacher": 0.05121126823599431,
+      "loss": 2.6802495995070785e-05,
+      "loss_ratio_to_anchor": 1.6378811939253963,
+      "protocol": "R11-New-Local-Direction-Fidelity-Target01",
+      "radius_index": 6,
+      "radius_l2": 2.0,
+      "row_id": "lr001-raw256__teacher-residual__r06__plus",
+      "schema": "vision_memory.r11-new-local-direction-fidelity-scan-row.v1",
+      "sign": "plus"
+    }
+  ],
+  "scan_summary": {
+    "alpha099-start": {
+      "deterministic-orthogonal-control": {
+        "analytic_directional_derivative": -1.5185246827015367e-13,
+        "best_positive_loss": 0.00013055538875050843,
+        "best_positive_loss_ratio": 0.9648466528308535,
+        "best_positive_radius_l2": 0.001,
+        "central_finite_difference": [
+          0.016976773622445762,
+          -0.009945644706021994,
+          0.00016230769688263535,
+          -2.135035174433142e-05,
+          -2.1268982285012804e-05,
+          -4.264766175765544e-06,
+          -3.635275788838044e-06
+        ],
+        "finite_difference_sign_agreement_count": 5,
+        "meaningful_descent": false,
+        "nonzero_finite_difference_count": 7
+      },
+      "negative-adam-preconditioned": {
+        "analytic_directional_derivative": -0.00022986107962797277,
+        "best_positive_loss": 5.265268555376679e-05,
+        "best_positive_loss_ratio": 0.3891204178189043,
+        "best_positive_radius_l2": 1.0,
+        "central_finite_difference": [
+          0.026526686269789934,
+          0.0017158163245767355,
+          -0.00019407598301768303,
+          -0.00013854067219654098,
+          -0.00021991283574607223,
+          -0.00019991504814242944,
+          -0.0001606348014320247
+        ],
+        "finite_difference_sign_agreement_count": 5,
+        "meaningful_descent": true,
+        "nonzero_finite_difference_count": 7
+      },
+      "negative-autograd": {
+        "analytic_directional_derivative": -0.0006489048598070437,
+        "best_positive_loss": 6.898914580233395e-05,
+        "best_positive_loss_ratio": 0.5098521558251835,
+        "best_positive_radius_l2": 0.3,
+        "central_finite_difference": [
+          0.01185289875138551,
+          -0.004171168257016689,
+          -0.0008056493243202567,
+          -0.0006071226744097658,
+          -0.000431709922850132,
+          -0.00023361518833553419,
+          -0.00016106612019939348
+        ],
+        "finite_difference_sign_agreement_count": 6,
+        "meaningful_descent": true,
+        "nonzero_finite_difference_count": 7
+      },
+      "teacher-residual": {
+        "analytic_directional_derivative": -6.230106808002232e-05,
+        "best_positive_loss": 3.204438689863309e-05,
+        "best_positive_loss_ratio": 0.2368184089302295,
+        "best_positive_radius_l2": 2.0,
+        "central_finite_difference": [
+          -0.06434034730773419,
+          0.00391044159187004,
+          0.00029384245863184333,
+          -3.242552338633686e-05,
+          -6.057063728803769e-05,
+          -7.4788218626054e-05,
+          -6.620586827921215e-05
+        ],
+        "finite_difference_sign_agreement_count": 5,
+        "meaningful_descent": true,
+        "nonzero_finite_difference_count": 7
+      }
+    },
+    "lr001-raw256": {
+      "deterministic-orthogonal-control": {
+        "analytic_directional_derivative": -4.214799274304738e-14,
+        "best_positive_loss": 1.572245491843205e-05,
+        "best_positive_loss_ratio": 0.9607878772923101,
+        "best_positive_radius_l2": 0.0001,
+        "central_finite_difference": [
+          -0.0024303244572365656,
+          -0.0006446362021961249,
+          6.955879143788479e-05,
+          6.073969416320324e-06,
+          -7.689322956139222e-07,
+          -1.665343006607145e-06,
+          -5.478505045175552e-07
+        ],
+        "finite_difference_sign_agreement_count": 5,
+        "meaningful_descent": false,
+        "nonzero_finite_difference_count": 7
+      },
+      "negative-adam-preconditioned": {
+        "analytic_directional_derivative": -4.8413006261446e-05,
+        "best_positive_loss": 1.559020165586844e-05,
+        "best_positive_loss_ratio": 0.952705975829549,
+        "best_positive_radius_l2": 0.01,
+        "central_finite_difference": [
+          0.0032669231586623937,
+          0.0010093094715557527,
+          -3.635095708887093e-05,
+          -2.669712557690218e-06,
+          -1.1002430255757645e-06,
+          -3.3005890145432204e-06,
+          -5.163092282600701e-06
+        ],
+        "finite_difference_sign_agreement_count": 5,
+        "meaningful_descent": false,
+        "nonzero_finite_difference_count": 7
+      },
+      "negative-autograd": {
+        "analytic_directional_derivative": -0.0001658341635848286,
+        "best_positive_loss": 1.5699362847954035e-05,
+        "best_positive_loss_ratio": 0.9593767375248908,
+        "best_positive_radius_l2": 0.001,
+        "central_finite_difference": [
+          0.0007576272764708847,
+          -0.00022741369321011007,
+          5.615893314825371e-05,
+          3.342036507092416e-05,
+          1.6114026948343962e-05,
+          2.8861242753919214e-05,
+          1.7061945982277393e-05
+        ],
+        "finite_difference_sign_agreement_count": 1,
+        "meaningful_descent": false,
+        "nonzero_finite_difference_count": 7
+      },
+      "teacher-residual": {
+        "analytic_directional_derivative": -2.4740617120857085e-07,
+        "best_positive_loss": 1.4926688891137019e-05,
+        "best_positive_loss_ratio": 0.912159189459992,
+        "best_positive_radius_l2": 0.0001,
+        "central_finite_difference": [
+          -0.002271881385240704,
+          0.0006289883458521217,
+          -4.911316864308901e-05,
+          -4.257290129316971e-06,
+          -3.84644105603608e-06,
+          -3.0443734431173652e-06,
+          -3.4180202419520356e-06
+        ],
+        "finite_difference_sign_agreement_count": 6,
+        "meaningful_descent": false,
+        "nonzero_finite_difference_count": 7
+      }
+    }
+  },
+  "schema": "vision_memory.r11-new-local-direction-fidelity-derived-summary.v1"
+}
