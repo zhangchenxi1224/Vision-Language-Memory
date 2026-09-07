@@ -1,0 +1,190 @@
+{
+  "base_terminal_contract": {
+    "config_byte_sha256": "cbf92ece9c2b64a28a10d0d7c637a05caa208396e9717ccbb88d6671a4094a7f",
+    "config_canonical_sha256": "3e0a8b2f912d75fd302d310403f8783fac455495989ba04fadc35fc9d84f0b01",
+    "config_path": "configs/experiments/r11_new_oracle_terminal_capture_target01.json",
+    "reuse_exact_data_models_snapshots_environment_and_deployment": true,
+    "reuse_exact_parent_target_and_plateau": true
+  },
+  "causal_role": "Separate the FP32-to-BF16 input/activation interface from deeper DreamLite latent-map geometry before any further optimizer training.",
+  "decision_table": {
+    "bf16_reproduction_failure": "The direct BF16 control does not reproduce the delivered terminal boundary; stop and audit before interpreting FP32.",
+    "fp32_gradient_only": "FP32 makes a local gradient actionable without a wide oracle capture region; audit nonlocal path geometry before any training claim.",
+    "fp32_restores_capture_and_gradient": "FP32 capture reaches at least 0.001 L2 and widens by at least 10x over BF16, while the FP32 negative gradient reaches loss ratio <=0.9; preregister FP32 residual-centered normalized-gradient trust-region optimization.",
+    "fp32_widens_capture_without_actionable_gradient": "Input/activation quantization controls capture width, but deeper Jacobian geometry still blocks gradient descent; test an explicit residual/continuation parameterization before training.",
+    "precision_lift_insufficient": "Neither capture width nor gradient fidelity materially improves; reject BF16 input cast as the sole cause and redesign the DreamLite latent-state parameterization.",
+    "technical_fail": "Repair only the violated precision conversion, replay, counter, determinism, or inventory contract and rerun in a fresh directory."
+  },
+  "formal_technical_gate": {
+    "all_endpoint_tensors_saved_and_hashed": true,
+    "backward_calls": 2,
+    "bf16_path_reproduces_parent_terminal_points": true,
+    "conditions": 2,
+    "duplicate_paths_bitwise_equal_within_condition": true,
+    "gradient_rows": 24,
+    "gradient_scan_forwards_per_condition": 12,
+    "model_snapshot_files_unchanged": true,
+    "optimizer_steps": 0,
+    "path_forwards_per_condition": 14,
+    "path_rows": 28,
+    "plateau_gradient_forwards_per_condition": 1,
+    "reader_forward_calls": 0,
+    "total_full_chain_forward_calls": 54
+  },
+  "gradient_control": {
+    "actionable_descent_loss_ratio_lte": 0.9,
+    "analytic_directional_derivative": "dot(condition plateau gradient, condition unit negative-gradient direction)",
+    "anchor": "exact parent lr=0.001 raw step256 plateau xT",
+    "central_finite_difference": "(loss(plateau+r*d)-loss(plateau-r*d))/(2*r)",
+    "direction_per_condition": "negative autograd gradient of condition-specific endpoint MSE at the shared plateau, unit L2 normalized",
+    "evaluate_both_signs": true,
+    "finite_nonzero_gradient_required": true,
+    "gradient_nonzero_fraction_gte": 0.99,
+    "no_gradient_clipping": true,
+    "signed_radii_l2": [
+      0.0001,
+      0.001,
+      0.01,
+      0.1,
+      0.3,
+      1.0
+    ]
+  },
+  "interpretation_boundaries": {
+    "diagnostic_only": true,
+    "fixed_target_is_self_generated_and_not_semantic_memory": true,
+    "formal_success_always_false": true,
+    "fp32_condition_changes_the_frozen_numeric_map_and_uses_its_own_teacher_endpoint": true,
+    "no_event_to_state_learning_claim": true,
+    "no_id_ood_claim": true,
+    "no_post_result_precision_path_radius_or_threshold_change": true,
+    "no_shared_writer_claim": true,
+    "phase2_always_false": true,
+    "reader_not_evaluated": true,
+    "same_original_bf16_parameter_values_but_not_same_arithmetic": true,
+    "teacher_x_T_is_oracle_information_unavailable_to_a_deployable_writer": true
+  },
+  "parent_terminal_failure": {
+    "classification": "microscopic_partial_code_capture",
+    "delivery_commit": "71884f39c81dbc9a7f66034d6c3091ff8d5959d2",
+    "first_failed_loss_ratio": 1.52669160588039,
+    "first_failed_requested_remaining_l2": 0.0001,
+    "formal_success": false,
+    "source_archive_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-terminal-0262545-20260907-round01.tar.gz",
+    "source_archive_sha256": "9c94ff86eb2649c049a763e93660fa6393e53117ad88e0d753ec588efbc75892",
+    "source_inventory_sha256": "376958a52709d637ee4daeb1170c8b75214fb7d26b16826b1ebb28bc2c79bdb7",
+    "source_manifest_sha256": "51436b24b40b3c824fe7642321a1be36e321c5e1954064aee49de1b35c1715c2",
+    "source_result_sha256": "0ccc5a80967327643d45bfc0a6a498e37544a1d03bb4972891afbcf0fbd8a814",
+    "source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-terminal-0262545-20260907-round01-formal",
+    "source_terminal_sha256": "1902a1f904cc937cf5e27860f923af2172dc232111117c822c14fca14e027506",
+    "strong_capture_prefix_max_requested_remaining_l2": 3e-05,
+    "training_commit": "0262545a91788f59c96a420bc27528cbbed6d0c0"
+  },
+  "path_control": {
+    "bf16_parent_expected": [
+      {
+        "endpoint_fp32_sha256": "9e627ec840af943d29e3b40a9a8ab796ce23bf07861cb18801360157c4bea0e9",
+        "loss_ratio_to_plateau": 0.0,
+        "source_point_index": 0
+      },
+      {
+        "endpoint_fp32_sha256": "9e627ec840af943d29e3b40a9a8ab796ce23bf07861cb18801360157c4bea0e9",
+        "loss_ratio_to_plateau": 0.0,
+        "source_point_index": 8
+      },
+      {
+        "endpoint_fp32_sha256": "a910d8ede0ea6cc2e9737c3dbfd1bc968ee112d27fb646fbf663b537ac125525",
+        "loss_ratio_to_plateau": 1.52669160588039,
+        "source_point_index": 9
+      },
+      {
+        "endpoint_fp32_sha256": "a7e9139bcce026cbcce10b7938bb336d2701c2b45b4f3b4d79fef7c29eba4848",
+        "loss_ratio_to_plateau": 1.6022857907618198,
+        "source_point_index": 11
+      },
+      {
+        "endpoint_fp32_sha256": "ec1400a41492b4753359d752103392154a9a5166873cee8f825ff45fedf7472e",
+        "loss_ratio_to_plateau": 1.4686863694903023,
+        "source_point_index": 13
+      },
+      {
+        "endpoint_fp32_sha256": "c2fbfea6f551a33f40a8887316502fde279048dd782690bd5a94b4bc5d096703",
+        "loss_ratio_to_plateau": 1.597843729526246,
+        "source_point_index": 15
+      },
+      {
+        "endpoint_fp32_sha256": "c9339962f2870e8768799eceab22c7bc6004e204e68c55ad7da505ff2ba52586",
+        "loss_ratio_to_plateau": 1.0,
+        "source_point_index": 16
+      }
+    ],
+    "condition_specific_plateau_mse_denominator": true,
+    "condition_specific_teacher_endpoint": true,
+    "duplicate_endpoint_must_be_bitwise_equal_within_condition": true,
+    "fp32_capture_restored_min_remaining_l2": 0.001,
+    "fp32_capture_widening_factor_gte": 10.0,
+    "meaningful_capture_loss_ratio_lte": 0.9,
+    "passes": [
+      "teacher-outward",
+      "plateau-inward"
+    ],
+    "requested_remaining_l2": [
+      0.0,
+      3e-05,
+      0.0001,
+      0.001,
+      0.01,
+      0.05,
+      2.0512112034227754
+    ],
+    "source_point_indices_from_terminal_contract": [
+      0,
+      8,
+      9,
+      11,
+      13,
+      15,
+      16
+    ],
+    "strong_capture_loss_ratio_lte": 0.1
+  },
+  "precision_conditions": {
+    "bf16-baseline": {
+      "compute_dtype": "torch.bfloat16",
+      "contract": "Unmodified frozen parent DreamLite oracle; xT is cast from FP32 to BF16 at the sampler boundary."
+    },
+    "condition_order_fixed": true,
+    "fp32-lifted": {
+      "compute_dtype": "torch.float32",
+      "contract": "After completing BF16 measurements, cast the same in-memory frozen BF16-valued UNet and VAE parameters/buffers, source latents, and precomputed prompt embeddings losslessly to FP32; set oracle compute_dtype=float32; do not reload, regenerate conditioning, or restore unavailable weight precision.",
+      "parameter_value_change": "BF16 values are exactly representable in FP32; only arithmetic and activation/input quantization change.",
+      "teacher_endpoint": "Regenerated within the FP32-lifted frozen map from the same exact teacher xT; losses are normalized only to the FP32-lifted plateau endpoint.",
+      "text_encoder": "Frozen and not executed because prompt embeddings are already fixed; its dtype is irrelevant and must not alter conditioning."
+    },
+    "fresh_model_load_per_run": true,
+    "order": [
+      "bf16-baseline",
+      "fp32-lifted"
+    ],
+    "reader_forward_calls": 0,
+    "return_to_bf16_after_lift_forbidden": true
+  },
+  "protocol": "R11-New-Activation-Precision-Control-Target01",
+  "research_question": "Does losslessly lifting the same frozen BF16 DreamLite parameter and conditioning values into FP32 activation compute widen the teacher capture region and restore finite-difference descent for the plateau negative gradient?",
+  "schema": "vision_memory.r11-new-activation-precision-control-config.v1",
+  "status": "preregistered_after_microscopic_terminal_capture_before_any_precision_control_dreamlite_forward",
+  "technical_preflight_gate": {
+    "all_models_frozen": true,
+    "backward_calls": 2,
+    "bf16_teacher_and_plateau_match_parent_bitwise": true,
+    "conditions": 2,
+    "finite_dense_gradient_per_condition": true,
+    "fp32_teacher_and_plateau_are_finite": true,
+    "only_student_x_T_trainable": true,
+    "optimizer_steps": 0,
+    "plateau_gradient_forwards_per_condition": 1,
+    "reader_forward_calls": 0,
+    "teacher_forwards_per_condition": 1,
+    "total_full_chain_forward_calls": 4
+  }
+}

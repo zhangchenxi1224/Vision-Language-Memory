@@ -1,0 +1,399 @@
+{
+  "classification": "fp32_restores_capture_and_gradient",
+  "conditions": {
+    "bf16-baseline": {
+      "analytic_negative_gradient_derivative": -0.0001658341635848286,
+      "compute_dtype": "torch.bfloat16",
+      "direction_fp32_sha256": "c423c2b54d9e256287ed551136d9066e39d13d355ba0419c8aa660cb2a4a6f63",
+      "gradient_fp32_sha256": "e1ee3b3af54c1a96c5d5cb2500ff7a28faa3c776d770ac3b1418c5b274310075",
+      "gradient_nonzero_fraction": 0.999603271484375,
+      "gradient_norm": 0.00016583416288125532,
+      "plateau_endpoint_fp32_sha256": "c9339962f2870e8768799eceab22c7bc6004e204e68c55ad7da505ff2ba52586",
+      "plateau_mse": 1.6364127077395096e-05,
+      "precision_audit": {
+        "condition": "bf16-baseline",
+        "conditioning_regenerated": false,
+        "layout": {
+          "attention_mask_dtype": "torch.int64",
+          "compute_dtype": "torch.bfloat16",
+          "dtype_numel": {
+            "torch.bfloat16": 392413451
+          },
+          "dtype_tensor_counts": {
+            "torch.bfloat16": 1209
+          },
+          "floating_numel": 392413451,
+          "floating_tensor_count": 1209,
+          "prompt_embeds_dtype": "torch.bfloat16",
+          "source_latents_dtype": "torch.bfloat16",
+          "tensor_count": 1209
+        },
+        "model_reloaded": false,
+        "passed": true
+      },
+      "teacher_endpoint_fp32_sha256": "9e627ec840af943d29e3b40a9a8ab796ce23bf07861cb18801360157c4bea0e9"
+    },
+    "fp32-lifted": {
+      "analytic_negative_gradient_derivative": -0.0002515691693063113,
+      "compute_dtype": "torch.float32",
+      "direction_fp32_sha256": "23bb1ae01455b36dc28d6e00ca6acc195e2d84542932bbb0591ee2fae7a22e9b",
+      "gradient_fp32_sha256": "c40db44b55a98ad40ec894b8ad0d91ae0fa48ef158c8338c2fa24e87c20e57ec",
+      "gradient_nonzero_fraction": 1.0,
+      "gradient_norm": 0.00025156916969025126,
+      "plateau_endpoint_fp32_sha256": "d63e3e481b852f5c71faab4461ebd54610f26705f7d4d458d1f397bc1ddab451",
+      "plateau_mse": 1.7977445168071426e-05,
+      "precision_audit": {
+        "attention_mask_sha256": "c3325ac723d7cc08cba37d46e1710b5067019e47236ef55c41c66cba27c519f1",
+        "baseline_layout": {
+          "attention_mask_dtype": "torch.int64",
+          "compute_dtype": "torch.bfloat16",
+          "dtype_numel": {
+            "torch.bfloat16": 392413451
+          },
+          "dtype_tensor_counts": {
+            "torch.bfloat16": 1209
+          },
+          "floating_numel": 392413451,
+          "floating_tensor_count": 1209,
+          "prompt_embeds_dtype": "torch.bfloat16",
+          "source_latents_dtype": "torch.bfloat16",
+          "tensor_count": 1209
+        },
+        "conditioning_regenerated": false,
+        "contract": "same in-memory BF16-valued weights lifted exactly into FP32 arithmetic",
+        "lifted_layout": {
+          "attention_mask_dtype": "torch.int64",
+          "compute_dtype": "torch.float32",
+          "dtype_numel": {
+            "torch.float32": 392413451
+          },
+          "dtype_tensor_counts": {
+            "torch.float32": 1209
+          },
+          "floating_numel": 392413451,
+          "floating_tensor_count": 1209,
+          "prompt_embeds_dtype": "torch.float32",
+          "source_latents_dtype": "torch.float32",
+          "tensor_count": 1209
+        },
+        "model_reloaded": false,
+        "model_value_audit": {
+          "all_expected_dtypes": true,
+          "all_sampled_values_bitwise_exact": true,
+          "baseline_dtype_tensor_counts": {
+            "torch.bfloat16": 1209
+          },
+          "sampled_value_count": 6041,
+          "tensor_topology_unchanged": true
+        },
+        "passed": true,
+        "prompt_embeds_bf16_roundtrip_sha256_after": "dbb23b166711849739432ba815002e889253da78e099e59c7adbd351a8fb9f4d",
+        "prompt_embeds_bf16_sha256_before": "dbb23b166711849739432ba815002e889253da78e099e59c7adbd351a8fb9f4d",
+        "source_latents_bf16_roundtrip_sha256_after": "6ad0d37ee42a280efb0ca331d2002793ccd4f088e81ef182fa3201d8fe973d79",
+        "source_latents_bf16_sha256_before": "6ad0d37ee42a280efb0ca331d2002793ccd4f088e81ef182fa3201d8fe973d79",
+        "student_x_T_fp32_sha256": "9a5cde0f0f93ba29dc74b2b78878e64dde49a6ec9168cb60f57ad48cdfb31f66",
+        "text_encoder_executed": false,
+        "text_encoder_unchanged_audit": {
+          "all_expected_dtypes": true,
+          "all_sampled_values_bitwise_exact": true,
+          "baseline_dtype_tensor_counts": {
+            "torch.bfloat16": 626
+          },
+          "sampled_value_count": 3130,
+          "tensor_topology_unchanged": true
+        }
+      },
+      "teacher_endpoint_fp32_sha256": "73115a188b098f761af77f9df5cde804b0f4665b6914fc5fcc0cdd5ba740e951"
+    }
+  },
+  "counters": {
+    "backward_calls": 2,
+    "full_chain_forward_calls": 54,
+    "optimizer_steps": 0,
+    "reader_forward_calls": 0
+  },
+  "elapsed_seconds": 58.56821393594146,
+  "engineering_gate": true,
+  "formal_success": false,
+  "git_commit": "27530943dba93d457e0ba0560201cd58dd81ca4b",
+  "mode": "formal",
+  "models_frozen": true,
+  "only_student_x_T_trainable": true,
+  "phase2_allowed": false,
+  "preflight_gate": null,
+  "protocol": "R11-New-Activation-Precision-Control-Target01",
+  "scan_summary": {
+    "bf16_capture_width": 3e-05,
+    "bf16_parent_reproduced": true,
+    "conditions": {
+      "bf16-baseline": {
+        "condition": "bf16-baseline",
+        "gradient": {
+          "actionable_descent": false,
+          "analytic_directional_derivative": -0.0001658341635848286,
+          "best_positive_loss": 1.5699362847954035e-05,
+          "best_positive_loss_ratio": 0.9593767375248908,
+          "best_positive_radius_l2": 0.001,
+          "central_finite_difference": [
+            0.0007576272764708847,
+            -0.00022741369321011007,
+            5.615893314825371e-05,
+            3.342036507092416e-05,
+            1.6114026948343962e-05,
+            2.8861242753919214e-05
+          ],
+          "finite_difference_descent_sign_count": 1
+        },
+        "path": {
+          "all_duplicate_endpoints_bitwise_equal": true,
+          "canonical_teacher_outward_rows": [
+            {
+              "condition": "bf16-baseline",
+              "endpoint_bitwise_equal_to_condition_teacher": true,
+              "endpoint_fp32_sha256": "9e627ec840af943d29e3b40a9a8ab796ce23bf07861cb18801360157c4bea0e9",
+              "loss": 0.0,
+              "loss_ratio_to_plateau": 0.0,
+              "pass": "teacher-outward",
+              "protocol": "R11-New-Activation-Precision-Control-Target01",
+              "requested_remaining_l2": 0.0,
+              "row_id": "bf16-baseline__path__teacher-outward__p00",
+              "schema": "vision_memory.r11-new-activation-precision-control-path-row.v1",
+              "source_point_index": 0,
+              "x_T_fp32_sha256": "9a5cde0f0f93ba29dc74b2b78878e64dde49a6ec9168cb60f57ad48cdfb31f66"
+            },
+            {
+              "condition": "bf16-baseline",
+              "endpoint_bitwise_equal_to_condition_teacher": true,
+              "endpoint_fp32_sha256": "9e627ec840af943d29e3b40a9a8ab796ce23bf07861cb18801360157c4bea0e9",
+              "loss": 0.0,
+              "loss_ratio_to_plateau": 0.0,
+              "pass": "teacher-outward",
+              "protocol": "R11-New-Activation-Precision-Control-Target01",
+              "requested_remaining_l2": 3e-05,
+              "row_id": "bf16-baseline__path__teacher-outward__p08",
+              "schema": "vision_memory.r11-new-activation-precision-control-path-row.v1",
+              "source_point_index": 8,
+              "x_T_fp32_sha256": "6970f43b54dd2f5a623e05c0eb65ee7f3ee4985e1f1b65c0cc8a70ab751b717f"
+            },
+            {
+              "condition": "bf16-baseline",
+              "endpoint_bitwise_equal_to_condition_teacher": false,
+              "endpoint_fp32_sha256": "a910d8ede0ea6cc2e9737c3dbfd1bc968ee112d27fb646fbf663b537ac125525",
+              "loss": 2.4982975446619093e-05,
+              "loss_ratio_to_plateau": 1.52669160588039,
+              "pass": "teacher-outward",
+              "protocol": "R11-New-Activation-Precision-Control-Target01",
+              "requested_remaining_l2": 0.0001,
+              "row_id": "bf16-baseline__path__teacher-outward__p09",
+              "schema": "vision_memory.r11-new-activation-precision-control-path-row.v1",
+              "source_point_index": 9,
+              "x_T_fp32_sha256": "afd50dac1c0aaa20ea302883338b4777d1c8f76a77ece28fb02a75518ab73f97"
+            },
+            {
+              "condition": "bf16-baseline",
+              "endpoint_bitwise_equal_to_condition_teacher": false,
+              "endpoint_fp32_sha256": "a7e9139bcce026cbcce10b7938bb336d2701c2b45b4f3b4d79fef7c29eba4848",
+              "loss": 2.622000829433091e-05,
+              "loss_ratio_to_plateau": 1.6022857907618198,
+              "pass": "teacher-outward",
+              "protocol": "R11-New-Activation-Precision-Control-Target01",
+              "requested_remaining_l2": 0.001,
+              "row_id": "bf16-baseline__path__teacher-outward__p11",
+              "schema": "vision_memory.r11-new-activation-precision-control-path-row.v1",
+              "source_point_index": 11,
+              "x_T_fp32_sha256": "425ea01b28a7d1d870c953e9034c4a25049d72b883d95232981399645ba23927"
+            },
+            {
+              "condition": "bf16-baseline",
+              "endpoint_bitwise_equal_to_condition_teacher": false,
+              "endpoint_fp32_sha256": "ec1400a41492b4753359d752103392154a9a5166873cee8f825ff45fedf7472e",
+              "loss": 2.4033770387177356e-05,
+              "loss_ratio_to_plateau": 1.4686863694903023,
+              "pass": "teacher-outward",
+              "protocol": "R11-New-Activation-Precision-Control-Target01",
+              "requested_remaining_l2": 0.01,
+              "row_id": "bf16-baseline__path__teacher-outward__p13",
+              "schema": "vision_memory.r11-new-activation-precision-control-path-row.v1",
+              "source_point_index": 13,
+              "x_T_fp32_sha256": "d28b0b0fb142303f3c25f25ddbfcba5452ecccc73862020ab8b11c04f710ae04"
+            },
+            {
+              "condition": "bf16-baseline",
+              "endpoint_bitwise_equal_to_condition_teacher": false,
+              "endpoint_fp32_sha256": "c2fbfea6f551a33f40a8887316502fde279048dd782690bd5a94b4bc5d096703",
+              "loss": 2.614731783978641e-05,
+              "loss_ratio_to_plateau": 1.597843729526246,
+              "pass": "teacher-outward",
+              "protocol": "R11-New-Activation-Precision-Control-Target01",
+              "requested_remaining_l2": 0.05,
+              "row_id": "bf16-baseline__path__teacher-outward__p15",
+              "schema": "vision_memory.r11-new-activation-precision-control-path-row.v1",
+              "source_point_index": 15,
+              "x_T_fp32_sha256": "d445d4f993fe44a1195733914767da96a7fe5a1c60150f75986589d31bccfc9e"
+            },
+            {
+              "condition": "bf16-baseline",
+              "endpoint_bitwise_equal_to_condition_teacher": false,
+              "endpoint_fp32_sha256": "c9339962f2870e8768799eceab22c7bc6004e204e68c55ad7da505ff2ba52586",
+              "loss": 1.6364127077395096e-05,
+              "loss_ratio_to_plateau": 1.0,
+              "pass": "teacher-outward",
+              "protocol": "R11-New-Activation-Precision-Control-Target01",
+              "requested_remaining_l2": 2.0512112034227754,
+              "row_id": "bf16-baseline__path__teacher-outward__p16",
+              "schema": "vision_memory.r11-new-activation-precision-control-path-row.v1",
+              "source_point_index": 16,
+              "x_T_fp32_sha256": "0d9cda8b23bb8e29dc5dda90bad9acf1dfcb7f32e74e91202736b9046b115608"
+            }
+          ],
+          "strong_capture_disconnected": false,
+          "strong_capture_prefix_end_source_point_index": 8,
+          "strong_capture_prefix_max_requested_remaining_l2": 3e-05
+        }
+      },
+      "fp32-lifted": {
+        "condition": "fp32-lifted",
+        "gradient": {
+          "actionable_descent": true,
+          "analytic_directional_derivative": -0.0002515691693063113,
+          "best_positive_loss": 1.4655518498329911e-05,
+          "best_positive_loss_ratio": 0.8152169766791239,
+          "best_positive_radius_l2": 0.1,
+          "central_finite_difference": [
+            -0.00025035660655703396,
+            -0.00025146528059849516,
+            -0.00024981918613775633,
+            -0.00015447588793904288,
+            -0.00010000238034990616,
+            -5.573094676947221e-05
+          ],
+          "finite_difference_descent_sign_count": 6
+        },
+        "path": {
+          "all_duplicate_endpoints_bitwise_equal": true,
+          "canonical_teacher_outward_rows": [
+            {
+              "condition": "fp32-lifted",
+              "endpoint_bitwise_equal_to_condition_teacher": true,
+              "endpoint_fp32_sha256": "73115a188b098f761af77f9df5cde804b0f4665b6914fc5fcc0cdd5ba740e951",
+              "loss": 0.0,
+              "loss_ratio_to_plateau": 0.0,
+              "pass": "teacher-outward",
+              "protocol": "R11-New-Activation-Precision-Control-Target01",
+              "requested_remaining_l2": 0.0,
+              "row_id": "fp32-lifted__path__teacher-outward__p00",
+              "schema": "vision_memory.r11-new-activation-precision-control-path-row.v1",
+              "source_point_index": 0,
+              "x_T_fp32_sha256": "9a5cde0f0f93ba29dc74b2b78878e64dde49a6ec9168cb60f57ad48cdfb31f66"
+            },
+            {
+              "condition": "fp32-lifted",
+              "endpoint_bitwise_equal_to_condition_teacher": false,
+              "endpoint_fp32_sha256": "ff5aa61a86c65d8f1af8edc4df5af2fe69295604b0b38fb33619605281bbd20d",
+              "loss": 2.913564842946942e-13,
+              "loss_ratio_to_plateau": 1.6206779193083205e-08,
+              "pass": "teacher-outward",
+              "protocol": "R11-New-Activation-Precision-Control-Target01",
+              "requested_remaining_l2": 3e-05,
+              "row_id": "fp32-lifted__path__teacher-outward__p08",
+              "schema": "vision_memory.r11-new-activation-precision-control-path-row.v1",
+              "source_point_index": 8,
+              "x_T_fp32_sha256": "6970f43b54dd2f5a623e05c0eb65ee7f3ee4985e1f1b65c0cc8a70ab751b717f"
+            },
+            {
+              "condition": "fp32-lifted",
+              "endpoint_bitwise_equal_to_condition_teacher": false,
+              "endpoint_fp32_sha256": "886c79d3d480da7efe6767d1681883ad3b0b9eb4f61cca234d6e7442ef29c51b",
+              "loss": 3.48601247694702e-13,
+              "loss_ratio_to_plateau": 1.9391033844666098e-08,
+              "pass": "teacher-outward",
+              "protocol": "R11-New-Activation-Precision-Control-Target01",
+              "requested_remaining_l2": 0.0001,
+              "row_id": "fp32-lifted__path__teacher-outward__p09",
+              "schema": "vision_memory.r11-new-activation-precision-control-path-row.v1",
+              "source_point_index": 9,
+              "x_T_fp32_sha256": "afd50dac1c0aaa20ea302883338b4777d1c8f76a77ece28fb02a75518ab73f97"
+            },
+            {
+              "condition": "fp32-lifted",
+              "endpoint_bitwise_equal_to_condition_teacher": false,
+              "endpoint_fp32_sha256": "2b85d73231b5bedd9f68bb62730ec309253156f0f6a6f50f21c7d5c9f9f899b2",
+              "loss": 4.965274285478882e-12,
+              "loss_ratio_to_plateau": 2.761946560848025e-07,
+              "pass": "teacher-outward",
+              "protocol": "R11-New-Activation-Precision-Control-Target01",
+              "requested_remaining_l2": 0.001,
+              "row_id": "fp32-lifted__path__teacher-outward__p11",
+              "schema": "vision_memory.r11-new-activation-precision-control-path-row.v1",
+              "source_point_index": 11,
+              "x_T_fp32_sha256": "425ea01b28a7d1d870c953e9034c4a25049d72b883d95232981399645ba23927"
+            },
+            {
+              "condition": "fp32-lifted",
+              "endpoint_bitwise_equal_to_condition_teacher": false,
+              "endpoint_fp32_sha256": "894192cccc5ff064762c7da9e0626c7904ae534fccaa80696efb259b7f0d0e1b",
+              "loss": 4.649149676350106e-10,
+              "loss_ratio_to_plateau": 2.586101435929928e-05,
+              "pass": "teacher-outward",
+              "protocol": "R11-New-Activation-Precision-Control-Target01",
+              "requested_remaining_l2": 0.01,
+              "row_id": "fp32-lifted__path__teacher-outward__p13",
+              "schema": "vision_memory.r11-new-activation-precision-control-path-row.v1",
+              "source_point_index": 13,
+              "x_T_fp32_sha256": "d28b0b0fb142303f3c25f25ddbfcba5452ecccc73862020ab8b11c04f710ae04"
+            },
+            {
+              "condition": "fp32-lifted",
+              "endpoint_bitwise_equal_to_condition_teacher": false,
+              "endpoint_fp32_sha256": "4e03dd3788683c72bd30513b4d14b7e505c9b68625974b43e8afe9a4de41d180",
+              "loss": 1.1607497185650573e-08,
+              "loss_ratio_to_plateau": 0.000645670009121535,
+              "pass": "teacher-outward",
+              "protocol": "R11-New-Activation-Precision-Control-Target01",
+              "requested_remaining_l2": 0.05,
+              "row_id": "fp32-lifted__path__teacher-outward__p15",
+              "schema": "vision_memory.r11-new-activation-precision-control-path-row.v1",
+              "source_point_index": 15,
+              "x_T_fp32_sha256": "d445d4f993fe44a1195733914767da96a7fe5a1c60150f75986589d31bccfc9e"
+            },
+            {
+              "condition": "fp32-lifted",
+              "endpoint_bitwise_equal_to_condition_teacher": false,
+              "endpoint_fp32_sha256": "d63e3e481b852f5c71faab4461ebd54610f26705f7d4d458d1f397bc1ddab451",
+              "loss": 1.7977445168071426e-05,
+              "loss_ratio_to_plateau": 1.0,
+              "pass": "teacher-outward",
+              "protocol": "R11-New-Activation-Precision-Control-Target01",
+              "requested_remaining_l2": 2.0512112034227754,
+              "row_id": "fp32-lifted__path__teacher-outward__p16",
+              "schema": "vision_memory.r11-new-activation-precision-control-path-row.v1",
+              "source_point_index": 16,
+              "x_T_fp32_sha256": "0d9cda8b23bb8e29dc5dda90bad9acf1dfcb7f32e74e91202736b9046b115608"
+            }
+          ],
+          "strong_capture_disconnected": false,
+          "strong_capture_prefix_end_source_point_index": 15,
+          "strong_capture_prefix_max_requested_remaining_l2": 0.05
+        }
+      }
+    },
+    "fp32_capture_restored": true,
+    "fp32_capture_width": 0.05,
+    "fp32_gradient_actionable": true,
+    "fp32_to_bf16_capture_widening_factor": 1666.6666666666667
+  },
+  "schema": "vision_memory.r11-new-activation-precision-control-result.v1",
+  "snapshots_unchanged": true,
+  "target_record": {
+    "artifact_sha256": "5352fac1cf614c8458d4f61b6ffcbf7b053f8a947dedac1286f80261ba8a772a",
+    "source_parent_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-lr-af00d04-20260907-round02-formal",
+    "teacher_endpoint_replay_bitwise_equal": true,
+    "tensor_sha256": {
+      "normalized_noise_fp32": "a320afe2438b0ee725de4702b7d7bd7a213c08ad306ea05eef699b292f7b4377",
+      "source_only_x_T_init_fp32": "719e92867b60546b21b281cfc633ab782c8ce2274bfb41c6b3cee6d673e74eaa",
+      "teacher_endpoint_fp32": "9e627ec840af943d29e3b40a9a8ab796ce23bf07861cb18801360157c4bea0e9",
+      "teacher_x_T_fp32": "9a5cde0f0f93ba29dc74b2b78878e64dde49a6ec9168cb60f57ad48cdfb31f66"
+    }
+  },
+  "tensor_bundle_sha256": "564bd82114f42eaea681c942af67548cb38086dd3e608bf586619500430f2f0a"
+}
