@@ -1,0 +1,180 @@
+{
+  "classification": "prpplus_material_improvement_only",
+  "counters": {
+    "backward_calls": 65,
+    "full_chain_forward_calls": 393,
+    "optimizer_steps": 0,
+    "parameter_updates": 64,
+    "reader_forward_calls": 0
+  },
+  "elapsed_seconds": 328.7176040671766,
+  "engineering_gate": true,
+  "final_replay_bitwise_equal": true,
+  "fixed_target_optimization_success": false,
+  "formal_success": false,
+  "fp32_lift_audit": {
+    "attention_mask_sha256": "c3325ac723d7cc08cba37d46e1710b5067019e47236ef55c41c66cba27c519f1",
+    "baseline_layout": {
+      "attention_mask_dtype": "torch.int64",
+      "compute_dtype": "torch.bfloat16",
+      "dtype_numel": {
+        "torch.bfloat16": 392413451
+      },
+      "dtype_tensor_counts": {
+        "torch.bfloat16": 1209
+      },
+      "floating_numel": 392413451,
+      "floating_tensor_count": 1209,
+      "prompt_embeds_dtype": "torch.bfloat16",
+      "source_latents_dtype": "torch.bfloat16",
+      "tensor_count": 1209
+    },
+    "conditioning_regenerated": false,
+    "contract": "same in-memory BF16-valued weights lifted exactly into FP32 arithmetic",
+    "lifted_layout": {
+      "attention_mask_dtype": "torch.int64",
+      "compute_dtype": "torch.float32",
+      "dtype_numel": {
+        "torch.float32": 392413451
+      },
+      "dtype_tensor_counts": {
+        "torch.float32": 1209
+      },
+      "floating_numel": 392413451,
+      "floating_tensor_count": 1209,
+      "prompt_embeds_dtype": "torch.float32",
+      "source_latents_dtype": "torch.float32",
+      "tensor_count": 1209
+    },
+    "model_reloaded": false,
+    "model_value_audit": {
+      "all_expected_dtypes": true,
+      "all_sampled_values_bitwise_exact": true,
+      "baseline_dtype_tensor_counts": {
+        "torch.bfloat16": 1209
+      },
+      "sampled_value_count": 6041,
+      "tensor_topology_unchanged": true
+    },
+    "passed": true,
+    "prompt_embeds_bf16_roundtrip_sha256_after": "dbb23b166711849739432ba815002e889253da78e099e59c7adbd351a8fb9f4d",
+    "prompt_embeds_bf16_sha256_before": "dbb23b166711849739432ba815002e889253da78e099e59c7adbd351a8fb9f4d",
+    "source_latents_bf16_roundtrip_sha256_after": "6ad0d37ee42a280efb0ca331d2002793ccd4f088e81ef182fa3201d8fe973d79",
+    "source_latents_bf16_sha256_before": "6ad0d37ee42a280efb0ca331d2002793ccd4f088e81ef182fa3201d8fe973d79",
+    "student_x_T_fp32_sha256": "9a5cde0f0f93ba29dc74b2b78878e64dde49a6ec9168cb60f57ad48cdfb31f66",
+    "text_encoder_executed": false,
+    "text_encoder_unchanged_audit": {
+      "all_expected_dtypes": true,
+      "all_sampled_values_bitwise_exact": true,
+      "baseline_dtype_tensor_counts": {
+        "torch.bfloat16": 626
+      },
+      "sampled_value_count": 3130,
+      "tensor_topology_unchanged": true
+    }
+  },
+  "git_commit": "de26e3a918861ab3d3214e229469ee246b395876",
+  "mode": "formal",
+  "models_frozen": true,
+  "only_student_x_T_trainable": true,
+  "phase2_allowed": false,
+  "preflight_gate": null,
+  "protocol": "R11-New-FP32-PRPPlus-Trust-Region-Target01",
+  "schema": "vision_memory.r11-new-fp32-prpplus-trust-region-result.v1",
+  "snapshots_unchanged": true,
+  "target_record": {
+    "artifact_sha256": "5352fac1cf614c8458d4f61b6ffcbf7b053f8a947dedac1286f80261ba8a772a",
+    "source_parent_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-lr-af00d04-20260907-round02-formal",
+    "teacher_endpoint_replay_bitwise_equal": true,
+    "tensor_sha256": {
+      "normalized_noise_fp32": "a320afe2438b0ee725de4702b7d7bd7a213c08ad306ea05eef699b292f7b4377",
+      "source_only_x_T_init_fp32": "719e92867b60546b21b281cfc633ab782c8ce2274bfb41c6b3cee6d673e74eaa",
+      "teacher_endpoint_fp32": "9e627ec840af943d29e3b40a9a8ab796ce23bf07861cb18801360157c4bea0e9",
+      "teacher_x_T_fp32": "9a5cde0f0f93ba29dc74b2b78878e64dde49a6ec9168cb60f57ad48cdfb31f66"
+    }
+  },
+  "tensor_bundle_sha256": "80d58818e04c1acaa2968666e9fab62c48a23cd0fe5c0fb90c7d346412641f07",
+  "trace_summary": {
+    "accepted_loss_sequence": [
+      1.2357087143755052e-05,
+      9.688770660432056e-06,
+      7.295366685866611e-06,
+      6.104106432758272e-06,
+      4.953125881002052e-06,
+      4.4868079385196324e-06,
+      4.118191100133117e-06,
+      3.820475740212714e-06,
+      3.165269163218909e-06,
+      2.727932269408484e-06,
+      2.4184921585401753e-06,
+      2.2081719635025365e-06,
+      1.9993196929135593e-06,
+      1.9041683572140755e-06,
+      1.8639517520568916e-06,
+      1.7478787412983365e-06,
+      1.6487457514813286e-06,
+      1.4995754327173927e-06,
+      1.4650083812739467e-06,
+      1.413680024597852e-06,
+      1.3639079270433285e-06,
+      1.3498356565833092e-06,
+      1.2810209000235773e-06,
+      1.2711227554973448e-06,
+      1.2490054359659553e-06,
+      1.216321152242017e-06,
+      1.2100534831915866e-06,
+      1.1790405096689938e-06,
+      1.1648322697510594e-06,
+      1.1438152114351396e-06,
+      1.1252457170485286e-06,
+      1.1127808647870552e-06,
+      1.0676055808289675e-06,
+      1.0112830750586e-06,
+      8.790154879534384e-07,
+      8.31703061976441e-07,
+      8.010878218556172e-07,
+      7.806011694810877e-07,
+      7.660964342903753e-07,
+      7.615594199705811e-07,
+      7.524458283114654e-07,
+      7.442454261763487e-07,
+      7.337013698816008e-07,
+      7.320688837353373e-07,
+      7.187743449321715e-07,
+      7.091319389473938e-07,
+      7.043522600724827e-07,
+      6.936878662600066e-07,
+      6.894043167449126e-07,
+      6.872153335280018e-07,
+      6.846642008895287e-07,
+      6.810572017457162e-07,
+      6.762056727893651e-07,
+      6.733076816090033e-07,
+      6.70774227273796e-07,
+      6.676945076833363e-07,
+      6.651309831795515e-07,
+      6.583252911696036e-07,
+      6.139073320809985e-07,
+      5.66924484246556e-07,
+      5.429332077255822e-07,
+      5.2678831252706e-07,
+      5.18195577114966e-07,
+      5.139965537637181e-07
+    ],
+    "accepted_update_count": 64,
+    "all_accepted_losses_strictly_monotone": true,
+    "final_endpoint_fp32_sha256": "745fdb33794b55c7bab27feb4ebc433c8709e3af93a098a2913adc3664daa23b",
+    "final_loss": 5.139964969202993e-07,
+    "final_loss_ratio_to_plateau": 0.02859118701878591,
+    "final_x_T_fp32_sha256": "04f8edafd19c38a3adc605f92662d08198ff4fe229d84063387fff4f5556b5cd",
+    "initial_loss": 1.7977445168071426e-05,
+    "initial_loss_ratio_to_plateau": 1.0,
+    "iteration_count": 65,
+    "restart_counts": {
+      "initial": 1,
+      "negative_beta_clamped": 8,
+      "none": 56
+    },
+    "stop_reason": "no_acceptable_candidate"
+  }
+}
