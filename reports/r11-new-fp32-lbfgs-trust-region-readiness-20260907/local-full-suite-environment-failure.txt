@@ -1,0 +1,14 @@
+Command:
+python -m pytest -q --maxfail=1 --junitxml=reports/r11-new-fp32-lbfgs-trust-region-readiness-20260907/pytest-junit.xml
+
+Outcome:
+1 failed, 210 passed, 1 skipped in 166.48s
+
+First failure:
+tests/test_dreamlite_training_contracts.py::DreamLiteTrainingContractTest::test_real_manifest_places_report_schemas_at_top_level
+
+Environment error:
+importlib.metadata.PackageNotFoundError: No package metadata was found for diffusers
+
+Interpretation:
+The local Python environment lacks the repository-pinned diffusers==0.39.0 dependency. This attempt is not counted as a full-suite pass and is not counted as an L-BFGS algorithm failure. The complete suite must be rerun in the locked remote training environment before any L-BFGS DreamLite forward.

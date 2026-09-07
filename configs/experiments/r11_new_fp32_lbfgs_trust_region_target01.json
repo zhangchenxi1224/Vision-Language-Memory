@@ -1,0 +1,262 @@
+{
+  "schema": "vision_memory.r11-new-fp32-lbfgs-trust-region-config.v1",
+  "protocol": "R11-New-FP32-LBFGS-Trust-Region-Target01",
+  "experiment_variant": "lbfgs_matched_horizon128",
+  "status": "preregistered_after_delivered_prpplus_material_improvement_before_any_lbfgs_dreamlite_forward",
+  "research_question": "Does a deterministic limited-memory BFGS inverse-curvature direction cross the unchanged fixed-target loss-ratio threshold within the same maximum 128-update budget?",
+  "causal_role": "Replace only the post-first-step search direction with an explicit L-BFGS inverse-curvature direction while holding target, plateau, model, FP32 map, loss, candidate radii, candidate selection, acceptance, horizon, stopping threshold, and evaluation boundaries fixed.",
+  "parent_prpplus_result": {
+    "training_commit": "de26e3a918861ab3d3214e229469ee246b395876",
+    "delivery_commit": "efc2a9c626cf5846d9d7970cc15d45ea85c8f9ae",
+    "source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/r11-new-prpplus-de26e3a-20260907-round01-formal",
+    "source_archive_path": "/inspire/ssd/project/exploration-topic/czxs26210936/r11-new-prpplus-de26e3a-20260907-round01-full.tar.gz",
+    "source_delivery_root": "reports/r11-new-fp32-prpplus-trust-region-results-20260907/formal",
+    "source_archive_sha256": "e6abd466e26302a052ce43df1f7a3c326c8620aa76151df4c38540bc1eb68015",
+    "source_result_sha256": "7ff8c9ad36e10734e9d606ac3fc40434d229dfd578629db3f25f26c24e8aabab",
+    "source_manifest_sha256": "ed13fab847cee1aa566166f6420784289568aec3fa31f9a0987f3d704e8fa724",
+    "source_terminal_sha256": "54127f79233657d3b837bd5410d1f3f902b4b9fd44abbdf2323dbeeb5603e22d",
+    "source_inventory_sha256": "7ecb0db5c1f73146b8910259a175b9f3d50732213a5814fac13e9f28d055c43b",
+    "source_iteration_metrics_sha256": "1882685de35e608f3a391f2972b480d5364e97033d54781efcae5e61a8e86336",
+    "source_candidate_metrics_sha256": "d5f3a8d6c4c3f6f536ceae58ad99b28415816486c5e4b070cab5214183a40bd4",
+    "source_tensor_bundle_sha256": "80d58818e04c1acaa2968666e9fab62c48a23cd0fe5c0fb90c7d346412641f07",
+    "source_final_checkpoint_sha256": "a2fad7355ddb8753274d9d1627154a0b77f57754e60f95b187841977ad0429d6",
+    "source_external_parent_audit_sha256": "e43335d1536510674dcb402f11b330407e29cbd429128f7f27a7b4ac39a63695",
+    "classification": "prpplus_material_improvement_only",
+    "iteration_count": 65,
+    "accepted_update_count": 64,
+    "final_loss_ratio_to_plateau": 0.02859118701878591,
+    "final_x_T_fp32_sha256": "04f8edafd19c38a3adc605f92662d08198ff4fe229d84063387fff4f5556b5cd",
+    "final_endpoint_fp32_sha256": "745fdb33794b55c7bab27feb4ebc433c8709e3af93a098a2913adc3664daa23b",
+    "stop_reason": "no_acceptable_candidate",
+    "formal_success": false,
+    "phase2_allowed": false
+  },
+  "parent_precision_result": {
+    "training_commit": "27530943dba93d457e0ba0560201cd58dd81ca4b",
+    "delivery_commit": "0653269d4941d005e1b999831a6faae67d192730",
+    "source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-precision-2753094-20260907-round01-formal",
+    "source_archive_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-precision-2753094-20260907-round01.tar.gz",
+    "source_result_sha256": "165d25177bd6a517f305b1fad9dac5ff3655febfa91a6ea5f72b4dca4401f406",
+    "source_manifest_sha256": "b823089eafd6562f7e3e2d72e605b5bdcfa832f0752344ea9c27dc70c7e0caf3",
+    "source_terminal_sha256": "ce3188d23620e7505e90e76646d06dbcb3f249271a641ba0f722550a8ddb7973",
+    "source_inventory_sha256": "7be7b1d219d3f91c5c85ef8428013d94692a185720ecd365cc6f67ea03de5673",
+    "source_gradient_metrics_sha256": "f94a1e7c4e5f126f65998b45fd030f92158bad730001ce7dfa21b91531f09043",
+    "source_archive_sha256": "b4a34fa3e9d3d7f40949b4b6534978e00e552f1baaf2903554dc5ee112def659",
+    "classification": "fp32_restores_capture_and_gradient",
+    "formal_success": false,
+    "phase2_allowed": false,
+    "fp32_capture_width": 0.05,
+    "fp32_to_bf16_capture_widening_factor": 1666.6666666666667,
+    "fp32_gradient_actionable": true
+  },
+  "base_precision_contract": {
+    "config_path": "configs/experiments/r11_new_activation_precision_control_target01.json",
+    "config_byte_sha256": "6fc1caf6e9760c295b25582a804584d6fa326137d48d1b6fcbd6e4146cf89cc5",
+    "config_canonical_sha256": "7d11a0f1bcc2b96bc71ba500410b9a60a092a84204584078558f98451f31c1c3",
+    "reuse_exact_data_models_snapshots_environment_and_deployment": true,
+    "reuse_exact_parent_target_and_plateau": true,
+    "reuse_same_in_memory_bf16_to_fp32_lift": true
+  },
+  "fixed_fp32_anchor": {
+    "teacher_endpoint_fp32_sha256": "73115a188b098f761af77f9df5cde804b0f4665b6914fc5fcc0cdd5ba740e951",
+    "plateau_endpoint_fp32_sha256": "d63e3e481b852f5c71faab4461ebd54610f26705f7d4d458d1f397bc1ddab451",
+    "plateau_mse": 0.000017977445168071426,
+    "gradient_fp32_sha256": "c40db44b55a98ad40ec894b8ad0d91ae0fa48ef158c8338c2fa24e87c20e57ec",
+    "negative_gradient_direction_fp32_sha256": "23bb1ae01455b36dc28d6e00ca6acc195e2d84542932bbb0591ee2fae7a22e9b",
+    "gradient_norm": 0.00025156916969025126,
+    "gradient_nonzero_fraction": 1.0,
+    "overlap_candidate_controls": [
+      {
+        "radius_l2": 0.1,
+        "x_T_fp32_sha256": "a63ca77623e2ee2c0c76b98f53bef2dbf42dd14693e37b52da26640fde608f3c",
+        "endpoint_fp32_sha256": "921ff3ef5af83fc9c0410cceac089c5e2275200c8b8a95abfb61691cf62b3371",
+        "loss_ratio_to_plateau": 0.8152169766791239
+      },
+      {
+        "radius_l2": 0.01,
+        "x_T_fp32_sha256": "dcf9614dacd8bda48c6aceca272b363f230e9a4f631d691f9894dc3bb3a4e89f",
+        "endpoint_fp32_sha256": "707b62464cda7f4290c9b955b0645b0d44259ebc21e4ee533f9a2404b25cf6ac",
+        "loss_ratio_to_plateau": 0.8698530486820824
+      },
+      {
+        "radius_l2": 0.001,
+        "x_T_fp32_sha256": "bc0be895ab5bc19d5933607d853621728787669cae93f888a119d09ac191bcba",
+        "endpoint_fp32_sha256": "ccfb57a2ec766e0b6e0bd7dcfb05cc1d47ffdcf7cd6ae4fbd21e0c2073ae0fae",
+        "loss_ratio_to_plateau": 0.9861155364074711
+      }
+    ]
+  },
+  "parent_first_step_control": {
+    "current_loss": 0.000017977445168071426,
+    "current_x_T_fp32_sha256": "0d9cda8b23bb8e29dc5dda90bad9acf1dfcb7f32e74e91202736b9046b115608",
+    "current_endpoint_fp32_sha256": "d63e3e481b852f5c71faab4461ebd54610f26705f7d4d458d1f397bc1ddab451",
+    "gradient_fp32_sha256": "c40db44b55a98ad40ec894b8ad0d91ae0fa48ef158c8338c2fa24e87c20e57ec",
+    "direction_fp32_sha256": "23bb1ae01455b36dc28d6e00ca6acc195e2d84542932bbb0591ee2fae7a22e9b",
+    "selected_radius_index": 1,
+    "selected_radius_l2": 0.03,
+    "selected_loss": 0.000012357087143755052,
+    "selected_loss_ratio_to_plateau": 0.6873661428655987,
+    "selected_x_T_fp32_sha256": "f118e8b0ae1c87e2700f6efb8b74f894ee2d6fb477e2fd9ffb1c909696a28bea",
+    "selected_endpoint_fp32_sha256": "533a9e58ae7ad2f53a86a436d990ca07aad5cb1f71130f7c86b9c483c581044f",
+    "candidates": [
+      {
+        "radius_l2": 0.1,
+        "candidate_x_T_fp32_sha256": "a63ca77623e2ee2c0c76b98f53bef2dbf42dd14693e37b52da26640fde608f3c",
+        "endpoint_fp32_sha256": "921ff3ef5af83fc9c0410cceac089c5e2275200c8b8a95abfb61691cf62b3371",
+        "loss": 0.000014655518498329911,
+        "loss_ratio_to_plateau": 0.8152169766791239
+      },
+      {
+        "radius_l2": 0.03,
+        "candidate_x_T_fp32_sha256": "f118e8b0ae1c87e2700f6efb8b74f894ee2d6fb477e2fd9ffb1c909696a28bea",
+        "endpoint_fp32_sha256": "533a9e58ae7ad2f53a86a436d990ca07aad5cb1f71130f7c86b9c483c581044f",
+        "loss": 0.000012357087143755052,
+        "loss_ratio_to_plateau": 0.6873661428655987
+      },
+      {
+        "radius_l2": 0.01,
+        "candidate_x_T_fp32_sha256": "dcf9614dacd8bda48c6aceca272b363f230e9a4f631d691f9894dc3bb3a4e89f",
+        "endpoint_fp32_sha256": "707b62464cda7f4290c9b955b0645b0d44259ebc21e4ee533f9a2404b25cf6ac",
+        "loss": 0.0000156377354869619,
+        "loss_ratio_to_plateau": 0.8698530486820824
+      },
+      {
+        "radius_l2": 0.003,
+        "candidate_x_T_fp32_sha256": "9811125dae12315f00f7eaec9c0f79a949b25c4e9b522855fa081131b62390f0",
+        "endpoint_fp32_sha256": "fda80e028c1058d4f00f08bde0d14678b4a303bcbb60aed58eacc2b6ae4c3274",
+        "loss": 0.000017237547581316903,
+        "loss_ratio_to_plateau": 0.9588430068990778
+      },
+      {
+        "radius_l2": 0.001,
+        "candidate_x_T_fp32_sha256": "bc0be895ab5bc19d5933607d853621728787669cae93f888a119d09ac191bcba",
+        "endpoint_fp32_sha256": "ccfb57a2ec766e0b6e0bd7dcfb05cc1d47ffdcf7cd6ae4fbd21e0c2073ae0fae",
+        "loss": 0.000017727837985148653,
+        "loss_ratio_to_plateau": 0.9861155364074711
+      }
+    ]
+  },
+  "algorithm": {
+    "parameterization": "student_x_T_fp32 = fixed_plateau_x_T_fp32 + residual_delta_fp32",
+    "initial_residual_delta": 0.0,
+    "trainable_values": [
+      "residual_delta_fp32"
+    ],
+    "frozen_values": [
+      "DreamLite UNet",
+      "DreamLite VAE",
+      "text encoder",
+      "Reader",
+      "source latents",
+      "prompt embeddings",
+      "scheduler",
+      "teacher endpoint"
+    ],
+    "loss": "mean((DreamLite_fp32(student_x_T)-fixed_fp32_teacher_endpoint)^2)",
+    "direction_method": "explicit limited-memory BFGS inverse-curvature two-loop recursion",
+    "history_size": 10,
+    "curvature_pair": "s_k = x_k-x_(k-1), y_k = g_k-g_(k-1), formed only after an accepted previous update",
+    "curvature_acceptance": "dot(s_k,y_k) > 1e-8*norm(s_k)*norm(y_k), with all scalar reductions in float64",
+    "curvature_relative_threshold": 1e-8,
+    "history_order": "retain the newest 10 accepted curvature pairs in chronological order",
+    "two_loop_first_pass": "newest to oldest: alpha_i=rho_i*dot(s_i,q), q=q-alpha_i*y_i",
+    "initial_inverse_hessian_scale": "gamma=dot(s_last,y_last)/dot(y_last,y_last); gamma=1 when history is empty",
+    "two_loop_second_pass": "oldest to newest: beta_i=rho_i*dot(y_i,r), r=r+s_i*(alpha_i-beta_i)",
+    "two_loop_vector_arithmetic": "q and r use CPU float64; raw direction is cast once to float32 before unit-L2 normalization",
+    "two_loop_numeric_contract": "q, r, s and y vector arithmetic and every dot product are evaluated in float64 on CPU; the resulting raw direction is cast once to float32 before deterministic unit normalization",
+    "raw_direction": "p_k=-r; p_0=-g_0 because history is empty",
+    "descent_restart": "if p_k is nonfinite or dot(g_k,p_k)>=0, clear all history and use p_k=-g_k",
+    "candidate_direction": "unit_l2_normalize(p_k) in float32",
+    "gradient_nonzero_fraction_gte": 0.99,
+    "candidate_radii_l2_in_fixed_order": [
+      0.1,
+      0.03,
+      0.01,
+      0.003,
+      0.001
+    ],
+    "candidate_formula": "plateau_x_T + (current_residual_delta + radius * candidate_direction)",
+    "evaluate_all_candidates_every_iteration": true,
+    "selection": "candidate with minimum endpoint loss; ties choose smaller radius",
+    "minimum_relative_improvement_to_accept": 0.000001,
+    "maximum_formal_iterations": 128,
+    "technical_preflight_iterations": 1,
+    "stop_after_loss_ratio_lte": 0.01,
+    "stop_if_no_candidate_is_acceptable": true,
+    "no_torch_optimizer": true,
+    "no_gradient_clipping": true,
+    "teacher_x_T_forbidden_from_update_direction_or_candidate_selection": true,
+    "checkpoint_every_accepted_update": true,
+    "final_independent_replay_required": true
+  },
+  "technical_preflight_gate": {
+    "full_chain_forward_calls": 9,
+    "backward_calls": 1,
+    "candidate_forwards": 5,
+    "parameter_updates": 1,
+    "reader_forward_calls": 0,
+    "first_direction_equals_parent_negative_gradient": true,
+    "all_five_first_candidates_match_parent": true,
+    "first_selection_matches_parent": true,
+    "final_replay_bitwise_equal": true,
+    "all_models_frozen": true,
+    "only_student_x_T_trainable": true
+  },
+  "formal_gate": {
+    "maximum_full_chain_forward_calls": 771,
+    "maximum_backward_calls": 128,
+    "maximum_parameter_updates": 128,
+    "reader_forward_calls": 0,
+    "accepted_losses_strictly_monotone": true,
+    "all_curvature_pairs_and_two_loop_directions_independently_reconstructed": true,
+    "all_current_endpoint_replays_bitwise_equal": true,
+    "all_candidate_endpoints_tensors_saved_and_hashed": true,
+    "all_gradients_curvature_pairs_raw_directions_and_unit_directions_saved_and_hashed": true,
+    "final_replay_bitwise_equal": true,
+    "model_snapshot_files_unchanged": true
+  },
+  "parent_first_step_reproduction_gate": {
+    "external_independent_audit_required_before_accepting_classification": true,
+    "parent_result_inventory_terminal_and_archive_hash_bound": true,
+    "gradient_and_direction_tensor_hashes_exact": true,
+    "all_five_candidate_x_endpoint_loss_and_ratio_values_exact": true,
+    "selected_candidate_exact": true
+  },
+  "fixed_target_success_gate": {
+    "final_loss_ratio_to_fp32_plateau_lte": 0.01,
+    "accepted_update_count_gte": 1,
+    "strict_monotonicity": true,
+    "final_replay_bitwise_equal": true,
+    "classification": "fixed_target_trust_region_success"
+  },
+  "matched_budget_gate": {
+    "parent_final_loss_ratio": 0.02859118701878591,
+    "material_relative_improvement_gte": 0.05,
+    "material_final_loss_ratio_lte": 0.027161627667846616,
+    "same_maximum_updates": 128,
+    "same_maximum_full_chain_forward_calls": 771
+  },
+  "decision_table": {
+    "fixed_target_trust_region_success": "Deliver the single-target result, then preregister multi-target and non-oracle writer feasibility; do not call this Picture Memory success.",
+    "lbfgs_material_improvement_only": "Conclude inverse-curvature information helps but still does not solve fixed-target optimization; deliver the trace, then redesign the controllable latent parameterization rather than tuning this optimizer post hoc.",
+    "lbfgs_no_matched_budget_advantage": "Reject local first/second-order direction choice as the main remedy and move to a preregistered controllable-parameterization discriminator without changing the target or success threshold.",
+    "lbfgs_stalled": "Reject this L-BFGS direction and move to a preregistered controllable-parameterization discriminator; do not tune memory, curvature threshold, radii, or success threshold after seeing the result.",
+    "technical_failure": "Repair only the violated binding, recurrence, replay, counter, precision, or inventory contract and rerun in a fresh directory."
+  },
+  "interpretation_boundaries": {
+    "single_changed_scientific_factor": "search direction after the identical first step: normalized PRP+ conjugate direction -> normalized L-BFGS inverse-curvature direction",
+    "all_non_direction_algorithm_fields_fixed": true,
+    "matched_update_and_forward_budget": true,
+    "single_fixed_self_generated_target": true,
+    "teacher_endpoint_is_oracle_supervision": true,
+    "teacher_x_T_used_only_to_generate_the_frozen_target_endpoint": true,
+    "teacher_x_T_not_used_by_optimizer": true,
+    "reader_not_evaluated": true,
+    "no_event_to_state_learning_claim": true,
+    "no_shared_writer_claim": true,
+    "no_id_ood_claim": true,
+    "formal_picture_memory_success_always_false": true,
+    "phase2_always_false": true,
+    "no_post_result_direction_radius_threshold_iteration_or_loss_change": true
+  }
+}
