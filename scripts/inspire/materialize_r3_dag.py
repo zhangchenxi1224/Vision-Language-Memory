@@ -966,7 +966,7 @@ def initialize_technical_dag(
     if not isinstance(reported_runs_root, str) or not is_within(run_root.resolve(), Path(reported_runs_root)):
         raise ValueError("Technical DAG run root is not inside the formal preflight VLM_RUN_ROOT")
     reported_python = preflight_report.get("python", {}).get("executable")
-    if not isinstance(reported_python, str) or Path(os.path.abspath(reported_python)) != python:
+    if not isinstance(reported_python, str) or Path(os.path.abspath(reported_python)).resolve() != python.resolve():
         raise ValueError("Formal preflight Python executable does not match the technical DAG Python")
     model_snapshots = _verified_model_snapshots(
         repo=repo.resolve(),
