@@ -49,6 +49,7 @@ def test_config_is_immutable_fixed_target_and_diagnostic_only() -> None:
     assert config["fixed_target_and_initialization_contract"]["regenerate_noise_or_target_forbidden"] is True
     assert config["fixed_target_and_initialization_contract"]["initialization_alpha"] == 0.99
     assert config["optimizer_contract"]["condition_order"] == ["lr-005", "lr-001"]
+    assert config["deployment"]["python_executable"].endswith("/envs/vlm-r3-ngc2502/bin/python")
     assert config["technical_preflight_gate"]["total_full_chain_forward_calls"] == 5
     assert config["formal_technical_gate"]["total_full_chain_forward_calls"] == 523
     assert config["formal_technical_gate"]["backward_calls"] == 512
@@ -151,6 +152,7 @@ def test_runner_reuses_target_resets_optimizer_and_forbids_reader() -> None:
     assert "for condition in config[\"learning_rate_conditions\"]" in source
     assert "lr=base_learning_rate" in source
     assert "optimizer_learning_rate(update, name, config)" in source
+    assert "Pinned Python environment drift." in source
     assert '"teacher_x_T_exposed_to_oracle_warm_start": True' in source
     assert "teacher_x_t.to(output.z_t.device)" not in source
     assert '"formal_success": False' in source and '"phase2_allowed": False' in source

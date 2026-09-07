@@ -14,8 +14,8 @@ import torch
 PROTOCOL = "R11-New-Reachable-LR-Control-Target01"
 PREFIX = "vision_memory.r11-new-reachable-lr-control"
 CONFIG_PATH = Path(__file__).resolve().parents[3] / "configs/experiments/r11_new_reachable_lr_control_target01.json"
-CONFIG_BYTES_SHA256 = "2d87a5f3f669409d7e8e5b45029e5a5b75229f11353049a4a2a07c23b44c13cd"
-CONFIG_CANONICAL_SHA256 = "5ca9dd8882ef397777f8fb8f4f5b8c070506a7452814c8a4f55ebbe891b7b339"
+CONFIG_BYTES_SHA256 = "bfbb32dfadde2cf65f8399695f3eaaea61c585578af78aab38567761eb0a7b55"
+CONFIG_CANONICAL_SHA256 = "329704c74202167ffe2932cd08010fc0a68ca4274f1a00613933b4092ec3657d"
 TARGET_TENSOR_NAMES = (
     "source_only_x_T_init_fp32",
     "teacher_x_T_fp32",

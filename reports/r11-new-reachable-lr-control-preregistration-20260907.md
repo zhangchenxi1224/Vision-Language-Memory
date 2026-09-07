@@ -72,3 +72,11 @@ condition 各 1 次 M0 forward 与 1 次 gradient probe。除模型冻结、targ
 
 本轮仍是几何/优化诊断：`formal_success=false`、`phase2_allowed=false`。不得声称
 事件到状态学习、共享 writer、Reader 读取、ID/OOD 或 Picture Memory 科学成功。
+
+## 运行前技术修订记录
+
+round01 preflight 误调用 `/usr/bin/python`，在导入 `diffusers` 时失败；模型未加载完成，
+完整链路 forward=0、backward=0、optimizer step=0，锁已正常释放。此后仅把上一轮已经
+验证过的 `/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python`
+加入部署契约并在 runner 中 fail-closed 校验。科学问题、自变量、target、训练口径、计数
+和门槛均未修改；修订仍发生在任何低 LR forward 之前。

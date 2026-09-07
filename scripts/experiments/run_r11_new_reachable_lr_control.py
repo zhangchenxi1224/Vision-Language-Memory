@@ -76,6 +76,8 @@ def validate_environment(args: argparse.Namespace, config: Mapping[str, Any]) ->
                  "Clean detached expected checkout required.")
     observed_environment = {name: os.environ.get(name) for name in config["environment"]}
     core.require(observed_environment == config["environment"], "Deterministic/offline environment drift.")
+    core.require(Path(sys.executable).resolve() == Path(config["deployment"]["python_executable"]).resolve(),
+                 "Pinned Python environment drift.")
     core.require(sys.version_info[:2] == (3, 12) and torch.__version__.startswith("2.7.0a0+ecf3bae40a")
                  and torch.version.cuda == "12.8", "Pinned NGC runtime drift.")
     core.require(torch.cuda.is_available() and torch.cuda.device_count() == 2 and torch.cuda.is_bf16_supported()
@@ -404,7 +406,8 @@ def write_report(root: Path, result: Mapping[str, Any]) -> None:
 def run_experiment(args: argparse.Namespace, config: Mapping[str, Any], validation: Mapping[str, Any]) -> dict[str, Any]:
     phase1a._atomic_json(args.output_root / "config.json", config)
     phase1a._write_environment(args.output_root / "environment.txt")
-    phase1a._atomic_json(args.output_root / "runtime.json", phase1a._runtime_versions())
+    runtime = {**phase1a._runtime_versions(), "python_executable": str(Path(sys.executable).resolve())}
+    phase1a._atomic_json(args.output_root / "runtime.json", runtime)
     phase1a._atomic_json(args.output_root / "determinism.json", configure_strict_cuda_determinism(0))
     snapshots_start = {name: phase1a.verify_snapshot_binding(value)
                        for name, value in config["model_snapshots"].items()}
