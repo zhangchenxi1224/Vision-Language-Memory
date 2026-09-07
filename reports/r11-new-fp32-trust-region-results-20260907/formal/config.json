@@ -1,0 +1,156 @@
+{
+  "algorithm": {
+    "candidate_formula": "plateau_x_T + (current_residual_delta + radius * unit_negative_gradient)",
+    "candidate_radii_l2_in_fixed_order": [
+      0.1,
+      0.03,
+      0.01,
+      0.003,
+      0.001
+    ],
+    "checkpoint_every_accepted_update": true,
+    "direction": "unit_l2_normalize(-d_loss/d_student_x_T_fp32)",
+    "evaluate_all_candidates_every_iteration": true,
+    "final_independent_replay_required": true,
+    "frozen_values": [
+      "DreamLite UNet",
+      "DreamLite VAE",
+      "text encoder",
+      "Reader",
+      "source latents",
+      "prompt embeddings",
+      "scheduler",
+      "teacher endpoint"
+    ],
+    "gradient_nonzero_fraction_gte": 0.99,
+    "initial_residual_delta": 0.0,
+    "loss": "mean((DreamLite_fp32(student_x_T)-fixed_fp32_teacher_endpoint)^2)",
+    "maximum_formal_iterations": 32,
+    "minimum_relative_improvement_to_accept": 1e-06,
+    "no_gradient_clipping": true,
+    "no_torch_optimizer": true,
+    "normalization_is_the_preregistered_update_rule_not_clipping": true,
+    "parameterization": "student_x_T_fp32 = fixed_plateau_x_T_fp32 + residual_delta_fp32",
+    "selection": "candidate with minimum endpoint loss; ties choose smaller radius",
+    "stop_after_loss_ratio_lte": 0.01,
+    "stop_if_no_candidate_is_acceptable": true,
+    "teacher_x_T_forbidden_from_update_direction_or_candidate_selection": true,
+    "technical_preflight_iterations": 1,
+    "trainable_values": [
+      "residual_delta_fp32"
+    ]
+  },
+  "base_precision_contract": {
+    "config_byte_sha256": "6fc1caf6e9760c295b25582a804584d6fa326137d48d1b6fcbd6e4146cf89cc5",
+    "config_canonical_sha256": "7d11a0f1bcc2b96bc71ba500410b9a60a092a84204584078558f98451f31c1c3",
+    "config_path": "configs/experiments/r11_new_activation_precision_control_target01.json",
+    "reuse_exact_data_models_snapshots_environment_and_deployment": true,
+    "reuse_exact_parent_target_and_plateau": true,
+    "reuse_same_in_memory_bf16_to_fp32_lift": true
+  },
+  "causal_role": "Test whether restoring a continuous FP32 map is sufficient for actual multi-step endpoint optimization before designing any non-oracle event-to-state writer.",
+  "decision_table": {
+    "fixed_target_trust_region_success": "Deliver this single-target optimizer result, then preregister a multi-target/non-oracle writer feasibility test; do not call it Picture Memory success.",
+    "monotone_progress_above_capture": "Use the trace to distinguish insufficient iteration budget from radius resolution; do not change the model or target.",
+    "strong_capture_reached_only": "Increase only the preregistered iteration budget or refine radii below the observed terminal radius after inspecting the fixed trace; preserve target and loss.",
+    "technical_failure": "Repair only the violated binding, replay, counter, precision, or inventory contract and rerun in a fresh directory.",
+    "trust_region_stalled": "Reject the current first-order update rule and test curvature-aware or continuation parameterization in FP32; do not return to BF16 Adam."
+  },
+  "fixed_fp32_anchor": {
+    "gradient_fp32_sha256": "c40db44b55a98ad40ec894b8ad0d91ae0fa48ef158c8338c2fa24e87c20e57ec",
+    "gradient_nonzero_fraction": 1.0,
+    "gradient_norm": 0.00025156916969025126,
+    "negative_gradient_direction_fp32_sha256": "23bb1ae01455b36dc28d6e00ca6acc195e2d84542932bbb0591ee2fae7a22e9b",
+    "overlap_candidate_controls": [
+      {
+        "endpoint_fp32_sha256": "921ff3ef5af83fc9c0410cceac089c5e2275200c8b8a95abfb61691cf62b3371",
+        "loss_ratio_to_plateau": 0.8152169766791239,
+        "radius_l2": 0.1,
+        "x_T_fp32_sha256": "a63ca77623e2ee2c0c76b98f53bef2dbf42dd14693e37b52da26640fde608f3c"
+      },
+      {
+        "endpoint_fp32_sha256": "707b62464cda7f4290c9b955b0645b0d44259ebc21e4ee533f9a2404b25cf6ac",
+        "loss_ratio_to_plateau": 0.8698530486820824,
+        "radius_l2": 0.01,
+        "x_T_fp32_sha256": "dcf9614dacd8bda48c6aceca272b363f230e9a4f631d691f9894dc3bb3a4e89f"
+      },
+      {
+        "endpoint_fp32_sha256": "ccfb57a2ec766e0b6e0bd7dcfb05cc1d47ffdcf7cd6ae4fbd21e0c2073ae0fae",
+        "loss_ratio_to_plateau": 0.9861155364074711,
+        "radius_l2": 0.001,
+        "x_T_fp32_sha256": "bc0be895ab5bc19d5933607d853621728787669cae93f888a119d09ac191bcba"
+      }
+    ],
+    "plateau_endpoint_fp32_sha256": "d63e3e481b852f5c71faab4461ebd54610f26705f7d4d458d1f397bc1ddab451",
+    "plateau_mse": 1.7977445168071426e-05,
+    "teacher_endpoint_fp32_sha256": "73115a188b098f761af77f9df5cde804b0f4665b6914fc5fcc0cdd5ba740e951"
+  },
+  "fixed_target_success_gate": {
+    "accepted_update_count_gte": 1,
+    "classification": "fixed_target_trust_region_success",
+    "final_loss_ratio_to_fp32_plateau_lte": 0.01,
+    "final_replay_bitwise_equal": true,
+    "strict_monotonicity": true
+  },
+  "formal_gate": {
+    "accepted_losses_strictly_monotone": true,
+    "all_candidate_endpoints_tensors_saved_and_hashed": true,
+    "all_current_endpoint_replays_bitwise_equal": true,
+    "all_gradients_and_directions_saved_and_hashed": true,
+    "final_replay_bitwise_equal": true,
+    "maximum_backward_calls": 32,
+    "maximum_full_chain_forward_calls": 195,
+    "maximum_parameter_updates": 32,
+    "model_snapshot_files_unchanged": true,
+    "reader_forward_calls": 0
+  },
+  "interpretation_boundaries": {
+    "formal_picture_memory_success_always_false": true,
+    "no_event_to_state_learning_claim": true,
+    "no_id_ood_claim": true,
+    "no_post_result_radius_threshold_or_iteration_change": true,
+    "no_shared_writer_claim": true,
+    "phase2_always_false": true,
+    "reader_not_evaluated": true,
+    "single_fixed_self_generated_target": true,
+    "teacher_endpoint_is_oracle_supervision": true,
+    "teacher_x_T_not_used_by_optimizer": true,
+    "teacher_x_T_used_only_to_generate_the_frozen_target_endpoint": true
+  },
+  "parent_precision_result": {
+    "classification": "fp32_restores_capture_and_gradient",
+    "delivery_commit": "0653269d4941d005e1b999831a6faae67d192730",
+    "formal_success": false,
+    "fp32_capture_width": 0.05,
+    "fp32_gradient_actionable": true,
+    "fp32_to_bf16_capture_widening_factor": 1666.6666666666667,
+    "phase2_allowed": false,
+    "source_archive_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-precision-2753094-20260907-round01.tar.gz",
+    "source_archive_sha256": "b4a34fa3e9d3d7f40949b4b6534978e00e552f1baaf2903554dc5ee112def659",
+    "source_gradient_metrics_sha256": "f94a1e7c4e5f126f65998b45fd030f92158bad730001ce7dfa21b91531f09043",
+    "source_inventory_sha256": "7be7b1d219d3f91c5c85ef8428013d94692a185720ecd365cc6f67ea03de5673",
+    "source_manifest_sha256": "b823089eafd6562f7e3e2d72e605b5bdcfa832f0752344ea9c27dc70c7e0caf3",
+    "source_result_sha256": "165d25177bd6a517f305b1fad9dac5ff3655febfa91a6ea5f72b4dca4401f406",
+    "source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-precision-2753094-20260907-round01-formal",
+    "source_terminal_sha256": "ce3188d23620e7505e90e76646d06dbcb3f249271a641ba0f722550a8ddb7973",
+    "training_commit": "27530943dba93d457e0ba0560201cd58dd81ca4b"
+  },
+  "protocol": "R11-New-FP32-Trust-Region-Target01",
+  "research_question": "Can a deterministic residual-centered normalized-gradient trust-region search optimize the same fixed target from the delivered plateau when the frozen DreamLite numeric map is lifted to FP32?",
+  "schema": "vision_memory.r11-new-fp32-trust-region-config.v1",
+  "status": "preregistered_after_fp32_precision_control_success_before_any_trust_region_dreamlite_forward",
+  "technical_preflight_gate": {
+    "all_models_frozen": true,
+    "backward_calls": 1,
+    "bf16_teacher_parent_replay": true,
+    "candidate_forwards": 5,
+    "final_replay_bitwise_equal": true,
+    "first_update_strictly_improves": true,
+    "fp32_lift_audit_passed": true,
+    "fp32_teacher_plateau_gradient_and_overlap_candidates_match_parent": true,
+    "full_chain_forward_calls": 9,
+    "only_student_x_T_trainable": true,
+    "parameter_updates": 1,
+    "reader_forward_calls": 0
+  }
+}

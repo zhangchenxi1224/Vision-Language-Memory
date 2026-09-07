@@ -1,0 +1,294 @@
+{
+  "archive": {
+    "bytes": 167727523,
+    "github_delivery_parts": [
+      {
+        "bytes": 83886080,
+        "path": "raw/r11-new-trust-bebeffd-20260907-round02.tar.gz.part-00.bin",
+        "sha256": "c34360c72f13fa1bacd75133314d6463b7e381489bffae83770da676a337761f"
+      },
+      {
+        "bytes": 83841443,
+        "path": "raw/r11-new-trust-bebeffd-20260907-round02.tar.gz.part-01.bin",
+        "sha256": "5e40804a497b45f1abfbdb3e932e6877846cd6158f1ba3dbcf4d96589e3f40cc"
+      }
+    ],
+    "path": "raw/r11-new-trust-bebeffd-20260907-round02.tar.gz",
+    "sha256": "e8b8630ac8177ef51ea4c812cd513ae295032db4f2b523a7805bfb7c3002397b"
+  },
+  "formal_result": {
+    "classification": "monotone_progress_above_capture",
+    "counters": {
+      "backward_calls": 32,
+      "full_chain_forward_calls": 195,
+      "optimizer_steps": 0,
+      "parameter_updates": 32,
+      "reader_forward_calls": 0
+    },
+    "elapsed_seconds": 176.80515135917813,
+    "engineering_gate": true,
+    "fixed_target_optimization_success": false,
+    "formal_success": false,
+    "phase2_allowed": false,
+    "trace_summary": {
+      "accepted_loss_sequence": [
+        1.2357087143755052e-05,
+        9.688770660432056e-06,
+        8.26322502689436e-06,
+        7.188225026766304e-06,
+        6.671928531432059e-06,
+        6.36942422715947e-06,
+        5.946151759417262e-06,
+        5.755531219620025e-06,
+        4.76831519335974e-06,
+        4.393261860968778e-06,
+        4.2555648178677075e-06,
+        3.9870442378742155e-06,
+        3.8666444197588135e-06,
+        3.6262376852391753e-06,
+        3.5204557207180187e-06,
+        3.3997685022768565e-06,
+        3.2359748729504645e-06,
+        3.1328434033639496e-06,
+        2.989177573908819e-06,
+        2.91729793389095e-06,
+        2.738357807174907e-06,
+        2.660972086232505e-06,
+        2.6148736651521176e-06,
+        2.576828364908579e-06,
+        2.5436352188989986e-06,
+        2.5041251774382545e-06,
+        2.474557732057292e-06,
+        2.4366736397496425e-06,
+        2.4096584638755303e-06,
+        2.3734985461487668e-06,
+        2.347215058762231e-06,
+        2.289901885887957e-06
+      ],
+      "accepted_update_count": 32,
+      "all_accepted_losses_strictly_monotone": true,
+      "final_endpoint_fp32_sha256": "07a581678d3f87635356f9745bb6de317eaf0fde93ce0d91effdbcd471eb0d6d",
+      "final_loss": 2.289901885887957e-06,
+      "final_loss_ratio_to_plateau": 0.12737637992938525,
+      "final_x_T_fp32_sha256": "59cd995d270ae9e9f6addb7d922296f9d072a6a1d04ab0e65fbacddc3af2246d",
+      "initial_loss": 1.7977445168071426e-05,
+      "initial_loss_ratio_to_plateau": 1.0,
+      "iteration_count": 32,
+      "stop_reason": "maximum_iterations"
+    }
+  },
+  "image_statistics": {
+    "FP32 teacher endpoint": {
+      "mean": 0.4282965660095215,
+      "mean_total_variation": 0.0002723167999647558,
+      "sha256": "f8578ab99d72c82b6af0022c779a0ac474c35433846d10ef334091075033f6fd",
+      "shape": [
+        1024,
+        1024,
+        3
+      ],
+      "std": 0.030211087316274643
+    },
+    "Final replay": {
+      "mean": 0.42834094166755676,
+      "mean_total_variation": 0.0002737031318247318,
+      "sha256": "3e4ac1098ec3f1bfb08e940715ff8380066c8288ec37c2819cd8d2bc3a174092",
+      "shape": [
+        1024,
+        1024,
+        3
+      ],
+      "std": 0.030258093029260635
+    },
+    "Fixed BF16 target": {
+      "mean": 0.4288567006587982,
+      "mean_total_variation": 0.00035175186349079013,
+      "sha256": "5bbc021956d4c38f69f34a1d06c5137f768e99082f22b4a6369ebf57ce986b07",
+      "shape": [
+        1024,
+        1024,
+        3
+      ],
+      "std": 0.030355030670762062
+    },
+    "Update 1": {
+      "mean": 0.42834171652793884,
+      "mean_total_variation": 0.0002735116286203265,
+      "sha256": "28ae7265ffa121c20346cd21df9f1ac20d59f98adcb306685d1b54121355a212",
+      "shape": [
+        1024,
+        1024,
+        3
+      ],
+      "std": 0.03026248887181282
+    },
+    "Update 16": {
+      "mean": 0.42834141850471497,
+      "mean_total_variation": 0.0002734810404945165,
+      "sha256": "6ed8ed90d46905212b0a779de0820ddd8b975d494183e84008fd98262e9dea9d",
+      "shape": [
+        1024,
+        1024,
+        3
+      ],
+      "std": 0.03025996685028076
+    },
+    "Update 24": {
+      "mean": 0.42834118008613586,
+      "mean_total_variation": 0.0002735814778134227,
+      "sha256": "35ec2ad5ede8a9fb69d82ac8ba0cb2b7161281ae196b13fca3a1cc6270c614b3",
+      "shape": [
+        1024,
+        1024,
+        3
+      ],
+      "std": 0.030258698388934135
+    },
+    "Update 32": {
+      "mean": 0.42834094166755676,
+      "mean_total_variation": 0.0002737031318247318,
+      "sha256": "3e4ac1098ec3f1bfb08e940715ff8380066c8288ec37c2819cd8d2bc3a174092",
+      "shape": [
+        1024,
+        1024,
+        3
+      ],
+      "std": 0.030258093029260635
+    },
+    "Update 8": {
+      "mean": 0.4283413887023926,
+      "mean_total_variation": 0.0002734198933467269,
+      "sha256": "6ee82a5ca2e32cb7e7a73cad5365e9e2e82163f54dfd4b627c52a225472220f5",
+      "shape": [
+        1024,
+        1024,
+        3
+      ],
+      "std": 0.03026234172284603
+    }
+  },
+  "interrupted_archive": {
+    "bytes": 41410316,
+    "path": "raw/r11-new-trust-bebeffd-20260907-round01-interrupted.tar.gz",
+    "sha256": "b71aa8fc8db6c046cd8571683682d9969ac129f9ba16bb98673e9be2ab9887de"
+  },
+  "interruption_evidence": {
+    "candidate_prefix_exact_match_round02": true,
+    "candidate_rows": 90,
+    "iteration_prefix_exact_match_round02": true,
+    "iteration_rows": 18,
+    "last_completed_iteration": 17,
+    "last_selected_loss_ratio_to_plateau": 0.17426521811497384,
+    "terminal_present": false
+  },
+  "inventories": {
+    "formal": {
+      "artifact_count": 89,
+      "inventory_sha256": "b5ae72243d5cd932a1327333af7b76a86a4026d7b4c3ff5c0b374e64a3ece1d1",
+      "passed": true
+    },
+    "preflight": {
+      "artifact_count": 27,
+      "inventory_sha256": "759a762de299e3802fda5e55ad422119135ba42df5814d862575b64a984c7e53",
+      "passed": true
+    }
+  },
+  "local_independent_audits": {
+    "formal": {
+      "artifact_count": 89,
+      "classification": "monotone_progress_above_capture",
+      "fixed_target_optimization_success": false,
+      "formal_success": false,
+      "git_commit": "bebeffdd84ae635fb5122d6025557ab27a85bfed",
+      "mode": "formal",
+      "passed": true,
+      "phase2_allowed": false,
+      "trace_summary": {
+        "accepted_loss_sequence": [
+          1.2357087143755052e-05,
+          9.688770660432056e-06,
+          8.26322502689436e-06,
+          7.188225026766304e-06,
+          6.671928531432059e-06,
+          6.36942422715947e-06,
+          5.946151759417262e-06,
+          5.755531219620025e-06,
+          4.76831519335974e-06,
+          4.393261860968778e-06,
+          4.2555648178677075e-06,
+          3.9870442378742155e-06,
+          3.8666444197588135e-06,
+          3.6262376852391753e-06,
+          3.5204557207180187e-06,
+          3.3997685022768565e-06,
+          3.2359748729504645e-06,
+          3.1328434033639496e-06,
+          2.989177573908819e-06,
+          2.91729793389095e-06,
+          2.738357807174907e-06,
+          2.660972086232505e-06,
+          2.6148736651521176e-06,
+          2.576828364908579e-06,
+          2.5436352188989986e-06,
+          2.5041251774382545e-06,
+          2.474557732057292e-06,
+          2.4366736397496425e-06,
+          2.4096584638755303e-06,
+          2.3734985461487668e-06,
+          2.347215058762231e-06,
+          2.289901885887957e-06
+        ],
+        "accepted_update_count": 32,
+        "all_accepted_losses_strictly_monotone": true,
+        "final_endpoint_fp32_sha256": "07a581678d3f87635356f9745bb6de317eaf0fde93ce0d91effdbcd471eb0d6d",
+        "final_loss": 2.289901885887957e-06,
+        "final_loss_ratio_to_plateau": 0.12737637992938525,
+        "final_x_T_fp32_sha256": "59cd995d270ae9e9f6addb7d922296f9d072a6a1d04ab0e65fbacddc3af2246d",
+        "initial_loss": 1.7977445168071426e-05,
+        "initial_loss_ratio_to_plateau": 1.0,
+        "iteration_count": 32,
+        "stop_reason": "maximum_iterations"
+      }
+    },
+    "preflight": {
+      "artifact_count": 27,
+      "classification": null,
+      "fixed_target_optimization_success": false,
+      "formal_success": false,
+      "git_commit": "bebeffdd84ae635fb5122d6025557ab27a85bfed",
+      "mode": "technical-preflight",
+      "passed": true,
+      "phase2_allowed": false,
+      "trace_summary": {
+        "accepted_loss_sequence": [
+          1.2357087143755052e-05
+        ],
+        "accepted_update_count": 1,
+        "all_accepted_losses_strictly_monotone": true,
+        "final_endpoint_fp32_sha256": "533a9e58ae7ad2f53a86a436d990ca07aad5cb1f71130f7c86b9c483c581044f",
+        "final_loss": 1.2357087143755052e-05,
+        "final_loss_ratio_to_plateau": 0.6873661428655987,
+        "final_x_T_fp32_sha256": "f118e8b0ae1c87e2700f6efb8b74f894ee2d6fb477e2fd9ffb1c909696a28bea",
+        "initial_loss": 1.7977445168071426e-05,
+        "initial_loss_ratio_to_plateau": 1.0,
+        "iteration_count": 1,
+        "stop_reason": "maximum_iterations"
+      }
+    }
+  },
+  "observations": {
+    "all_gradients_dense": true,
+    "final_gradient_norm": 2.0561916283286233e-05,
+    "final_relative_improvement": 0.024417426446940664,
+    "final_residual_l2_from_plateau": 0.18719515948756474,
+    "interpretation": "FP32 normalized-gradient trust-region search is stable and causally actionable: all 32 updates were accepted and endpoint MSE fell by 87.26%. The run ended only at the preregistered horizon with ratio 0.12738, above both strong-capture (0.1) and fixed-target success (0.01). The next minimal discriminator is an iteration-budget extension with the same target, map, radii, loss, and update rule; this is not yet Picture Memory or Reader success.",
+    "relative_loss_reduction": 0.8726236200706148,
+    "selected_radius_counts": {
+      "0.001": 1,
+      "0.003": 16,
+      "0.01": 11,
+      "0.03": 4
+    }
+  },
+  "schema": "vision_memory.r11-new-fp32-trust-region-derived-summary.v1"
+}
