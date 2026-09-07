@@ -1,0 +1,123 @@
+{
+  "classification": null,
+  "condition_gates": {},
+  "conditions": {
+    "lr-001": {
+      "base_learning_rate": 0.001,
+      "checkpoint_records": [
+        {
+          "checkpoint_bytes": 1839152,
+          "checkpoint_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-lr-af00d04-20260907-round02-preflight/conditions/lr-001/checkpoints/step-000.pt",
+          "checkpoint_sha256": "623f2eea39f94f3ea8666dc3cc22cb6e707f9befe1cddac4304af9a47a5dd9d2",
+          "distance": {
+            "l2_distance": 2.9778870366424126,
+            "l2_ratio_to_m0": 1.0,
+            "mse": 0.00013531206059269607,
+            "mse_ratio_to_m0": 1.0
+          },
+          "image_bytes": 298581,
+          "image_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-lr-af00d04-20260907-round02-preflight/conditions/lr-001/images/step-000.png",
+          "image_sha256": "1316e88652a73834ce3196320bbdcdabc7ec21c7f17fdae123b53248f2fb1c81",
+          "optimizer_step": 0,
+          "tensor_sha256": {
+            "endpoint_fp32": "4cd8d5fcffe1a8bee4ceb60c3bc91dac447514e461a42b79866968447d922fae",
+            "student_x_T_fp32": "d602b83f235ae5c0221d4dca5a0fc1369f1d0da238dbf0c8e26a94d2bd829d2c",
+            "trajectory_fp32": [
+              "aed427bc4b72e42bf3df18eb3666b78bedd229b6ac1a9b1a9e54a899b978d9b8",
+              "6b21bdfd36bb078a3b074109bde3b6f6121c7d37d2c5cd6b56f9d9bdcc19d73e",
+              "624bfbbbdbb535b0178223805ecb5e6272a03fc49b5f2be49ac8c7389881eed4",
+              "a13295b4a596fda6c719be8cea70137b462d1bc1355e789e347acae54f635f39",
+              "4cd8d5fcffe1a8bee4ceb60c3bc91dac447514e461a42b79866968447d922fae"
+            ]
+          }
+        }
+      ],
+      "gradient_probe": {
+        "base_learning_rate": 0.001,
+        "condition": "lr-001",
+        "gradient_fp32_sha256": "86447007384b812aeed59047214e237a4bc07f99573dfbeffbe29b4d14d019bb",
+        "gradient_nonzero_fraction": 0.99957275390625,
+        "gradient_norm": 0.0006489048621442366,
+        "initialization_alpha": 0.99,
+        "loss": 0.00013531206059269607,
+        "schema": "vision_memory.r11-new-reachable-lr-control-gradient-probe.v1"
+      },
+      "initialization_alpha": 0.99,
+      "m0_mse": 0.00013531206059269607
+    },
+    "lr-005": {
+      "base_learning_rate": 0.005,
+      "checkpoint_records": [
+        {
+          "checkpoint_bytes": 1839152,
+          "checkpoint_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-lr-af00d04-20260907-round02-preflight/conditions/lr-005/checkpoints/step-000.pt",
+          "checkpoint_sha256": "84ac2a9d9a09ed6bc8dd8c5f8d80a8f81c8f593e4148ae72fa1a80e6aaa06f3b",
+          "distance": {
+            "l2_distance": 2.9778870366424126,
+            "l2_ratio_to_m0": 1.0,
+            "mse": 0.00013531206059269607,
+            "mse_ratio_to_m0": 1.0
+          },
+          "image_bytes": 298581,
+          "image_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-lr-af00d04-20260907-round02-preflight/conditions/lr-005/images/step-000.png",
+          "image_sha256": "1316e88652a73834ce3196320bbdcdabc7ec21c7f17fdae123b53248f2fb1c81",
+          "optimizer_step": 0,
+          "tensor_sha256": {
+            "endpoint_fp32": "4cd8d5fcffe1a8bee4ceb60c3bc91dac447514e461a42b79866968447d922fae",
+            "student_x_T_fp32": "d602b83f235ae5c0221d4dca5a0fc1369f1d0da238dbf0c8e26a94d2bd829d2c",
+            "trajectory_fp32": [
+              "aed427bc4b72e42bf3df18eb3666b78bedd229b6ac1a9b1a9e54a899b978d9b8",
+              "6b21bdfd36bb078a3b074109bde3b6f6121c7d37d2c5cd6b56f9d9bdcc19d73e",
+              "624bfbbbdbb535b0178223805ecb5e6272a03fc49b5f2be49ac8c7389881eed4",
+              "a13295b4a596fda6c719be8cea70137b462d1bc1355e789e347acae54f635f39",
+              "4cd8d5fcffe1a8bee4ceb60c3bc91dac447514e461a42b79866968447d922fae"
+            ]
+          }
+        }
+      ],
+      "gradient_probe": {
+        "base_learning_rate": 0.005,
+        "condition": "lr-005",
+        "gradient_fp32_sha256": "86447007384b812aeed59047214e237a4bc07f99573dfbeffbe29b4d14d019bb",
+        "gradient_nonzero_fraction": 0.99957275390625,
+        "gradient_norm": 0.0006489048621442366,
+        "initialization_alpha": 0.99,
+        "loss": 0.00013531206059269607,
+        "schema": "vision_memory.r11-new-reachable-lr-control-gradient-probe.v1"
+      },
+      "initialization_alpha": 0.99,
+      "m0_mse": 0.00013531206059269607
+    }
+  },
+  "counters": {
+    "backward_calls": 2,
+    "full_chain_forward_calls": 5,
+    "optimizer_steps": 0,
+    "reader_forward_calls": 0
+  },
+  "elapsed_seconds": 33.7114257439971,
+  "engineering_gate": true,
+  "formal_success": false,
+  "git_commit": "af00d0418f4ead501a27bb1cab03b5cd9e3bc51a",
+  "mode": "technical-preflight",
+  "models_frozen": true,
+  "only_student_x_T_trainable": true,
+  "phase2_allowed": false,
+  "preflight_gate": true,
+  "protocol": "R11-New-Reachable-LR-Control-Target01",
+  "schema": "vision_memory.r11-new-reachable-lr-control-result.v1",
+  "snapshots_unchanged": true,
+  "target_record": {
+    "artifact_sha256": "5352fac1cf614c8458d4f61b6ffcbf7b053f8a947dedac1286f80261ba8a772a",
+    "bytes": 1052016,
+    "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-lr-af00d04-20260907-round02-preflight/target/fixed_parent_target.pt",
+    "source_parent_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-basin-7d4a845-20260907-round01-formal",
+    "teacher_endpoint_replay_bitwise_equal": true,
+    "tensor_sha256": {
+      "normalized_noise_fp32": "a320afe2438b0ee725de4702b7d7bd7a213c08ad306ea05eef699b292f7b4377",
+      "source_only_x_T_init_fp32": "719e92867b60546b21b281cfc633ab782c8ce2274bfb41c6b3cee6d673e74eaa",
+      "teacher_endpoint_fp32": "9e627ec840af943d29e3b40a9a8ab796ce23bf07861cb18801360157c4bea0e9",
+      "teacher_x_T_fp32": "9a5cde0f0f93ba29dc74b2b78878e64dde49a6ec9168cb60f57ad48cdfb31f66"
+    }
+  }
+}

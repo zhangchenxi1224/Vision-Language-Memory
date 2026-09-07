@@ -1,0 +1,343 @@
+{
+  "archive": {
+    "path": "raw/r11-new-lr-af00d04-20260907-round02.tar.gz",
+    "sha256": "9bfe553c8aa7a8eef8a69dcc19ef9d37fa182c7766548dc81b5df39737acfcd1"
+  },
+  "conditions": {
+    "lr-001": {
+      "base_learning_rate": 0.001,
+      "checkpoints": [
+        {
+          "endpoint_distance": {
+            "l2_distance": 2.9778870366424126,
+            "l2_ratio_to_m0": 1.0,
+            "mse": 0.00013531206059269607,
+            "mse_ratio_to_m0": 1.0
+          },
+          "optimizer_step": 0,
+          "x_T_l2_from_condition_start": 0.0,
+          "x_T_l2_to_teacher": 2.5599975547525995,
+          "x_T_mse_to_teacher": 9.999981557484716e-05
+        },
+        {
+          "endpoint_distance": {
+            "l2_distance": 1.1623967688881165,
+            "l2_ratio_to_m0": 0.3903428016526532,
+            "mse": 2.061716077150777e-05,
+            "mse_ratio_to_m0": 0.15236750280204256
+          },
+          "optimizer_step": 64,
+          "x_T_l2_from_condition_start": 1.4851186297453953,
+          "x_T_l2_to_teacher": 2.2456239265408535,
+          "x_T_mse_to_teacher": 7.694742816966027e-05
+        },
+        {
+          "endpoint_distance": {
+            "l2_distance": 1.141876265969329,
+            "l2_ratio_to_m0": 0.3834518408249636,
+            "mse": 1.989565134863369e-05,
+            "mse_ratio_to_m0": 0.1470353142320532
+          },
+          "optimizer_step": 128,
+          "x_T_l2_from_condition_start": 1.8890710962228665,
+          "x_T_l2_to_teacher": 2.0809164225170513,
+          "x_T_mse_to_teacher": 6.607381510548294e-05
+        },
+        {
+          "endpoint_distance": {
+            "l2_distance": 1.0868511610175238,
+            "l2_ratio_to_m0": 0.3649739387841104,
+            "mse": 1.802437509468291e-05,
+            "mse_ratio_to_m0": 0.13320597599158754
+          },
+          "optimizer_step": 192,
+          "x_T_l2_from_condition_start": 2.1847852989460588,
+          "x_T_l2_to_teacher": 2.045947592246578,
+          "x_T_mse_to_teacher": 6.387179018929601e-05
+        },
+        {
+          "endpoint_distance": {
+            "l2_distance": 1.0355865160111757,
+            "l2_ratio_to_m0": 0.3477588314359991,
+            "mse": 1.6364127077395096e-05,
+            "mse_ratio_to_m0": 0.12093620484173165
+          },
+          "optimizer_step": 256,
+          "x_T_l2_from_condition_start": 2.2507266247795217,
+          "x_T_l2_to_teacher": 2.0512112034227754,
+          "x_T_mse_to_teacher": 6.420085992431268e-05
+        }
+      ],
+      "endpoint_distance": {
+        "l2_distance": 1.0355865160111757,
+        "l2_ratio_to_m0": 0.3477588314359991,
+        "mse": 1.6364127077395096e-05,
+        "mse_ratio_to_m0": 0.12093620484173165
+      },
+      "first_step": {
+        "initial_x_T_l2_to_teacher": 2.5599975547525995,
+        "loss_after_first_step": 8.067055023275316e-05,
+        "loss_before": 0.00013531206059269607,
+        "loss_multiplier": 0.5961815220269259,
+        "update_to_remaining_distance_ratio": 0.09521733966558997,
+        "x_T_update_norm": 0.24375615671395803
+      },
+      "initialization_alpha": 0.99,
+      "m0_mse": 0.00013531206059269607,
+      "minimum_observed_pre_step_loss": {
+        "optimizer_step": 249,
+        "value": 1.4771378118894063e-05
+      },
+      "technical_audit": {
+        "finite_nonzero_gradient_every_step": true,
+        "gradient_clipping_absent": true,
+        "minimum_gradient_nonzero_fraction": 0.99945068359375,
+        "minimum_gradient_norm": 0.00013390203393974815,
+        "optimizer_lr_schedule_exact": true,
+        "optimizer_receipts": 256,
+        "optimizer_steps_contiguous": true
+      }
+    },
+    "lr-005": {
+      "base_learning_rate": 0.005,
+      "checkpoints": [
+        {
+          "endpoint_distance": {
+            "l2_distance": 2.9778870366424126,
+            "l2_ratio_to_m0": 1.0,
+            "mse": 0.00013531206059269607,
+            "mse_ratio_to_m0": 1.0
+          },
+          "optimizer_step": 0,
+          "x_T_l2_from_condition_start": 0.0,
+          "x_T_l2_to_teacher": 2.5599975547525995,
+          "x_T_mse_to_teacher": 9.999981557484716e-05
+        },
+        {
+          "endpoint_distance": {
+            "l2_distance": 1.4168956048020005,
+            "l2_ratio_to_m0": 0.47580569288469704,
+            "mse": 3.063344047404826e-05,
+            "mse_ratio_to_m0": 0.22639105738148665
+          },
+          "optimizer_step": 64,
+          "x_T_l2_from_condition_start": 3.5832548605483026,
+          "x_T_l2_to_teacher": 3.04844833513545,
+          "x_T_mse_to_teacher": 0.00014180049765855074
+        },
+        {
+          "endpoint_distance": {
+            "l2_distance": 1.4080715673529673,
+            "l2_ratio_to_m0": 0.47284250544996403,
+            "mse": 3.025307523785159e-05,
+            "mse_ratio_to_m0": 0.22358003496019926
+          },
+          "optimizer_step": 128,
+          "x_T_l2_from_condition_start": 4.787306269179292,
+          "x_T_l2_to_teacher": 3.988247385605715,
+          "x_T_mse_to_teacher": 0.00024270809080917388
+        },
+        {
+          "endpoint_distance": {
+            "l2_distance": 1.2406498250711586,
+            "l2_ratio_to_m0": 0.41662084887880757,
+            "mse": 2.3486511054215953e-05,
+            "mse_ratio_to_m0": 0.17357293172049823
+          },
+          "optimizer_step": 192,
+          "x_T_l2_from_condition_start": 5.591439047167219,
+          "x_T_l2_to_teacher": 4.783353095953621,
+          "x_T_mse_to_teacher": 0.0003491282113827765
+        },
+        {
+          "endpoint_distance": {
+            "l2_distance": 1.0455837542145208,
+            "l2_ratio_to_m0": 0.35111598974332603,
+            "mse": 1.6681600754964165e-05,
+            "mse_ratio_to_m0": 0.12328243825343542
+          },
+          "optimizer_step": 256,
+          "x_T_l2_from_condition_start": 5.687569426134195,
+          "x_T_l2_to_teacher": 4.897031899708805,
+          "x_T_mse_to_teacher": 0.00036591984098777175
+        }
+      ],
+      "endpoint_distance": {
+        "l2_distance": 1.0455837542145208,
+        "l2_ratio_to_m0": 0.35111598974332603,
+        "mse": 1.6681600754964165e-05,
+        "mse_ratio_to_m0": 0.12328243825343542
+      },
+      "first_step": {
+        "initial_x_T_l2_to_teacher": 2.5599975547525995,
+        "loss_after_first_step": 7.381814793916419e-05,
+        "loss_before": 0.00013531206059269607,
+        "loss_multiplier": 0.5455400473233852,
+        "update_to_remaining_distance_ratio": 0.4760865609933462,
+        "x_T_update_norm": 1.2187804319935405
+      },
+      "initialization_alpha": 0.99,
+      "m0_mse": 0.00013531206059269607,
+      "minimum_observed_pre_step_loss": {
+        "optimizer_step": 256,
+        "value": 1.6681598935974762e-05
+      },
+      "technical_audit": {
+        "finite_nonzero_gradient_every_step": true,
+        "gradient_clipping_absent": true,
+        "minimum_gradient_nonzero_fraction": 0.9994049072265625,
+        "minimum_gradient_norm": 0.00012592693499555253,
+        "optimizer_lr_schedule_exact": true,
+        "optimizer_receipts": 256,
+        "optimizer_steps_contiguous": true
+      }
+    }
+  },
+  "formal_result": {
+    "classification": "learning_rate_reduction_insufficient",
+    "condition_gates": {
+      "lr-001": false,
+      "lr-005": false
+    },
+    "counters": {
+      "backward_calls": 512,
+      "full_chain_forward_calls": 523,
+      "optimizer_steps": 512,
+      "reader_forward_calls": 0
+    },
+    "elapsed_seconds": 533.8374709319323,
+    "engineering_gate": true,
+    "formal_success": false,
+    "phase2_allowed": false
+  },
+  "image_statistics": {
+    "fixed-target.png": {
+      "mean": 0.4288567006587982,
+      "mean_total_variation": 0.00035175186349079013,
+      "sha256": "5bbc021956d4c38f69f34a1d06c5137f768e99082f22b4a6369ebf57ce986b07",
+      "shape": [
+        1024,
+        1024,
+        3
+      ],
+      "std": 0.030355030670762062
+    },
+    "lr-001-step-000.png": {
+      "mean": 0.42911481857299805,
+      "mean_total_variation": 0.00035422079963609576,
+      "sha256": "1316e88652a73834ce3196320bbdcdabc7ec21c7f17fdae123b53248f2fb1c81",
+      "shape": [
+        1024,
+        1024,
+        3
+      ],
+      "std": 0.03019825369119644
+    },
+    "lr-001-step-256.png": {
+      "mean": 0.42887258529663086,
+      "mean_total_variation": 0.0003529479436110705,
+      "sha256": "353263dfc28354b910f7955f37d77bba0cedac7cb819df7c1baa9cbf6adf08ce",
+      "shape": [
+        1024,
+        1024,
+        3
+      ],
+      "std": 0.030365558341145515
+    },
+    "lr-005-step-000.png": {
+      "mean": 0.42911481857299805,
+      "mean_total_variation": 0.00035422079963609576,
+      "sha256": "1316e88652a73834ce3196320bbdcdabc7ec21c7f17fdae123b53248f2fb1c81",
+      "shape": [
+        1024,
+        1024,
+        3
+      ],
+      "std": 0.03019825369119644
+    },
+    "lr-005-step-256.png": {
+      "mean": 0.4289187490940094,
+      "mean_total_variation": 0.0003508584341034293,
+      "sha256": "61840aa71259a06b9db0dd923153e4326c88aad682d8ac806e85c5c5efba58d4",
+      "shape": [
+        1024,
+        1024,
+        3
+      ],
+      "std": 0.030346592888236046
+    }
+  },
+  "inventories": {
+    "formal": {
+      "artifact_count": 40,
+      "passed": true
+    },
+    "preflight": {
+      "artifact_count": 24,
+      "passed": true
+    }
+  },
+  "local_independent_audits": {
+    "formal": {
+      "artifact_count": 40,
+      "classification": "learning_rate_reduction_insufficient",
+      "condition_gates": {
+        "lr-001": false,
+        "lr-005": false
+      },
+      "formal_success": false,
+      "git_commit": "af00d0418f4ead501a27bb1cab03b5cd9e3bc51a",
+      "mode": "formal",
+      "passed": true,
+      "phase2_allowed": false
+    },
+    "preflight": {
+      "artifact_count": 24,
+      "classification": null,
+      "condition_gates": {},
+      "formal_success": false,
+      "git_commit": "af00d0418f4ead501a27bb1cab03b5cd9e3bc51a",
+      "mode": "technical-preflight",
+      "passed": true,
+      "phase2_allowed": false
+    }
+  },
+  "schema": "vision_memory.r11-new-reachable-lr-control-derived-summary.v1",
+  "technical_failure_archive": {
+    "inventory": {
+      "artifact_count": 9,
+      "passed": true
+    },
+    "path": "raw/r11-new-lr-88a0b48-20260907-round01-technical-failure.tar.gz",
+    "sha256": "89d893798d96fe9d338f83cc5fdc75cc2fb1aff9ec11b18b1ec3529e889f770f",
+    "terminal": {
+      "completed_at_utc": "2026-09-07T00:22:15.039580+00:00",
+      "engineering_gate": false,
+      "error": "ModuleNotFoundError: No module named 'diffusers'",
+      "exit_code": 2,
+      "formal_success": false,
+      "git_commit": "88a0b4884550216f56d0aca4a75400a6f5e8fb39",
+      "lock_release": {
+        "owner": {
+          "git_commit": "88a0b4884550216f56d0aca4a75400a6f5e8fb39",
+          "mode": "technical-preflight",
+          "output_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-lr-88a0b48-20260907-round01-preflight",
+          "owner_token": "5b5fab239f4641ffbc3a0e8da748c5aa",
+          "pid": 1023078,
+          "started_at_utc": "2026-09-07T00:22:03.430983+00:00"
+        },
+        "owner_path": "/tmp/vision-memory-r11-new-reachable-lr-control.lock/owner.json",
+        "owner_sha256": "db6603fb075874cdd2bca60deb7b2a1cf78b69188d24475f37830c36348eb405",
+        "path": "/tmp/vision-memory-r11-new-reachable-lr-control.lock",
+        "released": true,
+        "released_at_utc": "2026-09-07T00:22:15.039556+00:00"
+      },
+      "mode": "technical-preflight",
+      "phase2_allowed": false,
+      "protocol": "R11-New-Reachable-LR-Control-Target01",
+      "schema": "vision_memory.r11-new-reachable-lr-control-terminal.v1",
+      "started_at_utc": "2026-09-07T00:22:03.431386+00:00",
+      "status": "technical_failed"
+    }
+  }
+}

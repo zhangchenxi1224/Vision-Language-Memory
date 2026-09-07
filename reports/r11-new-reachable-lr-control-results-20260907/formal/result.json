@@ -1,0 +1,345 @@
+{
+  "classification": "learning_rate_reduction_insufficient",
+  "condition_gates": {
+    "lr-001": false,
+    "lr-005": false
+  },
+  "conditions": {
+    "lr-001": {
+      "base_learning_rate": 0.001,
+      "checkpoint_records": [
+        {
+          "checkpoint_bytes": 1839152,
+          "checkpoint_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-lr-af00d04-20260907-round02-formal/conditions/lr-001/checkpoints/step-000.pt",
+          "checkpoint_sha256": "623f2eea39f94f3ea8666dc3cc22cb6e707f9befe1cddac4304af9a47a5dd9d2",
+          "distance": {
+            "l2_distance": 2.9778870366424126,
+            "l2_ratio_to_m0": 1.0,
+            "mse": 0.00013531206059269607,
+            "mse_ratio_to_m0": 1.0
+          },
+          "image_bytes": 298581,
+          "image_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-lr-af00d04-20260907-round02-formal/conditions/lr-001/images/step-000.png",
+          "image_sha256": "1316e88652a73834ce3196320bbdcdabc7ec21c7f17fdae123b53248f2fb1c81",
+          "optimizer_step": 0,
+          "tensor_sha256": {
+            "endpoint_fp32": "4cd8d5fcffe1a8bee4ceb60c3bc91dac447514e461a42b79866968447d922fae",
+            "student_x_T_fp32": "d602b83f235ae5c0221d4dca5a0fc1369f1d0da238dbf0c8e26a94d2bd829d2c",
+            "trajectory_fp32": [
+              "aed427bc4b72e42bf3df18eb3666b78bedd229b6ac1a9b1a9e54a899b978d9b8",
+              "6b21bdfd36bb078a3b074109bde3b6f6121c7d37d2c5cd6b56f9d9bdcc19d73e",
+              "624bfbbbdbb535b0178223805ecb5e6272a03fc49b5f2be49ac8c7389881eed4",
+              "a13295b4a596fda6c719be8cea70137b462d1bc1355e789e347acae54f635f39",
+              "4cd8d5fcffe1a8bee4ceb60c3bc91dac447514e461a42b79866968447d922fae"
+            ]
+          }
+        },
+        {
+          "checkpoint_bytes": 2364272,
+          "checkpoint_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-lr-af00d04-20260907-round02-formal/conditions/lr-001/checkpoints/step-064.pt",
+          "checkpoint_sha256": "469f756478a466ed38bdc81ba687ac64153e1e4629a28ee07725a92084d9e911",
+          "distance": {
+            "l2_distance": 1.1623967688881165,
+            "l2_ratio_to_m0": 0.3903428016526532,
+            "mse": 2.061716077150777e-05,
+            "mse_ratio_to_m0": 0.15236750280204256
+          },
+          "image_bytes": 298589,
+          "image_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-lr-af00d04-20260907-round02-formal/conditions/lr-001/images/step-064.png",
+          "image_sha256": "01e2db15a949713af33141b25c2ca6e905a1f983b93bcc7d69cbcdcf8005ffd5",
+          "optimizer_step": 64,
+          "tensor_sha256": {
+            "endpoint_fp32": "c0dbe42cf2a4af8080c533528ccf375f08eb6827556d360e2b3b6cf30ef40677",
+            "student_x_T_fp32": "c79f7999af46ebb3201abcaca217b6dd8c3cd621d53f134aabb8b16e490e3813",
+            "trajectory_fp32": [
+              "1e30da96e49cd8c8415883bdd211095e357332b382983def55a775425f4c7451",
+              "04eb6390471912b2efca530a57220ed2506d9d97eb9d5924a1a08e87af47ac39",
+              "2f4524d31a4b5c504af7ab7c2495cbbed65ebf59a00df81d4a804e680ee83033",
+              "53f1add71df7e524b2652f7187bd576069b68a83ca8dd6faeef0a67b3bd575da",
+              "c0dbe42cf2a4af8080c533528ccf375f08eb6827556d360e2b3b6cf30ef40677"
+            ]
+          }
+        },
+        {
+          "checkpoint_bytes": 2364272,
+          "checkpoint_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-lr-af00d04-20260907-round02-formal/conditions/lr-001/checkpoints/step-128.pt",
+          "checkpoint_sha256": "abb7e2846fed0d06875665914b8b0e9920be9db352bcc26b5873005018938b83",
+          "distance": {
+            "l2_distance": 1.141876265969329,
+            "l2_ratio_to_m0": 0.3834518408249636,
+            "mse": 1.989565134863369e-05,
+            "mse_ratio_to_m0": 0.1470353142320532
+          },
+          "image_bytes": 298281,
+          "image_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-lr-af00d04-20260907-round02-formal/conditions/lr-001/images/step-128.png",
+          "image_sha256": "47c7641651e96d739af20c436cb73faaee6802a4cebe47bd0494964a7e5ab553",
+          "optimizer_step": 128,
+          "tensor_sha256": {
+            "endpoint_fp32": "b9307ec209cf9aa05b0fa284d67c65fb4984af092ca54abbb1b36ab7ceef8700",
+            "student_x_T_fp32": "0f9824ace989eb3f6643954c35b44278060e3e8ceb7877a1d2a0249ac7ecc459",
+            "trajectory_fp32": [
+              "d066f36ba38754134d5f93e2984338eb6a52e9a10d5f3d481a148b2552326972",
+              "dd5eb41cece388a7c0eff4cef59a1d135b5f892724b7568a93ae42d981e7b435",
+              "cf9be9b4618332b8c18360819234474d0f63cc8defb6f03fe51b100a4705d3ab",
+              "002cd9dd60a3074583625e6a885d8971aed5499be4eb09b0a59d2ae421f24e6b",
+              "b9307ec209cf9aa05b0fa284d67c65fb4984af092ca54abbb1b36ab7ceef8700"
+            ]
+          }
+        },
+        {
+          "checkpoint_bytes": 2364272,
+          "checkpoint_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-lr-af00d04-20260907-round02-formal/conditions/lr-001/checkpoints/step-192.pt",
+          "checkpoint_sha256": "66a70435850fe5d18490635c0655509724eeb220f2225adb90c414e72887314f",
+          "distance": {
+            "l2_distance": 1.0868511610175238,
+            "l2_ratio_to_m0": 0.3649739387841104,
+            "mse": 1.802437509468291e-05,
+            "mse_ratio_to_m0": 0.13320597599158754
+          },
+          "image_bytes": 297541,
+          "image_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-lr-af00d04-20260907-round02-formal/conditions/lr-001/images/step-192.png",
+          "image_sha256": "ea171c5023a0fb0ea919acbdbdbcb3e5a6849d40476c4db18c3b7f72bd7261dc",
+          "optimizer_step": 192,
+          "tensor_sha256": {
+            "endpoint_fp32": "a842c22eb2bf7a8142ac2bae83b46d730e3c7e36dff8766b5deb7ef8528b06f4",
+            "student_x_T_fp32": "31d73d471a790d0d1534c0540403d43ac79e869fe88a2074147c6a80c9e7dddd",
+            "trajectory_fp32": [
+              "0fd902dbdd900aa325fe84c1dff7de168f7f95d7c988614e1dc277d25d23b4a2",
+              "5787844b1fd773a7819b16851f812cf8998737965e9f7a308068351107fb92d2",
+              "fc2e4c143b5c3aba10c92e9be9155ddcc12701c954d21f7a8d04baabcffbdf83",
+              "74edcb960e05d1ef1e3f02b9078f8c45029ab2a2a678fc3d1e0cd58a84fd6095",
+              "a842c22eb2bf7a8142ac2bae83b46d730e3c7e36dff8766b5deb7ef8528b06f4"
+            ]
+          }
+        },
+        {
+          "checkpoint_bytes": 2364272,
+          "checkpoint_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-lr-af00d04-20260907-round02-formal/conditions/lr-001/checkpoints/step-256.pt",
+          "checkpoint_sha256": "3d166294353511a33b160f8f97a677de1440e7225245a9057d39a182c2563c80",
+          "distance": {
+            "l2_distance": 1.0355865160111757,
+            "l2_ratio_to_m0": 0.3477588314359991,
+            "mse": 1.6364127077395096e-05,
+            "mse_ratio_to_m0": 0.12093620484173165
+          },
+          "image_bytes": 297523,
+          "image_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-lr-af00d04-20260907-round02-formal/conditions/lr-001/images/step-256.png",
+          "image_sha256": "353263dfc28354b910f7955f37d77bba0cedac7cb819df7c1baa9cbf6adf08ce",
+          "optimizer_step": 256,
+          "tensor_sha256": {
+            "endpoint_fp32": "c9339962f2870e8768799eceab22c7bc6004e204e68c55ad7da505ff2ba52586",
+            "student_x_T_fp32": "0d9cda8b23bb8e29dc5dda90bad9acf1dfcb7f32e74e91202736b9046b115608",
+            "trajectory_fp32": [
+              "8fd3f852af37dae3d78d5d7b82fe3a3cc8e0d6d62f57c0114cf95cf7589e3bcc",
+              "2efd688f686f2b6e039fe5f8bae5bc9902e990cc3a9282270c855e768ee3ff39",
+              "1d4cce60c0ba7d26670ade7f8675e6e78d248917bed9a5f79232241b527a7953",
+              "c28d09d4690084b4edeeef67a3530ed981216844771e8dd4efa753eca0905578",
+              "c9339962f2870e8768799eceab22c7bc6004e204e68c55ad7da505ff2ba52586"
+            ]
+          }
+        }
+      ],
+      "condition_gate": false,
+      "endpoint_distance": {
+        "l2_distance": 1.0355865160111757,
+        "l2_ratio_to_m0": 0.3477588314359991,
+        "mse": 1.6364127077395096e-05,
+        "mse_ratio_to_m0": 0.12093620484173165
+      },
+      "initialization_alpha": 0.99,
+      "m0_mse": 0.00013531206059269607,
+      "technical_audit": {
+        "finite_nonzero_gradient_every_step": true,
+        "gradient_clipping_absent": true,
+        "minimum_gradient_nonzero_fraction": 0.99945068359375,
+        "minimum_gradient_norm": 0.00013390203393974815,
+        "optimizer_lr_schedule_exact": true,
+        "optimizer_receipts": 256,
+        "optimizer_steps_contiguous": true
+      }
+    },
+    "lr-005": {
+      "base_learning_rate": 0.005,
+      "checkpoint_records": [
+        {
+          "checkpoint_bytes": 1839152,
+          "checkpoint_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-lr-af00d04-20260907-round02-formal/conditions/lr-005/checkpoints/step-000.pt",
+          "checkpoint_sha256": "84ac2a9d9a09ed6bc8dd8c5f8d80a8f81c8f593e4148ae72fa1a80e6aaa06f3b",
+          "distance": {
+            "l2_distance": 2.9778870366424126,
+            "l2_ratio_to_m0": 1.0,
+            "mse": 0.00013531206059269607,
+            "mse_ratio_to_m0": 1.0
+          },
+          "image_bytes": 298581,
+          "image_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-lr-af00d04-20260907-round02-formal/conditions/lr-005/images/step-000.png",
+          "image_sha256": "1316e88652a73834ce3196320bbdcdabc7ec21c7f17fdae123b53248f2fb1c81",
+          "optimizer_step": 0,
+          "tensor_sha256": {
+            "endpoint_fp32": "4cd8d5fcffe1a8bee4ceb60c3bc91dac447514e461a42b79866968447d922fae",
+            "student_x_T_fp32": "d602b83f235ae5c0221d4dca5a0fc1369f1d0da238dbf0c8e26a94d2bd829d2c",
+            "trajectory_fp32": [
+              "aed427bc4b72e42bf3df18eb3666b78bedd229b6ac1a9b1a9e54a899b978d9b8",
+              "6b21bdfd36bb078a3b074109bde3b6f6121c7d37d2c5cd6b56f9d9bdcc19d73e",
+              "624bfbbbdbb535b0178223805ecb5e6272a03fc49b5f2be49ac8c7389881eed4",
+              "a13295b4a596fda6c719be8cea70137b462d1bc1355e789e347acae54f635f39",
+              "4cd8d5fcffe1a8bee4ceb60c3bc91dac447514e461a42b79866968447d922fae"
+            ]
+          }
+        },
+        {
+          "checkpoint_bytes": 2364272,
+          "checkpoint_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-lr-af00d04-20260907-round02-formal/conditions/lr-005/checkpoints/step-064.pt",
+          "checkpoint_sha256": "affe7e5c5866b6bf046eacafa7edc621e540119637ffbc6c9fead8c0dedd8758",
+          "distance": {
+            "l2_distance": 1.4168956048020005,
+            "l2_ratio_to_m0": 0.47580569288469704,
+            "mse": 3.063344047404826e-05,
+            "mse_ratio_to_m0": 0.22639105738148665
+          },
+          "image_bytes": 297893,
+          "image_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-lr-af00d04-20260907-round02-formal/conditions/lr-005/images/step-064.png",
+          "image_sha256": "4cd52a42892b3c1252a3b221d40364ff33b8970a41cc0ce84186edcaa307ee1d",
+          "optimizer_step": 64,
+          "tensor_sha256": {
+            "endpoint_fp32": "2e6051d580e3148902e56f993f206b2f166e97c6bf964d823925f5d6727e40d4",
+            "student_x_T_fp32": "d830d8d9a538e15aa5b6a101836c6bc6a152b0b6cb8716b46db590712e89cf06",
+            "trajectory_fp32": [
+              "b714230b00e531cc07a2e6c2a7320a40ce6d5a8ea4714a339a890dbb374b8b66",
+              "74ea31cc7dffe64a9ceaa36df82226ce1e5dfb159b46136b8d7bfa876a84b028",
+              "00ef151bcb5a430b3573f576851cb292e8cc9655431aa8ea2c7488da4583c454",
+              "18da73cb4cfc3149d89d66fcf98b2ac21e2c34a6eb594f7fd320b1f49ae37e07",
+              "2e6051d580e3148902e56f993f206b2f166e97c6bf964d823925f5d6727e40d4"
+            ]
+          }
+        },
+        {
+          "checkpoint_bytes": 2364272,
+          "checkpoint_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-lr-af00d04-20260907-round02-formal/conditions/lr-005/checkpoints/step-128.pt",
+          "checkpoint_sha256": "8d73b59e65f9be9f55f8941abf2b27e661f0614ce6b7d1853287696d2a08df7a",
+          "distance": {
+            "l2_distance": 1.4080715673529673,
+            "l2_ratio_to_m0": 0.47284250544996403,
+            "mse": 3.025307523785159e-05,
+            "mse_ratio_to_m0": 0.22358003496019926
+          },
+          "image_bytes": 296260,
+          "image_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-lr-af00d04-20260907-round02-formal/conditions/lr-005/images/step-128.png",
+          "image_sha256": "1d8d0f23ea6a80b7da5ba74dbb52eaefe6a202336335efca6471e58f2d010742",
+          "optimizer_step": 128,
+          "tensor_sha256": {
+            "endpoint_fp32": "7a8f1ed7f65806199449dab7fc1a65954698c64ce54e6853e03f84803206aa6f",
+            "student_x_T_fp32": "6f4002542fafb6a3e460c81552574bc70d07797c96fd00c96549723cbe51aaae",
+            "trajectory_fp32": [
+              "2b7d9c155299e5f8ec15ed52bd176a50bb42426cb23b8a706a724be034c54d32",
+              "a03d5498527896f010f1e0974f2701e53d23fc618a7f9707baee7257f2aca4f1",
+              "1a6b17ccac834f02358b5f2acc1744689525f26d16dd583a9efdd16c6181d73b",
+              "02d6dfeac76ab522de5f6eec056418ba29f8e1b32ffb19c72c1a6149045c5ff9",
+              "7a8f1ed7f65806199449dab7fc1a65954698c64ce54e6853e03f84803206aa6f"
+            ]
+          }
+        },
+        {
+          "checkpoint_bytes": 2364272,
+          "checkpoint_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-lr-af00d04-20260907-round02-formal/conditions/lr-005/checkpoints/step-192.pt",
+          "checkpoint_sha256": "3f7724e3212399f82ac8012f6c541db242cc19841b440f76060bf308e94559ba",
+          "distance": {
+            "l2_distance": 1.2406498250711586,
+            "l2_ratio_to_m0": 0.41662084887880757,
+            "mse": 2.3486511054215953e-05,
+            "mse_ratio_to_m0": 0.17357293172049823
+          },
+          "image_bytes": 295722,
+          "image_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-lr-af00d04-20260907-round02-formal/conditions/lr-005/images/step-192.png",
+          "image_sha256": "11ca62a06f49b6ee7d47eea7190cafe124ce5f44f1345974007cf4a56bc665bc",
+          "optimizer_step": 192,
+          "tensor_sha256": {
+            "endpoint_fp32": "ccfb4a4c3ffdfa4865abbbc619d35216c5f32d1a1f3d7413e93e76804f5e848b",
+            "student_x_T_fp32": "0a2d9f932158b573933d23190d9183801e4eb4a32d788736863fc3ca120227d0",
+            "trajectory_fp32": [
+              "58764b831f40c5b3e4f2c5d6f56281cdfa06c4d4db618b5a3b92245e66b23901",
+              "a9709433730ec840938225e543e7c26570d6bb734ef32ae9452d3535e2a5e378",
+              "a1600bcce170702110fd5c50e489b796aa8dcbf8892363176424d15ce1231ca6",
+              "5b5586d2898898a7de7d59363b16dfe6137cbf8561aae5c2feaf5da42590ca18",
+              "ccfb4a4c3ffdfa4865abbbc619d35216c5f32d1a1f3d7413e93e76804f5e848b"
+            ]
+          }
+        },
+        {
+          "checkpoint_bytes": 2364272,
+          "checkpoint_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-lr-af00d04-20260907-round02-formal/conditions/lr-005/checkpoints/step-256.pt",
+          "checkpoint_sha256": "bd2c0fb0632cb4ef0738b5a07ff28e6751699efa81a4ff477db94be9f736e69e",
+          "distance": {
+            "l2_distance": 1.0455837542145208,
+            "l2_ratio_to_m0": 0.35111598974332603,
+            "mse": 1.6681600754964165e-05,
+            "mse_ratio_to_m0": 0.12328243825343542
+          },
+          "image_bytes": 296516,
+          "image_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-lr-af00d04-20260907-round02-formal/conditions/lr-005/images/step-256.png",
+          "image_sha256": "61840aa71259a06b9db0dd923153e4326c88aad682d8ac806e85c5c5efba58d4",
+          "optimizer_step": 256,
+          "tensor_sha256": {
+            "endpoint_fp32": "139383a82fc466cab2fb056d454d7d5fb99f59cc90bd37106968a1d7955a2bfd",
+            "student_x_T_fp32": "93c3a8023c2c246795d6432e272a7a2e04d87f17daba53f73c893cb5f13a5fdd",
+            "trajectory_fp32": [
+              "bc90de3b48b4d6126f57f5039bb1e5651f8dd8edde1dc61cd78b15c3c20e48d3",
+              "ab8f65a2a15a8c3733d9988865a06648d010bdabc72a609cf7eebba43dc57964",
+              "6e4bcd0c93aab2b8d0a6fc3f04bf1581704529878b3cd8fa626f4ca5cfa70be5",
+              "2b204e90e558092ec4d83eb22d423c6512fc6c5fa274fe95e99663e6f639cde2",
+              "139383a82fc466cab2fb056d454d7d5fb99f59cc90bd37106968a1d7955a2bfd"
+            ]
+          }
+        }
+      ],
+      "condition_gate": false,
+      "endpoint_distance": {
+        "l2_distance": 1.0455837542145208,
+        "l2_ratio_to_m0": 0.35111598974332603,
+        "mse": 1.6681600754964165e-05,
+        "mse_ratio_to_m0": 0.12328243825343542
+      },
+      "initialization_alpha": 0.99,
+      "m0_mse": 0.00013531206059269607,
+      "technical_audit": {
+        "finite_nonzero_gradient_every_step": true,
+        "gradient_clipping_absent": true,
+        "minimum_gradient_nonzero_fraction": 0.9994049072265625,
+        "minimum_gradient_norm": 0.00012592693499555253,
+        "optimizer_lr_schedule_exact": true,
+        "optimizer_receipts": 256,
+        "optimizer_steps_contiguous": true
+      }
+    }
+  },
+  "counters": {
+    "backward_calls": 512,
+    "full_chain_forward_calls": 523,
+    "optimizer_steps": 512,
+    "reader_forward_calls": 0
+  },
+  "elapsed_seconds": 533.8374709319323,
+  "engineering_gate": true,
+  "formal_success": false,
+  "git_commit": "af00d0418f4ead501a27bb1cab03b5cd9e3bc51a",
+  "mode": "formal",
+  "models_frozen": true,
+  "only_student_x_T_trainable": true,
+  "phase2_allowed": false,
+  "protocol": "R11-New-Reachable-LR-Control-Target01",
+  "schema": "vision_memory.r11-new-reachable-lr-control-result.v1",
+  "snapshots_unchanged": true,
+  "target_record": {
+    "artifact_sha256": "5352fac1cf614c8458d4f61b6ffcbf7b053f8a947dedac1286f80261ba8a772a",
+    "bytes": 1052016,
+    "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-lr-af00d04-20260907-round02-formal/target/fixed_parent_target.pt",
+    "source_parent_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-basin-7d4a845-20260907-round01-formal",
+    "teacher_endpoint_replay_bitwise_equal": true,
+    "tensor_sha256": {
+      "normalized_noise_fp32": "a320afe2438b0ee725de4702b7d7bd7a213c08ad306ea05eef699b292f7b4377",
+      "source_only_x_T_init_fp32": "719e92867b60546b21b281cfc633ab782c8ce2274bfb41c6b3cee6d673e74eaa",
+      "teacher_endpoint_fp32": "9e627ec840af943d29e3b40a9a8ab796ce23bf07861cb18801360157c4bea0e9",
+      "teacher_x_T_fp32": "9a5cde0f0f93ba29dc74b2b78878e64dde49a6ec9168cb60f57ad48cdfb31f66"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory-lr-88a0b48-20260907/scripts/experiments/run_r11_new_reachable_lr_control.py", line 584, in main
+    result = run_experiment(args, config, validation)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory-lr-88a0b48-20260907/scripts/experiments/run_r11_new_reachable_lr_control.py", line 415, in run_experiment
+    reader, oracle, source_latents, context, target, target_record, initialization, forward = load_fixed_runtime(
+                                                                                              ^^^^^^^^^^^^^^^^^^^
+  File "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory-lr-88a0b48-20260907/scripts/experiments/run_r11_new_reachable_lr_control.py", line 208, in load_fixed_runtime
+    processor, pipe, reader, oracle, source_latents, context = condition_binding.load_runtime(
+                                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory-lr-88a0b48-20260907/scripts/train/r11_new_identity_condition_binding.py", line 173, in load_runtime
+    pipe = phase1a._load_pipeline(args, updater_device, updater_dtype)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory-lr-88a0b48-20260907/scripts/train/r11_new_frozen_dreamlite_oracle.py", line 449, in _load_pipeline
+    from diffusers import DreamLiteMobilePipeline
+ModuleNotFoundError: No module named 'diffusers'
