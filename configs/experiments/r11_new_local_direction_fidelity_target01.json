@@ -1,0 +1,213 @@
+{
+  "schema": "vision_memory.r11-new-local-direction-fidelity-config.v1",
+  "protocol": "R11-New-Local-Direction-Fidelity-Target01",
+  "status": "preregistered_after_low_lr_failure_before_any_direction_scan_forward",
+  "research_question": "At the shared alpha=0.99 start and the lr=0.001 plateau, do autograd, Adam-preconditioned, and oracle-residual directions predict real finite-difference descent through the frozen BF16 DreamLite map?",
+  "causal_role": "Separate optimizer direction/step-policy failure from BF16 cast or local Jacobian fidelity failure before another training run.",
+  "parent_low_lr_failure": {
+    "training_commit": "af00d0418f4ead501a27bb1cab03b5cd9e3bc51a",
+    "delivery_commit": "496c136ec6cf359ba81348302942acddea41fe40",
+    "source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-lr-af00d04-20260907-round02-formal",
+    "source_target_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-lr-af00d04-20260907-round02-formal/target/fixed_parent_target.pt",
+    "source_alpha099_checkpoint_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-lr-af00d04-20260907-round02-formal/conditions/lr-001/checkpoints/step-000.pt",
+    "source_plateau_checkpoint_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-lr-af00d04-20260907-round02-formal/conditions/lr-001/checkpoints/step-256.pt",
+    "source_target_artifact_sha256": "5352fac1cf614c8458d4f61b6ffcbf7b053f8a947dedac1286f80261ba8a772a",
+    "source_alpha099_checkpoint_sha256": "623f2eea39f94f3ea8666dc3cc22cb6e707f9befe1cddac4304af9a47a5dd9d2",
+    "source_plateau_checkpoint_sha256": "3d166294353511a33b160f8f97a677de1440e7225245a9057d39a182c2563c80",
+    "source_result_sha256": "8e8e7fe686d2dc4b3394d799947b0a8e78d34d570e784f7143d841773fa1a8c8",
+    "source_manifest_sha256": "7374341a6b8269dafcf92c36ab23591ea0bb48003bbeeeb01e4d9299ac6bc798",
+    "source_terminal_sha256": "5983d4546a526583e49a6727766140ffc5fa134e0841c96ca93c13420e5ea436",
+    "source_inventory_sha256": "3ec274ff2f2d5db00d34ff5dba2200c1bc51b5a01a7135094cc0c7311a093af4",
+    "source_archive_sha256": "9bfe553c8aa7a8eef8a69dcc19ef9d37fa182c7766548dc81b5df39737acfcd1",
+    "target_tensor_sha256": {
+      "normalized_noise_fp32": "a320afe2438b0ee725de4702b7d7bd7a213c08ad306ea05eef699b292f7b4377",
+      "source_only_x_T_init_fp32": "719e92867b60546b21b281cfc633ab782c8ce2274bfb41c6b3cee6d673e74eaa",
+      "teacher_endpoint_fp32": "9e627ec840af943d29e3b40a9a8ab796ce23bf07861cb18801360157c4bea0e9",
+      "teacher_x_T_fp32": "9a5cde0f0f93ba29dc74b2b78878e64dde49a6ec9168cb60f57ad48cdfb31f66"
+    },
+    "plateau_tensor_sha256": {
+      "student_x_T_fp32": "0d9cda8b23bb8e29dc5dda90bad9acf1dfcb7f32e74e91202736b9046b115608",
+      "endpoint_fp32": "c9339962f2870e8768799eceab22c7bc6004e204e68c55ad7da505ff2ba52586"
+    },
+    "alpha099_tensor_sha256": {
+      "student_x_T_fp32": "d602b83f235ae5c0221d4dca5a0fc1369f1d0da238dbf0c8e26a94d2bd829d2c",
+      "endpoint_fp32": "4cd8d5fcffe1a8bee4ceb60c3bc91dac447514e461a42b79866968447d922fae"
+    },
+    "alpha099_m0_mse": 0.00013531206059269607,
+    "lr001_raw256_mse": 0.000016364127077395096,
+    "lr001_raw256_mse_ratio_to_m0": 0.12093620484173165,
+    "lr001_raw256_x_T_l2_to_teacher": 2.0512112034227754,
+    "formal_success": false
+  },
+  "fixed_target_and_anchor_contract": {
+    "load_exact_parent_target_artifact": true,
+    "load_exact_parent_plateau_checkpoint": true,
+    "regenerate_target_or_plateau_forbidden": true,
+    "teacher_endpoint_replay_must_be_bitwise_equal": true,
+    "anchors": [
+      {
+        "name": "alpha099-start",
+        "formula": "source_x_T + 0.99 * (teacher_x_T - source_x_T)",
+        "alpha": 0.99
+      },
+      {
+        "name": "lr001-raw256",
+        "formula": "exact student_x_T_fp32 from parent lr-001 raw step 256 checkpoint",
+        "parent_optimizer_step": 256
+      }
+    ],
+    "anchor_order": [
+      "alpha099-start",
+      "lr001-raw256"
+    ],
+    "baseline_endpoint_replay_must_be_bitwise_equal": true,
+    "bf16_cast_is_part_of_the_fixed_forward_map": true
+  },
+  "direction_scan_contract": {
+    "directions": [
+      "negative-autograd",
+      "negative-adam-preconditioned",
+      "teacher-residual",
+      "deterministic-orthogonal-control"
+    ],
+    "direction_order_fixed": true,
+    "all_directions_unit_l2": true,
+    "negative_autograd_formula": "-gradient / ||gradient||_2",
+    "negative_adam_preconditioned_formula": "normalized negative next Adam proposal using the anchor gradient and parent Adam hyperparameters/state; empty state at alpha099-start and exact step256 state at lr001-raw256",
+    "teacher_residual_formula": "(teacher_x_T - anchor_x_T) / ||teacher_x_T - anchor_x_T||_2",
+    "orthogonal_control_formula": "seeded N(0,1) projected off gradient and teacher-residual, then unit-normalized",
+    "orthogonal_control_seed": 20260907,
+    "signed_radii_l2": [
+      0.0001,
+      0.001,
+      0.01,
+      0.1,
+      0.3,
+      1.0,
+      2.0
+    ],
+    "evaluate_both_signs": true,
+    "loss": "mean elementwise FP32 MSE between scanned endpoint and fixed detached teacher endpoint",
+    "analytic_directional_derivative": "dot(anchor autograd gradient, unit direction)",
+    "central_finite_difference": "(loss(anchor + radius*direction) - loss(anchor - radius*direction)) / (2*radius)",
+    "meaningful_descent_loss_ratio_lte": 0.9,
+    "strong_oracle_descent_loss_ratio_lte": 0.1,
+    "no_optimizer_steps": true,
+    "no_gradient_clipping": true,
+    "global_determinism_seed": 0,
+    "strict_determinism": true,
+    "dreamlite_device": "cuda:0",
+    "reader_device": "cuda:1",
+    "reader_forward_calls": 0
+  },
+  "technical_preflight_gate": {
+    "teacher_replay_forwards": 1,
+    "anchor_gradient_forwards": 2,
+    "total_full_chain_forward_calls": 3,
+    "backward_calls": 2,
+    "optimizer_steps": 0,
+    "anchor_baselines_match_parent_bitwise": true,
+    "finite_nonzero_gradient_per_anchor": true,
+    "gradient_nonzero_fraction_gte": 0.99,
+    "all_direction_norms_abs_error_lte": 1e-06,
+    "orthogonal_control_abs_cosine_to_gradient_lte": 1e-05,
+    "orthogonal_control_abs_cosine_to_teacher_residual_lte": 1e-05,
+    "only_student_x_T_trainable": true,
+    "models_frozen": true
+  },
+  "formal_technical_gate": {
+    "teacher_replay_forwards": 1,
+    "anchor_gradient_forwards": 2,
+    "scan_forwards": 112,
+    "total_full_chain_forward_calls": 115,
+    "backward_calls": 2,
+    "optimizer_steps": 0,
+    "scan_rows": 112,
+    "all_rows_finite": true,
+    "all_endpoint_tensors_saved_and_hashed": true,
+    "target_and_anchor_tensors_identical_to_parent_and_preflight": true,
+    "model_snapshots_unchanged": true,
+    "reader_forward_calls": 0
+  },
+  "decision_table": {
+    "technical_fail": "Repair only the violated implementation contract and rerun in a fresh directory; never interpret partial scan outcomes.",
+    "plateau_negative_gradient_and_adam_descent": "The local gradient is actionable; Adam failed mainly through step policy. Preregister normalized-gradient trust-region optimization with deterministic line search.",
+    "plateau_negative_gradient_only": "Adam preconditioning or momentum is the dominant failure. Replace Adam with normalized raw-gradient trust-region optimization.",
+    "plateau_teacher_residual_only": "The exact solution path descends but the computed gradient directions do not; diagnose BF16 cast/Jacobian fidelity or use continuation/residual parameterization before another optimizer run.",
+    "plateau_oracle_not_strongly_descending": "Stop and audit anchor/target replay or scanned radius resolution; do not launch training.",
+    "adam_only_or_random_control_anomaly": "Non-monotone control outcome; audit implementation and local geometry before interpretation."
+  },
+  "interpretation_boundaries": {
+    "diagnostic_only": true,
+    "teacher_residual_is_oracle_information_unavailable_to_a_deployable_writer": true,
+    "fixed_target_is_self_generated_and_not_semantic_memory": true,
+    "reader_not_evaluated": true,
+    "formal_success_always_false": true,
+    "phase2_always_false": true,
+    "no_event_to_state_learning_claim": true,
+    "no_shared_writer_claim": true,
+    "no_id_ood_claim": true,
+    "no_post_result_direction_radius_threshold_anchor_or_target_change": true
+  },
+  "data": {
+    "train_path": "/inspire/ssd/project/exploration-topic/czxs26210936/data/vision-language-memory-r3/formal-v1/train.jsonl",
+    "train_sha256": "24327edc39e0d133df5150dc1aab4f55c6cf5b05ccfca9025ad90c5accc6d184",
+    "dev_path": "/inspire/ssd/project/exploration-topic/czxs26210936/data/vision-language-memory-r3/formal-v1/dev.jsonl",
+    "dev_sha256": "8b167df38022a631d4e631d3c0d66e9fca74171f4224fec436030d6650047303"
+  },
+  "models": {
+    "dreamlite": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-mobile",
+    "reader": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct"
+  },
+  "model_snapshots": {
+    "dreamlite_mobile": {
+      "file_count": 27,
+      "manifest_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-mobile/.snapshot_manifest.json",
+      "manifest_sha256": "1bcf41b170c4b4a806bac6701cbdf4fabd5c3c53fa67415d065ab95ce2703159",
+      "model_dir": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-mobile",
+      "passed": true,
+      "repo_id": "carlofkl/DreamLite-mobile",
+      "revision": "6695c3f4be230f0493fa5dbf78be3bc4d3bb2ab4",
+      "snapshot_payload_sha256": "3fb839f465793b01ecafc4df433031a063dd7b395a050960cde57c2807031337",
+      "total_bytes": 5071894300
+    },
+    "qwen_reader": {
+      "file_count": 14,
+      "manifest_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct/.snapshot_manifest.json",
+      "manifest_sha256": "159a504daaae6dc412535978f087150a0eb8e50164afd70a8a17f83906f1127c",
+      "model_dir": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+      "passed": true,
+      "repo_id": "Qwen/Qwen3-VL-4B-Instruct",
+      "revision": "ebb281ec70b05090aa6165b016eac8ec08e71b17",
+      "snapshot_payload_sha256": "45be3ffb00017b02bffa79f4f8e6f301760ac50c0bb78b2c4e5a7fe8aa3d52c6",
+      "total_bytes": 8887292732
+    }
+  },
+  "environment": {
+    "CUDA_VISIBLE_DEVICES": "0,1",
+    "PYTHONHASHSEED": "0",
+    "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+    "VLM_DREAMLITE_SNAPSHOT_MANIFEST_SHA256": "1bcf41b170c4b4a806bac6701cbdf4fabd5c3c53fa67415d065ab95ce2703159",
+    "VLM_READER_SNAPSHOT_MANIFEST_SHA256": "159a504daaae6dc412535978f087150a0eb8e50164afd70a8a17f83906f1127c",
+    "HF_HUB_OFFLINE": "1",
+    "TRANSFORMERS_OFFLINE": "1",
+    "OMP_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "TOKENIZERS_PARALLELISM": "false",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "deployment": {
+    "instance": "vlm-r11-identity-h200x4-20260907",
+    "workspace": "分布式训练空间",
+    "compute_group": "开发区-H200-3号机房-2-cuda12.8版本",
+    "python_executable": "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+    "physical_gpu_count": 4,
+    "runtime_visible_gpu_count": 2,
+    "runtime_cuda_visible_devices": "0,1",
+    "unused_physical_gpus_must_not_enter_run": true,
+    "fresh_output_root_required": true,
+    "clean_detached_checkout_required": true,
+    "preflight_and_formal_same_pushed_commit_required": true,
+    "implementation_commit_must_be_pushed_before_run": true
+  }
+}
