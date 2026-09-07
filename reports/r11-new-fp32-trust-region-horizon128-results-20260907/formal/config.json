@@ -1,0 +1,190 @@
+{
+  "algorithm": {
+    "candidate_formula": "plateau_x_T + (current_residual_delta + radius * unit_negative_gradient)",
+    "candidate_radii_l2_in_fixed_order": [
+      0.1,
+      0.03,
+      0.01,
+      0.003,
+      0.001
+    ],
+    "checkpoint_every_accepted_update": true,
+    "direction": "unit_l2_normalize(-d_loss/d_student_x_T_fp32)",
+    "evaluate_all_candidates_every_iteration": true,
+    "final_independent_replay_required": true,
+    "frozen_values": [
+      "DreamLite UNet",
+      "DreamLite VAE",
+      "text encoder",
+      "Reader",
+      "source latents",
+      "prompt embeddings",
+      "scheduler",
+      "teacher endpoint"
+    ],
+    "gradient_nonzero_fraction_gte": 0.99,
+    "initial_residual_delta": 0.0,
+    "loss": "mean((DreamLite_fp32(student_x_T)-fixed_fp32_teacher_endpoint)^2)",
+    "maximum_formal_iterations": 128,
+    "minimum_relative_improvement_to_accept": 1e-06,
+    "no_gradient_clipping": true,
+    "no_torch_optimizer": true,
+    "normalization_is_the_preregistered_update_rule_not_clipping": true,
+    "parameterization": "student_x_T_fp32 = fixed_plateau_x_T_fp32 + residual_delta_fp32",
+    "selection": "candidate with minimum endpoint loss; ties choose smaller radius",
+    "stop_after_loss_ratio_lte": 0.01,
+    "stop_if_no_candidate_is_acceptable": true,
+    "teacher_x_T_forbidden_from_update_direction_or_candidate_selection": true,
+    "technical_preflight_iterations": 1,
+    "trainable_values": [
+      "residual_delta_fp32"
+    ]
+  },
+  "base_precision_contract": {
+    "config_byte_sha256": "6fc1caf6e9760c295b25582a804584d6fa326137d48d1b6fcbd6e4146cf89cc5",
+    "config_canonical_sha256": "7d11a0f1bcc2b96bc71ba500410b9a60a092a84204584078558f98451f31c1c3",
+    "config_path": "configs/experiments/r11_new_activation_precision_control_target01.json",
+    "reuse_exact_data_models_snapshots_environment_and_deployment": true,
+    "reuse_exact_parent_target_and_plateau": true,
+    "reuse_same_in_memory_bf16_to_fp32_lift": true
+  },
+  "causal_role": "Distinguish insufficient iteration budget from first-order optimization stall without changing target, model, precision, loss, radii, selection, acceptance, or evaluation boundaries.",
+  "decision_table": {
+    "fixed_target_trust_region_success": "Deliver the single-target result, then preregister a multi-target and non-oracle writer feasibility test; do not call this Picture Memory success.",
+    "monotone_progress_above_capture": "Reject the claim that iteration budget up to 128 is sufficient and test curvature-aware updates without changing target or evaluation.",
+    "strong_capture_reached_only": "Conclude that more horizon helps but 128 identical first-order updates are insufficient for exact fixed-target optimization; next test curvature-aware updates with the same target.",
+    "technical_failure": "Repair only the violated binding, prefix reproduction, replay, counter, precision, or inventory contract and rerun in a fresh directory.",
+    "trust_region_stalled": "Reject the current first-order rule and test a curvature-aware or conjugate-direction update in FP32; do not return to BF16 Adam."
+  },
+  "experiment_variant": "horizon128",
+  "fixed_fp32_anchor": {
+    "gradient_fp32_sha256": "c40db44b55a98ad40ec894b8ad0d91ae0fa48ef158c8338c2fa24e87c20e57ec",
+    "gradient_nonzero_fraction": 1.0,
+    "gradient_norm": 0.00025156916969025126,
+    "negative_gradient_direction_fp32_sha256": "23bb1ae01455b36dc28d6e00ca6acc195e2d84542932bbb0591ee2fae7a22e9b",
+    "overlap_candidate_controls": [
+      {
+        "endpoint_fp32_sha256": "921ff3ef5af83fc9c0410cceac089c5e2275200c8b8a95abfb61691cf62b3371",
+        "loss_ratio_to_plateau": 0.8152169766791239,
+        "radius_l2": 0.1,
+        "x_T_fp32_sha256": "a63ca77623e2ee2c0c76b98f53bef2dbf42dd14693e37b52da26640fde608f3c"
+      },
+      {
+        "endpoint_fp32_sha256": "707b62464cda7f4290c9b955b0645b0d44259ebc21e4ee533f9a2404b25cf6ac",
+        "loss_ratio_to_plateau": 0.8698530486820824,
+        "radius_l2": 0.01,
+        "x_T_fp32_sha256": "dcf9614dacd8bda48c6aceca272b363f230e9a4f631d691f9894dc3bb3a4e89f"
+      },
+      {
+        "endpoint_fp32_sha256": "ccfb57a2ec766e0b6e0bd7dcfb05cc1d47ffdcf7cd6ae4fbd21e0c2073ae0fae",
+        "loss_ratio_to_plateau": 0.9861155364074711,
+        "radius_l2": 0.001,
+        "x_T_fp32_sha256": "bc0be895ab5bc19d5933607d853621728787669cae93f888a119d09ac191bcba"
+      }
+    ],
+    "plateau_endpoint_fp32_sha256": "d63e3e481b852f5c71faab4461ebd54610f26705f7d4d458d1f397bc1ddab451",
+    "plateau_mse": 1.7977445168071426e-05,
+    "teacher_endpoint_fp32_sha256": "73115a188b098f761af77f9df5cde804b0f4665b6914fc5fcc0cdd5ba740e951"
+  },
+  "fixed_target_success_gate": {
+    "accepted_update_count_gte": 1,
+    "classification": "fixed_target_trust_region_success",
+    "final_loss_ratio_to_fp32_plateau_lte": 0.01,
+    "final_replay_bitwise_equal": true,
+    "strict_monotonicity": true
+  },
+  "formal_gate": {
+    "accepted_losses_strictly_monotone": true,
+    "all_candidate_endpoints_tensors_saved_and_hashed": true,
+    "all_current_endpoint_replays_bitwise_equal": true,
+    "all_gradients_and_directions_saved_and_hashed": true,
+    "final_replay_bitwise_equal": true,
+    "maximum_backward_calls": 128,
+    "maximum_full_chain_forward_calls": 771,
+    "maximum_parameter_updates": 128,
+    "model_snapshot_files_unchanged": true,
+    "reader_forward_calls": 0
+  },
+  "interpretation_boundaries": {
+    "all_other_parent_algorithm_fields_exactly_equal": true,
+    "formal_picture_memory_success_always_false": true,
+    "no_event_to_state_learning_claim": true,
+    "no_id_ood_claim": true,
+    "no_post_result_radius_threshold_iteration_or_loss_change": true,
+    "no_shared_writer_claim": true,
+    "phase2_always_false": true,
+    "reader_not_evaluated": true,
+    "single_changed_scientific_factor": "maximum_formal_iterations: 32 -> 128",
+    "single_fixed_self_generated_target": true,
+    "teacher_endpoint_is_oracle_supervision": true,
+    "teacher_x_T_not_used_by_optimizer": true,
+    "teacher_x_T_used_only_to_generate_the_frozen_target_endpoint": true
+  },
+  "parent_precision_result": {
+    "classification": "fp32_restores_capture_and_gradient",
+    "delivery_commit": "0653269d4941d005e1b999831a6faae67d192730",
+    "formal_success": false,
+    "fp32_capture_width": 0.05,
+    "fp32_gradient_actionable": true,
+    "fp32_to_bf16_capture_widening_factor": 1666.6666666666667,
+    "phase2_allowed": false,
+    "source_archive_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-precision-2753094-20260907-round01.tar.gz",
+    "source_archive_sha256": "b4a34fa3e9d3d7f40949b4b6534978e00e552f1baaf2903554dc5ee112def659",
+    "source_gradient_metrics_sha256": "f94a1e7c4e5f126f65998b45fd030f92158bad730001ce7dfa21b91531f09043",
+    "source_inventory_sha256": "7be7b1d219d3f91c5c85ef8428013d94692a185720ecd365cc6f67ea03de5673",
+    "source_manifest_sha256": "b823089eafd6562f7e3e2d72e605b5bdcfa832f0752344ea9c27dc70c7e0caf3",
+    "source_result_sha256": "165d25177bd6a517f305b1fad9dac5ff3655febfa91a6ea5f72b4dca4401f406",
+    "source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-precision-2753094-20260907-round01-formal",
+    "source_terminal_sha256": "ce3188d23620e7505e90e76646d06dbcb3f249271a641ba0f722550a8ddb7973",
+    "training_commit": "27530943dba93d457e0ba0560201cd58dd81ca4b"
+  },
+  "parent_prefix_reproduction_gate": {
+    "all_parent_metric_rows_byte_equal": true,
+    "candidate_rows_exact_prefix_count": 160,
+    "external_independent_audit_required_before_accepting_classification": true,
+    "iteration_rows_exact_prefix_count": 32,
+    "parent_result_inventory_and_terminal_hash_bound": true
+  },
+  "parent_trust_result": {
+    "accepted_update_count": 32,
+    "classification": "monotone_progress_above_capture",
+    "delivery_commit": "2c0849235844895428fe65cb77015f1a58272aad",
+    "final_endpoint_fp32_sha256": "07a581678d3f87635356f9745bb6de317eaf0fde93ce0d91effdbcd471eb0d6d",
+    "final_loss_ratio_to_plateau": 0.12737637992938525,
+    "final_x_T_fp32_sha256": "59cd995d270ae9e9f6addb7d922296f9d072a6a1d04ab0e65fbacddc3af2246d",
+    "formal_success": false,
+    "iteration_count": 32,
+    "phase2_allowed": false,
+    "source_archive_sha256": "e8b8630ac8177ef51ea4c812cd513ae295032db4f2b523a7805bfb7c3002397b",
+    "source_candidate_metrics_sha256": "374d91abb67b021f8ed97631110acf76f656f35890bb3c52a6406e531cb97fc3",
+    "source_delivery_root": "reports/r11-new-fp32-trust-region-results-20260907/formal",
+    "source_final_checkpoint_sha256": "57760b82e58c9f4df5dfbeb7f70a9d4c2458b34f962650961fff70ffe8fc250f",
+    "source_inventory_sha256": "b5ae72243d5cd932a1327333af7b76a86a4026d7b4c3ff5c0b374e64a3ece1d1",
+    "source_iteration_metrics_sha256": "9b43317296aa2aa7adc572a280c7ff8473cb3e995a9abde62905e46f74cbe43d",
+    "source_manifest_sha256": "6c1390ccd70d66baf7fc8dad919ac976b6b6d55b30e7bfa97692b47f44e25006",
+    "source_result_sha256": "e910057e0ebe80a0a20739b0c376fa8869e9f4cca1a36659c66edd6aeea4c1e9",
+    "source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/r11-new-trust-bebeffd-20260907-round02-formal",
+    "source_tensor_bundle_sha256": "31bf71aa2fb6238fc1286fc877df1f39f526a9fd4fe4e73039e1b8e9d7ba7eb8",
+    "source_terminal_sha256": "a2f7ae9dac97c6c72669102342959e87efecacd70d3981b18bc33118db3b25c0",
+    "stop_reason": "maximum_iterations",
+    "training_commit": "bebeffdd84ae635fb5122d6025557ab27a85bfed"
+  },
+  "protocol": "R11-New-FP32-Trust-Region-Target01",
+  "research_question": "Is the delivered 32-update FP32 trust-region result limited only by the preregistered horizon, such that the identical algorithm reaches the fixed-target loss-ratio threshold within 128 updates?",
+  "schema": "vision_memory.r11-new-fp32-trust-region-config.v1",
+  "status": "preregistered_after_delivered_round02_monotone_progress_before_any_horizon128_dreamlite_forward",
+  "technical_preflight_gate": {
+    "all_models_frozen": true,
+    "backward_calls": 1,
+    "bf16_teacher_parent_replay": true,
+    "candidate_forwards": 5,
+    "final_replay_bitwise_equal": true,
+    "first_update_strictly_improves": true,
+    "fp32_lift_audit_passed": true,
+    "fp32_teacher_plateau_gradient_and_overlap_candidates_match_parent": true,
+    "full_chain_forward_calls": 9,
+    "only_student_x_T_trainable": true,
+    "parameter_updates": 1,
+    "reader_forward_calls": 0
+  }
+}

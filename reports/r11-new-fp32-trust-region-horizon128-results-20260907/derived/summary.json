@@ -1,0 +1,943 @@
+{
+  "archive": {
+    "bytes": 616876521,
+    "github_delivery_parts": [
+      {
+        "bytes": 47185920,
+        "path": "raw/r11-new-trust-h128-8efeabc-20260907-round01.tar.gz.github-part-00.bin",
+        "sha256": "2e0c498510fd4da83893bd7dc1233652f1b62b18adec6134b4ea10268e08c562"
+      },
+      {
+        "bytes": 47185920,
+        "path": "raw/r11-new-trust-h128-8efeabc-20260907-round01.tar.gz.github-part-01.bin",
+        "sha256": "b6317e40ed5e776c60a898f86f7968930067ee0eeb08bca74fd1d84e9804a938"
+      },
+      {
+        "bytes": 47185920,
+        "path": "raw/r11-new-trust-h128-8efeabc-20260907-round01.tar.gz.github-part-02.bin",
+        "sha256": "457129db3edb628ec535425896ddf2e684a469f25d4efd4b34ce5fb0b33ec0f3"
+      },
+      {
+        "bytes": 47185920,
+        "path": "raw/r11-new-trust-h128-8efeabc-20260907-round01.tar.gz.github-part-03.bin",
+        "sha256": "3c942d78aa4b3bb20febdae1b7cc5e39a3d7a4875851b1e2739a5717ec2f54c0"
+      },
+      {
+        "bytes": 47185920,
+        "path": "raw/r11-new-trust-h128-8efeabc-20260907-round01.tar.gz.github-part-04.bin",
+        "sha256": "fb0d3062e39d6729b235740d22b162f392683f20d79caa50b7fcec2e12c0d4e7"
+      },
+      {
+        "bytes": 47185920,
+        "path": "raw/r11-new-trust-h128-8efeabc-20260907-round01.tar.gz.github-part-05.bin",
+        "sha256": "8542e230fa08abdb051d86ca0121932082b68f4a2dcf96904a648b0fcdf5b5b9"
+      },
+      {
+        "bytes": 47185920,
+        "path": "raw/r11-new-trust-h128-8efeabc-20260907-round01.tar.gz.github-part-06.bin",
+        "sha256": "52b055d46dfd7cb651ff6fb778d7ab7f7e015188a2c3c0d1d65b642ad64e380a"
+      },
+      {
+        "bytes": 47185920,
+        "path": "raw/r11-new-trust-h128-8efeabc-20260907-round01.tar.gz.github-part-07.bin",
+        "sha256": "871827481ee866290527bb7e6f895b5ba7c00f9be6ea06e280bd871f5c3e0fb9"
+      },
+      {
+        "bytes": 47185920,
+        "path": "raw/r11-new-trust-h128-8efeabc-20260907-round01.tar.gz.github-part-08.bin",
+        "sha256": "5f956770c4b859f95ed42442cf6d756195363f1ebe3e42fcbf9b0c8b7abf8f7c"
+      },
+      {
+        "bytes": 47185920,
+        "path": "raw/r11-new-trust-h128-8efeabc-20260907-round01.tar.gz.github-part-09.bin",
+        "sha256": "258a0568585db7c1d28230f5bd9f8fe90ff2e11c2f0aa922e25095dd41c3fdd2"
+      },
+      {
+        "bytes": 47185920,
+        "path": "raw/r11-new-trust-h128-8efeabc-20260907-round01.tar.gz.github-part-10.bin",
+        "sha256": "5a3f5e4b438a2fd6dcafdd73231b5ef9ac0c4903ee3d106a5cc61536f75c6c9e"
+      },
+      {
+        "bytes": 47185920,
+        "path": "raw/r11-new-trust-h128-8efeabc-20260907-round01.tar.gz.github-part-11.bin",
+        "sha256": "9c002f099ea3c34372f4fcc9a13a3ea59202cb694eb4ddada7d804dfd3fa0cc6"
+      },
+      {
+        "bytes": 47185920,
+        "path": "raw/r11-new-trust-h128-8efeabc-20260907-round01.tar.gz.github-part-12.bin",
+        "sha256": "be905bf06676055c33aa98354ddf2cac0dd0f1ac1ba8ab45fc961b03f1353b8d"
+      },
+      {
+        "bytes": 3459561,
+        "path": "raw/r11-new-trust-h128-8efeabc-20260907-round01.tar.gz.github-part-13.bin",
+        "sha256": "97ed73235ffbeedc51519accfefb9f4fedca768be4aecd0d434168091ce6533e"
+      }
+    ],
+    "light_archive": {
+      "bytes": 33137568,
+      "path": "raw/r11-new-trust-h128-8efeabc-20260907-round01-light.tar.gz",
+      "sha256": "1aef0dc98ff38d11570bf5cfa24eda1febad726d29f05877257b6aeece25ed8f"
+    },
+    "path": "raw/r11-new-trust-h128-8efeabc-20260907-round01.tar.gz",
+    "sha256": "d907382f050eb7e5a452fe8632f079c746f2d6cd1f9519a667c95dae9e740483"
+  },
+  "formal_result": {
+    "classification": "strong_capture_reached_only",
+    "counters": {
+      "backward_calls": 128,
+      "full_chain_forward_calls": 771,
+      "optimizer_steps": 0,
+      "parameter_updates": 128,
+      "reader_forward_calls": 0
+    },
+    "elapsed_seconds": 617.8622815907001,
+    "engineering_gate": true,
+    "fixed_target_optimization_success": false,
+    "formal_success": false,
+    "phase2_allowed": false,
+    "trace_summary": {
+      "accepted_loss_sequence": [
+        1.2357087143755052e-05,
+        9.688770660432056e-06,
+        8.26322502689436e-06,
+        7.188225026766304e-06,
+        6.671928531432059e-06,
+        6.36942422715947e-06,
+        5.946151759417262e-06,
+        5.755531219620025e-06,
+        4.76831519335974e-06,
+        4.393261860968778e-06,
+        4.2555648178677075e-06,
+        3.9870442378742155e-06,
+        3.8666444197588135e-06,
+        3.6262376852391753e-06,
+        3.5204557207180187e-06,
+        3.3997685022768565e-06,
+        3.2359748729504645e-06,
+        3.1328434033639496e-06,
+        2.989177573908819e-06,
+        2.91729793389095e-06,
+        2.738357807174907e-06,
+        2.660972086232505e-06,
+        2.6148736651521176e-06,
+        2.576828364908579e-06,
+        2.5436352188989986e-06,
+        2.5041251774382545e-06,
+        2.474557732057292e-06,
+        2.4366736397496425e-06,
+        2.4096584638755303e-06,
+        2.3734985461487668e-06,
+        2.347215058762231e-06,
+        2.289901885887957e-06,
+        2.164315674235695e-06,
+        2.139747039109352e-06,
+        2.1133662357897265e-06,
+        2.081079855997814e-06,
+        2.0592774490069132e-06,
+        2.0206259705446428e-06,
+        2.0033012333442457e-06,
+        1.6334413430740824e-06,
+        1.6016613244573819e-06,
+        1.5908324257907225e-06,
+        1.5755781532789115e-06,
+        1.5557524193354766e-06,
+        1.5327233313655597e-06,
+        1.5187748658718192e-06,
+        1.3165613381715957e-06,
+        1.2335765404714039e-06,
+        1.2281816452741623e-06,
+        1.2230484571773559e-06,
+        1.2182249520265032e-06,
+        1.2130827826695167e-06,
+        1.2083653473382583e-06,
+        1.2033249277010327e-06,
+        1.1987010566372192e-06,
+        1.1937635235881316e-06,
+        1.1892387874468113e-06,
+        1.1844075515909935e-06,
+        1.1799974117820966e-06,
+        1.175276793219382e-06,
+        1.170949985862535e-06,
+        1.1662993983918568e-06,
+        1.1620642226262134e-06,
+        1.157506858362467e-06,
+        1.1533840051924926e-06,
+        1.1489148619148182e-06,
+        1.1448797749835649e-06,
+        1.1404713404772338e-06,
+        1.136557330028154e-06,
+        1.1322191539875348e-06,
+        1.1283636922598816e-06,
+        1.1241413631069008e-06,
+        1.1203600251974422e-06,
+        1.1162115924889804e-06,
+        1.112519612433971e-06,
+        1.1084505331382388e-06,
+        1.1048228998333798e-06,
+        1.100810891330184e-06,
+        1.0972768222927698e-06,
+        1.093326090995106e-06,
+        1.0898803566306015e-06,
+        1.0860032944037812e-06,
+        1.082617473002756e-06,
+        1.0788119197968626e-06,
+        1.0754832828752114e-06,
+        1.0717515124269994e-06,
+        1.068494384526275e-06,
+        1.0648199122442747e-06,
+        1.0616439567456837e-06,
+        1.0580263278825441e-06,
+        1.054894482876989e-06,
+        1.051339154400921e-06,
+        1.0482748393769725e-06,
+        1.0447905651744804e-06,
+        1.0417979865451343e-06,
+        1.0383532753621694e-06,
+        1.0354254982303246e-06,
+        1.0320123919882462e-06,
+        1.029122813633876e-06,
+        1.0258036127197556e-06,
+        1.0229858844468254e-06,
+        1.0197228448305395e-06,
+        1.0169361530643073e-06,
+        1.0137448498426238e-06,
+        1.011016365737305e-06,
+        1.0078388186229859e-06,
+        1.005183889901673e-06,
+        1.0020512490882538e-06,
+        9.994627134801704e-07,
+        9.963803222490242e-07,
+        9.938025868905243e-07,
+        9.907591902447166e-07,
+        9.882554650175734e-07,
+        9.852583389147185e-07,
+        9.827936082729138e-07,
+        9.798557130125118e-07,
+        9.774238378668088e-07,
+        9.744958333612885e-07,
+        9.721482001623372e-07,
+        9.692710136732785e-07,
+        9.66942593549902e-07,
+        9.641128144721733e-07,
+        9.618383955967147e-07,
+        9.59053068072535e-07,
+        9.568052519171033e-07,
+        9.540506198391085e-07,
+        9.518679462416912e-07,
+        9.491481591794582e-07
+      ],
+      "accepted_update_count": 128,
+      "all_accepted_losses_strictly_monotone": true,
+      "final_endpoint_fp32_sha256": "c2f956b5478fb6f0b1e1f432fa5b6d6e1e47de5e46566b5abd1e4380a21d240d",
+      "final_loss": 9.491481591794582e-07,
+      "final_loss_ratio_to_plateau": 0.05279660988009456,
+      "final_x_T_fp32_sha256": "77e9c2ada335cab9279589c805e8a6e5f057da8edaaef8c7f090de496698d296",
+      "initial_loss": 1.7977445168071426e-05,
+      "initial_loss_ratio_to_plateau": 1.0,
+      "iteration_count": 128,
+      "stop_reason": "maximum_iterations"
+    }
+  },
+  "image_statistics": {
+    "FP32 teacher endpoint": {
+      "difference_from_fixed_target_png": {
+        "pixel_mae": 0.0006833767984062433,
+        "pixel_max_abs": 0.00784313678741455,
+        "pixel_mse": 2.679928684301558e-06
+      },
+      "mean": 0.4282965660095215,
+      "mean_total_variation": 0.0002723167999647558,
+      "sha256": "f8578ab99d72c82b6af0022c779a0ac474c35433846d10ef334091075033f6fd",
+      "shape": [
+        1024,
+        1024,
+        3
+      ],
+      "std": 0.030211087316274643
+    },
+    "Final replay": {
+      "difference_from_fixed_target_png": {
+        "pixel_mae": 0.000649798777885735,
+        "pixel_max_abs": 0.00784313678741455,
+        "pixel_mse": 2.5482397632003995e-06
+      },
+      "mean": 0.42833948135375977,
+      "mean_total_variation": 0.00027362516266293824,
+      "sha256": "dc295c72fd739bec725fe583e3a7b37ada13fed6313ea785f4ad20faa241c6d9",
+      "shape": [
+        1024,
+        1024,
+        3
+      ],
+      "std": 0.030249809846282005
+    },
+    "Fixed BF16 target": {
+      "difference_from_fixed_target_png": {
+        "pixel_mae": 0.0,
+        "pixel_max_abs": 0.0,
+        "pixel_mse": 0.0
+      },
+      "mean": 0.4288567006587982,
+      "mean_total_variation": 0.00035175186349079013,
+      "sha256": "5bbc021956d4c38f69f34a1d06c5137f768e99082f22b4a6369ebf57ce986b07",
+      "shape": [
+        1024,
+        1024,
+        3
+      ],
+      "std": 0.030355030670762062
+    },
+    "Update 1": {
+      "difference_from_fixed_target_png": {
+        "pixel_mae": 0.0006446351762861013,
+        "pixel_max_abs": 0.00784313678741455,
+        "pixel_mse": 2.528010327296215e-06
+      },
+      "mean": 0.42834171652793884,
+      "mean_total_variation": 0.0002735116286203265,
+      "sha256": "28ae7265ffa121c20346cd21df9f1ac20d59f98adcb306685d1b54121355a212",
+      "shape": [
+        1024,
+        1024,
+        3
+      ],
+      "std": 0.03026248887181282
+    },
+    "Update 128": {
+      "difference_from_fixed_target_png": {
+        "pixel_mae": 0.000649798777885735,
+        "pixel_max_abs": 0.00784313678741455,
+        "pixel_mse": 2.5482397632003995e-06
+      },
+      "mean": 0.42833948135375977,
+      "mean_total_variation": 0.00027362516266293824,
+      "sha256": "dc295c72fd739bec725fe583e3a7b37ada13fed6313ea785f4ad20faa241c6d9",
+      "shape": [
+        1024,
+        1024,
+        3
+      ],
+      "std": 0.030249809846282005
+    },
+    "Update 32": {
+      "difference_from_fixed_target_png": {
+        "pixel_mae": 0.0006470075459219515,
+        "pixel_max_abs": 0.00784313678741455,
+        "pixel_mse": 2.5373335574840894e-06
+      },
+      "mean": 0.42834094166755676,
+      "mean_total_variation": 0.0002737031318247318,
+      "sha256": "3e4ac1098ec3f1bfb08e940715ff8380066c8288ec37c2819cd8d2bc3a174092",
+      "shape": [
+        1024,
+        1024,
+        3
+      ],
+      "std": 0.030258093029260635
+    },
+    "Update 48": {
+      "difference_from_fixed_target_png": {
+        "pixel_mae": 0.0006486555794253945,
+        "pixel_max_abs": 0.00784313678741455,
+        "pixel_mse": 2.5437573185627116e-06
+      },
+      "mean": 0.42834028601646423,
+      "mean_total_variation": 0.00027362577384337783,
+      "sha256": "1c96da115d2b7d98e86f821dcb59edceb3dbc3a4166ba97161632bb96ea2296a",
+      "shape": [
+        1024,
+        1024,
+        3
+      ],
+      "std": 0.030253561213612556
+    },
+    "Update 64": {
+      "difference_from_fixed_target_png": {
+        "pixel_mae": 0.0006488874205388129,
+        "pixel_max_abs": 0.00784313678741455,
+        "pixel_mse": 2.5446663585171336e-06
+      },
+      "mean": 0.4283401072025299,
+      "mean_total_variation": 0.00027364763082005084,
+      "sha256": "ccddd4f8810fd2eb3c6bad39f68ee3d4226a7d1e1794c1aad9c6a7fb766d3156",
+      "shape": [
+        1024,
+        1024,
+        3
+      ],
+      "std": 0.03025268204510212
+    },
+    "Update 96": {
+      "difference_from_fixed_target_png": {
+        "pixel_mae": 0.0006493499386124313,
+        "pixel_max_abs": 0.00784313678741455,
+        "pixel_mse": 2.5464803456998197e-06
+      },
+      "mean": 0.42833980917930603,
+      "mean_total_variation": 0.00027362327091395855,
+      "sha256": "18ede98320004060f1ec8ae8477d039c9a755620c1d2629f9fb8eaf0343a19be",
+      "shape": [
+        1024,
+        1024,
+        3
+      ],
+      "std": 0.03025117889046669
+    }
+  },
+  "inventories": {
+    "formal": {
+      "artifact_count": 281,
+      "inventory_sha256": "ef041702b1067898a531da98a5bd81661829747529e5d8ea4c249c4da2012ea5",
+      "passed": true
+    },
+    "preflight": {
+      "artifact_count": 27,
+      "inventory_sha256": "dd224fa49a9ca8f63750f83c0f15cbfbe55f5791073958f3f0b0531fce0bafa0",
+      "passed": true
+    }
+  },
+  "local_independent_audits": {
+    "formal": {
+      "artifact_count": 281,
+      "classification": "strong_capture_reached_only",
+      "fixed_target_optimization_success": false,
+      "formal_success": false,
+      "git_commit": "8efeabc1ab548700569bb6110bcacc2e78dba65d",
+      "mode": "formal",
+      "passed": true,
+      "phase2_allowed": false,
+      "trace_summary": {
+        "accepted_loss_sequence": [
+          1.2357087143755052e-05,
+          9.688770660432056e-06,
+          8.26322502689436e-06,
+          7.188225026766304e-06,
+          6.671928531432059e-06,
+          6.36942422715947e-06,
+          5.946151759417262e-06,
+          5.755531219620025e-06,
+          4.76831519335974e-06,
+          4.393261860968778e-06,
+          4.2555648178677075e-06,
+          3.9870442378742155e-06,
+          3.8666444197588135e-06,
+          3.6262376852391753e-06,
+          3.5204557207180187e-06,
+          3.3997685022768565e-06,
+          3.2359748729504645e-06,
+          3.1328434033639496e-06,
+          2.989177573908819e-06,
+          2.91729793389095e-06,
+          2.738357807174907e-06,
+          2.660972086232505e-06,
+          2.6148736651521176e-06,
+          2.576828364908579e-06,
+          2.5436352188989986e-06,
+          2.5041251774382545e-06,
+          2.474557732057292e-06,
+          2.4366736397496425e-06,
+          2.4096584638755303e-06,
+          2.3734985461487668e-06,
+          2.347215058762231e-06,
+          2.289901885887957e-06,
+          2.164315674235695e-06,
+          2.139747039109352e-06,
+          2.1133662357897265e-06,
+          2.081079855997814e-06,
+          2.0592774490069132e-06,
+          2.0206259705446428e-06,
+          2.0033012333442457e-06,
+          1.6334413430740824e-06,
+          1.6016613244573819e-06,
+          1.5908324257907225e-06,
+          1.5755781532789115e-06,
+          1.5557524193354766e-06,
+          1.5327233313655597e-06,
+          1.5187748658718192e-06,
+          1.3165613381715957e-06,
+          1.2335765404714039e-06,
+          1.2281816452741623e-06,
+          1.2230484571773559e-06,
+          1.2182249520265032e-06,
+          1.2130827826695167e-06,
+          1.2083653473382583e-06,
+          1.2033249277010327e-06,
+          1.1987010566372192e-06,
+          1.1937635235881316e-06,
+          1.1892387874468113e-06,
+          1.1844075515909935e-06,
+          1.1799974117820966e-06,
+          1.175276793219382e-06,
+          1.170949985862535e-06,
+          1.1662993983918568e-06,
+          1.1620642226262134e-06,
+          1.157506858362467e-06,
+          1.1533840051924926e-06,
+          1.1489148619148182e-06,
+          1.1448797749835649e-06,
+          1.1404713404772338e-06,
+          1.136557330028154e-06,
+          1.1322191539875348e-06,
+          1.1283636922598816e-06,
+          1.1241413631069008e-06,
+          1.1203600251974422e-06,
+          1.1162115924889804e-06,
+          1.112519612433971e-06,
+          1.1084505331382388e-06,
+          1.1048228998333798e-06,
+          1.100810891330184e-06,
+          1.0972768222927698e-06,
+          1.093326090995106e-06,
+          1.0898803566306015e-06,
+          1.0860032944037812e-06,
+          1.082617473002756e-06,
+          1.0788119197968626e-06,
+          1.0754832828752114e-06,
+          1.0717515124269994e-06,
+          1.068494384526275e-06,
+          1.0648199122442747e-06,
+          1.0616439567456837e-06,
+          1.0580263278825441e-06,
+          1.054894482876989e-06,
+          1.051339154400921e-06,
+          1.0482748393769725e-06,
+          1.0447905651744804e-06,
+          1.0417979865451343e-06,
+          1.0383532753621694e-06,
+          1.0354254982303246e-06,
+          1.0320123919882462e-06,
+          1.029122813633876e-06,
+          1.0258036127197556e-06,
+          1.0229858844468254e-06,
+          1.0197228448305395e-06,
+          1.0169361530643073e-06,
+          1.0137448498426238e-06,
+          1.011016365737305e-06,
+          1.0078388186229859e-06,
+          1.005183889901673e-06,
+          1.0020512490882538e-06,
+          9.994627134801704e-07,
+          9.963803222490242e-07,
+          9.938025868905243e-07,
+          9.907591902447166e-07,
+          9.882554650175734e-07,
+          9.852583389147185e-07,
+          9.827936082729138e-07,
+          9.798557130125118e-07,
+          9.774238378668088e-07,
+          9.744958333612885e-07,
+          9.721482001623372e-07,
+          9.692710136732785e-07,
+          9.66942593549902e-07,
+          9.641128144721733e-07,
+          9.618383955967147e-07,
+          9.59053068072535e-07,
+          9.568052519171033e-07,
+          9.540506198391085e-07,
+          9.518679462416912e-07,
+          9.491481591794582e-07
+        ],
+        "accepted_update_count": 128,
+        "all_accepted_losses_strictly_monotone": true,
+        "final_endpoint_fp32_sha256": "c2f956b5478fb6f0b1e1f432fa5b6d6e1e47de5e46566b5abd1e4380a21d240d",
+        "final_loss": 9.491481591794582e-07,
+        "final_loss_ratio_to_plateau": 0.05279660988009456,
+        "final_x_T_fp32_sha256": "77e9c2ada335cab9279589c805e8a6e5f057da8edaaef8c7f090de496698d296",
+        "initial_loss": 1.7977445168071426e-05,
+        "initial_loss_ratio_to_plateau": 1.0,
+        "iteration_count": 128,
+        "stop_reason": "maximum_iterations"
+      }
+    },
+    "preflight": {
+      "artifact_count": 27,
+      "classification": null,
+      "fixed_target_optimization_success": false,
+      "formal_success": false,
+      "git_commit": "8efeabc1ab548700569bb6110bcacc2e78dba65d",
+      "mode": "technical-preflight",
+      "passed": true,
+      "phase2_allowed": false,
+      "trace_summary": {
+        "accepted_loss_sequence": [
+          1.2357087143755052e-05
+        ],
+        "accepted_update_count": 1,
+        "all_accepted_losses_strictly_monotone": true,
+        "final_endpoint_fp32_sha256": "533a9e58ae7ad2f53a86a436d990ca07aad5cb1f71130f7c86b9c483c581044f",
+        "final_loss": 1.2357087143755052e-05,
+        "final_loss_ratio_to_plateau": 0.6873661428655987,
+        "final_x_T_fp32_sha256": "f118e8b0ae1c87e2700f6efb8b74f894ee2d6fb477e2fd9ffb1c909696a28bea",
+        "initial_loss": 1.7977445168071426e-05,
+        "initial_loss_ratio_to_plateau": 1.0,
+        "iteration_count": 1,
+        "stop_reason": "maximum_iterations"
+      }
+    }
+  },
+  "observations": {
+    "all_gradients_dense": true,
+    "final_gradient_norm": 1.3073582391909038e-05,
+    "final_relative_improvement": 0.0028573155267721272,
+    "final_residual_l2_from_plateau": 0.27234735863725157,
+    "first_strong_capture_update": 40,
+    "interpretation": "The exact parent algorithm crosses strong capture at update 40, proving the 32-step budget was insufficient for that threshold. It remains 5.28 times above the fixed-target success threshold after 128 monotone updates, while 88/128 selections use the smallest radius and the last 32 updates improve by only about 0.28% each. The preregistered next discriminator is a curvature-aware or conjugate-direction FP32 update on the same target, not more identical first-order budget.",
+    "late_32_updates": {
+      "maximum_relative_improvement": 0.0032963320373235873,
+      "mean_relative_improvement": 0.0028031345273256594,
+      "minimum_relative_improvement": 0.00228779642508423,
+      "selected_radius_counts": {
+        "0.001": 32
+      }
+    },
+    "loss_ratio_at_updates": {
+      "128": 0.05279660988009456,
+      "32": 0.12737637992938525,
+      "64": 0.06438661598135423,
+      "96": 0.05775866735537713
+    },
+    "phases": [
+      {
+        "end_ratio": 0.12737637992938525,
+        "relative_reduction_within_phase": 0.8726236200706148,
+        "selected_radius_counts": {
+          "0.001": 1,
+          "0.003": 16,
+          "0.01": 11,
+          "0.03": 4
+        },
+        "start_ratio": 1.0,
+        "updates": "1-32"
+      },
+      {
+        "end_ratio": 0.06438661598135423,
+        "relative_reduction_within_phase": 0.4945168325787811,
+        "selected_radius_counts": {
+          "0.001": 23,
+          "0.003": 7,
+          "0.03": 2
+        },
+        "start_ratio": 0.12737637992938525,
+        "updates": "33-64"
+      },
+      {
+        "end_ratio": 0.05775866735537713,
+        "relative_reduction_within_phase": 0.10293985054124433,
+        "selected_radius_counts": {
+          "0.001": 32
+        },
+        "start_ratio": 0.06438661598135423,
+        "updates": "65-96"
+      },
+      {
+        "end_ratio": 0.05279660988009456,
+        "relative_reduction_within_phase": 0.0859101794151873,
+        "selected_radius_counts": {
+          "0.001": 32
+        },
+        "start_ratio": 0.05775866735537713,
+        "updates": "97-128"
+      }
+    ],
+    "post_parent_horizon_relative_loss_reduction": 0.5855070625388799,
+    "relative_loss_reduction_from_plateau": 0.9472033901199054,
+    "remaining_factor_above_fixed_target_success_threshold": 5.279660988009456,
+    "selected_radius_counts": {
+      "0.001": 88,
+      "0.003": 23,
+      "0.01": 11,
+      "0.03": 6
+    }
+  },
+  "parent_archive": {
+    "bytes": 167727523,
+    "path": "reports/r11-new-fp32-trust-region-results-20260907/raw/r11-new-trust-bebeffd-20260907-round02.tar.gz",
+    "sha256": "e8b8630ac8177ef51ea4c812cd513ae295032db4f2b523a7805bfb7c3002397b"
+  },
+  "parent_prefix_audits": {
+    "local_recomputation": {
+      "classification_accepted": true,
+      "formal_picture_memory_success": false,
+      "output_root": "C:\\Users\\Expedition\\AppData\\Local\\Temp\\vlm-r11-h128-audit-uatbotgc\\run\\r11-new-trust-h128-8efeabc-20260907-round01-formal",
+      "parent": {
+        "audit": {
+          "artifact_count": 89,
+          "classification": "monotone_progress_above_capture",
+          "fixed_target_optimization_success": false,
+          "formal_success": false,
+          "git_commit": "bebeffdd84ae635fb5122d6025557ab27a85bfed",
+          "mode": "formal",
+          "passed": true,
+          "phase2_allowed": false,
+          "trace_summary": {
+            "accepted_loss_sequence": [
+              1.2357087143755052e-05,
+              9.688770660432056e-06,
+              8.26322502689436e-06,
+              7.188225026766304e-06,
+              6.671928531432059e-06,
+              6.36942422715947e-06,
+              5.946151759417262e-06,
+              5.755531219620025e-06,
+              4.76831519335974e-06,
+              4.393261860968778e-06,
+              4.2555648178677075e-06,
+              3.9870442378742155e-06,
+              3.8666444197588135e-06,
+              3.6262376852391753e-06,
+              3.5204557207180187e-06,
+              3.3997685022768565e-06,
+              3.2359748729504645e-06,
+              3.1328434033639496e-06,
+              2.989177573908819e-06,
+              2.91729793389095e-06,
+              2.738357807174907e-06,
+              2.660972086232505e-06,
+              2.6148736651521176e-06,
+              2.576828364908579e-06,
+              2.5436352188989986e-06,
+              2.5041251774382545e-06,
+              2.474557732057292e-06,
+              2.4366736397496425e-06,
+              2.4096584638755303e-06,
+              2.3734985461487668e-06,
+              2.347215058762231e-06,
+              2.289901885887957e-06
+            ],
+            "accepted_update_count": 32,
+            "all_accepted_losses_strictly_monotone": true,
+            "final_endpoint_fp32_sha256": "07a581678d3f87635356f9745bb6de317eaf0fde93ce0d91effdbcd471eb0d6d",
+            "final_loss": 2.289901885887957e-06,
+            "final_loss_ratio_to_plateau": 0.12737637992938525,
+            "final_x_T_fp32_sha256": "59cd995d270ae9e9f6addb7d922296f9d072a6a1d04ab0e65fbacddc3af2246d",
+            "initial_loss": 1.7977445168071426e-05,
+            "initial_loss_ratio_to_plateau": 1.0,
+            "iteration_count": 32,
+            "stop_reason": "maximum_iterations"
+          }
+        },
+        "bindings": {
+          "candidates": {
+            "path": "C:\\Users\\Expedition\\AppData\\Local\\Temp\\vlm-r11-h128-audit-uatbotgc\\parent\\r11-new-trust-bebeffd-20260907-round02-formal\\candidate_metrics.jsonl",
+            "sha256": "374d91abb67b021f8ed97631110acf76f656f35890bb3c52a6406e531cb97fc3"
+          },
+          "final_checkpoint": {
+            "path": "C:\\Users\\Expedition\\AppData\\Local\\Temp\\vlm-r11-h128-audit-uatbotgc\\parent\\r11-new-trust-bebeffd-20260907-round02-formal\\checkpoints\\iteration-31.pt",
+            "sha256": "57760b82e58c9f4df5dfbeb7f70a9d4c2458b34f962650961fff70ffe8fc250f"
+          },
+          "inventory": {
+            "path": "C:\\Users\\Expedition\\AppData\\Local\\Temp\\vlm-r11-h128-audit-uatbotgc\\parent\\r11-new-trust-bebeffd-20260907-round02-formal\\artifact_inventory.json",
+            "sha256": "b5ae72243d5cd932a1327333af7b76a86a4026d7b4c3ff5c0b374e64a3ece1d1"
+          },
+          "iterations": {
+            "path": "C:\\Users\\Expedition\\AppData\\Local\\Temp\\vlm-r11-h128-audit-uatbotgc\\parent\\r11-new-trust-bebeffd-20260907-round02-formal\\iteration_metrics.jsonl",
+            "sha256": "9b43317296aa2aa7adc572a280c7ff8473cb3e995a9abde62905e46f74cbe43d"
+          },
+          "manifest": {
+            "path": "C:\\Users\\Expedition\\AppData\\Local\\Temp\\vlm-r11-h128-audit-uatbotgc\\parent\\r11-new-trust-bebeffd-20260907-round02-formal\\manifest.json",
+            "sha256": "6c1390ccd70d66baf7fc8dad919ac976b6b6d55b30e7bfa97692b47f44e25006"
+          },
+          "result": {
+            "path": "C:\\Users\\Expedition\\AppData\\Local\\Temp\\vlm-r11-h128-audit-uatbotgc\\parent\\r11-new-trust-bebeffd-20260907-round02-formal\\result.json",
+            "sha256": "e910057e0ebe80a0a20739b0c376fa8869e9f4cca1a36659c66edd6aeea4c1e9"
+          },
+          "tensor_bundle": {
+            "path": "C:\\Users\\Expedition\\AppData\\Local\\Temp\\vlm-r11-h128-audit-uatbotgc\\parent\\r11-new-trust-bebeffd-20260907-round02-formal\\trust_region_tensors.pt",
+            "sha256": "31bf71aa2fb6238fc1286fc877df1f39f526a9fd4fe4e73039e1b8e9d7ba7eb8"
+          },
+          "terminal": {
+            "path": "C:\\Users\\Expedition\\AppData\\Local\\Temp\\vlm-r11-h128-audit-uatbotgc\\parent\\r11-new-trust-bebeffd-20260907-round02-formal\\terminal.json",
+            "sha256": "a2f7ae9dac97c6c72669102342959e87efecacd70d3981b18bc33118db3b25c0"
+          }
+        },
+        "passed": true
+      },
+      "parent_root": "C:\\Users\\Expedition\\AppData\\Local\\Temp\\vlm-r11-h128-audit-uatbotgc\\parent\\r11-new-trust-bebeffd-20260907-round02-formal",
+      "passed": true,
+      "phase2_allowed": false,
+      "prefix": {
+        "candidate_prefix_sha256": "374d91abb67b021f8ed97631110acf76f656f35890bb3c52a6406e531cb97fc3",
+        "candidate_rows": 160,
+        "candidate_rows_byte_exact": true,
+        "iteration_prefix_sha256": "9b43317296aa2aa7adc572a280c7ff8473cb3e995a9abde62905e46f74cbe43d",
+        "iteration_rows": 32,
+        "iteration_rows_byte_exact": true
+      },
+      "run_audit": {
+        "artifact_count": 281,
+        "classification": "strong_capture_reached_only",
+        "fixed_target_optimization_success": false,
+        "formal_success": false,
+        "git_commit": "8efeabc1ab548700569bb6110bcacc2e78dba65d",
+        "mode": "formal",
+        "passed": true,
+        "phase2_allowed": false,
+        "trace_summary": {
+          "accepted_loss_sequence": [
+            1.2357087143755052e-05,
+            9.688770660432056e-06,
+            8.26322502689436e-06,
+            7.188225026766304e-06,
+            6.671928531432059e-06,
+            6.36942422715947e-06,
+            5.946151759417262e-06,
+            5.755531219620025e-06,
+            4.76831519335974e-06,
+            4.393261860968778e-06,
+            4.2555648178677075e-06,
+            3.9870442378742155e-06,
+            3.8666444197588135e-06,
+            3.6262376852391753e-06,
+            3.5204557207180187e-06,
+            3.3997685022768565e-06,
+            3.2359748729504645e-06,
+            3.1328434033639496e-06,
+            2.989177573908819e-06,
+            2.91729793389095e-06,
+            2.738357807174907e-06,
+            2.660972086232505e-06,
+            2.6148736651521176e-06,
+            2.576828364908579e-06,
+            2.5436352188989986e-06,
+            2.5041251774382545e-06,
+            2.474557732057292e-06,
+            2.4366736397496425e-06,
+            2.4096584638755303e-06,
+            2.3734985461487668e-06,
+            2.347215058762231e-06,
+            2.289901885887957e-06,
+            2.164315674235695e-06,
+            2.139747039109352e-06,
+            2.1133662357897265e-06,
+            2.081079855997814e-06,
+            2.0592774490069132e-06,
+            2.0206259705446428e-06,
+            2.0033012333442457e-06,
+            1.6334413430740824e-06,
+            1.6016613244573819e-06,
+            1.5908324257907225e-06,
+            1.5755781532789115e-06,
+            1.5557524193354766e-06,
+            1.5327233313655597e-06,
+            1.5187748658718192e-06,
+            1.3165613381715957e-06,
+            1.2335765404714039e-06,
+            1.2281816452741623e-06,
+            1.2230484571773559e-06,
+            1.2182249520265032e-06,
+            1.2130827826695167e-06,
+            1.2083653473382583e-06,
+            1.2033249277010327e-06,
+            1.1987010566372192e-06,
+            1.1937635235881316e-06,
+            1.1892387874468113e-06,
+            1.1844075515909935e-06,
+            1.1799974117820966e-06,
+            1.175276793219382e-06,
+            1.170949985862535e-06,
+            1.1662993983918568e-06,
+            1.1620642226262134e-06,
+            1.157506858362467e-06,
+            1.1533840051924926e-06,
+            1.1489148619148182e-06,
+            1.1448797749835649e-06,
+            1.1404713404772338e-06,
+            1.136557330028154e-06,
+            1.1322191539875348e-06,
+            1.1283636922598816e-06,
+            1.1241413631069008e-06,
+            1.1203600251974422e-06,
+            1.1162115924889804e-06,
+            1.112519612433971e-06,
+            1.1084505331382388e-06,
+            1.1048228998333798e-06,
+            1.100810891330184e-06,
+            1.0972768222927698e-06,
+            1.093326090995106e-06,
+            1.0898803566306015e-06,
+            1.0860032944037812e-06,
+            1.082617473002756e-06,
+            1.0788119197968626e-06,
+            1.0754832828752114e-06,
+            1.0717515124269994e-06,
+            1.068494384526275e-06,
+            1.0648199122442747e-06,
+            1.0616439567456837e-06,
+            1.0580263278825441e-06,
+            1.054894482876989e-06,
+            1.051339154400921e-06,
+            1.0482748393769725e-06,
+            1.0447905651744804e-06,
+            1.0417979865451343e-06,
+            1.0383532753621694e-06,
+            1.0354254982303246e-06,
+            1.0320123919882462e-06,
+            1.029122813633876e-06,
+            1.0258036127197556e-06,
+            1.0229858844468254e-06,
+            1.0197228448305395e-06,
+            1.0169361530643073e-06,
+            1.0137448498426238e-06,
+            1.011016365737305e-06,
+            1.0078388186229859e-06,
+            1.005183889901673e-06,
+            1.0020512490882538e-06,
+            9.994627134801704e-07,
+            9.963803222490242e-07,
+            9.938025868905243e-07,
+            9.907591902447166e-07,
+            9.882554650175734e-07,
+            9.852583389147185e-07,
+            9.827936082729138e-07,
+            9.798557130125118e-07,
+            9.774238378668088e-07,
+            9.744958333612885e-07,
+            9.721482001623372e-07,
+            9.692710136732785e-07,
+            9.66942593549902e-07,
+            9.641128144721733e-07,
+            9.618383955967147e-07,
+            9.59053068072535e-07,
+            9.568052519171033e-07,
+            9.540506198391085e-07,
+            9.518679462416912e-07,
+            9.491481591794582e-07
+          ],
+          "accepted_update_count": 128,
+          "all_accepted_losses_strictly_monotone": true,
+          "final_endpoint_fp32_sha256": "c2f956b5478fb6f0b1e1f432fa5b6d6e1e47de5e46566b5abd1e4380a21d240d",
+          "final_loss": 9.491481591794582e-07,
+          "final_loss_ratio_to_plateau": 0.05279660988009456,
+          "final_x_T_fp32_sha256": "77e9c2ada335cab9279589c805e8a6e5f057da8edaaef8c7f090de496698d296",
+          "initial_loss": 1.7977445168071426e-05,
+          "initial_loss_ratio_to_plateau": 1.0,
+          "iteration_count": 128,
+          "stop_reason": "maximum_iterations"
+        }
+      }
+    },
+    "remote_audit_artifact": {
+      "passed": true,
+      "path": "external_parent_prefix_audit.json",
+      "prefix": {
+        "candidate_prefix_sha256": "374d91abb67b021f8ed97631110acf76f656f35890bb3c52a6406e531cb97fc3",
+        "candidate_rows": 160,
+        "candidate_rows_byte_exact": true,
+        "iteration_prefix_sha256": "9b43317296aa2aa7adc572a280c7ff8473cb3e995a9abde62905e46f74cbe43d",
+        "iteration_rows": 32,
+        "iteration_rows_byte_exact": true
+      },
+      "sha256": "8cd3f71f329448f46c97a875d1247086e310dc1660124c28a235ce9e95f5941d"
+    }
+  },
+  "schema": "vision_memory.r11-new-fp32-trust-region-horizon128-derived-summary.v1",
+  "scientific_boundary": {
+    "id_ood_evaluated": false,
+    "multi_seed_evaluated": false,
+    "multi_target_evaluated": false,
+    "picture_memory_success": false,
+    "reader_evaluated": false,
+    "shared_writer_evaluated": false,
+    "single_fixed_oracle_target_only": true
+  }
+}
