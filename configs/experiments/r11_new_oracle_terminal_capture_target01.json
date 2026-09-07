@@ -1,0 +1,262 @@
+{
+  "schema": "vision_memory.r11-new-oracle-terminal-capture-config.v1",
+  "protocol": "R11-New-Oracle-Terminal-Capture-Target01",
+  "status": "preregistered_after_direction_scan_failure_before_any_terminal_capture_dreamlite_forward",
+  "research_question": "How close in xT and BF16 code space must the exact lr=0.001 plateau-to-teacher residual path get before the frozen DreamLite endpoint enters the exact or strong-loss teacher capture region?",
+  "causal_role": "Resolve the unmeasured final 0.051211 L2 interval after the direction scan's oracle-not-strong classification before changing optimizer, precision, or parameterization.",
+  "parent_direction_failure": {
+    "training_commit": "8f696faa1176873045c39dcd8fa910db3e9cb558",
+    "delivery_commit": "912d987d41cdb0008f265a75c3367b11cb276147",
+    "source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-direction-8f696fa-20260907-round01-formal",
+    "source_result_sha256": "19f5ea49a4df0f23745748246c3aeb0e27f75dcb5927317fc50a1fee8f90ca97",
+    "source_manifest_sha256": "97f62f98b80a2f0a103fda33a833649e04ee0f8838d2038bfa592f27ec231a06",
+    "source_terminal_sha256": "286a3a8f8a3a74f447f41e2bcca80aa06beb0f31b85e4d782081e7914dd9817d",
+    "source_inventory_sha256": "307883bf485b4630d2c2242ad36da378db66853fdcf552968ecdecdcb7744db7",
+    "source_archive_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-direction-8f696fa-20260907-round01.tar.gz",
+    "source_archive_sha256": "02cf6befb4171168d87c4b6512820b73904a05ef20712185177666b1613ea6f3",
+    "classification": "plateau_oracle_not_strongly_descending",
+    "formal_success": false,
+    "plateau_oracle_best_positive_loss_ratio": 0.912159189459992,
+    "plateau_oracle_radius_2_loss_ratio": 1.6378811939253963,
+    "plateau_oracle_radius_2_fp32_l2_remaining": 0.05121126823599431,
+    "plateau_oracle_radius_2_bf16_equal_fraction": 0.920684814453125
+  },
+  "fixed_parent_artifacts": {
+    "source_target_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-lr-af00d04-20260907-round02-formal/target/fixed_parent_target.pt",
+    "source_target_artifact_sha256": "5352fac1cf614c8458d4f61b6ffcbf7b053f8a947dedac1286f80261ba8a772a",
+    "source_plateau_checkpoint_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-lr-af00d04-20260907-round02-formal/conditions/lr-001/checkpoints/step-256.pt",
+    "source_plateau_checkpoint_sha256": "3d166294353511a33b160f8f97a677de1440e7225245a9057d39a182c2563c80",
+    "teacher_x_T_fp32_sha256": "9a5cde0f0f93ba29dc74b2b78878e64dde49a6ec9168cb60f57ad48cdfb31f66",
+    "teacher_endpoint_fp32_sha256": "9e627ec840af943d29e3b40a9a8ab796ce23bf07861cb18801360157c4bea0e9",
+    "plateau_x_T_fp32_sha256": "0d9cda8b23bb8e29dc5dda90bad9acf1dfcb7f32e74e91202736b9046b115608",
+    "plateau_endpoint_fp32_sha256": "c9339962f2870e8768799eceab22c7bc6004e204e68c55ad7da505ff2ba52586",
+    "plateau_endpoint_mse": 0.000016364127077395096,
+    "plateau_to_teacher_fp32_l2": 2.0512112034227754,
+    "load_exact_parent_bytes": true,
+    "regeneration_forbidden": true
+  },
+  "base_runtime_contract": {
+    "config_path": "configs/experiments/r11_new_local_direction_fidelity_target01.json",
+    "config_byte_sha256": "1dd314776247683487df7ba17c1a04d86f079c19c20ce0d01db6a9ed363e0511",
+    "config_canonical_sha256": "5e42cd51bd1a35a59b51cbff8dc696539e33023d2dda53240eb47b3b6f243bbd",
+    "reuse_exact_sections": [
+      "data",
+      "models",
+      "model_snapshots",
+      "environment",
+      "deployment"
+    ]
+  },
+  "terminal_path_contract": {
+    "coordinate": "requested remaining L2 distance delta from exact teacher along the normalized plateau-minus-teacher residual",
+    "construction": "delta=0 copies exact teacher xT; delta=D copies exact plateau xT; every interior point is float((teacher.double + delta * (plateau.double-teacher.double)/D)).",
+    "full_distance_D": 2.0512112034227754,
+    "grid_selection_used_only_parent_tensor_bf16_codes_not_new_dreamlite_endpoints": true,
+    "requested_remaining_l2_grid": [
+      0.0,
+      1e-08,
+      3e-08,
+      1e-07,
+      3e-07,
+      1e-06,
+      3e-06,
+      1e-05,
+      3e-05,
+      0.0001,
+      0.0003,
+      0.001,
+      0.003,
+      0.01,
+      0.03,
+      0.05,
+      2.0512112034227754
+    ],
+    "point_bindings": [
+      {
+        "requested_remaining_l2": 0.0,
+        "actual_fp32_l2": 0.0,
+        "bf16_equal_fraction_to_teacher": 1.0,
+        "bf16_l2_to_teacher": 0.0,
+        "x_T_fp32_sha256": "9a5cde0f0f93ba29dc74b2b78878e64dde49a6ec9168cb60f57ad48cdfb31f66"
+      },
+      {
+        "requested_remaining_l2": 1e-08,
+        "actual_fp32_l2": 3.7605158891043874e-10,
+        "bf16_equal_fraction_to_teacher": 1.0,
+        "bf16_l2_to_teacher": 0.0,
+        "x_T_fp32_sha256": "8562f1996c4c90893018a0a3dab0f5ebd4220c0495896fa89474e08fdb321218"
+      },
+      {
+        "requested_remaining_l2": 3e-08,
+        "actual_fp32_l2": 1.8120348452698397e-09,
+        "bf16_equal_fraction_to_teacher": 0.9999847412109375,
+        "bf16_l2_to_teacher": 7.62939453125e-06,
+        "x_T_fp32_sha256": "cb808f8e5886637086cf0625ab8988008d7f1ac66c1b5530264bf58799543d9a"
+      },
+      {
+        "requested_remaining_l2": 1e-07,
+        "actual_fp32_l2": 1.0489195731858054e-08,
+        "bf16_equal_fraction_to_teacher": 0.999969482421875,
+        "bf16_l2_to_teacher": 7.64428116888113e-06,
+        "x_T_fp32_sha256": "be02758cb9dac3fee955de248a9168aede1842d56eb27dc24bd5918223ba9f25"
+      },
+      {
+        "requested_remaining_l2": 3e-07,
+        "actual_fp32_l2": 5.712038244179444e-08,
+        "bf16_equal_fraction_to_teacher": 0.999969482421875,
+        "bf16_l2_to_teacher": 7.64428116888113e-06,
+        "x_T_fp32_sha256": "e5edb2647a21fdfb366f931b7204a73d30f98777a4936916c96459a70028e94f"
+      },
+      {
+        "requested_remaining_l2": 1e-06,
+        "actual_fp32_l2": 3.3566062566623897e-07,
+        "bf16_equal_fraction_to_teacher": 0.999969482421875,
+        "bf16_l2_to_teacher": 7.64428116888113e-06,
+        "x_T_fp32_sha256": "438a133c83d17a85e1b54489468d701c4dc61a7a1253846487d7794cc4d73b44"
+      },
+      {
+        "requested_remaining_l2": 3e-06,
+        "actual_fp32_l2": 1.7927336958891893e-06,
+        "bf16_equal_fraction_to_teacher": 0.999969482421875,
+        "bf16_l2_to_teacher": 7.64428116888113e-06,
+        "x_T_fp32_sha256": "ea97f97a8fe99b7ca51f37990f9e7cf3232ac88eb44e5924dade917ea7b79361"
+      },
+      {
+        "requested_remaining_l2": 1e-05,
+        "actual_fp32_l2": 1.017400611961934e-05,
+        "bf16_equal_fraction_to_teacher": 0.999969482421875,
+        "bf16_l2_to_teacher": 7.64428116888113e-06,
+        "x_T_fp32_sha256": "bfe7bfa11b2a4b47bbf52caae7564c77445ffb0f24f8979449a3bdaa10548327"
+      },
+      {
+        "requested_remaining_l2": 3e-05,
+        "actual_fp32_l2": 3.116070543341695e-05,
+        "bf16_equal_fraction_to_teacher": 0.9999542236328125,
+        "bf16_l2_to_teacher": 7.647998300717088e-06,
+        "x_T_fp32_sha256": "6970f43b54dd2f5a623e05c0eb65ee7f3ee4985e1f1b65c0cc8a70ab751b717f"
+      },
+      {
+        "requested_remaining_l2": 0.0001,
+        "actual_fp32_l2": 0.0001002727638855292,
+        "bf16_equal_fraction_to_teacher": 0.9997406005859375,
+        "bf16_l2_to_teacher": 0.0050115893841201275,
+        "x_T_fp32_sha256": "afd50dac1c0aaa20ea302883338b4777d1c8f76a77ece28fb02a75518ab73f97"
+      },
+      {
+        "requested_remaining_l2": 0.0003,
+        "actual_fp32_l2": 0.0003001008850590145,
+        "bf16_equal_fraction_to_teacher": 0.9990692138671875,
+        "bf16_l2_to_teacher": 0.025165464483255268,
+        "x_T_fp32_sha256": "f2573c25e0e349995fb12b822f390144d50c47737502f5d38ed3cc83aa75d1e5"
+      },
+      {
+        "requested_remaining_l2": 0.001,
+        "actual_fp32_l2": 0.0010000369540017415,
+        "bf16_equal_fraction_to_teacher": 0.9970855712890625,
+        "bf16_l2_to_teacher": 0.03991380518905893,
+        "x_T_fp32_sha256": "425ea01b28a7d1d870c953e9034c4a25049d72b883d95232981399645ba23927"
+      },
+      {
+        "requested_remaining_l2": 0.003,
+        "actual_fp32_l2": 0.0030000357289842973,
+        "bf16_equal_fraction_to_teacher": 0.9923248291015625,
+        "bf16_l2_to_teacher": 0.06582994579847995,
+        "x_T_fp32_sha256": "f86587699248fa6e1f044878e1a79c560d4e25ace8d832c8a8a534b4ea506a74"
+      },
+      {
+        "requested_remaining_l2": 0.01,
+        "actual_fp32_l2": 0.009999965814450286,
+        "bf16_equal_fraction_to_teacher": 0.979278564453125,
+        "bf16_l2_to_teacher": 0.10626894563778054,
+        "x_T_fp32_sha256": "d28b0b0fb142303f3c25f25ddbfcba5452ecccc73862020ab8b11c04f710ae04"
+      },
+      {
+        "requested_remaining_l2": 0.03,
+        "actual_fp32_l2": 0.029999955252003368,
+        "bf16_equal_fraction_to_teacher": 0.9477996826171875,
+        "bf16_l2_to_teacher": 0.18751256040387387,
+        "x_T_fp32_sha256": "1b630c611991c6300315682974bb8d53e3e6b7d3ddb491416751e6d835418450"
+      },
+      {
+        "requested_remaining_l2": 0.05,
+        "actual_fp32_l2": 0.04999997670370494,
+        "bf16_equal_fraction_to_teacher": 0.9220733642578125,
+        "bf16_l2_to_teacher": 0.24180641476138282,
+        "x_T_fp32_sha256": "d445d4f993fe44a1195733914767da96a7fe5a1c60150f75986589d31bccfc9e"
+      },
+      {
+        "requested_remaining_l2": 2.0512112034227754,
+        "actual_fp32_l2": 2.0512112034227754,
+        "bf16_equal_fraction_to_teacher": 0.240234375,
+        "bf16_l2_to_teacher": 2.1498957330574484,
+        "x_T_fp32_sha256": "0d9cda8b23bb8e29dc5dda90bad9acf1dfcb7f32e74e91202736b9046b115608"
+      }
+    ],
+    "formal_passes": [
+      "teacher-outward",
+      "plateau-inward"
+    ],
+    "teacher_outward_order": "point index 0 through 16",
+    "plateau_inward_order": "point index 16 through 0",
+    "duplicate_endpoint_must_be_bitwise_equal": true,
+    "loss": "mean elementwise FP32 MSE between scanned endpoint and exact fixed teacher endpoint",
+    "loss_ratio_denominator": "exact parent lr=0.001 raw step256 endpoint MSE",
+    "meaningful_capture_loss_ratio_lte": 0.9,
+    "strong_capture_loss_ratio_lte": 0.1,
+    "macroscopic_capture_remaining_l2_gte": 0.01,
+    "narrow_capture_remaining_l2_gte": 0.0001,
+    "no_optimizer_steps": true,
+    "no_backward": true,
+    "no_gradient_clipping": true,
+    "reader_forward_calls": 0
+  },
+  "technical_preflight_gate": {
+    "teacher_replay_forwards": 1,
+    "plateau_replay_forwards": 1,
+    "total_full_chain_forward_calls": 2,
+    "backward_calls": 0,
+    "optimizer_steps": 0,
+    "reader_forward_calls": 0,
+    "teacher_endpoint_bitwise_equal": true,
+    "plateau_endpoint_bitwise_equal": true,
+    "all_17_candidate_tensor_hashes_match": true,
+    "models_frozen": true,
+    "only_student_x_T_trainable": true
+  },
+  "formal_technical_gate": {
+    "prerequisite_teacher_replay_forwards": 1,
+    "scan_forwards": 34,
+    "total_full_chain_forward_calls": 35,
+    "backward_calls": 0,
+    "optimizer_steps": 0,
+    "reader_forward_calls": 0,
+    "scan_rows": 34,
+    "unique_points": 17,
+    "duplicate_endpoint_tensors_bitwise_equal": true,
+    "all_rows_finite": true,
+    "all_endpoint_tensors_saved_and_hashed": true,
+    "model_snapshots_unchanged": true
+  },
+  "decision_table": {
+    "technical_fail": "Repair only the violated replay, grid, duplicate, counter, or inventory contract and rerun in a fresh directory.",
+    "macroscopic_terminal_capture": "A strong region extends at least 0.01 L2 from teacher; preregister oracle continuation stages to test whether gradient optimization can remain inside successive capture regions.",
+    "narrow_terminal_capture": "A strong region exists from 0.0001 to below 0.01 L2; compare BF16 input cast against a higher-precision or residual-centered parameterization before training.",
+    "microscopic_partial_code_capture": "Strong loss survives some changed BF16 codes but only below 0.0001 L2; current optimization precision is likely inadequate, so isolate precision/parameterization next.",
+    "bf16_exact_cell_only": "Strong loss occurs only where all BF16 codes equal teacher; the present BF16 cast creates an unusably discrete terminal basin for gradient writer training.",
+    "exact_teacher_only": "Only exact teacher replay is strong; audit candidate construction and BF16/model determinism before any further optimization.",
+    "nonmonotone_capture_anomaly": "Duplicated paths agree but capture is disconnected/nonmonotone; map the smallest responsible BF16 coordinate set before choosing an optimizer."
+  },
+  "interpretation_boundaries": {
+    "diagnostic_only": true,
+    "teacher_x_T_is_oracle_information_unavailable_to_a_deployable_writer": true,
+    "grid_was_selected_without_new_dreamlite_endpoint_evaluation": true,
+    "fixed_target_is_self_generated_and_not_semantic_memory": true,
+    "reader_not_evaluated": true,
+    "formal_success_always_false": true,
+    "phase2_always_false": true,
+    "no_event_to_state_learning_claim": true,
+    "no_shared_writer_claim": true,
+    "no_id_ood_claim": true,
+    "no_post_result_grid_or_threshold_change": true
+  }
+}
