@@ -1,0 +1,208 @@
+{
+  "schema": "vision_memory.r11-new-reachable-lr-control-config.v1",
+  "protocol": "R11-New-Reachable-LR-Control-Target01",
+  "status": "preregistered_after_alpha099_lr0p05_overshoot_before_any_low_lr_forward",
+  "research_question": "Does reducing Adam's base learning rate eliminate the measured first-step overshoot and fit the same alpha=0.99 reachable endpoint?",
+  "causal_role": "Test optimizer scale as the single changed factor before altering parameterization, generator weights, data, or scientific evaluation.",
+  "parent_basin_failure": {
+    "training_commit": "7d4a84569ea422572fe2e474939f9648b099210a",
+    "delivery_commit": "21131aa98938d351bf9c45b155a5e72b7fc46560",
+    "source_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-basin-7d4a845-20260907-round01-formal",
+    "source_target_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-basin-7d4a845-20260907-round01-formal/target/fixed_parent_target.pt",
+    "source_target_artifact_sha256": "5352fac1cf614c8458d4f61b6ffcbf7b053f8a947dedac1286f80261ba8a772a",
+    "source_result_sha256": "ddac62ecbf725f207742f1dcf5cf414c86c94a5102e06e726535a3033d167696",
+    "source_manifest_sha256": "7f2ea1d919f036b87ef292c2aac9c8ccbcb8596753fe76408a6a1dcf29b24f4b",
+    "source_inventory_sha256": "d1e9e4b1315857f56ec759fb2ab11ceecf82d8394ee904c00aa0964a3d5d83c7",
+    "source_archive_sha256": "5134e63f4cc2574a8d553341cc536052038727dd1b117cec64506b7165a37b4e",
+    "target_tensor_sha256": {
+      "normalized_noise_fp32": "a320afe2438b0ee725de4702b7d7bd7a213c08ad306ea05eef699b292f7b4377",
+      "source_only_x_T_init_fp32": "719e92867b60546b21b281cfc633ab782c8ce2274bfb41c6b3cee6d673e74eaa",
+      "teacher_endpoint_fp32": "9e627ec840af943d29e3b40a9a8ab796ce23bf07861cb18801360157c4bea0e9",
+      "teacher_x_T_fp32": "9a5cde0f0f93ba29dc74b2b78878e64dde49a6ec9168cb60f57ad48cdfb31f66"
+    },
+    "alpha": 0.99,
+    "alpha099_m0_mse": 0.00013531206059269607,
+    "alpha099_initial_x_T_l2_to_teacher": 2.5599975547525995,
+    "base_learning_rate": 0.05,
+    "first_update_x_T_l2": 12.187803714647877,
+    "first_update_to_remaining_distance_ratio": 4.760865373492796,
+    "loss_after_first_step_multiplier": 29.092615706451333,
+    "raw256_mse": 0.000590489711612463,
+    "raw256_mse_ratio_to_m0": 4.363910423254146,
+    "condition_gate": false,
+    "formal_success": false
+  },
+  "fixed_inputs": {
+    "target_index": 1,
+    "target_segment_id": "r5-f1-392d41fd097d069c42218e0a",
+    "actual_conditioning_text": "no changes",
+    "actual_conditioning_text_sha256": "44f9161c3a252925f55022d60f68918abf8fdc1a9a3fadbf5ab766549f6b3461",
+    "full_prompt_sha256": "4620b977a7aff51c9ee9a6e2901555b39ee4a3e4bd705d1402818acf330d22e6",
+    "source_state": "RGB 127/255 encoded by frozen DreamLite VAE posterior mean",
+    "source_latents_fp32_sha256": "719e92867b60546b21b281cfc633ab782c8ce2274bfb41c6b3cee6d673e74eaa",
+    "identity_parent_config_file_sha256": "e4d375f10796d70f64ed91e201aebdbaa6a3939d5c7e37fd90f7034525fa60c8"
+  },
+  "data": {
+    "train_path": "/inspire/ssd/project/exploration-topic/czxs26210936/data/vision-language-memory-r3/formal-v1/train.jsonl",
+    "train_sha256": "24327edc39e0d133df5150dc1aab4f55c6cf5b05ccfca9025ad90c5accc6d184",
+    "dev_path": "/inspire/ssd/project/exploration-topic/czxs26210936/data/vision-language-memory-r3/formal-v1/dev.jsonl",
+    "dev_sha256": "8b167df38022a631d4e631d3c0d66e9fca74171f4224fec436030d6650047303"
+  },
+  "models": {
+    "dreamlite": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-mobile",
+    "reader": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct"
+  },
+  "model_snapshots": {
+    "dreamlite_mobile": {
+      "file_count": 27,
+      "manifest_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-mobile/.snapshot_manifest.json",
+      "manifest_sha256": "1bcf41b170c4b4a806bac6701cbdf4fabd5c3c53fa67415d065ab95ce2703159",
+      "model_dir": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-mobile",
+      "passed": true,
+      "repo_id": "carlofkl/DreamLite-mobile",
+      "revision": "6695c3f4be230f0493fa5dbf78be3bc4d3bb2ab4",
+      "snapshot_payload_sha256": "3fb839f465793b01ecafc4df433031a063dd7b395a050960cde57c2807031337",
+      "total_bytes": 5071894300
+    },
+    "qwen_reader": {
+      "file_count": 14,
+      "manifest_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct/.snapshot_manifest.json",
+      "manifest_sha256": "159a504daaae6dc412535978f087150a0eb8e50164afd70a8a17f83906f1127c",
+      "model_dir": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+      "passed": true,
+      "repo_id": "Qwen/Qwen3-VL-4B-Instruct",
+      "revision": "ebb281ec70b05090aa6165b016eac8ec08e71b17",
+      "snapshot_payload_sha256": "45be3ffb00017b02bffa79f4f8e6f301760ac50c0bb78b2c4e5a7fe8aa3d52c6",
+      "total_bytes": 8887292732
+    }
+  },
+  "fixed_target_and_initialization_contract": {
+    "load_exact_parent_target_artifact": true,
+    "regenerate_noise_or_target_forbidden": true,
+    "copy_target_into_each_run": true,
+    "initialization_alpha": 0.99,
+    "initialization_formula": "source_x_T + 0.99 * (teacher_x_T - source_x_T)",
+    "teacher_endpoint_replay_must_be_bitwise_equal": true,
+    "all_four_parent_tensor_hashes_must_match": true
+  },
+  "learning_rate_conditions": [
+    {
+      "name": "lr-005",
+      "base_learning_rate": 0.005,
+      "first_step_l2_prediction_from_parent_linear_scaling": 1.2187803714647878,
+      "predicted_update_to_remaining_distance_ratio": 0.4760865373492796
+    },
+    {
+      "name": "lr-001",
+      "base_learning_rate": 0.001,
+      "first_step_l2_prediction_from_parent_linear_scaling": 0.24375607429295754,
+      "predicted_update_to_remaining_distance_ratio": 0.09521730746985592
+    }
+  ],
+  "optimizer_contract": {
+    "only_trainable": "one condition-specific alpha=0.99 student x_T_fp32 at a time",
+    "objective": "mean elementwise FP32 MSE between F_identity(student_x_T) and the fixed detached parent teacher endpoint",
+    "diffusion_steps": 4,
+    "effective_sigma_schedule": [0.5, 0.375, 0.25, 0.125],
+    "optimizer": "Adam",
+    "learning_rate_schedule": "condition base LR for updates 1..128; 0.5*base*(1+cos(pi*(u-128)/128)) for updates 129..256",
+    "weight_decay": 0.0,
+    "optimizer_steps_per_condition": 256,
+    "gradient_clipping": null,
+    "checkpoint_steps": [0, 64, 128, 192, 256],
+    "primary_endpoint": "raw_step_256_only_per_condition",
+    "best_checkpoint_selection_forbidden": true,
+    "condition_order": ["lr-005", "lr-001"],
+    "optimizer_state_reset_between_conditions": true,
+    "global_determinism_seed": 0,
+    "strict_determinism": true,
+    "dreamlite_device": "cuda:0",
+    "reader_device": "cuda:1",
+    "reader_forward_calls": 0
+  },
+  "technical_preflight_gate": {
+    "target_replay_forwards": 1,
+    "initial_endpoint_forwards_per_condition": 1,
+    "gradient_probe_forwards_per_condition": 1,
+    "total_full_chain_forward_calls": 5,
+    "backward_calls": 2,
+    "optimizer_steps": 0,
+    "minimum_initial_endpoint_mse": 1e-8,
+    "initial_mse_must_be_bitwise_identical_between_lr_conditions": true,
+    "gradient_probe_must_be_bitwise_identical_between_lr_conditions": true,
+    "gradient_norm_gt": 0.0,
+    "gradient_nonzero_fraction_gte": 0.99,
+    "only_student_x_T_trainable": true,
+    "models_frozen": true
+  },
+  "formal_technical_gate": {
+    "optimizer_receipts_per_condition": 256,
+    "optimizer_steps_contiguous": true,
+    "condition_specific_lr_schedule_exact": true,
+    "checkpoint_steps_exact": [0, 64, 128, 192, 256],
+    "total_full_chain_forward_calls": 523,
+    "backward_calls": 512,
+    "optimizer_steps": 512,
+    "finite_nonzero_gradient_every_step": true,
+    "gradient_clipping_absent": true,
+    "optimizer_state_reset_between_conditions": true,
+    "only_student_x_T_trainable": true,
+    "models_frozen": true,
+    "target_identical_to_preflight_and_parent": true,
+    "model_snapshots_unchanged": true,
+    "reader_forward_calls": 0
+  },
+  "per_condition_gate": {
+    "endpoint": "raw_step_256_only",
+    "technical_gate": true,
+    "endpoint_mse_ratio_to_m0_lte": 0.01,
+    "endpoint_l2_ratio_to_m0_lte": 0.1,
+    "endpoint_absolute_mse_lte": 0.001
+  },
+  "decision_table": {
+    "technical_fail": "Repair only the violated implementation contract and rerun in a fresh directory; never interpret partial endpoint outcomes.",
+    "both_pass": "A stable low-LR region is identified; use lr=0.005 in a preregistered alpha=0 source-init reachable control before any generator adaptation.",
+    "only_lr005_pass": "lr=0.005 is sufficient while lr=0.001 underfits within 256 steps; use lr=0.005 for the source-init control.",
+    "only_lr001_pass": "The conservative scale is required; use lr=0.001 for the source-init control.",
+    "neither_pass": "Learning-rate reduction alone is insufficient; diagnose Adam sign normalization, finite-difference gradients, precision, or residual parameterization before generator adaptation."
+  },
+  "interpretation_boundaries": {
+    "diagnostic_only": true,
+    "fixed_target_is_self_generated_and_not_semantic_memory": true,
+    "teacher_x_T_is_oracle_initialization_information": true,
+    "reader_not_evaluated": true,
+    "formal_success_always_false": true,
+    "phase2_always_false": true,
+    "no_event_to_state_learning_claim": true,
+    "no_canonical_reachability_theorem": true,
+    "no_shared_writer_claim": true,
+    "no_id_ood_claim": true,
+    "no_post_result_threshold_lr_target_alpha_optimizer_or_schedule_change": true
+  },
+  "environment": {
+    "CUDA_VISIBLE_DEVICES": "0,1",
+    "PYTHONHASHSEED": "0",
+    "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+    "VLM_DREAMLITE_SNAPSHOT_MANIFEST_SHA256": "1bcf41b170c4b4a806bac6701cbdf4fabd5c3c53fa67415d065ab95ce2703159",
+    "VLM_READER_SNAPSHOT_MANIFEST_SHA256": "159a504daaae6dc412535978f087150a0eb8e50164afd70a8a17f83906f1127c",
+    "HF_HUB_OFFLINE": "1",
+    "TRANSFORMERS_OFFLINE": "1",
+    "OMP_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "TOKENIZERS_PARALLELISM": "false",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "deployment": {
+    "instance": "vlm-r11-identity-h200x4-20260907",
+    "workspace": "分布式训练空间",
+    "compute_group": "开发区-H200-3号机房-2-cuda12.8版本",
+    "physical_gpu_count": 4,
+    "runtime_visible_gpu_count": 2,
+    "runtime_cuda_visible_devices": "0,1",
+    "unused_physical_gpus_must_not_enter_run": true,
+    "fresh_output_root_required": true,
+    "clean_detached_checkout_required": true,
+    "preflight_and_formal_same_pushed_commit_required": true,
+    "implementation_commit_must_be_pushed_before_run": true
+  }
+}
