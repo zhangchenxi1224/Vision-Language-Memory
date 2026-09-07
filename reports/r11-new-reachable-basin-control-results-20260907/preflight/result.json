@@ -1,0 +1,117 @@
+{
+  "classification": null,
+  "condition_gates": {},
+  "conditions": {
+    "alpha-050": {
+      "alpha": 0.5,
+      "checkpoint_records": [
+        {
+          "checkpoint_bytes": 1839152,
+          "checkpoint_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-basin-7d4a845-20260907-round01-preflight/conditions/alpha-050/checkpoints/step-000.pt",
+          "checkpoint_sha256": "e9d2cb08b2ee41fa6a8809bb0dd7da19444fd725b71bc8170fd53e0b10546d23",
+          "distance": {
+            "l2_distance": 27.112714806880163,
+            "l2_ratio_to_m0": 1.0,
+            "mse": 0.0112167252227664,
+            "mse_ratio_to_m0": 1.0
+          },
+          "image_bytes": 243303,
+          "image_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-basin-7d4a845-20260907-round01-preflight/conditions/alpha-050/images/step-000.png",
+          "image_sha256": "b688080f62abf2306f3c0c704b6822b5f2fe317a5da1d6e8c56b2987a00662ed",
+          "optimizer_step": 0,
+          "tensor_sha256": {
+            "endpoint_fp32": "a0892bfccb06c706cde36a9eedf5971d1652c40904867191b200057ee90668f9",
+            "student_x_T_fp32": "bc59c22a381102544161ee788944117915c9e30ffc520e9a886f51744f9fa03e",
+            "trajectory_fp32": [
+              "b9398b4c300c26296764d4bdc97ecb895be159303a7ad78d52a36bc73d0899c3",
+              "14cc79c31e06792efeaaa5c6019ee509a73259ad421a51c7ebe329afda848df4",
+              "38a3424ec399ff1e46c96f3e5d28616fd4686c920e69817cfecf82aec46f9cd5",
+              "1beda6aa9ef1e713225d850bf130c5e5a172586ec153b1cf78e97d986027ac6a",
+              "a0892bfccb06c706cde36a9eedf5971d1652c40904867191b200057ee90668f9"
+            ]
+          }
+        }
+      ],
+      "gradient_probe": {
+        "alpha": 0.5,
+        "condition": "alpha-050",
+        "gradient_nonzero_fraction": 0.99951171875,
+        "gradient_norm": 0.0021019609008419296,
+        "loss": 0.011216726154088974,
+        "schema": "vision_memory.r11-new-reachable-basin-control-gradient-probe.v1"
+      },
+      "m0_mse": 0.0112167252227664
+    },
+    "alpha-099": {
+      "alpha": 0.99,
+      "checkpoint_records": [
+        {
+          "checkpoint_bytes": 1839152,
+          "checkpoint_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-basin-7d4a845-20260907-round01-preflight/conditions/alpha-099/checkpoints/step-000.pt",
+          "checkpoint_sha256": "1fc541eb0499745fccc445b6021672e6420b209dc30d8c3f2c0b95989565cd44",
+          "distance": {
+            "l2_distance": 2.9778870366424126,
+            "l2_ratio_to_m0": 1.0,
+            "mse": 0.00013531206059269607,
+            "mse_ratio_to_m0": 1.0
+          },
+          "image_bytes": 298581,
+          "image_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-basin-7d4a845-20260907-round01-preflight/conditions/alpha-099/images/step-000.png",
+          "image_sha256": "1316e88652a73834ce3196320bbdcdabc7ec21c7f17fdae123b53248f2fb1c81",
+          "optimizer_step": 0,
+          "tensor_sha256": {
+            "endpoint_fp32": "4cd8d5fcffe1a8bee4ceb60c3bc91dac447514e461a42b79866968447d922fae",
+            "student_x_T_fp32": "d602b83f235ae5c0221d4dca5a0fc1369f1d0da238dbf0c8e26a94d2bd829d2c",
+            "trajectory_fp32": [
+              "aed427bc4b72e42bf3df18eb3666b78bedd229b6ac1a9b1a9e54a899b978d9b8",
+              "6b21bdfd36bb078a3b074109bde3b6f6121c7d37d2c5cd6b56f9d9bdcc19d73e",
+              "624bfbbbdbb535b0178223805ecb5e6272a03fc49b5f2be49ac8c7389881eed4",
+              "a13295b4a596fda6c719be8cea70137b462d1bc1355e789e347acae54f635f39",
+              "4cd8d5fcffe1a8bee4ceb60c3bc91dac447514e461a42b79866968447d922fae"
+            ]
+          }
+        }
+      ],
+      "gradient_probe": {
+        "alpha": 0.99,
+        "condition": "alpha-099",
+        "gradient_nonzero_fraction": 0.99957275390625,
+        "gradient_norm": 0.0006489048621442366,
+        "loss": 0.00013531206059269607,
+        "schema": "vision_memory.r11-new-reachable-basin-control-gradient-probe.v1"
+      },
+      "m0_mse": 0.00013531206059269607
+    }
+  },
+  "counters": {
+    "backward_calls": 2,
+    "full_chain_forward_calls": 5,
+    "optimizer_steps": 0,
+    "reader_forward_calls": 0
+  },
+  "elapsed_seconds": 33.91469202749431,
+  "engineering_gate": true,
+  "formal_success": false,
+  "git_commit": "7d4a84569ea422572fe2e474939f9648b099210a",
+  "mode": "technical-preflight",
+  "models_frozen": true,
+  "only_student_x_T_trainable": true,
+  "phase2_allowed": false,
+  "preflight_gate": true,
+  "protocol": "R11-New-Reachable-Basin-Control-Target01",
+  "schema": "vision_memory.r11-new-reachable-basin-control-result.v1",
+  "snapshots_unchanged": true,
+  "target_record": {
+    "artifact_sha256": "5352fac1cf614c8458d4f61b6ffcbf7b053f8a947dedac1286f80261ba8a772a",
+    "bytes": 1052016,
+    "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-basin-7d4a845-20260907-round01-preflight/target/fixed_parent_target.pt",
+    "source_parent_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-reachable-986a181-20260907-round01-formal",
+    "teacher_endpoint_replay_bitwise_equal": true,
+    "tensor_sha256": {
+      "normalized_noise_fp32": "a320afe2438b0ee725de4702b7d7bd7a213c08ad306ea05eef699b292f7b4377",
+      "source_only_x_T_init_fp32": "719e92867b60546b21b281cfc633ab782c8ce2274bfb41c6b3cee6d673e74eaa",
+      "teacher_endpoint_fp32": "9e627ec840af943d29e3b40a9a8ab796ce23bf07861cb18801360157c4bea0e9",
+      "teacher_x_T_fp32": "9a5cde0f0f93ba29dc74b2b78878e64dde49a6ec9168cb60f57ad48cdfb31f66"
+    }
+  }
+}
