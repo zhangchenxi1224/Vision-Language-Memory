@@ -1,0 +1,437 @@
+{
+  "classification": "microscopic_partial_code_capture",
+  "counters": {
+    "backward_calls": 0,
+    "full_chain_forward_calls": 35,
+    "optimizer_steps": 0,
+    "reader_forward_calls": 0
+  },
+  "elapsed_seconds": 46.94327909313142,
+  "engineering_gate": true,
+  "formal_success": false,
+  "git_commit": "0262545a91788f59c96a420bc27528cbbed6d0c0",
+  "mode": "formal",
+  "models_frozen": true,
+  "only_student_x_T_trainable": true,
+  "phase2_allowed": false,
+  "plateau_endpoint_mse": 1.6364127077395096e-05,
+  "preflight_gate": null,
+  "protocol": "R11-New-Oracle-Terminal-Capture-Target01",
+  "scan_summary": {
+    "all_duplicate_endpoints_bitwise_equal": true,
+    "canonical_teacher_outward_rows": [
+      {
+        "actual_fp32_l2_to_teacher": 0.0,
+        "bf16_equal_fraction_to_teacher": 1.0,
+        "bf16_l2_to_teacher": 0.0,
+        "endpoint_bitwise_equal_to_teacher": true,
+        "endpoint_fp32_sha256": "9e627ec840af943d29e3b40a9a8ab796ce23bf07861cb18801360157c4bea0e9",
+        "loss": 0.0,
+        "loss_ratio_to_plateau": 0.0,
+        "pass": "teacher-outward",
+        "point_index": 0,
+        "protocol": "R11-New-Oracle-Terminal-Capture-Target01",
+        "requested_remaining_l2": 0.0,
+        "row_id": "teacher-outward__p00",
+        "schema": "vision_memory.r11-new-oracle-terminal-capture-scan-row.v1",
+        "x_T_fp32_sha256": "9a5cde0f0f93ba29dc74b2b78878e64dde49a6ec9168cb60f57ad48cdfb31f66"
+      },
+      {
+        "actual_fp32_l2_to_teacher": 3.7605158891043874e-10,
+        "bf16_equal_fraction_to_teacher": 1.0,
+        "bf16_l2_to_teacher": 0.0,
+        "endpoint_bitwise_equal_to_teacher": true,
+        "endpoint_fp32_sha256": "9e627ec840af943d29e3b40a9a8ab796ce23bf07861cb18801360157c4bea0e9",
+        "loss": 0.0,
+        "loss_ratio_to_plateau": 0.0,
+        "pass": "teacher-outward",
+        "point_index": 1,
+        "protocol": "R11-New-Oracle-Terminal-Capture-Target01",
+        "requested_remaining_l2": 1e-08,
+        "row_id": "teacher-outward__p01",
+        "schema": "vision_memory.r11-new-oracle-terminal-capture-scan-row.v1",
+        "x_T_fp32_sha256": "8562f1996c4c90893018a0a3dab0f5ebd4220c0495896fa89474e08fdb321218"
+      },
+      {
+        "actual_fp32_l2_to_teacher": 1.8120348452698397e-09,
+        "bf16_equal_fraction_to_teacher": 0.9999847412109375,
+        "bf16_l2_to_teacher": 7.62939453125e-06,
+        "endpoint_bitwise_equal_to_teacher": true,
+        "endpoint_fp32_sha256": "9e627ec840af943d29e3b40a9a8ab796ce23bf07861cb18801360157c4bea0e9",
+        "loss": 0.0,
+        "loss_ratio_to_plateau": 0.0,
+        "pass": "teacher-outward",
+        "point_index": 2,
+        "protocol": "R11-New-Oracle-Terminal-Capture-Target01",
+        "requested_remaining_l2": 3e-08,
+        "row_id": "teacher-outward__p02",
+        "schema": "vision_memory.r11-new-oracle-terminal-capture-scan-row.v1",
+        "x_T_fp32_sha256": "cb808f8e5886637086cf0625ab8988008d7f1ac66c1b5530264bf58799543d9a"
+      },
+      {
+        "actual_fp32_l2_to_teacher": 1.0489195731858054e-08,
+        "bf16_equal_fraction_to_teacher": 0.999969482421875,
+        "bf16_l2_to_teacher": 7.64428116888113e-06,
+        "endpoint_bitwise_equal_to_teacher": true,
+        "endpoint_fp32_sha256": "9e627ec840af943d29e3b40a9a8ab796ce23bf07861cb18801360157c4bea0e9",
+        "loss": 0.0,
+        "loss_ratio_to_plateau": 0.0,
+        "pass": "teacher-outward",
+        "point_index": 3,
+        "protocol": "R11-New-Oracle-Terminal-Capture-Target01",
+        "requested_remaining_l2": 1e-07,
+        "row_id": "teacher-outward__p03",
+        "schema": "vision_memory.r11-new-oracle-terminal-capture-scan-row.v1",
+        "x_T_fp32_sha256": "be02758cb9dac3fee955de248a9168aede1842d56eb27dc24bd5918223ba9f25"
+      },
+      {
+        "actual_fp32_l2_to_teacher": 5.712038244179444e-08,
+        "bf16_equal_fraction_to_teacher": 0.999969482421875,
+        "bf16_l2_to_teacher": 7.64428116888113e-06,
+        "endpoint_bitwise_equal_to_teacher": true,
+        "endpoint_fp32_sha256": "9e627ec840af943d29e3b40a9a8ab796ce23bf07861cb18801360157c4bea0e9",
+        "loss": 0.0,
+        "loss_ratio_to_plateau": 0.0,
+        "pass": "teacher-outward",
+        "point_index": 4,
+        "protocol": "R11-New-Oracle-Terminal-Capture-Target01",
+        "requested_remaining_l2": 3e-07,
+        "row_id": "teacher-outward__p04",
+        "schema": "vision_memory.r11-new-oracle-terminal-capture-scan-row.v1",
+        "x_T_fp32_sha256": "e5edb2647a21fdfb366f931b7204a73d30f98777a4936916c96459a70028e94f"
+      },
+      {
+        "actual_fp32_l2_to_teacher": 3.3566062566623897e-07,
+        "bf16_equal_fraction_to_teacher": 0.999969482421875,
+        "bf16_l2_to_teacher": 7.64428116888113e-06,
+        "endpoint_bitwise_equal_to_teacher": true,
+        "endpoint_fp32_sha256": "9e627ec840af943d29e3b40a9a8ab796ce23bf07861cb18801360157c4bea0e9",
+        "loss": 0.0,
+        "loss_ratio_to_plateau": 0.0,
+        "pass": "teacher-outward",
+        "point_index": 5,
+        "protocol": "R11-New-Oracle-Terminal-Capture-Target01",
+        "requested_remaining_l2": 1e-06,
+        "row_id": "teacher-outward__p05",
+        "schema": "vision_memory.r11-new-oracle-terminal-capture-scan-row.v1",
+        "x_T_fp32_sha256": "438a133c83d17a85e1b54489468d701c4dc61a7a1253846487d7794cc4d73b44"
+      },
+      {
+        "actual_fp32_l2_to_teacher": 1.7927336958891893e-06,
+        "bf16_equal_fraction_to_teacher": 0.999969482421875,
+        "bf16_l2_to_teacher": 7.64428116888113e-06,
+        "endpoint_bitwise_equal_to_teacher": true,
+        "endpoint_fp32_sha256": "9e627ec840af943d29e3b40a9a8ab796ce23bf07861cb18801360157c4bea0e9",
+        "loss": 0.0,
+        "loss_ratio_to_plateau": 0.0,
+        "pass": "teacher-outward",
+        "point_index": 6,
+        "protocol": "R11-New-Oracle-Terminal-Capture-Target01",
+        "requested_remaining_l2": 3e-06,
+        "row_id": "teacher-outward__p06",
+        "schema": "vision_memory.r11-new-oracle-terminal-capture-scan-row.v1",
+        "x_T_fp32_sha256": "ea97f97a8fe99b7ca51f37990f9e7cf3232ac88eb44e5924dade917ea7b79361"
+      },
+      {
+        "actual_fp32_l2_to_teacher": 1.017400611961934e-05,
+        "bf16_equal_fraction_to_teacher": 0.999969482421875,
+        "bf16_l2_to_teacher": 7.64428116888113e-06,
+        "endpoint_bitwise_equal_to_teacher": true,
+        "endpoint_fp32_sha256": "9e627ec840af943d29e3b40a9a8ab796ce23bf07861cb18801360157c4bea0e9",
+        "loss": 0.0,
+        "loss_ratio_to_plateau": 0.0,
+        "pass": "teacher-outward",
+        "point_index": 7,
+        "protocol": "R11-New-Oracle-Terminal-Capture-Target01",
+        "requested_remaining_l2": 1e-05,
+        "row_id": "teacher-outward__p07",
+        "schema": "vision_memory.r11-new-oracle-terminal-capture-scan-row.v1",
+        "x_T_fp32_sha256": "bfe7bfa11b2a4b47bbf52caae7564c77445ffb0f24f8979449a3bdaa10548327"
+      },
+      {
+        "actual_fp32_l2_to_teacher": 3.116070543341695e-05,
+        "bf16_equal_fraction_to_teacher": 0.9999542236328125,
+        "bf16_l2_to_teacher": 7.647998300717088e-06,
+        "endpoint_bitwise_equal_to_teacher": true,
+        "endpoint_fp32_sha256": "9e627ec840af943d29e3b40a9a8ab796ce23bf07861cb18801360157c4bea0e9",
+        "loss": 0.0,
+        "loss_ratio_to_plateau": 0.0,
+        "pass": "teacher-outward",
+        "point_index": 8,
+        "protocol": "R11-New-Oracle-Terminal-Capture-Target01",
+        "requested_remaining_l2": 3e-05,
+        "row_id": "teacher-outward__p08",
+        "schema": "vision_memory.r11-new-oracle-terminal-capture-scan-row.v1",
+        "x_T_fp32_sha256": "6970f43b54dd2f5a623e05c0eb65ee7f3ee4985e1f1b65c0cc8a70ab751b717f"
+      },
+      {
+        "actual_fp32_l2_to_teacher": 0.0001002727638855292,
+        "bf16_equal_fraction_to_teacher": 0.9997406005859375,
+        "bf16_l2_to_teacher": 0.0050115893841201275,
+        "endpoint_bitwise_equal_to_teacher": false,
+        "endpoint_fp32_sha256": "a910d8ede0ea6cc2e9737c3dbfd1bc968ee112d27fb646fbf663b537ac125525",
+        "loss": 2.4982975446619093e-05,
+        "loss_ratio_to_plateau": 1.52669160588039,
+        "pass": "teacher-outward",
+        "point_index": 9,
+        "protocol": "R11-New-Oracle-Terminal-Capture-Target01",
+        "requested_remaining_l2": 0.0001,
+        "row_id": "teacher-outward__p09",
+        "schema": "vision_memory.r11-new-oracle-terminal-capture-scan-row.v1",
+        "x_T_fp32_sha256": "afd50dac1c0aaa20ea302883338b4777d1c8f76a77ece28fb02a75518ab73f97"
+      },
+      {
+        "actual_fp32_l2_to_teacher": 0.0003001008850590145,
+        "bf16_equal_fraction_to_teacher": 0.9990692138671875,
+        "bf16_l2_to_teacher": 0.025165464483255268,
+        "endpoint_bitwise_equal_to_teacher": false,
+        "endpoint_fp32_sha256": "bb2fb34aec5a86004a0711b24fc2fb4667f6ab32382f3c73d17d76b25d6dcebf",
+        "loss": 2.5623576220823452e-05,
+        "loss_ratio_to_plateau": 1.565838257038414,
+        "pass": "teacher-outward",
+        "point_index": 10,
+        "protocol": "R11-New-Oracle-Terminal-Capture-Target01",
+        "requested_remaining_l2": 0.0003,
+        "row_id": "teacher-outward__p10",
+        "schema": "vision_memory.r11-new-oracle-terminal-capture-scan-row.v1",
+        "x_T_fp32_sha256": "f2573c25e0e349995fb12b822f390144d50c47737502f5d38ed3cc83aa75d1e5"
+      },
+      {
+        "actual_fp32_l2_to_teacher": 0.0010000369540017415,
+        "bf16_equal_fraction_to_teacher": 0.9970855712890625,
+        "bf16_l2_to_teacher": 0.03991380518905893,
+        "endpoint_bitwise_equal_to_teacher": false,
+        "endpoint_fp32_sha256": "a7e9139bcce026cbcce10b7938bb336d2701c2b45b4f3b4d79fef7c29eba4848",
+        "loss": 2.622000829433091e-05,
+        "loss_ratio_to_plateau": 1.6022857907618198,
+        "pass": "teacher-outward",
+        "point_index": 11,
+        "protocol": "R11-New-Oracle-Terminal-Capture-Target01",
+        "requested_remaining_l2": 0.001,
+        "row_id": "teacher-outward__p11",
+        "schema": "vision_memory.r11-new-oracle-terminal-capture-scan-row.v1",
+        "x_T_fp32_sha256": "425ea01b28a7d1d870c953e9034c4a25049d72b883d95232981399645ba23927"
+      },
+      {
+        "actual_fp32_l2_to_teacher": 0.0030000357289842973,
+        "bf16_equal_fraction_to_teacher": 0.9923248291015625,
+        "bf16_l2_to_teacher": 0.06582994579847995,
+        "endpoint_bitwise_equal_to_teacher": false,
+        "endpoint_fp32_sha256": "e9e4c388dfde166469744a481197383cff0647d9b7247dc1e631813b7ba62504",
+        "loss": 2.3595157472300343e-05,
+        "loss_ratio_to_plateau": 1.4418830506940985,
+        "pass": "teacher-outward",
+        "point_index": 12,
+        "protocol": "R11-New-Oracle-Terminal-Capture-Target01",
+        "requested_remaining_l2": 0.003,
+        "row_id": "teacher-outward__p12",
+        "schema": "vision_memory.r11-new-oracle-terminal-capture-scan-row.v1",
+        "x_T_fp32_sha256": "f86587699248fa6e1f044878e1a79c560d4e25ace8d832c8a8a534b4ea506a74"
+      },
+      {
+        "actual_fp32_l2_to_teacher": 0.009999965814450286,
+        "bf16_equal_fraction_to_teacher": 0.979278564453125,
+        "bf16_l2_to_teacher": 0.10626894563778054,
+        "endpoint_bitwise_equal_to_teacher": false,
+        "endpoint_fp32_sha256": "ec1400a41492b4753359d752103392154a9a5166873cee8f825ff45fedf7472e",
+        "loss": 2.4033770387177356e-05,
+        "loss_ratio_to_plateau": 1.4686863694903023,
+        "pass": "teacher-outward",
+        "point_index": 13,
+        "protocol": "R11-New-Oracle-Terminal-Capture-Target01",
+        "requested_remaining_l2": 0.01,
+        "row_id": "teacher-outward__p13",
+        "schema": "vision_memory.r11-new-oracle-terminal-capture-scan-row.v1",
+        "x_T_fp32_sha256": "d28b0b0fb142303f3c25f25ddbfcba5452ecccc73862020ab8b11c04f710ae04"
+      },
+      {
+        "actual_fp32_l2_to_teacher": 0.029999955252003368,
+        "bf16_equal_fraction_to_teacher": 0.9477996826171875,
+        "bf16_l2_to_teacher": 0.18751256040387387,
+        "endpoint_bitwise_equal_to_teacher": false,
+        "endpoint_fp32_sha256": "5bf7faadf9bbeb9fe87510ed132253bcbd8c1b4a731f925236d8ce04325a7cda",
+        "loss": 2.4468272386002354e-05,
+        "loss_ratio_to_plateau": 1.4952384731723378,
+        "pass": "teacher-outward",
+        "point_index": 14,
+        "protocol": "R11-New-Oracle-Terminal-Capture-Target01",
+        "requested_remaining_l2": 0.03,
+        "row_id": "teacher-outward__p14",
+        "schema": "vision_memory.r11-new-oracle-terminal-capture-scan-row.v1",
+        "x_T_fp32_sha256": "1b630c611991c6300315682974bb8d53e3e6b7d3ddb491416751e6d835418450"
+      },
+      {
+        "actual_fp32_l2_to_teacher": 0.04999997670370494,
+        "bf16_equal_fraction_to_teacher": 0.9220733642578125,
+        "bf16_l2_to_teacher": 0.24180641476138282,
+        "endpoint_bitwise_equal_to_teacher": false,
+        "endpoint_fp32_sha256": "c2fbfea6f551a33f40a8887316502fde279048dd782690bd5a94b4bc5d096703",
+        "loss": 2.614731783978641e-05,
+        "loss_ratio_to_plateau": 1.597843729526246,
+        "pass": "teacher-outward",
+        "point_index": 15,
+        "protocol": "R11-New-Oracle-Terminal-Capture-Target01",
+        "requested_remaining_l2": 0.05,
+        "row_id": "teacher-outward__p15",
+        "schema": "vision_memory.r11-new-oracle-terminal-capture-scan-row.v1",
+        "x_T_fp32_sha256": "d445d4f993fe44a1195733914767da96a7fe5a1c60150f75986589d31bccfc9e"
+      },
+      {
+        "actual_fp32_l2_to_teacher": 2.0512112034227754,
+        "bf16_equal_fraction_to_teacher": 0.240234375,
+        "bf16_l2_to_teacher": 2.1498957330574484,
+        "endpoint_bitwise_equal_to_teacher": false,
+        "endpoint_fp32_sha256": "c9339962f2870e8768799eceab22c7bc6004e204e68c55ad7da505ff2ba52586",
+        "loss": 1.6364127077395096e-05,
+        "loss_ratio_to_plateau": 1.0,
+        "pass": "teacher-outward",
+        "point_index": 16,
+        "protocol": "R11-New-Oracle-Terminal-Capture-Target01",
+        "requested_remaining_l2": 2.0512112034227754,
+        "row_id": "teacher-outward__p16",
+        "schema": "vision_memory.r11-new-oracle-terminal-capture-scan-row.v1",
+        "x_T_fp32_sha256": "0d9cda8b23bb8e29dc5dda90bad9acf1dfcb7f32e74e91202736b9046b115608"
+      }
+    ],
+    "duplicate_replays": [
+      {
+        "bitwise_equal": true,
+        "point_index": 0,
+        "requested_remaining_l2": 0.0
+      },
+      {
+        "bitwise_equal": true,
+        "point_index": 1,
+        "requested_remaining_l2": 1e-08
+      },
+      {
+        "bitwise_equal": true,
+        "point_index": 2,
+        "requested_remaining_l2": 3e-08
+      },
+      {
+        "bitwise_equal": true,
+        "point_index": 3,
+        "requested_remaining_l2": 1e-07
+      },
+      {
+        "bitwise_equal": true,
+        "point_index": 4,
+        "requested_remaining_l2": 3e-07
+      },
+      {
+        "bitwise_equal": true,
+        "point_index": 5,
+        "requested_remaining_l2": 1e-06
+      },
+      {
+        "bitwise_equal": true,
+        "point_index": 6,
+        "requested_remaining_l2": 3e-06
+      },
+      {
+        "bitwise_equal": true,
+        "point_index": 7,
+        "requested_remaining_l2": 1e-05
+      },
+      {
+        "bitwise_equal": true,
+        "point_index": 8,
+        "requested_remaining_l2": 3e-05
+      },
+      {
+        "bitwise_equal": true,
+        "point_index": 9,
+        "requested_remaining_l2": 0.0001
+      },
+      {
+        "bitwise_equal": true,
+        "point_index": 10,
+        "requested_remaining_l2": 0.0003
+      },
+      {
+        "bitwise_equal": true,
+        "point_index": 11,
+        "requested_remaining_l2": 0.001
+      },
+      {
+        "bitwise_equal": true,
+        "point_index": 12,
+        "requested_remaining_l2": 0.003
+      },
+      {
+        "bitwise_equal": true,
+        "point_index": 13,
+        "requested_remaining_l2": 0.01
+      },
+      {
+        "bitwise_equal": true,
+        "point_index": 14,
+        "requested_remaining_l2": 0.03
+      },
+      {
+        "bitwise_equal": true,
+        "point_index": 15,
+        "requested_remaining_l2": 0.05
+      },
+      {
+        "bitwise_equal": true,
+        "point_index": 16,
+        "requested_remaining_l2": 2.0512112034227754
+      }
+    ],
+    "largest_all_bf16_codes_equal_index": 1,
+    "largest_bitwise_teacher_endpoint_index": 8,
+    "meaningful_capture_point_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "significant_monotonicity_violations": [
+      {
+        "absolute_drop": 0.16040274006772126,
+        "from_index": 11,
+        "to_index": 12
+      },
+      {
+        "absolute_drop": 0.597843729526246,
+        "from_index": 15,
+        "to_index": 16
+      }
+    ],
+    "strong_capture_disconnected": false,
+    "strong_capture_point_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "strong_capture_prefix_end_index": 8,
+    "strong_capture_prefix_max_requested_remaining_l2": 3e-05
+  },
+  "schema": "vision_memory.r11-new-oracle-terminal-capture-result.v1",
+  "snapshots_unchanged": true,
+  "target_record": {
+    "artifact_sha256": "5352fac1cf614c8458d4f61b6ffcbf7b053f8a947dedac1286f80261ba8a772a",
+    "source_parent_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-lr-af00d04-20260907-round02-formal",
+    "teacher_endpoint_replay_bitwise_equal": true,
+    "tensor_sha256": {
+      "normalized_noise_fp32": "a320afe2438b0ee725de4702b7d7bd7a213c08ad306ea05eef699b292f7b4377",
+      "source_only_x_T_init_fp32": "719e92867b60546b21b281cfc633ab782c8ce2274bfb41c6b3cee6d673e74eaa",
+      "teacher_endpoint_fp32": "9e627ec840af943d29e3b40a9a8ab796ce23bf07861cb18801360157c4bea0e9",
+      "teacher_x_T_fp32": "9a5cde0f0f93ba29dc74b2b78878e64dde49a6ec9168cb60f57ad48cdfb31f66"
+    }
+  },
+  "tensor_bundle_sha256": "9a8e83fc91a5726c817f528a3d0235826565590a736444a5606e2d04a2523efa"
+}

@@ -1,0 +1,261 @@
+{
+  "owner": {
+    "git_commit": "0262545a91788f59c96a420bc27528cbbed6d0c0",
+    "mode": "technical-preflight",
+    "output_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-terminal-0262545-20260907-round01-preflight",
+    "owner_token": "23bf8d70017e445181c751b0b6e02c35",
+    "pid": 1529842,
+    "started_at_utc": "2026-09-07T01:59:41.924293+00:00"
+  },
+  "validation": {
+    "base_direction_config": {
+      "byte_sha256": "1dd314776247683487df7ba17c1a04d86f079c19c20ce0d01db6a9ed363e0511",
+      "canonical_sha256": "5e42cd51bd1a35a59b51cbff8dc696539e33023d2dda53240eb47b3b6f243bbd",
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory-terminal-0262545-20260907/configs/experiments/r11_new_local_direction_fidelity_target01.json"
+    },
+    "deployment": {
+      "disk_free_bytes": 901261557760,
+      "disk_usage_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new",
+      "hostname": "vlm-r11-identity-h200x4-20260907--be5a66e9128b-lzfotstnvy",
+      "minimum_free_bytes": 53687091200,
+      "output_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-terminal-0262545-20260907-round01-preflight",
+      "passed": true,
+      "required_hostname_prefix": "vlm-r11-identity-h200x4-20260907",
+      "ssd_root": "/inspire/ssd"
+    },
+    "environment": {
+      "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+      "CUDA_VISIBLE_DEVICES": "0,1",
+      "HF_HUB_OFFLINE": "1",
+      "MKL_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTHONHASHSEED": "0",
+      "TOKENIZERS_PARALLELISM": "false",
+      "TRANSFORMERS_OFFLINE": "1",
+      "VLM_DREAMLITE_SNAPSHOT_MANIFEST_SHA256": "1bcf41b170c4b4a806bac6701cbdf4fabd5c3c53fa67415d065ab95ce2703159",
+      "VLM_READER_SNAPSHOT_MANIFEST_SHA256": "159a504daaae6dc412535978f087150a0eb8e50164afd70a8a17f83906f1127c"
+    },
+    "git_clean": true,
+    "git_commit": "0262545a91788f59c96a420bc27528cbbed6d0c0",
+    "git_detached": true,
+    "gpu_names": [
+      "NVIDIA H200",
+      "NVIDIA H200"
+    ],
+    "parent_bindings": {
+      "archive": {
+        "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-direction-8f696fa-20260907-round01.tar.gz",
+        "sha256": "02cf6befb4171168d87c4b6512820b73904a05ef20712185177666b1613ea6f3"
+      },
+      "inventory": {
+        "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-direction-8f696fa-20260907-round01-formal/artifact_inventory.json",
+        "sha256": "307883bf485b4630d2c2242ad36da378db66853fdcf552968ecdecdcb7744db7"
+      },
+      "manifest": {
+        "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-direction-8f696fa-20260907-round01-formal/manifest.json",
+        "sha256": "97f62f98b80a2f0a103fda33a833649e04ee0f8838d2038bfa592f27ec231a06"
+      },
+      "plateau": {
+        "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-lr-af00d04-20260907-round02-formal/conditions/lr-001/checkpoints/step-256.pt",
+        "sha256": "3d166294353511a33b160f8f97a677de1440e7225245a9057d39a182c2563c80"
+      },
+      "result": {
+        "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-direction-8f696fa-20260907-round01-formal/result.json",
+        "sha256": "19f5ea49a4df0f23745748246c3aeb0e27f75dcb5927317fc50a1fee8f90ca97"
+      },
+      "target": {
+        "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-lr-af00d04-20260907-round02-formal/target/fixed_parent_target.pt",
+        "sha256": "5352fac1cf614c8458d4f61b6ffcbf7b053f8a947dedac1286f80261ba8a772a"
+      },
+      "terminal": {
+        "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-new/r11-new-direction-8f696fa-20260907-round01-formal/terminal.json",
+        "sha256": "286a3a8f8a3a74f447f41e2bcca80aa06beb0f31b85e4d782081e7914dd9817d"
+      }
+    },
+    "parent_direction_audit": {
+      "artifact_count": 136,
+      "classification": "plateau_oracle_not_strongly_descending",
+      "formal_success": false,
+      "git_commit": "8f696faa1176873045c39dcd8fa910db3e9cb558",
+      "mode": "formal",
+      "passed": true,
+      "phase2_allowed": false,
+      "scan_summary": {
+        "alpha099-start": {
+          "deterministic-orthogonal-control": {
+            "analytic_directional_derivative": -1.5185246827015367e-13,
+            "best_positive_loss": 0.00013055538875050843,
+            "best_positive_loss_ratio": 0.9648466528308535,
+            "best_positive_radius_l2": 0.001,
+            "central_finite_difference": [
+              0.016976773622445762,
+              -0.009945644706021994,
+              0.00016230769688263535,
+              -2.135035174433142e-05,
+              -2.1268982285012804e-05,
+              -4.264766175765544e-06,
+              -3.635275788838044e-06
+            ],
+            "finite_difference_sign_agreement_count": 5,
+            "meaningful_descent": false,
+            "nonzero_finite_difference_count": 7
+          },
+          "negative-adam-preconditioned": {
+            "analytic_directional_derivative": -0.00022986107962797277,
+            "best_positive_loss": 5.265268555376679e-05,
+            "best_positive_loss_ratio": 0.3891204178189043,
+            "best_positive_radius_l2": 1.0,
+            "central_finite_difference": [
+              0.026526686269789934,
+              0.0017158163245767355,
+              -0.00019407598301768303,
+              -0.00013854067219654098,
+              -0.00021991283574607223,
+              -0.00019991504814242944,
+              -0.0001606348014320247
+            ],
+            "finite_difference_sign_agreement_count": 5,
+            "meaningful_descent": true,
+            "nonzero_finite_difference_count": 7
+          },
+          "negative-autograd": {
+            "analytic_directional_derivative": -0.0006489048598070437,
+            "best_positive_loss": 6.898914580233395e-05,
+            "best_positive_loss_ratio": 0.5098521558251835,
+            "best_positive_radius_l2": 0.3,
+            "central_finite_difference": [
+              0.01185289875138551,
+              -0.004171168257016689,
+              -0.0008056493243202567,
+              -0.0006071226744097658,
+              -0.000431709922850132,
+              -0.00023361518833553419,
+              -0.00016106612019939348
+            ],
+            "finite_difference_sign_agreement_count": 6,
+            "meaningful_descent": true,
+            "nonzero_finite_difference_count": 7
+          },
+          "teacher-residual": {
+            "analytic_directional_derivative": -6.230106808002232e-05,
+            "best_positive_loss": 3.204438689863309e-05,
+            "best_positive_loss_ratio": 0.2368184089302295,
+            "best_positive_radius_l2": 2.0,
+            "central_finite_difference": [
+              -0.06434034730773419,
+              0.00391044159187004,
+              0.00029384245863184333,
+              -3.242552338633686e-05,
+              -6.057063728803769e-05,
+              -7.4788218626054e-05,
+              -6.620586827921215e-05
+            ],
+            "finite_difference_sign_agreement_count": 5,
+            "meaningful_descent": true,
+            "nonzero_finite_difference_count": 7
+          }
+        },
+        "lr001-raw256": {
+          "deterministic-orthogonal-control": {
+            "analytic_directional_derivative": -4.214799274304738e-14,
+            "best_positive_loss": 1.572245491843205e-05,
+            "best_positive_loss_ratio": 0.9607878772923101,
+            "best_positive_radius_l2": 0.0001,
+            "central_finite_difference": [
+              -0.0024303244572365656,
+              -0.0006446362021961249,
+              6.955879143788479e-05,
+              6.073969416320324e-06,
+              -7.689322956139222e-07,
+              -1.665343006607145e-06,
+              -5.478505045175552e-07
+            ],
+            "finite_difference_sign_agreement_count": 5,
+            "meaningful_descent": false,
+            "nonzero_finite_difference_count": 7
+          },
+          "negative-adam-preconditioned": {
+            "analytic_directional_derivative": -4.8413006261446e-05,
+            "best_positive_loss": 1.559020165586844e-05,
+            "best_positive_loss_ratio": 0.952705975829549,
+            "best_positive_radius_l2": 0.01,
+            "central_finite_difference": [
+              0.0032669231586623937,
+              0.0010093094715557527,
+              -3.635095708887093e-05,
+              -2.669712557690218e-06,
+              -1.1002430255757645e-06,
+              -3.3005890145432204e-06,
+              -5.163092282600701e-06
+            ],
+            "finite_difference_sign_agreement_count": 5,
+            "meaningful_descent": false,
+            "nonzero_finite_difference_count": 7
+          },
+          "negative-autograd": {
+            "analytic_directional_derivative": -0.0001658341635848286,
+            "best_positive_loss": 1.5699362847954035e-05,
+            "best_positive_loss_ratio": 0.9593767375248908,
+            "best_positive_radius_l2": 0.001,
+            "central_finite_difference": [
+              0.0007576272764708847,
+              -0.00022741369321011007,
+              5.615893314825371e-05,
+              3.342036507092416e-05,
+              1.6114026948343962e-05,
+              2.8861242753919214e-05,
+              1.7061945982277393e-05
+            ],
+            "finite_difference_sign_agreement_count": 1,
+            "meaningful_descent": false,
+            "nonzero_finite_difference_count": 7
+          },
+          "teacher-residual": {
+            "analytic_directional_derivative": -2.4740617120857085e-07,
+            "best_positive_loss": 1.4926688891137019e-05,
+            "best_positive_loss_ratio": 0.912159189459992,
+            "best_positive_radius_l2": 0.0001,
+            "central_finite_difference": [
+              -0.002271881385240704,
+              0.0006289883458521217,
+              -4.911316864308901e-05,
+              -4.257290129316971e-06,
+              -3.84644105603608e-06,
+              -3.0443734431173652e-06,
+              -3.4180202419520356e-06
+            ],
+            "finite_difference_sign_agreement_count": 6,
+            "meaningful_descent": false,
+            "nonzero_finite_difference_count": 7
+          }
+        }
+      }
+    },
+    "preflight_prerequisite": null,
+    "snapshots": {
+      "dreamlite_mobile": {
+        "file_count": 27,
+        "manifest_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-mobile/.snapshot_manifest.json",
+        "manifest_sha256": "1bcf41b170c4b4a806bac6701cbdf4fabd5c3c53fa67415d065ab95ce2703159",
+        "model_dir": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-mobile",
+        "passed": true,
+        "repo_id": "carlofkl/DreamLite-mobile",
+        "revision": "6695c3f4be230f0493fa5dbf78be3bc4d3bb2ab4",
+        "snapshot_payload_sha256": "3fb839f465793b01ecafc4df433031a063dd7b395a050960cde57c2807031337",
+        "total_bytes": 5071894300
+      },
+      "qwen_reader": {
+        "file_count": 14,
+        "manifest_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct/.snapshot_manifest.json",
+        "manifest_sha256": "159a504daaae6dc412535978f087150a0eb8e50164afd70a8a17f83906f1127c",
+        "model_dir": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+        "passed": true,
+        "repo_id": "Qwen/Qwen3-VL-4B-Instruct",
+        "revision": "ebb281ec70b05090aa6165b016eac8ec08e71b17",
+        "snapshot_payload_sha256": "45be3ffb00017b02bffa79f4f8e6f301760ac50c0bb78b2c4e5a7fe8aa3d52c6",
+        "total_bytes": 8887292732
+      }
+    }
+  }
+}
