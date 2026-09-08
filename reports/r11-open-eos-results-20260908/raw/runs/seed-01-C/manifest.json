@@ -1,0 +1,22 @@
+{
+  "append_eos": true,
+  "arm": "C",
+  "initial_tensor_sha256": "ed04dcf0f552074190e2880a0300b2f2925733c1995ffd7c300f21dd743faf2b",
+  "optimizer": {
+    "amsgrad": false,
+    "betas": [
+      0.9,
+      0.999
+    ],
+    "eps": 1e-08,
+    "lr": 0.05,
+    "name": "Adam",
+    "steps": 256,
+    "weight_decay": 0.0
+  },
+  "seed": 1,
+  "train_prompts": [
+    "original_open",
+    "paraphrase_open"
+  ]
+}

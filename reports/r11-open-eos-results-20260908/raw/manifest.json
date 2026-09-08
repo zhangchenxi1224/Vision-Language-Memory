@@ -1,0 +1,320 @@
+{
+  "actual_arms": [
+    "A",
+    "B",
+    "C"
+  ],
+  "actual_seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "config": {
+    "arms": {
+      "A": {
+        "append_eos": false,
+        "loss": "legacy_answer_mean_ce",
+        "training_prompts": [
+          "original_open"
+        ]
+      },
+      "B": {
+        "append_eos": true,
+        "lambda_eos": 1.0,
+        "loss": "answer_mean_ce_plus_lambda_eos_ce",
+        "training_prompts": [
+          "original_open"
+        ]
+      },
+      "C": {
+        "append_eos": true,
+        "lambda_eos": 1.0,
+        "loss": "answer_mean_ce_plus_lambda_eos_ce",
+        "schedule": "alternating_original_first_128_exposures_each",
+        "training_prompts": [
+          "original_open",
+          "paraphrase_open"
+        ]
+      }
+    },
+    "best_checkpoint_selection": false,
+    "checkpoint_steps": [
+      0,
+      16,
+      32,
+      64,
+      128,
+      192,
+      256
+    ],
+    "deployment_generation": {
+      "answer_type": "short_phrase",
+      "answer_type_source": "task_schema_only",
+      "short_phrase_max_new_tokens": 8,
+      "short_word_max_new_tokens": 4,
+      "split_on_space": false,
+      "stop_on_newline": true
+    },
+    "evaluation_conditions": [
+      "matched",
+      "blank",
+      "fixed_donor"
+    ],
+    "evaluation_prompts": [
+      "original_open",
+      "paraphrase_open",
+      "new_rewrite_open"
+    ],
+    "extend_to_512": false,
+    "extension_discussion_only_if": "raw_EM_strictly_improves_64_to_128_to_256_and_fixed_prompt_loss_decreases",
+    "formal_shared_memory_success": false,
+    "new_rewrite_exposure": "evaluation_only_never_training_or_checkpoint_selection",
+    "new_rewrite_open": "R3 Train Standard Templates 03: Based on the stored memory, name the current preferred music for the indigo desk train 001123 at this later check.\nReturn only a short phrase.",
+    "optimizer": {
+      "amsgrad": false,
+      "betas": [
+        0.9,
+        0.999
+      ],
+      "eps": 1e-08,
+      "lr": 0.05,
+      "name": "Adam",
+      "steps": 256,
+      "weight_decay": 0.0
+    },
+    "p4_scope": "tokenization_and_metric_contract_audit_not_cross_field_training_success",
+    "p4_tokenization_examples": [
+      {
+        "answer": "green",
+        "answer_type": "short_word",
+        "field": "color"
+      },
+      {
+        "answer": "juice",
+        "answer_type": "short_word",
+        "field": "drink"
+      },
+      {
+        "answer": "ambient",
+        "answer_type": "short_word",
+        "field": "music"
+      },
+      {
+        "answer": "light blue",
+        "answer_type": "short_phrase",
+        "field": "color"
+      },
+      {
+        "answer": "orange juice",
+        "answer_type": "short_phrase",
+        "field": "drink"
+      },
+      {
+        "answer": "no active preference",
+        "answer_type": "short_phrase",
+        "field": "material"
+      },
+      {
+        "answer": "orange",
+        "answer_type": "short_word",
+        "field": "food"
+      }
+    ],
+    "parent_commit": "c6a294b",
+    "parent_run_name": "multistart-5d06b76-20260907-round02",
+    "primary_endpoint": 256,
+    "protocol": "old-R11-open-answer-EOS-20260908",
+    "raw_generation": {
+      "do_sample": false,
+      "eos_policy": "original_model",
+      "max_new_tokens": 32
+    },
+    "schema": "vision_memory.r11-open-eos-paired-config.v1",
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "target_index": 1
+  },
+  "config_sha256": "89c5c206f4762b116107443aa9f17ef3e90e19ea050c738aed220ed67256c6f6",
+  "determinism": {
+    "cuda_matmul_allow_tf32": false,
+    "cudnn_allow_tf32": false,
+    "cudnn_benchmark": false,
+    "cudnn_deterministic": true,
+    "deterministic_algorithms": true,
+    "deterministic_warn_only": false,
+    "environment": {
+      "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+      "MKL_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "PYTHONHASHSEED": "0",
+      "TOKENIZERS_PARALLELISM": "false"
+    },
+    "float32_matmul_precision": "highest",
+    "sdpa": {
+      "cudnn": false,
+      "flash": false,
+      "math": true,
+      "memory_efficient": false
+    },
+    "seed": 0
+  },
+  "formal_shared_memory_success": false,
+  "git_commit": "e6e6c8071a6c1311a966bda1aa636748fbb016f6",
+  "mode": "all",
+  "model_snapshot_payloads": {
+    "dreamlite_mobile": {
+      "file_count": 27,
+      "manifest_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-mobile/.snapshot_manifest.json",
+      "manifest_sha256": "1bcf41b170c4b4a806bac6701cbdf4fabd5c3c53fa67415d065ab95ce2703159",
+      "model_dir": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-mobile",
+      "passed": true,
+      "repo_id": "carlofkl/DreamLite-mobile",
+      "revision": "6695c3f4be230f0493fa5dbf78be3bc4d3bb2ab4",
+      "snapshot_payload_sha256": "3fb839f465793b01ecafc4df433031a063dd7b395a050960cde57c2807031337",
+      "total_bytes": 5071894300
+    },
+    "qwen_reader": {
+      "file_count": 14,
+      "manifest_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct/.snapshot_manifest.json",
+      "manifest_sha256": "159a504daaae6dc412535978f087150a0eb8e50164afd70a8a17f83906f1127c",
+      "model_dir": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+      "passed": true,
+      "repo_id": "Qwen/Qwen3-VL-4B-Instruct",
+      "revision": "ebb281ec70b05090aa6165b016eac8ec08e71b17",
+      "snapshot_payload_sha256": "45be3ffb00017b02bffa79f4f8e6f301760ac50c0bb78b2c4e5a7fe8aa3d52c6",
+      "total_bytes": 8887292732
+    }
+  },
+  "p4_tokenization_audit": [
+    {
+      "answer": "green",
+      "answer_token_count": 1,
+      "answer_token_ids": [
+        13250
+      ],
+      "answer_type": "short_word",
+      "deployment_max_new_tokens": 4,
+      "field": "color",
+      "scope": "tokenization_contract_only_no_memory_result"
+    },
+    {
+      "answer": "juice",
+      "answer_token_count": 2,
+      "answer_token_ids": [
+        8613,
+        558
+      ],
+      "answer_type": "short_word",
+      "deployment_max_new_tokens": 4,
+      "field": "drink",
+      "scope": "tokenization_contract_only_no_memory_result"
+    },
+    {
+      "answer": "ambient",
+      "answer_token_count": 1,
+      "answer_token_ids": [
+        59614
+      ],
+      "answer_type": "short_word",
+      "deployment_max_new_tokens": 4,
+      "field": "music",
+      "scope": "tokenization_contract_only_no_memory_result"
+    },
+    {
+      "answer": "light blue",
+      "answer_token_count": 2,
+      "answer_token_ids": [
+        4145,
+        6303
+      ],
+      "answer_type": "short_phrase",
+      "deployment_max_new_tokens": 8,
+      "field": "color",
+      "scope": "tokenization_contract_only_no_memory_result"
+    },
+    {
+      "answer": "orange juice",
+      "answer_token_count": 2,
+      "answer_token_ids": [
+        34164,
+        22815
+      ],
+      "answer_type": "short_phrase",
+      "deployment_max_new_tokens": 8,
+      "field": "drink",
+      "scope": "tokenization_contract_only_no_memory_result"
+    },
+    {
+      "answer": "no active preference",
+      "answer_token_count": 3,
+      "answer_token_ids": [
+        2152,
+        4541,
+        21933
+      ],
+      "answer_type": "short_phrase",
+      "deployment_max_new_tokens": 8,
+      "field": "material",
+      "scope": "tokenization_contract_only_no_memory_result"
+    },
+    {
+      "answer": "orange",
+      "answer_token_count": 1,
+      "answer_token_ids": [
+        34164
+      ],
+      "answer_type": "short_word",
+      "deployment_max_new_tokens": 4,
+      "field": "food",
+      "scope": "tokenization_contract_only_no_memory_result"
+    }
+  ],
+  "parent_manifest_sha256": "5a18653586b8f74d9f0ea1f4371ae395d677a030088114e9f8b10aa61d66275a",
+  "runtime": {
+    "cudnn": 90701,
+    "executable": "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+    "nvidia_smi": "0, NVIDIA H200, GPU-1b6a029b-6802-6a1f-dcec-d838461592ee, 595.58.03\n1, NVIDIA H200, GPU-01302d81-cb67-aa53-40d0-7321f67fe8ba, 595.58.03",
+    "packages": {
+      "accelerate": "1.12.0",
+      "diffusers": "0.39.0",
+      "numpy": "1.26.4",
+      "peft": "0.18.1",
+      "safetensors": "0.8.0",
+      "torch": "2.7.0a0+ecf3bae40a.nv25.2",
+      "torchvision": "0.22.0a0",
+      "transformers": "4.57.3"
+    },
+    "platform": "Linux-5.15.0-119-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3 (main, Jan 17 2025, 18:03:48) [GCC 13.3.0]",
+    "torch_cuda": "12.8"
+  },
+  "schema": "vision_memory.r11-open-eos-paired.v1.manifest",
+  "termination_contract": {
+    "assistant_end_token_id": 151645,
+    "assistant_end_token_text": "<|im_end|>",
+    "chat_suffix": "<|im_end|>\n",
+    "chat_suffix_token_ids": [
+      151645,
+      198
+    ],
+    "generation_eos_token_ids": [
+      151645,
+      151643
+    ],
+    "selection": "first token after an assistant answer in actual chat template, checked against generation EOS",
+    "tokenizer_eos_token_id": 151645
+  }
+}
