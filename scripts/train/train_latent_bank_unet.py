@@ -249,6 +249,8 @@ def evaluate(args, runtime, bank, teachers, phase: str) -> dict:
             images.append(("matched", noise_seed, pixels))
         ids = group["teacher_ids"]
         _, held = member_split(ids)
+        if getattr(args, "teacher_split", "holdout") == "all":
+            held = []
         geometries[group["question_id"]] = bank_geometry(torch.cat(outputs), torch.cat([teachers[t] for t in ids]), ids, held)
         for image_kind, noise_seed, pixels in images:
             for prompt_id, query in group["question_variants"].items():
