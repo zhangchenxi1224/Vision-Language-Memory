@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 import pytest
 import torch
+from types import SimpleNamespace
 
 from scripts.experiments import run_r11_open_eos_multiquestion as mq
 
@@ -146,3 +147,40 @@ def test_new_A_is_fresh_and_does_not_claim_old_ambient_parity():
     assert a["eos_lambda"] is None and b["eos_lambda"]==1.
     assert a["rewrites_used_in_training"] is False
     assert "no old ambient trajectory parity claim" in a["baseline"]
+
+
+def test_actual_training_io_loop_creates_checkpoints_and_verified_reuse(tmp_path, monkeypatch):
+    """Exercise the real 256-step runner/save/reuse path with a tiny differentiable oracle."""
+    class TinyOracle:
+        def __init__(self, *, initial_latent, **kwargs):
+            self.latent_fp32=torch.nn.Parameter(initial_latent.clone())
+        def image(self):
+            return self.latent_fp32
+    def teacher(runtime, image, prompt, **kwargs):
+        return SimpleNamespace(loss=image.square().mean(),target_ids=torch.tensor([[1,2]]))
+    def evaluate(runtime,target,binding,image,step,directory):
+        output=[]
+        for condition in (mq.CONDITIONS if step==256 else ["matched"]):
+            for prompt in mq.PROMPTS:
+                row={**{k:binding[k] for k in ["target_index","segment_id","seed","arm"]},
+                     "step":step,"condition":condition,"prompt_id":prompt,
+                     "prompt_exposed_in_training":prompt=="original_open","decoding":"raw_greedy_32_original_eos"}
+                mq.replay.append_jsonl(directory/"raw_generations.jsonl",row)
+                output.append(row)
+        return output
+    monkeypatch.setattr(mq,"VAELatentOracle",TinyOracle)
+    monkeypatch.setattr(mq,"configure_strict_cuda_determinism",lambda _:None)
+    monkeypatch.setattr(mq.paired,"teacher",teacher)
+    monkeypatch.setattr(mq,"evaluate",evaluate)
+    monkeypatch.setattr(mq.replay,"frozen_audit",lambda *args:None)
+    initial_tensor=torch.ones(1,1,2,2)
+    initial={"latent_fp32":initial_tensor,"latent_sha256":mq.canonical_tensor_sha256(initial_tensor)}
+    runtime={"vae":object(),"reader":object(),"vae_device":torch.device("cpu")}
+    target=real_panel()["targets"][0]
+    directory=tmp_path/"actual-run"
+    records=mq.train_one(runtime,target,0,"A",initial,directory,"plan")
+    assert len(records)==27 and len(list((directory/"checkpoints").glob("*.pt")))==7
+    terminal=json.loads((directory/"terminal.json").read_text())
+    assert terminal["status"]=="completed" and terminal["optimizer_steps"]==256
+    reused=mq.train_one(runtime,target,0,"A",initial,directory,"plan")
+    assert records==reused
