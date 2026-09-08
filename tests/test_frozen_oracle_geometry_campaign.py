@@ -18,14 +18,15 @@ from vision_memory.training.frozen_oracle_geometry import build_manifest, canoni
 
 
 FAKE_WORKER = r'''
-import argparse, hashlib, json, os
+import argparse, hashlib, json, os, time
 from pathlib import Path
 import numpy as np
+from PIL import Image
 p=argparse.ArgumentParser()
 p.add_argument('--run-spec');p.add_argument('--mode');p.add_argument('--output-dir')
 a,_=p.parse_known_args(); spec=json.loads(a.run_spec); out=Path(a.output_dir);out.mkdir(parents=True)
-with open(os.environ['GEOMETRY_TEST_EVENTS'],'a') as f:
- f.write(json.dumps({**spec,'mode':a.mode})+'\n')
+event_path=Path(os.environ['GEOMETRY_TEST_EVENTS'])/(a.mode+'-'+spec['run_id']+'.json')
+event_path.write_text(json.dumps({**spec,'mode':a.mode,'event_time_ns':time.time_ns()}))
 fault=os.environ.get('GEOMETRY_TEST_FAULT','')
 if fault=='probe_fail' and a.mode=='probe': raise SystemExit(7)
 if fault=='malformed' and spec['stage']=='A1' and spec['target_index']==0:
@@ -37,8 +38,20 @@ record={'path':str(array),'file_sha256':sha(array),'sha256':'a'*64}
 index=out/'trajectory_index.json'
 index.write_text(json.dumps([{'step':i,'xT':record,'z':record} for i in range(257)]))
 checkpoints=out/'checkpoint_index.json'
-checkpoints.write_text(json.dumps([{'step':i,'path':str(array),'file_sha256':sha(array),
- 'png_path':str(array),'png_sha256':sha(array)} for i in (0,1,2,4,8,16,32,64,128,192,256)]))
+checkpoint_records=[]
+checkpoint_dir=out/'checkpoints';checkpoint_dir.mkdir()
+for i in (0,1,2,4,8,16,32,64,128,192,256):
+ checkpoint_path=checkpoint_dir/f'step-{i:03d}.npz'
+ np.savez(checkpoint_path,step=np.int64(i),x_T_fp32=np.zeros((1,4,2,2),dtype=np.float32),
+          z=np.ones((1,4,2,2),dtype=np.float32),rgb=np.zeros((1,3,2,2),dtype=np.float32),
+          optimizer_step=np.int64(i))
+ png_path=checkpoint_dir/f'step-{i:03d}.png'
+ Image.new('RGB',(2,2),(i%256,127,0)).save(png_path)
+ checkpoint_records.append({'step':i,'path':str(checkpoint_path),'file_sha256':sha(checkpoint_path),
+                            'png_path':str(png_path),'png_sha256':sha(png_path)})
+if fault=='missing_checkpoint_step' and spec['stage']=='A1':
+ checkpoint_records=[r for r in checkpoint_records if r['step']!=192]
+checkpoints.write_text(json.dumps(checkpoint_records))
 summary=dict(spec,status='completed',mode=a.mode,technical_pass=True,passed=True,bitwise_repeatability=True,
  model_snapshot_end_verified=True,manifest_sha256=sha(out/'manifest.json'),qa_pass=False,
  optimizer_steps=0 if a.mode=='probe' else 256,trajectory_index_path=str(index),checkpoint_index_path=str(checkpoints),
@@ -64,7 +77,8 @@ def harness(tmp_path, monkeypatch):
                            expected_commit="test-commit", max_hours=0.1, aux_command_json=None,
                            train=tmp_path / "train", dev=tmp_path / "dev",
                            dreamlite=tmp_path / "dreamlite", reader=tmp_path / "reader")
-    events = tmp_path / "events.jsonl"
+    events = tmp_path / "events"
+    events.mkdir()
     monkeypatch.setenv("GEOMETRY_TEST_EVENTS", str(events))
     fake_path = tmp_path / "fake_worker.py"
     fake_path.write_text(FAKE_WORKER)
@@ -83,6 +97,8 @@ def harness(tmp_path, monkeypatch):
 
     def fake_analysis(command, **kwargs):
         del kwargs
+        if Path(command[1]).name == "render_frozen_oracle_geometry.py":
+            return SimpleNamespace(returncode=0)
         assert Path(command[1]).name == "analyze_frozen_oracle_geometry.py"
         directory = args.output_root / "evaluation_inputs"
         directory.mkdir(exist_ok=True)
@@ -102,7 +118,9 @@ def harness(tmp_path, monkeypatch):
 
 
 def _events(path):
-    return [json.loads(line) for line in path.read_text().splitlines()] if path.exists() else []
+    # Each child owns one file: Windows concurrent append can otherwise lose events.
+    return sorted((json.loads(item.read_text()) for item in path.glob("*.json")),
+                  key=lambda row: row["event_time_ns"])
 
 
 def test_probe_failure_stops_all_optimization(harness, monkeypatch):
@@ -133,6 +151,15 @@ def test_matching_a1_allows_later_studies(harness):
     assert rows[-1]["stage"] == "A2"
     assert json.loads((args.output_root / "A1_determinism_gate.json").read_text())["passed"] is True
     assert json.loads((args.output_root / "status.json").read_text())["state"] == "completed"
+    endpoint_run = args.output_root / "runs" / rows[-1]["run_id"]
+    checkpoints = json.loads((endpoint_run / "checkpoint_index.json").read_text())
+    assert [row["step"] for row in checkpoints] == [0, 1, 2, 4, 8, 16, 32, 64, 128, 192, 256]
+    assert len({row["path"] for row in checkpoints}) == 11
+    assert len({row["png_path"] for row in checkpoints}) == 11
+    for row in checkpoints:
+        assert Path(row["png_path"]).read_bytes().startswith(b"\x89PNG\r\n\x1a\n")
+        assert campaign.file_hash(row["path"]) == row["file_sha256"]
+        assert campaign.file_hash(row["png_path"]) == row["png_sha256"]
 
 
 def test_malformed_summary_stops_later_studies(harness, monkeypatch):
@@ -172,6 +199,15 @@ def test_newly_completed_summary_requires_matching_manifest_hash(harness, monkey
     monkeypatch.setenv("GEOMETRY_TEST_FAULT", "fresh_hash_mismatch")
     with pytest.raises((RuntimeError, ValueError), match="manifest|hash|binding"):
         campaign.run_campaign(args)
+
+
+def test_missing_checkpoint_step_stops_later_studies(harness, monkeypatch):
+    args, events = harness
+    monkeypatch.setenv("GEOMETRY_TEST_FAULT", "missing_checkpoint_step")
+    with pytest.raises(RuntimeError, match="eleven locked steps"):
+        campaign.run_campaign(args)
+    assert not any(row["stage"] == "A2" for row in _events(events))
+    assert json.loads((args.output_root / "status.json").read_text())["state"] == "failed"
 
 
 def test_incomplete_analysis_must_not_be_reported_completed(harness):
