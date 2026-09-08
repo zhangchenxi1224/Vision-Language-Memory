@@ -1,0 +1,227 @@
+{
+  "actual_prompts": {
+    "new_rewrite_open": "R3 Train Standard Templates 03: Based on the stored memory, name the current preferred music for the indigo desk train 001123 at this later check.\nReturn only a short phrase.",
+    "original_open": "R3 Train Standard Templates 03: At this later check, what is the current music preference for the indigo desk train 001123?\nUse the memory image to answer. Answer with a short phrase only.",
+    "paraphrase_open": "R3 Train Standard Templates 03: At this later check, which music does the indigo desk train 001123 currently prefer?\nUse the memory image to answer. Answer with a short phrase only.",
+    "question_only_02": "R3 Train Standard Templates 03: At this later check, which type of music is currently preferred by the indigo desk train 001123?\nUse the memory image to answer. Answer with a short phrase only.",
+    "question_only_03": "R3 Train Standard Templates 03: What music does the indigo desk train 001123 prefer now, at this later check?\nUse the memory image to answer. Answer with a short phrase only.",
+    "question_only_04": "R3 Train Standard Templates 03: For the indigo desk train 001123, what is the music preference currently in effect at this later check?\nUse the memory image to answer. Answer with a short phrase only.",
+    "question_only_05": "R3 Train Standard Templates 03: At this later check, what would you identify as the current music preference of the indigo desk train 001123?\nUse the memory image to answer. Answer with a short phrase only.",
+    "question_only_restored": "R3 Train Standard Templates 03: Based on the stored memory, name the current preferred music for the indigo desk train 001123 at this later check.\nUse the memory image to answer. Answer with a short phrase only."
+  },
+  "anchor_ids": [
+    "original_open",
+    "paraphrase_open",
+    "new_rewrite_open"
+  ],
+  "best_checkpoint_selection": false,
+  "config": {
+    "anchor_prompts": [
+      "original_open",
+      "paraphrase_open",
+      "new_rewrite_open"
+    ],
+    "arms": [
+      "A",
+      "B",
+      "C"
+    ],
+    "checkpoint_selection": "all_existing_raw_step_256_endpoints_no_selection",
+    "conditions": [
+      "matched",
+      "blank",
+      "fixed_donor"
+    ],
+    "endpoint_step": 256,
+    "expected_anchor_parity_count": 216,
+    "expected_generation_count": 576,
+    "fixed_prefix": "R3 Train Standard Templates 03: ",
+    "fixed_suffix": "\nUse the memory image to answer. Answer with a short phrase only.",
+    "generation": {
+      "do_sample": false,
+      "eos_policy": "original_model",
+      "max_new_tokens": 32
+    },
+    "independent_unit": "eight_paired_initializations_of_one_question_not_120_independent_tasks",
+    "parent_training_commit": "e6e6c8071a6c1311a966bda1aa636748fbb016f6",
+    "prompt_selection": "locked_before_supplementary_generation_no_result_based_replacement",
+    "question_sentences": {
+      "question_only_02": "At this later check, which type of music is currently preferred by the indigo desk train 001123?",
+      "question_only_03": "What music does the indigo desk train 001123 prefer now, at this later check?",
+      "question_only_04": "For the indigo desk train 001123, what is the music preference currently in effect at this later check?",
+      "question_only_05": "At this later check, what would you identify as the current music preference of the indigo desk train 001123?",
+      "question_only_restored": "Based on the stored memory, name the current preferred music for the indigo desk train 001123 at this later check."
+    },
+    "schema": "vision_memory.r11-open-eos-question-only.v1",
+    "scope": "post_hoc_controlled_diagnostic_after_observing_old_mixed_prompt_results",
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "training_updates": 0
+  },
+  "endpoint_bindings_before_evaluation": [
+    {
+      "arm": "A",
+      "file_sha256": "0b0b2b546beeeb513a39029b1757ece6468b520addfc14fe72801527ca63f1aa",
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos/all-e6e6c80-20260908/runs/seed-00-A/step-256.pt",
+      "seed": 0
+    },
+    {
+      "arm": "B",
+      "file_sha256": "1fbec951da87bfed911120cd44f1d7784921bede50fa1a2e1726ad6fa5acf1ac",
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos/all-e6e6c80-20260908/runs/seed-00-B/step-256.pt",
+      "seed": 0
+    },
+    {
+      "arm": "C",
+      "file_sha256": "62f6576af1dfeedf2276b5699fb23165ff461a19a396a28d2a7c0214c24ccbf5",
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos/all-e6e6c80-20260908/runs/seed-00-C/step-256.pt",
+      "seed": 0
+    },
+    {
+      "arm": "A",
+      "file_sha256": "75e262140cbfcfb17cf331e993bb653075446677a3812db00fac68ddd723d60f",
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos/all-e6e6c80-20260908/runs/seed-01-A/step-256.pt",
+      "seed": 1
+    },
+    {
+      "arm": "B",
+      "file_sha256": "7f30b7cec3a307395b865472b3f7176f8b3c980898365ae55443568201cb5631",
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos/all-e6e6c80-20260908/runs/seed-01-B/step-256.pt",
+      "seed": 1
+    },
+    {
+      "arm": "C",
+      "file_sha256": "97fb252d4075e4d2980d1773d1a25b30241104fd42038922918ce7acb52fb5e0",
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos/all-e6e6c80-20260908/runs/seed-01-C/step-256.pt",
+      "seed": 1
+    },
+    {
+      "arm": "A",
+      "file_sha256": "42d0f2ea98df9626230c6a904f3ae4368d0f362a9c9018d78d88a0b523046a43",
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos/all-e6e6c80-20260908/runs/seed-02-A/step-256.pt",
+      "seed": 2
+    },
+    {
+      "arm": "B",
+      "file_sha256": "700a41bb9df954302eea59f6533c5d0967cb1aafc494ab8e3c8939060a8996e2",
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos/all-e6e6c80-20260908/runs/seed-02-B/step-256.pt",
+      "seed": 2
+    },
+    {
+      "arm": "C",
+      "file_sha256": "2891b990255a526acd74a0da9cd78efebe0c9d15b6fb440633bcd27389a5bc77",
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos/all-e6e6c80-20260908/runs/seed-02-C/step-256.pt",
+      "seed": 2
+    },
+    {
+      "arm": "A",
+      "file_sha256": "ae440e80f5c82dcbe1977e11fa01afed9f2994599745fab8d5e5c25087cc7c84",
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos/all-e6e6c80-20260908/runs/seed-03-A/step-256.pt",
+      "seed": 3
+    },
+    {
+      "arm": "B",
+      "file_sha256": "d2fa4ff3e91cbfe7c3efb2bcf5966b8014c5d353b0cb2d3a8d50eb1a18950c28",
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos/all-e6e6c80-20260908/runs/seed-03-B/step-256.pt",
+      "seed": 3
+    },
+    {
+      "arm": "C",
+      "file_sha256": "2777b6bb466747a8a909b62d11626b2a39269720a5cc908689966aaca56f1d17",
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos/all-e6e6c80-20260908/runs/seed-03-C/step-256.pt",
+      "seed": 3
+    },
+    {
+      "arm": "A",
+      "file_sha256": "01c35301b5d20c244a799e72e2290bc4c2c290910557c818974b22e20b8f7510",
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos/all-e6e6c80-20260908/runs/seed-04-A/step-256.pt",
+      "seed": 4
+    },
+    {
+      "arm": "B",
+      "file_sha256": "1af87edaa5d473660827ca4bb41f245880ddb264c81bb462d4a54f785c599111",
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos/all-e6e6c80-20260908/runs/seed-04-B/step-256.pt",
+      "seed": 4
+    },
+    {
+      "arm": "C",
+      "file_sha256": "b6f16e26ce973469298b6657aaa3349710e18a18bd8b88e1e5434ba6df1f1342",
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos/all-e6e6c80-20260908/runs/seed-04-C/step-256.pt",
+      "seed": 4
+    },
+    {
+      "arm": "A",
+      "file_sha256": "28ec8be896d95227f9638e97bfb49683d182a175164a630ba634ff32c598321d",
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos/all-e6e6c80-20260908/runs/seed-05-A/step-256.pt",
+      "seed": 5
+    },
+    {
+      "arm": "B",
+      "file_sha256": "977dd43ce853c074f97f377477965b14a57d280059e44096419ca41a47f680c8",
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos/all-e6e6c80-20260908/runs/seed-05-B/step-256.pt",
+      "seed": 5
+    },
+    {
+      "arm": "C",
+      "file_sha256": "9aeb1865c037c77ad4ef146b4a949121cc511749560bfecceb972302d275254a",
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos/all-e6e6c80-20260908/runs/seed-05-C/step-256.pt",
+      "seed": 5
+    },
+    {
+      "arm": "A",
+      "file_sha256": "7e31b9fad9d6d2f2c77ba9762b70db6714998f9f3bfc8f09e6c1e90fb44e533a",
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos/all-e6e6c80-20260908/runs/seed-06-A/step-256.pt",
+      "seed": 6
+    },
+    {
+      "arm": "B",
+      "file_sha256": "df807df16d2a5cd3b90b52c1d31b402db5cbeb4dfdf9243556c719df47c2979c",
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos/all-e6e6c80-20260908/runs/seed-06-B/step-256.pt",
+      "seed": 6
+    },
+    {
+      "arm": "C",
+      "file_sha256": "1526e65bbe2beefe643d91625c7cec113acf2b8f19cb08d6be4466063384b123",
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos/all-e6e6c80-20260908/runs/seed-06-C/step-256.pt",
+      "seed": 6
+    },
+    {
+      "arm": "A",
+      "file_sha256": "af83899236f44e3d591655193d135231c84c4087300361c0551645a21c555695",
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos/all-e6e6c80-20260908/runs/seed-07-A/step-256.pt",
+      "seed": 7
+    },
+    {
+      "arm": "B",
+      "file_sha256": "eb626ba94da645817f81972becf97374c08096a3082bc9a05684424dd73ef7ef",
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos/all-e6e6c80-20260908/runs/seed-07-B/step-256.pt",
+      "seed": 7
+    },
+    {
+      "arm": "C",
+      "file_sha256": "b79d7ef32f637b15f95c23ddf6a4ffb1d19fbf02165360b20a3dcc64f0a4d80a",
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos/all-e6e6c80-20260908/runs/seed-07-C/step-256.pt",
+      "seed": 7
+    }
+  ],
+  "git_commit": "d430ff621fd2182b8560299958fa2886f9be3142",
+  "parent_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos/all-e6e6c80-20260908",
+  "primary_question_ids": [
+    "question_only_restored",
+    "question_only_02",
+    "question_only_03",
+    "question_only_04",
+    "question_only_05"
+  ],
+  "prompt_config_sha256": "b1e07bb1eaaa16d3d2b3ef8e0838c1c9d76c48e258083dcb9881f5fa3ac73a48",
+  "schema": "vision_memory.r11-open-eos-question-only.v1.manifest",
+  "training_updates": 0
+}
