@@ -258,8 +258,9 @@ def campaign(args,config):
     sources=own_source(args.expected_commit)
     assert socket.gethostname()==args.expected_hostname
     devices,active=gpu_snapshot()
-    assert set(devices)=={0,1},'Use the explicitly allocated two-GPU notebook only'
-    uuids=set(devices.values())
+    assert {0,1}.issubset(devices),'Need two allocated GPUs'
+    # Bootstrap masks this pair for torch; nvidia-smi still lists physical GPUs.
+    uuids={devices[0],devices[1]}
     assert not any(p['uuid'] in uuids for p in active),'GPUs are occupied; do not disturb the owner'
     stopped=[False]
     child=[None]
@@ -302,6 +303,10 @@ def campaign(args,config):
             return read(destination/'result.json')
         execute('preflight',config['base_rank'],0)
         primary=execute('single',config['base_rank'],config['base_steps'])
+        if args.warmup_only:
+            training.write_json(output/'warmup-complete.json',{'status':'completed','result':primary,
+                'hostname':socket.gethostname(),'completed_epoch':time.time()})
+            return
         rank,budget=config['base_rank'],config['base_steps']
         if not primary['gate']['passed']:
             # Capacity control uses the same base budget, then budget control
@@ -337,6 +342,7 @@ def main():
     p.add_argument('--stage',choices=['preflight','single','noise','set'])
     p.add_argument('--rank',type=int,default=4)
     p.add_argument('--steps',type=int,default=512)
+    p.add_argument('--warmup-only',action='store_true')
     args=p.parse_args()
     config=read(args.config)
     args.output.mkdir(parents=True,exist_ok=True)
@@ -344,7 +350,10 @@ def main():
         if args.stage:
             return stage_worker(args,config)
         campaign(args,config)
-        training.write_json(args.output/'status.json',{'state':'finished',**read(args.output/'terminal.json')})
+        if args.warmup_only:
+            training.write_json(args.output/'status.json',{'state':'warmup_completed_waiting_for_continuation',**read(args.output/'warmup-complete.json')})
+        else:
+            training.write_json(args.output/'status.json',{'state':'finished',**read(args.output/'terminal.json')})
         return 0
     except training.TrainingPaused as error:
         target=args.output/f'{args.stage}-rank{args.rank}' if args.stage else args.output

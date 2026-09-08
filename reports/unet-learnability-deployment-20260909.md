@@ -51,6 +51,8 @@ single 若失败，自动运行两个独立因素对照：rank16 ×512 步（改
 
 申请实例不等于已开训。排队时由本地 `watch_unet_learnability.ps1` 等待 RUNNING 后执行独立 bootstrap；bootstrap 再检查 hostname、空闲 GPU、源代码 commit 与重复 dispatch。该接续进程依赖本机保持运行，最多等待120分钟；未排到会留下明确状态，不能报告成正在训练。
 
+随后现场观察到 dl-base 两组原 U-Net 均已完成512步、退出且释放四卡，平台剩余运行时间约1小时。因此先利用 dl-base 空闲的 GPU0/1 运行96终点 GPU复测与 single rank4 ×512 的起步阶段，运行预算45分钟，其他两卡不占用。起步阶段结束后保存 `warmup-complete.json`，新申请实例才允许接续完整阶段控制；若资源先到，也等待这个阶段自然结束，不中断优化。全部使用相同锁定源码与共享输出，接续读取已完成阶段结果，不重复训练。
+
 训练每16步保存精确 optimizer/RNG checkpoint，关键步检查原问生成；预算终点独立保存 checkpoint 与全部评测。资源截止或停止信号按 checkpoint 暂停，错误不自动重试。输出中 `completed_gate_not_met` 表示实验已跑完但门槛未通过；不能当作功能成功。
 
 ## 实现与验证
