@@ -91,7 +91,7 @@ def run(args):
                     image=pixels.to(runtime["reader_device"]),query=query,device=runtime["reader_device"],
                     max_new_tokens=32,do_sample=False)
                 score=generation_diagnostics(gen,group["answer"],scores.target_ids[0,:scores.answer_token_count].cpu().tolist())
-                rows.append({"condition":kind,"noise_seed":seed,"prompt_id":pid,"raw":gen["raw"],
+                rows.append({"question_id":group["question_id"],"condition":kind,"noise_seed":seed,"prompt_id":pid,"raw":gen["raw"],
                     "scorer":score,"answer_ce":float(scores.answer_loss),"eos_ce":float(scores.eos_loss)})
         evaluation={"additional_step":step,"rows":rows,"cells":training.summarize_evaluation(rows,{})["cells"]}
         report["evaluations"].append(evaluation)
