@@ -49,3 +49,13 @@ L      = L_end + L_path
 首次 b795f17/r01 在更新前退出，保留 failure.json；没有产生 optimizer update。参考算法在新 96 bank 上五种问法均 8/8，未训练学生均 0/8。
 
 真实 FlowMatch scheduler 反向 shift 后返回 sigma 为 `[0.4999999701976776, 0.375, 0.25, 0.1249999925494194]`；按理想 0.5 混合会产生约 2.4e-7 的浮点差异，触发起点逐位一致校验。修正为参考算法读取实际 scheduler sigma，使用与学生完全相同的 mul/add 起点运算和实际 sigma 差分步长，条件密度按实际起点 s0 写为 `mean = sigma*(1/s0-1)*source + (1-sigma/s0)*teacher`。保留起点逐位一致校验，增加完整 schedule 一致校验，不改变 U-Net sampler 或放宽验证。加入真实误差值的 scheduler 回归测试；使用新 commit、新输出目录重启。
+
+## 已启动证据（2026-09-09 02:29 北京时间）
+
+- 运行源码：`370238724d1eb73476a7701d079a34d440562482`；本地相关回归测试 37 passed。
+- 实例 `dl-base-h200x4-20260907`，物理 GPU 2、3，PID `1557417`；2026-09-09 02:24:43 启动。新训练目录 `P/runs/reference-distillation/3702387-direct96-dl-base-r02`，独立 checkout `P/repos/reference-distillation-20260909-r02`。
+- bank SHA256：`20ef4a9fc53b254fd99b12cbc01cf1a6d41dee8d04dd3120c70ecaa141f30722`。
+- 已真实更新 72/512 步。独立 CPU 读取 checkpoint：step=72，240 个 LoRA B 张量，419840 个非零元素，B 权重 L2=1.9545703831558843；每步训练均通过冻结参数审计。
+- 修正后 reference：原问、p1、p2、p3、p4 各 8/8；学生 baseline 与 step64：五种问法各 0/8。训练仍在进行，尚不能宣称学生已学会。step72 loss=0.10938348，endpoint MSE=0.09195736，intermediate MSE=0.01742611。不同 step 使用不同噪声，单点 loss 差异不能作为严格配对改善结论。
+- 本轮使用空闲 GPU，没有创建新排队实例，因此没有创建排队心跳。未停止或发送信号给任何其他训练。
+- 为在已确认的实例剩余租期内完成 512 步，运行目录另有只监视本次 PID 的 `continuation.py`（PID 1588919）。若本次进程因自身首次 deadline 保存 checkpoint 后正常暂停，才用同一固定源码和原配置 `--resume` 一次；最终 deadline=1788893448.6187768，距 deadline 两分钟主动保存。它不终止任何训练、不抢占 GPU，不修改平台自动停止时间。正式 runner 仍会先检查 GPU 锁和占用；只有 completed 才报告训练完成。此进程是本实验续训器，不是 Codex 的排队心跳。
