@@ -1,5 +1,26 @@
 # Direct 三问法轮换训练：启智部署
 
+**当前实例已按用户要求迁到 `dl-base-h200x4-20260907`。** 原训练代码、原96条基线结果和原U-Net流程均未修改。以下先记录当前接续，再保留首次部署历史。
+
+## 当前：dl-base 接续
+
+北京时间 00:11:56，新增三问法对照在 trust 的两条worker均在完整轨迹边界结束，保留16条完整结果、没有残缺轨迹；该新增实验的trust进程已退出。只针对本实验PID操作，没有停止trust实例或其他训练。
+
+00:15:48 在 `dl-base-h200x4-20260907` 启动原提交 `46cd36b1eb421471dafa7865fbab4dfe02336336` 接续，supervisor PID373421。原结果根目录继续使用，16条结果校验后跳过，剩余80条继续执行。源码和训练参数没有因迁移修改。
+
+接续前完成真实 VAE→Qwen 零更新预检：Python、依赖、CUDA/cuDNN一致，reference/blank逐位一致，Gaussian seed0初始loss及梯度SHA与trust完全一致。已复制并验证162份历史元数据/receipt，共43,090,032字节；全部原始latent保留原路径。新记录位于结果根目录 `provenance/migrate-to-dl-base-20260909/`：
+
+- `archive_manifest.json`：历史元数据归档及SHA。
+- `stop_status.json`：16条完成边界及停止PID。
+- `preflight_dl_base.json`：零更新一致性检查。
+- `dispatch_dl_base.json`：当前实例、源码、命令和进程。
+
+结果根目录 `current_execution.json` 指向本次dl-base接续。当前容器为 `dl-base-h200x4-20260907--46095613ce18-kk5gt4zzxr`。任务预算截至北京时间02:15:48，处于查询到的平台自动停止窗口内；未修改平台自动停止设置。
+
+00:17:20 已确认dl-base实际优化增长：两个lane分别跳过8条完成结果，Uniform seed3到101/256步、Sphere seed3到105/256步。四卡已加载VAE/Reader并工作，原q0/q1/q2轮换记录持续增长。证据为同目录 `dispatch_verification.json`。
+
+## 历史：首次 trust 部署
+
 北京时间 2026-09-09 00:01:21，在 `vlm-r11-trust-h200x4-20260907-r3` 实际启动两条训练 lane，GPU 0/1 和 2/3 各一条。部署前已确认旧 Direct 和两次 U-Net 训练完成、四卡无计算进程。
 
 - 训练源码：`46cd36b1eb421471dafa7865fbab4dfe02336336`。
