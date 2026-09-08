@@ -5,14 +5,20 @@ from .latent_bank_unet import EFFECTIVE_SIGMAS
 
 
 @torch.no_grad()
-def reference_trajectory(flow, source, noise):
+def reference_trajectory(flow, source, noise, *, sigmas=EFFECTIVE_SIGMAS):
     if source.shape != noise.shape:
         raise ValueError('Source/noise shape mismatch')
-    state=.5*source+.5*noise
+    sigmas=tuple(float(s) for s in sigmas)
+    if len(sigmas)!=4 or not all(a>b for a,b in zip(sigmas,(*sigmas[1:],0.))):
+        raise ValueError('Require four positive descending scheduler sigmas')
+    if flow.start_sigma!=sigmas[0]:
+        raise ValueError('Reference field and sampler start sigma differ')
+    # Match the actual post-shift scheduler and sampler arithmetic exactly.
+    state=source.mul(1-sigmas[0]).add(noise,alpha=sigmas[0])
     path=[state]
-    for sigma in EFFECTIVE_SIGMAS:
+    for sigma,next_sigma in zip(sigmas,(*sigmas[1:],0.)):
         velocity,_,_=flow.evaluate(state,sigma)
-        state=(state.double()-.125*velocity).to(source.dtype)
+        state=(state.double()+(next_sigma-sigma)*velocity).to(source.dtype)
         path.append(state)
     return tuple(path)
 

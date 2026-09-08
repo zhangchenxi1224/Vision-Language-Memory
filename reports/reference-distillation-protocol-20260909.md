@@ -43,3 +43,9 @@ L      = L_end + L_path
 代码入口 `scripts/train/train_reference_distillation.py`。启动记录补充实际 commit、bank SHA、PID、输出路径和运行证据。若临近启动时 GPU 已被使用，则保持既有任务并重新申请资源，不强占。
 
 `P=/inspire/ssd/project/exploration-topic/czxs26210936`。
+
+## 启动校验修正
+
+首次 b795f17/r01 在更新前退出，保留 failure.json；没有产生 optimizer update。参考算法在新 96 bank 上五种问法均 8/8，未训练学生均 0/8。
+
+真实 FlowMatch scheduler 反向 shift 后返回 sigma 为 `[0.4999999701976776, 0.375, 0.25, 0.1249999925494194]`；按理想 0.5 混合会产生约 2.4e-7 的浮点差异，触发起点逐位一致校验。修正为参考算法读取实际 scheduler sigma，使用与学生完全相同的 mul/add 起点运算和实际 sigma 差分步长，条件密度按实际起点 s0 写为 `mean = sigma*(1/s0-1)*source + (1-sigma/s0)*teacher`。保留起点逐位一致校验，增加完整 schedule 一致校验，不改变 U-Net sampler 或放宽验证。加入真实误差值的 scheduler 回归测试；使用新 commit、新输出目录重启。

@@ -41,11 +41,11 @@ ORACLE_SUFFIX='runs/direct-multiprompt-eos/46cd36b-20260909-r01'
 
 
 class ReferenceSampler:
-    def __init__(self,flow): self.flow=flow
+    def __init__(self,flow,sigmas): self.flow,self.sigmas=flow,tuple(sigmas)
     @torch.no_grad()
     def __call__(self,*,source_latents,noise_latents,**kwargs):
-        path=reference_trajectory(self.flow,source_latents,noise_latents)
-        return DreamLiteSamplerOutput(path[-1],path,EFFECTIVE_SIGMAS)
+        path=reference_trajectory(self.flow,source_latents,noise_latents,sigmas=self.sigmas)
+        return DreamLiteSamplerOutput(path[-1],path,self.sigmas)
 
 
 def validate_bank(args):
@@ -100,8 +100,9 @@ def run(args):
     source,cond=ctx['source'],ctx['condition']
     ids=group['teacher_ids']
     targets=torch.stack([teachers[t] for t in ids]).to(source.device)
-    flow=EmpiricalBankFlow(source,targets)
-    reference_runtime={**runtime,'sampler':ReferenceSampler(flow)}
+    _,actual_sigmas=runtime['sampler']._prepare_timesteps(source,4,EFFECTIVE_SIGMAS,sigmas_are_effective=True)
+    flow=EmpiricalBankFlow(source,targets,start_sigma=actual_sigmas[0])
+    reference_runtime={**runtime,'sampler':ReferenceSampler(flow,actual_sigmas)}
     parameters=lora_trainable_parameters(pipe.unet)
     initial={n:p.detach().cpu().clone() for n,p in pipe.unet.named_parameters() if p.requires_grad}
     optimizer=torch.optim.AdamW(parameters,lr=args.lr,weight_decay=0.)
@@ -131,7 +132,7 @@ def run(args):
         raise ValueError('Resume requested but checkpoint absent')
     metrics=[json.loads((args.output_dir/'metrics'/f'step-{i:06d}.json').read_text()) for i in range(1,step+1)]
     training.write_json(args.output_dir/'runtime.json',dict(snapshots=runtime['snapshots'],termination=runtime['termination'],
-        trainable_parameters=sum(p.numel() for p in parameters),device_count=torch.cuda.device_count(),
+        trainable_parameters=sum(p.numel() for p in parameters),device_count=torch.cuda.device_count(),actual_sigmas=actual_sigmas,
         physical_gpu_indices=args.physical_gpus,process_pid=os.getpid(),hostname=socket.gethostname()))
 
     def verify_reference(ref,noise_seed):
@@ -165,12 +166,13 @@ def run(args):
         noise_seed=stable_seed(args.seed,'reference-distillation-training',step)
         noise=torch.randn(source.shape,generator=torch.Generator().manual_seed(noise_seed)).to(source.device)
         with torch.no_grad():
-            ref=reference_trajectory(flow,source,noise)
+            ref=reference_trajectory(flow,source,noise,sigmas=actual_sigmas)
             receipt=verify_reference(ref,noise_seed)
         optimizer.zero_grad(set_to_none=True)
         output=runtime['sampler'](source_latents=source,noise_latents=noise,prompt_embeds=cond.prompt_embeds,
             prompt_attention_mask=cond.attention_mask,num_steps=4,edit_start_sigma=.5,return_trajectory=True)
         if not torch.equal(output.trajectory[0],ref[0]): raise RuntimeError('Teacher/student starting states differ')
+        if output.effective_sigmas!=actual_sigmas: raise RuntimeError('Teacher/student schedules differ')
         loss,end,path=rollout_distillation_loss(output.trajectory,ref)
         if not torch.isfinite(loss): raise RuntimeError('Nonfinite distillation loss')
         loss.backward()
@@ -256,6 +258,7 @@ def main():
         return 75
     except BaseException:
         training.write_json(args.output_dir/'failure.json',dict(status='failed',epoch=time.time(),traceback=traceback.format_exc()))
+        training.write_json(args.output_dir/'status.json',dict(state='failed',epoch=time.time(),failure='failure.json'))
         raise
 
 
