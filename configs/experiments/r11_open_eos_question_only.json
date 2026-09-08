@@ -1,0 +1,26 @@
+{
+  "schema": "vision_memory.r11-open-eos-question-only.v1",
+  "parent_training_commit": "e6e6c8071a6c1311a966bda1aa636748fbb016f6",
+  "endpoint_step": 256,
+  "arms": ["A", "B", "C"],
+  "seeds": [0, 1, 2, 3, 4, 5, 6, 7],
+  "conditions": ["matched", "blank", "fixed_donor"],
+  "fixed_prefix": "R3 Train Standard Templates 03: ",
+  "fixed_suffix": "\nUse the memory image to answer. Answer with a short phrase only.",
+  "anchor_prompts": ["original_open", "paraphrase_open", "new_rewrite_open"],
+  "question_sentences": {
+    "question_only_restored": "Based on the stored memory, name the current preferred music for the indigo desk train 001123 at this later check.",
+    "question_only_02": "At this later check, which type of music is currently preferred by the indigo desk train 001123?",
+    "question_only_03": "What music does the indigo desk train 001123 prefer now, at this later check?",
+    "question_only_04": "For the indigo desk train 001123, what is the music preference currently in effect at this later check?",
+    "question_only_05": "At this later check, what would you identify as the current music preference of the indigo desk train 001123?"
+  },
+  "generation": {"do_sample": false, "max_new_tokens": 32, "eos_policy": "original_model"},
+  "expected_generation_count": 576,
+  "expected_anchor_parity_count": 216,
+  "training_updates": 0,
+  "checkpoint_selection": "all_existing_raw_step_256_endpoints_no_selection",
+  "scope": "post_hoc_controlled_diagnostic_after_observing_old_mixed_prompt_results",
+  "prompt_selection": "locked_before_supplementary_generation_no_result_based_replacement",
+  "independent_unit": "eight_paired_initializations_of_one_question_not_120_independent_tasks"
+}
