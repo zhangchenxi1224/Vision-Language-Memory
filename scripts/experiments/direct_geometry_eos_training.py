@@ -11,10 +11,12 @@ from vision_memory.reader.open_answer import generate_short_answer
 from vision_memory.reader.open_eos import qwen3vl_answer_eos_ce, generation_diagnostics
 from vision_memory.reader.qwen3vl import R3_QWEN_READER_RESIZE_CONTRACT
 from vision_memory.repro import canonical_tensor_sha256, configure_strict_cuda_determinism
-from vision_memory.training.direct_latent_geometry import CHECKPOINTS
+from vision_memory.training.direct_latent_geometry import CHECKPOINTS, TRAIN_PROMPTS, HELDOUT_PROMPTS, training_prompt
 
 
 def teacher(runtime, image, prompt, require_grad=False):
+    if require_grad and prompt not in TRAIN_PROMPTS:
+        raise ValueError('Held-out prompts must never enter latent optimization')
     return qwen3vl_answer_eos_ce(
         model=runtime['reader'], processor=runtime['processor'],
         image=image[0].to(runtime['reader_device']), device=runtime['reader_device'],
@@ -62,7 +64,7 @@ def evaluate(runtime, image, *, spec, step, directory, all_prompts):
                     image=pixels.to(runtime['reader_device']), query=query, device=runtime['reader_device'],
                     max_new_tokens=32, do_sample=False)
                 row = {**spec, 'optimizer_step': step, 'condition': condition, 'prompt_id': prompt_id,
-                    'query': query, 'question_trained': prompt_id == 'original_open',
+                    'query': query, 'question_trained': prompt_id in TRAIN_PROMPTS,
                     'image_sha256': canonical_tensor_sha256(pixels), **generated,
                     'answer_ce': float(output.answer_loss), 'eos_ce': float(output.eos_loss),
                     'total_ce': float(output.loss), 'gold_eos_appended': True,
@@ -89,7 +91,9 @@ def run_one(*, spec, initial, reference, runtime, output_dir):
         raise RuntimeError('Initialization changed during device copy')
     replay.write_json(directory / 'manifest.json', {**spec, 'initial_latent_sha256': initial_hash,
         'reference_sha256': canonical_tensor_sha256(reference), 'optimizer_steps': 256,
-        'fresh_start': True, 'training_prompts': ['original_open'], 'gold_eos_appended': True,
+        'fresh_start': True, 'training_prompts': list(TRAIN_PROMPTS), 'gold_eos_appended': True,
+        'heldout_prompts': list(HELDOUT_PROMPTS), 'prompt_schedule': 'round_robin_zero_based',
+        'optimizer_prompt_counts': {p: sum(training_prompt(s) == p for s in range(256)) for p in TRAIN_PROMPTS},
         'loss': 'mean_answer_ce + eos_ce', 'termination_contract': runtime['termination']})
     try:
         replay.write_json(directory / 'initial_reproducibility.json', gradient_gate(oracle, runtime))
@@ -116,7 +120,8 @@ def run_one(*, spec, initial, reference, runtime, output_dir):
             if step == 256:
                 break
             optimizer.zero_grad(set_to_none=True)
-            output = teacher(runtime, oracle.image(), 'original_open', True)
+            prompt_id = training_prompt(step)
+            output = teacher(runtime, oracle.image(), prompt_id, True)
             if not torch.isfinite(output.loss):
                 raise RuntimeError('Nonfinite loss')
             output.loss.backward()
@@ -130,7 +135,7 @@ def run_one(*, spec, initial, reference, runtime, output_dir):
             updated = oracle.latent_fp32.detach().cpu()
             if not torch.isfinite(updated).all():
                 raise RuntimeError('Nonfinite updated latent')
-            metrics = {**spec, 'optimizer_step': step+1, 'loss_before_step': loss,
+            metrics = {**spec, 'optimizer_step': step+1, 'training_prompt_id': prompt_id, 'loss_before_step': loss,
                 'answer_ce_before_step': answer, 'eos_ce_before_step': eos,
                 'gradient_rms': grad_rms, 'update_rms': float((updated-current).square().mean().sqrt()),
                 'latent_rms': float(updated.square().mean().sqrt()),
@@ -139,7 +144,7 @@ def run_one(*, spec, initial, reference, runtime, output_dir):
             replay.append_jsonl(directory / 'metrics.jsonl', metrics)
             if step % 16 == 0:
                 print(json.dumps({'stage':'optimizer_step','id':spec['run_id'],'step':step+1,
-                                  'answer_ce':answer,'eos_ce':eos}), flush=True)
+                                  'training_prompt_id':prompt_id,'answer_ce':answer,'eos_ce':eos}), flush=True)
             del output, gradient
         with torch.no_grad():
             image = oracle.image().cpu()

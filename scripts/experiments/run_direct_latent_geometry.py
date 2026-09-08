@@ -21,6 +21,7 @@ from scripts.train import latent_r11_vae_oracle as legacy
 from scripts.inspire.model_snapshot_manifest import verify_snapshot_binding
 from vision_memory.repro import canonical_tensor_sha256, configure_strict_cuda_determinism
 from vision_memory.training.direct_latent_geometry import panel, initial_array, CHECKPOINTS, DISTRIBUTIONS, study_members, spectrum, question_prompts
+from vision_memory.training.direct_latent_geometry import TRAIN_PROMPTS, HELDOUT_PROMPTS, training_prompt
 from vision_memory.reader.open_eos import assistant_termination_contract
 from vision_memory.training.r10_alignment import R10_SELECTION_SEED
 from vision_memory.training.r11_new_oracle import R11_NEW_TARGET_IDS, R11_NEW_TARGETS_PAYLOAD_SHA256
@@ -45,8 +46,16 @@ def verify_run(directory, spec):
         raise RuntimeError(f"Preserved incomplete run requires audit: {directory}")
     if any(terminal.get(k) != v for k, v in spec.items()):
         raise RuntimeError("Run identity mismatch")
-    if len(rows(directory / "metrics.jsonl")) != 256:
-        raise RuntimeError("Missing optimizer receipts")
+    manifest = load(directory / 'manifest.json')
+    if (manifest.get('training_prompts') != list(TRAIN_PROMPTS)
+            or manifest.get('heldout_prompts') != list(HELDOUT_PROMPTS)
+            or manifest.get('prompt_schedule') != 'round_robin_zero_based'
+            or manifest.get('optimizer_prompt_counts') != {'original_open': 86, 'paraphrase_1': 85, 'paraphrase_2': 85}):
+        raise RuntimeError('Run belongs to a different prompt-training protocol')
+    metrics = rows(directory / "metrics.jsonl")
+    if ([r.get('optimizer_step') for r in metrics] != list(range(1, 257))
+            or [r.get('training_prompt_id') for r in metrics] != [training_prompt(s) for s in range(256)]):
+        raise RuntimeError("Missing or invalid optimizer prompt receipts")
     for filename, expected in (("latent_index.jsonl", list(range(257))), ("checkpoint_index.jsonl", list(CHECKPOINTS))):
         index = rows(directory / filename)
         if [r["optimizer_step"] for r in index] != expected:
@@ -61,7 +70,8 @@ def verify_run(directory, spec):
     expected = {(c,p) for c in ('matched','blank','fixed_donor') for p in question_prompts()}
     if len(generations) != len(expected) or {(r['condition'],r['prompt_id']) for r in generations} != expected:
         raise RuntimeError("Incomplete endpoint evaluation")
-    if any(r['query'] != question_prompts()[r['prompt_id']] or not r['gold_eos_appended'] for r in generations):
+    if any(r['query'] != question_prompts()[r['prompt_id']] or not r['gold_eos_appended']
+           or r.get('question_trained') != (r['prompt_id'] in TRAIN_PROMPTS) for r in generations):
         raise RuntimeError('Prompt or EOS protocol changed')
     probes=rows(directory / 'checkpoint_generations.jsonl')
     if [r['optimizer_step'] for r in probes] != list(CHECKPOINTS):
@@ -69,6 +79,8 @@ def verify_run(directory, spec):
     matched=[r for r in generations if r['condition']=='matched']
     original=next(r for r in matched if r['prompt_id']=='original_open')
     return {**spec, "qa_pass": original['scorer']['strict_correct'],
+            "train_qa_pass": all(r['scorer']['strict_correct'] for r in matched if r['prompt_id'] in TRAIN_PROMPTS),
+            "heldout_qa_pass": all(r['scorer']['strict_correct'] for r in matched if r['prompt_id'] in HELDOUT_PROMPTS),
             "robust_qa_pass": all(r['scorer']['strict_correct'] for r in matched),
             "answer_prefix_correct": original['scorer']['answer_prefix_token_exact'],
             "overgeneration": original['scorer']['overgeneration'],
@@ -89,6 +101,11 @@ def summarize(root, config):
               "completed_count": len(completed), "planned_count": len(config["runs"]),
               "complete": len(completed) == len(config["runs"]), "formal_shared_writer_success": False,
               "per_run": completed, "success_count": sum(r["qa_pass"] for r in completed), "cells": []}
+    result.update(training_prompts=list(TRAIN_PROMPTS), heldout_prompts=list(HELDOUT_PROMPTS),
+                  train_all_correct_count=sum(r['train_qa_pass'] for r in completed),
+                  heldout_all_correct_count=sum(r['heldout_qa_pass'] for r in completed),
+                  all5_correct_count=sum(r['robust_qa_pass'] for r in completed),
+                  prompt_correct_counts={p: sum(r['prompt_correct'][p] for r in completed) for p in question_prompts()})
     for study, labels in (("distribution", DISTRIBUTIONS), ("scale", (.25,.5,1.,2.,4.)), ("gaussian_density", ("all32",))):
         for label in labels:
             planned = study_members(config["runs"], study, label)
@@ -126,7 +143,9 @@ def run_lane(args):
         config = load(args.config)
         if (config["runs"] != panel() or config["vae_dtype"] != "float32" or config["reader_dtype"] != "bfloat16"
                 or config['target']['inputs'] != question_prompts()
-                or config['training'] != {'optimizer':'Adam','steps':256,'lr':.05,'lambda_eos':1.,'prompts':['original_open']}):
+                or config['training'] != {'optimizer':'Adam','steps':256,'lr':.05,'lambda_eos':1.,
+                                          'prompts':list(TRAIN_PROMPTS),'prompt_schedule':'round_robin_zero_based'}
+                or config.get('heldout_prompts') != list(HELDOUT_PROMPTS)):
             raise ValueError("Protocol changed")
         commit = replay.command_output(["git", "rev-parse", "HEAD"])
         if commit != args.expected_commit or replay.command_output(["git", "status", "--porcelain"]):

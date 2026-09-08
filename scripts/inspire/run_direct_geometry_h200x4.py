@@ -6,6 +6,7 @@ import json
 import os
 from pathlib import Path
 import signal
+import socket
 import subprocess
 import sys
 import time
@@ -23,7 +24,11 @@ def main():
     parser.add_argument('--output-root',type=Path,required=True)
     parser.add_argument('--expected-commit',required=True)
     parser.add_argument('--deadline',type=float,required=True)
+    parser.add_argument('--instance',required=True)
+    parser.add_argument('--expected-hostname',required=True)
     args=parser.parse_args()
+    if socket.gethostname() != args.expected_hostname:
+        raise RuntimeError('Instance container changed; deployment binding must be rechecked')
     if (subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()!=args.expected_commit
             or subprocess.check_output(['git','status','--porcelain'],cwd=ROOT,text=True).strip()):
         raise RuntimeError('Exact clean source commit required')
@@ -41,7 +46,7 @@ def main():
             'MKL_NUM_THREADS':'1','TOKENIZERS_PARALLELISM':'false','HF_HUB_OFFLINE':'1','TRANSFORMERS_OFFLINE':'1',
             'VLM_DREAMLITE_SNAPSHOT_MANIFEST_SHA256':'1bcf41b170c4b4a806bac6701cbdf4fabd5c3c53fa67415d065ab95ce2703159',
             'VLM_READER_SNAPSHOT_MANIFEST_SHA256':'159a504daaae6dc412535978f087150a0eb8e50164afd70a8a17f83906f1127c'})
-        launched={'instance':'dl-base-h200x4-20260907','commit':args.expected_commit,'started_epoch':time.time(),
+        launched={'instance':args.instance,'hostname':socket.gethostname(),'commit':args.expected_commit,'started_epoch':time.time(),
                   'deadline_epoch':args.deadline,'planned_runs':96,'pid':os.getpid(),'gpus':gpus,'lanes':[]}
         children=[]; logs=[]; interrupted=[]
         signal.signal(signal.SIGTERM,lambda s,f:interrupted.append(s))

@@ -1097,15 +1097,19 @@
     "lr": 0.05,
     "lambda_eos": 1.0,
     "prompts": [
-      "original_open"
-    ]
+      "original_open",
+      "paraphrase_1",
+      "paraphrase_2"
+    ],
+    "prompt_schedule": "round_robin_zero_based"
   },
+  "heldout_prompts": ["paraphrase_3", "paraphrase_4"],
   "initialization": {
     "center": "FP32 posterior mean of constant RGB 127/255",
     "formula": "reference + 0.1 * scale * RMS(reference) * epsilon",
     "noise": "matched population variance, except sphere fixed empirical RMS; student t df=5"
   },
-  "success": "step256 original_open raw greedy32 exact match; all5prompt success reported separately",
+  "success": "step256 raw greedy32 exact match; original, all3train, both2heldout and all5 reported separately; heldout never selects updates or checkpoints",
   "data_sha256": {
     "train": "24327edc39e0d133df5150dc1aab4f55c6cf5b05ccfca9025ad90c5accc6d184",
     "dev": "8b167df38022a631d4e631d3c0d66e9fca74171f4224fec436030d6650047303"

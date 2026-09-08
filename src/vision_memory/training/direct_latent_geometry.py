@@ -5,7 +5,16 @@ import numpy as np
 
 DISTRIBUTIONS = ("gaussian", "uniform", "sphere", "rademacher", "heavy_tail")
 CHECKPOINTS = (0, 1, 2, 4, 8, 16, 32, 64, 128, 192, 256)
+TRAIN_PROMPTS = ("original_open", "paraphrase_1", "paraphrase_2")
+HELDOUT_PROMPTS = ("paraphrase_3", "paraphrase_4")
 INSTRUCTIONS = "Use the memory image to answer.\nAnswer with a short phrase only."
+
+
+def training_prompt(step):
+    """Select the prompt before the zero-based optimizer update."""
+    if not isinstance(step, int) or isinstance(step, bool) or not 0 <= step < 256:
+        raise ValueError("Expected a zero-based optimizer step in [0, 256)")
+    return TRAIN_PROMPTS[step % len(TRAIN_PROMPTS)]
 
 
 def question_prompts():
