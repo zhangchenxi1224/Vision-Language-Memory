@@ -1,0 +1,213 @@
+{
+  "schema": "vision_memory.frozen-oracle-eos-config.v1",
+  "protocol": "Frozen-DreamLite-Open-EOS-Geometry-20260908",
+  "base_commit": "7c27edb",
+  "fixed_data": {
+    "train_sha256": "24327edc39e0d133df5150dc1aab4f55c6cf5b05ccfca9025ad90c5accc6d184",
+    "dev_sha256": "8b167df38022a631d4e631d3c0d66e9fca74171f4224fec436030d6650047303"
+  },
+  "target_selection": {
+    "family": "F1",
+    "independent_run_per_target": true,
+    "target_count": 8,
+    "target_ids": [
+      "r5-f1-8015bf53a4067aaa7e882288",
+      "r5-f1-392d41fd097d069c42218e0a",
+      "r5-f1-1aee01c0f3e7684c05c9122c",
+      "r5-f1-807090710dd4c077a97348ba",
+      "r5-f1-02c8aa9dc3523351c4d5f9c7",
+      "r5-f1-11dddf29efebc033a995ab92",
+      "r5-f1-de4899e05b0aa7f3d8373171",
+      "r5-f1-850189e424efde62468b2ef9"
+    ],
+    "selected_segment_payload_sha256": "6198beb3a3758fd7df912c6956bc05eac0ace8603708f37147826c65a4d61845"
+  },
+  "source_state": {
+    "rgb_numerator": 127,
+    "rgb_denominator": 255,
+    "encoding": "frozen VAE posterior mean in DreamLite model-latent scale/shift",
+    "persistent_state": "latent",
+    "reset": "decode the unchanged blank source latent"
+  },
+  "dreamlite_path": {
+    "execution": "complete frozen base DreamLite source-anchored edit path",
+    "dreamlite_inputs": [
+      "source_latent",
+      "event_text",
+      "x_T"
+    ],
+    "unet_executed_and_frozen": true,
+    "condition_encoder_executed_and_frozen": true,
+    "scheduler_executed_and_fixed": true,
+    "vae_decoder_executed_and_frozen": true,
+    "reader_executed_and_frozen": true,
+    "lora_trainable_parameters": 0,
+    "diffusion_steps": 4,
+    "effective_start_sigma": 0.5,
+    "effective_sigma_schedule": [
+      0.5,
+      0.375,
+      0.25,
+      0.125
+    ],
+    "initial_flow_state": "0.5*source_latent + 0.5*x_T"
+  },
+  "optimization": {
+    "optimizer": "Adam",
+    "learning_rate": 0.05,
+    "weight_decay": 0.0,
+    "optimizer_steps": 256,
+    "gradient_clipping": null,
+    "checkpoint_steps": [
+      0,
+      1,
+      2,
+      4,
+      8,
+      16,
+      32,
+      64,
+      128,
+      192,
+      256
+    ],
+    "save_latents_every_step": true,
+    "primary_endpoint": "raw_step256",
+    "best_checkpoint_selection_forbidden": true
+  },
+  "precision": {
+    "x_T": "float32",
+    "dreamlite": "float32",
+    "reader": "bfloat16",
+    "strict_determinism": true,
+    "tf32": false,
+    "attention": "math_sdpa"
+  },
+  "initialization": {
+    "rng": "numpy.PCG64",
+    "draw_dtype": "float64",
+    "storage_dtype": "float32",
+    "matching": "population mean=0 variance=1; log empirical moments",
+    "gaussian": "N(0,1), no sample normalization",
+    "uniform": "U(-sqrt(3),sqrt(3))",
+    "rademacher": "equiprobable +/-1",
+    "sphere": "Gaussian divided by sample RMS; radius=sqrt(D)",
+    "heavy_tail": "Student-t df5 times sqrt(3/5); no sample normalization",
+    "paired_seeds_across_tasks_and_scales": true
+  },
+  "primary_success": {
+    "endpoint_step": 256,
+    "metric": "original_open raw greedy32 exact match",
+    "technical_pass_required": true,
+    "paraphrase_metric": "all 5 fixed-instruction questions; secondary"
+  },
+  "deployment": {
+    "gpus": 4,
+    "gpu_type": "H200",
+    "worker_gpu_pairs": [
+      [
+        0,
+        1
+      ],
+      [
+        2,
+        3
+      ]
+    ],
+    "stages": [
+      "probe",
+      "A1",
+      "A2",
+      "A3",
+      "A4",
+      "A9"
+    ],
+    "reproducibility_failure_stops_multistart": true,
+    "model_hash_failure_stops_all": true,
+    "maximum_runtime_hours": 72,
+    "resume_complete_runs_only_after_hash_verification": true
+  },
+  "scientific_limits": [
+    "sampled reachability is not geometric basin volume",
+    "linear interpolation failure does not prove disconnected basins",
+    "64 centered samples have rank at most 63",
+    "Open oracle success is not shared Writer or held-out task generalization."
+  ],
+  "stage_bcd": {
+    "bank_tasks": 32,
+    "bank_selection": "original locked train F1 hash order",
+    "failed_task_replacement": false,
+    "requires_geometry_decision": true,
+    "controller_inputs": [
+      "source_latent",
+      "event_condition_embedding"
+    ],
+    "split_unit": "source_episode/event",
+    "full_ft_default": false
+  },
+  "manifest_sha256": "806a799a7b6cd5cda08e5d1f6c9002477b69c50e3fba3848179898dbc4a8aa37",
+  "open_supervision": {
+    "loss": "mean_answer_ce + eos_ce",
+    "lambda_eos": 1.0,
+    "train_prompts": [
+      "original_open"
+    ],
+    "fresh_starts": true,
+    "termination": "first assistant chat-template suffix token verified against generation stops",
+    "question_instructions": "Use the memory image to answer.\nAnswer with a short phrase only.",
+    "generation": {
+      "max_new_tokens": 32,
+      "do_sample": false
+    }
+  },
+  "donors": {
+    "0": {
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/frozen-oracle-geometry/3c8cf7d-20260908-r02/runs/A2-t01-gaussian-s04-a1/z/step-256.npy",
+      "gold": "ambient",
+      "provenance": "historical MCQ optimized endpoint, control only; never training initialization",
+      "sha256": "825d764d677583ca577cdbbb0eaad95c5eb564450be19a06f5984076d2fef284"
+    },
+    "1": {
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/frozen-oracle-geometry/3c8cf7d-20260908-r02/runs/A1-t00-gaussian-s00-a1-r0/z/step-256.npy",
+      "gold": "linen",
+      "provenance": "historical MCQ optimized endpoint, control only; never training initialization",
+      "sha256": "7a5bc83c2b409181a011132600673de49ecc8c38ae207f83a59878291dabdd04"
+    },
+    "2": {
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/frozen-oracle-geometry/3c8cf7d-20260908-r02/runs/A2-t01-gaussian-s04-a1/z/step-256.npy",
+      "gold": "ambient",
+      "provenance": "historical MCQ optimized endpoint, control only; never training initialization",
+      "sha256": "825d764d677583ca577cdbbb0eaad95c5eb564450be19a06f5984076d2fef284"
+    },
+    "3": {
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/frozen-oracle-geometry/3c8cf7d-20260908-r02/runs/A2-t01-gaussian-s04-a1/z/step-256.npy",
+      "gold": "ambient",
+      "provenance": "historical MCQ optimized endpoint, control only; never training initialization",
+      "sha256": "825d764d677583ca577cdbbb0eaad95c5eb564450be19a06f5984076d2fef284"
+    },
+    "4": {
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/frozen-oracle-geometry/3c8cf7d-20260908-r02/runs/A2-t01-gaussian-s04-a1/z/step-256.npy",
+      "gold": "ambient",
+      "provenance": "historical MCQ optimized endpoint, control only; never training initialization",
+      "sha256": "825d764d677583ca577cdbbb0eaad95c5eb564450be19a06f5984076d2fef284"
+    },
+    "5": {
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/frozen-oracle-geometry/3c8cf7d-20260908-r02/runs/A2-t01-gaussian-s04-a1/z/step-256.npy",
+      "gold": "ambient",
+      "provenance": "historical MCQ optimized endpoint, control only; never training initialization",
+      "sha256": "825d764d677583ca577cdbbb0eaad95c5eb564450be19a06f5984076d2fef284"
+    },
+    "6": {
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/frozen-oracle-geometry/3c8cf7d-20260908-r02/runs/A2-t01-gaussian-s04-a1/z/step-256.npy",
+      "gold": "ambient",
+      "provenance": "historical MCQ optimized endpoint, control only; never training initialization",
+      "sha256": "825d764d677583ca577cdbbb0eaad95c5eb564450be19a06f5984076d2fef284"
+    },
+    "7": {
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/frozen-oracle-geometry/3c8cf7d-20260908-r02/runs/A2-t01-gaussian-s04-a1/z/step-256.npy",
+      "gold": "ambient",
+      "provenance": "historical MCQ optimized endpoint, control only; never training initialization",
+      "sha256": "825d764d677583ca577cdbbb0eaad95c5eb564450be19a06f5984076d2fef284"
+    }
+  }
+}
