@@ -7,6 +7,7 @@ import torch
 
 from vision_memory.reader.open_eos import generation_diagnostics
 from vision_memory.training.latent_teacher_bank import (AuditError, SUFFIX, audit_evaluations,
+    audit_direct_prompt_receipts, direct_prompt_protocol,
     campaign_progress, export_bank, geometry_description, local_artifact, validate_prompts, write_json)
 from vision_memory.training.latent_bank_unet import load_teacher_bank
 
@@ -154,3 +155,56 @@ def test_artifact_path_escape_is_rejected(tmp_path):
     (tmp_path/"outside").write_text("outside")
     with pytest.raises(AuditError,match="escaping"):
         local_artifact(root,"../outside")
+
+
+def multiprompt_receipts():
+    trained = ["original_open", "paraphrase_1", "paraphrase_2"]
+    held = ["paraphrase_3", "paraphrase_4"]
+    config = {"training":{"optimizer":"Adam", "steps":256, "lr":.05, "lambda_eos":1.,
+                          "prompts":trained, "prompt_schedule":"round_robin_zero_based"}, "heldout_prompts":held}
+    manifest = {"training_prompts":trained, "heldout_prompts":held, "prompt_schedule":"round_robin_zero_based",
+                "optimizer_prompt_counts":{"original_open":86, "paraphrase_1":85, "paraphrase_2":85}}
+    metrics = [{"optimizer_step":i+1, "training_prompt_id":trained[i%3]} for i in range(256)]
+    rows = evaluated()
+    for row in rows:
+        row["question_trained"] = row["prompt_id"] in trained
+    return config, manifest, metrics, rows
+
+
+def test_new_direct_bank_retains_three_training_and_two_heldout_prompts():
+    config, manifest, metrics, rows = multiprompt_receipts()
+    protocol = audit_direct_prompt_receipts(config, manifest, metrics, rows)
+    assert protocol["training_prompts"] == ["original_open", "paraphrase_1", "paraphrase_2"]
+    assert protocol["heldout_prompts"] == ["paraphrase_3", "paraphrase_4"]
+
+
+@pytest.mark.parametrize("bad_prompt", ["paraphrase_3", "paraphrase_2", None])
+def test_new_direct_bank_rejects_heldout_leakage_schedule_drift_and_missing_receipt(bad_prompt):
+    config, manifest, metrics, rows = multiprompt_receipts()
+    metrics[1]["training_prompt_id"] = bad_prompt
+    with pytest.raises(AuditError, match="optimizer prompt schedule"):
+        audit_direct_prompt_receipts(config, manifest, metrics, rows)
+
+
+def test_new_direct_bank_rejects_old_labels_and_mixed_manifest():
+    config, manifest, metrics, rows = multiprompt_receipts()
+    rows[1]["question_trained"] = False
+    with pytest.raises(AuditError, match="label mismatch"):
+        audit_direct_prompt_receipts(config, manifest, metrics, rows)
+    rows[1]["question_trained"] = True
+    manifest["training_prompts"] = ["original_open"]
+    with pytest.raises(AuditError, match="manifest mismatch"):
+        audit_direct_prompt_receipts(config, manifest, metrics, rows)
+
+
+def test_legacy_direct_prompt_receipts_still_work_without_per_step_prompt_field():
+    config = {"training":{"optimizer":"Adam", "steps":256, "lr":.05, "lambda_eos":1., "prompts":["original_open"]}}
+    rows = evaluated()
+    for row in rows:
+        row["question_trained"] = row["prompt_id"] == "original_open"
+    metrics = [{"optimizer_step":i+1} for i in range(256)]
+    result = audit_direct_prompt_receipts(config, {"training_prompts":["original_open"]}, metrics, rows)
+    assert len(result["heldout_prompts"]) == 4
+    config["training"]["lambda_eos"] = 0.
+    with pytest.raises(AuditError, match="training contract"):
+        direct_prompt_protocol(config)

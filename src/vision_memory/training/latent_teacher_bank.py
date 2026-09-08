@@ -109,6 +109,43 @@ def validate_prompts(prompts: dict[str, str]) -> None:
         require(bool(sentence.strip()) and "\n" not in sentence and "Choose exactly one option" not in sentence, "Invalid Open question sentence")
 
 
+def direct_prompt_protocol(config: dict) -> dict:
+    """Accept the two deployed protocols without treating held-out prompts as training."""
+    base = {"optimizer":"Adam", "steps":256, "lr":.05, "lambda_eos":1.}
+    original = ["original_open"]
+    multiple = ["original_open", "paraphrase_1", "paraphrase_2"]
+    if config["training"] == {**base, "prompts":original}:
+        require(not config.get("heldout_prompts"), "Legacy Direct heldout declaration changed")
+        return {"training_prompts":original, "heldout_prompts":[f"paraphrase_{i}" for i in range(1,5)],
+                "prompt_schedule":"constant_original"}
+    require(config["training"] == {**base, "prompts":multiple, "prompt_schedule":"round_robin_zero_based"},
+            "Direct EOS training contract changed")
+    require(config.get("heldout_prompts") == ["paraphrase_3", "paraphrase_4"],
+            "Direct heldout prompt contract changed")
+    return {"training_prompts":multiple, "heldout_prompts":config["heldout_prompts"],
+            "prompt_schedule":"round_robin_zero_based"}
+
+
+def audit_direct_prompt_receipts(config: dict, manifest: dict, metrics: list[dict], evaluations: list[dict]) -> dict:
+    protocol = direct_prompt_protocol(config)
+    trained = protocol["training_prompts"]
+    require(manifest.get("training_prompts") == trained, "Direct training prompt manifest mismatch")
+    require([r.get("optimizer_step") for r in metrics] == list(range(1,257)), "Incomplete optimizer receipt grid")
+    if protocol["prompt_schedule"] == "round_robin_zero_based":
+        expected = [trained[i % len(trained)] for i in range(256)]
+        require(manifest.get("heldout_prompts") == protocol["heldout_prompts"]
+                and manifest.get("prompt_schedule") == protocol["prompt_schedule"], "Direct prompt split/schedule mismatch")
+        require(manifest.get("optimizer_prompt_counts") == dict(Counter(expected)), "Direct prompt exposure counts changed")
+        require([r.get("training_prompt_id") for r in metrics] == expected,
+                "Direct optimizer prompt schedule contains missing, reordered or held-out prompts")
+    else:
+        require(all(r.get("training_prompt_id", "original_open") == "original_open" for r in metrics),
+                "Legacy Direct optimizer used another prompt")
+    require(all(r.get("question_trained") is (r.get("prompt_id") in trained) for r in evaluations),
+            "Direct evaluation training/heldout label mismatch")
+    return protocol
+
+
 def audit_evaluations(rows: list[dict], prompts: dict[str, str], answer: str, *, direct: bool) -> dict:
     validate_prompts(prompts)
     donor = "fixed_donor" if direct else "donor"
@@ -214,7 +251,6 @@ def audit_direct_run(root: Path, spec: dict, lane: int, config: dict, commit: st
     require(spec.get("arm") == "open_gold_eos" and all(terminal.get(k) == v and manifest.get(k) == v for k,v in spec.items()), "Direct run identity/EOS arm mismatch")
     require(terminal.get("status") == "completed" and terminal.get("optimizer_steps") == 256, "Incomplete Direct trajectory")
     require(manifest.get("fresh_start") is True and manifest.get("gold_eos_appended") is True and manifest.get("loss") == SELECTION["objective"], "Historical or wrong-objective teacher")
-    require(manifest.get("training_prompts") == ["original_open"], "Direct training prompt protocol changed")
     require(lane_manifest.get("only_trainable") == "final_latent_fp32" and lane_manifest.get("unet_forward_count") == 0, "Direct route executed U-Net or updated a different variable")
     _termination(manifest["termination_contract"])
     metrics = json_rows(directory / "metrics.jsonl")
@@ -235,8 +271,11 @@ def audit_direct_run(root: Path, spec: dict, lane: int, config: dict, commit: st
     rows = json_rows(directory / "generations.jsonl")
     probes = json_rows(directory / "checkpoint_generations.jsonl")
     require([r["optimizer_step"] for r in probes] == CHECKPOINTS, "Incomplete checkpoint generation grid")
+    prompt_protocol = audit_direct_prompt_receipts(config, manifest, metrics, rows + probes)
     target = config["target"]
     qa = audit_evaluations(rows, target["inputs"], target["scorer_metadata"]["gold"], direct=True)
+    qa["train_qa_pass"] = all(qa["prompt_correct"][p] for p in prompt_protocol["training_prompts"])
+    qa["heldout_qa_pass"] = all(qa["prompt_correct"][p] for p in prompt_protocol["heldout_prompts"])
     require(qa["image_sha256"]["matched"] == canonical_tensor_sha256(payload["image"]), "Endpoint image is not evaluated image")
     controls = torch.load(parent / "reference_and_controls.pt", map_location="cpu", weights_only=True)
     source = tensor(controls["reference"])
@@ -250,7 +289,8 @@ def audit_direct_run(root: Path, spec: dict, lane: int, config: dict, commit: st
                 donor={"kind":"image", "value":controls["fixed_donor"].float(), "answer":"orange"},
                 qa=qa, rows=rows, source_run=str(directory.resolve()), termination=manifest["termination_contract"],
                 models=lane_manifest["snapshots_start"], data=lane_manifest["protocol"]["data_sha256"],
-                provenance={"endpoint_file_sha256":file_sha256(endpoint_path), "endpoint_tensor_sha256":endpoint_sha,
+                provenance={"prompt_protocol":prompt_protocol, "metrics_sha256":file_sha256(directory/"metrics.jsonl"),
+                            "endpoint_file_sha256":file_sha256(endpoint_path), "endpoint_tensor_sha256":endpoint_sha,
                             "manifest_sha256":file_sha256(directory/"manifest.json"), "terminal_sha256":file_sha256(directory/"terminal.json"),
                             "generation_file_sha256":file_sha256(directory/"generations.jsonl"),
                             "latent_index_sha256":file_sha256(directory/"latent_index.jsonl"), "checkpoint_index_sha256":file_sha256(directory/"checkpoint_index.jsonl")})
@@ -492,7 +532,7 @@ def build_bank(*, route: str, oracle_root: Path, oracle_repo: Path, oracle_confi
             local_artifact(output_dir,teacher["latent_path"],teacher["latent_file_sha256"])
         return previous
     if route == "direct":
-        require(config["training"] == {"optimizer":"Adam","steps":256,"lr":.05,"lambda_eos":1.,"prompts":["original_open"]},"Direct EOS training contract changed")
+        direct_prompt_protocol(config)
         for lane in range(2):
             parent=oracle_root/f"lane-{lane}"
             manifest=read_json(parent/"manifest.json")
@@ -520,4 +560,6 @@ def build_bank(*, route: str, oracle_root: Path, oracle_repo: Path, oracle_confi
                 "config_path":str(oracle_config.resolve()),"config_sha256":file_sha256(oracle_config),
                 "planned_manifest_sha256":file_sha256(planned_manifest) if planned_manifest else None,
                 "run_ids":[r["run_id"] for r in specs],"fresh_EOS_only":True,"selection":SELECTION}
+    if route == "direct":
+        provenance["oracle_prompt_protocol"] = direct_prompt_protocol(config)
     return export_bank(audited,output_dir,route=route,provenance=provenance)

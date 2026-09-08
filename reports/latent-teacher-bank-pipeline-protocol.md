@@ -1,5 +1,13 @@
 # 新 EOS Oracle → 成功 latent 集合 → 独立 U-Net 训练
 
+## 2026-09-09 多问法 Direct 接续
+
+新增支持 oracle 提交 `46cd36b1eb421471dafa7865fbab4dfe02336336`：同一道 ambient 题、96 个新起点，训练问法为 original_open / paraphrase_1 / paraphrase_2，按 optimizer step 从零开始轮换，256 次更新的曝光数为 86/85/85；paraphrase_3 / paraphrase_4 仅评测。封库同时验证配置、每条 manifest、256 条实际 prompt receipts、全部评测行的 question_trained 标记，并保留训练与留出问法分组。旧单问法协议继续受单独校验。
+
+新一轮只从该 oracle 的完整 step-256 终点建库，继续以原问 raw exact match 决定入库，不用留出问法筛选目标。U-Net 架构、flow matching 目标、两个 seed 各512步及训练前后新噪声评测保持原设置；输出独立保存。多问法 oracle 在 dl-base 实例运行，U-Net 接续进程可以在共享盘可见的 trust 实例等待完成，因此不会占用正在优化 latent 的 GPU。
+
+这仍然是单题实验。第一轮 U-Net 的两组新噪声原问均为0/8，训练执行完成不能解释为已经学会生成正确记忆；新一轮结果同样必须查看原始答题评测。
+
 本文件登记实现规则，不是 GPU 训练成功报告。当前两条新实验继续使用其冻结的原 checkout；下述工具部署到单独 checkout，由 CPU sidecar 等待完成，再接续同一实例的空闲 GPU。
 
 ## 两条 arm 保持独立
