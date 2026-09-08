@@ -36,6 +36,13 @@ def main():
             if not (terminal.exists() and json.loads(terminal.read_text()).get('status')=='paused'):
                 print(json.dumps({'status':'waiting_for_warmup_boundary'}))
                 return 11
+        if args.wait_for_warmup:
+            with (args.output/'.campaign.lock').open('a+') as campaign_lock:
+                try:
+                    fcntl.flock(campaign_lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
+                except BlockingIOError:
+                    print(json.dumps({'status':'waiting_for_warmup_boundary'}))
+                    return 11
         dispatch=args.output/('warmup-dispatch.json' if args.warmup_only else 'dispatch.json')
         if dispatch.exists():
             previous=json.loads(dispatch.read_text())
