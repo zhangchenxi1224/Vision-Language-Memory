@@ -1,5 +1,14 @@
 # U-Net 逐级可学性实验：部署协议
 
+**实际部署核验：2026-09-09 01:56:41 北京时间。** 已在 dl-base 原任务正常完成后空闲的 GPU0/1 启动。96/96 个 teacher 全部通过重新解码图像 SHA 与原始答案+EOS复测；single rank4 已实际更新 **89/512 步**，无 failure。原问在 step16 的早期检查仍未答对，不能将启动或 teacher 复测成功记作 U-Net 已学会。
+
+- 实际训练源码：`fd07eb1c21091bfd7044d77cf821cb5010b06ac1`，独立目录 `P/repos/unet-learnability-live-20260909`。
+- 实际输出：`P/runs/unet-learnability/fd07eb1-20260909-r01`；含 `deployment-verification.json`、`preflight-rank4/result.json`、`single-rank4/metrics`、checkpoint 与原始评测。
+- dl-base 主进程 PID1322098，single worker PID1332143；GPU0/1分别占用约31.3GB/9.3GB，GPU2/3空闲。
+- 新申请 `vlm-unet-fit-h200x2-20260909` 仍在排队，已创建而非仅口头建议。接续控制器本机PID52324，目录 `C:/Users/Expedition/.codex/unet-learnability-20260909-live`，控制器代码 `c2b9b0f`；远端训练源码未随本地控制器修正而改变。
+- 本地接续的非交互启动已使用真实 Linux PTY 验证，能正确返回“等待起步阶段结束”，不会因 restricted notebook 不接受stdin而误报启动成功。它还会根据平台剩余运行时间扣除退出缓冲。
+- 原有 dl-base 两个 U-Net 的 terminal 均为 `completed/512`，进程退出、显存释放后才启用本次训练。没有中断其他实例、Job或更改其训练数据。
+
 使用 `dl-base-h200x4-20260907` 完成的新一轮 96 个 Direct 终点；不使用第一轮单问法 bank 或旧失败 U-Net 的权重。每个不同阶段/rank 从同一预训练 DreamLite 开始注入新 LoRA；仅预算延长对照恢复原 optimizer、RNG 和权重。
 
 ## 数据绑定
