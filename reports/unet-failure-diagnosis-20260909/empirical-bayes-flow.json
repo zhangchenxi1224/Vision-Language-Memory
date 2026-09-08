@@ -1,0 +1,589 @@
+{
+  "bank_sha256": "be0832584d82eeb50782c353e083a9c4793abfe9426fca53361d7c5525b37087",
+  "checkpoint_sha256": "2c5731ed3ffb328f4cd7a12c52541bd30f95737af4b1235d71df685f96538957",
+  "completed_epoch": 1788887958.0349824,
+  "exact_match": 8,
+  "heldout_teacher_count": 19,
+  "helper_sha256": "c925e7e4b581f32a37c6ddb2dcf1b4b9fafa8be0ae3e9dd6f781550890cc5962",
+  "hostname": "vlm-r11-open-h200x2-20260907--9e8ac885838b-l2pf2gogaj",
+  "interpretation": "Uses complete TRAIN bank at inference; diagnostic control, not a learned U-Net or evidence of generalization",
+  "n": 8,
+  "optimizer_updates": 0,
+  "rows": [
+    {
+      "answer_ce": 0.00012969970703125,
+      "eos_ce": 0.000011444091796875,
+      "nearest_teacher_id": "r5-f1-392d41fd097d069c42218e0a-e11ac74d49cf3fce",
+      "nearest_teacher_rms": 0,
+      "noise_seed": 1714865758548534000,
+      "path": [
+        {
+          "exact_entropy": 4.343805421853684,
+          "exact_max_posterior": 0.012987012987012988,
+          "exact_mode_id": "r5-f1-392d41fd097d069c42218e0a-5dc9e2555c0d1508",
+          "irreducible_mse_on_exact": 0.4095101356376864,
+          "irreducible_mse_on_learned": 0.4095101356376864,
+          "learned_max_posterior": 0.012987012987012988,
+          "learned_vs_bayes_mse_on_exact": 0.017962863030762,
+          "learned_vs_bayes_mse_on_learned": 0.017962863030762,
+          "sigma": 0.5
+        },
+        {
+          "exact_entropy": 3.8156575063491034e-15,
+          "exact_max_posterior": 1,
+          "exact_mode_id": "r5-f1-392d41fd097d069c42218e0a-e11ac74d49cf3fce",
+          "irreducible_mse_on_exact": 1.370708541761284e-16,
+          "irreducible_mse_on_learned": 2.4751508582200673e-21,
+          "learned_max_posterior": 1,
+          "learned_vs_bayes_mse_on_exact": 0.7053324779482153,
+          "learned_vs_bayes_mse_on_learned": 0.7132891125167689,
+          "sigma": 0.375
+        },
+        {
+          "exact_entropy": 0,
+          "exact_max_posterior": 1,
+          "exact_mode_id": "r5-f1-392d41fd097d069c42218e0a-e11ac74d49cf3fce",
+          "irreducible_mse_on_exact": 0,
+          "irreducible_mse_on_learned": 1.4899054668538676e-32,
+          "learned_max_posterior": 1,
+          "learned_vs_bayes_mse_on_exact": 1.1801138510101277,
+          "learned_vs_bayes_mse_on_learned": 1.6824650271185582,
+          "sigma": 0.25
+        },
+        {
+          "exact_entropy": 0,
+          "exact_max_posterior": 1,
+          "exact_mode_id": "r5-f1-392d41fd097d069c42218e0a-e11ac74d49cf3fce",
+          "irreducible_mse_on_exact": 0,
+          "irreducible_mse_on_learned": 2.5626406173762095e-154,
+          "learned_max_posterior": 1,
+          "learned_vs_bayes_mse_on_exact": 1.5242430504058908,
+          "learned_vs_bayes_mse_on_learned": 7.236532249674349,
+          "sigma": 0.125
+        }
+      ],
+      "raw": "ambient",
+      "score": {
+        "answer_followed_immediately_by_eos": true,
+        "answer_prefix_token_exact": true,
+        "answer_token_count": 1,
+        "expected_text_present": true,
+        "format_status": "exact_short_answer",
+        "generated_answer_token_accuracy": 1,
+        "gold_token_ids": [
+          59614
+        ],
+        "has_extra_text": false,
+        "normalized": "ambient",
+        "normalized_expected": "ambient",
+        "overgeneration": false,
+        "raw": "ambient",
+        "strict_correct": true
+      }
+    },
+    {
+      "answer_ce": 0.0000457763671875,
+      "eos_ce": 0.000026702880859375,
+      "nearest_teacher_id": "r5-f1-392d41fd097d069c42218e0a-4a3051ea18b29f5e",
+      "nearest_teacher_rms": 0,
+      "noise_seed": 6530417308455505000,
+      "path": [
+        {
+          "exact_entropy": 4.343805421853684,
+          "exact_max_posterior": 0.012987012987012988,
+          "exact_mode_id": "r5-f1-392d41fd097d069c42218e0a-5dc9e2555c0d1508",
+          "irreducible_mse_on_exact": 0.4095101356376864,
+          "irreducible_mse_on_learned": 0.4095101356376864,
+          "learned_max_posterior": 0.012987012987012988,
+          "learned_vs_bayes_mse_on_exact": 0.01770953182996552,
+          "learned_vs_bayes_mse_on_learned": 0.01770953182996552,
+          "sigma": 0.5
+        },
+        {
+          "exact_entropy": 0.004558717683744513,
+          "exact_max_posterior": 0.9994658528056783,
+          "exact_mode_id": "r5-f1-392d41fd097d069c42218e0a-4a3051ea18b29f5e",
+          "irreducible_mse_on_exact": 0.0006718754157025985,
+          "irreducible_mse_on_learned": 0.042561256295966805,
+          "learned_max_posterior": 0.9649532016828,
+          "learned_vs_bayes_mse_on_exact": 0.6657204132862794,
+          "learned_vs_bayes_mse_on_learned": 0.6261666018656706,
+          "sigma": 0.375
+        },
+        {
+          "exact_entropy": 0,
+          "exact_max_posterior": 1,
+          "exact_mode_id": "r5-f1-392d41fd097d069c42218e0a-4a3051ea18b29f5e",
+          "irreducible_mse_on_exact": 0,
+          "irreducible_mse_on_learned": 5.359544430634949e-31,
+          "learned_max_posterior": 1,
+          "learned_vs_bayes_mse_on_exact": 1.1352778182277787,
+          "learned_vs_bayes_mse_on_learned": 1.6269865826376655,
+          "sigma": 0.25
+        },
+        {
+          "exact_entropy": 0,
+          "exact_max_posterior": 1,
+          "exact_mode_id": "r5-f1-392d41fd097d069c42218e0a-4a3051ea18b29f5e",
+          "irreducible_mse_on_exact": 0,
+          "irreducible_mse_on_learned": 1.161738394262601e-297,
+          "learned_max_posterior": 1,
+          "learned_vs_bayes_mse_on_exact": 1.4936995767758656,
+          "learned_vs_bayes_mse_on_learned": 7.117556430058297,
+          "sigma": 0.125
+        }
+      ],
+      "raw": "ambient",
+      "score": {
+        "answer_followed_immediately_by_eos": true,
+        "answer_prefix_token_exact": true,
+        "answer_token_count": 1,
+        "expected_text_present": true,
+        "format_status": "exact_short_answer",
+        "generated_answer_token_accuracy": 1,
+        "gold_token_ids": [
+          59614
+        ],
+        "has_extra_text": false,
+        "normalized": "ambient",
+        "normalized_expected": "ambient",
+        "overgeneration": false,
+        "raw": "ambient",
+        "strict_correct": true
+      }
+    },
+    {
+      "answer_ce": 0.0005340576171875,
+      "eos_ce": 0.000087738037109375,
+      "nearest_teacher_id": "r5-f1-392d41fd097d069c42218e0a-4dde10e68cc6bc34",
+      "nearest_teacher_rms": 0,
+      "noise_seed": 1148844983744496400,
+      "path": [
+        {
+          "exact_entropy": 4.343805421853684,
+          "exact_max_posterior": 0.012987012987012988,
+          "exact_mode_id": "r5-f1-392d41fd097d069c42218e0a-5dc9e2555c0d1508",
+          "irreducible_mse_on_exact": 0.4095101356376864,
+          "irreducible_mse_on_learned": 0.4095101356376864,
+          "learned_max_posterior": 0.012987012987012988,
+          "learned_vs_bayes_mse_on_exact": 0.016886804558665192,
+          "learned_vs_bayes_mse_on_learned": 0.016886804558665192,
+          "sigma": 0.5
+        },
+        {
+          "exact_entropy": 2.3557589460355768e-26,
+          "exact_max_posterior": 1,
+          "exact_mode_id": "r5-f1-392d41fd097d069c42218e0a-4dde10e68cc6bc34",
+          "irreducible_mse_on_exact": 4.753643035079675e-28,
+          "irreducible_mse_on_learned": 5.7444883212256074e-33,
+          "learned_max_posterior": 1,
+          "learned_vs_bayes_mse_on_exact": 0.6638265861320498,
+          "learned_vs_bayes_mse_on_learned": 0.6664396100016066,
+          "sigma": 0.375
+        },
+        {
+          "exact_entropy": 0,
+          "exact_max_posterior": 1,
+          "exact_mode_id": "r5-f1-392d41fd097d069c42218e0a-4dde10e68cc6bc34",
+          "irreducible_mse_on_exact": 0,
+          "irreducible_mse_on_learned": 1.4730440015119404e-201,
+          "learned_max_posterior": 1,
+          "learned_vs_bayes_mse_on_exact": 1.1387411001799488,
+          "learned_vs_bayes_mse_on_learned": 1.6178296938603733,
+          "sigma": 0.25
+        },
+        {
+          "exact_entropy": 0,
+          "exact_max_posterior": 1,
+          "exact_mode_id": "r5-f1-392d41fd097d069c42218e0a-4dde10e68cc6bc34",
+          "irreducible_mse_on_exact": 0,
+          "irreducible_mse_on_learned": 0,
+          "learned_max_posterior": 1,
+          "learned_vs_bayes_mse_on_exact": 1.5013463082484715,
+          "learned_vs_bayes_mse_on_learned": 7.04724563841199,
+          "sigma": 0.125
+        }
+      ],
+      "raw": "ambient",
+      "score": {
+        "answer_followed_immediately_by_eos": true,
+        "answer_prefix_token_exact": true,
+        "answer_token_count": 1,
+        "expected_text_present": true,
+        "format_status": "exact_short_answer",
+        "generated_answer_token_accuracy": 1,
+        "gold_token_ids": [
+          59614
+        ],
+        "has_extra_text": false,
+        "normalized": "ambient",
+        "normalized_expected": "ambient",
+        "overgeneration": false,
+        "raw": "ambient",
+        "strict_correct": true
+      }
+    },
+    {
+      "answer_ce": 0.0000457763671875,
+      "eos_ce": 0.000026702880859375,
+      "nearest_teacher_id": "r5-f1-392d41fd097d069c42218e0a-4a3051ea18b29f5e",
+      "nearest_teacher_rms": 0,
+      "noise_seed": 4975988128162006000,
+      "path": [
+        {
+          "exact_entropy": 4.343805421853684,
+          "exact_max_posterior": 0.012987012987012988,
+          "exact_mode_id": "r5-f1-392d41fd097d069c42218e0a-5dc9e2555c0d1508",
+          "irreducible_mse_on_exact": 0.4095101356376864,
+          "irreducible_mse_on_learned": 0.4095101356376864,
+          "learned_max_posterior": 0.012987012987012988,
+          "learned_vs_bayes_mse_on_exact": 0.01760858597761119,
+          "learned_vs_bayes_mse_on_learned": 0.01760858597761119,
+          "sigma": 0.5
+        },
+        {
+          "exact_entropy": 2.1722351656598047e-8,
+          "exact_max_posterior": 0.9999999990000441,
+          "exact_mode_id": "r5-f1-392d41fd097d069c42218e0a-4a3051ea18b29f5e",
+          "irreducible_mse_on_exact": 1.2766996536757758e-9,
+          "irreducible_mse_on_learned": 2.4427482130778127e-9,
+          "learned_max_posterior": 0.999999998086754,
+          "learned_vs_bayes_mse_on_exact": 0.667022013259948,
+          "learned_vs_bayes_mse_on_learned": 0.6747491018069149,
+          "sigma": 0.375
+        },
+        {
+          "exact_entropy": 0,
+          "exact_max_posterior": 1,
+          "exact_mode_id": "r5-f1-392d41fd097d069c42218e0a-4a3051ea18b29f5e",
+          "irreducible_mse_on_exact": 0,
+          "irreducible_mse_on_learned": 1.8008848210371926e-40,
+          "learned_max_posterior": 1,
+          "learned_vs_bayes_mse_on_exact": 1.138700113109435,
+          "learned_vs_bayes_mse_on_learned": 1.65491607501877,
+          "sigma": 0.25
+        },
+        {
+          "exact_entropy": 0,
+          "exact_max_posterior": 1,
+          "exact_mode_id": "r5-f1-392d41fd097d069c42218e0a-4a3051ea18b29f5e",
+          "irreducible_mse_on_exact": 0,
+          "irreducible_mse_on_learned": 2.3968635170931832e-44,
+          "learned_max_posterior": 1,
+          "learned_vs_bayes_mse_on_exact": 1.4924438809088354,
+          "learned_vs_bayes_mse_on_learned": 7.236449562687101,
+          "sigma": 0.125
+        }
+      ],
+      "raw": "ambient",
+      "score": {
+        "answer_followed_immediately_by_eos": true,
+        "answer_prefix_token_exact": true,
+        "answer_token_count": 1,
+        "expected_text_present": true,
+        "format_status": "exact_short_answer",
+        "generated_answer_token_accuracy": 1,
+        "gold_token_ids": [
+          59614
+        ],
+        "has_extra_text": false,
+        "normalized": "ambient",
+        "normalized_expected": "ambient",
+        "overgeneration": false,
+        "raw": "ambient",
+        "strict_correct": true
+      }
+    },
+    {
+      "answer_ce": 0.0000457763671875,
+      "eos_ce": 0.000026702880859375,
+      "nearest_teacher_id": "r5-f1-392d41fd097d069c42218e0a-4a3051ea18b29f5e",
+      "nearest_teacher_rms": 0,
+      "noise_seed": 2220925912469646300,
+      "path": [
+        {
+          "exact_entropy": 4.343805421853684,
+          "exact_max_posterior": 0.012987012987012988,
+          "exact_mode_id": "r5-f1-392d41fd097d069c42218e0a-5dc9e2555c0d1508",
+          "irreducible_mse_on_exact": 0.4095101356376864,
+          "irreducible_mse_on_learned": 0.4095101356376864,
+          "learned_max_posterior": 0.012987012987012988,
+          "learned_vs_bayes_mse_on_exact": 0.017741858073138418,
+          "learned_vs_bayes_mse_on_learned": 0.017741858073138418,
+          "sigma": 0.5
+        },
+        {
+          "exact_entropy": 0.08173592132587859,
+          "exact_max_posterior": 0.9861228044651995,
+          "exact_mode_id": "r5-f1-392d41fd097d069c42218e0a-4a3051ea18b29f5e",
+          "irreducible_mse_on_exact": 0.018156563342288462,
+          "irreducible_mse_on_learned": 0.0013109798315655184,
+          "learned_max_posterior": 0.9990138424231793,
+          "learned_vs_bayes_mse_on_exact": 0.6386309820578842,
+          "learned_vs_bayes_mse_on_learned": 0.6958879439100899,
+          "sigma": 0.375
+        },
+        {
+          "exact_entropy": 0,
+          "exact_max_posterior": 1,
+          "exact_mode_id": "r5-f1-392d41fd097d069c42218e0a-4a3051ea18b29f5e",
+          "irreducible_mse_on_exact": 0,
+          "irreducible_mse_on_learned": 1.5107064636238352e-38,
+          "learned_max_posterior": 1,
+          "learned_vs_bayes_mse_on_exact": 1.1445306087307316,
+          "learned_vs_bayes_mse_on_learned": 1.5827237185632743,
+          "sigma": 0.25
+        },
+        {
+          "exact_entropy": 0,
+          "exact_max_posterior": 1,
+          "exact_mode_id": "r5-f1-392d41fd097d069c42218e0a-4a3051ea18b29f5e",
+          "irreducible_mse_on_exact": 0,
+          "irreducible_mse_on_learned": 0.3357259984453173,
+          "learned_max_posterior": 0.9694248585583243,
+          "learned_vs_bayes_mse_on_exact": 1.5092502611869762,
+          "learned_vs_bayes_mse_on_learned": 6.531447811143861,
+          "sigma": 0.125
+        }
+      ],
+      "raw": "ambient",
+      "score": {
+        "answer_followed_immediately_by_eos": true,
+        "answer_prefix_token_exact": true,
+        "answer_token_count": 1,
+        "expected_text_present": true,
+        "format_status": "exact_short_answer",
+        "generated_answer_token_accuracy": 1,
+        "gold_token_ids": [
+          59614
+        ],
+        "has_extra_text": false,
+        "normalized": "ambient",
+        "normalized_expected": "ambient",
+        "overgeneration": false,
+        "raw": "ambient",
+        "strict_correct": true
+      }
+    },
+    {
+      "answer_ce": 0.000179290771484375,
+      "eos_ce": 0.000041961669921875,
+      "nearest_teacher_id": "r5-f1-392d41fd097d069c42218e0a-021790fccb9d85c6",
+      "nearest_teacher_rms": 0,
+      "noise_seed": 2990107280750281000,
+      "path": [
+        {
+          "exact_entropy": 4.343805421853684,
+          "exact_max_posterior": 0.012987012987012988,
+          "exact_mode_id": "r5-f1-392d41fd097d069c42218e0a-5dc9e2555c0d1508",
+          "irreducible_mse_on_exact": 0.4095101356376864,
+          "irreducible_mse_on_learned": 0.4095101356376864,
+          "learned_max_posterior": 0.012987012987012988,
+          "learned_vs_bayes_mse_on_exact": 0.017911786909308038,
+          "learned_vs_bayes_mse_on_learned": 0.017911786909308038,
+          "sigma": 0.5
+        },
+        {
+          "exact_entropy": 0.1676572717974396,
+          "exact_max_posterior": 0.9601020836907609,
+          "exact_mode_id": "r5-f1-392d41fd097d069c42218e0a-021790fccb9d85c6",
+          "irreducible_mse_on_exact": 0.04849486940298374,
+          "irreducible_mse_on_learned": 0.06265712476587594,
+          "learned_max_posterior": 0.9486707356933254,
+          "learned_vs_bayes_mse_on_exact": 0.641645276095202,
+          "learned_vs_bayes_mse_on_learned": 0.5946067824272978,
+          "sigma": 0.375
+        },
+        {
+          "exact_entropy": 0,
+          "exact_max_posterior": 1,
+          "exact_mode_id": "r5-f1-392d41fd097d069c42218e0a-021790fccb9d85c6",
+          "irreducible_mse_on_exact": 0,
+          "irreducible_mse_on_learned": 3.1275668089017642e-74,
+          "learned_max_posterior": 1,
+          "learned_vs_bayes_mse_on_exact": 1.13814311328074,
+          "learned_vs_bayes_mse_on_learned": 1.576744330256051,
+          "sigma": 0.25
+        },
+        {
+          "exact_entropy": 0,
+          "exact_max_posterior": 1,
+          "exact_mode_id": "r5-f1-392d41fd097d069c42218e0a-021790fccb9d85c6",
+          "irreducible_mse_on_exact": 0,
+          "irreducible_mse_on_learned": 0,
+          "learned_max_posterior": 1,
+          "learned_vs_bayes_mse_on_exact": 1.4759585704269755,
+          "learned_vs_bayes_mse_on_learned": 6.846100903354917,
+          "sigma": 0.125
+        }
+      ],
+      "raw": "ambient",
+      "score": {
+        "answer_followed_immediately_by_eos": true,
+        "answer_prefix_token_exact": true,
+        "answer_token_count": 1,
+        "expected_text_present": true,
+        "format_status": "exact_short_answer",
+        "generated_answer_token_accuracy": 1,
+        "gold_token_ids": [
+          59614
+        ],
+        "has_extra_text": false,
+        "normalized": "ambient",
+        "normalized_expected": "ambient",
+        "overgeneration": false,
+        "raw": "ambient",
+        "strict_correct": true
+      }
+    },
+    {
+      "answer_ce": 0.000213623046875,
+      "eos_ce": 0.000095367431640625,
+      "nearest_teacher_id": "r5-f1-392d41fd097d069c42218e0a-a3cb1559e19e23c5",
+      "nearest_teacher_rms": 0,
+      "noise_seed": 4411931784921147400,
+      "path": [
+        {
+          "exact_entropy": 4.343805421853684,
+          "exact_max_posterior": 0.012987012987012988,
+          "exact_mode_id": "r5-f1-392d41fd097d069c42218e0a-5dc9e2555c0d1508",
+          "irreducible_mse_on_exact": 0.4095101356376864,
+          "irreducible_mse_on_learned": 0.4095101356376864,
+          "learned_max_posterior": 0.012987012987012988,
+          "learned_vs_bayes_mse_on_exact": 0.018435371717541726,
+          "learned_vs_bayes_mse_on_learned": 0.018435371717541726,
+          "sigma": 0.5
+        },
+        {
+          "exact_entropy": 2.2235062156180732e-32,
+          "exact_max_posterior": 1,
+          "exact_mode_id": "r5-f1-392d41fd097d069c42218e0a-a3cb1559e19e23c5",
+          "irreducible_mse_on_exact": 3.668982750320613e-34,
+          "irreducible_mse_on_learned": 8.081170690134966e-29,
+          "learned_max_posterior": 1,
+          "learned_vs_bayes_mse_on_exact": 0.6713140961562176,
+          "learned_vs_bayes_mse_on_learned": 0.6747658689021168,
+          "sigma": 0.375
+        },
+        {
+          "exact_entropy": 0,
+          "exact_max_posterior": 1,
+          "exact_mode_id": "r5-f1-392d41fd097d069c42218e0a-a3cb1559e19e23c5",
+          "irreducible_mse_on_exact": 0,
+          "irreducible_mse_on_learned": 1.5095490493807296e-11,
+          "learned_max_posterior": 0.9999999999947355,
+          "learned_vs_bayes_mse_on_exact": 1.1013056080954073,
+          "learned_vs_bayes_mse_on_learned": 1.5683783438090368,
+          "sigma": 0.25
+        },
+        {
+          "exact_entropy": 0,
+          "exact_max_posterior": 1,
+          "exact_mode_id": "r5-f1-392d41fd097d069c42218e0a-a3cb1559e19e23c5",
+          "irreducible_mse_on_exact": 0,
+          "irreducible_mse_on_learned": 0,
+          "learned_max_posterior": 1,
+          "learned_vs_bayes_mse_on_exact": 1.4338930378756125,
+          "learned_vs_bayes_mse_on_learned": 6.797317070129109,
+          "sigma": 0.125
+        }
+      ],
+      "raw": "ambient",
+      "score": {
+        "answer_followed_immediately_by_eos": true,
+        "answer_prefix_token_exact": true,
+        "answer_token_count": 1,
+        "expected_text_present": true,
+        "format_status": "exact_short_answer",
+        "generated_answer_token_accuracy": 1,
+        "gold_token_ids": [
+          59614
+        ],
+        "has_extra_text": false,
+        "normalized": "ambient",
+        "normalized_expected": "ambient",
+        "overgeneration": false,
+        "raw": "ambient",
+        "strict_correct": true
+      }
+    },
+    {
+      "answer_ce": 0.0000457763671875,
+      "eos_ce": 0.000026702880859375,
+      "nearest_teacher_id": "r5-f1-392d41fd097d069c42218e0a-4a3051ea18b29f5e",
+      "nearest_teacher_rms": 0,
+      "noise_seed": 8823630301187379000,
+      "path": [
+        {
+          "exact_entropy": 4.343805421853684,
+          "exact_max_posterior": 0.012987012987012988,
+          "exact_mode_id": "r5-f1-392d41fd097d069c42218e0a-5dc9e2555c0d1508",
+          "irreducible_mse_on_exact": 0.4095101356376864,
+          "irreducible_mse_on_learned": 0.4095101356376864,
+          "learned_max_posterior": 0.012987012987012988,
+          "learned_vs_bayes_mse_on_exact": 0.018065792269856693,
+          "learned_vs_bayes_mse_on_learned": 0.018065792269856693,
+          "sigma": 0.5
+        },
+        {
+          "exact_entropy": 0.000001976234065074718,
+          "exact_max_posterior": 0.9999998849834827,
+          "exact_mode_id": "r5-f1-392d41fd097d069c42218e0a-4a3051ea18b29f5e",
+          "irreducible_mse_on_exact": 1.4874501052904035e-7,
+          "irreducible_mse_on_learned": 0.00004339507303106077,
+          "learned_max_posterior": 0.9999664337881976,
+          "learned_vs_bayes_mse_on_exact": 0.6809107490114883,
+          "learned_vs_bayes_mse_on_learned": 0.6945526688206634,
+          "sigma": 0.375
+        },
+        {
+          "exact_entropy": 0,
+          "exact_max_posterior": 1,
+          "exact_mode_id": "r5-f1-392d41fd097d069c42218e0a-4a3051ea18b29f5e",
+          "irreducible_mse_on_exact": 0,
+          "irreducible_mse_on_learned": 5.257651893073259e-38,
+          "learned_max_posterior": 1,
+          "learned_vs_bayes_mse_on_exact": 1.143346183442503,
+          "learned_vs_bayes_mse_on_learned": 1.7144249264787201,
+          "sigma": 0.25
+        },
+        {
+          "exact_entropy": 0,
+          "exact_max_posterior": 1,
+          "exact_mode_id": "r5-f1-392d41fd097d069c42218e0a-4a3051ea18b29f5e",
+          "irreducible_mse_on_exact": 0,
+          "irreducible_mse_on_learned": 5.8346941293924166e-33,
+          "learned_max_posterior": 1,
+          "learned_vs_bayes_mse_on_exact": 1.5124976245986819,
+          "learned_vs_bayes_mse_on_learned": 7.555685911145807,
+          "sigma": 0.125
+        }
+      ],
+      "raw": "ambient",
+      "score": {
+        "answer_followed_immediately_by_eos": true,
+        "answer_prefix_token_exact": true,
+        "answer_token_count": 1,
+        "expected_text_present": true,
+        "format_status": "exact_short_answer",
+        "generated_answer_token_accuracy": 1,
+        "gold_token_ids": [
+          59614
+        ],
+        "has_extra_text": false,
+        "normalized": "ambient",
+        "normalized_expected": "ambient",
+        "overgeneration": false,
+        "raw": "ambient",
+        "strict_correct": true
+      }
+    }
+  ],
+  "script_sha256": "277cd547accd3825b02cba474f49230fa90b4821794ba7975a1ce1b6ccb01a99",
+  "seed": 20260908,
+  "start_irreducible_velocity_mse": 0.4095101356376864,
+  "started_epoch": 1788887946.3605294,
+  "status": "completed",
+  "training_teacher_count": 77,
+  "unique_nearest_teachers": 5
+}
