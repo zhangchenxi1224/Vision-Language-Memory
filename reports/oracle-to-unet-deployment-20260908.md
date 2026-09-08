@@ -1,6 +1,6 @@
 # 两路 EOS oracle 自动接续 U-Net：实际部署记录
 
-截至北京时间 2026-09-08 22:40。Job 正在运行 Frozen DreamLite 输入端优化，Direct 剩余任务已转移到 `vlm-r11-trust-h200x4-20260907-r3` 并确认新轨迹步数增长。两路的 U-Net 自动接续进程均已启动等待；U-Net 本身尚未开始训练。
+截至北京时间 2026-09-08 22:42。Job 正在运行 Frozen DreamLite 输入端优化，Direct 剩余任务已转移到 `vlm-r11-trust-h200x4-20260907-r3` 并确认新轨迹步数增长。两路的 U-Net 自动接续进程均已启动等待；U-Net 本身尚未开始训练。下列计数分别标注各自抓取时刻。
 
 ## 已交付的自动流程
 
@@ -38,7 +38,9 @@ U-Net 训练从成功集合采样，采用符合真实 DreamLite 初始状态的
 
 22:38:43 已实际启动原冻结代码接续，保留原 `0f70417` 输出目录，完成的36条由原runner验证并跳过，继续剩余60条。resume helper PID22052、原launcher PID22070、两条worker PID22477/22478。22:40:16 的主机检查确认：lane0 的 `direct-uniform-s07-a1` 已保存 step73，lane1 的 `direct-sphere-s07-a1` 已保存 step71，两个日志均已输出 optimizer_step65。GPU0/2分别占3564 MiB，GPU1/3分别占10320 MiB，四卡均已加载相应模型并执行两条独立优化。
 
-按此前每条约98秒、剩余两lane各30条估算，Direct 剩余优化约50–70分钟；这不包含后续bank审计、几何分析及U-Net训练，失败或平台重启会改变时间。当前36条既有成绩仍是原问36/36、五问法全对26/36，新轨迹不能在完成前计入终点成功数。
+**22:42:08 的更新：Direct 完成38/96，原问句38/38正确、五种问法全对28/38。** trust新增完成的Uniform seed7与Sphere seed7均五问法全对；下一对Rademacher/heavy-tail seed7各到step225，尚不计入终点成功数。
+
+启动时按此前每条约98秒、剩余两lane各30条估算，Direct 剩余优化约50–70分钟；这不包含后续bank审计、几何分析及U-Net训练，失败或平台重启会改变时间。
 
 两套新trust sidecar已启动，均为 `waiting_for_oracle`、`unet_training_started=false`：
 
@@ -64,6 +66,8 @@ trust 在正式启动前发生过容器更换，hostname guard 按设计拦截�
 预检记录：`P/runs/direct-latent-geometry/0f70417-20260908-r01/continuation-trust-20260908/preflight-container-wj6s2jn4v3.json`，SHA256 `a6945bc3e1171f9b4efaed8ce1a8ea5ea83fd2bd659b36b5356d041774aeea33`。首次预检曾因在VAE编码后才启用严格确定性而不匹配，该未通过检查没有启动训练；最终检查修正执行顺序后才接续。
 
 真实启动记录：同目录 `dispatch.json`，SHA256 `5342a684589d9d6d8055411b5734f7bd468092da085940dea1b27665d612a273`。`planned_resume.json`、`allocation.json`、`config_ready.json` 记录当前实例、绑定、期限和校验链。原冻结launcher会在 `launch.json.instance` 写入硬编码的旧名 `dl-base-h200x4-20260907`，这个遗留标签**不代表当前实际实例**；本轮接续以真实dispatch/hostname及GPU进程为准，源码未为改标签而热更新。
+
+22:42实际运行验证：同目录 `dispatch_verification.json`，SHA256 `fc9cda3f745c76677cf549af594edff4a810e12d4c98d89002116f477af88819`；原oracle root的 `current_execution.json` 另外明确当前实际实例为trust，并解释原launcher旧标签。
 
 ## 验证及限制
 
