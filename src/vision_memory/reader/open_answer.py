@@ -98,6 +98,7 @@ def generate_short_answer(
     max_new_tokens: int = 32,
     reader_resize_contract: str | None = R3_QWEN_READER_RESIZE_CONTRACT,
     do_sample: bool = False,
+    stop_on_newline: bool = False,
 ) -> dict[str, Any]:
     """Generate from image + question, without any answer/choice interface.
 
@@ -155,6 +156,11 @@ def generate_short_answer(
     }
     if eos_ids:
         generation_kwargs["eos_token_id"] = list(eos_ids)
+    if stop_on_newline:
+        from transformers import StoppingCriteriaList
+        from .open_eos import newline_stopping_criteria
+        generation_kwargs["stopping_criteria"] = StoppingCriteriaList([
+            newline_stopping_criteria(processor, prompt_length)])
     prior_training = model.training
     model.eval()
     try:
@@ -175,7 +181,8 @@ def generate_short_answer(
         continuation, skip_special_tokens=False, clean_up_tokenization_spaces=False
     )[0]
     eos_reached = any(token_id in eos_ids for token_id in token_ids)
-    finish_reason = "eos" if eos_reached else "token_limit" if len(token_ids) >= max_new_tokens else "other_stop"
+    finish_reason = ("eos" if eos_reached else "newline" if stop_on_newline and "\n" in raw
+                     else "token_limit" if len(token_ids) >= max_new_tokens else "other_stop")
     return {
         "raw": raw,
         "raw_with_special_tokens": raw_with_special_tokens,

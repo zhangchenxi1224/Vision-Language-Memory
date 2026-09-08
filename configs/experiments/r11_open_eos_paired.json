@@ -1,0 +1,36 @@
+{
+  "schema": "vision_memory.r11-open-eos-paired-config.v1",
+  "protocol": "old-R11-open-answer-EOS-20260908",
+  "parent_commit": "c6a294b",
+  "parent_run_name": "multistart-5d06b76-20260907-round02",
+  "target_index": 1,
+  "seeds": [0, 1, 2, 3, 4, 5, 6, 7],
+  "checkpoint_steps": [0, 16, 32, 64, 128, 192, 256],
+  "optimizer": {"name": "Adam", "steps": 256, "lr": 0.05, "betas": [0.9, 0.999], "eps": 1e-8, "weight_decay": 0.0, "amsgrad": false},
+  "arms": {
+    "A": {"loss": "legacy_answer_mean_ce", "append_eos": false, "training_prompts": ["original_open"]},
+    "B": {"loss": "answer_mean_ce_plus_lambda_eos_ce", "append_eos": true, "lambda_eos": 1.0, "training_prompts": ["original_open"]},
+    "C": {"loss": "answer_mean_ce_plus_lambda_eos_ce", "append_eos": true, "lambda_eos": 1.0, "training_prompts": ["original_open", "paraphrase_open"], "schedule": "alternating_original_first_128_exposures_each"}
+  },
+  "evaluation_prompts": ["original_open", "paraphrase_open", "new_rewrite_open"],
+  "new_rewrite_open": "R3 Train Standard Templates 03: Based on the stored memory, name the current preferred music for the indigo desk train 001123 at this later check.\nReturn only a short phrase.",
+  "new_rewrite_exposure": "evaluation_only_never_training_or_checkpoint_selection",
+  "raw_generation": {"do_sample": false, "max_new_tokens": 32, "eos_policy": "original_model"},
+  "deployment_generation": {"answer_type_source": "task_schema_only", "answer_type": "short_phrase", "short_word_max_new_tokens": 4, "short_phrase_max_new_tokens": 8, "stop_on_newline": true, "split_on_space": false},
+  "evaluation_conditions": ["matched", "blank", "fixed_donor"],
+  "p4_tokenization_examples": [
+    {"answer": "green", "field": "color", "answer_type": "short_word"},
+    {"answer": "juice", "field": "drink", "answer_type": "short_word"},
+    {"answer": "ambient", "field": "music", "answer_type": "short_word"},
+    {"answer": "light blue", "field": "color", "answer_type": "short_phrase"},
+    {"answer": "orange juice", "field": "drink", "answer_type": "short_phrase"},
+    {"answer": "no active preference", "field": "material", "answer_type": "short_phrase"},
+    {"answer": "orange", "field": "food", "answer_type": "short_word"}
+  ],
+  "p4_scope": "tokenization_and_metric_contract_audit_not_cross_field_training_success",
+  "primary_endpoint": 256,
+  "best_checkpoint_selection": false,
+  "extend_to_512": false,
+  "extension_discussion_only_if": "raw_EM_strictly_improves_64_to_128_to_256_and_fixed_prompt_loss_decreases",
+  "formal_shared_memory_success": false
+}
