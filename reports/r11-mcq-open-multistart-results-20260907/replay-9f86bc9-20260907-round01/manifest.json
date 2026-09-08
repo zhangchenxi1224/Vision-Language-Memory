@@ -1,0 +1,619 @@
+{
+  "blank_definition": "decode(posterior mean encode of uniform RGB 127/255), original R11 step-zero image",
+  "compute_dtype": "bfloat16",
+  "config": {
+    "conditions": [
+      "matched",
+      "blank",
+      "donor"
+    ],
+    "generation": {
+      "do_sample": false,
+      "eos_policy": "original_model",
+      "max_new_tokens": 32
+    },
+    "prompts": [
+      "original_open",
+      "paraphrase_open"
+    ],
+    "schema": "vision_memory.r11-open-answer-replay-config.v1",
+    "targets": [
+      {
+        "artifact": {
+          "archive_path": "C:\\Users\\Expedition\\DreamLite_R11_VAELatent_RawParts_20260831\\target-00.tar.gz",
+          "endpoint_file_sha256": "4ad1bba39b35f4177dbcb5a019b8e5b34dd7fc6d51244111aa009ff49d953e76",
+          "endpoint_member": "target-00/run/endpoint_raw.pt",
+          "endpoint_tensor_sha256": "4d325261c99642f359da581a55e326b73c84a83953ece7cf63404b2e2e75e5fb"
+        },
+        "donor_segment_id": "r5-f1-392d41fd097d069c42218e0a",
+        "donor_target_index": 1,
+        "inputs": {
+          "original_open": "R3 Train Standard Templates 15: At this later check, what is the current material preference for the willow room train 000431?\nUse the memory image to answer. Answer with a short phrase only.",
+          "paraphrase_open": "R3 Train Standard Templates 15: At this later check, which material does the willow room train 000431 currently prefer?\nUse the memory image to answer. Answer with a short phrase only."
+        },
+        "original": {
+          "answer_index": 1,
+          "choices": [
+            "no active preference",
+            "linen",
+            "leather",
+            "wood"
+          ],
+          "query": "R3 Train Standard Templates 15: At this later check, what is the current material preference for the willow room train 000431? Choose exactly one option."
+        },
+        "scorer_metadata": {
+          "aliases": [],
+          "gold": "linen"
+        },
+        "segment_id": "r5-f1-8015bf53a4067aaa7e882288",
+        "target_index": 0
+      },
+      {
+        "artifact": {
+          "archive_path": "C:\\Users\\Expedition\\DreamLite_R11_VAELatent_RawParts_20260831\\target-01.tar.gz",
+          "endpoint_file_sha256": "d359291de63bb5232325b2e7a9294ff3d861287c06e63da2ab6ebe42eab036b9",
+          "endpoint_member": "target-01/run/endpoint_raw.pt",
+          "endpoint_tensor_sha256": "6857afeffd37124bb196ab7c6607580c57c950d72d760ca6b49f8cc00bdef3f1"
+        },
+        "donor_segment_id": "r5-f1-1aee01c0f3e7684c05c9122c",
+        "donor_target_index": 2,
+        "inputs": {
+          "original_open": "R3 Train Standard Templates 03: At this later check, what is the current music preference for the indigo desk train 001123?\nUse the memory image to answer. Answer with a short phrase only.",
+          "paraphrase_open": "R3 Train Standard Templates 03: At this later check, which music does the indigo desk train 001123 currently prefer?\nUse the memory image to answer. Answer with a short phrase only."
+        },
+        "original": {
+          "answer_index": 1,
+          "choices": [
+            "no active preference",
+            "ambient",
+            "blues",
+            "jazz"
+          ],
+          "query": "R3 Train Standard Templates 03: At this later check, what is the current music preference for the indigo desk train 001123? Choose exactly one option."
+        },
+        "scorer_metadata": {
+          "aliases": [],
+          "gold": "ambient"
+        },
+        "segment_id": "r5-f1-392d41fd097d069c42218e0a",
+        "target_index": 1
+      },
+      {
+        "artifact": {
+          "archive_path": "C:\\Users\\Expedition\\DreamLite_R11_VAELatent_RawParts_20260831\\target-02.tar.gz",
+          "endpoint_file_sha256": "569d37d94fd78d1b9e49a9387d1461ed046745ec2a5b864d62c3c01ed1a4d00b",
+          "endpoint_member": "target-02/run/endpoint_raw.pt",
+          "endpoint_tensor_sha256": "e780ae9b2ea6fd95f4b50bc30afcb0ec27b6c39373eeecf9b9784d28174a8267"
+        },
+        "donor_segment_id": "r5-f1-807090710dd4c077a97348ba",
+        "donor_target_index": 3,
+        "inputs": {
+          "original_open": "R3 Train Standard Templates 29: After applying this update first, what is the current color preference for the amber desk train 000797?\nUse the memory image to answer. Answer with a short phrase only.",
+          "paraphrase_open": "R3 Train Standard Templates 29: Once this update has been applied first, which color does the amber desk train 000797 currently prefer?\nUse the memory image to answer. Answer with a short phrase only."
+        },
+        "original": {
+          "answer_index": 0,
+          "choices": [
+            "orange",
+            "red",
+            "no active preference",
+            "purple"
+          ],
+          "query": "R3 Train Standard Templates 29: After applying this update first, what is the current color preference for the amber desk train 000797? Choose exactly one option."
+        },
+        "scorer_metadata": {
+          "aliases": [],
+          "gold": "orange"
+        },
+        "segment_id": "r5-f1-1aee01c0f3e7684c05c9122c",
+        "target_index": 2
+      },
+      {
+        "artifact": {
+          "archive_path": "C:\\Users\\Expedition\\DreamLite_R11_VAELatent_RawParts_20260831\\target-03.tar.gz",
+          "endpoint_file_sha256": "e306317f63c9402cad7ee328dae7c7f4203e265173a498544777e131def869fc",
+          "endpoint_member": "target-03/run/endpoint_raw.pt",
+          "endpoint_tensor_sha256": "77e6d261ef59cbfe02a24acd5db45f3dee44395c746733bcd22d7e84ae562735"
+        },
+        "donor_segment_id": "r5-f1-02c8aa9dc3523351c4d5f9c7",
+        "donor_target_index": 4,
+        "inputs": {
+          "original_open": "R3 Train Standard Templates 24: Before any later update, what is the current color preference for the willow chair train 000408?\nUse the memory image to answer. Answer with a short phrase only.",
+          "paraphrase_open": "R3 Train Standard Templates 24: Before any subsequent update, which color does the willow chair train 000408 currently prefer?\nUse the memory image to answer. Answer with a short phrase only."
+        },
+        "original": {
+          "answer_index": 0,
+          "choices": [
+            "yellow",
+            "purple",
+            "orange",
+            "no active preference"
+          ],
+          "query": "R3 Train Standard Templates 24: Before any later update, what is the current color preference for the willow chair train 000408? Choose exactly one option."
+        },
+        "scorer_metadata": {
+          "aliases": [],
+          "gold": "yellow"
+        },
+        "segment_id": "r5-f1-807090710dd4c077a97348ba",
+        "target_index": 3
+      },
+      {
+        "artifact": {
+          "archive_path": "C:\\Users\\Expedition\\DreamLite_R11_VAELatent_RawParts_20260831\\target-04.tar.gz",
+          "endpoint_file_sha256": "0b69eb08fe3a43688a64a82d378ba6f4909b3eb382130fb2886349b08e2494a0",
+          "endpoint_member": "target-04/run/endpoint_raw.pt",
+          "endpoint_tensor_sha256": "55c18c26ddc59d87e9bdfa7469fd90667118c739047ff8efda98815e7da7dbf9"
+        },
+        "donor_segment_id": "r5-f1-11dddf29efebc033a995ab92",
+        "donor_target_index": 5,
+        "inputs": {
+          "original_open": "R3 Train Standard Templates 27: Before any later update, what is the current color preference for the linen lamp train 000987?\nUse the memory image to answer. Answer with a short phrase only.",
+          "paraphrase_open": "R3 Train Standard Templates 27: Before any subsequent update, which color does the linen lamp train 000987 currently prefer?\nUse the memory image to answer. Answer with a short phrase only."
+        },
+        "original": {
+          "answer_index": 1,
+          "choices": [
+            "no active preference",
+            "blue",
+            "green",
+            "yellow"
+          ],
+          "query": "R3 Train Standard Templates 27: Before any later update, what is the current color preference for the linen lamp train 000987? Choose exactly one option."
+        },
+        "scorer_metadata": {
+          "aliases": [],
+          "gold": "blue"
+        },
+        "segment_id": "r5-f1-02c8aa9dc3523351c4d5f9c7",
+        "target_index": 4
+      },
+      {
+        "artifact": {
+          "archive_path": "C:\\Users\\Expedition\\DreamLite_R11_VAELatent_RawParts_20260831\\target-05.tar.gz",
+          "endpoint_file_sha256": "c1c469a7b299a0da46a13ecf93b941e4dcee1f6ca8b93ca33d03b76d6abaa34c",
+          "endpoint_member": "target-05/run/endpoint_raw.pt",
+          "endpoint_tensor_sha256": "ad32cb2782840f36a4d5ab453fd2dc04e08e58488b13979a193c32f40d32cd19"
+        },
+        "donor_segment_id": "r5-f1-de4899e05b0aa7f3d8373171",
+        "donor_target_index": 6,
+        "inputs": {
+          "original_open": "R3 Train Standard Templates 30: Before any later update, what is the current drink preference for the copper desk train 000478?\nUse the memory image to answer. Answer with a short phrase only.",
+          "paraphrase_open": "R3 Train Standard Templates 30: Before any subsequent update, which drink does the copper desk train 000478 currently prefer?\nUse the memory image to answer. Answer with a short phrase only."
+        },
+        "original": {
+          "answer_index": 0,
+          "choices": [
+            "juice",
+            "no active preference",
+            "coffee",
+            "water"
+          ],
+          "query": "R3 Train Standard Templates 30: Before any later update, what is the current drink preference for the copper desk train 000478? Choose exactly one option."
+        },
+        "scorer_metadata": {
+          "aliases": [],
+          "gold": "juice"
+        },
+        "segment_id": "r5-f1-11dddf29efebc033a995ab92",
+        "target_index": 5
+      },
+      {
+        "artifact": {
+          "archive_path": "C:\\Users\\Expedition\\DreamLite_R11_VAELatent_RawParts_20260831\\target-06.tar.gz",
+          "endpoint_file_sha256": "bcc687a047a080361414ed1198097dbb625637e127b91dcd072a0d9fa4867a4f",
+          "endpoint_member": "target-06/run/endpoint_raw.pt",
+          "endpoint_tensor_sha256": "954de6551449f7fa981cd139d17203bf102a0acfc687aa5338817e6d19d9394c"
+        },
+        "donor_segment_id": "r5-f1-850189e424efde62468b2ef9",
+        "donor_target_index": 7,
+        "inputs": {
+          "original_open": "R3 Train Standard Templates 28: After applying this update first, what is the current meal preference for the linen backpack train 000540?\nUse the memory image to answer. Answer with a short phrase only.",
+          "paraphrase_open": "R3 Train Standard Templates 28: Once this update has been applied first, which meal does the linen backpack train 000540 currently prefer?\nUse the memory image to answer. Answer with a short phrase only."
+        },
+        "original": {
+          "answer_index": 0,
+          "choices": [
+            "pasta",
+            "salad",
+            "curry",
+            "no active preference"
+          ],
+          "query": "R3 Train Standard Templates 28: After applying this update first, what is the current meal preference for the linen backpack train 000540? Choose exactly one option."
+        },
+        "scorer_metadata": {
+          "aliases": [],
+          "gold": "pasta"
+        },
+        "segment_id": "r5-f1-de4899e05b0aa7f3d8373171",
+        "target_index": 6
+      },
+      {
+        "artifact": {
+          "archive_path": "C:\\Users\\Expedition\\DreamLite_R11_VAELatent_RawParts_20260831\\target-07.tar.gz",
+          "endpoint_file_sha256": "6cba67fb2c4e1d9a807530d3bf2116eba13cb77f6d769a2f1ee0eef31199c25e",
+          "endpoint_member": "target-07/run/endpoint_raw.pt",
+          "endpoint_tensor_sha256": "77c32b82fc04b5c58d1682e6cc50583d6f87d5f0bfcf13690caa8ed30804d04b"
+        },
+        "donor_segment_id": "r5-f1-8015bf53a4067aaa7e882288",
+        "donor_target_index": 0,
+        "inputs": {
+          "original_open": "R3 Train Standard Templates 03: At this later check, what is the current color preference for the silver backpack train 000003?\nUse the memory image to answer. Answer with a short phrase only.",
+          "paraphrase_open": "R3 Train Standard Templates 03: At this later check, which color does the silver backpack train 000003 currently prefer?\nUse the memory image to answer. Answer with a short phrase only."
+        },
+        "original": {
+          "answer_index": 2,
+          "choices": [
+            "no active preference",
+            "blue",
+            "green",
+            "yellow"
+          ],
+          "query": "R3 Train Standard Templates 03: At this later check, what is the current color preference for the silver backpack train 000003? Choose exactly one option."
+        },
+        "scorer_metadata": {
+          "aliases": [],
+          "gold": "green"
+        },
+        "segment_id": "r5-f1-850189e424efde62468b2ef9",
+        "target_index": 7
+      }
+    ]
+  },
+  "config_path": "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory-r11-open-9f86bc9-20260907/configs/experiments/r11_open_answer_replay.json",
+  "config_sha256": "5420dafd73b1cabd9b0d77f1e8eda4d94eb9179f4ac157dc0d8993a1d10ef7a5",
+  "created_at_utc": "2026-09-06T20:32:47.967552+00:00",
+  "determinism": {
+    "cuda_matmul_allow_tf32": false,
+    "cudnn_allow_tf32": false,
+    "cudnn_benchmark": false,
+    "cudnn_deterministic": true,
+    "deterministic_algorithms": true,
+    "deterministic_warn_only": false,
+    "environment": {
+      "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+      "MKL_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "PYTHONHASHSEED": "0",
+      "TOKENIZERS_PARALLELISM": "false"
+    },
+    "float32_matmul_precision": "highest",
+    "sdpa": {
+      "cudnn": false,
+      "flash": false,
+      "math": true,
+      "memory_efficient": false
+    },
+    "seed": 0
+  },
+  "expected_generation_count": 48,
+  "expected_mcq_anchor_count": 32,
+  "formal_success": false,
+  "frozen_parameters_start": {
+    "reader": {
+      "parameter_gradient_tensors": 0,
+      "trainable_parameters": 0,
+      "training": false
+    },
+    "vae": {
+      "parameter_gradient_tensors": 0,
+      "trainable_parameters": 0,
+      "training": false
+    }
+  },
+  "generation_overrides": {
+    "do_sample": false,
+    "eos_policy": "original_model",
+    "max_new_tokens": 32,
+    "num_beams": 1,
+    "num_return_sequences": 1,
+    "use_cache": true
+  },
+  "git_commit": "9f86bc9b5752fa9a0c264ecee700a9f33497599b",
+  "git_status_porcelain": "",
+  "image_processor_class": "Qwen2VLImageProcessorFast",
+  "initial_latent_sha256_expected": "719e92867b60546b21b281cfc633ab782c8ce2274bfb41c6b3cee6d673e74eaa",
+  "model_snapshot_payloads_start": {
+    "dreamlite_mobile": {
+      "file_count": 27,
+      "manifest_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-mobile/.snapshot_manifest.json",
+      "manifest_sha256": "1bcf41b170c4b4a806bac6701cbdf4fabd5c3c53fa67415d065ab95ce2703159",
+      "model_dir": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-mobile",
+      "passed": true,
+      "repo_id": "carlofkl/DreamLite-mobile",
+      "revision": "6695c3f4be230f0493fa5dbf78be3bc4d3bb2ab4",
+      "snapshot_payload_sha256": "3fb839f465793b01ecafc4df433031a063dd7b395a050960cde57c2807031337",
+      "total_bytes": 5071894300
+    },
+    "qwen_reader": {
+      "file_count": 14,
+      "manifest_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct/.snapshot_manifest.json",
+      "manifest_sha256": "159a504daaae6dc412535978f087150a0eb8e50164afd70a8a17f83906f1127c",
+      "model_dir": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+      "passed": true,
+      "repo_id": "Qwen/Qwen3-VL-4B-Instruct",
+      "revision": "ebb281ec70b05090aa6165b016eac8ec08e71b17",
+      "snapshot_payload_sha256": "45be3ffb00017b02bffa79f4f8e6f301760ac50c0bb78b2c4e5a7fe8aa3d52c6",
+      "total_bytes": 8887292732
+    }
+  },
+  "old_run_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11/r11-vae-latent-f4a018f-20260831",
+  "old_runtime_comparison": {
+    "all_legacy_fields_match": false,
+    "driver_policy": "Current driver is separately recorded in runtime.nvidia_smi; hardware parity uses exact image and MCQ gates.",
+    "targets": [
+      {
+        "matches": false,
+        "mismatches": {
+          "torch": {
+            "current": "2.7.0a0+ecf3bae40a.nv25.2",
+            "old": "2.7.0a0+ecf3bae40a.nv25.02"
+          }
+        },
+        "old_runtime": {
+          "cuda_runtime": "12.8",
+          "diffusers": "0.39.0",
+          "peft": "0.18.1",
+          "python": "3.12.3",
+          "torch": "2.7.0a0+ecf3bae40a.nv25.02",
+          "torchvision": "0.22.0a0",
+          "transformers": "4.57.3"
+        },
+        "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11/r11-vae-latent-f4a018f-20260831/target-00/run/runtime.json",
+        "sha256": "7f5eff20b5bf2ca4db086eb28211084b78f6844a1c828f3c946d5a4f861666f9",
+        "target_index": 0
+      },
+      {
+        "matches": false,
+        "mismatches": {
+          "torch": {
+            "current": "2.7.0a0+ecf3bae40a.nv25.2",
+            "old": "2.7.0a0+ecf3bae40a.nv25.02"
+          }
+        },
+        "old_runtime": {
+          "cuda_runtime": "12.8",
+          "diffusers": "0.39.0",
+          "peft": "0.18.1",
+          "python": "3.12.3",
+          "torch": "2.7.0a0+ecf3bae40a.nv25.02",
+          "torchvision": "0.22.0a0",
+          "transformers": "4.57.3"
+        },
+        "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11/r11-vae-latent-f4a018f-20260831/target-01/run/runtime.json",
+        "sha256": "7f5eff20b5bf2ca4db086eb28211084b78f6844a1c828f3c946d5a4f861666f9",
+        "target_index": 1
+      },
+      {
+        "matches": false,
+        "mismatches": {
+          "torch": {
+            "current": "2.7.0a0+ecf3bae40a.nv25.2",
+            "old": "2.7.0a0+ecf3bae40a.nv25.02"
+          }
+        },
+        "old_runtime": {
+          "cuda_runtime": "12.8",
+          "diffusers": "0.39.0",
+          "peft": "0.18.1",
+          "python": "3.12.3",
+          "torch": "2.7.0a0+ecf3bae40a.nv25.02",
+          "torchvision": "0.22.0a0",
+          "transformers": "4.57.3"
+        },
+        "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11/r11-vae-latent-f4a018f-20260831/target-02/run/runtime.json",
+        "sha256": "7f5eff20b5bf2ca4db086eb28211084b78f6844a1c828f3c946d5a4f861666f9",
+        "target_index": 2
+      },
+      {
+        "matches": false,
+        "mismatches": {
+          "torch": {
+            "current": "2.7.0a0+ecf3bae40a.nv25.2",
+            "old": "2.7.0a0+ecf3bae40a.nv25.02"
+          }
+        },
+        "old_runtime": {
+          "cuda_runtime": "12.8",
+          "diffusers": "0.39.0",
+          "peft": "0.18.1",
+          "python": "3.12.3",
+          "torch": "2.7.0a0+ecf3bae40a.nv25.02",
+          "torchvision": "0.22.0a0",
+          "transformers": "4.57.3"
+        },
+        "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11/r11-vae-latent-f4a018f-20260831/target-03/run/runtime.json",
+        "sha256": "7f5eff20b5bf2ca4db086eb28211084b78f6844a1c828f3c946d5a4f861666f9",
+        "target_index": 3
+      },
+      {
+        "matches": false,
+        "mismatches": {
+          "torch": {
+            "current": "2.7.0a0+ecf3bae40a.nv25.2",
+            "old": "2.7.0a0+ecf3bae40a.nv25.02"
+          }
+        },
+        "old_runtime": {
+          "cuda_runtime": "12.8",
+          "diffusers": "0.39.0",
+          "peft": "0.18.1",
+          "python": "3.12.3",
+          "torch": "2.7.0a0+ecf3bae40a.nv25.02",
+          "torchvision": "0.22.0a0",
+          "transformers": "4.57.3"
+        },
+        "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11/r11-vae-latent-f4a018f-20260831/target-04/run/runtime.json",
+        "sha256": "7f5eff20b5bf2ca4db086eb28211084b78f6844a1c828f3c946d5a4f861666f9",
+        "target_index": 4
+      },
+      {
+        "matches": false,
+        "mismatches": {
+          "torch": {
+            "current": "2.7.0a0+ecf3bae40a.nv25.2",
+            "old": "2.7.0a0+ecf3bae40a.nv25.02"
+          }
+        },
+        "old_runtime": {
+          "cuda_runtime": "12.8",
+          "diffusers": "0.39.0",
+          "peft": "0.18.1",
+          "python": "3.12.3",
+          "torch": "2.7.0a0+ecf3bae40a.nv25.02",
+          "torchvision": "0.22.0a0",
+          "transformers": "4.57.3"
+        },
+        "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11/r11-vae-latent-f4a018f-20260831/target-05/run/runtime.json",
+        "sha256": "7f5eff20b5bf2ca4db086eb28211084b78f6844a1c828f3c946d5a4f861666f9",
+        "target_index": 5
+      },
+      {
+        "matches": false,
+        "mismatches": {
+          "torch": {
+            "current": "2.7.0a0+ecf3bae40a.nv25.2",
+            "old": "2.7.0a0+ecf3bae40a.nv25.02"
+          }
+        },
+        "old_runtime": {
+          "cuda_runtime": "12.8",
+          "diffusers": "0.39.0",
+          "peft": "0.18.1",
+          "python": "3.12.3",
+          "torch": "2.7.0a0+ecf3bae40a.nv25.02",
+          "torchvision": "0.22.0a0",
+          "transformers": "4.57.3"
+        },
+        "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11/r11-vae-latent-f4a018f-20260831/target-06/run/runtime.json",
+        "sha256": "7f5eff20b5bf2ca4db086eb28211084b78f6844a1c828f3c946d5a4f861666f9",
+        "target_index": 6
+      },
+      {
+        "matches": false,
+        "mismatches": {
+          "torch": {
+            "current": "2.7.0a0+ecf3bae40a.nv25.2",
+            "old": "2.7.0a0+ecf3bae40a.nv25.02"
+          }
+        },
+        "old_runtime": {
+          "cuda_runtime": "12.8",
+          "diffusers": "0.39.0",
+          "peft": "0.18.1",
+          "python": "3.12.3",
+          "torch": "2.7.0a0+ecf3bae40a.nv25.02",
+          "torchvision": "0.22.0a0",
+          "transformers": "4.57.3"
+        },
+        "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11/r11-vae-latent-f4a018f-20260831/target-07/run/runtime.json",
+        "sha256": "7f5eff20b5bf2ca4db086eb28211084b78f6844a1c828f3c946d5a4f861666f9",
+        "target_index": 7
+      }
+    ]
+  },
+  "output_dir": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open/replay-9f86bc9-20260907-round01",
+  "processor_class": "Qwen3VLProcessor",
+  "reader_class": "Qwen3VLForConditionalGeneration",
+  "reader_device": "cuda:1",
+  "reader_generation_config": {
+    "_from_model_config": false,
+    "assistant_confidence_threshold": 0.4,
+    "assistant_early_exit": null,
+    "assistant_lookbehind": 10,
+    "bad_words_ids": null,
+    "begin_suppress_tokens": null,
+    "bos_token_id": 151643,
+    "cache_config": null,
+    "cache_implementation": null,
+    "constraints": null,
+    "decoder_start_token_id": null,
+    "disable_compile": false,
+    "diversity_penalty": 0.0,
+    "do_sample": true,
+    "dola_layers": null,
+    "early_stopping": false,
+    "encoder_no_repeat_ngram_size": 0,
+    "encoder_repetition_penalty": 1.0,
+    "eos_token_id": [
+      151645,
+      151643
+    ],
+    "epsilon_cutoff": 0.0,
+    "eta_cutoff": 0.0,
+    "exponential_decay_length_penalty": null,
+    "force_words_ids": null,
+    "forced_bos_token_id": null,
+    "forced_eos_token_id": null,
+    "guidance_scale": null,
+    "is_assistant": false,
+    "length_penalty": 1.0,
+    "low_memory": null,
+    "max_length": 20,
+    "max_matching_ngram_size": null,
+    "max_new_tokens": null,
+    "max_time": null,
+    "min_length": 0,
+    "min_new_tokens": null,
+    "min_p": null,
+    "no_repeat_ngram_size": 0,
+    "num_assistant_tokens": 20,
+    "num_assistant_tokens_schedule": "constant",
+    "num_beam_groups": 1,
+    "num_beams": 1,
+    "num_return_sequences": 1,
+    "output_attentions": false,
+    "output_hidden_states": false,
+    "output_logits": null,
+    "output_scores": false,
+    "pad_token_id": 151643,
+    "penalty_alpha": null,
+    "prefill_chunk_size": null,
+    "prompt_lookup_num_tokens": null,
+    "remove_invalid_values": false,
+    "renormalize_logits": false,
+    "repetition_penalty": 1.0,
+    "return_dict_in_generate": false,
+    "return_legacy_cache": null,
+    "sequence_bias": null,
+    "stop_strings": null,
+    "suppress_tokens": null,
+    "target_lookbehind": 10,
+    "temperature": 0.7,
+    "token_healing": false,
+    "top_k": 20,
+    "top_p": 0.8,
+    "transformers_version": "4.57.3",
+    "typical_p": 1.0,
+    "use_cache": true,
+    "watermarking_config": null
+  },
+  "reader_resize_contract": "r3-qwen-reader-1024-to-256-bicubic-antialias-cpu-adjoint.v1",
+  "runtime": {
+    "cudnn": 90701,
+    "executable": "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+    "nvidia_smi": "0, NVIDIA H200, GPU-25442c52-fb4d-7807-d6c8-b08f83d407c0, 595.58.03\n1, NVIDIA H200, GPU-1d429113-ba28-25f0-ba05-094884fefe10, 595.58.03",
+    "packages": {
+      "accelerate": "1.12.0",
+      "diffusers": "0.39.0",
+      "numpy": "1.26.4",
+      "peft": "0.18.1",
+      "safetensors": "0.8.0",
+      "torch": "2.7.0a0+ecf3bae40a.nv25.2",
+      "torchvision": "0.22.0a0",
+      "transformers": "4.57.3"
+    },
+    "platform": "Linux-5.15.0-119-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3 (main, Jan 17 2025, 18:03:48) [GCC 13.3.0]",
+    "torch_cuda": "12.8"
+  },
+  "schema": "vision_memory.r11-open-answer-replay.v1.manifest",
+  "source_sha256": {
+    "models.lock.json": "4a5ec02e9c212308c78665fc51ca6d1e0cc3b3fc7a2e466cfec9c8498a06ad4e",
+    "scripts/experiments/run_r11_open_answer_replay.py": "c30adc4d9604feb69581c6a1f36bf837d42349bd75aa870af36203abb7bebd06",
+    "src/vision_memory/reader/open_answer.py": "64fec7c47b045fa3c60b1e96616ab928337fa5cfe4ad916639bcee7ef6c8096d",
+    "src/vision_memory/reader/qwen3vl.py": "2e4dbc7d159d5c8c5d62a21040d5d4ed0adcd586a627061ceef988e25ac6d2d0"
+  },
+  "vae_class": "AutoencoderTiny",
+  "vae_device": "cuda:0"
+}

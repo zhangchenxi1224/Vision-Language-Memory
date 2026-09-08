@@ -1,5 +1,7 @@
 # Vision Learnable Memory
 
+> 2026-09-08：已同步 [旧 R11 同题多起点实验的真实结果](reports/r11-mcq-open-multistart-results-20260907/README.md)，包含汇总、原文回答、审计记录与轨迹图。
+
 This repository is the reproducible engineering shell for the DreamLite + Qwen3-VL
 stateful-memory experiments. The laptop is for framework development, mock autograd
 tests, and API validation. Real model probes and episode training run on a Linux GPU

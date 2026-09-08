@@ -1,0 +1,280 @@
+{
+  "all_images_exactly_reproduced": true,
+  "by_condition": {
+    "blank": {
+      "count": 16,
+      "extra_text_count": 0,
+      "format_status_counts": {
+        "different_answer": 16
+      },
+      "strict_accuracy": 0.0,
+      "strict_correct": 0,
+      "truncated_count": 0
+    },
+    "donor": {
+      "count": 16,
+      "extra_text_count": 0,
+      "format_status_counts": {
+        "different_answer": 15,
+        "exact_short_answer": 1
+      },
+      "strict_accuracy": 0.0625,
+      "strict_correct": 1,
+      "truncated_count": 0
+    },
+    "matched": {
+      "count": 16,
+      "extra_text_count": 0,
+      "format_status_counts": {
+        "different_answer": 9,
+        "exact_short_answer": 7
+      },
+      "strict_accuracy": 0.4375,
+      "strict_correct": 7,
+      "truncated_count": 0
+    }
+  },
+  "by_condition_and_prompt": {
+    "blank": {
+      "original_open": {
+        "count": 8,
+        "extra_text_count": 0,
+        "format_status_counts": {
+          "different_answer": 8
+        },
+        "strict_accuracy": 0.0,
+        "strict_correct": 0,
+        "truncated_count": 0
+      },
+      "paraphrase_open": {
+        "count": 8,
+        "extra_text_count": 0,
+        "format_status_counts": {
+          "different_answer": 8
+        },
+        "strict_accuracy": 0.0,
+        "strict_correct": 0,
+        "truncated_count": 0
+      }
+    },
+    "donor": {
+      "original_open": {
+        "count": 8,
+        "extra_text_count": 0,
+        "format_status_counts": {
+          "different_answer": 8
+        },
+        "strict_accuracy": 0.0,
+        "strict_correct": 0,
+        "truncated_count": 0
+      },
+      "paraphrase_open": {
+        "count": 8,
+        "extra_text_count": 0,
+        "format_status_counts": {
+          "different_answer": 7,
+          "exact_short_answer": 1
+        },
+        "strict_accuracy": 0.125,
+        "strict_correct": 1,
+        "truncated_count": 0
+      }
+    },
+    "matched": {
+      "original_open": {
+        "count": 8,
+        "extra_text_count": 0,
+        "format_status_counts": {
+          "different_answer": 5,
+          "exact_short_answer": 3
+        },
+        "strict_accuracy": 0.375,
+        "strict_correct": 3,
+        "truncated_count": 0
+      },
+      "paraphrase_open": {
+        "count": 8,
+        "extra_text_count": 0,
+        "format_status_counts": {
+          "different_answer": 4,
+          "exact_short_answer": 4
+        },
+        "strict_accuracy": 0.5,
+        "strict_correct": 4,
+        "truncated_count": 0
+      }
+    }
+  },
+  "by_prompt": {
+    "original_open": {
+      "count": 24,
+      "extra_text_count": 0,
+      "format_status_counts": {
+        "different_answer": 21,
+        "exact_short_answer": 3
+      },
+      "strict_accuracy": 0.125,
+      "strict_correct": 3,
+      "truncated_count": 0
+    },
+    "paraphrase_open": {
+      "count": 24,
+      "extra_text_count": 0,
+      "format_status_counts": {
+        "different_answer": 19,
+        "exact_short_answer": 5
+      },
+      "strict_accuracy": 0.20833333333333334,
+      "strict_correct": 5,
+      "truncated_count": 0
+    }
+  },
+  "complete_records": true,
+  "elapsed_seconds": 75.74035474401899,
+  "formal_success": false,
+  "initial_latent_sha256": "719e92867b60546b21b281cfc633ab782c8ce2274bfb41c6b3cee6d673e74eaa",
+  "mcq_anchor": {
+    "all_correct": true,
+    "correct": 32,
+    "count": 32,
+    "mean_ce": 0.0002881067232465284
+  },
+  "open_answer": {
+    "count": 48,
+    "extra_text_count": 0,
+    "format_status_counts": {
+      "different_answer": 40,
+      "exact_short_answer": 8
+    },
+    "strict_accuracy": 0.16666666666666666,
+    "strict_correct": 8,
+    "truncated_count": 0
+  },
+  "paired_matched_vs_controls": {
+    "original_open": {
+      "blank": {
+        "both_correct": {
+          "count": 0,
+          "target_indices": []
+        },
+        "control_only_correct": {
+          "count": 0,
+          "target_indices": []
+        },
+        "matched_only_correct": {
+          "count": 3,
+          "target_indices": [
+            3,
+            5,
+            7
+          ]
+        },
+        "neither_correct": {
+          "count": 5,
+          "target_indices": [
+            0,
+            1,
+            2,
+            4,
+            6
+          ]
+        }
+      },
+      "donor": {
+        "both_correct": {
+          "count": 0,
+          "target_indices": []
+        },
+        "control_only_correct": {
+          "count": 0,
+          "target_indices": []
+        },
+        "matched_only_correct": {
+          "count": 3,
+          "target_indices": [
+            3,
+            5,
+            7
+          ]
+        },
+        "neither_correct": {
+          "count": 5,
+          "target_indices": [
+            0,
+            1,
+            2,
+            4,
+            6
+          ]
+        }
+      }
+    },
+    "paraphrase_open": {
+      "blank": {
+        "both_correct": {
+          "count": 0,
+          "target_indices": []
+        },
+        "control_only_correct": {
+          "count": 0,
+          "target_indices": []
+        },
+        "matched_only_correct": {
+          "count": 4,
+          "target_indices": [
+            0,
+            3,
+            5,
+            7
+          ]
+        },
+        "neither_correct": {
+          "count": 4,
+          "target_indices": [
+            1,
+            2,
+            4,
+            6
+          ]
+        }
+      },
+      "donor": {
+        "both_correct": {
+          "count": 0,
+          "target_indices": []
+        },
+        "control_only_correct": {
+          "count": 1,
+          "target_indices": [
+            4
+          ]
+        },
+        "matched_only_correct": {
+          "count": 4,
+          "target_indices": [
+            0,
+            3,
+            5,
+            7
+          ]
+        },
+        "neither_correct": {
+          "count": 3,
+          "target_indices": [
+            1,
+            2,
+            6
+          ]
+        }
+      }
+    }
+  },
+  "schema": "vision_memory.r11-open-answer-replay.v1.summary",
+  "scope": "exploratory endpoint replay only; no optimization and no new latent endpoints",
+  "semantic_review": {
+    "automatic_semantic_credit": false,
+    "status": "pending_manual_raw_text_review"
+  },
+  "snapshots_unchanged": true,
+  "technical_passed": true
+}

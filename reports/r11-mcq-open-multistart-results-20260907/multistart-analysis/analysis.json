@@ -1,0 +1,145 @@
+{
+  "behavior": {
+    "mcq": {
+      "matched_minus_controls_original": {
+        "blank": 0.0,
+        "fixed_donor": 0.0
+      },
+      "mcq_all4": 1.0,
+      "open_original": 0.0,
+      "open_robust": 0.0
+    },
+    "open": {
+      "matched_minus_controls_original": {
+        "blank": 0.375,
+        "fixed_donor": 0.375
+      },
+      "mcq_all4": 0.0,
+      "open_original": 0.375,
+      "open_robust": 0.25
+    }
+  },
+  "geometry": {
+    "mcq": {
+      "C_over_C0": 31.005984554570357,
+      "endpoint_mean_pairwise_rmse": 0.4466642571640455,
+      "endpoint_raw_cosine": 0.7630988440349478,
+      "endpoint_own_delta_cosine": 0.002318549132471019,
+      "last_update_rms_min_max": [
+        3.7559211844721515e-06,
+        6.696195528059123e-06
+      ],
+      "last_gradient_rms_min_max": [
+        1.359431918568869e-06,
+        1.5048990075396722e-05
+      ],
+      "last_four_update_rms_min_max": [
+        1.462795353727302e-05,
+        2.671661528559336e-05
+      ]
+    },
+    "open": {
+      "C_over_C0": 30.768717787998217,
+      "endpoint_mean_pairwise_rmse": 0.4449667243136419,
+      "endpoint_raw_cosine": 0.7641476970493665,
+      "endpoint_own_delta_cosine": 0.0033301545192216224,
+      "last_update_rms_min_max": [
+        3.968551152818203e-06,
+        1.950736038566737e-05
+      ],
+      "last_gradient_rms_min_max": [
+        1.020469934439873e-06,
+        3.8332306177932513e-05
+      ],
+      "last_four_update_rms_min_max": [
+        1.620056399173022e-05,
+        6.513065895030103e-05
+      ]
+    }
+  },
+  "cross_arm_endpoints": [
+    {
+      "cosine": 0.7930997660430984,
+      "init_id": "noise-seed-00",
+      "l2": 106.84979726370825,
+      "rmse": 0.41738202056135626
+    },
+    {
+      "cosine": 0.7975120105476387,
+      "init_id": "noise-seed-01",
+      "l2": 105.29957714118596,
+      "rmse": 0.4113264732077532
+    },
+    {
+      "cosine": 0.7871400675613718,
+      "init_id": "noise-seed-02",
+      "l2": 108.36858958274279,
+      "rmse": 0.42331480305758457
+    },
+    {
+      "cosine": 0.8094661903827159,
+      "init_id": "noise-seed-03",
+      "l2": 102.25659383401258,
+      "rmse": 0.39943981966410647
+    },
+    {
+      "cosine": 0.8090051321765194,
+      "init_id": "noise-seed-04",
+      "l2": 102.17179289829215,
+      "rmse": 0.3991085660089486
+    },
+    {
+      "cosine": 0.789838212022843,
+      "init_id": "noise-seed-05",
+      "l2": 107.70618272664883,
+      "rmse": 0.42072727627596773
+    },
+    {
+      "cosine": 0.7919781668034153,
+      "init_id": "noise-seed-06",
+      "l2": 107.04979836558154,
+      "rmse": 0.4181632748655485
+    },
+    {
+      "cosine": 0.7847166414036472,
+      "init_id": "noise-seed-07",
+      "l2": 109.73235141750871,
+      "rmse": 0.4286419977246394
+    }
+  ],
+  "blank_separate": {
+    "init_id": "blank",
+    "mcq": {
+      "controls": {
+        "blank": {
+          "original_open": false,
+          "paraphrase_open": false
+        },
+        "fixed_donor": {
+          "original_open": false,
+          "paraphrase_open": false
+        }
+      },
+      "mcq_all4": true,
+      "open_original": false,
+      "open_robust": false
+    },
+    "open": {
+      "controls": {
+        "blank": {
+          "original_open": false,
+          "paraphrase_open": false
+        },
+        "fixed_donor": {
+          "original_open": false,
+          "paraphrase_open": false
+        }
+      },
+      "mcq_all4": false,
+      "open_original": false,
+      "open_robust": false
+    },
+    "seed": null
+  },
+  "scope": "One target, eight random starts; distances are descriptive, not a test of equal distributions."
+}
