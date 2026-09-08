@@ -1,0 +1,45 @@
+{
+  "schema": "vision_memory.direct-continuation-verification.v1",
+  "verified_epoch": 1788878475.6256793,
+  "actual_instance": "vlm-r11-trust-h200x4-20260907-r3",
+  "actual_hostname": "vlm-r11-trust-h200x4-20260907-r3--1529e224dfc5-wj6s2jn4v3",
+  "source_commit": "0f704178137ee4beac952224f3175a3923d5e438",
+  "completed_before_continuation": 36,
+  "planned_total": 96,
+  "lanes": [
+    {
+      "lane": 0,
+      "pid": 22477,
+      "gpu_pair": "0,1",
+      "run_id": "direct-uniform-s07-a1",
+      "last_saved_latent": "step-256.pt",
+      "run_complete": true
+    },
+    {
+      "lane": 1,
+      "pid": 22478,
+      "gpu_pair": "2,3",
+      "run_id": "direct-sphere-s07-a1",
+      "last_saved_latent": "step-256.pt",
+      "run_complete": true
+    }
+  ],
+  "sidecars": [
+    {
+      "seed": 20260908,
+      "pid": 22053,
+      "state": "waiting_for_oracle",
+      "unet_training_started": false,
+      "output_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/a43b2e4-direct-trust-seed20260908"
+    },
+    {
+      "seed": 20260909,
+      "pid": 22054,
+      "state": "waiting_for_oracle",
+      "unet_training_started": false,
+      "output_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/a43b2e4-direct-trust-seed20260909"
+    }
+  ],
+  "launcher_legacy_instance_label": "dl-base-h200x4-20260907",
+  "legacy_label_note": "Original frozen launcher has a hardcoded old instance name. Actual execution verified here by hostname, PIDs, new optimizer artifacts."
+}

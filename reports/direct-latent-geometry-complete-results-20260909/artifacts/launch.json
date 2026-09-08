@@ -1,0 +1,67 @@
+{
+  "commit": "0f704178137ee4beac952224f3175a3923d5e438",
+  "deadline_epoch": 1788899898.5422487,
+  "gpus": "0, NVIDIA H200, 143771\n1, NVIDIA H200, 143771\n2, NVIDIA H200, 143771\n3, NVIDIA H200, 143771\n",
+  "instance": "dl-base-h200x4-20260907",
+  "lanes": [
+    {
+      "command": [
+        "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+        "-u",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/repos/direct-latent-geometry-20260908/scripts/experiments/run_direct_latent_geometry.py",
+        "--lane",
+        "0",
+        "--output-dir",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/direct-latent-geometry/0f70417-20260908-r01/lane-0",
+        "--expected-commit",
+        "0f704178137ee4beac952224f3175a3923d5e438",
+        "--deadline",
+        "1788899898.5422487",
+        "--dreamlite",
+        "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-mobile",
+        "--reader",
+        "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+        "--train",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/data/vision-language-memory-r3/formal-v1/train.jsonl",
+        "--dev",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/data/vision-language-memory-r3/formal-v1/dev.jsonl",
+        "--old-multistart-root",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open/multistart-5d06b76-20260907-round02"
+      ],
+      "gpu_pair": "0,1",
+      "lane": 0,
+      "pid": 22477
+    },
+    {
+      "command": [
+        "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+        "-u",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/repos/direct-latent-geometry-20260908/scripts/experiments/run_direct_latent_geometry.py",
+        "--lane",
+        "1",
+        "--output-dir",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/direct-latent-geometry/0f70417-20260908-r01/lane-1",
+        "--expected-commit",
+        "0f704178137ee4beac952224f3175a3923d5e438",
+        "--deadline",
+        "1788899898.5422487",
+        "--dreamlite",
+        "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-mobile",
+        "--reader",
+        "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+        "--train",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/data/vision-language-memory-r3/formal-v1/train.jsonl",
+        "--dev",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/data/vision-language-memory-r3/formal-v1/dev.jsonl",
+        "--old-multistart-root",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open/multistart-5d06b76-20260907-round02"
+      ],
+      "gpu_pair": "2,3",
+      "lane": 1,
+      "pid": 22478
+    }
+  ],
+  "pid": 22070,
+  "planned_runs": 96,
+  "started_epoch": 1788878328.790296
+}

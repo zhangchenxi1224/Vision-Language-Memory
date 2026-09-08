@@ -1,0 +1,35 @@
+{
+  "arm": "open_gold_eos",
+  "distribution": "gaussian",
+  "fresh_start": true,
+  "gold_eos_appended": true,
+  "included_in_random_start_statistics": true,
+  "init_id": "gaussian-9-1",
+  "init_seed": 9,
+  "initial_latent_sha256": "2da279cc9a8dc2f4188a090ece1f4b509b7a91c67ce073643bf2e8e370aec8cc",
+  "loss": "mean_answer_ce + eos_ce",
+  "optimizer_steps": 256,
+  "reference_sha256": "5f8c07caa37de38cae96d0b0e28851b1b831bea8728182e9fbd14b1588ac3743",
+  "run_id": "direct-gaussian-s09-a1",
+  "scale": 1.0,
+  "seed": 9,
+  "study": "gaussian_density",
+  "termination_contract": {
+    "assistant_end_token_id": 151645,
+    "assistant_end_token_text": "<|im_end|>",
+    "chat_suffix": "<|im_end|>\n",
+    "chat_suffix_token_ids": [
+      151645,
+      198
+    ],
+    "generation_eos_token_ids": [
+      151645,
+      151643
+    ],
+    "selection": "first token after an assistant answer in actual chat template, checked against generation EOS",
+    "tokenizer_eos_token_id": 151645
+  },
+  "training_prompts": [
+    "original_open"
+  ]
+}

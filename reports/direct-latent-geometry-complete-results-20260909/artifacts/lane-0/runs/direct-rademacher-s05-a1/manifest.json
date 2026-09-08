@@ -1,0 +1,35 @@
+{
+  "arm": "open_gold_eos",
+  "distribution": "rademacher",
+  "fresh_start": true,
+  "gold_eos_appended": true,
+  "included_in_random_start_statistics": true,
+  "init_id": "rademacher-5-1",
+  "init_seed": 5,
+  "initial_latent_sha256": "203ba16217a6845c72719a1825a2cbe9897e6ce16ae4a0cee4c223d83b40b72f",
+  "loss": "mean_answer_ce + eos_ce",
+  "optimizer_steps": 256,
+  "reference_sha256": "5f8c07caa37de38cae96d0b0e28851b1b831bea8728182e9fbd14b1588ac3743",
+  "run_id": "direct-rademacher-s05-a1",
+  "scale": 1.0,
+  "seed": 5,
+  "study": "distribution",
+  "termination_contract": {
+    "assistant_end_token_id": 151645,
+    "assistant_end_token_text": "<|im_end|>",
+    "chat_suffix": "<|im_end|>\n",
+    "chat_suffix_token_ids": [
+      151645,
+      198
+    ],
+    "generation_eos_token_ids": [
+      151645,
+      151643
+    ],
+    "selection": "first token after an assistant answer in actual chat template, checked against generation EOS",
+    "tokenizer_eos_token_id": 151645
+  },
+  "training_prompts": [
+    "original_open"
+  ]
+}
