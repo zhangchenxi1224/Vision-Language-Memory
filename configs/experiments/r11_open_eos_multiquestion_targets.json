@@ -1,0 +1,1254 @@
+{
+  "schema": "vision_memory.r11-open-eos-multiquestion-targets.v1",
+  "protocol": "r11-open-eos-multiquestion-20260908",
+  "source_train_sha256": "24327edc39e0d133df5150dc1aab4f55c6cf5b05ccfca9025ad90c5accc6d184",
+  "source_train_path": "/inspire/ssd/project/exploration-topic/czxs26210936/data/vision-language-memory-r3/formal-v1/train.jsonl",
+  "source_split": "train",
+  "selection": {
+    "source_dataset_path": "/inspire/ssd/project/exploration-topic/czxs26210936/data/vision-language-memory-r3/formal-v1/train.jsonl",
+    "source_dataset_sha256": "24327edc39e0d133df5150dc1aab4f55c6cf5b05ccfca9025ad90c5accc6d184",
+    "split": "train",
+    "method": "fixed eight strata; two unique semantic groups per stratum; SHA256 ascending",
+    "outcomes_used": false,
+    "excluded_old_semantic_groups": [
+      "r3-train-semantic-000003",
+      "r3-train-semantic-000408",
+      "r3-train-semantic-000431",
+      "r3-train-semantic-000478",
+      "r3-train-semantic-000540",
+      "r3-train-semantic-000797",
+      "r3-train-semantic-000987",
+      "r3-train-semantic-001123"
+    ],
+    "strata": [
+      {
+        "topic": "color",
+        "gold": "green"
+      },
+      {
+        "topic": "drink",
+        "gold": "juice"
+      },
+      {
+        "topic": "music",
+        "gold": "jazz"
+      },
+      {
+        "topic": "material",
+        "gold": "linen"
+      },
+      {
+        "topic": "meal",
+        "gold": "pasta"
+      },
+      {
+        "topic": "color",
+        "gold": "no active preference"
+      },
+      {
+        "topic": "drink",
+        "gold": "no active preference"
+      },
+      {
+        "topic": "material",
+        "gold": "no active preference"
+      }
+    ],
+    "failed_target_replacement": false
+  },
+  "targets": [
+    {
+      "target_index": 0,
+      "segment_id": "open-mq-005371267f4ccc63cf06f1a9",
+      "topic": "color",
+      "stratum": "color:green",
+      "source_episode_id": "r3-train-semantic-001175-s0-clean",
+      "source_record_index": 4700,
+      "semantic_group_id": "r3-train-semantic-001175",
+      "source_turn_id": 1,
+      "source_episode_sha256": "3363daeb1b3d80850de85f95254f8430a71c0b437a38a330fe8f204180a9f2b1",
+      "source_query_sha256": "959d2df26a3eeda31388a9e5920eea81ee0ab22f26cd0976f4bf77f12668f43a",
+      "source_prefix": [
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 23: For the marble lamp train 001175, remember that the preferred color is green.",
+          "type": "event"
+        },
+        {
+          "query": {
+            "choices": [
+              "no active preference",
+              "green",
+              "yellow",
+              "purple"
+            ],
+            "comparison_id": "r3-train-semantic-001175:s0:initial",
+            "target_index": 1,
+            "target_token_count": 1,
+            "text": "R3 Train Standard Templates 23: Before any later update, what is the current color preference for the marble lamp train 001175? Choose exactly one option."
+          },
+          "type": "query"
+        }
+      ],
+      "selection_key_sha256": "005371267f4ccc63cf06f1a9b258da7076872a2f40758e4559fca1200e49a6f5",
+      "original": {
+        "query": "R3 Train Standard Templates 23: Before any later update, what is the current color preference for the marble lamp train 001175? Choose exactly one option.",
+        "choices": [
+          "no active preference",
+          "green",
+          "yellow",
+          "purple"
+        ],
+        "answer_index": 1
+      },
+      "inputs": {
+        "original_open": "R3 Train Standard Templates 23: Before any later update, what is the current color preference for the marble lamp train 001175?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_open": "R3 Train Standard Templates 23: Before any later update, which color does the marble lamp train 001175 currently prefer?\nUse the memory image to answer. Answer with a short phrase only.",
+        "new_rewrite_open": "R3 Train Standard Templates 23: Before any later update, name the currently stored color preference for the marble lamp train 001175.\nReturn only a short phrase."
+      },
+      "scorer_metadata": {
+        "gold": "green",
+        "aliases": []
+      },
+      "scope": "independent_question_vae_latent_oracle_not_shared_writer",
+      "source_prefix_is_audit_only_not_reader_input": true
+    },
+    {
+      "target_index": 1,
+      "segment_id": "open-mq-0176cb1d3a90d1b0006f4cc3",
+      "topic": "color",
+      "stratum": "color:green",
+      "source_episode_id": "r3-train-semantic-000414-s0-clean",
+      "source_record_index": 1656,
+      "semantic_group_id": "r3-train-semantic-000414",
+      "source_turn_id": 3,
+      "source_episode_sha256": "5f40f9b7489fbaa71e5e17398c5a243c202b0edfe0a5689a4e2f62a4c4fcce96",
+      "source_query_sha256": "165fe5d5fbae640c84ff31db17e7f9945a7fad988c0d7f6882c85c3eec607972",
+      "source_prefix": [
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 30: For the linen desk train 000414, remember that the preferred color is purple.",
+          "type": "event"
+        },
+        {
+          "query": {
+            "choices": [
+              "purple",
+              "no active preference",
+              "green",
+              "yellow"
+            ],
+            "comparison_id": "r3-train-semantic-000414:s0:initial",
+            "target_index": 0,
+            "target_token_count": 1,
+            "text": "R3 Train Standard Templates 30: Before any later update, what is the current color preference for the linen desk train 000414? Choose exactly one option."
+          },
+          "type": "query"
+        },
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 30: For the linen desk train 000414, remember that the preferred color is green.",
+          "query": {
+            "choices": [
+              "purple",
+              "no active preference",
+              "green",
+              "yellow"
+            ],
+            "comparison_id": "r3-train-semantic-000414:s0:immediate",
+            "target_index": 2,
+            "target_token_count": 1,
+            "text": "R3 Train Standard Templates 30: After applying this update first, what is the current color preference for the linen desk train 000414? Choose exactly one option."
+          },
+          "type": "mixed"
+        },
+        {
+          "query": {
+            "choices": [
+              "purple",
+              "no active preference",
+              "green",
+              "yellow"
+            ],
+            "comparison_id": "r3-train-semantic-000414:s0:delayed",
+            "target_index": 2,
+            "target_token_count": 1,
+            "text": "R3 Train Standard Templates 30: At this later check, what is the current color preference for the linen desk train 000414? Choose exactly one option."
+          },
+          "type": "query"
+        }
+      ],
+      "selection_key_sha256": "0176cb1d3a90d1b0006f4cc3d6b321dba3cc22db06479eff243310f5f6f6ef59",
+      "original": {
+        "query": "R3 Train Standard Templates 30: At this later check, what is the current color preference for the linen desk train 000414? Choose exactly one option.",
+        "choices": [
+          "purple",
+          "no active preference",
+          "green",
+          "yellow"
+        ],
+        "answer_index": 2
+      },
+      "inputs": {
+        "original_open": "R3 Train Standard Templates 30: At this later check, what is the current color preference for the linen desk train 000414?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_open": "R3 Train Standard Templates 30: At this later check, which color does the linen desk train 000414 currently prefer?\nUse the memory image to answer. Answer with a short phrase only.",
+        "new_rewrite_open": "R3 Train Standard Templates 30: At this later check, name the currently stored color preference for the linen desk train 000414.\nReturn only a short phrase."
+      },
+      "scorer_metadata": {
+        "gold": "green",
+        "aliases": []
+      },
+      "scope": "independent_question_vae_latent_oracle_not_shared_writer",
+      "source_prefix_is_audit_only_not_reader_input": true
+    },
+    {
+      "target_index": 2,
+      "segment_id": "open-mq-01d2689a68b048f1b09165ce",
+      "topic": "drink",
+      "stratum": "drink:juice",
+      "source_episode_id": "r3-train-semantic-000271-s1-clean",
+      "source_record_index": 1086,
+      "semantic_group_id": "r3-train-semantic-000271",
+      "source_turn_id": 1,
+      "source_episode_sha256": "06e4a58bf79d33716aa6cf54e58fae6c7953d00524e7ffce6b50ac774a26c3d5",
+      "source_query_sha256": "8af1f6d3914ca3889e1c7a031099dc87010eb2ef7323470c82c558e97484126e",
+      "source_prefix": [
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 15: Save juice as the current drink preference for the indigo notebook train 000271.",
+          "type": "event"
+        },
+        {
+          "query": {
+            "choices": [
+              "no active preference",
+              "coffee",
+              "water",
+              "juice"
+            ],
+            "comparison_id": "r3-train-semantic-000271:s1:initial",
+            "target_index": 3,
+            "target_token_count": 1,
+            "text": "R3 Train Standard Templates 15: Before any later update, what is the current drink preference for the indigo notebook train 000271? Choose exactly one option."
+          },
+          "type": "query"
+        }
+      ],
+      "selection_key_sha256": "01d2689a68b048f1b09165ce1d80db3e9abb16ec61199256c814d70396a16559",
+      "original": {
+        "query": "R3 Train Standard Templates 15: Before any later update, what is the current drink preference for the indigo notebook train 000271? Choose exactly one option.",
+        "choices": [
+          "no active preference",
+          "coffee",
+          "water",
+          "juice"
+        ],
+        "answer_index": 3
+      },
+      "inputs": {
+        "original_open": "R3 Train Standard Templates 15: Before any later update, what is the current drink preference for the indigo notebook train 000271?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_open": "R3 Train Standard Templates 15: Before any later update, which drink does the indigo notebook train 000271 currently prefer?\nUse the memory image to answer. Answer with a short phrase only.",
+        "new_rewrite_open": "R3 Train Standard Templates 15: Before any later update, name the currently stored drink preference for the indigo notebook train 000271.\nReturn only a short phrase."
+      },
+      "scorer_metadata": {
+        "gold": "juice",
+        "aliases": []
+      },
+      "scope": "independent_question_vae_latent_oracle_not_shared_writer",
+      "source_prefix_is_audit_only_not_reader_input": true
+    },
+    {
+      "target_index": 3,
+      "segment_id": "open-mq-03e09bfff4de30969c86b296",
+      "topic": "drink",
+      "stratum": "drink:juice",
+      "source_episode_id": "r3-train-semantic-001242-s1-clean",
+      "source_record_index": 4970,
+      "semantic_group_id": "r3-train-semantic-001242",
+      "source_turn_id": 2,
+      "source_episode_sha256": "87fccfa215d4157ad01012b3e92858b58e4562a8b793553b9d3ac6976c34458b",
+      "source_query_sha256": "229b753f8ae824205803ba844dc9440107c7d6267479bc7e154c64ba1393be05",
+      "source_prefix": [
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 26: For the amber mug train 001242, remember that the preferred drink is coffee.",
+          "type": "event"
+        },
+        {
+          "query": {
+            "choices": [
+              "juice",
+              "no active preference",
+              "coffee",
+              "water"
+            ],
+            "comparison_id": "r3-train-semantic-001242:s1:initial",
+            "target_index": 2,
+            "target_token_count": 1,
+            "text": "R3 Train Standard Templates 26: Before any later update, what is the current drink preference for the amber mug train 001242? Choose exactly one option."
+          },
+          "type": "query"
+        },
+        {
+          "event_kind": "overwrite",
+          "event_text": "R3 Train Standard Templates 26: Replace the earlier drink preference for the amber mug train 001242 with juice.",
+          "query": {
+            "choices": [
+              "juice",
+              "no active preference",
+              "coffee",
+              "water"
+            ],
+            "comparison_id": "r3-train-semantic-001242:s1:immediate",
+            "target_index": 0,
+            "target_token_count": 1,
+            "text": "R3 Train Standard Templates 26: After applying this update first, what is the current drink preference for the amber mug train 001242? Choose exactly one option."
+          },
+          "type": "mixed"
+        }
+      ],
+      "selection_key_sha256": "03e09bfff4de30969c86b296d841965770f08e3439c5edf16c20b41749182ce5",
+      "original": {
+        "query": "R3 Train Standard Templates 26: After applying this update first, what is the current drink preference for the amber mug train 001242? Choose exactly one option.",
+        "choices": [
+          "juice",
+          "no active preference",
+          "coffee",
+          "water"
+        ],
+        "answer_index": 0
+      },
+      "inputs": {
+        "original_open": "R3 Train Standard Templates 26: After applying this update first, what is the current drink preference for the amber mug train 001242?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_open": "R3 Train Standard Templates 26: After applying this update first, which drink does the amber mug train 001242 currently prefer?\nUse the memory image to answer. Answer with a short phrase only.",
+        "new_rewrite_open": "R3 Train Standard Templates 26: After applying this update first, name the currently stored drink preference for the amber mug train 001242.\nReturn only a short phrase."
+      },
+      "scorer_metadata": {
+        "gold": "juice",
+        "aliases": []
+      },
+      "scope": "independent_question_vae_latent_oracle_not_shared_writer",
+      "source_prefix_is_audit_only_not_reader_input": true
+    },
+    {
+      "target_index": 4,
+      "segment_id": "open-mq-0418717d9d236989970f6f9f",
+      "topic": "music",
+      "stratum": "music:jazz",
+      "source_episode_id": "r3-train-semantic-000550-s1-clean",
+      "source_record_index": 2202,
+      "semantic_group_id": "r3-train-semantic-000550",
+      "source_turn_id": 1,
+      "source_episode_sha256": "e4ca8001439cb6746449a1a92e1d932e222ffe4c1473533a9b70920ee391fc40",
+      "source_query_sha256": "b007cefe67afc86eaeddd9ae656cffb51b780c8a6c71a3f6514bdf3a90bdcc65",
+      "source_prefix": [
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 06: For the willow desk train 000550, remember that the preferred music is jazz.",
+          "type": "event"
+        },
+        {
+          "query": {
+            "choices": [
+              "folk",
+              "no active preference",
+              "jazz",
+              "classical"
+            ],
+            "comparison_id": "r3-train-semantic-000550:s1:initial",
+            "target_index": 2,
+            "target_token_count": 1,
+            "text": "R3 Train Standard Templates 06: Before any later update, what is the current music preference for the willow desk train 000550? Choose exactly one option."
+          },
+          "type": "query"
+        }
+      ],
+      "selection_key_sha256": "0418717d9d236989970f6f9fac1ad19f748ef7c360b224cd551790be5f39c9d6",
+      "original": {
+        "query": "R3 Train Standard Templates 06: Before any later update, what is the current music preference for the willow desk train 000550? Choose exactly one option.",
+        "choices": [
+          "folk",
+          "no active preference",
+          "jazz",
+          "classical"
+        ],
+        "answer_index": 2
+      },
+      "inputs": {
+        "original_open": "R3 Train Standard Templates 06: Before any later update, what is the current music preference for the willow desk train 000550?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_open": "R3 Train Standard Templates 06: Before any later update, which music does the willow desk train 000550 currently prefer?\nUse the memory image to answer. Answer with a short phrase only.",
+        "new_rewrite_open": "R3 Train Standard Templates 06: Before any later update, name the currently stored music preference for the willow desk train 000550.\nReturn only a short phrase."
+      },
+      "scorer_metadata": {
+        "gold": "jazz",
+        "aliases": []
+      },
+      "scope": "independent_question_vae_latent_oracle_not_shared_writer",
+      "source_prefix_is_audit_only_not_reader_input": true
+    },
+    {
+      "target_index": 5,
+      "segment_id": "open-mq-049b7fb05f52b4f05e6514a9",
+      "topic": "music",
+      "stratum": "music:jazz",
+      "source_episode_id": "r3-train-semantic-000190-s0-clean",
+      "source_record_index": 760,
+      "semantic_group_id": "r3-train-semantic-000190",
+      "source_turn_id": 1,
+      "source_episode_sha256": "2e5540207851037786b3f8774b99933ee152780b05aa17e577b09481feea08a3",
+      "source_query_sha256": "446e5b4536e60608ff05fae79b1ad8f5057cc865c214a352b8d20d6d802213f8",
+      "source_prefix": [
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 30: For the indigo mug train 000190, remember that the preferred music is jazz.",
+          "type": "event"
+        },
+        {
+          "query": {
+            "choices": [
+              "jazz",
+              "no active preference",
+              "ambient",
+              "blues"
+            ],
+            "comparison_id": "r3-train-semantic-000190:s0:initial",
+            "target_index": 0,
+            "target_token_count": 1,
+            "text": "R3 Train Standard Templates 30: Before any later update, what is the current music preference for the indigo mug train 000190? Choose exactly one option."
+          },
+          "type": "query"
+        }
+      ],
+      "selection_key_sha256": "049b7fb05f52b4f05e6514a95f789c6a88899b009768e2b69371f5ff272071da",
+      "original": {
+        "query": "R3 Train Standard Templates 30: Before any later update, what is the current music preference for the indigo mug train 000190? Choose exactly one option.",
+        "choices": [
+          "jazz",
+          "no active preference",
+          "ambient",
+          "blues"
+        ],
+        "answer_index": 0
+      },
+      "inputs": {
+        "original_open": "R3 Train Standard Templates 30: Before any later update, what is the current music preference for the indigo mug train 000190?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_open": "R3 Train Standard Templates 30: Before any later update, which music does the indigo mug train 000190 currently prefer?\nUse the memory image to answer. Answer with a short phrase only.",
+        "new_rewrite_open": "R3 Train Standard Templates 30: Before any later update, name the currently stored music preference for the indigo mug train 000190.\nReturn only a short phrase."
+      },
+      "scorer_metadata": {
+        "gold": "jazz",
+        "aliases": []
+      },
+      "scope": "independent_question_vae_latent_oracle_not_shared_writer",
+      "source_prefix_is_audit_only_not_reader_input": true
+    },
+    {
+      "target_index": 6,
+      "segment_id": "open-mq-0302527e26c769c3991c59be",
+      "topic": "material",
+      "stratum": "material:linen",
+      "source_episode_id": "r3-train-semantic-000608-s1-clean",
+      "source_record_index": 2434,
+      "semantic_group_id": "r3-train-semantic-000608",
+      "source_turn_id": 3,
+      "source_episode_sha256": "520330199c82ba8f9a5b5aa5a9ac14d746a602c07af1db38f2df1f2fc9db4b2f",
+      "source_query_sha256": "7bbec77440ff581697b6ca840ff91462c0d3666d81e104498086490e86a74658",
+      "source_prefix": [
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 00: Save leather as the current material preference for the silver lamp train 000608.",
+          "type": "event"
+        },
+        {
+          "query": {
+            "choices": [
+              "ceramic",
+              "linen",
+              "leather",
+              "no active preference"
+            ],
+            "comparison_id": "r3-train-semantic-000608:s1:initial",
+            "target_index": 2,
+            "target_token_count": 1,
+            "text": "R3 Train Standard Templates 00: Before any later update, what is the current material preference for the silver lamp train 000608? Choose exactly one option."
+          },
+          "type": "query"
+        },
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 00: Save linen as the current material preference for the silver lamp train 000608.",
+          "type": "event"
+        },
+        {
+          "query": {
+            "choices": [
+              "ceramic",
+              "linen",
+              "leather",
+              "no active preference"
+            ],
+            "comparison_id": "r3-train-semantic-000608:s1:delayed",
+            "target_index": 1,
+            "target_token_count": 1,
+            "text": "R3 Train Standard Templates 00: At this later check, what is the current material preference for the silver lamp train 000608? Choose exactly one option."
+          },
+          "type": "query"
+        }
+      ],
+      "selection_key_sha256": "0302527e26c769c3991c59be4639cd5d813bd82ba046de5bfa8688830eddf36f",
+      "original": {
+        "query": "R3 Train Standard Templates 00: At this later check, what is the current material preference for the silver lamp train 000608? Choose exactly one option.",
+        "choices": [
+          "ceramic",
+          "linen",
+          "leather",
+          "no active preference"
+        ],
+        "answer_index": 1
+      },
+      "inputs": {
+        "original_open": "R3 Train Standard Templates 00: At this later check, what is the current material preference for the silver lamp train 000608?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_open": "R3 Train Standard Templates 00: At this later check, which material does the silver lamp train 000608 currently prefer?\nUse the memory image to answer. Answer with a short phrase only.",
+        "new_rewrite_open": "R3 Train Standard Templates 00: At this later check, name the currently stored material preference for the silver lamp train 000608.\nReturn only a short phrase."
+      },
+      "scorer_metadata": {
+        "gold": "linen",
+        "aliases": []
+      },
+      "scope": "independent_question_vae_latent_oracle_not_shared_writer",
+      "source_prefix_is_audit_only_not_reader_input": true
+    },
+    {
+      "target_index": 7,
+      "segment_id": "open-mq-036ef70f5444f465b3142a01",
+      "topic": "material",
+      "stratum": "material:linen",
+      "source_episode_id": "r3-train-semantic-000613-s0-clean",
+      "source_record_index": 2452,
+      "semantic_group_id": "r3-train-semantic-000613",
+      "source_turn_id": 3,
+      "source_episode_sha256": "2cb5af410390e187f3228b63c483ea7dd518be83821a9c549b1ab5d3d385ca1b",
+      "source_query_sha256": "9f0288f8ec3e3e0aa3022e7c3dd48f84b70f08f306c2e6af6546e9b29fce6e32",
+      "source_prefix": [
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 05: Save ceramic as the current material preference for the amber room train 000613.",
+          "type": "event"
+        },
+        {
+          "query": {
+            "choices": [
+              "linen",
+              "leather",
+              "no active preference",
+              "ceramic"
+            ],
+            "comparison_id": "r3-train-semantic-000613:s0:initial",
+            "target_index": 3,
+            "target_token_count": 1,
+            "text": "R3 Train Standard Templates 05: Before any later update, what is the current material preference for the amber room train 000613? Choose exactly one option."
+          },
+          "type": "query"
+        },
+        {
+          "event_kind": "overwrite",
+          "event_text": "R3 Train Standard Templates 05: The material preference for the amber room train 000613 is now linen, not the previous value.",
+          "type": "event"
+        },
+        {
+          "query": {
+            "choices": [
+              "linen",
+              "leather",
+              "no active preference",
+              "ceramic"
+            ],
+            "comparison_id": "r3-train-semantic-000613:s0:delayed",
+            "target_index": 0,
+            "target_token_count": 1,
+            "text": "R3 Train Standard Templates 05: At this later check, what is the current material preference for the amber room train 000613? Choose exactly one option."
+          },
+          "type": "query"
+        }
+      ],
+      "selection_key_sha256": "036ef70f5444f465b3142a014fee655ce41d544b612cd802be95bf01411bb7a6",
+      "original": {
+        "query": "R3 Train Standard Templates 05: At this later check, what is the current material preference for the amber room train 000613? Choose exactly one option.",
+        "choices": [
+          "linen",
+          "leather",
+          "no active preference",
+          "ceramic"
+        ],
+        "answer_index": 0
+      },
+      "inputs": {
+        "original_open": "R3 Train Standard Templates 05: At this later check, what is the current material preference for the amber room train 000613?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_open": "R3 Train Standard Templates 05: At this later check, which material does the amber room train 000613 currently prefer?\nUse the memory image to answer. Answer with a short phrase only.",
+        "new_rewrite_open": "R3 Train Standard Templates 05: At this later check, name the currently stored material preference for the amber room train 000613.\nReturn only a short phrase."
+      },
+      "scorer_metadata": {
+        "gold": "linen",
+        "aliases": []
+      },
+      "scope": "independent_question_vae_latent_oracle_not_shared_writer",
+      "source_prefix_is_audit_only_not_reader_input": true
+    },
+    {
+      "target_index": 8,
+      "segment_id": "open-mq-00d2c10bf829b0af62d96574",
+      "topic": "meal",
+      "stratum": "meal:pasta",
+      "source_episode_id": "r3-train-semantic-000327-s0-clean",
+      "source_record_index": 1308,
+      "semantic_group_id": "r3-train-semantic-000327",
+      "source_turn_id": 3,
+      "source_episode_sha256": "65d1e56307089946bb91a70b98c221da1c6f36a04d123708e1e00386cd96f0c4",
+      "source_query_sha256": "c22a0531f4866a5faac694dd90bc20ac4d1aa24bcf6403be01c42bfc6ef0d64c",
+      "source_prefix": [
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 07: For the indigo lamp train 000327, remember that the preferred meal is rice.",
+          "type": "event"
+        },
+        {
+          "query": {
+            "choices": [
+              "no active preference",
+              "rice",
+              "pasta",
+              "salad"
+            ],
+            "comparison_id": "r3-train-semantic-000327:s0:initial",
+            "target_index": 1,
+            "target_token_count": 1,
+            "text": "R3 Train Standard Templates 07: Before any later update, what is the current meal preference for the indigo lamp train 000327? Choose exactly one option."
+          },
+          "type": "query"
+        },
+        {
+          "event_kind": "overwrite",
+          "event_text": "R3 Train Standard Templates 07: Replace the earlier meal preference for the indigo lamp train 000327 with pasta.",
+          "type": "event"
+        },
+        {
+          "query": {
+            "choices": [
+              "no active preference",
+              "rice",
+              "pasta",
+              "salad"
+            ],
+            "comparison_id": "r3-train-semantic-000327:s0:delayed",
+            "target_index": 2,
+            "target_token_count": 1,
+            "text": "R3 Train Standard Templates 07: At this later check, what is the current meal preference for the indigo lamp train 000327? Choose exactly one option."
+          },
+          "type": "query"
+        }
+      ],
+      "selection_key_sha256": "00d2c10bf829b0af62d965746009388b0daff200805e131acf4c13df55ae40a6",
+      "original": {
+        "query": "R3 Train Standard Templates 07: At this later check, what is the current meal preference for the indigo lamp train 000327? Choose exactly one option.",
+        "choices": [
+          "no active preference",
+          "rice",
+          "pasta",
+          "salad"
+        ],
+        "answer_index": 2
+      },
+      "inputs": {
+        "original_open": "R3 Train Standard Templates 07: At this later check, what is the current meal preference for the indigo lamp train 000327?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_open": "R3 Train Standard Templates 07: At this later check, which meal does the indigo lamp train 000327 currently prefer?\nUse the memory image to answer. Answer with a short phrase only.",
+        "new_rewrite_open": "R3 Train Standard Templates 07: At this later check, name the currently stored meal preference for the indigo lamp train 000327.\nReturn only a short phrase."
+      },
+      "scorer_metadata": {
+        "gold": "pasta",
+        "aliases": []
+      },
+      "scope": "independent_question_vae_latent_oracle_not_shared_writer",
+      "source_prefix_is_audit_only_not_reader_input": true
+    },
+    {
+      "target_index": 9,
+      "segment_id": "open-mq-042f909e2865c6acfa0cf559",
+      "topic": "meal",
+      "stratum": "meal:pasta",
+      "source_episode_id": "r3-train-semantic-000147-s1-clean",
+      "source_record_index": 590,
+      "semantic_group_id": "r3-train-semantic-000147",
+      "source_turn_id": 1,
+      "source_episode_sha256": "96e637d8847d564b839b7d56ae137dee3889148a29e5daafcbdc51c4602872ae",
+      "source_query_sha256": "37bf92d979600c4be7e39c5c2e265b5c2565753296c0d5a52fea60965871935b",
+      "source_prefix": [
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 19: Save pasta as the current meal preference for the silver mug train 000147.",
+          "type": "event"
+        },
+        {
+          "query": {
+            "choices": [
+              "no active preference",
+              "tacos",
+              "rice",
+              "pasta"
+            ],
+            "comparison_id": "r3-train-semantic-000147:s1:initial",
+            "target_index": 3,
+            "target_token_count": 1,
+            "text": "R3 Train Standard Templates 19: Before any later update, what is the current meal preference for the silver mug train 000147? Choose exactly one option."
+          },
+          "type": "query"
+        }
+      ],
+      "selection_key_sha256": "042f909e2865c6acfa0cf5597203cb5bfd0fcec9897bfe02fca0f9a36998a3dd",
+      "original": {
+        "query": "R3 Train Standard Templates 19: Before any later update, what is the current meal preference for the silver mug train 000147? Choose exactly one option.",
+        "choices": [
+          "no active preference",
+          "tacos",
+          "rice",
+          "pasta"
+        ],
+        "answer_index": 3
+      },
+      "inputs": {
+        "original_open": "R3 Train Standard Templates 19: Before any later update, what is the current meal preference for the silver mug train 000147?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_open": "R3 Train Standard Templates 19: Before any later update, which meal does the silver mug train 000147 currently prefer?\nUse the memory image to answer. Answer with a short phrase only.",
+        "new_rewrite_open": "R3 Train Standard Templates 19: Before any later update, name the currently stored meal preference for the silver mug train 000147.\nReturn only a short phrase."
+      },
+      "scorer_metadata": {
+        "gold": "pasta",
+        "aliases": []
+      },
+      "scope": "independent_question_vae_latent_oracle_not_shared_writer",
+      "source_prefix_is_audit_only_not_reader_input": true
+    },
+    {
+      "target_index": 10,
+      "segment_id": "open-mq-02ac05e85b451ada35102b04",
+      "topic": "color",
+      "stratum": "color:no active preference",
+      "source_episode_id": "r3-train-semantic-000986-s0-clean",
+      "source_record_index": 3944,
+      "semantic_group_id": "r3-train-semantic-000986",
+      "source_turn_id": 2,
+      "source_episode_sha256": "b2d667d9c0cfd2eab53c5a9856f17f4b3f2a0a607e2e8e3627b04183a2139616",
+      "source_query_sha256": "57830a6c6bd44a7c0687f4375a49ab82100964c9a7ffb64c50f3238eda5e9510",
+      "source_prefix": [
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 26: Save yellow as the current color preference for the marble backpack train 000986.",
+          "type": "event"
+        },
+        {
+          "query": {
+            "choices": [
+              "orange",
+              "no active preference",
+              "yellow",
+              "purple"
+            ],
+            "comparison_id": "r3-train-semantic-000986:s0:initial",
+            "target_index": 2,
+            "target_token_count": 1,
+            "text": "R3 Train Standard Templates 26: Before any later update, what is the current color preference for the marble backpack train 000986? Choose exactly one option."
+          },
+          "type": "query"
+        },
+        {
+          "event_kind": "clear",
+          "event_text": "R3 Train Standard Templates 26: Forget the current color choice for the marble backpack train 000986; none is active now.",
+          "query": {
+            "choices": [
+              "orange",
+              "no active preference",
+              "yellow",
+              "purple"
+            ],
+            "comparison_id": "r3-train-semantic-000986:s0:immediate",
+            "target_index": 1,
+            "target_token_count": 1,
+            "text": "R3 Train Standard Templates 26: After applying this update first, what is the current color preference for the marble backpack train 000986? Choose exactly one option."
+          },
+          "type": "mixed"
+        }
+      ],
+      "selection_key_sha256": "02ac05e85b451ada35102b041094da16013c811307c5e8d186d4472e972f4dce",
+      "original": {
+        "query": "R3 Train Standard Templates 26: After applying this update first, what is the current color preference for the marble backpack train 000986? Choose exactly one option.",
+        "choices": [
+          "orange",
+          "no active preference",
+          "yellow",
+          "purple"
+        ],
+        "answer_index": 1
+      },
+      "inputs": {
+        "original_open": "R3 Train Standard Templates 26: After applying this update first, what is the current color preference for the marble backpack train 000986?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_open": "R3 Train Standard Templates 26: After applying this update first, which color does the marble backpack train 000986 currently prefer?\nUse the memory image to answer. Answer with a short phrase only.",
+        "new_rewrite_open": "R3 Train Standard Templates 26: After applying this update first, name the currently stored color preference for the marble backpack train 000986.\nReturn only a short phrase."
+      },
+      "scorer_metadata": {
+        "gold": "no active preference",
+        "aliases": []
+      },
+      "scope": "independent_question_vae_latent_oracle_not_shared_writer",
+      "source_prefix_is_audit_only_not_reader_input": true
+    },
+    {
+      "target_index": 11,
+      "segment_id": "open-mq-06b682fc1b24767ee553d86f",
+      "topic": "color",
+      "stratum": "color:no active preference",
+      "source_episode_id": "r3-train-semantic-000024-s0-clean",
+      "source_record_index": 96,
+      "semantic_group_id": "r3-train-semantic-000024",
+      "source_turn_id": 2,
+      "source_episode_sha256": "38f03ee87a2c1f0116b4545f41252c3e4b4824454af3f5b75e111a55163d8f94",
+      "source_query_sha256": "97652bcfbbe1ebeadc2c38b99575e9c8dcad3b111c1ef6ba39d1a1e08799cd4f",
+      "source_prefix": [
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 24: For the linen notebook train 000024, remember that the preferred color is yellow.",
+          "type": "event"
+        },
+        {
+          "query": {
+            "choices": [
+              "yellow",
+              "purple",
+              "orange",
+              "no active preference"
+            ],
+            "comparison_id": "r3-train-semantic-000024:s0:initial",
+            "target_index": 0,
+            "target_token_count": 1,
+            "text": "R3 Train Standard Templates 24: Before any later update, what is the current color preference for the linen notebook train 000024? Choose exactly one option."
+          },
+          "type": "query"
+        },
+        {
+          "event_kind": "clear",
+          "event_text": "R3 Train Standard Templates 24: Clear the saved color preference for the linen notebook train 000024.",
+          "query": {
+            "choices": [
+              "yellow",
+              "purple",
+              "orange",
+              "no active preference"
+            ],
+            "comparison_id": "r3-train-semantic-000024:s0:immediate",
+            "target_index": 3,
+            "target_token_count": 1,
+            "text": "R3 Train Standard Templates 24: After applying this update first, what is the current color preference for the linen notebook train 000024? Choose exactly one option."
+          },
+          "type": "mixed"
+        }
+      ],
+      "selection_key_sha256": "06b682fc1b24767ee553d86f73c3887acaad48fcbbdeeb013a7cf56984c5e008",
+      "original": {
+        "query": "R3 Train Standard Templates 24: After applying this update first, what is the current color preference for the linen notebook train 000024? Choose exactly one option.",
+        "choices": [
+          "yellow",
+          "purple",
+          "orange",
+          "no active preference"
+        ],
+        "answer_index": 3
+      },
+      "inputs": {
+        "original_open": "R3 Train Standard Templates 24: After applying this update first, what is the current color preference for the linen notebook train 000024?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_open": "R3 Train Standard Templates 24: After applying this update first, which color does the linen notebook train 000024 currently prefer?\nUse the memory image to answer. Answer with a short phrase only.",
+        "new_rewrite_open": "R3 Train Standard Templates 24: After applying this update first, name the currently stored color preference for the linen notebook train 000024.\nReturn only a short phrase."
+      },
+      "scorer_metadata": {
+        "gold": "no active preference",
+        "aliases": []
+      },
+      "scope": "independent_question_vae_latent_oracle_not_shared_writer",
+      "source_prefix_is_audit_only_not_reader_input": true
+    },
+    {
+      "target_index": 12,
+      "segment_id": "open-mq-0112aa17b99101c19178fc3f",
+      "topic": "drink",
+      "stratum": "drink:no active preference",
+      "source_episode_id": "r3-train-semantic-001048-s0-clean",
+      "source_record_index": 4192,
+      "semantic_group_id": "r3-train-semantic-001048",
+      "source_turn_id": 2,
+      "source_episode_sha256": "2e14914285006e063a15c5efa74acb41af487240abcceb165e193914d373c15a",
+      "source_query_sha256": "188d0a560d3cda1910d13630f9b5c8ea7005861135e2909180f39eb165c34c85",
+      "source_prefix": [
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 24: Save cocoa as the current drink preference for the copper backpack train 001048.",
+          "type": "event"
+        },
+        {
+          "query": {
+            "choices": [
+              "cocoa",
+              "milk",
+              "tea",
+              "no active preference"
+            ],
+            "comparison_id": "r3-train-semantic-001048:s0:initial",
+            "target_index": 0,
+            "target_token_count": 1,
+            "text": "R3 Train Standard Templates 24: Before any later update, what is the current drink preference for the copper backpack train 001048? Choose exactly one option."
+          },
+          "type": "query"
+        },
+        {
+          "event_kind": "clear",
+          "event_text": "R3 Train Standard Templates 24: Forget the current drink choice for the copper backpack train 001048; none is active now.",
+          "query": {
+            "choices": [
+              "cocoa",
+              "milk",
+              "tea",
+              "no active preference"
+            ],
+            "comparison_id": "r3-train-semantic-001048:s0:immediate",
+            "target_index": 3,
+            "target_token_count": 1,
+            "text": "R3 Train Standard Templates 24: After applying this update first, what is the current drink preference for the copper backpack train 001048? Choose exactly one option."
+          },
+          "type": "mixed"
+        }
+      ],
+      "selection_key_sha256": "0112aa17b99101c19178fc3f0dfee0c64c2616890e366a5bcc9a7e1f6bd13406",
+      "original": {
+        "query": "R3 Train Standard Templates 24: After applying this update first, what is the current drink preference for the copper backpack train 001048? Choose exactly one option.",
+        "choices": [
+          "cocoa",
+          "milk",
+          "tea",
+          "no active preference"
+        ],
+        "answer_index": 3
+      },
+      "inputs": {
+        "original_open": "R3 Train Standard Templates 24: After applying this update first, what is the current drink preference for the copper backpack train 001048?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_open": "R3 Train Standard Templates 24: After applying this update first, which drink does the copper backpack train 001048 currently prefer?\nUse the memory image to answer. Answer with a short phrase only.",
+        "new_rewrite_open": "R3 Train Standard Templates 24: After applying this update first, name the currently stored drink preference for the copper backpack train 001048.\nReturn only a short phrase."
+      },
+      "scorer_metadata": {
+        "gold": "no active preference",
+        "aliases": []
+      },
+      "scope": "independent_question_vae_latent_oracle_not_shared_writer",
+      "source_prefix_is_audit_only_not_reader_input": true
+    },
+    {
+      "target_index": 13,
+      "segment_id": "open-mq-05cda70ed23abc6597cd9f5c",
+      "topic": "drink",
+      "stratum": "drink:no active preference",
+      "source_episode_id": "r3-train-semantic-001224-s0-clean",
+      "source_record_index": 4896,
+      "semantic_group_id": "r3-train-semantic-001224",
+      "source_turn_id": 3,
+      "source_episode_sha256": "3c1c1fabd37358f3add8b1cdeaa43a42743ad7d0b311677f637549fc27fad8cd",
+      "source_query_sha256": "f5a7052f19981d1ced6370a86ed5a09bd441e6bf08827778d8f8c46fd083de3b",
+      "source_prefix": [
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 08: For the willow chair train 001224, remember that the preferred drink is coffee.",
+          "type": "event"
+        },
+        {
+          "query": {
+            "choices": [
+              "coffee",
+              "water",
+              "juice",
+              "no active preference"
+            ],
+            "comparison_id": "r3-train-semantic-001224:s0:initial",
+            "target_index": 0,
+            "target_token_count": 1,
+            "text": "R3 Train Standard Templates 08: Before any later update, what is the current drink preference for the willow chair train 001224? Choose exactly one option."
+          },
+          "type": "query"
+        },
+        {
+          "event_kind": "clear",
+          "event_text": "R3 Train Standard Templates 08: Clear the saved drink preference for the willow chair train 001224.",
+          "type": "event"
+        },
+        {
+          "query": {
+            "choices": [
+              "coffee",
+              "water",
+              "juice",
+              "no active preference"
+            ],
+            "comparison_id": "r3-train-semantic-001224:s0:delayed",
+            "target_index": 3,
+            "target_token_count": 1,
+            "text": "R3 Train Standard Templates 08: At this later check, what is the current drink preference for the willow chair train 001224? Choose exactly one option."
+          },
+          "type": "query"
+        }
+      ],
+      "selection_key_sha256": "05cda70ed23abc6597cd9f5c0168d5695fffb69167fd03946ca743bf1cca1dd3",
+      "original": {
+        "query": "R3 Train Standard Templates 08: At this later check, what is the current drink preference for the willow chair train 001224? Choose exactly one option.",
+        "choices": [
+          "coffee",
+          "water",
+          "juice",
+          "no active preference"
+        ],
+        "answer_index": 3
+      },
+      "inputs": {
+        "original_open": "R3 Train Standard Templates 08: At this later check, what is the current drink preference for the willow chair train 001224?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_open": "R3 Train Standard Templates 08: At this later check, which drink does the willow chair train 001224 currently prefer?\nUse the memory image to answer. Answer with a short phrase only.",
+        "new_rewrite_open": "R3 Train Standard Templates 08: At this later check, name the currently stored drink preference for the willow chair train 001224.\nReturn only a short phrase."
+      },
+      "scorer_metadata": {
+        "gold": "no active preference",
+        "aliases": []
+      },
+      "scope": "independent_question_vae_latent_oracle_not_shared_writer",
+      "source_prefix_is_audit_only_not_reader_input": true
+    },
+    {
+      "target_index": 14,
+      "segment_id": "open-mq-033967b373c9a898638e12d0",
+      "topic": "material",
+      "stratum": "material:no active preference",
+      "source_episode_id": "r3-train-semantic-000250-s0-clean",
+      "source_record_index": 1000,
+      "semantic_group_id": "r3-train-semantic-000250",
+      "source_turn_id": 2,
+      "source_episode_sha256": "3e5d4a91508becc08fb600ab84671a1fa0ddf7938ba5ce704b523dc68beef032",
+      "source_query_sha256": "88ee20c2b3aa740eb1d344c28e2fd1b6b5b3ff9875008bd1cef75b1e610d374a",
+      "source_prefix": [
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 26: For the linen room train 000250, remember that the preferred material is glass.",
+          "type": "event"
+        },
+        {
+          "query": {
+            "choices": [
+              "ceramic",
+              "no active preference",
+              "glass",
+              "steel"
+            ],
+            "comparison_id": "r3-train-semantic-000250:s0:initial",
+            "target_index": 2,
+            "target_token_count": 1,
+            "text": "R3 Train Standard Templates 26: Before any later update, what is the current material preference for the linen room train 000250? Choose exactly one option."
+          },
+          "type": "query"
+        },
+        {
+          "event_kind": "clear",
+          "event_text": "R3 Train Standard Templates 26: Clear the saved material preference for the linen room train 000250.",
+          "query": {
+            "choices": [
+              "ceramic",
+              "no active preference",
+              "glass",
+              "steel"
+            ],
+            "comparison_id": "r3-train-semantic-000250:s0:immediate",
+            "target_index": 1,
+            "target_token_count": 1,
+            "text": "R3 Train Standard Templates 26: After applying this update first, what is the current material preference for the linen room train 000250? Choose exactly one option."
+          },
+          "type": "mixed"
+        }
+      ],
+      "selection_key_sha256": "033967b373c9a898638e12d073586166e605f8441b12c50524e66d51e1a5a3f9",
+      "original": {
+        "query": "R3 Train Standard Templates 26: After applying this update first, what is the current material preference for the linen room train 000250? Choose exactly one option.",
+        "choices": [
+          "ceramic",
+          "no active preference",
+          "glass",
+          "steel"
+        ],
+        "answer_index": 1
+      },
+      "inputs": {
+        "original_open": "R3 Train Standard Templates 26: After applying this update first, what is the current material preference for the linen room train 000250?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_open": "R3 Train Standard Templates 26: After applying this update first, which material does the linen room train 000250 currently prefer?\nUse the memory image to answer. Answer with a short phrase only.",
+        "new_rewrite_open": "R3 Train Standard Templates 26: After applying this update first, name the currently stored material preference for the linen room train 000250.\nReturn only a short phrase."
+      },
+      "scorer_metadata": {
+        "gold": "no active preference",
+        "aliases": []
+      },
+      "scope": "independent_question_vae_latent_oracle_not_shared_writer",
+      "source_prefix_is_audit_only_not_reader_input": true
+    },
+    {
+      "target_index": 15,
+      "segment_id": "open-mq-05d1c140acd816aaa24fd5ae",
+      "topic": "material",
+      "stratum": "material:no active preference",
+      "source_episode_id": "r3-train-semantic-001209-s0-clean",
+      "source_record_index": 4836,
+      "semantic_group_id": "r3-train-semantic-001209",
+      "source_turn_id": 2,
+      "source_episode_sha256": "0fde3114339b73dc3fda111ccabb824a840bc10af2b303c19163739db8ea1e07",
+      "source_query_sha256": "459cde986864cbe7f27ad626a81716a59ca8fa098734d80b13762648bb2f5a35",
+      "source_prefix": [
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 25: Save leather as the current material preference for the amber backpack train 001209.",
+          "type": "event"
+        },
+        {
+          "query": {
+            "choices": [
+              "wood",
+              "glass",
+              "no active preference",
+              "leather"
+            ],
+            "comparison_id": "r3-train-semantic-001209:s0:initial",
+            "target_index": 3,
+            "target_token_count": 1,
+            "text": "R3 Train Standard Templates 25: Before any later update, what is the current material preference for the amber backpack train 001209? Choose exactly one option."
+          },
+          "type": "query"
+        },
+        {
+          "event_kind": "clear",
+          "event_text": "R3 Train Standard Templates 25: Forget the current material choice for the amber backpack train 001209; none is active now.",
+          "query": {
+            "choices": [
+              "wood",
+              "glass",
+              "no active preference",
+              "leather"
+            ],
+            "comparison_id": "r3-train-semantic-001209:s0:immediate",
+            "target_index": 2,
+            "target_token_count": 1,
+            "text": "R3 Train Standard Templates 25: After applying this update first, what is the current material preference for the amber backpack train 001209? Choose exactly one option."
+          },
+          "type": "mixed"
+        }
+      ],
+      "selection_key_sha256": "05d1c140acd816aaa24fd5aeeca465278320b8b7dc0ae9ea0c43c8b1e11c7792",
+      "original": {
+        "query": "R3 Train Standard Templates 25: After applying this update first, what is the current material preference for the amber backpack train 001209? Choose exactly one option.",
+        "choices": [
+          "wood",
+          "glass",
+          "no active preference",
+          "leather"
+        ],
+        "answer_index": 2
+      },
+      "inputs": {
+        "original_open": "R3 Train Standard Templates 25: After applying this update first, what is the current material preference for the amber backpack train 001209?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_open": "R3 Train Standard Templates 25: After applying this update first, which material does the amber backpack train 001209 currently prefer?\nUse the memory image to answer. Answer with a short phrase only.",
+        "new_rewrite_open": "R3 Train Standard Templates 25: After applying this update first, name the currently stored material preference for the amber backpack train 001209.\nReturn only a short phrase."
+      },
+      "scorer_metadata": {
+        "gold": "no active preference",
+        "aliases": []
+      },
+      "scope": "independent_question_vae_latent_oracle_not_shared_writer",
+      "source_prefix_is_audit_only_not_reader_input": true
+    }
+  ],
+  "targets_payload_sha256": "07376be72ef7312a0c6a6197fac8e5794264b65f96fa5d21ba8a84a7eeae66be",
+  "arms": [
+    "A",
+    "B"
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "optimizer_steps": 256,
+  "learning_rate": 0.05,
+  "lambda_eos": 1.0,
+  "training_prompts": [
+    "original_open"
+  ],
+  "evaluation_only_prompts": [
+    "paraphrase_open",
+    "new_rewrite_open"
+  ],
+  "donor_spec": {
+    "kind": "frozen_completed_ambient_eos_B_endpoint",
+    "gold": "ambient",
+    "source_run": "seed-00-B",
+    "step": 256,
+    "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos/all-e6e6c80-20260908/runs/seed-00-B/step-256.pt",
+    "parent_training_commit": "e6e6c8071a6c1311a966bda1aa636748fbb016f6",
+    "all_target_golds_must_differ": true
+  },
+  "lanes": [
+    {
+      "gpu_pair": [
+        0,
+        1
+      ],
+      "target_indices": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        12,
+        14
+      ]
+    },
+    {
+      "gpu_pair": [
+        2,
+        3
+      ],
+      "target_indices": [
+        1,
+        3,
+        5,
+        7,
+        9,
+        11,
+        13,
+        15
+      ]
+    }
+  ],
+  "planned_questions": 16,
+  "planned_question_seed_pairs": 64,
+  "planned_optimization_runs": 128,
+  "planned_optimizer_updates": 32768,
+  "token_length_source": "actual contextual Qwen tokenizer; dataset target_token_count is MCQ label metadata",
+  "limitations": [
+    "all 16 questions are individually optimized, not held-out question generalization",
+    "no shared Writer is trained",
+    "answer-length groups differ in semantic content",
+    "natural train vocabulary has no light blue/orange juice; no synthetic replacement"
+  ],
+  "control_spec": {
+    "donor_checkpoint": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos/all-e6e6c80-20260908/runs/seed-00-B/step-256.pt",
+    "donor_checkpoint_sha256": "1fbec951da87bfed911120cd44f1d7784921bede50fa1a2e1726ad6fa5acf1ac",
+    "donor_gold": "ambient",
+    "donor_source_run_id": "seed-00-B",
+    "donor_source_raw_generations": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos/all-e6e6c80-20260908/raw_generations.jsonl",
+    "donor_source_raw_generations_sha256": "6ee14f206f8fbbee51349cfd7591fb24974a93480f1ea0184f80672eba01a1a7"
+  }
+}
