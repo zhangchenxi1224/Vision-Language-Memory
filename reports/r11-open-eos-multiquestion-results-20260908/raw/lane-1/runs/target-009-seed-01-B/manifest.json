@@ -1,0 +1,32 @@
+{
+  "append_eos": true,
+  "arm": "B",
+  "baseline": "fresh paired A; no old ambient trajectory parity claim",
+  "eos_lambda": 1.0,
+  "formal_shared_memory_success": false,
+  "initial_latent_sha256": "ed04dcf0f552074190e2880a0300b2f2925733c1995ffd7c300f21dd743faf2b",
+  "optimizer": {
+    "amsgrad": false,
+    "betas": [
+      0.9,
+      0.999
+    ],
+    "eps": 1e-08,
+    "lr": 0.05,
+    "name": "Adam",
+    "steps": 256,
+    "weight_decay": 0.0
+  },
+  "plan_sha256": "9eb16f95a48d31d087bddcb949b9abb84a63fc18f6611902842f159a2d5812c6",
+  "rewrites_used_in_training": false,
+  "schema": "vision_memory.r11-open-eos-multiquestion.v1.run",
+  "seed": 1,
+  "segment_id": "open-mq-042f909e2865c6acfa0cf559",
+  "semantic_group_id": "r3-train-semantic-000147",
+  "source_episode_id": "r3-train-semantic-000147-s1-clean",
+  "stratum": "meal:pasta",
+  "target_canonical_sha256": "53404fc1402f5d9e6ae926b369692c6731b1119ced6206d715926cff42cea094",
+  "target_index": 9,
+  "topic": "meal",
+  "training_prompt": "original_open"
+}

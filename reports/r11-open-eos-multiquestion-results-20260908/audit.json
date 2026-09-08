@@ -1,0 +1,58 @@
+{
+  "all_checks_passed": true,
+  "downloaded_original_files_hash_verified": 784,
+  "original_run_JSON_inventory_hashes_verified": 640,
+  "historical_source_Git_blobs_verified": 10,
+  "completed_runs": 128,
+  "independent_questions": 16,
+  "seeds_per_question": 4,
+  "optimizer_updates_verified": 32768,
+  "raw_records_recomputed": 3456,
+  "exact_expected_raw_grid": true,
+  "checkpoint_receipts": 896,
+  "paired_initial_latent_hashes_match": 64,
+  "paired_step_zero_generation_matches": 192,
+  "end_binding_receipts_verified": 2,
+  "training_commit": "2c0e41c899910bf0641f16ee724f85bbe3491a7e",
+  "targets_sha256": "d356238fd5c267812dcf28d214ab062fd43388bb6b53b78602f0c1e8f5b36672",
+  "elapsed_seconds": 5102.245759984013,
+  "paired_EM_counts": [
+    {
+      "prompt_id": "original_open",
+      "both_correct": 60,
+      "B_only_correct": 4,
+      "A_only_correct": 0,
+      "both_wrong": 0
+    },
+    {
+      "prompt_id": "paraphrase_open",
+      "both_correct": 62,
+      "B_only_correct": 2,
+      "A_only_correct": 0,
+      "both_wrong": 0
+    },
+    {
+      "prompt_id": "new_rewrite_open",
+      "both_correct": 53,
+      "B_only_correct": 8,
+      "A_only_correct": 3,
+      "both_wrong": 0
+    }
+  ],
+  "rewrite_consistency": [
+    {
+      "arm": "A",
+      "n": 64,
+      "all_three_same": 55,
+      "all_three_correct": 54
+    },
+    {
+      "arm": "B",
+      "n": 64,
+      "all_three_same": 61,
+      "all_three_correct": 61
+    }
+  ],
+  "formal_shared_memory_success": false,
+  "verification_boundary": "Raw strings/tokens and completeness recomputed locally. Teacher-forced metrics, source dataset, checkpoint tensors and model payloads are receipt-checked; no logits, tensors or GPU models loaded locally."
+}

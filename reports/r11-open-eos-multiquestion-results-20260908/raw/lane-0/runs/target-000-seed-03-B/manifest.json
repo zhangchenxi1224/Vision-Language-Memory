@@ -1,0 +1,32 @@
+{
+  "append_eos": true,
+  "arm": "B",
+  "baseline": "fresh paired A; no old ambient trajectory parity claim",
+  "eos_lambda": 1.0,
+  "formal_shared_memory_success": false,
+  "initial_latent_sha256": "76955c23e8f3f91d73f2116917550703f96588a4df76e0d076bbd43029a83c01",
+  "optimizer": {
+    "amsgrad": false,
+    "betas": [
+      0.9,
+      0.999
+    ],
+    "eps": 1e-08,
+    "lr": 0.05,
+    "name": "Adam",
+    "steps": 256,
+    "weight_decay": 0.0
+  },
+  "plan_sha256": "f48f8e8b9958f4418095ff34549fc148273b28245a10a55200a653ffba358f89",
+  "rewrites_used_in_training": false,
+  "schema": "vision_memory.r11-open-eos-multiquestion.v1.run",
+  "seed": 3,
+  "segment_id": "open-mq-005371267f4ccc63cf06f1a9",
+  "semantic_group_id": "r3-train-semantic-001175",
+  "source_episode_id": "r3-train-semantic-001175-s0-clean",
+  "stratum": "color:green",
+  "target_canonical_sha256": "c7f515a972a297e18f86c392a8490ed56504f338c92ba5c78f881ed7b661e3e7",
+  "target_index": 0,
+  "topic": "color",
+  "training_prompt": "original_open"
+}
