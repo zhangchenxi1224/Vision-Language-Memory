@@ -1,0 +1,392 @@
+{
+  "bundle_sha256": "bd6a6181a797adbd191d967ee3269c94fbc863089399244977a2a440874480de",
+  "bank_sha256": "20ef4a9fc53b254fd99b12cbc01cf1a6d41dee8d04dd3120c70ecaa141f30722",
+  "optimizer_updates": 0,
+  "teacher_count": 96,
+  "bank_dispersion_rms": 0.32252542266124795,
+  "bank_to_source_rms": 0.3252977212532477,
+  "uniform_vs_weighted_mean_rms": 0.07494203080390477,
+  "phases": {
+    "reference": {
+      "paired_endpoint_mse": 0.0,
+      "centroid_error_mse": 0.0,
+      "centered_error_mse": 0.0,
+      "output_variance": 0.07500302251303473,
+      "reference_variance": 0.07500302251303473,
+      "distance_to_training_target_mean_rms": 0.2918378039062554,
+      "distance_to_source_rms": 0.3045410586541624,
+      "distance_to_uniform_bank_mean_rms": 0.30204868457636697,
+      "spectrum_vs_paired_reference": {
+        "dc": {
+          "error_energy_fraction": 0.0,
+          "error_to_target_energy": 0.0,
+          "target_energy_fraction": 0.7590662465430066,
+          "output_to_target_energy": 1.0
+        },
+        "low": {
+          "error_energy_fraction": 0.0,
+          "error_to_target_energy": 0.0,
+          "target_energy_fraction": 0.01337969222044392,
+          "output_to_target_energy": 1.0
+        },
+        "mid": {
+          "error_energy_fraction": 0.0,
+          "error_to_target_energy": 0.0,
+          "target_energy_fraction": 0.09718441049917954,
+          "output_to_target_energy": 1.0
+        },
+        "high": {
+          "error_energy_fraction": 0.0,
+          "error_to_target_energy": 0.0,
+          "target_energy_fraction": 0.1303696507373699,
+          "output_to_target_energy": 1.0
+        }
+      }
+    },
+    "baseline": {
+      "paired_endpoint_mse": 0.09963450820917037,
+      "centroid_error_mse": 0.019822906059562995,
+      "centered_error_mse": 0.0798116021470468,
+      "output_variance": 0.004869727057842961,
+      "reference_variance": 0.07500302251303473,
+      "distance_to_training_target_mean_rms": 0.1192007847140166,
+      "distance_to_source_rms": 0.08320866474482821,
+      "distance_to_uniform_bank_mean_rms": 0.09340277103918537,
+      "spectrum_vs_paired_reference": {
+        "dc": {
+          "error_energy_fraction": 0.01149006984075867,
+          "error_to_target_energy": 0.0036261731605053745,
+          "target_energy_fraction": 0.7590662465430066,
+          "output_to_target_energy": 1.1110822952983952
+        },
+        "low": {
+          "error_energy_fraction": 0.041638924892552324,
+          "error_to_target_energy": 0.745519375616247,
+          "target_energy_fraction": 0.01337969222044392,
+          "output_to_target_energy": 0.32386464446524665
+        },
+        "mid": {
+          "error_energy_fraction": 0.38051910816735635,
+          "error_to_target_energy": 0.9379623718974744,
+          "target_energy_fraction": 0.09718441049917954,
+          "output_to_target_energy": 0.11345298329779585
+        },
+        "high": {
+          "error_energy_fraction": 0.5663518970993325,
+          "error_to_target_energy": 1.040675686579006,
+          "target_energy_fraction": 0.1303696507373699,
+          "output_to_target_energy": 0.10721427660157497
+        }
+      },
+      "paired_total_distillation_loss": 0.11755042312761987
+    },
+    "step-000064": {
+      "paired_endpoint_mse": 0.09321979576443068,
+      "centroid_error_mse": 0.0179409436788295,
+      "centered_error_mse": 0.07527885209241741,
+      "output_variance": 0.00028423339312388143,
+      "reference_variance": 0.07500302251303473,
+      "distance_to_training_target_mean_rms": 0.0880195194669293,
+      "distance_to_source_rms": 0.022932757771259294,
+      "distance_to_uniform_bank_mean_rms": 0.04767089899848664,
+      "spectrum_vs_paired_reference": {
+        "dc": {
+          "error_energy_fraction": 0.00048534053417672245,
+          "error_to_target_energy": 0.0001433081204446585,
+          "target_energy_fraction": 0.7590662465430066,
+          "output_to_target_energy": 0.988889058014277
+        },
+        "low": {
+          "error_energy_fraction": 0.04303484679354271,
+          "error_to_target_energy": 0.7209050274933946,
+          "target_energy_fraction": 0.01337969222044392,
+          "output_to_target_energy": 0.2922896216895793
+        },
+        "mid": {
+          "error_energy_fraction": 0.39401845940588326,
+          "error_to_target_energy": 0.9087070140248051,
+          "target_energy_fraction": 0.09718441049917954,
+          "output_to_target_energy": 0.07906359244412425
+        },
+        "high": {
+          "error_energy_fraction": 0.5624613532663972,
+          "error_to_target_energy": 0.9669858113384009,
+          "target_energy_fraction": 0.1303696507373699,
+          "output_to_target_energy": 0.03727383766428614
+        }
+      }
+    },
+    "step-000256": {
+      "paired_endpoint_mse": 0.09289779287032113,
+      "centroid_error_mse": 0.01778031661409095,
+      "centered_error_mse": 0.07511747624418738,
+      "output_variance": 0.00014194865029222472,
+      "reference_variance": 0.07500302251303473,
+      "distance_to_training_target_mean_rms": 0.08630412905668369,
+      "distance_to_source_rms": 0.016045111099871463,
+      "distance_to_uniform_bank_mean_rms": 0.044545779979546035,
+      "spectrum_vs_paired_reference": {
+        "dc": {
+          "error_energy_fraction": 0.0002932922335726075,
+          "error_to_target_energy": 8.630223597878449e-05,
+          "target_energy_fraction": 0.7590662465430066,
+          "output_to_target_energy": 0.9963831995065303
+        },
+        "low": {
+          "error_energy_fraction": 0.0427679381666322,
+          "error_to_target_energy": 0.7139591358680779,
+          "target_energy_fraction": 0.01337969222044392,
+          "output_to_target_energy": 0.3122452538637534
+        },
+        "mid": {
+          "error_energy_fraction": 0.39453568967645286,
+          "error_to_target_energy": 0.9067568725199858,
+          "target_energy_fraction": 0.09718441049917954,
+          "output_to_target_energy": 0.08820733353610996
+        },
+        "high": {
+          "error_energy_fraction": 0.5624030799233424,
+          "error_to_target_energy": 0.9635457791432493,
+          "target_energy_fraction": 0.1303696507373699,
+          "output_to_target_energy": 0.03991296802387621
+        }
+      }
+    },
+    "trained": {
+      "paired_endpoint_mse": 0.09277317323949871,
+      "centroid_error_mse": 0.01770761336727866,
+      "centered_error_mse": 0.075065559872006,
+      "output_variance": 8.27611267147093e-05,
+      "reference_variance": 0.07500302251303473,
+      "distance_to_training_target_mean_rms": 0.08554504292160171,
+      "distance_to_source_rms": 0.013613866725103362,
+      "distance_to_uniform_bank_mean_rms": 0.04348519932228792,
+      "spectrum_vs_paired_reference": {
+        "dc": {
+          "error_energy_fraction": 0.00017115539178097475,
+          "error_to_target_energy": 5.029549487220838e-05,
+          "target_energy_fraction": 0.7590662465430066,
+          "output_to_target_energy": 1.0039426380293939
+        },
+        "low": {
+          "error_energy_fraction": 0.042553539159192244,
+          "error_to_target_energy": 0.7094270494814504,
+          "target_energy_fraction": 0.01337969222044392,
+          "output_to_target_energy": 0.3053263011451726
+        },
+        "mid": {
+          "error_energy_fraction": 0.39454735547344755,
+          "error_to_target_energy": 0.90556726061558,
+          "target_energy_fraction": 0.09718441049917954,
+          "output_to_target_energy": 0.09330982979128058
+        },
+        "high": {
+          "error_energy_fraction": 0.5627279499755791,
+          "error_to_target_energy": 0.9628090532094392,
+          "target_energy_fraction": 0.1303696507373699,
+          "output_to_target_energy": 0.04002056298361402
+        }
+      },
+      "paired_total_distillation_loss": 0.1099120484915993
+    }
+  },
+  "single": {
+    "rank4-step512": {
+      "train_rms": 0.26501114602972675,
+      "baseline_rms": 0.326075570575322,
+      "train_em": 0,
+      "test_em": 0,
+      "spectrum": {
+        "dc": {
+          "error_energy_fraction": 2.8871816289381306e-05,
+          "error_to_target_energy": 6.448054515744002e-06,
+          "target_energy_fraction": 0.7472047828285441,
+          "output_to_target_energy": 0.9966884790476765
+        },
+        "low": {
+          "error_energy_fraction": 0.030416819034199086,
+          "error_to_target_energy": 0.31068293442992345,
+          "target_energy_fraction": 0.016337689333715096,
+          "output_to_target_energy": 0.5957455983451394
+        },
+        "mid": {
+          "error_energy_fraction": 0.24574644676063157,
+          "error_to_target_energy": 0.3829872283317307,
+          "target_energy_fraction": 0.1070772462199433,
+          "output_to_target_energy": 0.5251188393933155
+        },
+        "high": {
+          "error_energy_fraction": 0.72380786238888,
+          "error_to_target_energy": 0.9335754922197766,
+          "target_energy_fraction": 0.12938028161779783,
+          "output_to_target_energy": 0.06667273963025448
+        }
+      },
+      "target_spatial_rms": 0.3261755831992988,
+      "output_spatial_rms": 0.17717405093655164
+    },
+    "rank4-step2048": {
+      "train_rms": 0.24003243571302363,
+      "baseline_rms": 0.326075570575322,
+      "train_em": 0,
+      "test_em": 0,
+      "spectrum": {
+        "dc": {
+          "error_energy_fraction": 7.988320020657753e-05,
+          "error_to_target_energy": 1.463597415453223e-05,
+          "target_energy_fraction": 0.7472047828285441,
+          "output_to_target_energy": 0.9946831691615134
+        },
+        "low": {
+          "error_energy_fraction": 0.01870426887969978,
+          "error_to_target_energy": 0.1567313684843711,
+          "target_energy_fraction": 0.016337689333715096,
+          "output_to_target_energy": 0.6814081376315717
+        },
+        "mid": {
+          "error_energy_fraction": 0.18778576031865762,
+          "error_to_target_energy": 0.24008845974662738,
+          "target_energy_fraction": 0.1070772462199433,
+          "output_to_target_energy": 0.6194966697890918
+        },
+        "high": {
+          "error_energy_fraction": 0.7934300876014361,
+          "error_to_target_energy": 0.8395496702067072,
+          "target_energy_fraction": 0.12938028161779783,
+          "output_to_target_energy": 0.1283031937974924
+        }
+      },
+      "target_spatial_rms": 0.3261755831992988,
+      "output_spatial_rms": 0.19896862332312854
+    },
+    "rank16-step512": {
+      "train_rms": 0.2505085266173184,
+      "baseline_rms": 0.326075570575322,
+      "train_em": 0,
+      "test_em": 0,
+      "spectrum": {
+        "dc": {
+          "error_energy_fraction": 3.9811368569028605e-05,
+          "error_to_target_energy": 7.944717284114837e-06,
+          "target_energy_fraction": 0.7472047828285441,
+          "output_to_target_energy": 0.9968632510427906
+        },
+        "low": {
+          "error_energy_fraction": 0.025637636606507138,
+          "error_to_target_energy": 0.23399056011814254,
+          "target_energy_fraction": 0.016337689333715096,
+          "output_to_target_energy": 0.6411783659643843
+        },
+        "mid": {
+          "error_energy_fraction": 0.2003508007673792,
+          "error_to_target_energy": 0.27900042965837757,
+          "target_energy_fraction": 0.1070772462199433,
+          "output_to_target_energy": 0.6187206236826298
+        },
+        "high": {
+          "error_energy_fraction": 0.7739717512575446,
+          "error_to_target_energy": 0.8920064627059988,
+          "target_energy_fraction": 0.12938028161779783,
+          "output_to_target_energy": 0.09226894287345389
+        }
+      },
+      "target_spatial_rms": 0.3261755831992988,
+      "output_spatial_rms": 0.1931705057601846
+    }
+  },
+  "trajectories": {
+    "0": {
+      "baseline": {
+        "paired_mse": 0.0,
+        "spread_rms": 0.4683235338515501,
+        "reference_spread_rms": 0.4683235338515501
+      },
+      "trained": {
+        "paired_mse": 0.0,
+        "spread_rms": 0.4683235338515501,
+        "reference_spread_rms": 0.4683235338515501
+      },
+      "reference_posterior": {
+        "entropy_mean": 4.564348191467836,
+        "max_probability_mean": 0.010416666666666666
+      }
+    },
+    "1": {
+      "baseline": {
+        "paired_mse": 0.00025780212277059725,
+        "spread_rms": 0.3496294844169871,
+        "reference_spread_rms": 0.3512426713994706
+      },
+      "trained": {
+        "paired_mse": 0.00014255544117688763,
+        "spread_rms": 0.35428977334418194,
+        "reference_spread_rms": 0.3512426713994706
+      },
+      "reference_posterior": {
+        "entropy_mean": 0.07003671946143766,
+        "max_probability_mean": 0.9787760899459947
+      }
+    },
+    "2": {
+      "baseline": {
+        "paired_mse": 0.010814779048762005,
+        "spread_rms": 0.22724018763129455,
+        "reference_spread_rms": 0.2513975426264166
+      },
+      "trained": {
+        "paired_mse": 0.010205690178133026,
+        "spread_rms": 0.23652420091264026,
+        "reference_spread_rms": 0.2513975426264166
+      },
+      "reference_posterior": {
+        "entropy_mean": 0.0,
+        "max_probability_mean": 1.0
+      }
+    },
+    "3": {
+      "baseline": {
+        "paired_mse": 0.04267516358381589,
+        "spread_rms": 0.1064121416308271,
+        "reference_spread_rms": 0.21690281367271283
+      },
+      "trained": {
+        "paired_mse": 0.04106838013699183,
+        "spread_rms": 0.11691727739224807,
+        "reference_spread_rms": 0.21690281367271283
+      },
+      "reference_posterior": {
+        "entropy_mean": 0.0,
+        "max_probability_mean": 1.0
+      }
+    },
+    "4": {
+      "baseline": {
+        "paired_mse": 0.09963450820917037,
+        "spread_rms": 0.0697834296795662,
+        "reference_spread_rms": 0.27386679702555167
+      },
+      "trained": {
+        "paired_mse": 0.09277317323949871,
+        "spread_rms": 0.009097314258324229,
+        "reference_spread_rms": 0.27386679702555167
+      }
+    }
+  },
+  "constant_endpoint_controls": {
+    "source": {
+      "endpoint_mse": 0.09274525640619799,
+      "intermediate_mse": 0.017079630289183044,
+      "total_distillation_loss": 0.10982488669538104
+    },
+    "uniform_teacher_mean": {
+      "endpoint_mse": 0.09123340785431364,
+      "intermediate_mse": 0.016620445562315365,
+      "total_distillation_loss": 0.10785385341662901
+    },
+    "training_visit_weighted_mean": {
+      "endpoint_mse": 0.08516930378882598,
+      "intermediate_mse": 0.01564153051253948,
+      "total_distillation_loss": 0.10081083430136546
+    }
+  }
+}
