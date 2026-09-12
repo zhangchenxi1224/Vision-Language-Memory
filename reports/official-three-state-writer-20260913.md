@@ -1,0 +1,15 @@
+# Shared Writer for three conditional states
+
+Registered while target construction is running, before inspecting new oracle endpoints or training this Writer. Full512 passed fresh-noise ambient tests but failed all jazz/clear interventions. LoRA3500 remained unsuccessful. The next required behavior is different generated memory states for different events using one set of Writer weights.
+
+The training bank must come from the fixed c3bee0e state-oracle construction. Require its completed record, bank_sealed=true, matching bank SHA, allthree targets passing five raw Reader question variants with immediate EOS, verified target tensors and original source/control/model bindings. A failed oracle prevents Writer dispatch; no partial-state bank or replacement seed is authorized by this design. Record the actual bank hash in dispatch once it exists.
+
+Use fresh initialization from the same sealed official Base snapshot, all389,968,388 original U-Net parameters trainable, other models frozen. Keep official target/noise FM on the full sigma interval, integer training timesteps, raw event/source conditioning, pure-noise start and the upstream native28-step inference with CFG7.5/imageCFG1. No prior single-state Writer checkpoint is resumed.
+
+Fixed optimization:1536 updates, accumulation4, seed20260913, AdamW lr5e-5/betas(.9,.999)/epsilon1e-8/weight_decay1e-4, clip1, FP32 Writer/bf16 Reader, checkpoint interval16 plus first/final/graceful stop. The existing balanced sampler visits every state once per three draws. Across6144 microbatches this gives2048 draws per state, matching the single-state pilot's number of teacher exposures. Each state has one fixed target; this is one semantic question with three conditions, not three independent questions or broad generalization.
+
+Run on the already created dl-align-full-h200x1-20260913 instance, explicit cuda:0 Writer/Reader colocation as validated by the earlier bitwise baseline gate. Worker deadline1789251300 precedes notebook expiry. This new bank has three distinct conditions, so the earlier single-group baseline-reference gate is not applicable; retain this run's own untrained baseline and paired final evaluation for every group.
+
+Development evaluation: eight fixed benchmark noises per state, five question variants, blank/different-answer donor per state, all raw answers/tokens/EOS and complete trajectories. These noise seeds have already been observed in this task. Primary development success requires each state to answer correctly with immediate EOS on every five-prompt/noise combination, rather than high aggregate accuracy from repeating ambient. Report shared controls as repeated per-state scoring, not independent observations.
+
+If this endpoint passes, use a separately fixed fresh-noise confirmation and withheld event wording to evaluate stability and conditional behavior before claiming a bounded usable version. A successful single event or loss decrease is insufficient. Retain all failed endpoints and raw outputs without best-checkpoint selection.

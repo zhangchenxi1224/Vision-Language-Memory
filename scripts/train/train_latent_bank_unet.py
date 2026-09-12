@@ -432,6 +432,7 @@ def run(args) -> dict:
     signal.signal(signal.SIGTERM, stop_handler)
     signal.signal(signal.SIGINT, stop_handler)
     groups = training_groups(bank, args.target_mode)
+    semantic_questions = {g.get("semantic_question_id", g["question_id"]) for g in groups}
     official = is_official_flow(args)
     inference_steps=28 if args.model_variant=="base" else 4
     binding = {"schema": "latent-bank-unet/v2", "git_commit": commit, "source_hashes": source_hashes(),
@@ -449,6 +450,7 @@ def run(args) -> dict:
         "prompt_style": args.prompt_style if official else "legacy_decoded_source_diptych",
         "gradient_accumulation_steps": args.gradient_accumulation_steps, "weight_decay": args.weight_decay,
         "target_mode": args.target_mode,
+        "semantic_question_count": len(semantic_questions), "conditional_group_count": len(groups),
         "raw_inference_sigmas": np.linspace(1.,1./inference_steps,inference_steps).tolist() if official else None,
         "training_timestep": "floor(1000*sigma)" if official else "1000*sigma",
         "dreamlite_dtype": "float32", "reader_dtype": "bfloat16", "source_sigma": 1.0 if official else START_SIGMA,
@@ -458,7 +460,7 @@ def run(args) -> dict:
         "excluded_additional_condition_inputs": ["question", "answer", "target_latent", "teacher_id", "question_id"],
         "dreamlite_model_path": str(args.dreamlite.resolve()), "reader_model_path": str(args.reader_model.resolve()),
         "target_split": {g["question_id"]: dict(zip(("train", "heldout"), member_split(g["teacher_ids"]))) for g in groups},
-        "generalization_scope": "single-question Writer mechanism" if len(bank["groups"]) == 1 else "seen-question Writer; no held-out-question claim"}
+        "generalization_scope": "single-question Writer mechanism" if len(semantic_questions) == 1 else "seen-question Writer; no held-out-question claim"}
     identity_path = args.output_dir / "identity.json"
     if identity_path.exists() and json.loads(identity_path.read_text(encoding="utf-8")) != binding:
         raise RuntimeError("Output directory belongs to another bank/source/budget")
