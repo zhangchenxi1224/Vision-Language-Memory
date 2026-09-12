@@ -85,3 +85,9 @@ Base预训练输出也包含列车，训练后出现纹理及残留列车。与�
 第一次代码4694fdf生成了80条记录，但末尾误用“必须有可训练LoRA”的训练审计而退出。修复为检查全部模型参数冻结、无梯度和版本不变后，以代码5daf0b2重跑全部样本，完成记录与权重封存检查均通过。80条完整生成记录与第一次逐字段完全一致，说明修复没有改变推理结果。见[重放比对](event-format-replay-check.json)、[首次失败文本证据](event-format-first-attempt-text.tgz)、[完成证据及16张PNG](event-format-evidence.tgz)。原始PT保留在远端，文本和PNG下载后再次验SHA。
 
 该诊断使用cuda:1，主训练的冻结Reader仍驻留在同一卡；主训练计算在cuda:0，未修改其进程/源码。Base3500已观察1232/3500步；已核验其前512步噪声、sigma、teacher、loss和梯度范数与Base512完全一致（仅排除耗时），见[前缀一致性检查](base3500-prefix-check.json)。
+
+## 全 U-Net 容量对照正在训练
+
+新增固定代码b0a06f5的512步全U-Net对照，模型与数据、官方FM、seed、优化超参和原生28步评测均保持Base512设置；完整约定见[调度前预注册](../official-full-unet-preregistration-20260913.md)。新单H200实例显式同卡放置Writer/Reader，训练前已核验8个初始latent/image、全部采样轨迹与原双卡基线逐位一致，50条raw Reader记录逐字段一致。见[基线核验](full512-baseline-reference-check.json)。
+
+02:53实测31/512步，实际GPU进程40541和4.4GiB完整优化器检查点存在。它只解冻原始U-Net；其余模型继续冻结。相关51项测试通过。原LoRA3500仍在原实例、原代码上独立运行，已观察2152步。这些进度不属于功能成功证据，仍须收集完整训练后答题结果。

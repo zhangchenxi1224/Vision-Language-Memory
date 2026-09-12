@@ -80,3 +80,5 @@ worker deadline Unix `1789254021`（2026-09-13 07:00:21北京时间）；GPU平�
 - 训练前必须生成 `train/baseline-reference-check.json`：与原Base512 runtime相同、8个latent/image和全部28步轨迹逐位相同、50条raw Reader记录逐字段相同，原resultsha afd3d93c222654c2754060610a93c072449288752db3733867f8f4e1550b92b4。不通过则0步失败，调查差异，不静默放宽容差。
 - 全量checkpoint每16步、首步/末步/正常停止均保存，完整optimizer+RNG；硬中断保留physical log并重放未保存更新。默认LoRA仍每步保存。最终collector请用新checkout版本，读取通用unet_parameter_delta_l2；旧collector仅认识adapter字段。
 - 接下来先确认full baseline gate及首步/16步checkpoint，随后收集两轮最终raw答案+EOS与哈希，再决定功能迭代；goal仍active。
+
+**02:53实测更新：full baseline gate已经通过，8张初始latent/image、全部轨迹和50条raw记录均与Base512逐位/逐字段一致。核验JSON已下载为reports/official-alignment-results-20260913/full512-baseline-reference-check.json。PID40541占用45840MiB，full已31/512步，checkpoint-latest.pt为4.4GiB，已跨过16步周期保存；约1.9秒/步。主LoRA已观察2152/3500，预计端点约03:30；full端点预计03:10左右。不要重复启动。**
