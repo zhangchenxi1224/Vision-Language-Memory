@@ -124,3 +124,13 @@ Full确认cb41fa1也completed：原事件16新噪声×5问法80/80正确立即EO
 原ambient bank teacher记录（.cache/teacher-bank-manifest.json内）有完整来源：source manifest SHA d331859338726a6c90cbca1448f74c47840a264b27603a0d60a5af2792bb201e，latent_index SHA2ee4b8c90d254649bb2b68324b20e03cc492963acad5a4c238190aa2e5b48d8e，endpoint SHAa58c978cf78dc2955705a8d370f7d60bf9e1805343a6e563d108be9f455e6cdd。当前独立teacher tensor SHA e910e9b89ed3861ef7c36176c762bccde7d9d809e2510618b5318202313777f6。
 
 新bank若按状态使用不同group ID，必须明确这是同一语义问题的3种条件状态，不能报成3道独立题；问题5种问法沿用原组，Writer只接事件和source，不接query/gold标签。沿用source_kind blank_gray_1024、原封存source tensor及PIL128条件差异约定。不同答案donor仍可用原orange RGB control。暂未实现或调度多状态oracle/Writer，不要把建议写成已运行。
+
+## 03:56 三状态目标完成，共享 Writer 实际开始优化
+
+上述03:31建议已执行。代码c3bee0e8564ca379300326ed3f2d2ebe9ec8d8d5、checkout `P/repos/dreamlite-state-oracles-20260913`、run `P/runs/dreamlite-official-alignment/c3bee0e-state-oracles` 已完成。ambient复用固定原目标；jazz和clear各从已核验的原seed7/scale.5初态训练256更新，三问法计数86/85/85，p3/p4不参加梯度。三个目标都五问法正确且立即EOS。CPU核验45条raw、两轮512更新、所有中间latent/checkpoint文件SHA；本地再验三个bank tensor canonical SHA。证据state-oracles-evidence.tgz、state-oracles-summary.json、state-oracles/已下载。三目标pairwise RMS分别0.36555954、0.43353733、0.42337517。这些是oracle目标，不是共享Writer输出。
+
+原bank SHA4e68df0fe38a4eb38c6cbf1903229ac81598d7b582c480e1700dbcf69e15b2f9遗漏snapshots字段，首次共享Writer `63483ac-three-state-full1536-20260913` 在模型加载前KeyError、0更新退出，three-state-first-attempt.tgz保留。修复exporter并用scripts/reporting/complete_state_bank_metadata.py产生新manifest；该工具验证原始bank和parent bank SHA、目标及raw hashes，只复制原有snapshot绑定且记录provenance，原manifest不变。新bank `P/runs/dreamlite-official-alignment/c90896c-state-bank/manifest.json`，SHA **5165c059a0a4c0760cd4b0df1663c642132e52bf55a13031cd99207fd200bb86**，本地state-bank-complete-manifest.json再验SHA及groups/teachers逐字段不变。
+
+**当前唯一活跃GPU训练**：源码c90896c55c7b6cd6f489ccb7848ade2cff587daa，checkout `P/repos/dreamlite-three-state-writer-20260913-r2`，run `P/runs/dreamlite-official-alignment/c90896c-three-state-full1536-20260913`，stage-0-1789242667553720835.log。单H200实例 `dl-align-full-h200x1-20260913` 实际GPU PID396075、45842MiB；03:56观察28/1536更新，约1.9秒/步，已出现checkpoint。不是仅提交/加载。预注册reports/official-three-state-writer-20260913.md：fresh Base full U-Net、lr5e-5/accum4/clip1/wd1e-4、三状态各2048训练draw、原生28CFG7.5/image1；没有继承ambient-only权重。1536结束后还要完成3组baseline/trained的真实Reader评价。deadline1789251300（06:15），实例约06:40到期。55项相关测试通过。不要重启这个run。
+
+2-H200实例 `dl-align-h200x2-20260913-r2` 已实际核验无GPU计算进程，目标/旧训练证据均在共享盘且本地下载，现已stop并delete。保留上述单H200和CPU实例；不要等待已删除实例的历史PID。三状态Writer尚未功能验证，goal继续active。正在预注册新噪声及两种留出事件表达的确认测试；只有固定1536端点的每个状态/问法/噪声全部通过，才进入该确认。

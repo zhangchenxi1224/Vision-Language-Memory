@@ -119,3 +119,9 @@ Base预训练输出也包含列车，训练后出现纹理及残留列车。与�
 ![LoRA3500训练前后](base3500-preview.png)
 
 见[重新核验摘要](base3500-summary.json)、[原始文本证据](base3500-evidence.tgz)。前512步与LoRA512的严格重放核验仍成立。结合full512正结果，不再把单纯延长当前rank16 LoRA当作修复方向；下一阶段为同实体的ambient/jazz/clear构建经过真实Reader验证的多个目标，再训练同一个官方FM Writer，以检验事件条件学习。
+
+## 三状态目标与共享训练
+
+按[预注册配方](../official-state-oracles-20260913.md)，复用固定ambient目标，从同一个原始高斯初态为jazz和清除状态各训练256步latent。三个目标均在原问和四种改写问法上正确且立即EOS；新目标仅对原问/p1/p2轮转优化，p3/p4留出。已校验原始生成、512个优化步骤、全部中间latent与端点哈希。见[摘要](state-oracles-summary.json)、[证据](state-oracles-evidence.tgz)。这仍是同一语义问题的三个条件状态，不能当作三道独立问题或共享Writer成功。
+
+首次Writer在0步因bank缺少snapshot元数据退出，保留[失败证据](three-state-first-attempt.tgz)。新[完整manifest](state-bank-complete-manifest.json)仅补回已封存parent bank的模型snapshot绑定，原目标与分组逐字段保持不变，SHA为5165c059a0a4c0760cd4b0df1663c642132e52bf55a13031cd99207fd200bb86。以修复代码c90896c从官方Base重新初始化共享全U-Net；1536步、三状态各2048 draw的[训练约定](../official-three-state-writer-20260913.md)保持不变。单H200已实际开始优化，尚未取得最终功能结果。

@@ -30,6 +30,21 @@ def collect(root: Path):
             v["answer_eos"]+=int(r["scorer"]["strict_correct"] and r["scorer"]["answer_followed_immediately_by_eos"])
         phases[phase]={"cells":cells,"matched_raw":dict(Counter(r["raw"] for r in matched)),
                        "generation_rows":len(records)}
+        # Keep the earlier aggregate while exposing every conditional group.
+        # Otherwise an always-one-state Writer can hide behind aggregate cells.
+        by_group = {}
+        for row in records:
+            group = by_group.setdefault(row["question_id"], {"gold": row["gold"], "cells": {}, "matched_raw": {}})
+            if group["gold"] != row["gold"]:
+                raise ValueError("A conditional group has inconsistent gold answers")
+            cell = group["cells"].setdefault(row["condition"] + "/" + row["prompt_id"],
+                                            {"n": 0, "exact_match": 0, "answer_eos": 0})
+            cell["n"] += 1
+            cell["exact_match"] += int(row["scorer"]["strict_correct"])
+            cell["answer_eos"] += int(row["scorer"]["strict_correct"] and row["scorer"]["answer_followed_immediately_by_eos"])
+            if row["condition"] == "matched":
+                group["matched_raw"][row["raw"]] = group["matched_raw"].get(row["raw"], 0) + 1
+        phases[phase]["conditional_groups"] = by_group
     verification=None
     if terminal and terminal.get("state")=="completed" and result is not None:
         verification=hashlib.sha256(result_path.read_bytes()).hexdigest()==terminal["training_result_sha256"]
@@ -43,6 +58,7 @@ def collect(root: Path):
         if digest!=result["checkpoint_sha256"]: raise ValueError("Checkpoint SHA mismatch")
     return {"run":str(root),"terminal":terminal,"result_and_checkpoint_verified":verification,
         "optimizer_steps":len(rows),"training_draws":len(draws),
+        "training_draws_per_conditional_group":dict(Counter(m["question_id"] for m in draws)),
         "sigma_min":min((m["effective_sigma"] for m in draws),default=None),
         "sigma_max":max((m["effective_sigma"] for m in draws),default=None),
         "sigma_above_half":sum(m["effective_sigma"]>.5 for m in draws),

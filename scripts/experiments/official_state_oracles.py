@@ -138,7 +138,8 @@ def main():
             'reused_original_teacher':tid if state=='ambient' else None}
         new_teachers.append(teacher)
         new_groups.append({**copy.deepcopy(group),'question_id':qid,'semantic_question_id':group['question_id'],
-            'state':state,'event_text':event,'answer':gold,'teacher_ids':[new_tid]})
+            'state':state,'event_text':event,'answer':gold,'teacher_ids':[new_tid],
+            'planned_count':1,'successful_run_count':int(passed)})
         audit_inference_only_runtime(runtime,frozen)
         train.write_json(a.output/'progress.json',state_results)
     runtime['verify_additional_bindings']()
