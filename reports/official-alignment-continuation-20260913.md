@@ -7,7 +7,7 @@
 - 工作树：`C:/Users/Expedition/dreamlite-official-alignment-20260913`。
 - 分支：`codex/dreamlite-official-alignment-20260913`，源自latent-bank分支`f68bf06`，已推送origin。
 - 官方源码在本地 `third_party/DreamLite`，HEAD=`a6e20c8cc94027f37dd7c5a81b0b3b472aa18409`。
-- 已通过46项针对性测试（`PYTHONPATH=src`，本地默认`python`有torch/pytest；home/.venv python主要用于HF API，不是测试环境）。新增摘要严格EOS统计及缺失/重复五问法拒绝；活跃3500实验使用旧固定提交，结束仍以原始generation计算EOS，不能只看旧terminal的exact字段。
+- 已通过47项针对性测试（`PYTHONPATH=src`，本地默认`python`有torch/pytest；home/.venv python主要用于HF API，不是测试环境）。新增摘要严格EOS统计及缺失/重复五问法拒绝，以及全冻结inference审计；活跃3500实验使用旧固定提交，结束仍以原始generation计算EOS，不能只看旧terminal的exact字段。
 - 重要修改：默认official FM、全0–1训练、整数t、原始source图条件、原始raw vs effective调度、纯噪声起点、rank16/accum4/AdamW官方默认；base选项直接官方pipeline训练/原生28步CFG评测；hash/optimizer/RNG/teacher EOS/real QA审计保留。
 
 ## 当前远端
@@ -35,6 +35,11 @@ GPU Python `P/envs/vlm-r3-ngc2502/bin/python`；CPU纯stdlib脚本用python3（3
 5. **已完成oracle邻域诊断**：`P/runs/dreamlite-official-alignment/1bb0d28-neighborhood`，源码checkout `P/repos/dreamlite-neighborhood-20260913`。其`-queue`目录terminal completed，不再运行。48条输出、哈希已复核；原问及paraphrase_4，RMS0.001/.003/.01/.03均3/3正确立即EOS，RMS.1为3/3与2/3，RMS.3均0/3。teacher向Base512 seed0插值.01/.03/.1/.3两个问法都通过；纯Writer失败，RMS0.444540。这否定“只能精确坐标读出”，不证明任意方向鲁棒。诊断不算Writer成功。
 6. **已完成CFG1**：`P/runs/dreamlite-official-alignment/32d70c0-guidance1`，源码checkout `P/repos/dreamlite-guidance-20260913`，日志同路径加`.log`。Base512同checkpoint、8噪声、native28steps，仅CFG7.5改为1。50条结果，五问法均0/8。已下载guidance1-evidence.tgz并验证文本哈希；`.pt`留在远端。
 7. **当前活跃Base3500**：`P/runs/dreamlite-official-alignment/ac34ab2-base3500-single-20260913`。与Base512完全相同的固定代码`ac34ab2`/checkout，仅预算3500、fresh initialization。同seed同目标同超参同nativeCFG7.5，不改旧512运行身份；前512draw应相同。已实际确认GPU PID2622580，启动时间Unix1789235717.7。已观察85/3500步，并下载当前training.jsonl到本地.cache/base3500-prefix.jsonl；前85步除耗时外所有字段（loss/grad/draw/cursor）与Base512完全一致，报告reports/official-alignment-results-20260913/base3500-prefix-check.json。接续检查train/training.jsonl与terminal，而非重复启动。预注册在本地reports/official-base-3500-preregistration-20260913.md，提交2e08e97先于调度。预计约100分钟到端点评测；不以启动或loss成功替代功能证据。
+
+**更新至北京时间02:29：主训练已实际观察1232/3500步，PID2622580仍占用GPU0约30GB、GPU1约9GB。前缀核验已扩展到完整512步，除耗时外字段全部一致，JSON报告已更新（读取时采样到了714步）。预计到端点还约60分钟，不将等待或源码测试当功能通过。**
+
+8. **历史多题审计已完成**：`P/runs/dreamlite-official-alignment/historical-multiquestion-audit.json`，本地报告同名及historical-multiquestion-review.md。原16题实验已completed；CPU重跑固定commit2c0e41c的inventory/score函数，128run/32768updates/3456raw全验证。B原问64/64、第一改写64/64、第二61/64，旧BF16 VAE；不等于Writer成功，也不能未经FP32重放就移植为当前teacher。原数据路径和plan限制详见报告。
+9. **提示词接口对照已完成**：第一次 `P/runs/dreamlite-official-alignment/4694fdf-event-format`（代码checkout `P/repos/dreamlite-event-format-20260913`）80条输出后因误用要求trainableLoRA的审计退出；日志同路径加.log。修复后 `P/runs/dreamlite-official-alignment/5daf0b2-event-format`（代码checkout `P/repos/dreamlite-event-format-20260913-r2`）全完成，80行逐字段与首次一致。两事件ambient/jazz×两形式raw/memory_note×4新噪声×5问法全部0/4；只有模型生成图片，没有外部答案栅格化。完成证据tar/PNG montage/replay检查已落地。此probe在GPU1曾使用约23GB额外显存，已经退出；当前只剩主训练PID2622580，不要重复启动。全冻结推理可以显式`load_base_runtime(...,inference_only=True)`同卡加载，但正常训练仍要求两卡。其审计必须使用`audit_inference_only_runtime`，不要调用要求可训练LoRA的training.frozen_audit。
 
 worker deadline Unix `1789254021`（2026-09-13 07:00:21北京时间）；GPU平台8h上限约08:54。需要延长/追加时仍须根据新结果安排，不能让平台关闭前丢失检查点。未经结果证据不得扩大成“可用”或“多题泛化”。
 
