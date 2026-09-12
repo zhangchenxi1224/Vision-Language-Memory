@@ -14,7 +14,24 @@ from vision_memory.repro import canonical_tensor_sha256, configure_strict_cuda_d
 from vision_memory.training.direct_latent_geometry import CHECKPOINTS
 
 
+def training_prompts(runtime):
+    prompts = tuple(runtime.get('training_prompts', ('original_open',)))
+    if (not prompts or len(set(prompts)) != len(prompts) or 'original_open' not in prompts
+            or any(p not in runtime['target']['inputs'] for p in prompts)):
+        raise ValueError('Invalid explicit oracle training prompts')
+    return prompts
+
+
+def training_prompt(runtime, step):
+    if step < 0:
+        raise ValueError('Oracle optimizer step must be nonnegative')
+    prompts = training_prompts(runtime)
+    return prompts[step % len(prompts)]
+
+
 def teacher(runtime, image, prompt, require_grad=False):
+    if require_grad and prompt not in training_prompts(runtime):
+        raise ValueError('Held-out prompts must never enter latent optimization')
     return qwen3vl_answer_eos_ce(
         model=runtime['reader'], processor=runtime['processor'],
         image=image[0].to(runtime['reader_device']), device=runtime['reader_device'],
@@ -62,7 +79,7 @@ def evaluate(runtime, image, *, spec, step, directory, all_prompts):
                     image=pixels.to(runtime['reader_device']), query=query, device=runtime['reader_device'],
                     max_new_tokens=32, do_sample=False)
                 row = {**spec, 'optimizer_step': step, 'condition': condition, 'prompt_id': prompt_id,
-                    'query': query, 'question_trained': prompt_id == 'original_open',
+                    'query': query, 'question_trained': prompt_id in training_prompts(runtime),
                     'image_sha256': canonical_tensor_sha256(pixels), **generated,
                     'answer_ce': float(output.answer_loss), 'eos_ce': float(output.eos_loss),
                     'total_ce': float(output.loss), 'gold_eos_appended': True,
@@ -89,7 +106,10 @@ def run_one(*, spec, initial, reference, runtime, output_dir):
         raise RuntimeError('Initialization changed during device copy')
     replay.write_json(directory / 'manifest.json', {**spec, 'initial_latent_sha256': initial_hash,
         'reference_sha256': canonical_tensor_sha256(reference), 'optimizer_steps': 256,
-        'fresh_start': True, 'training_prompts': ['original_open'], 'gold_eos_appended': True,
+        'fresh_start': True, 'training_prompts': list(training_prompts(runtime)), 'gold_eos_appended': True,
+        'heldout_prompts': [p for p in runtime['target']['inputs'] if p not in training_prompts(runtime)],
+        'prompt_schedule': 'round_robin_zero_based',
+        'optimizer_prompt_counts': {p:sum(training_prompt(runtime,s)==p for s in range(256)) for p in training_prompts(runtime)},
         'loss': 'mean_answer_ce + eos_ce', 'termination_contract': runtime['termination']})
     try:
         replay.write_json(directory / 'initial_reproducibility.json', gradient_gate(oracle, runtime))
@@ -116,7 +136,8 @@ def run_one(*, spec, initial, reference, runtime, output_dir):
             if step == 256:
                 break
             optimizer.zero_grad(set_to_none=True)
-            output = teacher(runtime, oracle.image(), 'original_open', True)
+            prompt_id = training_prompt(runtime, step)
+            output = teacher(runtime, oracle.image(), prompt_id, True)
             if not torch.isfinite(output.loss):
                 raise RuntimeError('Nonfinite loss')
             output.loss.backward()
@@ -130,7 +151,7 @@ def run_one(*, spec, initial, reference, runtime, output_dir):
             updated = oracle.latent_fp32.detach().cpu()
             if not torch.isfinite(updated).all():
                 raise RuntimeError('Nonfinite updated latent')
-            metrics = {**spec, 'optimizer_step': step+1, 'loss_before_step': loss,
+            metrics = {**spec, 'optimizer_step': step+1, 'training_prompt_id': prompt_id, 'loss_before_step': loss,
                 'answer_ce_before_step': answer, 'eos_ce_before_step': eos,
                 'gradient_rms': grad_rms, 'update_rms': float((updated-current).square().mean().sqrt()),
                 'latent_rms': float(updated.square().mean().sqrt()),
