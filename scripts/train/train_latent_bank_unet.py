@@ -19,6 +19,7 @@ import time
 import traceback
 from typing import Any
 
+import numpy as np
 import torch
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -124,6 +125,9 @@ def frozen_audit(pipe, reader, versions: dict[str, int]) -> None:
 
 @torch.no_grad()
 def load_runtime(args, bank) -> dict:
+    if getattr(args,"model_variant","mobile") == "base":
+        from scripts.train.official_base_runtime import load_base_runtime
+        return load_base_runtime(args,bank)
     from scripts.train import r11_new_frozen_dreamlite_oracle as legacy
     from scripts.experiments.run_r11_open_answer_replay import snapshot_bindings
     from peft import LoraConfig, get_peft_model
@@ -288,13 +292,14 @@ def evaluate(args, runtime, bank, teachers, phase: str) -> dict:
             noise_seed = stable_seed(args.seed, "heldout-evaluation-noise", i)
             noise = torch.randn(context["source"].shape, generator=torch.Generator().manual_seed(noise_seed),
                                 dtype=torch.float32).to(runtime["vae_device"])
-            output = runtime["sampler"](source_latents=context["source"], noise_latents=noise,
+            count=context.get("num_inference_steps",4)
+            output = context.get("inference_sampler",runtime["sampler"])(source_latents=context["source"], noise_latents=noise,
                 prompt_embeds=condition.prompt_embeds, prompt_attention_mask=condition.attention_mask,
-                num_steps=4, edit_start_sigma=1.0 if is_official_flow(args) else START_SIGMA, return_trajectory=True)
+                num_steps=count, edit_start_sigma=1.0 if is_official_flow(args) else START_SIGMA, return_trajectory=True)
             expected_sigmas = context.get("effective_sigmas", EFFECTIVE_SIGMAS)
-            if (len(output.effective_sigmas) != 4 or output.trajectory is None or len(output.trajectory) != 5
+            if (len(output.effective_sigmas) != count or output.trajectory is None or len(output.trajectory) != count+1
                     or any(abs(a-b) > 2e-6 for a, b in zip(output.effective_sigmas, expected_sigmas))):
-                raise RuntimeError("Four-step Writer schedule differs from preregistration")
+                raise RuntimeError("Writer schedule differs from preregistration")
             if is_official_flow(args) and not torch.equal(output.trajectory[0], noise):
                 raise RuntimeError("Official Writer must start from the supplied Gaussian noise")
             latent = output.latents.cpu()
@@ -358,14 +363,17 @@ def run(args) -> dict:
     signal.signal(signal.SIGINT, stop_handler)
     groups = training_groups(bank, args.target_mode)
     official = is_official_flow(args)
+    inference_steps=28 if args.model_variant=="base" else 4
     binding = {"schema": "latent-bank-unet/v2", "git_commit": commit, "source_hashes": source_hashes(),
         "bank_manifest_sha256": file_sha256(args.bank_manifest), "route": bank["route"],
         "steps": args.steps, "seed": args.seed, "lr": args.lr, "lora_rank": args.lora_rank,
         "eval_seeds": args.eval_seeds, "objective": "official target-noise flow matching" if official else "legacy source-anchored flow matching",
         "flow_protocol": args.flow_protocol, "upstream_commit": OFFICIAL_REFERENCE_COMMIT,
+        "model_variant":args.model_variant,"inference_steps":inference_steps,
         "prompt_style": args.prompt_style if official else "legacy_decoded_source_diptych",
         "gradient_accumulation_steps": args.gradient_accumulation_steps, "weight_decay": args.weight_decay,
-        "target_mode": args.target_mode, "raw_inference_sigmas": list(OFFICIAL_RAW_SIGMAS) if official else None,
+        "target_mode": args.target_mode,
+        "raw_inference_sigmas": np.linspace(1.,1./inference_steps,inference_steps).tolist() if official else None,
         "training_timestep": "floor(1000*sigma)" if official else "1000*sigma",
         "dreamlite_dtype": "float32", "reader_dtype": "bfloat16", "source_sigma": 1.0 if official else START_SIGMA,
         "unet_input_keys": ["interpolated_flow_state", "source_latent", "event_condition", "effective_sigma", "time_ids"],
@@ -383,6 +391,7 @@ def run(args) -> dict:
     runtime["should_pause"] = lambda: stop_requested[0] or bool(args.deadline_unix and time.time() >= args.deadline_unix - 90)
     pause_if_requested(runtime)
     runtime_binding = {"snapshots": runtime["snapshots"], "termination": runtime["termination"],
+        "additional_protocol_binding":runtime.get("protocol_binding",{}),
         "scheduler_config": dict(runtime["pipe"].scheduler.config),
         "effective_inference_sigmas": {k: list(v["effective_sigmas"]) for k,v in runtime["contexts"].items()},
         "condition_sha256": {k: canonical_tensor_sha256(v["condition"].prompt_embeds) for k,v in runtime["contexts"].items()}}
@@ -491,6 +500,7 @@ def run(args) -> dict:
     load_teacher_bank(args.bank_manifest)
     for snapshot in runtime["snapshots"].values():
         verify_snapshot_binding(snapshot)
+    runtime.get("verify_additional_bindings",lambda:None)()
     delta = sum(float((p.detach().cpu() - initial_parameters[n]).double().square().sum())
                 for n,p in pipe.unet.named_parameters() if p.requires_grad)
     if not delta > 0:
@@ -515,6 +525,10 @@ def parser() -> argparse.ArgumentParser:
     p.add_argument("--bank-manifest", type=Path, required=True)
     p.add_argument("--output-dir", type=Path, required=True)
     p.add_argument("--dreamlite", type=Path)
+    p.add_argument("--model-variant",choices=("mobile","base"),default="mobile")
+    p.add_argument("--teacher-dreamlite",type=Path)
+    p.add_argument("--official-source",type=Path)
+    p.add_argument("--base-manifest",type=Path)
     p.add_argument("--reader-model", type=Path)
     p.add_argument("--dreamlite-device", default="cuda:0")
     p.add_argument("--reader-device", default="cuda:1")

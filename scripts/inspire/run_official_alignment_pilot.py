@@ -21,6 +21,10 @@ def main():
     p.add_argument("--bank-manifest", type=Path, required=True)
     p.add_argument("--bank-sha256", required=True)
     p.add_argument("--dreamlite", type=Path, required=True)
+    p.add_argument("--model-variant",choices=("mobile","base"),default="mobile")
+    p.add_argument("--teacher-dreamlite",type=Path)
+    p.add_argument("--official-source",type=Path)
+    p.add_argument("--base-manifest",type=Path)
     p.add_argument("--reader", type=Path, required=True)
     p.add_argument("--output-dir", type=Path, required=True)
     p.add_argument("--expected-commit", required=True)
@@ -54,7 +58,12 @@ def main():
     write_json(a.output_dir/"dispatch.json",binding)
     parity=a.output_dir/"parity.json"
     commands=[]
-    if not parity.exists():
+    if a.model_variant=="base":
+        if not all((a.teacher_dreamlite,a.official_source,a.base_manifest)):
+            raise ValueError("Base needs its sealed snapshot, teacher decoder and official source")
+        # Base evaluation executes the upstream pipeline itself; there is no
+        # copied denoising core whose numerical parity needs to be established.
+    elif not parity.exists():
         commands.append([sys.executable,"-u",str(ROOT/"scripts/probes/dreamlite_parity.py"),
             "--model",str(a.dreamlite),"--dtype","float32","--strict-determinism",
             "--atol","0","--rtol","0","--output-json",str(parity)])
@@ -69,6 +78,10 @@ def main():
         "--steps",str(a.steps),"--seed",str(a.seed),"--lora-rank","16","--lr","5e-5",
         "--gradient-accumulation-steps","4","--weight-decay","1e-4","--eval-seeds","8",
         "--deadline-unix",str(a.deadline_unix)]
+    train.extend(["--model-variant",a.model_variant])
+    if a.model_variant=="base":
+        train.extend(["--teacher-dreamlite",str(a.teacher_dreamlite),"--official-source",str(a.official_source),
+                      "--base-manifest",str(a.base_manifest)])
     if a.resume: train.append("--resume")
     commands.append(train)
     write_json(a.output_dir/"commands.json",{"commands":commands})
