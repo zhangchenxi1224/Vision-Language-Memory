@@ -1,5 +1,15 @@
 # Goal 接续位置
 
+## 06:29 接续：独立推理入口与真实参数导出
+
+- 当前功能commit **a333cf8c957f9d537ff1d319ae64213d0f390ed5** 已推送，独立checkout **P/repos/dreamlite-inference-package-20260913** 已fetch/worktree成功（session25956已exit0）。不修改正在训练的9628d71或待验证的0f40767 checkout。
+- 新src/vision_memory/dreamlite/writer_package.py负责只含FP32参数的导出/完整性检查/加载，绑定官方Base源和快照，支持同内容快照移动目录；不读取teacherbank或oracle。scripts/inference/export_rgb_writer.py导出完成的Base/full/official端点，导出状态始终experimental_endpoint_requires_independent_functional_validation。scripts/inference/rgb_memory.py消费严格write(event,seed)/read(query)JSONL，拒绝gold等额外字段，Reader惰性加载，无答案输入；状态仅实际RGB PNG，Reader不能改变图或调用Writer，确定性设置在新worker生效。用法与限制见reports/official-rgb-inference-interface-20260913.md。
+- 新tests/test_writer_package.py三项通过，覆盖剥离optimizer/teacher/query、完整参数加载/篡改拒绝、最后参数形状错误时零修改、无gold接口及连续只读。相关回归本次12 passed，未改旧覆盖累计75项；不是实际功能通过。
+- 已用**旧c90896c full1536端点**做真实CPU工程导出，CUDA_VISIBLE_DEVICES为空、OMP/MKL各1线程，不占训练GPU。输出 **P/runs/dreamlite-official-alignment/a333cf8-export-engineering-full1536**，保留旧端点原nativeCFG7.5（不是新的CFG1发布候选）。导出session67165已exit0，逐值验证session17604也已exit0。
+- 真实结果：1075参数张量、389968388值逐位等于原checkpoint。导出1560240719bytes，原训练checkpoint4680971012bytes；weights SHA **6a202dce122dde37877fbaa5c30989754b9ee9295fe99a4945c5cf9fc7ab17b8**，package manifest SHA **7b8fc78458b155c9ec0e17c8c311a4280bb82e1b50ab021818291ac020529184**。完整weights仅留远端，三个小证据文件rgb-writer-export-{manifest,complete,verification}.json已下载，manifest与seal哈希重验通过。旧端点功能失败结论不变；实际独立加载/native图与Reader parity尚未GPU运行，须在空闲资源上做，不能凭参数相同直接宣布全流程通过。
+- 新report helper scripts/reporting/verify_writer_export.py已在远端真实验证通过，副本P/runs/dreamlite-official-alignment/verify_writer_export.py；运行它需PYTHONPATH指向a333cf8 checkout的src（副本在checkout外）。本地helper和工程证据/此记录待本轮提交。
+- 当前训练GPU6087仍活跃，06:26实测baseline1230/1350；尚未观察optimizer更新。最近只读查询session34400等待输出（不是训练句柄，不能据其超时重启实验）。接下来先核验baseline完成与实际首次优化，再按固定2880端点收集，goal active。
+
 **06:14接续：99f816a已提交并push成功（session95368已exit0），下文所述完整链归档/原始文本/本地核验/预览图与README均已入库。没有待传输文件或待push会话。GPU查询session99384也已exit0：模型PID6087、22660MiB、baseline750/1350，尚未优化。新验证探针0f40767的独立checkout已部署但没有启动；不要重复运行旧完成探针，也不要修改9628d71训练checkout。**
 
 ## 06:12 补记：旧链完整归档已恢复并复核
