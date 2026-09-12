@@ -1,5 +1,13 @@
 # Goal 接续位置
 
+## 07:16 接续：真实独立CPU加载通过，训练1425步
+
+- 本轮前段是verified wait：实际PID6087/463114持续存活，1025→1118→1168→1183→1231→1269。复查官方源码与实际Base config，dropout=0且官方模型源码未找到BatchNorm/self.training分支；未发现要中断训练的新偏差，也未更改训练源码。新增**只读临时观察器**本地.cache/observe-transition.py、远端P/runs/dreamlite-official-alignment/observe-transition.py，直接在GPU实例用python3运行，可输出简洁live/step/final-row/collector状态；非训练进程，不能把观察超时当任务结束。
+- 最新功能commit **4c2f0fd** 已push，新增scripts/probes/load_rgb_package_cpu.py。副本已上传P/runs/.../load_rgb_package_cpu.py，PYTHONPATH指向已部署 **P/repos/dreamlite-result-verification-20260913/src**（3c335a2 loader与a333cf8相同）。实际CPU探针exec session99081已exit0，CUDA_VISIBLE_DEVICES空、OMP/MKL1，未占训练GPU。输入仅旧a333cf8-export-engineering-full1536 package、Base快照和官方source，不传bank/parent checkpoint。
+- 实际官方pipeline六组件加载成功，U-Net1075 tensors/389968388值与导出逐位一致；VAE2445063参数、text_encoder2127532032参数，三模块全部CPU/FP32/frozen eval。OfficialRGBMemory接受并构造RGB1024初态，CUDA未初始化，耗时31.6337s。**Writer调用0、Reader调用0；不是native采样或新模型功能成功，旧c90896c/CFG7.5失败结论保持。**
+- 原始结果P/runs/.../**rgb-writer-real-cpu-loading.json**已下载，SHA **2a3055f5a4f0787382ea3cf0be38c19beab5a801fbd6bfbadc658b2445cd4ec1** 本地远端一致；下载session16315已exit0。新结果和推理文档待本轮提交。全部上传/观察/CPU探针均结束，无待传输会话。
+- 最新07:15只读实测 **1425/2880更新、elapsed2734.65s**，训练PID6087和collector等待器463114存活；parent_terminal不存在、final_generation_rows0、collector waiting_for_training。不要把训练接近一半误作完成。GPU实例/worker/collector截止仍09:49/09:15/09:20，CPU约08:47。后续按固定final→完整独立验证→实际package CUDA replay推进，goal active。
+
 ## 07:02 接续：新验证collector已部署，训练962步
 
 - 最新功能commit **3c335a284f430d924ff27178341dd1de547e12b3** 已push；CPU fetch/worktree session16827已exit0，独立checkout **P/repos/dreamlite-result-verification-20260913** 已固定此commit，包含新endpoint/validation collectors与此前独立package工具。不要修改正在运行的训练9628d71、probe0f40767、已等待的collector副本。

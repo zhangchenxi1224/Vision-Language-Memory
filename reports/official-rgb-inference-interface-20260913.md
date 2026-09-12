@@ -37,6 +37,14 @@ The exported file contains1075 tensors/389,968,388FP32 parameter values. Every v
 
 See the [exact-value verification](official-alignment-results-20260913/rgb-writer-export-verification.json), [inference manifest](official-alignment-results-20260913/rgb-writer-export-manifest.json) and [completion seal](official-alignment-results-20260913/rgb-writer-export-complete.json). Downloaded manifest bytes match the remote seal. Actual bank-independent native inference/Reader parity has not yet run; this check establishes serialization integrity only.
 
+## Actual CPU pipeline loading
+
+The real `load_writer_package` path has now also completed on the H200 host with CUDA hidden and one CPU thread. Probe4c2f0fd used the unchanged loader in checkout3c335a2 and the same old, known-failing c90896c engineering export. Inputs were only that parameter package, the sealed Base snapshot and pinned official source; no training bank or parent checkpoint was supplied.
+
+All six official pipeline components loaded. The resulting U-Net's1075 tensors/389,968,388 values were compared against the export and were bitwise equal. The U-Net, VAE (2,445,063 parameters) and text encoder (2,127,532,032 parameters) were all frozen FP32 CPU modules. `OfficialRGBMemory` accepted them and constructed its RGB1024×1024 state. CUDA was never initialized. This took31.63 seconds; the separate training GPU process remained active throughout.
+
+The [actual loading result](official-alignment-results-20260913/rgb-writer-real-cpu-loading.json) has verified local/remote SHA2a3055f5a4f0787382ea3cf0be38c19beab5a801fbd6bfbadc658b2445cd4ec1. Writer calls and Reader calls were both zero. This establishes actual package/pipeline integration on CPU, while CUDA sampling parity and functional memory behavior remain unverified for the new endpoint.
+
 ## Fixed native inference parity protocol
 
 `scripts/probes/rgb_package_parity.py` prepares a replay from the **first preregistered six-write RGB sequence** of the new 45-condition endpoint, irrespective of whether it succeeds. It requires a completed chain, verifies its artifact hashes, and binds the package to the exact parent checkpoint/result and CFG setting. Preparation emits a separate command stream containing only six event/seed writes and thirty query reads. The inference process receives no reference results, expected answers, bank path, or training checkpoint.
