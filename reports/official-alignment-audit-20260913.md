@@ -2,7 +2,7 @@
 
 分支：`codex/dreamlite-official-alignment-20260913`，起点 `f68bf06`。附件为问题线索，以下以实际源码和可追溯产物为依据。
 
-截至04:08的结论：官方FM公式、完整时间域、纯噪声初态、原生scheduler与条件接口已成套实现并验证。后续真实实验使用官方Base原生28步推理。rank16 LoRA在512和3500步均未通过；相同512步的全U-Net训练通过单事件新噪声，却未通过事件替换/清除，因此还不能宣称得到可用的条件Writer。当前正以同一问题的ambient/jazz/clear三个独立可读目标训练一个共享全U-Net。完整证据与限制见[实验结果](official-alignment-results-20260913/README.md)，当前进程信息见[续接记录](official-alignment-continuation-20260913.md)。以下早期记录按实验阶段保留。
+截至05:26的结论：官方FM公式、完整时间域、纯噪声初态、原生scheduler与条件接口已成套实现并验证，67项相关测试通过。真实实验使用官方Base原生28步推理。rank16 LoRA在512和3500步均未通过；全U-Net单状态训练虽能稳定读取，却未通过事件替换/清除。后续同一问题ambient/jazz/clear共享全U-Net已完成1536更新：原生CFG7.5仅20/120严格正确且立即EOS；同一权重零更新改用native CFG1后120/120，training_raw CFG1也120/120。独立新噪声及事件改写确认正在运行，随后自动执行真实RGB连续更新链；目前仍不能宣称完整可用。完整证据与限制见[实验结果](official-alignment-results-20260913/README.md)，当前进程信息见[续接记录](official-alignment-continuation-20260913.md)。以下早期记录按实验阶段保留。
 
 ## 官方依据
 
@@ -38,13 +38,14 @@
 
 ## 必须公开的剩余区别
 
-1. 官方 LoRA 示例训练 DreamLite-base，本仓库默认加载 Mobile（蒸馏后的四步模型）。本轮先对 Mobile 做官方 FM 目标适配，不能称为官方 base 的完整复现。后续应使用现存 base 快照建立独立对照。
-2. 官方 LoRA 条件编码用 512×512 图像，Mobile 用 256×256；不得混淆两种模型。官方训练传 raw prompt，Mobile 公共推理包装 diptych；本实验为保持条件一致，两端采用同一明确配置。
+1. 官方 LoRA 示例训练 DreamLite-base，历史主路径加载Mobile（蒸馏后的四步模型）。最早Mobile适配不能称为官方Base复现；后续已建立固定Base快照的独立训练与原生28步对照，目前候选使用Base。
+2. 官方 LoRA 条件编码用512×512图像，Mobile用256×256；不得混淆两种模型。当前Base训练用raw event，原生推理保留官方diptych包装，两者差异公开；缓存训练条件的CFG1对照与native CFG1都通过开发评价，因此候选保留native条件。
 3. 官方从训练 RGB 编码 target，本实验使用已验证的 FP32 model-space oracle endpoint。重新 decode/encode 会改变这些经搜索验证的目标，故保留并明确这一实验设计。灰图 source 的 FP32 编码及 PIL 量化差异亦不能掩盖。
 4. 官方示例 bf16，本实验保留已验证的 FP32 DreamLite/latent 与 bf16 Reader，确保 teacher 重放精度。训练步数由各实验显式记录；短程 pilot 不冒充官方 3500 步预算。
 5. 单题成功不能证明按事件写入或泛化；需进一步反事实事件和多题检查。
 6. 后续全U-Net容量对照改变了官方示例的LoRA训练范围。这是根据配对失败证据做的显式实验选择，保持官方FM/条件/采样协议，不称为原样复现官方LoRA配方。
 7. 官方示例将batch prompts替换为同一个default_prompt，属于固定风格示例；本任务学习多个事件条件是额外实验任务。不能假定官方示例本身已证明多状态记忆更新。
+8. 当前候选CFG1是根据固定零更新诊断得到的显式推理选择，默认官方CFG7.5的失败端点保留。三状态仍属于同一个实体、同一道语义问题；新噪声、事件改写、RGB连续更新和更广范围的功能需分别验证。
 
 ## 以往证据核验
 

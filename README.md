@@ -9,7 +9,21 @@ stateful-memory experiments. The laptop is for framework development, mock autog
 tests, and API validation. Real model probes and episode training run on a Linux GPU
 cluster.
 
-## Canonical baseline
+## Current official-alignment experiment
+
+The current branch uses the pinned upstream DreamLite Base pipeline with target/noise
+flow matching over the full training time interval, source-image conditioning, pure-noise
+initialization, and native 28-step inference. The tested candidate trains the full U-Net
+and uses explicit CFG1 at inference. This differs from the official LoRA example's
+trainable parameter scope; the [audit](reports/official-alignment-audit-20260913.md)
+records that choice and the remaining experimental differences.
+
+Recurrent validation carries the actual generated RGB PNG between events and applies
+the official VAE encoding at every write. The earlier direct-latent BPTT protocol below
+is preserved for historical experiments. Current three-state development results do not
+establish unseen-entity, multi-fact, or general memory functionality.
+
+## Historical Mobile baseline
 
 - Runtime pipeline: Diffusers 0.39.0 `DreamLiteMobilePipeline`.
 - Read-only reference: ByteVisionLab/DreamLite at the exact commit in `models.lock.json`.
@@ -21,7 +35,7 @@ Qwen source is not cloned because Qwen3-VL is supplied by Transformers. Model we
 are reconstructed from `models.lock.json`, loaded with `local_files_only=True`, and never
 committed to Git.
 
-## Exact technical scope
+## Historical Mobile technical scope
 
 The official mobile pipeline is kept untouched as the inference and numerical reference.
 Its public call is inference-oriented: it is under `torch.no_grad()`, creates target noise,
