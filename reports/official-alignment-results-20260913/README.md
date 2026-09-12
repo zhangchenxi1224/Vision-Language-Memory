@@ -2,6 +2,12 @@
 
 目标仍在进行。实现偏差已修复并有数值证据，但目前还没有通过功能验收的 Writer。
 
+## 06:43 新训练基线已封存，优化进行中
+
+45 条件组的完整未训练 baseline 已结束：1,350 条原始回答，其中900条matched严格正确且立即EOS为0/900。45组teacher原问直接读取45/45，36组非灰源PNG的官方编码与已封存source latent完全一致。新full-U-Net训练已实际进入优化；06:38观察279/2880更新，尚无最终训练效果结论。
+
+预检摘要、完整文本归档和本地复核见 `transition-wording-preflight-{summary.json,evidence.tgz,local-verification.json}`。远端复核了baseline全部PT/JSON哈希；本地再次核对archive与summary SHA、文本文件和1,350条raw/query/gold/token/EOS。大型PT仍在共享盘，不冒称已下载。archive SHA为f8e78e0db220f45c03872a27249dfa2f60eb4cbe9dd37584f8e76f09f15662ba。
+
 ## 已完成：Mobile 官方 FM 单目标试验
 
 - 训练代码：`106c8eb62c4da4b752a60866fe74bae880ce1120`。

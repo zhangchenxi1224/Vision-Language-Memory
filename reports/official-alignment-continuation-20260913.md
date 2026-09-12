@@ -1,5 +1,13 @@
 # Goal 接续位置
 
+## 06:44 接续：基线封存完成，已观察414步优化
+
+- 下文06:29“尚未optimizer”和“10826a2待提交”的记录已过时：10826a2已成功推送。当前唯一GPU dl-transitions-h200x1-20260913 的 PID6087 仍活跃，46068MiB。最新只读查询session27633已经exit0，实际 **414/2880更新、elapsed794.8s**。此前06:31为42步、06:38为279步。不要重启训练；尚无final端点或新功能结果。训练run/checkout/deadline均保持9628d71固定配置。
+- baseline已完成1350raw。新scripts/reporting/collect_transition_preflight.py实际远端运行成功，45/45教师原问正确且立即EOS，36个非灰源绑定RMS0，900 matched为0/900。远端collector验证全部baseline PT/JSON。已下载transition-wording-preflight-summary.json和-evidence.tgz；summary SHAdf05f300b7587c681fce0b71dd7366e04973d200c2b8d4a4031b06172fb42132，archive SHA f8e78e0db220f45c03872a27249dfa2f60eb4cbe9dd37584f8e76f09f15662ba。scripts/reporting/verify_transition_preflight_local.py已实际核验二者SHA、archive文本和1350raw，生成local-verification；PT留远端。全部相关下载已exit0，无待传输。46896曾因读错根目录training.jsonl返回1，只是只读路径错误；正确路径train/training.jsonl随后成功，不是训练失败。
+- 新scripts/probes/rgb_package_parity.py准备/核验独立CLI重放，固定新链计划第一组六步/30读，不挑成功样本。prepare只在已完成新链+匹配导出端点时允许，CLI只收到event/seed/query commands，不收到reference/gold/bank/checkpoint。verify比对PNG字节、全部raw/input/output token/EOS和最终状态。parity不改变reference功能失败结论。两个新测试通过，连同包3项本次5 passed；此前未改覆盖累计77项。用法和未GPU执行限制已写推理入口文档。
+- **真正的独立package native/Reader replay仍未运行**，需要等新训练final、完整新链和新CFG1导出完成；旧a333cf8工程导出仍是已知功能失败的CFG7.5端点。不能用它替代新候选。0f40767验证checkout已部署但未dispatch；本轮新parity工具待独立commit部署，不改训练和验证checkout。
+- 接下来继续固定2880端点评测；预计训练约08:02后还需完整final评测，实际完成时间为准。CPU实例08:47左右到期，GPU训练worker09:15截止、实例约09:49到期；为72新图+96连续写及独立重放预留完整资源时长，不缩减已登记测试。
+
 ## 06:29 接续：独立推理入口与真实参数导出
 
 - 当前功能commit **a333cf8c957f9d537ff1d319ae64213d0f390ed5** 已推送，独立checkout **P/repos/dreamlite-inference-package-20260913** 已fetch/worktree成功（session25956已exit0）。不修改正在训练的9628d71或待验证的0f40767 checkout。

@@ -36,3 +36,15 @@ Codea333cf8 exported the already completed c90896c full1536 endpoint for enginee
 The exported file contains1075 tensors/389,968,388FP32 parameter values. Every value was loaded back and compared bitwise against the sealed original checkpoint; all match. Size is1,560,240,719 bytes versus4,680,971,012 bytes for the training checkpoint. Export weights SHA6a202dce122dde37877fbaa5c30989754b9ee9295fe99a4945c5cf9fc7ab17b8; package manifest SHA7b8fc78458b155c9ec0e17c8c311a4280bb82e1b50ab021818291ac020529184. The package stays on the shared project disk at `runs/dreamlite-official-alignment/a333cf8-export-engineering-full1536`; large weights are not copied into Git.
 
 See the [exact-value verification](official-alignment-results-20260913/rgb-writer-export-verification.json), [inference manifest](official-alignment-results-20260913/rgb-writer-export-manifest.json) and [completion seal](official-alignment-results-20260913/rgb-writer-export-complete.json). Downloaded manifest bytes match the remote seal. Actual bank-independent native inference/Reader parity has not yet run; this check establishes serialization integrity only.
+
+## Fixed native inference parity protocol
+
+`scripts/probes/rgb_package_parity.py` prepares a replay from the **first preregistered six-write RGB sequence** of the new 45-condition endpoint, irrespective of whether it succeeds. It requires a completed chain, verifies its artifact hashes, and binds the package to the exact parent checkpoint/result and CFG setting. Preparation emits a separate command stream containing only six event/seed writes and thirty query reads. The inference process receives no reference results, expected answers, bank path, or training checkpoint.
+
+```bash
+python scripts/probes/rgb_package_parity.py prepare --reference /path/to/completed-new-rgb-chains --package /path/to/new-package --output /path/to/replay
+python scripts/inference/rgb_memory.py --package /path/to/new-package --base-model /path/to/exact-Base-snapshot --official-source /path/to/pinned-DreamLite --reader-model /path/to/exact-Reader-snapshot --commands /path/to/replay/commands.jsonl --output /path/to/new-inference
+python scripts/probes/rgb_package_parity.py verify --prepared /path/to/replay --inference /path/to/new-inference
+```
+
+Verification compares every PNG byte hash, raw answer, input/output token sequence, EOS/termination field and final persistent image. It rejects missing or reordered operations and altered artifacts. A parity result retains the reference's functional failure flag: two implementations making the same mistake does not become functional success. Two new CPU tests exercise one-token differences, missing reads, image tampering and that distinction; both passed. **The actual GPU replay remains pending the new endpoint and complete chain evidence.**
