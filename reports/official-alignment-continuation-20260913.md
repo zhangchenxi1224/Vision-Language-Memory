@@ -110,3 +110,17 @@ worker deadline Unix `1789254021`（2026-09-13 07:00:21北京时间）；GPU平�
 - 主LoRA3500最后观察3320/3500，仍等待端点及最终校验，容器PID411798。继续收集，不能因剩余少而提前停。
 - .gitattributes新增结果目录 -text，实测即使Windows core.autocrlf=true，Git checkout过滤后仍保持full result原始SHA。证据tar仍为原始bytes来源。
 - 旧16题FP32兼容性还没有执行。若要复用：B/seed0/step256在各lane/runs/target-XXX-seed-00-B/checkpoints/step-256.pt，payload键latent_fp32，checkpoint_index.jsonl有SHA；原训练是BF16VAE、仅original_open CE+EOS。旧三问法的instruction行也不同于当前五问法，不能只换dtype后就宣称满足新bank合同。后续应固定新五问法做FP32读取，或按已验证FP32三训练问法+两留出问法重新准备同实体ambient/jazz/clear的独立目标，再训练共享Writer；取决于当前确认的条件敏感性结果。
+
+## 03:31 全部现有训练/确认已完成；下一步多状态
+
+**当前GPU上已无活跃计算进程**，两个实例都实际查询nvidia-smi确认空闲（2卡r2与1卡full）。保留供紧接的目标构建/共享Writer训练使用，不再等待/重启旧PID或队列。CPU仍可用。主LoRA3500正式completed，全部五问法0/8；resultSHA `dc5b38055139bf202b92ad860300e984dee29a075294a419722589a7d4516604`，末64loss0.332762，deltaL2=33.412885。CPU重验result/checkpoint通过，base3500-evidence.tgz、summary、preview均下载、文本展开base3500/复核，图已view。
+
+Full确认cb41fa1也completed：原事件16新噪声×5问法80/80正确立即EOS；jazz和clear各20条全失败，仍raw ambient/[59614,151645]，blank/donor各5失败。全部artifact哈希远端复核，full-confirmation-evidence.tgz/summary下载，展开full-confirmation/，文本/PNG再次验SHA，paired事件图full-confirmation-preview.png已生成并view。这证明当前权重是单状态记忆，并未实现事件值变化；goal仍active，下一步必须共享Writer多状态学习。
+
+已查明更合适的已验证oracle配方（不必先迁移旧BF16多题）：当前ambient teacher来自 `P/runs/direct-multiprompt-eos/46cd36b-20260909-r01/lane-1/runs/direct-gaussian-s07-a0.5`，源码commit46cd36b在本地git可读。其FP32 VAE+bf16 Reader、Adam lr.05、256更新、EOS权重1、三训练问法original_open/paraphrase_1/paraphrase_2按zero-based round_robin；paraphrase_3/4只用于评测。不是每步累积三个问法。`git show 46cd36b:scripts/experiments/direct_geometry_eos_training.py`已读，可据此恢复显式可选multiprompt能力，当前worktree该helper仍为仅original版本，不能误调用默认就声称复现三问法。
+
+建议下一步具体执行：在已空闲的2-H200 r2上准备同实体jazz/clear两个FP32 latent目标，与既有ambient teacher一起构成3状态bank，再用1-H200 full实例训练共享官方FM U-Net。初始化固定复用上述hash选定teacher的原始高斯seed7/scale.5起点；原始`latents/step-000.pt`(payload latent_fp32)可从source_run读取并用latent_index.jsonl及bank记录的index SHA验证，避免按新状态结果选初始化。每个新目标256更新、三问法轮转、两问法留出；所有5问法成功+EOS后才能封存，不能失败后换seed择优。仍须事前确定新实验配置后再派发。
+
+原ambient bank teacher记录（.cache/teacher-bank-manifest.json内）有完整来源：source manifest SHA d331859338726a6c90cbca1448f74c47840a264b27603a0d60a5af2792bb201e，latent_index SHA2ee4b8c90d254649bb2b68324b20e03cc492963acad5a4c238190aa2e5b48d8e，endpoint SHAa58c978cf78dc2955705a8d370f7d60bf9e1805343a6e563d108be9f455e6cdd。当前独立teacher tensor SHA e910e9b89ed3861ef7c36176c762bccde7d9d809e2510618b5318202313777f6。
+
+新bank若按状态使用不同group ID，必须明确这是同一语义问题的3种条件状态，不能报成3道独立题；问题5种问法沿用原组，Writer只接事件和source，不接query/gold标签。沿用source_kind blank_gray_1024、原封存source tensor及PIL128条件差异约定。不同答案donor仍可用原orange RGB control。暂未实现或调度多状态oracle/Writer，不要把建议写成已运行。

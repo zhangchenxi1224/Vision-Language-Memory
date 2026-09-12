@@ -103,3 +103,19 @@ Base预训练输出也包含列车，训练后出现纹理及残留列车。与�
 默认原生CFG7.5已经通过；按事前约定，CFG1/native与CFG1/缓存训练条件的无训练对照继续执行，不替换该端点结果。相关53项测试通过。原LoRA3500仍在原实例、原代码上独立运行，最后观察2786步。下一步须固定全新未观察噪声，并检查事件值替换/清除等条件敏感性，再安排多事件目标与训练；goal仍active。
 
 两项条件对照随后均完成：native CFG1与训练缓存条件/CFG1，五问法仍全部8/8正确且立即EOS，各40个matched raw均ambient。已复核phase完整清单中的全部PT/JSON哈希，验证原始token的EOS，并下载文本证据后再次验SHA。见[两臂摘要](full-condition-summary.json)、[证据归档](full-condition-evidence.tgz)。因此该单题正结果在三种已测推理设置下成立，不依赖挑选其中一臂。固定新噪声及同实体jazz/clear事件的确认实验已预注册并启动，配置继续使用原生CFG7.5，见[确认协议](../official-writer-confirmation-20260913.md)。
+
+## 全新噪声确认与事件敏感性
+
+固定full512权重、原生CFG7.5；完整130条raw和全部PT/PNG/JSON哈希已复核。原始事件16个全新噪声×5问法为80/80正确且立即EOS。相同实体的jazz替换和clear事件，各4个配对噪声×5问法均0/20；这40条也都输出ambient，tokens[59614,151645]。blank/donor各5条保持失败。图像会随条件略有变化，但所读取的状态没有更新。
+
+这强化了单目标噪声鲁棒性，同时直接否定该checkpoint已能按事件写入不同状态。不能把80/80写成通用记忆成功率。见[完整摘要](full-confirmation-summary.json)、[原始证据及24张PNG](full-confirmation-evidence.tgz)、[raw记录](full-confirmation/generations.jsonl)。
+
+![同一噪声下的事件替换与清除](full-confirmation-preview.png)
+
+## LoRA3500预算对照完成
+
+原始ac34ab2代码完成3500更新、14000独立训练noise，全sigma范围；仍是五问法全部0/8，严格EOS也全失败。首末64步未配对loss均值0.684343/0.332762，adapter deltaL2=33.412885。部分改写问法生成含jazz的长句，目标仍是ambient，不能当作成功。完整result/checkpoint SHA复核通过，result SHA256为`dc5b38055139bf202b92ad860300e984dee29a075294a419722589a7d4516604`。
+
+![LoRA3500训练前后](base3500-preview.png)
+
+见[重新核验摘要](base3500-summary.json)、[原始文本证据](base3500-evidence.tgz)。前512步与LoRA512的严格重放核验仍成立。结合full512正结果，不再把单纯延长当前rank16 LoRA当作修复方向；下一阶段为同实体的ambient/jazz/clear构建经过真实Reader验证的多个目标，再训练同一个官方FM Writer，以检验事件条件学习。
