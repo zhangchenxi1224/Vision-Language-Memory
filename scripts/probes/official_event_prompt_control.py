@@ -23,7 +23,7 @@ def main():
     p.add_argument("--worker", action="store_true")
     a = p.parse_args()
     from scripts.train import train_latent_bank_unet as train
-    from scripts.train.official_base_runtime import load_base_runtime
+    from scripts.train.official_base_runtime import load_base_runtime, audit_inference_only_runtime
     from scripts.inspire.run_oracle_to_unet_pipeline import snapshot_environment
     from vision_memory.repro.determinism import REQUIRED_DETERMINISM_ENV
     from vision_memory.training.latent_bank_unet import load_teacher_bank, file_sha256, stable_seed
@@ -103,7 +103,7 @@ def main():
                         cell["exact_match"]+=int(score["strict_correct"])
                         cell["answer_eos"]+=int(score["strict_correct"] and score["answer_followed_immediately_by_eos"])
                     print(label,flush=True)
-    train.frozen_audit(pipe,runtime["reader"],frozen)
+    audit_inference_only_runtime(runtime,frozen)
     runtime["verify_additional_bindings"]()
     train.write_json(a.output/"complete.json",{"cells":cells,"identity":identity,
         "artifact_hashes":{p.name:file_sha256(p) for p in a.output.iterdir() if p.is_file()}})

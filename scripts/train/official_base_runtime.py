@@ -9,6 +9,17 @@ import numpy as np
 import torch
 
 
+def audit_inference_only_runtime(runtime, frozen_versions):
+    """An inference probe has no trainable adapter; audit that contract directly."""
+    from scripts.train.train_latent_bank_unet import frozen_versions as versions
+    pipe, reader = runtime["pipe"], runtime["reader"]
+    for module in (pipe.unet, pipe.vae, pipe.text_encoder, reader):
+        if any(p.requires_grad or p.grad is not None for p in module.parameters()):
+            raise RuntimeError("Inference-only parameter became trainable or acquired a gradient")
+    if versions(pipe, reader) != frozen_versions:
+        raise RuntimeError("Inference-only model parameters changed")
+
+
 @torch.no_grad()
 def load_base_runtime(args, bank, *, inference_only=False):
     from PIL import Image

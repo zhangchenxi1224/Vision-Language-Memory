@@ -66,3 +66,22 @@ def test_native_base_keeps_official_pipeline_cfg_and_restores_hooks_on_failure(g
     with pytest.raises(RuntimeError,match="source encoding"):
         sampler(source_latents=torch.ones_like(noise),noise_latents=noise,num_steps=2)
     assert original==(pipe.prepare_latents,pipe.prepare_image_latents,pipe.scheduler.step)
+
+
+def test_inference_freeze_audit_accepts_zero_trainables_and_rejects_mutation_or_gradients():
+    from scripts.train.official_base_runtime import audit_inference_only_runtime
+    from scripts.train.train_latent_bank_unet import frozen_versions
+    pipe=SimpleNamespace(**{k:torch.nn.Linear(2,2).requires_grad_(False)
+                            for k in ("unet","vae","text_encoder")})
+    reader=torch.nn.Linear(2,2).requires_grad_(False)
+    runtime={"pipe":pipe,"reader":reader}
+    original=frozen_versions(pipe,reader)
+    audit_inference_only_runtime(runtime,original)
+    pipe.unet.weight.grad=torch.ones_like(pipe.unet.weight)
+    with pytest.raises(RuntimeError,match="gradient"):
+        audit_inference_only_runtime(runtime,original)
+    pipe.unet.weight.grad=None
+    with torch.no_grad():
+        pipe.unet.weight.add_(1.)
+    with pytest.raises(RuntimeError,match="parameters changed"):
+        audit_inference_only_runtime(runtime,original)
