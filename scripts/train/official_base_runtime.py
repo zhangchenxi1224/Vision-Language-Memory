@@ -75,14 +75,21 @@ def load_base_runtime(args, bank, *, inference_only=False):
     sys.path.insert(0,str(source_root))
     from dreamlite import DreamLitePipelineLoRA
     vd,rd=torch.device(args.dreamlite_device),torch.device(args.reader_device)
-    if vd.type!="cuda" or rd.type!="cuda" or (vd==rd and not inference_only):
+    colocated=bool(getattr(args,"colocate_models",False))
+    if vd.type!="cuda" or rd.type!="cuda" or (vd==rd and not (inference_only or colocated)):
         raise ValueError("Base Writer and Reader require separate CUDA devices")
     pipe=DreamLitePipelineLoRA.from_pretrained(args.dreamlite,local_files_only=True,torch_dtype=torch.float32).to(vd)
     for module in (pipe.unet,pipe.vae,pipe.text_encoder): freeze_module(module)
     processor,reader=legacy._load_reader(teacher_args,rd,torch.bfloat16)
     torch.manual_seed(args.seed)
-    pipe.unet=get_peft_model(pipe.unet,LoraConfig(r=args.lora_rank,lora_alpha=args.lora_rank,lora_dropout=0.,
-                                               target_modules=["to_q","to_k","to_v","to_out.0"]))
+    scope=getattr(args,"trainable_scope","lora")
+    if scope=="lora":
+        pipe.unet=get_peft_model(pipe.unet,LoraConfig(r=args.lora_rank,lora_alpha=args.lora_rank,lora_dropout=0.,
+                                                   target_modules=["to_q","to_k","to_v","to_out.0"]))
+    elif scope=="full_unet":
+        pipe.unet.requires_grad_(True)
+    else:
+        raise ValueError("Unknown U-Net trainable scope")
     pipe.unet.eval()
     if inference_only:
         # B=0 leaves the pretrained model unchanged; no optimizer is permitted

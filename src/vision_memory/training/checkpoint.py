@@ -1,4 +1,4 @@
-"""Atomic LoRA-only training checkpoints with exact RNG/cursor recovery."""
+"""Atomic trainable-state checkpoints with exact RNG/cursor recovery."""
 
 from __future__ import annotations
 
@@ -10,6 +10,13 @@ from typing import Any, Mapping
 import numpy as np
 import torch
 from torch import nn
+
+
+def checkpoint_due(step: int, total_steps: int, interval: int, *, stopping: bool = False) -> bool:
+    """Always preserve first/final updates and graceful stops, plus fixed intervals."""
+    if interval < 1 or total_steps < 1 or not 1 <= step <= total_steps:
+        raise ValueError("Invalid checkpoint interval or optimizer cursor")
+    return stopping or step == 1 or step == total_steps or step % interval == 0
 
 
 def _rng_state() -> dict[str, Any]:

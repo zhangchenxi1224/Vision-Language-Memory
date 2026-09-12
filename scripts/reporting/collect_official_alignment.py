@@ -51,7 +51,9 @@ def collect(root: Path):
         "loss_last64_mean":sum(r["flow_matching_mse"] for r in rows[-64:])/min(len(rows),64) if rows else None,
         "loss_interpretation":"unpaired sampled training loss, not functional accuracy or a paired loss comparison",
         "phases":phases,"paired_evaluation":result.get("paired_evaluation") if result else None,
-        "adapter_delta_l2":result.get("unet_adapter_delta_l2") if result else None}
+        "adapter_delta_l2":result.get("unet_adapter_delta_l2") if result else None,
+        "trainable_scope":result.get("trainable_scope","lora") if result else None,
+        "unet_parameter_delta_l2":result.get("unet_parameter_delta_l2",result.get("unet_adapter_delta_l2")) if result else None}
 
 
 if __name__=="__main__":

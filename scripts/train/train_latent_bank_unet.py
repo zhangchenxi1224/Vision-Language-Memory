@@ -32,7 +32,7 @@ from vision_memory.reader.open_answer import generate_short_answer
 from vision_memory.reader.open_eos import assistant_termination_contract, generation_diagnostics, qwen3vl_answer_eos_ce
 from vision_memory.reader.qwen3vl import R3_QWEN_READER_RESIZE_CONTRACT
 from vision_memory.repro import canonical_tensor_sha256, configure_strict_cuda_determinism, lora_trainable_parameters
-from vision_memory.training.checkpoint import load_training_checkpoint, save_training_checkpoint
+from vision_memory.training.checkpoint import checkpoint_due, load_training_checkpoint, save_training_checkpoint
 from vision_memory.training.latent_bank_unet import (EFFECTIVE_SIGMAS, START_SIGMA, anchored_flow_bridge,
     OFFICIAL_REFERENCE_COMMIT, OFFICIAL_RAW_SIGMAS, official_flow_bridge,
     balanced_draw, bank_geometry, file_sha256, load_teacher_bank, member_split, predict_velocity, stable_seed)
@@ -112,13 +112,67 @@ def frozen_versions(pipe, reader) -> dict[str, int]:
             for name, p in module.named_parameters() if not p.requires_grad}
 
 
-def frozen_audit(pipe, reader, versions: dict[str, int]) -> None:
+def trainable_unet_parameters(unet, scope="lora"):
+    if scope=="lora":
+        return lora_trainable_parameters(unet)
+    if scope!="full_unet":
+        raise ValueError("Unknown U-Net trainable scope")
+    named=list(unet.named_parameters())
+    if not named or any(not p.requires_grad or "lora_" in n for n,p in named):
+        raise RuntimeError("Full U-Net training requires every base weight and no added LoRA")
+    return [p for _,p in named]
+
+
+def verify_baseline_reference(output_dir, reference, expected_result_sha256):
+    """Fail before optimization if the co-located/full-weight baseline differs."""
+    if not expected_result_sha256 or file_sha256(reference/"train/result.json")!=expected_result_sha256:
+        raise RuntimeError("Reference result hash mismatch")
+    terminal=json.loads((reference/"terminal.json").read_text())
+    if terminal.get("state")!="completed" or terminal["training_result_sha256"]!=expected_result_sha256:
+        raise RuntimeError("Reference is not a verified completed run")
+    if json.loads((output_dir/"runtime.json").read_text())!=json.loads((reference/"train/runtime.json").read_text()):
+        raise RuntimeError("Reference model, condition or native schedule differs")
+    left,right=output_dir/"baseline",reference/"train/baseline"
+    hashes=[json.loads((p/"complete.json").read_text())["artifact_hashes"] for p in (left,right)]
+    names=[{n for n in h if n.endswith(".pt")} for h in hashes]
+    if names[0]!=names[1] or not names[0]:
+        raise RuntimeError("Reference baseline sample coverage differs")
+    checked=[]
+    for name in sorted(names[0]):
+        values=[]
+        for directory,h in zip((left,right),hashes):
+            if file_sha256(directory/name)!=h[name]:
+                raise RuntimeError("Reference or current baseline payload changed")
+            values.append(torch.load(directory/name,map_location="cpu",weights_only=True))
+        if values[0]["noise_seed"]!=values[1]["noise_seed"] or any(
+            not torch.equal(values[0][k],values[1][k]) for k in ("latent","image")):
+            raise RuntimeError("Baseline is not bitwise equal to the original two-GPU LoRA-zero baseline")
+        paths=[v["trajectory"] for v in values]
+        if len(paths[0])!=len(paths[1]) or any(not torch.equal(x,y) for x,y in zip(*paths)):
+            raise RuntimeError("Baseline native trajectories differ from reference")
+        checked.append(name)
+    records=[]
+    for directory,h in zip((left,right),hashes):
+        path=directory/"generations.jsonl"
+        if file_sha256(path)!=h[path.name]:
+            raise RuntimeError("Baseline generation evidence changed")
+        records.append([json.loads(x) for x in path.read_text().splitlines()])
+    if records[0]!=records[1]:
+        raise RuntimeError("Baseline raw generations/CE differ from reference")
+    report={"reference":str(reference),"reference_result_sha256":expected_result_sha256,
+        "bitwise_latents_and_images":True,"bitwise_trajectories":True,
+        "identical_raw_generation_records":True,"samples":checked}
+    write_json(output_dir/"baseline-reference-check.json",report)
+    return report
+
+
+def frozen_audit(pipe, reader, versions: dict[str, int], *, scope="lora") -> None:
     if frozen_versions(pipe, reader) != versions:
         raise RuntimeError("A frozen model parameter was modified in memory")
     for module in (pipe.vae, pipe.text_encoder, reader):
         if module.training or any(p.requires_grad or p.grad is not None for p in module.parameters()):
             raise RuntimeError("VAE, Reader and condition encoder must stay frozen")
-    lora_trainable_parameters(pipe.unet)
+    trainable_unet_parameters(pipe.unet,scope)
     if any(p.grad is not None for p in pipe.unet.parameters() if not p.requires_grad):
         raise RuntimeError("A frozen U-Net base weight received a gradient")
 
@@ -360,6 +414,12 @@ def run(args) -> dict:
     args.output_dir.mkdir(parents=True, exist_ok=True)
     lock = (args.output_dir / ".training.lock").open("a")
     fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    scope=getattr(args,"trainable_scope","lora")
+    interval=getattr(args,"checkpoint_interval",1)
+    if interval<1 or (scope=="full_unet" and (args.model_variant!="base" or not is_official_flow(args))):
+        raise ValueError("Full U-Net control requires official Base; checkpoint interval must be positive")
+    if getattr(args,"colocate_models",False) and args.model_variant!="base":
+        raise ValueError("Explicit co-location is implemented for Base only")
     bank, teachers = load_teacher_bank(args.bank_manifest)
     commit = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
     dirty = subprocess.check_output(["git", "status", "--porcelain"], cwd=ROOT, text=True).strip()
@@ -376,7 +436,13 @@ def run(args) -> dict:
     inference_steps=28 if args.model_variant=="base" else 4
     binding = {"schema": "latent-bank-unet/v2", "git_commit": commit, "source_hashes": source_hashes(),
         "bank_manifest_sha256": file_sha256(args.bank_manifest), "route": bank["route"],
-        "steps": args.steps, "seed": args.seed, "lr": args.lr, "lora_rank": args.lora_rank,
+        "steps": args.steps, "seed": args.seed, "lr": args.lr, "lora_rank": args.lora_rank if scope=="lora" else None,
+        "trainable_scope":scope,"checkpoint_interval":interval,
+        "colocate_models":getattr(args,"colocate_models",False),
+        "dreamlite_device":args.dreamlite_device,"reader_device":args.reader_device,
+        "baseline_reference":str(args.baseline_reference) if getattr(args,"baseline_reference",None) else None,
+        "baseline_reference_result_sha256":getattr(args,"baseline_reference_result_sha256",None),
+        "checkpoint_recovery":"exact saved optimizer/RNG; replay unsaved updates after a hard interruption",
         "eval_seeds": args.eval_seeds, "objective": "official target-noise flow matching" if official else "legacy source-anchored flow matching",
         "flow_protocol": args.flow_protocol, "upstream_commit": OFFICIAL_REFERENCE_COMMIT,
         "model_variant":args.model_variant,"inference_steps":inference_steps,
@@ -412,13 +478,15 @@ def run(args) -> dict:
     binding = {**binding, **runtime_binding}
     pipe, reader = runtime["pipe"], runtime["reader"]
     frozen = frozen_versions(pipe, reader)
-    parameters = lora_trainable_parameters(pipe.unet)
+    parameters = trainable_unet_parameters(pipe.unet,scope)
     initial_parameters = {n: p.detach().cpu().clone() for n,p in pipe.unet.named_parameters() if p.requires_grad}
     optimizer = torch.optim.AdamW(parameters, lr=args.lr, betas=(.9, .999), eps=1e-8, weight_decay=args.weight_decay)
     checkpoint = args.output_dir / "checkpoint-latest.pt"
     verify_training_teacher_readback(args, runtime, groups, teachers)
     # Baseline is evaluated on the untrained adapter (LoRA B=0), before resume load.
     baseline = evaluate(args, runtime, bank, teachers, "baseline")
+    if getattr(args,"baseline_reference",None):
+        verify_baseline_reference(args.output_dir,args.baseline_reference,args.baseline_reference_result_sha256)
     step = 0
     if checkpoint.exists():
         if not args.resume:
@@ -440,13 +508,27 @@ def run(args) -> dict:
             raise RuntimeError("Optimizer metric sequence is corrupt")
         log_rows.append(metric)
     log_path = args.output_dir / "training.jsonl"
+    if args.resume and log_path.exists():
+        # Preserve the physical pre-recovery history, including any updates
+        # beyond the last periodic checkpoint that must be replayed exactly.
+        log_path.rename(args.output_dir / f"training-before-recovery-{time.time_ns()}.jsonl")
     temporary_log = log_path.with_suffix(".jsonl.tmp")
     temporary_log.write_text("".join(json.dumps(row, sort_keys=True) + "\n" for row in log_rows), encoding="utf-8")
     temporary_log.replace(log_path)
     question_updates = Counter(q for row in log_rows for q in {m["question_id"] for m in row["microbatches"]})
     teacher_updates = Counter(t for row in log_rows for t in {m["teacher_id"] for m in row["microbatches"]})
+    last_saved_step=step
+    last_row=log_rows[-1] if log_rows else None
+    def save_current():
+        nonlocal last_saved_step
+        if step>last_saved_step:
+            save_training_checkpoint(checkpoint, trainable_module=pipe.unet, optimizer=optimizer,
+                epoch=0, episode_cursor=step, optimizer_step=step, manifest=binding, trainer_state={"metrics_row":last_row})
+            last_saved_step=step
     started = time.monotonic()
     while step < args.steps:
+        if runtime["should_pause"]():
+            save_current()
         pause_if_requested(runtime)
         optimizer.zero_grad(set_to_none=True)
         microbatches = []
@@ -471,30 +553,32 @@ def run(args) -> dict:
                 "noise_seed": noise_seed, "effective_sigma": sigma, "flow_matching_mse": float(loss.detach())})
         grads = [p.grad for p in parameters if p.grad is not None]
         if not grads or not all(torch.isfinite(g).all() for g in grads) or not any((g != 0).any() for g in grads):
-            raise RuntimeError("U-Net LoRA has no finite nonzero gradient")
+            raise RuntimeError("Trainable U-Net parameters have no finite nonzero gradient")
         norm = float(torch.nn.utils.clip_grad_norm_(parameters, 1.0, error_if_nonfinite=True))
         optimizer.step()
         optimizer.zero_grad(set_to_none=True)
         if not all(torch.isfinite(p).all() for p in parameters):
-            raise RuntimeError("Nonfinite U-Net adapter parameter")
+            raise RuntimeError("Nonfinite trainable U-Net parameter")
         step += 1
         row = {"optimizer_step": step, "question_id": group["question_id"], "teacher_id": teacher_id,
                "noise_seed": noise_seed, "effective_sigma": sigma,
                "flow_matching_mse": sum(m["flow_matching_mse"] for m in microbatches) / len(microbatches),
                "microbatches": microbatches,
-               "lora_grad_norm_before_clip": norm, "elapsed_since_resume_seconds": time.monotonic() - started}
-        # Exact optimizer + all RNG state at every step: termination never requires inventing missing updates.
-        save_training_checkpoint(checkpoint, trainable_module=pipe.unet, optimizer=optimizer,
-            epoch=0, episode_cursor=step, optimizer_step=step, manifest=binding, trainer_state={"metrics_row": row})
+               ("lora_grad_norm_before_clip" if scope=="lora" else "unet_grad_norm_before_clip"): norm,
+               "elapsed_since_resume_seconds": time.monotonic() - started}
+        last_row=row
+        if checkpoint_due(step,args.steps,interval,stopping=runtime["should_pause"]()):
+            save_current()
         write_json(args.output_dir / "metrics" / f"step-{step:06d}.json", row)
         append_jsonl(args.output_dir / "training.jsonl", row)
         question_updates.update({m["question_id"] for m in microbatches})
         teacher_updates.update({m["teacher_id"] for m in microbatches})
         if step % 16 == 0 or step == 1:
             print(json.dumps({"stage": "unet_training", **row}), flush=True)
-            frozen_audit(pipe, reader, frozen)
+            frozen_audit(pipe, reader, frozen,scope=scope)
         del loss, prediction, state, target, true_velocity, grads
         if stop_requested[0] or (args.deadline_unix and time.time() >= args.deadline_unix - 90):
+            save_current()
             result = {"status": "paused", "optimizer_steps": step, "checkpoint": str(checkpoint),
                       "reason": "signal or configured deadline; resume preserves optimizer/RNG"}
             write_json(args.output_dir / "terminal.json", result)
@@ -504,7 +588,7 @@ def run(args) -> dict:
     after = evaluate(args, runtime, bank, teachers, "trained")
     paired = paired_evaluation(*[[json.loads(line) for line in (args.output_dir / phase / "generations.jsonl").read_text(encoding="utf-8").splitlines()]
                                  for phase in ("baseline", "trained")])
-    frozen_audit(pipe, reader, frozen)
+    frozen_audit(pipe, reader, frozen,scope=scope)
     if source_hashes() != binding["source_hashes"] or file_sha256(args.bank_manifest) != binding["bank_manifest_sha256"]:
         raise RuntimeError("Source or bank manifest changed during U-Net training")
     load_teacher_bank(args.bank_manifest)
@@ -516,7 +600,9 @@ def run(args) -> dict:
     if not delta > 0:
         raise RuntimeError("No actual U-Net parameter update occurred")
     result = {"status": "completed", "route": bank["route"], "optimizer_steps": step,
-        "unet_trainable_parameters": sum(p.numel() for p in parameters), "unet_adapter_delta_l2": delta**.5,
+        "trainable_scope":scope,"checkpoint_interval":interval,
+        "unet_trainable_parameters": sum(p.numel() for p in parameters), "unet_parameter_delta_l2": delta**.5,
+        "unet_adapter_delta_l2": delta**.5 if scope=="lora" else None,
         "optimizer_updates_by_question": dict(question_updates), "optimizer_updates_by_teacher": dict(teacher_updates),
         "baseline": baseline, "trained": after, "paired_evaluation": paired, "generalization_scope": binding["generalization_scope"],
         "success_interpretation": "Training completion is not QA success; inspect paired raw exact match, controls and mode coverage",
@@ -547,6 +633,11 @@ def parser() -> argparse.ArgumentParser:
     p.add_argument("--seed", type=int, default=20260908)
     p.add_argument("--lr", type=float, default=5e-5)
     p.add_argument("--lora-rank", type=int, default=16)
+    p.add_argument("--trainable-scope",choices=("lora","full_unet"),default="lora")
+    p.add_argument("--checkpoint-interval",type=int,default=1)
+    p.add_argument("--colocate-models",action="store_true")
+    p.add_argument("--baseline-reference",type=Path)
+    p.add_argument("--baseline-reference-result-sha256")
     p.add_argument("--gradient-accumulation-steps", type=int, default=4)
     p.add_argument("--weight-decay", type=float, default=1e-4)
     p.add_argument("--flow-protocol", choices=("official", "legacy_anchored"), default="official")
@@ -562,7 +653,7 @@ def parser() -> argparse.ArgumentParser:
 def main() -> int:
     args = parser().parse_args()
     if (args.steps <= 0 or args.eval_seeds < 2 or args.lora_rank <= 0 or args.lr <= 0
-            or args.gradient_accumulation_steps <= 0 or args.weight_decay < 0):
+            or args.gradient_accumulation_steps <= 0 or args.weight_decay < 0 or args.checkpoint_interval < 1):
         raise ValueError("Positive training budget/rank/lr and at least two held-out noise seeds required")
     if args.validate_only:
         bank, teachers = load_teacher_bank(args.bank_manifest)

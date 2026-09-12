@@ -1,4 +1,4 @@
-"""Run one bound official-FM pilot on an already allocated two-H200 instance."""
+"""Run one bound official-FM pilot on an already allocated H200 instance."""
 from __future__ import annotations
 import argparse
 import json
@@ -30,6 +30,11 @@ def main():
     p.add_argument("--expected-commit", required=True)
     p.add_argument("--target-mode", choices=("single","bank"), default="single")
     p.add_argument("--steps", type=int, default=512)
+    p.add_argument("--trainable-scope",choices=("lora","full_unet"),default="lora")
+    p.add_argument("--checkpoint-interval",type=int,default=1)
+    p.add_argument("--colocate-models",action="store_true")
+    p.add_argument("--baseline-reference",type=Path)
+    p.add_argument("--baseline-reference-result-sha256")
     p.add_argument("--seed", type=int, default=20260913)
     p.add_argument("--deadline-unix", type=float, required=True)
     p.add_argument("--resume", action="store_true")
@@ -43,8 +48,9 @@ def main():
     bank,_=load_teacher_bank(a.bank_manifest)
     gpu=subprocess.check_output(["nvidia-smi","--query-gpu=name,memory.total,memory.used","--format=csv,noheader,nounits"],text=True)
     rows=[r.split(",") for r in gpu.strip().splitlines()]
-    if len(rows)!=2 or any("H200" not in r[0] or int(r[1])<140000 or int(r[2])>100 for r in rows):
-        raise RuntimeError(f"Need two idle full-memory H200s: {gpu}")
+    expected_gpus=1 if a.colocate_models else 2
+    if len(rows)!=expected_gpus or any("H200" not in r[0] or int(r[1])<140000 or int(r[2])>100 for r in rows):
+        raise RuntimeError(f"Need {expected_gpus} idle full-memory H200s: {gpu}")
     env={**os.environ, **snapshot_environment(bank), **REQUIRED_DETERMINISM_ENV,
          "PYTHONUNBUFFERED":"1", "HF_HUB_OFFLINE":"1", "TRANSFORMERS_OFFLINE":"1"}
     a.output_dir.mkdir(parents=True,exist_ok=True)
@@ -54,6 +60,8 @@ def main():
     binding={"commit":a.expected_commit,"bank_sha256":a.bank_sha256,"torch":torch.__version__,
         "diffusers":diffusers.__version__,"transformers":transformers.__version__,"gpu":gpu,
         "cuda":torch.version.cuda,"target_mode":a.target_mode,"steps":a.steps,"seed":a.seed,
+        "trainable_scope":a.trainable_scope,"checkpoint_interval":a.checkpoint_interval,
+        "colocate_models":a.colocate_models,
         "created_unix":time.time(),"deadline_unix":a.deadline_unix}
     write_json(a.output_dir/"dispatch.json",binding)
     parity=a.output_dir/"parity.json"
@@ -79,6 +87,14 @@ def main():
         "--gradient-accumulation-steps","4","--weight-decay","1e-4","--eval-seeds","8",
         "--deadline-unix",str(a.deadline_unix)]
     train.extend(["--model-variant",a.model_variant])
+    train.extend(["--trainable-scope",a.trainable_scope,"--checkpoint-interval",str(a.checkpoint_interval)])
+    if a.colocate_models:
+        train.extend(["--colocate-models","--reader-device","cuda:0"])
+    if a.baseline_reference:
+        if not a.baseline_reference_result_sha256:
+            raise ValueError("Baseline reference requires its verified result SHA")
+        train.extend(["--baseline-reference",str(a.baseline_reference),
+                      "--baseline-reference-result-sha256",a.baseline_reference_result_sha256])
     if a.model_variant=="base":
         train.extend(["--teacher-dreamlite",str(a.teacher_dreamlite),"--official-source",str(a.official_source),
                       "--base-manifest",str(a.base_manifest)])
