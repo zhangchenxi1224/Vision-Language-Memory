@@ -257,7 +257,7 @@ def verify_training_teacher_readback(args, runtime, groups, teachers):
                 "gold":group["answer"], "image_sha256":canonical_tensor_sha256(pixels.cpu()),
                 **generation, "scorer":score})
             write_json(args.output_dir / "teacher-readback.json", {"scope":"direct oracle positive control, not Writer output", "rows":rows})
-            if not score["strict_correct"] or score["overgeneration"]:
+            if not score["strict_correct"] or not score["answer_followed_immediately_by_eos"]:
                 raise RuntimeError(f"Previously correct teacher no longer passes raw answer/EOS readback: {tid}")
 
 

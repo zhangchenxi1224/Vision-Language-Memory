@@ -13,6 +13,7 @@ sys.path[:0] = [str(ROOT), str(ROOT / "src")]
 from scripts.inspire.run_oracle_to_unet_pipeline import snapshot_environment
 from scripts.train.train_latent_bank_unet import write_json
 from vision_memory.training.latent_bank_unet import load_teacher_bank, file_sha256
+from vision_memory.repro.determinism import REQUIRED_DETERMINISM_ENV
 
 
 def main():
@@ -40,8 +41,8 @@ def main():
     rows=[r.split(",") for r in gpu.strip().splitlines()]
     if len(rows)!=2 or any("H200" not in r[0] or int(r[1])<140000 or int(r[2])>100 for r in rows):
         raise RuntimeError(f"Need two idle full-memory H200s: {gpu}")
-    env={**os.environ, **snapshot_environment(bank), "PYTHONUNBUFFERED":"1",
-         "HF_HUB_OFFLINE":"1", "TRANSFORMERS_OFFLINE":"1", "CUBLAS_WORKSPACE_CONFIG":":4096:8"}
+    env={**os.environ, **snapshot_environment(bank), **REQUIRED_DETERMINISM_ENV,
+         "PYTHONUNBUFFERED":"1", "HF_HUB_OFFLINE":"1", "TRANSFORMERS_OFFLINE":"1"}
     a.output_dir.mkdir(parents=True,exist_ok=True)
     import torch, diffusers, transformers
     if not torch.cuda.is_available() or torch.version.cuda != "12.8":
@@ -55,7 +56,8 @@ def main():
     commands=[]
     if not parity.exists():
         commands.append([sys.executable,"-u",str(ROOT/"scripts/probes/dreamlite_parity.py"),
-            "--model",str(a.dreamlite),"--dtype","float32","--atol","0","--rtol","0","--output-json",str(parity)])
+            "--model",str(a.dreamlite),"--dtype","float32","--strict-determinism",
+            "--atol","0","--rtol","0","--output-json",str(parity)])
     else:
         previous=json.loads(parity.read_text())
         if previous.get("allclose") is not True:

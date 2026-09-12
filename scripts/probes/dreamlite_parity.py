@@ -33,6 +33,7 @@ def main() -> int:
     parser.add_argument("--resolution", type=int, default=1024)
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--dtype", choices=("auto", "float32", "bfloat16"), default="auto")
+    parser.add_argument("--strict-determinism", action="store_true")
     parser.add_argument("--atol", type=float, default=1e-3)
     parser.add_argument("--rtol", type=float, default=1e-3)
     parser.add_argument("--output-json", type=Path)
@@ -47,6 +48,9 @@ def main() -> int:
     dtype = torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16
     if args.dtype != "auto":
         dtype = getattr(torch, args.dtype)
+    if args.strict_determinism:
+        from vision_memory.repro import configure_strict_cuda_determinism
+        configure_strict_cuda_determinism(args.seed)
     reset_cuda_peak_memory([device])
     pipe = DreamLiteMobilePipeline.from_pretrained(
         args.model,
