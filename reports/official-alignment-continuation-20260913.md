@@ -1,5 +1,7 @@
 # Goal 接续位置
 
+**06:14接续：99f816a已提交并push成功（session95368已exit0），下文所述完整链归档/原始文本/本地核验/预览图与README均已入库。没有待传输文件或待push会话。GPU查询session99384也已exit0：模型PID6087、22660MiB、baseline750/1350，尚未优化。新验证探针0f40767的独立checkout已部署但没有启动；不要重复运行旧完成探针，也不要修改9628d71训练checkout。**
+
 ## 06:12 补记：旧链完整归档已恢复并复核
 
 - 下载session34331已900秒timeout退出，得到59535360字节前段，SHAa73f979116e69ab11a059cbf35e91e0d4aead6a111eb83761ea256a56cd299ec。使用已提交推送4bdea12的scripts/inspire/prepare_transfer_tail.py在远端分出尾段；远端前段SHA与本地一致。尾段22482260字节，SHA4de62ec96bcf8b1b52cdbe045f208682bf30170dd490dca935b36e17c3753855，下载session76135已经exit0。
