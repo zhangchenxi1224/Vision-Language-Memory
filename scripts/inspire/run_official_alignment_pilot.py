@@ -96,6 +96,7 @@ def main():
     result=json.loads((a.output_dir/"train/result.json").read_text())
     write_json(a.output_dir/"terminal.json",{"state":"completed","training_result_sha256":file_sha256(a.output_dir/"train/result.json"),
         "matched_all_five_prompts_correct":result["trained"]["matched_all_five_prompts_correct"],
+        "matched_all_five_prompts_answer_eos":result["trained"]["matched_all_five_prompts_answer_eos"],
         "matched_question_noise_pairs":result["trained"]["matched_question_noise_pairs"],
         "scope":"single-question regression evaluation; not evidence of event-conditioned generalization", "time_unix":time.time()})
     return 0

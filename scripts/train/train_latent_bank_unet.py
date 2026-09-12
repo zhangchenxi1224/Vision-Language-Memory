@@ -193,18 +193,28 @@ def summarize_evaluation(rows: list[dict], geometry: dict) -> dict:
     cells = {}
     for row in rows:
         key = row["condition"] + "/" + row["prompt_id"]
-        cell = cells.setdefault(key, {"n": 0, "exact_match": 0, "answer_prefix": 0, "overgeneration": 0})
+        cell = cells.setdefault(key, {"n": 0, "exact_match": 0, "answer_eos": 0, "answer_prefix": 0, "overgeneration": 0})
         cell["n"] += 1
         for out, metric in (("exact_match", "strict_correct"), ("answer_prefix", "answer_prefix_token_exact"),
                             ("overgeneration", "overgeneration")):
             cell[out] += int(row["scorer"][metric])
+        cell["answer_eos"] += int(row["scorer"]["strict_correct"] and
+                                  row["scorer"].get("answer_followed_immediately_by_eos", False))
     for cell in cells.values():
-        cell.update({k + "_rate": cell[k] / cell["n"] for k in ("exact_match", "answer_prefix", "overgeneration")})
+        cell.update({k + "_rate": cell[k] / cell["n"] for k in ("exact_match", "answer_eos", "answer_prefix", "overgeneration")})
     per_noise = {}
     for row in rows:
         if row["condition"] == "matched":
-            per_noise.setdefault((row["question_id"], row["noise_seed"]), []).append(row["scorer"]["strict_correct"])
-    return {"cells": cells, "matched_all_five_prompts_correct": sum(all(v) for v in per_noise.values()),
+            prompts = per_noise.setdefault((row["question_id"], row["noise_seed"]), {})
+            if row["prompt_id"] in prompts:
+                raise RuntimeError("Duplicate Writer prompt in a question/noise pair")
+            prompts[row["prompt_id"]] = row["scorer"]
+    if any(len(v) != 5 for v in per_noise.values()):
+        raise RuntimeError("Each Writer question/noise pair requires all five prompts")
+    return {"cells": cells,
+            "matched_all_five_prompts_correct": sum(all(s["strict_correct"] for s in v.values()) for v in per_noise.values()),
+            "matched_all_five_prompts_answer_eos": sum(all(s["strict_correct"] and
+                s.get("answer_followed_immediately_by_eos", False) for s in v.values()) for v in per_noise.values()),
             "matched_question_noise_pairs": len(per_noise), "geometry": geometry,
             "controls": "One deterministic generation per question/prompt/control; not inflated by duplicating noise seeds"}
 

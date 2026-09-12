@@ -218,12 +218,19 @@ def test_writer_evaluation_separates_controls_and_new_seed_denominators():
                 correct = kind == "matched" and (seed == 111 or i < 4)
                 rows.append({"condition": kind, "question_id": "q", "noise_seed": seed, "prompt_id": str(i),
                     "scorer": {"strict_correct": correct, "answer_prefix_token_exact": kind == "matched",
+                               "answer_followed_immediately_by_eos": correct and i != 4,
                                "overgeneration": kind == "matched" and not correct}})
     summary = summarize_evaluation(rows, {})
     assert summary["matched_all_five_prompts_correct"] == 1
+    assert summary["matched_all_five_prompts_answer_eos"] == 0
+    assert summary["cells"]["matched/4"]["answer_eos"] == 0
     assert summary["matched_question_noise_pairs"] == 2
     assert summary["cells"]["matched/4"]["n"] == 2
     assert summary["cells"]["donor/4"]["n"] == 1
+    with pytest.raises(RuntimeError, match="all five"):
+        summarize_evaluation(rows[1:], {})
+    with pytest.raises(RuntimeError, match="Duplicate"):
+        summarize_evaluation(rows + [rows[0]], {})
 
 
 def test_paired_generation_rejects_missing_seeds_and_changed_controls():
