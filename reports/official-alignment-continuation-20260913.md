@@ -144,3 +144,15 @@ Full确认cb41fa1也completed：原事件16新噪声×5问法80/80正确立即EO
 **确认队列已实际启动，不要重复提交**。CPU已经fetch并创建 `P/repos/dreamlite-three-state-confirmation-20260913` 锁定1e4acd2，shell位于 `P/runs/dreamlite-official-alignment/run-three-state-confirmation-1e4acd2.sh`（本地.cache/run-three-state-confirmation.sh）。单H200实际bash PID540574，GPU上仍只有父训练PID396075/45842MiB。队列每20秒等父terminal到06:00，随后固定调用确认脚本，deadline06:15；失败门槛会在加载模型前拒绝。固定输出 `P/runs/dreamlite-official-alignment/1e4acd2-three-state-confirmation`，worker日志同路径加.log，queue.json记录退出码，外层nohup日志同路径加-queue.log。仅退出0还不等于功能成功，须检查complete.json、各state/style/prompt的raw/EOS和所有hash。父训练仍为c90896c，不修改其checkout。
 
 主训练最近实际观察335/1536（04:06–04:07），1536预计04:45前后结束优化，其后还有3组原生采样/Reader评测；具体以terminal/raw为准。没有新功能结果。已上传新版CPU报告器为 `P/runs/dreamlite-official-alignment/collect_groups_1e4acd2.py`（scp session73539已exit0）；其per-conditional-group计数避免constant-state被aggregate掩盖。它可先采进度，也可在端点后核验checkpoint/result并打包。原state bank遗留descriptive planned_count/successful_run_count=96来自parent，但实际每组teacher列表只有1，训练完全不读这两个字段；future exporter已改为1，正在运行的manifest保持不变，预注册也公开此点。
+
+## 04:33 非灰图源条件已真实验证，主训练1183/1536
+
+源码 **6419eda2270e853e6d18a21b99e7f509069aa130** 已推送；加入sealed_rgb_1024路径和15组source-dependent转移准备，62项相关测试通过。source_images.py严格核验PNG字节SHA/RGB/1024尺寸，不隐式缩放或重绘；official_base_runtime实际编码必须等于bank source tensor，完成再验PNG SHA。blank control始终用灰图，旧灰图分支的PIL128与float0.5差别仍显式保留。所有在跑的旧checkout/队列继续用其固定旧代码。
+
+临时新单H200 `dl-align-sources-h200x1-20260913`（同workspace/project/group/NGC25.02，1GPU20CPU200GiB/shm64，120分钟限制）实际worker PID22200已完成，nvidia-smi确认无计算进程，证据持久化/下载后stop并delete，不要等待其旧PID。checkout `P/repos/dreamlite-source-transitions-20260913`；run **P/runs/dreamlite-official-alignment/6419eda-source-transitions**，日志同路径+.log；deadline1789247700（05:15）。现在只保留主单H200和CPU实例。
+
+结果：三个oracle目标只经VAE decode/nearest uint8/PNG成为输入源；PNG真实Reader五问法15/15正确立即EOS，无新优化。实际加载15个新group，三个no-op同文本下的native28完整轨迹捕获通过，source均逐位等于训练输入；三个image-aware condition SHA不同。新bank **P/runs/dreamlite-official-alignment/6419eda-source-transitions/manifest.json**，SHA **3d89168c9d36e6df5ded067e54d13128dda1a3cf2c5516600901b017ebe377f2**。3个gray→目标、9个已有状态→目标、3个noop；一个semantic question、三个unique target tensors、15组/teacher记录（重复目标只为条件身份，不是15个独立目标）。完整权重冻结检查通过。新的15组bank尚未训练，不把pretrained native source检查图算作功能成功。
+
+CPU报告器 `P/runs/dreamlite-official-alignment/collect_source_transitions.py`（本地.cache/同名）已验证全部产物SHA、15raw/EOS和noop设计。已下载source-transitions-summary.json、source-transitions-evidence.tgz，展开source-transitions/；本地再次核验下载文件、三个canonical source tensor、12个source binding RMS=0及15raw。source-transitions-local-verification.json列出三条留远端的完整native PT轨迹，其远端SHA已验证。jazz-source.png已view，只有模型产生的纹理，没有外部答案栅格化。候选candidate-manifest.json保留为中间产物，后续仅使用正式manifest.json及complete封存绑定。
+
+主c90896c Writer最新观察 **1183/1536（04:33）**，PID396075；1e4acd2确认队列PID540574等待它。预计04:45附近结束优化，再有最终评测。先收齐该端点按状态raw/EOS：若主CFG7.5失败，使用已有scripts/probes/official_base_guidance.py固定native CFG1与training_raw CFG1诊断条件/引导差异，不重启或只加预算；若通过，既有确认队列自动执行新噪声与改写。15组bank为后续source-dependent保留/更新提供数据，但训练预算/条件设置应基于当前端点结果确定。后续还需实际生成图→PNG→官方再编码的链式事件测试；现有确认仅从灰图开始，不能当作完整可用更新器。goal仍active。

@@ -28,7 +28,7 @@
 | 生成初态 | 0.5*source+0.5*noise | 纯噪声，并逐位校验实际初态 |
 | 四步输入 sigma | 强制有效 0.5/.375/.25/.125 | 原始 1/.75/.5/.25 交给 scheduler |
 | 有效 sigma | 反解 shift 以强制旧表 | 读取实际 scheduler.sigmas 并记录；不能把 raw 当 effective |
-| 提示词 | Mobile diptych 包装 | 官方 LoRA 原始 event；同一条件用于训练和评测 |
+| 提示词 | Mobile diptych 包装 | 训练用官方 LoRA raw event；Base 主评测保留官方 native 包装，另设一致条件对照 |
 | 条件图像 | VAE 解码回原图 | 原始灰色 PIL 条件；bank 的 FP32 source latent 保持独立核验 |
 | LoRA | rank4 | rank16、alpha16；相同 attention projections |
 | 更新 | lr1e-4，weight decay0，无累积 | lr5e-5，weight decay1e-4，累积4，clip1 |
@@ -44,6 +44,7 @@
 4. 官方示例 bf16，本实验保留已验证的 FP32 DreamLite/latent 与 bf16 Reader，确保 teacher 重放精度。训练步数由各实验显式记录；短程 pilot 不冒充官方 3500 步预算。
 5. 单题成功不能证明按事件写入或泛化；需进一步反事实事件和多题检查。
 6. 后续全U-Net容量对照改变了官方示例的LoRA训练范围。这是根据配对失败证据做的显式实验选择，保持官方FM/条件/采样协议，不称为原样复现官方LoRA配方。
+7. 官方示例将batch prompts替换为同一个default_prompt，属于固定风格示例；本任务学习多个事件条件是额外实验任务。不能假定官方示例本身已证明多状态记忆更新。
 
 ## 以往证据核验
 

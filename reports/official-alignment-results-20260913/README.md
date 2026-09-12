@@ -125,3 +125,13 @@ Base预训练输出也包含列车，训练后出现纹理及残留列车。与�
 按[预注册配方](../official-state-oracles-20260913.md)，复用固定ambient目标，从同一个原始高斯初态为jazz和清除状态各训练256步latent。三个目标均在原问和四种改写问法上正确且立即EOS；新目标仅对原问/p1/p2轮转优化，p3/p4留出。已校验原始生成、512个优化步骤、全部中间latent与端点哈希。见[摘要](state-oracles-summary.json)、[证据](state-oracles-evidence.tgz)。这仍是同一语义问题的三个条件状态，不能当作三道独立问题或共享Writer成功。
 
 首次Writer在0步因bank缺少snapshot元数据退出，保留[失败证据](three-state-first-attempt.tgz)。新[完整manifest](state-bank-complete-manifest.json)仅补回已封存parent bank的模型snapshot绑定，原目标与分组逐字段保持不变，SHA为5165c059a0a4c0760cd4b0df1663c642132e52bf55a13031cd99207fd200bb86。以修复代码c90896c从官方Base重新初始化共享全U-Net；1536步、三状态各2048 draw的[训练约定](../official-three-state-writer-20260913.md)保持不变。单H200已实际开始优化，尚未取得最终功能结果。
+
+## 非灰图源条件与转移准备
+
+固定灰图不能识别保留已有记忆的规则。代码6419eda加入显式封存PNG源图支持：训练条件编码和官方推理读取同一RGB源图，绑定source latent并要求与官方VAE编码逐位相同，完成时重新验文件SHA；source依然不参与目标侧FM桥。blank control保持灰图，不把输入记忆误标成空白。
+
+按[事前约定](../official-source-transitions-20260913.md)，三个已验证目标仅经VAE解码和RGB量化生成输入PNG，没有外加答案文字。实际PNG的五问法读取全部正确立即EOS，15/15。真实新运行时加载15个条件组，并在相同no-op事件下对三种源图各运行原生28步；三个source latent均与实际官方推理编码逐位一致，三个图像条件哈希互不相同。12个非灰图条件的source RMS差异均为0。这是输入链路验证，未训练的采样输出没有被当作记忆成功。
+
+已封存[15组转移bank](source-transitions/manifest.json)，SHA为3d89168c9d36e6df5ded067e54d13128dda1a3cf2c5516600901b017ebe377f2。它仍是一个语义问题和三个不同目标；15条teacher记录只是复用原目标以绑定不同源状态/操作。三个no-op的事件文本完全相同、要求的答案不同，因而不能仅凭事件文字区分正确结果。共享转移Writer尚未训练。
+
+见[远端全文件校验摘要](source-transitions-summary.json)、[原始证据及PNG/source张量](source-transitions-evidence.tgz)、[下载后逐文件与canonical tensor复核](source-transitions-local-verification.json)。完整三条native轨迹保留在共享盘并已核验文件SHA；本地归档不含这三条大型轨迹。该临时单H200的计算已结束，证据持久化后停止并删除。
