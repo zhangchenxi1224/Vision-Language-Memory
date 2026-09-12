@@ -1,5 +1,16 @@
 # Goal 接续位置
 
+## 最新状态：09月13日05:40（优先于下列历史段落）
+
+- 当前源码 **9628d7142db5a81a9d11a35b89d0515ef32d2e4f** 已推送，69项相关测试通过（原67+新2，新的采样计数测试首次调用参数错误已修正后通过）。新增45条件组的固定事件增广和pilot显式--eval-seeds（默认8保持不变）。源FM/运行中的09b324d代码不变。
+- Stage A `09b324d-cfg1-confirmation` 已完成，complete SHA **9febcb5037d425e9b4fb067f3d9b39a1a691da66de377e84d5d67868518d0446**。远端collector逐个核验所有PT/PNG/JSON哈希、独立事前plan与390条raw：360 matched中320正确且立即EOS，64/72图通过全部五问法。三个原始事件各80/80，ambient/jazz两改写各20/20，**clear两改写各0/20**；第二种改写全部仍ambient。不要宣称确认通过。summary已下载，63MiB evidence.tgz正重传，exec session66540（900秒timeout）尚未完成；此前60秒/300秒下载超时，目标文件仍可能不完整，必须等待exit0再解包/提交。CPU实例RUNNING、剩余约3小时。
+- Stage B 已自动启动，单H200 `dl-align-full-h200x1-20260913` 实际wrapper PID1055266、GPU worker **1055496**，约22642MiB；输出 `P/runs/dreamlite-official-alignment/09b324d-cfg1-chains`，log同路径+.log。固定96写/480回答继续跑，首两六事件链已观察no-op立即失败和后续覆盖不稳，尚非最终汇总。不要重启。新collector `P/runs/dreamlite-official-alignment/collect_cfg1_validation.py` 支持--kind chains/confirmation、--plan固定JSON、--output-prefix，可核验全部文件+tokens+链链接；--text-only仅显式允许本地缺失PT。PNG仍需全部下载。固定首样本渲染脚本scripts/reporting/render_cfg1_validation.py已提交。
+- 根据已封存清除改写失败和真实链保留失败，新训练事前协议 `reports/official-transition-wording-training-20260913.md` 已提交。45条件=15已验证source/operation组合×3表达，仍一题/三个不同目标。fresh Base全U-Net2880更新、accum4、每条件256draw、每目标3840draw，lr5e-5/wd1e-4/clip1，native28CFG1；四开发噪声×五问法×45组=900 matched、450重复controls/phase。新两训练改写不包含旧确认改写，但旧确认已成为开发观察，未来需新留出验证。
+- checkout `P/repos/dreamlite-transition-wordings-20260913` 已成功fetch并固定9628d71。CPU已验证原15组bank完整artifact/tensors并导出新 **P/runs/dreamlite-official-alignment/9628d71-transition-wording-bank/manifest.json**，SHA **962f02846ed1a1933e6c219604bc22ee520e28f2dfe2721e26f111dc36ea122e**。旧source/target原样复用、未新优化。新bank尚未通过45上下文GPU加载，训练入口将逐项验证。
+- 新实例 **dl-transitions-h200x1-20260913** 已创建，当前PENDING；同project/group/NGC25.02、1H20020CPU200GiB/shm64、240分钟。05:38:54 events有parent project quota检查失败；应在旧链完成并释放旧单卡后让它调度，不干扰他人实例。之前过长名称dl-align-transition-h200x1-20260913被API拒绝，未创建任何资源。
+- 新训练启动脚本已上传 `P/runs/dreamlite-official-alignment/run-transition-wording-9628d71.sh`（本地.cache/run-transition-wording.sh），**尚未执行**。输出将是 `P/runs/dreamlite-official-alignment/9628d71-transition-wording-full2880-20260913`，日志同路径+.log；deadline1789262100（09:15），早于新实例预计到期。等RUNNING、核验GPU空闲/共享环境后nohup仅启动一次；不要把排队当训练开始。若排队过久需在首次dispatch前核对截止预算，不能更改已运行任务身份。
+- 下一步收全旧链final/raw/哈希，持久化证据后停止删除旧单H200释放quota，再启动新实例的新训练。完成本地confirmation归档与图预览；补充新bank/dispatch证据。goal active，仍无可用版本结论。
+
 ## 最新状态：09月13日05:20（以下历史段落不代表当前进程）
 
 - 当前源码09b324dc7574ed33c0236ee09a4f5c3526fb85bb已推送；67项相关测试通过。唯一GPU实例仍为dl-align-full-h200x1-20260913，另有CPU实例；其他本任务GPU实例已删除。

@@ -1,6 +1,6 @@
 # Vision Learnable Memory
 
-> 2026-09-13：新增[官方DreamLite训练对齐审计](reports/official-alignment-audit-20260913.md)与[实训结果](reports/official-alignment-results-20260913/README.md)。新训练入口默认官方target/noise FM与纯噪声推理；Base采用原生官方28步pipeline。三状态全U-Net1536在CFG7.5仅20/120正确+EOS，同一权重改用native CFG1后120/120通过；新噪声与连续更新验证仍待完成。显式参数`--base-guidance-scale 1`只改变Base推理，默认7.5保留。旧source-anchored文档仅供历史复现。
+> 2026-09-13：新增[官方DreamLite训练对齐审计](reports/official-alignment-audit-20260913.md)与[实训结果](reports/official-alignment-results-20260913/README.md)。新训练入口默认官方target/noise FM与纯噪声推理；Base采用原生官方28步pipeline。三状态全U-Net1536在CFG7.5仅20/120正确+EOS，同一权重改用native CFG1后开发120/120通过；独立新噪声与事件表达确认为320/360，两种清除改写均失败，连续更新仍在验证。显式参数`--base-guidance-scale 1`只改变Base推理，默认7.5保留。旧source-anchored文档仅供历史复现。
 
 > 2026-09-08：已同步 [旧 R11 同题多起点实验的真实结果](reports/r11-mcq-open-multistart-results-20260907/README.md)，包含汇总、原文回答、审计记录与轨迹图。
 
