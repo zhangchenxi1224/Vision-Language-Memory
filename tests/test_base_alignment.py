@@ -50,16 +50,17 @@ class FakeNativePipeline:
         return SimpleNamespace(images=output)
 
 
-def test_native_base_keeps_official_pipeline_cfg_and_restores_hooks_on_failure():
+@pytest.mark.parametrize("guidance", [1.0, 7.5])
+def test_native_base_keeps_official_pipeline_cfg_and_restores_hooks_on_failure(guidance):
     pipe=FakeNativePipeline()
     original=(pipe.prepare_latents,pipe.prepare_image_latents,pipe.scheduler.step)
     image=object()
-    sampler=NativeBaseEditSampler(pipe,source_image=image,event_text="change the room",num_steps=2)
+    sampler=NativeBaseEditSampler(pipe,source_image=image,event_text="change the room",num_steps=2,guidance_scale=guidance)
     noise=torch.randn(1,4,2,2)
     result=sampler(source_latents=torch.zeros_like(noise),noise_latents=noise,num_steps=2)
     assert pipe.kwargs["image"] is image
     assert pipe.kwargs["prompt"]=="change the room"
-    assert pipe.kwargs["guidance_scale"]==7.5
+    assert pipe.kwargs["guidance_scale"]==guidance
     torch.testing.assert_close(result.trajectory[0],noise,rtol=0,atol=0)
     assert original==(pipe.prepare_latents,pipe.prepare_image_latents,pipe.scheduler.step)
     with pytest.raises(RuntimeError,match="source encoding"):

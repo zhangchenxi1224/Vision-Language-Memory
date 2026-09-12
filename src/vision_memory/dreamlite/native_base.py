@@ -5,11 +5,14 @@ from .differentiable_mobile import DreamLiteSamplerOutput
 
 
 class NativeBaseEditSampler:
-    def __init__(self, pipeline, *, source_image, event_text, num_steps=28):
+    def __init__(self, pipeline, *, source_image, event_text, num_steps=28, guidance_scale=7.5):
         self.pipeline = pipeline
         self.source_image = source_image
         self.event_text = event_text
         self.num_steps = num_steps
+        if not 1.0 <= guidance_scale <= 100.0:
+            raise ValueError("Invalid native base guidance scale")
+        self.guidance_scale = float(guidance_scale)
 
     @torch.no_grad()
     def __call__(self, *, source_latents, noise_latents, num_steps, return_trajectory=True, **_):
@@ -43,7 +46,7 @@ class NativeBaseEditSampler:
         pipe.scheduler.step=capture_step
         try:
             output=pipe(prompt=self.event_text,image=self.source_image,num_inference_steps=num_steps,
-                        guidance_scale=7.5,image_guidance_scale=1.0,output_type="latent").images
+                        guidance_scale=self.guidance_scale,image_guidance_scale=1.0,output_type="latent").images
         finally:
             pipe.prepare_latents=original_noise
             pipe.prepare_image_latents=original_source
