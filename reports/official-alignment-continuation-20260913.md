@@ -1,5 +1,7 @@
 # Goal 接续位置
 
+**05:57接续补记：5457ee1已经提交并push成功（exec session35980已exit0），包含下文待提交的确认完整archive/原始文本/PNG预览、本地核验、链摘要/96张量核验、45组bank和报告；当前唯一未跟踪项是仍在下载的cfg1-chains-evidence.tgz（session34331）。GPU6087实测baseline已150/1350回答，未到优化。不要再等已结束的push或重传已验证的confirmation包。**
+
 ## 最新状态：09月13日05:54
 
 - **旧09b324d链已全部完成**：480条raw/96写，99/480严格正确+EOS，16/96图通过全部五问法，0/16完整链通过；首次写入80/80、no-op0/240、后续写入19/160。complete SHA88339078bfdc2e0ebe43945f5385a6e97b32da862e318b46652d382e95e6fa2b。CPU collector核验全部PT/PNG/JSON、事前plan、tokens/EOS、源图文件链接，summary已下载。额外实际读取全部96PT，Reader tensor逐位等于PNG像素，初态逐位等于固定独立Gaussian、完整29状态轨迹起终点正确；cfg1-chain-tensor-verification.json已下载。旧queue/所有旧GPU进程均结束。
