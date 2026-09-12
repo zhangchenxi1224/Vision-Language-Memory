@@ -1,5 +1,12 @@
 # Goal 接续位置
 
+## 06:12 补记：旧链完整归档已恢复并复核
+
+- 下载session34331已900秒timeout退出，得到59535360字节前段，SHAa73f979116e69ab11a059cbf35e91e0d4aead6a111eb83761ea256a56cd299ec。使用已提交推送4bdea12的scripts/inspire/prepare_transfer_tail.py在远端分出尾段；远端前段SHA与本地一致。尾段22482260字节，SHA4de62ec96bcf8b1b52cdbe045f208682bf30170dd490dca935b36e17c3753855，下载session76135已经exit0。
+- 本地.cache/assemble_chain_archive.py核验两个片段并原子组装原文件，最终82017620字节SHA66f978d0d8f4d1f59504e02ab96fe5c2126fba61f8b0d6659a7c33ce02ba737e与远端封存archive完全一致。已展开cfg1-chains/，原始JSON/全部96PNG/480 raw及链链接复核通过，报告cfg1-chains-local-verification-summary.json；大型PT未下载，远端原96张量额外审计仍有效。
+- cfg1-chains-preview.png按四顺序的首个重复固定渲染，并实际view检查。完整archive/展开文本/本地复核/图和结果README待本轮提交；忽略重复展开PNG，原图均在archive中。**现已没有待完成的下载会话，不要再等34331、76135或重传。**
+- 最新实测GPU6087 baseline630/1350（06:09），训练进程仍活跃，尚未优化；下一步继续等待实际基线完成后观察首个参数更新，并为新端点验证准备足够lease。Probe checkout0f40767已部署，尚未运行新权重；训练checkout9628d71保持不变。goal active。
+
 ## 06:06 补记：新端点验证探针已实现并部署
 
 - 最新功能源码 **0f40767** 已提交推送。新增scripts/probes/official_transition_confirmation.py，--mode single_writes/rgb_chains，绑定parent源码9628d71、bank962f0284、2880步/四开发噪声/nativeCFG1，校验900个开发单元、完整artifact/checkpoint/runtime/condition SHA。默认开发失败在加载前拒绝；--diagnostic才允许明确标成diagnostic_after_development_failure，不能覆盖原失败。记录固定/解析后计划、源文件SHA、真实raw/EOS、RGB源链接，冻结审计和结束复核，Reader查询不修改记忆。

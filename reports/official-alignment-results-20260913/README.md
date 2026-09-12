@@ -183,6 +183,10 @@ c90896c完成1536更新/6144训练draw，各状态恰好2048draw。本地逐个�
 | 保留当前状态的no-op | 0/240 |
 | 已有生成状态上的后续写入/清除 | 19/160 |
 
-见[链式完整远端校验摘要](cfg1-chains-summary.json)及[96次实际PNG/Reader张量/独立噪声/29状态轨迹复核](cfg1-chain-tensor-verification.json)。没有使用oracle重置失败链，也没有在Reader查询时改变记忆图。该证据说明灰图单次写入的成功不能推广到连续记忆。完整链archive已生成在共享盘，正在传回；此处不把未完成的本地传输当作已归档证据。
+见[链式完整远端校验摘要](cfg1-chains-summary.json)及[96次实际PNG/Reader张量/独立噪声/29状态轨迹复核](cfg1-chain-tensor-verification.json)。没有使用oracle重置失败链，也没有在Reader查询时改变记忆图。该证据说明灰图单次写入的成功不能推广到连续记忆。[完整原始证据与96张PNG](cfg1-chains-evidence.tgz)已传回；本地再次核验全部JSON/PNG、480条raw和链链接，见[本地复核](cfg1-chains-local-verification-summary.json)。大型PT保留远端并已经过上述逐文件/张量核验。
+
+文件传输超时后，先验证本地59535360字节前段与远端相同，再仅补传22482260字节尾段；两段各自SHA及合并后的82017620字节完整SHA66f978d0d8f4d1f59504e02ab96fe5c2126fba61f8b0d6659a7c33ce02ba737e均通过。不修改或重新生成科学产物。
+
+![四种固定顺序各首个重复的真实RGB链](cfg1-chains-preview.png)
 
 据此推进[45条件组训练协议](../official-transition-wording-training-20260913.md)：已验证15种source/operation组合×3事件表达，仍一题和三个不同目标，source/target原始张量不变。[新bank](transition-wording-bank-manifest.json) SHA962f02846ed1a1933e6c219604bc22ee520e28f2dfe2721e26f111dc36ea122e。fresh Base全U-Net2880步、每组256draw、官方FM/native28CFG1，四个开发噪声。源码9628d71已部署到新单H200，现进入未训练基线阶段，尚无新优化端点。旧单H200已空闲并停止删除，新留出表达/独立噪声/连续链计划已在任何新权重结果前固定。goal仍未达成。
