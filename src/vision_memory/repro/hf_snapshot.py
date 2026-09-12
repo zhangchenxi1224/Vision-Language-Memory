@@ -32,6 +32,20 @@ def inspect_download(model_dir: Path, revision: str) -> dict:
         files.append({"path":rel.as_posix(), "bytes":size, "sha256":sha256.hexdigest(), "hf_etag":etag})
     if not files or not (root/"model_index.json").is_file():
         raise ValueError("Missing pipeline snapshot")
+    index=json.loads((root/"model_index.json").read_text())
+    for component in ("text_encoder","unet","vae"):
+        if component not in index:
+            continue
+        directory=root/component
+        prefix="model" if component=="text_encoder" else "diffusion_pytorch_model"
+        weight=directory/(prefix+".safetensors")
+        sharded=directory/(prefix+".safetensors.index.json")
+        if not (directory/"config.json").is_file() or not (weight.is_file() or sharded.is_file()):
+            raise ValueError(f"Incomplete declared pipeline component: {component}")
+        if sharded.is_file():
+            mapping=json.loads(sharded.read_text())["weight_map"]
+            if not mapping or any(not (directory/f).is_file() for f in set(mapping.values())):
+                raise ValueError(f"Missing weight shard: {component}")
     payload={"revision":revision,"files":files}
     return {"schema":"hf-local-download-seal/v1", "model_dir":str(root), **payload,
             "payload_sha256":hashlib.sha256(json.dumps(payload,sort_keys=True).encode()).hexdigest()}

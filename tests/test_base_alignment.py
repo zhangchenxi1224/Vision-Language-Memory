@@ -25,6 +25,17 @@ def test_snapshot_seal_checks_hf_blob_hash_and_rejects_tampering(tmp_path):
         verify_download_seal(seal,root)
 
 
+def test_valid_hf_config_hash_does_not_make_a_missing_weight_snapshot_complete(tmp_path):
+    payload=b'{"text_encoder":["transformers","Qwen3VLForConditionalGeneration"]}'
+    (tmp_path/"model_index.json").write_bytes(payload)
+    metadata=tmp_path/".cache/huggingface/download/model_index.json.metadata"
+    metadata.parent.mkdir(parents=True)
+    etag=hashlib.sha1(f"blob {len(payload)}\0".encode()+payload).hexdigest()
+    metadata.write_text("revision\n"+etag+"\n0\n")
+    with pytest.raises(ValueError,match="Incomplete declared pipeline component"):
+        inspect_download(tmp_path,"revision")
+
+
 class FakeNativePipeline:
     def __init__(self):
         self.scheduler=SimpleNamespace(step=lambda *a,**k:(torch.ones(1,4,2,2),),sigmas=torch.tensor([1.,.5,0.]))
