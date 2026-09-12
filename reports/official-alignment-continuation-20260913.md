@@ -1,5 +1,13 @@
 # Goal 接续位置
 
+## 07:49 接续：CPU连接实例已更换，训练继续
+
+- **后续CPU exec/scp/fetch统一使用 `dl-align-cpu2-20260913`**。新实例已创建并实测RUNNING，CPU资源空间 / 前沿课题探索 / CPU资源-2 / 0,2,8 / ubuntu-inspire-base:22.04 / shm32 / 480min，节点cpu-nat-417。07:47状态剩7h58m，约15:46到期；以后以实时status为准。
+- `connection refresh`会话38429已exit0；新连接实际读取共享bank文件220499bytes和result-verification checkout HEAD3c335a284f430d924ff27178341dd1de547e12b3。通过新CPU完整下载historical-fp32-payload-verification.json到本地.cache/cpu2-transfer-check.json，SHA212fc526c29302b71a4dfef7657afb072d4f66983a884d349b0159d366c541db与封存结果一致。所有相关查询与传输均已结束。
+- 旧 `dl-align-cpu-20260913` 已确认没有实验/传输工作进程，仅平台服务；新连接验证后已成功stop并delete。不要再向旧名称exec/scp。GPU `dl-transitions-h200x1-20260913` 及训练PID6087、collector463114完全保持原样。
+- 最新07:47训练实测 **2423/2880**、elapsed4643.94s，父terminal不存在、final raw0、collector waiting_for_training。仍在进行真实优化，不能重启或选择中途checkpoint；继续等待2880完整final后收集和原定独立验证。
+- 下文07:38的“待本轮提交”已完成于 **2647bb5** 并push；64历史载荷检查不是待提交/待重跑项目。当前没有新GPU验证结果，goal仍active。
+
 ## 07:38 接续：多问题回读probe已部署，64载荷真实CPU验证通过
 
 - 最新功能commit **5bcf6d0990e6e428c536ff21d58c0b4af69ce66b** 已push。新增scripts/probes/historical_fp32_readback.py，固定panel SHA17f00e92...，全64端点×FP32/RGB两形式×五问法640matched+80blank；零optimizer/零Writer，FP32 VAE/bf16 Reader，真实raw32-token/EOS，完整PT/PNG/hash和冻结审计。要求idle GPU且deadline至少剩40min，不能抢当前训练GPU。两新tests通过，与panel两项本次4 passed，未改累计85项；不是功能回读结果。
