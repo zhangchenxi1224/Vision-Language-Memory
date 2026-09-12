@@ -148,7 +148,7 @@ def main():
     bank_path=a.output/'bank'/'manifest.json'
     if passed:
         new_bank={'schema':'latent-teacher-bank/v1','bank_status':'sealed','route':'direct',
-            'models':bank['models'],'teachers':new_teachers,'groups':new_groups,
+            'models':bank['models'],'snapshots':bank['snapshots'],'teachers':new_teachers,'groups':new_groups,
             'semantic_question_count':1,'conditional_state_count':3,'provenance':identity}
         train.write_json(bank_path,new_bank)
         load_teacher_bank(bank_path)
