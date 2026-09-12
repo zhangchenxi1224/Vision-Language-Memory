@@ -10,7 +10,7 @@ import torch
 
 
 @torch.no_grad()
-def load_base_runtime(args, bank):
+def load_base_runtime(args, bank, *, inference_only=False):
     from PIL import Image
     from peft import LoraConfig,get_peft_model
     from scripts.train import train_latent_bank_unet as training
@@ -64,7 +64,7 @@ def load_base_runtime(args, bank):
     sys.path.insert(0,str(source_root))
     from dreamlite import DreamLitePipelineLoRA
     vd,rd=torch.device(args.dreamlite_device),torch.device(args.reader_device)
-    if vd.type!="cuda" or rd.type!="cuda" or vd==rd:
+    if vd.type!="cuda" or rd.type!="cuda" or (vd==rd and not inference_only):
         raise ValueError("Base Writer and Reader require separate CUDA devices")
     pipe=DreamLitePipelineLoRA.from_pretrained(args.dreamlite,local_files_only=True,torch_dtype=torch.float32).to(vd)
     for module in (pipe.unet,pipe.vae,pipe.text_encoder): freeze_module(module)
@@ -73,6 +73,10 @@ def load_base_runtime(args, bank):
     pipe.unet=get_peft_model(pipe.unet,LoraConfig(r=args.lora_rank,lora_alpha=args.lora_rank,lora_dropout=0.,
                                                target_modules=["to_q","to_k","to_v","to_out.0"]))
     pipe.unet.eval()
+    if inference_only:
+        # B=0 leaves the pretrained model unchanged; no optimizer is permitted
+        # in read-only probes using the otherwise idle Reader GPU.
+        freeze_module(pipe.unet)
     predictor=DifferentiableDreamLiteMobileSampler.from_pipeline(pipe,checkpoint_unet=False)
     contexts={}
     image=Image.new("RGB",(1024,1024),(128,128,128))
