@@ -7,7 +7,7 @@
 - 工作树：`C:/Users/Expedition/dreamlite-official-alignment-20260913`。
 - 分支：`codex/dreamlite-official-alignment-20260913`，源自latent-bank分支`f68bf06`，已推送origin。
 - 官方源码在本地 `third_party/DreamLite`，HEAD=`a6e20c8cc94027f37dd7c5a81b0b3b472aa18409`。
-- 已通过45项针对性测试（`PYTHONPATH=src`，本地默认`python`有torch/pytest；home/.venv python主要用于HF API，不是测试环境）。
+- 已通过46项针对性测试（`PYTHONPATH=src`，本地默认`python`有torch/pytest；home/.venv python主要用于HF API，不是测试环境）。新增摘要严格EOS统计及缺失/重复五问法拒绝；活跃3500实验使用旧固定提交，结束仍以原始generation计算EOS，不能只看旧terminal的exact字段。
 - 重要修改：默认official FM、全0–1训练、整数t、原始source图条件、原始raw vs effective调度、纯噪声起点、rank16/accum4/AdamW官方默认；base选项直接官方pipeline训练/原生28步CFG评测；hash/optimizer/RNG/teacher EOS/real QA审计保留。
 
 ## 当前远端
@@ -31,7 +31,10 @@ GPU Python `P/envs/vlm-r3-ngc2502/bin/python`；CPU纯stdlib脚本用python3（3
 1. `P/runs/dreamlite-official-alignment/c7e752b-single-20260913`：官方Mobile逐位parity通过，但首次训练因launcher缺少确定性env在0步停止。后续已修复，保留失败记录。
 2. `P/runs/dreamlite-official-alignment/106c8eb-single-20260913`：完整512步官方FM Mobile单目标，2048独立noise；teacher原问输出ambient+EOS；最终原问与四个改写均0/8，loss首末64步均值0.752814/0.439556，adapter deltaL2=12.6377。结果和checkpointSHA已复核，已下载 `reports/official-alignment-results-20260913/mobile-evidence.tgz`、展开文本和mobile-preview.png。
 3. `P/runs/dreamlite-official-alignment/e76114c-base-single-20260913`：旧Base缺text_encoder权重，0步失败，已补全。串行queue目录后缀 `-queue` 已终止失败，不会自动再跑。
-4. **当前活跃**：`P/runs/dreamlite-official-alignment/ac34ab2-base-single-20260913`。固定源码 `ac34ab20b50fae82d56d1aef13fc995ee35c302a`，checkout `P/repos/dreamlite-official-base-20260913-r2`。Base官方类、28步native CFG、同一teacher/seed/rank16/accum4/lr5e-5，预算512。已通过完整权重、VAE匹配、teacher EOS复测、baseline50格，并观察实际优化step16。日志 `stage-0-1789234161819887929.log`；`train/training.jsonl`、`train/metrics`、`train/checkpoint-latest.pt`。接续先读 `terminal.json`、`train/result.json`；无终态则查看最新metric和进程。
+4. **已完成Base512**：`P/runs/dreamlite-official-alignment/ac34ab2-base-single-20260913`。固定源码 `ac34ab20b50fae82d56d1aef13fc995ee35c302a`，checkout `P/repos/dreamlite-official-base-20260913-r2`。Base官方类、28步native CFG7.5、同一teacher/seed/rank16/accum4/lr5e-5，512步。五问法均0/8、raw EOS也全失败；loss首末64均值0.684343/0.436569，adapterdelta13.174183。result与checkpointSHA已复核，resultsha=`afd3d93c222654c2754060610a93c072449288752db3733867f8f4e1550b92b4`。完整文本证据已下载为base-evidence.tgz，preview生成器修正动态Base标题（旧cache脚本错误硬编码Mobile，勿再用）。
+5. **已完成oracle邻域诊断**：`P/runs/dreamlite-official-alignment/1bb0d28-neighborhood`，源码checkout `P/repos/dreamlite-neighborhood-20260913`。其`-queue`目录terminal completed，不再运行。48条输出、哈希已复核；原问及paraphrase_4，RMS0.001/.003/.01/.03均3/3正确立即EOS，RMS.1为3/3与2/3，RMS.3均0/3。teacher向Base512 seed0插值.01/.03/.1/.3两个问法都通过；纯Writer失败，RMS0.444540。这否定“只能精确坐标读出”，不证明任意方向鲁棒。诊断不算Writer成功。
+6. **已完成CFG1**：`P/runs/dreamlite-official-alignment/32d70c0-guidance1`，源码checkout `P/repos/dreamlite-guidance-20260913`，日志同路径加`.log`。Base512同checkpoint、8噪声、native28steps，仅CFG7.5改为1。50条结果，五问法均0/8。已下载guidance1-evidence.tgz并验证文本哈希；`.pt`留在远端。
+7. **当前活跃Base3500**：`P/runs/dreamlite-official-alignment/ac34ab2-base3500-single-20260913`。与Base512完全相同的固定代码`ac34ab2`/checkout，仅预算3500、fresh initialization。同seed同目标同超参同nativeCFG7.5，不改旧512运行身份；前512draw应相同，可核验loss确定性。已实际确认GPU PID2622580、两卡约14GB/9GB，启动时间Unix1789235717.7。正在baseline/训练阶段，接续检查train/training.jsonl与terminal，而非重复启动。预注册在本地reports/official-base-3500-preregistration-20260913.md，提交2e08e97先于调度。预计约100分钟到端点评测；不以启动或loss成功替代功能证据。
 
 worker deadline Unix `1789254021`（2026-09-13 07:00:21北京时间）；GPU平台8h上限约08:54。需要延长/追加时仍须根据新结果安排，不能让平台关闭前丢失检查点。未经结果证据不得扩大成“可用”或“多题泛化”。
 
@@ -57,4 +60,6 @@ worker deadline Unix `1789254021`（2026-09-13 07:00:21北京时间）；GPU平�
 
 ## 接下来
 
-先完成并分析当前Base512的成对实测。若仍失败，应区分官方目标对齐、模型变体/蒸馏、可训练容量、优化预算与oracle目标本身的可读邻域；可以做有明确控制变量的新训练，保留未见噪声与原始QA/EOS，不复用测试问法来挑teacher。不能单纯无限增加旧方案预算或声称源码修复已解决全部失败。达到可用还需多事件或反事实内容验证，单题0/8显然未达标。
+先继续当前Base3500，核验前512draw/loss与Base512；等待真实结果时保持进程核验及适度进度沟通，不重新启动。Base512/CFG1失败、oracle邻域相对鲁棒共同支持测试官方3500预算；若仍失败，应再区分容量、优化目标与oracle训练目标，不能无边界只加步数。成功后还须全新固定噪声、反事实事件/多题验证；目前8benchmark噪声未参与训练，但研究迭代中已反复观察，不是 untouched research holdout。
+
+预览生成器现在版本化为scripts/reporting/render_alignment_preview.py，远端临时副本 `P/runs/dreamlite-official-alignment/render_alignment_preview_v2.py`，会从identity读正确model_variant与预算标题。旧render_alignment_preview.py硬编码Mobile，只适用于历史Mobile图。

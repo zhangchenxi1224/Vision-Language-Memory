@@ -62,4 +62,4 @@ Mobile单目标512步已完成，原问及四种改写全部0/8；原始结果�
 
 已实现Base独立运行时：直接加载官方 `DreamLitePipelineLoRA`，训练raw event、512像素conditioner、全时间域FM；评测直接调用官方28步CFG代码。因此上文“本仓库默认Mobile”的限制仅适用于Mobile臂，不能用于描述现在新增的Base臂。Base评测遵循官方原样的diptych提示词包装，与其训练示例raw event的差别完整保留并记录。
 
-Base历史下载缺失text_encoder权重，已经按官方HF revision的内容SHA补全；完整27文件封存通过，且Base/Mobile VAE权重字节相同。Base新运行 `ac34ab2-base-single-20260913` 已完成teacher复测、训练前50格真实生成并开始优化；返回完整结果前不判定功能成功。
+Base历史下载缺失text_encoder权重，已经按官方HF revision的内容SHA补全；完整27文件封存通过，且Base/Mobile VAE权重字节相同。Base `ac34ab2-base-single-20260913` 已完成512步，五問法均0/8；同checkpoint的CFG1仍均0/8。Oracle邻域诊断表明其有一定可读范围，见实验记录。已预注册并启动相同代码的3500步预算对照，功能目标仍active。新增评测汇总严格EOS和完整问法检查后，相关测试46 passed。
