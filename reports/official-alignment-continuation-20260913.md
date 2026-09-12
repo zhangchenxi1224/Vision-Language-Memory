@@ -1,5 +1,13 @@
 # Goal 接续位置
 
+## 06:55 接续：严格端点collector已接到真实训练之后
+
+- 最新功能commit **c2cf878** 已push，包含0c0066a严格端点collector、79caf79完成后收集worker及退出竞态修复。训练仍锁定9628d71，不修改训练checkout。最新训练只读查询session63196已exit0：**687/2880更新，elapsed1317.4s，PID6087存活/46068MiB，checkpoint-latest4.4GiB于06:51更新**。尚无final结果。
+- scripts/reporting/collect_transition_endpoint.py要求真正completed父terminal、result/checkpoint SHA、45组/four-seed/five-prompt完整覆盖、两个phase各180PT+2文本文件、固定gold token IDs、问法共享图片、blank/donor跨phase不变，以及全部11520 draw的condition/teacher/noise/sigma精确重放、每组256次。仅完成的2880端点才输出summary/archive；显式--text-only可本地复核并列出远端PT缺失，不宣称本地权重核验。详见reports/official-transition-endpoint-collection-20260913.md。实际baseline1350raw已通过phase验证，两项新测试拒绝漏项/重复/伪造gold token/问法换图，2 passed，未改覆盖累计79项；真正final collector尚未执行。
+- collector副本已上传 **P/runs/dreamlite-official-alignment/collect_transition_endpoint.py**，实际SHA **8949c0b3acbda7cc7cabbf356c67f3d3d446fd8742c978253985949abe6bc261**。等待器P/runs/.../collect_after_training.py已上传c2cf878版本。启动脚本P/runs/.../launch-transition-collector.sh（本地.cache同名）已经执行**一次**，不要重复。
+- 实际后台收集等待器 **PID463114** 已pgrep核验存活，父训练PID6087。状态P/runs/.../**transition-wording-endpoint-collector-status.json**为waiting_for_training，日志同前缀collector.log，目前空且无错误。截止 **1789262400 =09:20CST**。父completed后仅CPU隐藏CUDA/OMP1/MKL1运行collector，PYTHONPATH固定训练9628d71/src；输出P/runs/.../**transition-wording-endpoint-summary.json**和**transition-wording-endpoint-evidence.tgz**。父paused/failed或进程消失三次观察后终止并保留failed状态，不重启训练。不把watcher waiting状态冒称收集已完成。
+- 所有本轮上传/启动查询已exit0（40163、84090等均关闭），无未完成传输。训练GPU实例约09:49到期，CPU实例约08:47到期；完整final预估仍约08:40，按实测为准。0f40767新72图/96写validation探针尚未运行；281b653独立package parity checkout已部署。后续需新schema验证结果collector（旧collect_cfg1_validation固定09b324d，不直接适用新probe）；真正endpoint完成后再安排完整GPU验证，不能仅凭开发结果宣称可用。
+
 **06:45部署补记：281b65360bd42e4822f2d5750b541d85661a97dc 已提交并push成功，包含以下预检证据、本地核验、parity工具和两项新测试。CPU fetch/worktree session90632已exit0，独立checkout P/repos/dreamlite-package-parity-20260913 已固定281b653，可用于新端点导出、CLI推理和parity。无待下载或待fetch会话；训练仍在原9628d71 checkout运行。**
 
 ## 06:44 接续：基线封存完成，已观察414步优化
