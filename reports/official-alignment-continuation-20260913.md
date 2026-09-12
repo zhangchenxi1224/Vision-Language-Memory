@@ -1,5 +1,13 @@
 # Goal 接续位置
 
+## 07:28 接续：64个历史端点的FP32/RGB回读面板已真实封存
+
+- 上轮55e8b2f（真实CPUpackage加载证据）已提交push。当前最新功能 **acc0b68** 已push，新增scripts/experiments/prepare_historical_fp32_readback.py和两项测试（2 passed，累计未改覆盖83）；不是新Writer训练代码。**历史16题审计本来已经完成**，见historical-multiquestion-review.md和audit.json，不要重复重跑它。之前摘要只说检查root并不完整，以当前仓库审计为准：128run/32768updates/3456raw，B原问64/64、第一改写64/64、第二61/64，旧BF16 VAE，非共享Writer。
+- 已核验旧lane-0/runtime_attempts/attempt-000/manifest.json，其Qwen Reader revision和manifest/payload SHA与当前一致，Mobile VAE也同已封存快照；软件仍torch2.7.0a0/diffusers0.39.0/transformers4.57.3。不是擅自更换Reader的计划。旧panel原始SHA d356238fd5c267812dcf28d214ab062fd43388bb6b53b78602f0c1e8f5b36672，audit SHA c1a9706a7eb3fa2ee9d3e25486f07ac738e45017d032cbffd96ee616ec21a460。
+- 新prepare脚本副本P/runs/dreamlite-official-alignment/prepare_historical_fp32_readback.py已在CPU真实执行成功，读取3c335a2 checkout的旧panel、已封存audit和原paired-2c0e41c campaign。64个B端点的inventory/manifest/checkpoint-index/step256文件SHA全部核验，无按成功替换。输出 **P/runs/dreamlite-official-alignment/historical-fp32-readback-panel.json**，SHA **17f00e924ea8a2e66999fd63fb45db8848be8f1c91083155b4a21f9d011b45b5**。已下载同名results文件并本地验证SHA、16×4完整矩阵及event-only字段。所有相关上传/下载/查询已exit0（96661、24631、17499等已结束），没有待传输会话。
+- 面板覆盖color4/drink4/music2/material4/meal2，共16实体/64旧oracle。计划FP32-decoded和RGB uint8两形式×每端点5问法=640matched，加统一gray128 RGB空白80control。三个历史问法原样保留，两新问法已固定。event_stream同时保留event和mixed的更新/clear文本，剥离query/choices/scorer，避免漏掉mixed中的更新。**这里只prepare了面板；实际FP32/RGB Reader探针尚需实现并在空闲资源上执行，未创建新teacher bank，也不是16题Writer成功。** 详见reports/official-historical-fp32-readback-plan-20260913.md。
+- 最新07:25实测训练 **1743/2880、elapsed3340.1s**，PID6087及collector463114存活，final rows0，parent无terminal，collector waiting_for_training。当前训练仍9628d71固定运行，继续等待final及后续原定独立验证；新多题兼容性工作不改变当前预算或验收条件。只读短观察器P/runs/.../observe-transition.py可继续用。
+
 ## 07:16 接续：真实独立CPU加载通过，训练1425步
 
 - 本轮前段是verified wait：实际PID6087/463114持续存活，1025→1118→1168→1183→1231→1269。复查官方源码与实际Base config，dropout=0且官方模型源码未找到BatchNorm/self.training分支；未发现要中断训练的新偏差，也未更改训练源码。新增**只读临时观察器**本地.cache/observe-transition.py、远端P/runs/dreamlite-official-alignment/observe-transition.py，直接在GPU实例用python3运行，可输出简洁live/step/final-row/collector状态；非训练进程，不能把观察超时当任务结束。
