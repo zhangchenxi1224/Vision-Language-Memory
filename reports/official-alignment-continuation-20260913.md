@@ -1,5 +1,13 @@
 # Goal 接续位置
 
+## 07:02 接续：新验证collector已部署，训练962步
+
+- 最新功能commit **3c335a284f430d924ff27178341dd1de547e12b3** 已push；CPU fetch/worktree session16827已exit0，独立checkout **P/repos/dreamlite-result-verification-20260913** 已固定此commit，包含新endpoint/validation collectors与此前独立package工具。不要修改正在运行的训练9628d71、probe0f40767、已等待的collector副本。
+- 新scripts/reporting/collect_transition_validation.py绑定 **0f4076788bf4125bbca8851b6b270d5f8418d534** probe、新bank/parent/result/checkpoint/事前计划字节SHA，复算父900个开发单元；开发失败必须仍标diagnostic_after_development_failure。核验single72图/390raw/152artifact、chain96图/480raw/194artifact，所有事件/问法/seed/source前图链接、固定gold token、五问法同图；统计16条完整链，任一no-op失败都使所在整链失败。旧09b324d collector保持不变。
+- 新tests/test_transition_validation_collection.py两项通过，连同endpoint两项本次4 passed；未改覆盖累计81项。详见reports/official-transition-validation-collection-20260913.md。**实际新probe尚未运行、没有新独立确认结果**。此工具只能在endpoint/probe真完成后收集；本地--text-only使用archive原始preregistered-plan.json，保留所有PNG，明确缺少远端PT。已有verify_rgb_chain_tensors.py可直接核验新96写输出，但也尚未对新结果执行。
+- 07:00最新实际训练 **962/2880更新、elapsed1847.8s**，PID6087活跃；自动收集等待器PID463114也存活，仍waiting_for_training。无final结果，不能据loss单点变化选择检查点。07:00平台status实测RUNNING，Auto-stop In2h49m（约09:49）。CLI notebook没有原地延长子命令，start也无auto-stop参数；后续如时间不足，完整持久化并停妥当前任务后再新建验证实例，不缩减72图/96写/独立CLI重放。
+- 无未完成的上传/fetch/查询会话。待完成的真实工作是正在运行的训练及随后final、独立验证和实际package replay；不要为了等待重复生成同类报告或再次运行已完成旧模型实验。goal active。
+
 ## 06:55 接续：严格端点collector已接到真实训练之后
 
 - 最新功能commit **c2cf878** 已push，包含0c0066a严格端点collector、79caf79完成后收集worker及退出竞态修复。训练仍锁定9628d71，不修改训练checkout。最新训练只读查询session63196已exit0：**687/2880更新，elapsed1317.4s，PID6087存活/46068MiB，checkpoint-latest4.4GiB于06:51更新**。尚无final结果。
