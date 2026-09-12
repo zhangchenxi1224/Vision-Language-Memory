@@ -1,5 +1,15 @@
 # Goal 接续位置
 
+## 最新状态：09月13日05:54
+
+- **旧09b324d链已全部完成**：480条raw/96写，99/480严格正确+EOS，16/96图通过全部五问法，0/16完整链通过；首次写入80/80、no-op0/240、后续写入19/160。complete SHA88339078bfdc2e0ebe43945f5385a6e97b32da862e318b46652d382e95e6fa2b。CPU collector核验全部PT/PNG/JSON、事前plan、tokens/EOS、源图文件链接，summary已下载。额外实际读取全部96PT，Reader tensor逐位等于PNG像素，初态逐位等于固定独立Gaussian、完整29状态轨迹起终点正确；cfg1-chain-tensor-verification.json已下载。旧queue/所有旧GPU进程均结束。
+- **旧实例dl-align-full-h200x1-20260913已stop并delete**，不要再查询旧PID1055496。释放quota后新 **dl-transitions-h200x1-20260913** 已RUNNING，nodeqb-prod-gpu800、1H20020CPU200GiB/shm64、NGC25.02，05:49左右启动240分钟lease。
+- 新训练 **9628d71-transition-wording-full2880-20260913已启动一次**，用下文9628d71固定checkout和962f0284新bank。实际GPU训练脚本PID **6087**，05:52约22652MiB、正在原生28步未训练baseline；尚未观察首个optimizer更新。日志run+.log及run/stage-0-*.log。deadline1789262100（09:15）保持；预计最终paired评测也要完成后才能判断。勿因baseline阶段没有training.jsonl而重启。
+- 45组bank已下载为transition-wording-bank-manifest.json并复核SHA；每目标15组，源gray9组/其余各12组，只有三个unique targets。新独立确认计划已提交 **0c152ec**，与训练checkout9628d71分离，不修改正在运行的源码。新增计划检查通过，相关测试合计70；scripts/probes/transition_validation_plan.py和reports/official-transition-validation-plan-20260913.json已固定，但对应实际新权重probe尚需实现/部署，未排队。
+- confirmation archive的exec session66540最终900秒timeout，**已结束**；实际上65102668字节已经到齐。文件锁释放后本地SHA **03ab9224538a367bcab8e4fe3106d4b7bc6ecf8948561a4cd981b2bee3d3b334** 与远端完全一致，已解包cfg1-confirmation/、重验所有本地JSON/PNG和390 raw，cfg1-confirmation-local-verification-summary.json使用archive原始preregistered-plan.json（保持LF字节SHA59912642...；仓库原plan在Windows为CRLF但JSON内容相同）。图cfg1-confirmation-preview.png已渲染并view通过。大型PT留远端，明确列出未本地重验文件。
+- **当前仍在传输链archive**：exec session **34331**，下载 `P/runs/dreamlite-official-alignment/cfg1-chains-evidence.tgz` 到reports/official-alignment-results-20260913/cfg1-chains-evidence.tgz，timeout900。源archive已完成核验生成；先等客户端结束。若再出现收齐字节但超时，先从GPU读取远端stat/SHA，等文件锁释放后本地核对完整SHA，再解包/验证，不重复训练或盲目重传。未完成file不得commit。
+- scripts/reporting/verify_rgb_chain_tensors.py已实际运行通过但待本地提交；其remote副本在P/runs/dreamlite-official-alignment/。确认本地证据、结果README与此记录待同次提交。PNG原图在完整archive中，.gitignore仅排除重复展开的PNG，montage仍跟踪。下一步实现新45组权重的已预注册确认/链探针，跟踪当前baseline→优化，完成链本地归档，goal active。
+
 ## 最新状态：09月13日05:40（优先于下列历史段落）
 
 - 当前源码 **9628d7142db5a81a9d11a35b89d0515ef32d2e4f** 已推送，69项相关测试通过（原67+新2，新的采样计数测试首次调用参数错误已修正后通过）。新增45条件组的固定事件增广和pilot显式--eval-seeds（默认8保持不变）。源FM/运行中的09b324d代码不变。

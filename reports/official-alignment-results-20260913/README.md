@@ -159,3 +159,30 @@ c90896c完成1536更新/6144训练draw，各状态恰好2048draw。本地逐个�
 图仅展示事先排序的第一个噪声，标签是原问法；完整八个噪声、五个问法见JSON，不按视觉质量挑样本。
 
 下一候选保留官方native条件与28步采样，显式CFG1，不改变FM训练目标或权重；新噪声、未训练事件表达和真正RGB链式更新的[后续协议](../official-cfg1-candidate-20260913.md)已固定。仅开发评测通过还不等于完整可用更新器。15组源状态转移bank暂未训练，后续按新验证结果判断是否需要。
+
+## CFG1独立确认与连续链：候选未通过
+
+09b324d探针按事前计划完成全部72张确认图、360 matched回答和30重复控制行。complete SHA9febcb5037d425e9b4fb067f3d9b39a1a691da66de377e84d5d67868518d0446；同一c90896c checkpoint，零参数更新，native28/CFG1。完整远端PT/PNG/JSON校验通过。
+
+| 确认子集 | 严格正确且立即EOS |
+|---|---:|
+| 三种原始事件，16全新噪声/状态 | 240/240 |
+| ambient/jazz各两种未训练表达 | 80/80 |
+| clear两种未训练表达 | 0/40 |
+| 合计 | 320/360 |
+
+64/72图通过全部五种问法。clear第二种改写全部读出ambient，第一种混合no music preference、none、Jazz和额外文字；评分标准不变，不以近义答案放宽为通过。见[完整确认摘要](cfg1-confirmation-summary.json)、[原始证据与全部72张PNG](cfg1-confirmation-evidence.tgz)、[下载后文本/PNG/raw复核](cfg1-confirmation-local-verification-summary.json)。本地未下载大型PT，其远端SHA已核验。传输客户端在收齐65102668字节后仍超时；释放文件锁后，本地archive SHA03ab9224538a367bcab8e4fe3106d4b7bc6ecf8948561a4cd981b2bee3d3b334与远端完全一致，解包及逐文件校验通过，因此没有重跑实验。
+
+![固定首个确认噪声的三状态与事件表达](cfg1-confirmation-preview.png)
+
+同一权重继续执行全部16个六事件RGB链、96次写入、480条回答，complete SHA88339078bfdc2e0ebe43945f5385a6e97b32da862e318b46652d382e95e6fa2b。结果为99/480，只有16/96首次写入图同时通过五问法，**0/16完整链通过**。
+
+| 连续链子集 | 严格正确且立即EOS |
+|---|---:|
+| 每条链首次从灰图写入 | 80/80 |
+| 保留当前状态的no-op | 0/240 |
+| 已有生成状态上的后续写入/清除 | 19/160 |
+
+见[链式完整远端校验摘要](cfg1-chains-summary.json)及[96次实际PNG/Reader张量/独立噪声/29状态轨迹复核](cfg1-chain-tensor-verification.json)。没有使用oracle重置失败链，也没有在Reader查询时改变记忆图。该证据说明灰图单次写入的成功不能推广到连续记忆。完整链archive已生成在共享盘，正在传回；此处不把未完成的本地传输当作已归档证据。
+
+据此推进[45条件组训练协议](../official-transition-wording-training-20260913.md)：已验证15种source/operation组合×3事件表达，仍一题和三个不同目标，source/target原始张量不变。[新bank](transition-wording-bank-manifest.json) SHA962f02846ed1a1933e6c219604bc22ee520e28f2dfe2721e26f111dc36ea122e。fresh Base全U-Net2880步、每组256draw、官方FM/native28CFG1，四个开发噪声。源码9628d71已部署到新单H200，现进入未训练基线阶段，尚无新优化端点。旧单H200已空闲并停止删除，新留出表达/独立噪声/连续链计划已在任何新权重结果前固定。goal仍未达成。

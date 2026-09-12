@@ -1,0 +1,716 @@
+{
+  "all_correct_eos": false,
+  "all_five_prompt_images": 64,
+  "all_remote_files_verified_here": true,
+  "complete_sha256": "9febcb5037d425e9b4fb067f3d9b39a1a691da66de377e84d5d67868518d0446",
+  "generated_images": 72,
+  "groups": {
+    "ambient_blank": {
+      "correct_eos": 0,
+      "n": 5,
+      "raw": {
+        "No music preference recorded.": 1,
+        "No music preference set": 1,
+        "No music preference stored.": 1,
+        "None": 2
+      }
+    },
+    "ambient_donor": {
+      "correct_eos": 0,
+      "n": 5,
+      "raw": {
+        "Yellow Haze": 1,
+        "Yellow, not blue": 1,
+        "Yellow, not indigo.": 3
+      }
+    },
+    "ambient_reworded_1": {
+      "correct_eos": 20,
+      "n": 20,
+      "raw": {
+        "ambient": 20
+      }
+    },
+    "ambient_reworded_2": {
+      "correct_eos": 20,
+      "n": 20,
+      "raw": {
+        "ambient": 20
+      }
+    },
+    "ambient_trained": {
+      "correct_eos": 80,
+      "n": 80,
+      "raw": {
+        "ambient": 80
+      }
+    },
+    "clear_blank": {
+      "correct_eos": 0,
+      "n": 5,
+      "raw": {
+        "No music preference recorded.": 1,
+        "No music preference set": 1,
+        "No music preference stored.": 1,
+        "None": 2
+      }
+    },
+    "clear_donor": {
+      "correct_eos": 0,
+      "n": 5,
+      "raw": {
+        "Yellow Haze": 1,
+        "Yellow, not blue": 1,
+        "Yellow, not indigo.": 3
+      }
+    },
+    "clear_reworded_1": {
+      "correct_eos": 0,
+      "n": 20,
+      "raw": {
+        "Jazz": 4,
+        "No preferred music stored.": 4,
+        "indigo desk train 001123: music preference currently in effect: 03": 3,
+        "no music": 1,
+        "no music preference": 5,
+        "none": 3
+      }
+    },
+    "clear_reworded_2": {
+      "correct_eos": 0,
+      "n": 20,
+      "raw": {
+        "ambient": 20
+      }
+    },
+    "clear_trained": {
+      "correct_eos": 80,
+      "n": 80,
+      "raw": {
+        "no active preference": 80
+      }
+    },
+    "jazz_blank": {
+      "correct_eos": 0,
+      "n": 5,
+      "raw": {
+        "No music preference recorded.": 1,
+        "No music preference set": 1,
+        "No music preference stored.": 1,
+        "None": 2
+      }
+    },
+    "jazz_donor": {
+      "correct_eos": 0,
+      "n": 5,
+      "raw": {
+        "Yellow Haze": 1,
+        "Yellow, not blue": 1,
+        "Yellow, not indigo.": 3
+      }
+    },
+    "jazz_reworded_1": {
+      "correct_eos": 20,
+      "n": 20,
+      "raw": {
+        "jazz": 20
+      }
+    },
+    "jazz_reworded_2": {
+      "correct_eos": 20,
+      "n": 20,
+      "raw": {
+        "jazz": 20
+      }
+    },
+    "jazz_trained": {
+      "correct_eos": 80,
+      "n": 80,
+      "raw": {
+        "jazz": 80
+      }
+    }
+  },
+  "identity": {
+    "bank_sha256": "5165c059a0a4c0760cd4b0df1663c642132e52bf55a13031cd99207fd200bb86",
+    "checkpoint_sha256": "3c4b0679f16dd7714a662cfaddcd7716f7d3d43a49920898ab19a522d77af38d",
+    "conditional_state_count": 3,
+    "deadline_unix": 1789251300.0,
+    "guidance_control_gate": {
+      "complete_sha256": "dfe525cb6b37880e525365c872d289656bec446dea2ec46bf0c5f72cb980fb78",
+      "identity": {
+        "cached_condition_sha256": null,
+        "checkpoint_sha256": "3c4b0679f16dd7714a662cfaddcd7716f7d3d43a49920898ab19a522d77af38d",
+        "condition_style": "native",
+        "guidance_scale": 1.0,
+        "image_guidance_scale": 1.0,
+        "inference_steps": 28,
+        "optimizer_updates": 0,
+        "parent_result_sha256": "4dfb56f942d7dea62ac1d52ec91a0a814df30d4f6accc1238f9310dd822dff14",
+        "probe_commit": "1e4acd2bcd9cbf9f0b2878e51694c17bebe06110",
+        "scope": "Same checkpoint, noise, native prompt, image and Reader; only CFG changes 7.5 to 1",
+        "seed": 20260913,
+        "trainable_scope": "full_unet"
+      }
+    },
+    "guidance_scale": 1.0,
+    "image_guidance_scale": 1.0,
+    "inference_steps": 28,
+    "optimizer_updates": 0,
+    "parent_commit": "c90896c55c7b6cd6f489ccb7848ade2cff587daa",
+    "parent_result_sha256": "4dfb56f942d7dea62ac1d52ec91a0a814df30d4f6accc1238f9310dd822dff14",
+    "plan": [
+      {
+        "case": "ambient_trained",
+        "event": "R3 Train Standard Templates 03: For the indigo desk train 001123, remember that the preferred music is ambient.",
+        "gold": "ambient",
+        "question_id": "r5-f1-392d41fd097d069c42218e0a-state-ambient",
+        "seeds": [
+          6111847791805634731,
+          6664537592120271533,
+          7452023695451201443,
+          6214586318859129421,
+          4398406155763725347,
+          2005496710673399096,
+          264086871677559714,
+          2371478938469660153,
+          8553887925862612132,
+          5491146181988245324,
+          4354971798857337027,
+          2213890128814681272,
+          614687594472184893,
+          1491820010505241912,
+          6494453391875569915,
+          2023698763420143126
+        ],
+        "state": "ambient",
+        "style": "trained"
+      },
+      {
+        "case": "ambient_reworded_1",
+        "event": "R3 Train Standard Templates 03: Set the current music preference of the indigo desk train 001123 to ambient.",
+        "gold": "ambient",
+        "question_id": "r5-f1-392d41fd097d069c42218e0a-state-ambient",
+        "seeds": [
+          6111847791805634731,
+          6664537592120271533,
+          7452023695451201443,
+          6214586318859129421
+        ],
+        "state": "ambient",
+        "style": "reworded_1"
+      },
+      {
+        "case": "ambient_reworded_2",
+        "event": "The indigo desk train 001123 now prefers ambient music. Store this as its current music preference.",
+        "gold": "ambient",
+        "question_id": "r5-f1-392d41fd097d069c42218e0a-state-ambient",
+        "seeds": [
+          6111847791805634731,
+          6664537592120271533,
+          7452023695451201443,
+          6214586318859129421
+        ],
+        "state": "ambient",
+        "style": "reworded_2"
+      },
+      {
+        "case": "jazz_trained",
+        "event": "R3 Train Standard Templates 03: For the indigo desk train 001123, remember that the preferred music is jazz.",
+        "gold": "jazz",
+        "question_id": "r5-f1-392d41fd097d069c42218e0a-state-jazz",
+        "seeds": [
+          6111847791805634731,
+          6664537592120271533,
+          7452023695451201443,
+          6214586318859129421,
+          4398406155763725347,
+          2005496710673399096,
+          264086871677559714,
+          2371478938469660153,
+          8553887925862612132,
+          5491146181988245324,
+          4354971798857337027,
+          2213890128814681272,
+          614687594472184893,
+          1491820010505241912,
+          6494453391875569915,
+          2023698763420143126
+        ],
+        "state": "jazz",
+        "style": "trained"
+      },
+      {
+        "case": "jazz_reworded_1",
+        "event": "R3 Train Standard Templates 03: Set the current music preference of the indigo desk train 001123 to jazz.",
+        "gold": "jazz",
+        "question_id": "r5-f1-392d41fd097d069c42218e0a-state-jazz",
+        "seeds": [
+          6111847791805634731,
+          6664537592120271533,
+          7452023695451201443,
+          6214586318859129421
+        ],
+        "state": "jazz",
+        "style": "reworded_1"
+      },
+      {
+        "case": "jazz_reworded_2",
+        "event": "The indigo desk train 001123 now prefers jazz music. Store this as its current music preference.",
+        "gold": "jazz",
+        "question_id": "r5-f1-392d41fd097d069c42218e0a-state-jazz",
+        "seeds": [
+          6111847791805634731,
+          6664537592120271533,
+          7452023695451201443,
+          6214586318859129421
+        ],
+        "state": "jazz",
+        "style": "reworded_2"
+      },
+      {
+        "case": "clear_trained",
+        "event": "R3 Train Standard Templates 03: Clear the saved music preference for the indigo desk train 001123.",
+        "gold": "no active preference",
+        "question_id": "r5-f1-392d41fd097d069c42218e0a-state-clear",
+        "seeds": [
+          6111847791805634731,
+          6664537592120271533,
+          7452023695451201443,
+          6214586318859129421,
+          4398406155763725347,
+          2005496710673399096,
+          264086871677559714,
+          2371478938469660153,
+          8553887925862612132,
+          5491146181988245324,
+          4354971798857337027,
+          2213890128814681272,
+          614687594472184893,
+          1491820010505241912,
+          6494453391875569915,
+          2023698763420143126
+        ],
+        "state": "clear",
+        "style": "trained"
+      },
+      {
+        "case": "clear_reworded_1",
+        "event": "R3 Train Standard Templates 03: Remove the music preference stored for the indigo desk train 001123; it now has no active music preference.",
+        "gold": "no active preference",
+        "question_id": "r5-f1-392d41fd097d069c42218e0a-state-clear",
+        "seeds": [
+          6111847791805634731,
+          6664537592120271533,
+          7452023695451201443,
+          6214586318859129421
+        ],
+        "state": "clear",
+        "style": "reworded_1"
+      },
+      {
+        "case": "clear_reworded_2",
+        "event": "For the indigo desk train 001123, forget its saved music preference. There is no current music preference.",
+        "gold": "no active preference",
+        "question_id": "r5-f1-392d41fd097d069c42218e0a-state-clear",
+        "seeds": [
+          6111847791805634731,
+          6664537592120271533,
+          7452023695451201443,
+          6214586318859129421
+        ],
+        "state": "clear",
+        "style": "reworded_2"
+      }
+    ],
+    "probe_commit": "09b324dc7574ed33c0236ee09a4f5c3526fb85bb",
+    "protocol_binding": {
+      "base_snapshot": {
+        "files": [
+          {
+            "bytes": 1641,
+            "hf_etag": "a82744f53a7fb2bd90ab1667ef5dccdfae0094d2",
+            "path": ".gitattributes",
+            "sha256": "019d31f916e3d6fb9ed369200040376aa0f395c2d412df2a22bb0664b28e4746"
+          },
+          {
+            "bytes": 1157,
+            "hf_etag": "cf86c331d4e123815f3cb3b9ef196db41a1cdb92",
+            "path": "README.md",
+            "sha256": "f1051a6285bd9d1c8adba94634df7b6d16e641a2c5814b4f6f39073cad7f0b82"
+          },
+          {
+            "bytes": 519,
+            "hf_etag": "661e08ff3eb1443002955166776e009dcaef6bc5",
+            "path": "model_index.json",
+            "sha256": "1c5161bcb184ceb7c32f3610d1307030c241dbe9a4fe924e4daaceabd55455be"
+          },
+          {
+            "bytes": 707,
+            "hf_etag": "b54f9135e44c1e81047e8d05cb027af8bc039eed",
+            "path": "processor/added_tokens.json",
+            "sha256": "c0284b582e14987fbd3d5a2cb2bd139084371ed9acbae488829a1c900833c680"
+          },
+          {
+            "bytes": 5292,
+            "hf_etag": "124386803f142761528f710e77ae483f5f8c4fc4",
+            "path": "processor/chat_template.jinja",
+            "sha256": "3636d0f0bd6bef02654cdffdc447b79cb2cef8ab02cc75267345946291a489e4"
+          },
+          {
+            "bytes": 1671853,
+            "hf_etag": "31349551d90c7606f325fe0f11bbb8bd5fa0d7c7",
+            "path": "processor/merges.txt",
+            "sha256": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5"
+          },
+          {
+            "bytes": 782,
+            "hf_etag": "2fa6553554f69b4e3a6b742a75264ff9dff90ad0",
+            "path": "processor/preprocessor_config.json",
+            "sha256": "93585062a80db5e8ca038efc7726a3e6411d9db948472d81d63c6303993be8c5"
+          },
+          {
+            "bytes": 613,
+            "hf_etag": "ac23c0aaa2434523c494330aeb79c58395378103",
+            "path": "processor/special_tokens_map.json",
+            "sha256": "76862e765266b85aa9459767e33cbaf13970f327a0e88d1c65846c2ddd3a1ecd"
+          },
+          {
+            "bytes": 11422654,
+            "hf_etag": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+            "path": "processor/tokenizer.json",
+            "sha256": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4"
+          },
+          {
+            "bytes": 5445,
+            "hf_etag": "fec7f182135c384a08ea2fc9635566ca79c45afc",
+            "path": "processor/tokenizer_config.json",
+            "sha256": "81ec7bb9530159b326c0bef1d0b6c33d392090524014ea3f0123a3c1eb9c2af5"
+          },
+          {
+            "bytes": 817,
+            "hf_etag": "e32b1d90356f74457edbfca27aa1e121dab7cdc7",
+            "path": "processor/video_preprocessor_config.json",
+            "sha256": "59c5c9eb52182eb14c06ffb10ca9effd29adce5f238a95de23ca14a38dbd2cb1"
+          },
+          {
+            "bytes": 2776833,
+            "hf_etag": "4783fe10ac3adce15ac8f358ef5462739852c569",
+            "path": "processor/vocab.json",
+            "sha256": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910"
+          },
+          {
+            "bytes": 481,
+            "hf_etag": "8ffe55493d9aab2b2a200c65879b00e062ff0531",
+            "path": "scheduler/scheduler_config.json",
+            "sha256": "a20515a2393e2ed1e41a9e9fecab581cb626dc8361ee578eac8f71e8d5a9e90a"
+          },
+          {
+            "bytes": 1546,
+            "hf_etag": "454cc4936468d57e3c36067d8afe9f39de2e5f6c",
+            "path": "text_encoder/config.json",
+            "sha256": "79ca0168d4f0286439068ab397e610088756790a6e61dbbb8ae401e6b705f5f2"
+          },
+          {
+            "bytes": 213,
+            "hf_etag": "3dd2c545b96b4d51586680d7bb27fdca5c90dfe9",
+            "path": "text_encoder/generation_config.json",
+            "sha256": "a12101ea177dca07e73e58c38379eac5f023e4524253df22ccfd097f6b4b6a2d"
+          },
+          {
+            "bytes": 4255140312,
+            "hf_etag": "7de1838c87a5349b016c26a1c3f7d2bc400a3d485f95ef39a7059ffd734977a0",
+            "path": "text_encoder/model.safetensors",
+            "sha256": "7de1838c87a5349b016c26a1c3f7d2bc400a3d485f95ef39a7059ffd734977a0"
+          },
+          {
+            "bytes": 707,
+            "hf_etag": "b54f9135e44c1e81047e8d05cb027af8bc039eed",
+            "path": "tokenizer/added_tokens.json",
+            "sha256": "c0284b582e14987fbd3d5a2cb2bd139084371ed9acbae488829a1c900833c680"
+          },
+          {
+            "bytes": 5292,
+            "hf_etag": "124386803f142761528f710e77ae483f5f8c4fc4",
+            "path": "tokenizer/chat_template.jinja",
+            "sha256": "3636d0f0bd6bef02654cdffdc447b79cb2cef8ab02cc75267345946291a489e4"
+          },
+          {
+            "bytes": 1671853,
+            "hf_etag": "31349551d90c7606f325fe0f11bbb8bd5fa0d7c7",
+            "path": "tokenizer/merges.txt",
+            "sha256": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5"
+          },
+          {
+            "bytes": 613,
+            "hf_etag": "ac23c0aaa2434523c494330aeb79c58395378103",
+            "path": "tokenizer/special_tokens_map.json",
+            "sha256": "76862e765266b85aa9459767e33cbaf13970f327a0e88d1c65846c2ddd3a1ecd"
+          },
+          {
+            "bytes": 11422654,
+            "hf_etag": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+            "path": "tokenizer/tokenizer.json",
+            "sha256": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4"
+          },
+          {
+            "bytes": 5404,
+            "hf_etag": "1d4fba2de0e94e8f97e08927cfb7d084160c2880",
+            "path": "tokenizer/tokenizer_config.json",
+            "sha256": "355f2b4e5bad7b01f11ef6cb68ebc176f61b95c3276092ea225b1bea0e01e95c"
+          },
+          {
+            "bytes": 2776833,
+            "hf_etag": "4783fe10ac3adce15ac8f358ef5462739852c569",
+            "path": "tokenizer/vocab.json",
+            "sha256": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910"
+          },
+          {
+            "bytes": 1971,
+            "hf_etag": "238e7ee5455f13fc726372a75dd1301db5aa8de9",
+            "path": "unet/config.json",
+            "sha256": "5bb219157837199dbe325e23e3ca0d9f8ef28b09b11e5970463b593ce526d3f2"
+          },
+          {
+            "bytes": 780074688,
+            "hf_etag": "f983bd1710344cb44f7d12d05c0ca961984b48391dcbb095ad710609cbde3246",
+            "path": "unet/diffusion_pytorch_model.safetensors",
+            "sha256": "f983bd1710344cb44f7d12d05c0ca961984b48391dcbb095ad710609cbde3246"
+          },
+          {
+            "bytes": 634,
+            "hf_etag": "e8d284adced0c0d59bad19fadf2fccdb9784878f",
+            "path": "vae/config.json",
+            "sha256": "27fa78b2c236868031fa2108168aa9c8332d694c315c27c81f0b62677d8de6bc"
+          },
+          {
+            "bytes": 4903270,
+            "hf_etag": "e175c3284b8514a2ecb1a70f004b0b09320decd6842e77dfebbdb5dbbdf0312b",
+            "path": "vae/diffusion_pytorch_model.safetensors",
+            "sha256": "e175c3284b8514a2ecb1a70f004b0b09320decd6842e77dfebbdb5dbbdf0312b"
+          }
+        ],
+        "model_dir": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+        "payload_sha256": "fc70dd11ccc652805388e0b0e687383c1441fbf9ea34c5384c8d7a241c7f7a72",
+        "revision": "a9a0f151ffd99d3c37f3fd0472f5e8f1b31215aa",
+        "schema": "hf-local-download-seal/v1"
+      },
+      "inference_guidance_scale": 7.5,
+      "inference_image_guidance_scale": 1.0,
+      "inference_prompt": "native upstream diptych+CFG",
+      "inference_steps": 28,
+      "official_source_commit": "a6e20c8cc94027f37dd7c5a81b0b3b472aa18409",
+      "source_bindings": {
+        "r5-f1-392d41fd097d069c42218e0a-state-ambient": {
+          "bank_source_sha256": "5f8c07caa37de38cae96d0b0e28851b1b831bea8728182e9fbd14b1588ac3743",
+          "official_source_sha256": "fee703bb760f4269db3311991c9af4b633a2bc3c85d38e8b93cd65bcdcf24607",
+          "reason": "official source PIL gray128 preprocessing instead of historical exact float gray0.5",
+          "rms_difference": 0.006467190105777682
+        },
+        "r5-f1-392d41fd097d069c42218e0a-state-clear": {
+          "bank_source_sha256": "5f8c07caa37de38cae96d0b0e28851b1b831bea8728182e9fbd14b1588ac3743",
+          "official_source_sha256": "fee703bb760f4269db3311991c9af4b633a2bc3c85d38e8b93cd65bcdcf24607",
+          "reason": "official source PIL gray128 preprocessing instead of historical exact float gray0.5",
+          "rms_difference": 0.006467190105777682
+        },
+        "r5-f1-392d41fd097d069c42218e0a-state-jazz": {
+          "bank_source_sha256": "5f8c07caa37de38cae96d0b0e28851b1b831bea8728182e9fbd14b1588ac3743",
+          "official_source_sha256": "fee703bb760f4269db3311991c9af4b633a2bc3c85d38e8b93cd65bcdcf24607",
+          "reason": "official source PIL gray128 preprocessing instead of historical exact float gray0.5",
+          "rms_difference": 0.006467190105777682
+        }
+      },
+      "student": "official DreamLitePipelineLoRA base",
+      "train_prompt": "raw event, upstream LoRA example",
+      "vae_weights_sha256": {
+        "diffusion_pytorch_model.safetensors": "e175c3284b8514a2ecb1a70f004b0b09320decd6842e77dfebbdb5dbbdf0312b"
+      }
+    },
+    "scope": "Fixed three states; 16 paired fresh noises per trained event; two unseen wordings with four paired noises each; no sequential memory update test",
+    "semantic_question_count": 1,
+    "snapshots": {
+      "dreamlite_mobile": {
+        "file_count": 27,
+        "manifest_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-mobile/.snapshot_manifest.json",
+        "manifest_sha256": "1bcf41b170c4b4a806bac6701cbdf4fabd5c3c53fa67415d065ab95ce2703159",
+        "model_dir": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-mobile",
+        "passed": true,
+        "repo_id": "carlofkl/DreamLite-mobile",
+        "revision": "6695c3f4be230f0493fa5dbf78be3bc4d3bb2ab4",
+        "snapshot_payload_sha256": "3fb839f465793b01ecafc4df433031a063dd7b395a050960cde57c2807031337",
+        "total_bytes": 5071894300
+      },
+      "qwen_reader": {
+        "file_count": 14,
+        "manifest_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct/.snapshot_manifest.json",
+        "manifest_sha256": "159a504daaae6dc412535978f087150a0eb8e50164afd70a8a17f83906f1127c",
+        "model_dir": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+        "passed": true,
+        "repo_id": "Qwen/Qwen3-VL-4B-Instruct",
+        "revision": "ebb281ec70b05090aa6165b016eac8ec08e71b17",
+        "snapshot_payload_sha256": "45be3ffb00017b02bffa79f4f8e6f301760ac50c0bb78b2c4e5a7fe8aa3d52c6",
+        "total_bytes": 8887292732
+      }
+    }
+  },
+  "kind": "confirmation",
+  "matched_correct_eos": 320,
+  "matched_rows": 360,
+  "preregistered_plan_sha256": "59912642a001560909f9f10fff786d81a110bbe0d98a08533db498674cea5588",
+  "pt_files_omitted_locally": [],
+  "raw_rows": 390,
+  "verified_files": [
+    "ambient_blank.pt",
+    "ambient_donor.pt",
+    "ambient_reworded_1-seed-00.png",
+    "ambient_reworded_1-seed-00.pt",
+    "ambient_reworded_1-seed-01.png",
+    "ambient_reworded_1-seed-01.pt",
+    "ambient_reworded_1-seed-02.png",
+    "ambient_reworded_1-seed-02.pt",
+    "ambient_reworded_1-seed-03.png",
+    "ambient_reworded_1-seed-03.pt",
+    "ambient_reworded_2-seed-00.png",
+    "ambient_reworded_2-seed-00.pt",
+    "ambient_reworded_2-seed-01.png",
+    "ambient_reworded_2-seed-01.pt",
+    "ambient_reworded_2-seed-02.png",
+    "ambient_reworded_2-seed-02.pt",
+    "ambient_reworded_2-seed-03.png",
+    "ambient_reworded_2-seed-03.pt",
+    "ambient_trained-seed-00.png",
+    "ambient_trained-seed-00.pt",
+    "ambient_trained-seed-01.png",
+    "ambient_trained-seed-01.pt",
+    "ambient_trained-seed-02.png",
+    "ambient_trained-seed-02.pt",
+    "ambient_trained-seed-03.png",
+    "ambient_trained-seed-03.pt",
+    "ambient_trained-seed-04.png",
+    "ambient_trained-seed-04.pt",
+    "ambient_trained-seed-05.png",
+    "ambient_trained-seed-05.pt",
+    "ambient_trained-seed-06.png",
+    "ambient_trained-seed-06.pt",
+    "ambient_trained-seed-07.png",
+    "ambient_trained-seed-07.pt",
+    "ambient_trained-seed-08.png",
+    "ambient_trained-seed-08.pt",
+    "ambient_trained-seed-09.png",
+    "ambient_trained-seed-09.pt",
+    "ambient_trained-seed-10.png",
+    "ambient_trained-seed-10.pt",
+    "ambient_trained-seed-11.png",
+    "ambient_trained-seed-11.pt",
+    "ambient_trained-seed-12.png",
+    "ambient_trained-seed-12.pt",
+    "ambient_trained-seed-13.png",
+    "ambient_trained-seed-13.pt",
+    "ambient_trained-seed-14.png",
+    "ambient_trained-seed-14.pt",
+    "ambient_trained-seed-15.png",
+    "ambient_trained-seed-15.pt",
+    "clear_blank.pt",
+    "clear_donor.pt",
+    "clear_reworded_1-seed-00.png",
+    "clear_reworded_1-seed-00.pt",
+    "clear_reworded_1-seed-01.png",
+    "clear_reworded_1-seed-01.pt",
+    "clear_reworded_1-seed-02.png",
+    "clear_reworded_1-seed-02.pt",
+    "clear_reworded_1-seed-03.png",
+    "clear_reworded_1-seed-03.pt",
+    "clear_reworded_2-seed-00.png",
+    "clear_reworded_2-seed-00.pt",
+    "clear_reworded_2-seed-01.png",
+    "clear_reworded_2-seed-01.pt",
+    "clear_reworded_2-seed-02.png",
+    "clear_reworded_2-seed-02.pt",
+    "clear_reworded_2-seed-03.png",
+    "clear_reworded_2-seed-03.pt",
+    "clear_trained-seed-00.png",
+    "clear_trained-seed-00.pt",
+    "clear_trained-seed-01.png",
+    "clear_trained-seed-01.pt",
+    "clear_trained-seed-02.png",
+    "clear_trained-seed-02.pt",
+    "clear_trained-seed-03.png",
+    "clear_trained-seed-03.pt",
+    "clear_trained-seed-04.png",
+    "clear_trained-seed-04.pt",
+    "clear_trained-seed-05.png",
+    "clear_trained-seed-05.pt",
+    "clear_trained-seed-06.png",
+    "clear_trained-seed-06.pt",
+    "clear_trained-seed-07.png",
+    "clear_trained-seed-07.pt",
+    "clear_trained-seed-08.png",
+    "clear_trained-seed-08.pt",
+    "clear_trained-seed-09.png",
+    "clear_trained-seed-09.pt",
+    "clear_trained-seed-10.png",
+    "clear_trained-seed-10.pt",
+    "clear_trained-seed-11.png",
+    "clear_trained-seed-11.pt",
+    "clear_trained-seed-12.png",
+    "clear_trained-seed-12.pt",
+    "clear_trained-seed-13.png",
+    "clear_trained-seed-13.pt",
+    "clear_trained-seed-14.png",
+    "clear_trained-seed-14.pt",
+    "clear_trained-seed-15.png",
+    "clear_trained-seed-15.pt",
+    "generations.jsonl",
+    "identity.json",
+    "jazz_blank.pt",
+    "jazz_donor.pt",
+    "jazz_reworded_1-seed-00.png",
+    "jazz_reworded_1-seed-00.pt",
+    "jazz_reworded_1-seed-01.png",
+    "jazz_reworded_1-seed-01.pt",
+    "jazz_reworded_1-seed-02.png",
+    "jazz_reworded_1-seed-02.pt",
+    "jazz_reworded_1-seed-03.png",
+    "jazz_reworded_1-seed-03.pt",
+    "jazz_reworded_2-seed-00.png",
+    "jazz_reworded_2-seed-00.pt",
+    "jazz_reworded_2-seed-01.png",
+    "jazz_reworded_2-seed-01.pt",
+    "jazz_reworded_2-seed-02.png",
+    "jazz_reworded_2-seed-02.pt",
+    "jazz_reworded_2-seed-03.png",
+    "jazz_reworded_2-seed-03.pt",
+    "jazz_trained-seed-00.png",
+    "jazz_trained-seed-00.pt",
+    "jazz_trained-seed-01.png",
+    "jazz_trained-seed-01.pt",
+    "jazz_trained-seed-02.png",
+    "jazz_trained-seed-02.pt",
+    "jazz_trained-seed-03.png",
+    "jazz_trained-seed-03.pt",
+    "jazz_trained-seed-04.png",
+    "jazz_trained-seed-04.pt",
+    "jazz_trained-seed-05.png",
+    "jazz_trained-seed-05.pt",
+    "jazz_trained-seed-06.png",
+    "jazz_trained-seed-06.pt",
+    "jazz_trained-seed-07.png",
+    "jazz_trained-seed-07.pt",
+    "jazz_trained-seed-08.png",
+    "jazz_trained-seed-08.pt",
+    "jazz_trained-seed-09.png",
+    "jazz_trained-seed-09.pt",
+    "jazz_trained-seed-10.png",
+    "jazz_trained-seed-10.pt",
+    "jazz_trained-seed-11.png",
+    "jazz_trained-seed-11.pt",
+    "jazz_trained-seed-12.png",
+    "jazz_trained-seed-12.pt",
+    "jazz_trained-seed-13.png",
+    "jazz_trained-seed-13.pt",
+    "jazz_trained-seed-14.png",
+    "jazz_trained-seed-14.pt",
+    "jazz_trained-seed-15.png",
+    "jazz_trained-seed-15.pt"
+  ]
+}
