@@ -23,7 +23,12 @@ def main():
     collector_sha = digest(a.collector)
     command = [sys.executable, '-u', str(a.collector), '--run', str(a.run), '--bank', str(a.bank), '--output-prefix', str(a.output_prefix)]
     proc = Path(f'/proc/{a.parent_pid}/cmdline')
-    if not proc.exists() or b'train_latent_bank_unet.py' not in proc.read_bytes():
+    def parent_live():
+        try:
+            return b'train_latent_bank_unet.py' in proc.read_bytes()
+        except FileNotFoundError:
+            return False
+    if not parent_live():
         raise ValueError('The specified training worker is not live')
     with a.status.open('x') as stream:
         json.dump({'state': 'waiting_for_training', 'parent_pid': a.parent_pid,
@@ -43,7 +48,7 @@ def main():
                     break
                 if current.get('state') in ('failed', 'paused', 'error'):
                     raise RuntimeError('Parent ended without a completed endpoint: ' + str(current.get('state')))
-            live = proc.exists() and b'train_latent_bank_unet.py' in proc.read_bytes()
+            live = parent_live()
             missing = 0 if live else missing + 1
             if missing >= 3:
                 raise RuntimeError('Worker disappeared without a completed terminal after grace period')
