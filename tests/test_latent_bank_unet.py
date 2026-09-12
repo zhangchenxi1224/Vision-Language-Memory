@@ -11,7 +11,7 @@ from vision_memory.dreamlite.differentiable_mobile import DifferentiableDreamLit
 from vision_memory.repro import canonical_tensor_sha256
 from vision_memory.training.checkpoint import load_training_checkpoint, save_training_checkpoint
 from vision_memory.training.latent_bank_unet import (
-    INSTRUCTIONS, anchored_flow_bridge, balanced_draw, bank_geometry, file_sha256,
+    INSTRUCTIONS, anchored_flow_bridge, official_flow_bridge, balanced_draw, bank_geometry, file_sha256,
     load_teacher_bank, member_split, predict_velocity, stable_seed,
 )
 
@@ -77,10 +77,50 @@ def test_balanced_draw_does_not_average_targets_or_use_evaluation_noise():
     for group, teacher_id, seed, sigma in draws:
         train, held = member_split(group["teacher_ids"])
         assert teacher_id in train and teacher_id not in held
-        assert 0 < sigma <= .5
+        assert 0 <= sigma < 1
         assert seed not in {stable_seed(17, "heldout-evaluation-noise", i) for i in range(8)}
     assert draws == [balanced_draw(groups, 17, step) for step in range(400)]
     assert set(member_split(groups[0]["teacher_ids"])[0]) == {x[1] for x in draws if x[0]["question_id"] == "q1"}
+    assert any(x[3] > .9 for x in draws)
+    assert any(x[3] < .1 for x in draws)
+
+
+def test_official_bridge_endpoints_derivative_and_zero_source_dependency():
+    noise = torch.randn(1, 4, 3, 5, dtype=torch.float64)
+    target = torch.randn_like(noise)
+    start, velocity = official_flow_bridge(noise, target, 1.)
+    end, _ = official_flow_bridge(noise, target, 0.)
+    torch.testing.assert_close(start, noise, rtol=0, atol=0)
+    torch.testing.assert_close(end, target, rtol=0, atol=0)
+    state, _ = official_flow_bridge(noise, target, .63)
+    nearby, _ = official_flow_bridge(noise, target, .630001)
+    torch.testing.assert_close((nearby-state)/.000001, velocity, rtol=1e-8, atol=1e-8)
+    torch.testing.assert_close(start - velocity, target)
+    # Source never appears in the target-side API or derivative.
+    import inspect
+    assert set(inspect.signature(official_flow_bridge).parameters) == {"noise", "target", "sigma"}
+
+
+def test_official_timestep_above_old_half_range_matches_upstream_integer_cast():
+    unet = CapturingUNet()
+    sampler = DifferentiableDreamLiteMobileSampler(unet=unet,
+        scheduler=SimpleNamespace(config=SimpleNamespace(num_train_timesteps=1000)), vae_scale_factor=8)
+    state = torch.ones(1,4,3,5)
+    predict_velocity(sampler, state, state*7, .8769, torch.ones(1,4,8), torch.ones(1,4),
+                     integer_timestep=True)
+    assert unet.observed[1]["timestep"].tolist() == [876.]
+
+
+def test_new_cli_defaults_to_complete_official_protocol():
+    from scripts.train.train_latent_bank_unet import parser, is_official_flow, training_groups
+    args = parser().parse_args(["--bank-manifest", "bank.json", "--output-dir", "out"])
+    assert is_official_flow(args)
+    assert (args.lora_rank, args.lr, args.gradient_accumulation_steps, args.weight_decay) == (16, 5e-5, 4, 1e-4)
+    assert args.prompt_style == "official_raw"
+    groups = [{"question_id":"q", "teacher_ids":[f"t{i}" for i in range(10)]}]
+    selected = training_groups({"groups":groups}, "single")
+    assert selected[0]["teacher_ids"] == [member_split(groups[0]["teacher_ids"])[0][0]]
+    assert len(groups[0]["teacher_ids"]) == 10
 
 
 def test_geometry_exposes_collapse_without_claiming_coverage_from_correctness():

@@ -25,6 +25,24 @@ def official_mobile_edit_prompt(event_text: str) -> str:
 
 
 @torch.no_grad()
+def encode_image_edit_condition(pipeline: Any, source_image: Any, event_text: str,
+                                *, device: Any, dtype: Any,
+                                prompt_style: str = "official_raw") -> EditConditioning:
+    """Use the original source PIL image, as upstream LoRA training does.
+
+    The LoRA example passes raw editing instructions; Mobile inference wraps
+    them in a diptych description. Choose explicitly and use the same choice
+    in training and evaluation rather than silently changing the condition.
+    """
+    if prompt_style not in {"official_raw", "mobile_diptych"}:
+        raise ValueError("Unknown DreamLite prompt style")
+    prompt = event_text if prompt_style == "official_raw" else official_mobile_edit_prompt(event_text)
+    embeds, mask = pipeline.encode_prompt(mode="edit", prompts=[prompt], image=source_image,
+                                         device=device, dtype=dtype)
+    return EditConditioning(embeds.detach(), mask.detach())
+
+
+@torch.no_grad()
 def encode_latent_path_condition(pipeline: Any, source_latents: Tensor, event_text: str) -> EditConditioning:
     """Build the internal Qwen3-VL-2B condition with an explicit stop-gradient.
 

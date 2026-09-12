@@ -1,8 +1,7 @@
-"""Empirical-set supervision for a source-anchored DreamLite flow.
+"""Empirical-target supervision with the official DreamLite FM objective.
 
-No question or answer is a U-Net input. A sampled successful endpoint is a
-training target, never an averaged latent. The bridge starts at the *actual*
-deployment distribution: (1-s0)*source+s0*Gaussian, with s0=0.5.
+Source is conditioning only. Historical anchored helpers remain explicitly
+available for reproducing old experiments, not as the default training law.
 """
 from __future__ import annotations
 
@@ -20,6 +19,22 @@ from vision_memory.repro import canonical_tensor_sha256
 INSTRUCTIONS = "Use the memory image to answer.\nAnswer with a short phrase only."
 START_SIGMA = 0.5
 EFFECTIVE_SIGMAS = (0.5, 0.375, 0.25, 0.125)
+# The constants above describe the legacy experiment, never official sigmas.
+OFFICIAL_RAW_SIGMAS = (1.0, 0.75, 0.5, 0.25)
+OFFICIAL_REFERENCE_COMMIT = "a6e20c8cc94027f37dd7c5a81b0b3b472aa18409"
+
+
+def official_flow_bridge(noise: Tensor, target: Tensor, sigma: float) -> tuple[Tensor, Tensor]:
+    """Upstream train_edit_lora.py: x=(1-sigma)*target+sigma*noise, v=noise-target.
+
+    There is deliberately no source argument: changing the condition must not
+    change the noisy target or velocity label for a fixed target/noise draw.
+    """
+    if noise.shape != target.shape or noise.device != target.device or noise.dtype != target.dtype:
+        raise ValueError("Noise and target must have matching shape, device and dtype")
+    if not math.isfinite(sigma) or not 0 <= sigma <= 1:
+        raise ValueError("Official flow sigma must lie in [0, 1]")
+    return (1.0 - sigma) * target + sigma * noise, noise - target
 
 
 def file_sha256(path: Path) -> str:
@@ -46,12 +61,19 @@ def anchored_flow_bridge(source: Tensor, noise: Tensor, target: Tensor, sigma: f
 
 
 def predict_velocity(sampler: Any, state: Tensor, source: Tensor, sigma: float,
-                     prompt_embeds: Tensor, attention_mask: Tensor) -> Tensor:
+                     prompt_embeds: Tensor, attention_mask: Tensor, *,
+                     integer_timestep: bool = False) -> Tensor:
     """Use the same spatial concatenation, timestep units and crop as inference."""
-    if not 0 <= sigma <= START_SIGMA:
+    if not math.isfinite(sigma) or not 0 <= sigma <= 1:
         raise ValueError("Unexpected effective sigma")
     count = int(getattr(sampler.scheduler.config, "num_train_timesteps", 1000))
     timestep = torch.tensor(sigma * count, device=state.device, dtype=state.dtype)
+    if integer_timestep:
+        # Match upstream training's (sigmas * 1000.0).long(). Inference still
+        # consumes the scheduler's continuous timesteps, as upstream does.
+        if count != 1000:
+            raise ValueError("Official DreamLite training requires 1000 timestep units")
+        timestep = timestep.long()
     time_ids = torch.tensor([[state.shape[-1] * sampler.vae_scale_factor,
                               state.shape[-2] * sampler.vae_scale_factor]],
                             device=state.device, dtype=state.dtype)
@@ -72,8 +94,11 @@ def member_split(teacher_ids: list[str]) -> tuple[list[str], list[str]]:
     return [x for x in ordered if x not in held], held
 
 
-def balanced_draw(groups: list[dict[str, Any]], seed: int, step: int) -> tuple[dict[str, Any], str, int, float]:
+def balanced_draw(groups: list[dict[str, Any]], seed: int, step: int, *,
+                  max_sigma: float = 1.0) -> tuple[dict[str, Any], str, int, float]:
     """Each complete cycle visits every question once; sample a member uniformly."""
+    if not groups or not math.isfinite(max_sigma) or not 0 < max_sigma <= 1:
+        raise ValueError("Nonempty groups and max_sigma in (0, 1] required")
     cycle, offset = divmod(step, len(groups))
     order_generator = torch.Generator().manual_seed(stable_seed(seed, "question-order", cycle))
     order = torch.randperm(len(groups), generator=order_generator).tolist()
@@ -81,8 +106,9 @@ def balanced_draw(groups: list[dict[str, Any]], seed: int, step: int) -> tuple[d
     train, _ = member_split(group["teacher_ids"])
     rng = torch.Generator().manual_seed(stable_seed(seed, "bank-member-and-sigma", step))
     teacher_id = train[int(torch.randint(len(train), (), generator=rng))]
-    # Exact zero carries no training probability. Keep float32 strictly positive.
-    sigma = max(float(torch.rand((), generator=rng)), 1e-6) * START_SIGMA
+    # Upstream samples torch.rand over the entire unit interval; no scheduler
+    # shift is applied to training draws. Zero is a valid FM endpoint.
+    sigma = float(torch.rand((), generator=rng)) * max_sigma
     return group, teacher_id, stable_seed(seed, "training-noise", step), sigma
 
 

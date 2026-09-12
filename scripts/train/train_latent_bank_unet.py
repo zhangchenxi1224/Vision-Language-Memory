@@ -1,7 +1,7 @@
 """Train DreamLite U-Net LoRA from a sealed successful-latent set, then evaluate.
 
 The two oracle routes use this identical entry point and budget independently.
-This is an anchored conditional flow-matching objective, NOT Reader QA loss.
+The default is upstream target/noise flow matching, without Reader QA loss.
 Only new-noise four-step Writer outputs determine final QA performance.
 """
 from __future__ import annotations
@@ -25,7 +25,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path[:0] = [str(ROOT), str(ROOT / "src")]
 
 from vision_memory.dreamlite import DifferentiableDreamLiteMobileSampler
-from vision_memory.dreamlite.conditioning import encode_latent_path_condition
+from vision_memory.dreamlite.conditioning import encode_image_edit_condition, encode_latent_path_condition
 from vision_memory.dreamlite.latent_codec import decode_model_latents_unit_interval
 from vision_memory.reader.open_answer import generate_short_answer
 from vision_memory.reader.open_eos import assistant_termination_contract, generation_diagnostics, qwen3vl_answer_eos_ce
@@ -33,7 +33,23 @@ from vision_memory.reader.qwen3vl import R3_QWEN_READER_RESIZE_CONTRACT
 from vision_memory.repro import canonical_tensor_sha256, configure_strict_cuda_determinism, lora_trainable_parameters
 from vision_memory.training.checkpoint import load_training_checkpoint, save_training_checkpoint
 from vision_memory.training.latent_bank_unet import (EFFECTIVE_SIGMAS, START_SIGMA, anchored_flow_bridge,
+    OFFICIAL_REFERENCE_COMMIT, OFFICIAL_RAW_SIGMAS, official_flow_bridge,
     balanced_draw, bank_geometry, file_sha256, load_teacher_bank, member_split, predict_velocity, stable_seed)
+
+
+def is_official_flow(args) -> bool:
+    # Older diagnostic entry points construct their own Namespace. Preserve
+    # their explicitly historical behavior; the public CLI defaults to official.
+    return getattr(args, "flow_protocol", "legacy_anchored") == "official"
+
+
+def training_groups(bank, target_mode):
+    if target_mode == "bank":
+        return bank["groups"]
+    if target_mode != "single":
+        raise ValueError("Unknown target mode")
+    # Select a training member by hash only, never by test-prompt performance.
+    return [{**g, "teacher_ids": [member_split(g["teacher_ids"])[0][0]]} for g in bank["groups"]]
 
 
 class TrainingPaused(Exception):
@@ -137,9 +153,16 @@ def load_runtime(args, bank) -> dict:
         actual = legacy.encode_model_latent(pipe.vae, legacy.blank_source_rgb(device=vd, dtype=torch.float32))
         if source.shape != actual.shape or not torch.equal(source, actual):
             raise ValueError("Teacher source latent differs from the current FP32 gray-source encoder")
-        condition = encode_latent_path_condition(pipe, source, group["event_text"])
-        actual_timesteps, effective = sampler._prepare_timesteps(source, 4, EFFECTIVE_SIGMAS, sigmas_are_effective=True)
-        expected_t = torch.tensor(EFFECTIVE_SIGMAS, device=vd) * int(pipe.scheduler.config.num_train_timesteps)
+        if is_official_flow(args):
+            from PIL import Image
+            condition = encode_image_edit_condition(pipe, Image.new("RGB", (1024, 1024), (128, 128, 128)),
+                group["event_text"], device=vd, dtype=source.dtype, prompt_style=args.prompt_style)
+        else:
+            condition = encode_latent_path_condition(pipe, source, group["event_text"])
+        raw_sigmas = OFFICIAL_RAW_SIGMAS if is_official_flow(args) else EFFECTIVE_SIGMAS
+        actual_timesteps, effective = sampler._prepare_timesteps(source, 4, raw_sigmas,
+                                                               sigmas_are_effective=not is_official_flow(args))
+        expected_t = torch.tensor(effective, device=vd) * int(pipe.scheduler.config.num_train_timesteps)
         if not torch.allclose(actual_timesteps.float(), expected_t.float(), atol=2e-3, rtol=2e-6):
             raise RuntimeError("Flow-matching training timestep units differ from the actual scheduler")
         blank = decode_model_latents_unit_interval(pipe.vae, source, clamp=True).cpu()
@@ -155,7 +178,7 @@ def load_runtime(args, bank) -> dict:
             donor_pixels = donor_pixels.unsqueeze(0)
         if donor_pixels.shape[0:2] != (1, 3) or donor_pixels.min() < 0 or donor_pixels.max() > 1:
             raise ValueError("Donor is not a raw unit-RGB image")
-        contexts[qid] = {"source": source, "condition": condition,
+        contexts[qid] = {"source": source, "condition": condition, "effective_sigmas": effective,
                          "blank": blank, "donor": donor_pixels, "donor_answer": donor["answer"]}
     return dict(pipe=pipe, reader=reader, processor=processor, sampler=sampler, contexts=contexts,
                 vae_device=vd, reader_device=rd, snapshots=snapshots,
@@ -208,6 +231,37 @@ def paired_evaluation(before: list[dict], after: list[dict]) -> dict:
 
 
 @torch.no_grad()
+def verify_training_teacher_readback(args, runtime, groups, teachers):
+    """Recheck the original positive control before spending optimizer updates.
+
+    This result uses an oracle latent directly and is never Writer accuracy.
+    No member is silently dropped, replaced, or selected using this readback.
+    """
+    rows = []
+    for group in groups:
+        ids, _ = member_split(group["teacher_ids"])
+        for tid in ids:
+            pause_if_requested(runtime)
+            pixels = decode_model_latents_unit_interval(runtime["pipe"].vae,
+                teachers[tid].to(runtime["vae_device"]), clamp=True)
+            query = group["question_variants"]["original_open"]
+            ce = qwen3vl_answer_eos_ce(model=runtime["reader"], processor=runtime["processor"],
+                image=pixels[0].to(runtime["reader_device"]), device=runtime["reader_device"],
+                query=query, target=group["answer"], termination=runtime["termination"], lambda_eos=1.,
+                require_image_grad=False, deterministic_ce=True, reader_resize_contract=R3_QWEN_READER_RESIZE_CONTRACT)
+            generation = generate_short_answer(model=runtime["reader"], processor=runtime["processor"],
+                image=pixels.to(runtime["reader_device"]), query=query, device=runtime["reader_device"],
+                max_new_tokens=32, do_sample=False)
+            score = generation_diagnostics(generation, group["answer"], ce.target_ids[0,:ce.answer_token_count].cpu().tolist())
+            rows.append({"teacher_id": tid, "question_id": group["question_id"], "query":query,
+                "gold":group["answer"], "image_sha256":canonical_tensor_sha256(pixels.cpu()),
+                **generation, "scorer":score})
+            write_json(args.output_dir / "teacher-readback.json", {"scope":"direct oracle positive control, not Writer output", "rows":rows})
+            if not score["strict_correct"] or score["overgeneration"]:
+                raise RuntimeError(f"Previously correct teacher no longer passes raw answer/EOS readback: {tid}")
+
+
+@torch.no_grad()
 def evaluate(args, runtime, bank, teachers, phase: str) -> dict:
     directory = args.output_dir / phase
     directory.mkdir(parents=True, exist_ok=True)
@@ -236,10 +290,13 @@ def evaluate(args, runtime, bank, teachers, phase: str) -> dict:
                                 dtype=torch.float32).to(runtime["vae_device"])
             output = runtime["sampler"](source_latents=context["source"], noise_latents=noise,
                 prompt_embeds=condition.prompt_embeds, prompt_attention_mask=condition.attention_mask,
-                num_steps=4, edit_start_sigma=START_SIGMA, return_trajectory=True)
+                num_steps=4, edit_start_sigma=1.0 if is_official_flow(args) else START_SIGMA, return_trajectory=True)
+            expected_sigmas = context.get("effective_sigmas", EFFECTIVE_SIGMAS)
             if (len(output.effective_sigmas) != 4 or output.trajectory is None or len(output.trajectory) != 5
-                    or any(abs(a-b) > 2e-6 for a, b in zip(output.effective_sigmas, EFFECTIVE_SIGMAS))):
+                    or any(abs(a-b) > 2e-6 for a, b in zip(output.effective_sigmas, expected_sigmas))):
                 raise RuntimeError("Four-step Writer schedule differs from preregistration")
+            if is_official_flow(args) and not torch.equal(output.trajectory[0], noise):
+                raise RuntimeError("Official Writer must start from the supplied Gaussian noise")
             latent = output.latents.cpu()
             outputs.append(latent)
             pixels = decode_model_latents_unit_interval(runtime["pipe"].vae, output.latents, clamp=True).cpu()
@@ -299,16 +356,24 @@ def run(args) -> dict:
         stop_requested[0] = True
     signal.signal(signal.SIGTERM, stop_handler)
     signal.signal(signal.SIGINT, stop_handler)
-    binding = {"schema": "latent-bank-unet/v1", "git_commit": commit, "source_hashes": source_hashes(),
+    groups = training_groups(bank, args.target_mode)
+    official = is_official_flow(args)
+    binding = {"schema": "latent-bank-unet/v2", "git_commit": commit, "source_hashes": source_hashes(),
         "bank_manifest_sha256": file_sha256(args.bank_manifest), "route": bank["route"],
         "steps": args.steps, "seed": args.seed, "lr": args.lr, "lora_rank": args.lora_rank,
-        "eval_seeds": args.eval_seeds, "objective": "source-anchored empirical-set conditional flow matching",
-        "dreamlite_dtype": "float32", "reader_dtype": "bfloat16", "source_sigma": START_SIGMA,
+        "eval_seeds": args.eval_seeds, "objective": "official target-noise flow matching" if official else "legacy source-anchored flow matching",
+        "flow_protocol": args.flow_protocol, "upstream_commit": OFFICIAL_REFERENCE_COMMIT,
+        "prompt_style": args.prompt_style if official else "legacy_decoded_source_diptych",
+        "gradient_accumulation_steps": args.gradient_accumulation_steps, "weight_decay": args.weight_decay,
+        "target_mode": args.target_mode, "raw_inference_sigmas": list(OFFICIAL_RAW_SIGMAS) if official else None,
+        "training_timestep": "floor(1000*sigma)" if official else "1000*sigma",
+        "dreamlite_dtype": "float32", "reader_dtype": "bfloat16", "source_sigma": 1.0 if official else START_SIGMA,
         "unet_input_keys": ["interpolated_flow_state", "source_latent", "event_condition", "effective_sigma", "time_ids"],
-        "flow_state_construction_inputs": ["source_latent", "fresh_random_noise", "sampled_successful_target", "effective_sigma"],
+        "flow_state_construction_inputs": (["fresh_random_noise", "sampled_successful_target", "sigma"] if official
+                                          else ["source_latent", "fresh_random_noise", "sampled_successful_target", "effective_sigma"]),
         "excluded_additional_condition_inputs": ["question", "answer", "target_latent", "teacher_id", "question_id"],
         "dreamlite_model_path": str(args.dreamlite.resolve()), "reader_model_path": str(args.reader_model.resolve()),
-        "target_split": {g["question_id"]: dict(zip(("train", "heldout"), member_split(g["teacher_ids"]))) for g in bank["groups"]},
+        "target_split": {g["question_id"]: dict(zip(("train", "heldout"), member_split(g["teacher_ids"]))) for g in groups},
         "generalization_scope": "single-question Writer mechanism" if len(bank["groups"]) == 1 else "seen-question Writer; no held-out-question claim"}
     identity_path = args.output_dir / "identity.json"
     if identity_path.exists() and json.loads(identity_path.read_text(encoding="utf-8")) != binding:
@@ -317,7 +382,10 @@ def run(args) -> dict:
     runtime = load_runtime(args, bank)
     runtime["should_pause"] = lambda: stop_requested[0] or bool(args.deadline_unix and time.time() >= args.deadline_unix - 90)
     pause_if_requested(runtime)
-    runtime_binding = {"snapshots": runtime["snapshots"], "termination": runtime["termination"]}
+    runtime_binding = {"snapshots": runtime["snapshots"], "termination": runtime["termination"],
+        "scheduler_config": dict(runtime["pipe"].scheduler.config),
+        "effective_inference_sigmas": {k: list(v["effective_sigmas"]) for k,v in runtime["contexts"].items()},
+        "condition_sha256": {k: canonical_tensor_sha256(v["condition"].prompt_embeds) for k,v in runtime["contexts"].items()}}
     runtime_path = args.output_dir / "runtime.json"
     if runtime_path.exists() and json.loads(runtime_path.read_text(encoding="utf-8")) != runtime_binding:
         raise RuntimeError("Model/runtime identity changed")
@@ -327,8 +395,9 @@ def run(args) -> dict:
     frozen = frozen_versions(pipe, reader)
     parameters = lora_trainable_parameters(pipe.unet)
     initial_parameters = {n: p.detach().cpu().clone() for n,p in pipe.unet.named_parameters() if p.requires_grad}
-    optimizer = torch.optim.AdamW(parameters, lr=args.lr, betas=(.9, .999), eps=1e-8, weight_decay=0.)
+    optimizer = torch.optim.AdamW(parameters, lr=args.lr, betas=(.9, .999), eps=1e-8, weight_decay=args.weight_decay)
     checkpoint = args.output_dir / "checkpoint-latest.pt"
+    verify_training_teacher_readback(args, runtime, groups, teachers)
     # Baseline is evaluated on the untrained adapter (LoRA B=0), before resume load.
     baseline = evaluate(args, runtime, bank, teachers, "baseline")
     step = 0
@@ -355,24 +424,32 @@ def run(args) -> dict:
     temporary_log = log_path.with_suffix(".jsonl.tmp")
     temporary_log.write_text("".join(json.dumps(row, sort_keys=True) + "\n" for row in log_rows), encoding="utf-8")
     temporary_log.replace(log_path)
-    question_updates = Counter(row["question_id"] for row in log_rows)
-    teacher_updates = Counter(row["teacher_id"] for row in log_rows)
+    question_updates = Counter(q for row in log_rows for q in {m["question_id"] for m in row["microbatches"]})
+    teacher_updates = Counter(t for row in log_rows for t in {m["teacher_id"] for m in row["microbatches"]})
     started = time.monotonic()
     while step < args.steps:
-        group, teacher_id, noise_seed, sigma = balanced_draw(bank["groups"], args.seed, step)
-        context = runtime["contexts"][group["question_id"]]
-        noise = torch.randn(context["source"].shape, generator=torch.Generator().manual_seed(noise_seed),
-                            dtype=torch.float32).to(runtime["vae_device"])
-        target = teachers[teacher_id].to(runtime["vae_device"])
-        state, true_velocity = anchored_flow_bridge(context["source"], noise, target, sigma)
+        pause_if_requested(runtime)
         optimizer.zero_grad(set_to_none=True)
-        condition = context["condition"]
-        prediction = predict_velocity(runtime["sampler"], state, context["source"], sigma,
-                                      condition.prompt_embeds, condition.attention_mask)
-        loss = (prediction.float() - true_velocity.float()).square().mean()
-        if not torch.isfinite(loss):
-            raise RuntimeError("Nonfinite U-Net flow-matching loss")
-        loss.backward()
+        microbatches = []
+        for micro in range(args.gradient_accumulation_steps):
+            draw_index = step * args.gradient_accumulation_steps + micro
+            group, teacher_id, noise_seed, sigma = balanced_draw(groups, args.seed, draw_index,
+                                                               max_sigma=1.0 if official else START_SIGMA)
+            context = runtime["contexts"][group["question_id"]]
+            noise = torch.randn(context["source"].shape, generator=torch.Generator().manual_seed(noise_seed),
+                                dtype=torch.float32).to(runtime["vae_device"])
+            target = teachers[teacher_id].to(runtime["vae_device"])
+            state, true_velocity = (official_flow_bridge(noise, target, sigma) if official
+                                    else anchored_flow_bridge(context["source"], noise, target, sigma))
+            condition = context["condition"]
+            prediction = predict_velocity(runtime["sampler"], state, context["source"], sigma,
+                condition.prompt_embeds, condition.attention_mask, integer_timestep=official)
+            loss = (prediction.float() - true_velocity.float()).square().mean()
+            if not torch.isfinite(loss):
+                raise RuntimeError("Nonfinite U-Net flow-matching loss")
+            (loss / args.gradient_accumulation_steps).backward()
+            microbatches.append({"question_id": group["question_id"], "teacher_id": teacher_id,
+                "noise_seed": noise_seed, "effective_sigma": sigma, "flow_matching_mse": float(loss.detach())})
         grads = [p.grad for p in parameters if p.grad is not None]
         if not grads or not all(torch.isfinite(g).all() for g in grads) or not any((g != 0).any() for g in grads):
             raise RuntimeError("U-Net LoRA has no finite nonzero gradient")
@@ -383,15 +460,17 @@ def run(args) -> dict:
             raise RuntimeError("Nonfinite U-Net adapter parameter")
         step += 1
         row = {"optimizer_step": step, "question_id": group["question_id"], "teacher_id": teacher_id,
-               "noise_seed": noise_seed, "effective_sigma": sigma, "flow_matching_mse": float(loss.detach()),
+               "noise_seed": noise_seed, "effective_sigma": sigma,
+               "flow_matching_mse": sum(m["flow_matching_mse"] for m in microbatches) / len(microbatches),
+               "microbatches": microbatches,
                "lora_grad_norm_before_clip": norm, "elapsed_since_resume_seconds": time.monotonic() - started}
         # Exact optimizer + all RNG state at every step: termination never requires inventing missing updates.
         save_training_checkpoint(checkpoint, trainable_module=pipe.unet, optimizer=optimizer,
             epoch=0, episode_cursor=step, optimizer_step=step, manifest=binding, trainer_state={"metrics_row": row})
         write_json(args.output_dir / "metrics" / f"step-{step:06d}.json", row)
         append_jsonl(args.output_dir / "training.jsonl", row)
-        question_updates[group["question_id"]] += 1
-        teacher_updates[teacher_id] += 1
+        question_updates.update({m["question_id"] for m in microbatches})
+        teacher_updates.update({m["teacher_id"] for m in microbatches})
         if step % 16 == 0 or step == 1:
             print(json.dumps({"stage": "unet_training", **row}), flush=True)
             frozen_audit(pipe, reader, frozen)
@@ -440,10 +519,15 @@ def parser() -> argparse.ArgumentParser:
     p.add_argument("--dreamlite-device", default="cuda:0")
     p.add_argument("--reader-device", default="cuda:1")
     p.add_argument("--expected-commit")
-    p.add_argument("--steps", type=int, default=512)
+    p.add_argument("--steps", type=int, default=3500)
     p.add_argument("--seed", type=int, default=20260908)
-    p.add_argument("--lr", type=float, default=1e-4)
-    p.add_argument("--lora-rank", type=int, default=4)
+    p.add_argument("--lr", type=float, default=5e-5)
+    p.add_argument("--lora-rank", type=int, default=16)
+    p.add_argument("--gradient-accumulation-steps", type=int, default=4)
+    p.add_argument("--weight-decay", type=float, default=1e-4)
+    p.add_argument("--flow-protocol", choices=("official", "legacy_anchored"), default="official")
+    p.add_argument("--prompt-style", choices=("official_raw", "mobile_diptych"), default="official_raw")
+    p.add_argument("--target-mode", choices=("bank", "single"), default="bank")
     p.add_argument("--eval-seeds", type=int, default=8)
     p.add_argument("--resume", action="store_true")
     p.add_argument("--validate-only", action="store_true")
@@ -453,7 +537,8 @@ def parser() -> argparse.ArgumentParser:
 
 def main() -> int:
     args = parser().parse_args()
-    if args.steps <= 0 or args.eval_seeds < 2 or args.lora_rank <= 0 or args.lr <= 0:
+    if (args.steps <= 0 or args.eval_seeds < 2 or args.lora_rank <= 0 or args.lr <= 0
+            or args.gradient_accumulation_steps <= 0 or args.weight_decay < 0):
         raise ValueError("Positive training budget/rank/lr and at least two held-out noise seeds required")
     if args.validate_only:
         bank, teachers = load_teacher_bank(args.bank_manifest)

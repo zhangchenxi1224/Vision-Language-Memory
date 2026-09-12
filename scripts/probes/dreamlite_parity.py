@@ -32,6 +32,7 @@ def main() -> int:
     parser.add_argument("--event", default="the background is a quiet blue room")
     parser.add_argument("--resolution", type=int, default=1024)
     parser.add_argument("--seed", type=int, default=0)
+    parser.add_argument("--dtype", choices=("auto", "float32", "bfloat16"), default="auto")
     parser.add_argument("--atol", type=float, default=1e-3)
     parser.add_argument("--rtol", type=float, default=1e-3)
     parser.add_argument("--output-json", type=Path)
@@ -44,6 +45,8 @@ def main() -> int:
 
     device = torch.device("cuda:0")
     dtype = torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16
+    if args.dtype != "auto":
+        dtype = getattr(torch, args.dtype)
     reset_cuda_peak_memory([device])
     pipe = DreamLiteMobilePipeline.from_pretrained(
         args.model,
