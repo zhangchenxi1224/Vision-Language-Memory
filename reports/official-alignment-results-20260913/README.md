@@ -86,8 +86,18 @@ Base预训练输出也包含列车，训练后出现纹理及残留列车。与�
 
 该诊断使用cuda:1，主训练的冻结Reader仍驻留在同一卡；主训练计算在cuda:0，未修改其进程/源码。Base3500已观察1232/3500步；已核验其前512步噪声、sigma、teacher、loss和梯度范数与Base512完全一致（仅排除耗时），见[前缀一致性检查](base3500-prefix-check.json)。
 
-## 全 U-Net 容量对照正在训练
+## 全 U-Net 容量对照：单题功能通过
 
 新增固定代码b0a06f5的512步全U-Net对照，模型与数据、官方FM、seed、优化超参和原生28步评测均保持Base512设置；完整约定见[调度前预注册](../official-full-unet-preregistration-20260913.md)。新单H200实例显式同卡放置Writer/Reader，训练前已核验8个初始latent/image、全部采样轨迹与原双卡基线逐位一致，50条raw Reader记录逐字段一致。见[基线核验](full512-baseline-reference-check.json)。
 
-02:53实测31/512步，实际GPU进程40541和4.4GiB完整优化器检查点存在。它只解冻原始U-Net；其余模型继续冻结。相关51项测试通过。原LoRA3500仍在原实例、原代码上独立运行，已观察2152步。这些进度不属于功能成功证据，仍须收集完整训练后答题结果。
+全U-Net512已完成。8个噪声下，原问和四个改写问法均为 **8/8正确且立即EOS**；全部40个matched输出的raw文本为`ambient`，token为`[59614,151645]`。训练前这40个单元全部错误，训练后全部正确；blank和不同答案donor的10个单元仍全部错误。这里只证明同一题、同一事件下的新生成噪声可学性，不能据此声称按新事件更新或多题泛化。
+
+训练范围是389,968,388个原始U-Net参数，其他模型冻结；实际参数delta L2=19.940394。最终result和checkpoint SHA重新核验通过，result SHA256为`51332a99686e4de865bdfc344e68f371b132e0d9a741c1f0410c5852563f485b`。完整2048个训练draw均与LoRA512对应一致，首步loss完全相同；同一末64步样本上，full平均FM loss0.054692，LoRA0.436569。见[训练样本配对核验](full512-draw-comparison.json)。
+
+8个生成结果距预先选定训练teacher的RMS为0.05682–0.06772，彼此平均RMS0.02844；全部最近邻是被训练的同一个teacher。这是单目标实验的拟合结果，不能说覆盖了96个不同记忆目标。这组配对实验支持可训练参数范围是512步LoRA失败的重要因素，尚不构成所有失败原因的唯一解释。
+
+![全U-Net训练前后真实图像及原问输出](full512-preview.png)
+
+原始文本证据：[full512-evidence.tgz](full512-evidence.tgz)、[重新核验摘要](full512-summary.json)、[训练后raw generations](full512/train/trained/generations.jsonl)。原始PT和4.4GiB模型/优化器状态保存在远端。已检查下载后的文本哈希及result绑定，并查看真实PNG预览。
+
+默认原生CFG7.5已经通过；按事前约定，CFG1/native与CFG1/缓存训练条件的无训练对照继续执行，不替换该端点结果。相关53项测试通过。原LoRA3500仍在原实例、原代码上独立运行，最后观察2786步。下一步须固定全新未观察噪声，并检查事件值替换/清除等条件敏感性，再安排多事件目标与训练；goal仍active。

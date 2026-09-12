@@ -90,3 +90,14 @@ worker deadline Unix `1789254021`（2026-09-13 07:00:21北京时间）；GPU平�
 - **已经排好本次full退出后的串行无训练对照，不要重复提交**：GPU上实际queue PID112379，脚本 `P/runs/dreamlite-official-alignment/run-full-condition-controls-712c00d.sh`，日志 `P/runs/dreamlite-official-alignment/712c00d-full-condition-queue.log`。检查/proc/40541/cmdline必须仍指向full run/train才等待；父进程退出后各probe各自核验completed/result/checkpoint。队列等待上限06:00（1789250400）。
 - 固定两输出：`P/runs/dreamlite-official-alignment/712c00d-full-native-guidance1` 和 `P/runs/dreamlite-official-alignment/712c00d-full-training-raw-guidance1`。每个50raw generations、8图/轨迹和complete.json；第二个phase叫training_raw_guidance1，第一个guidance1。不要使用只找train/trained的主训练collector解析这两probe，应独立读phase complete/summary/generations并验hash。
 - 队列原脚本本地.cache/run-full-condition-controls.sh；单卡H200仍只本任务使用，不修改运行中的full或LoRA源码。完成图预览标题已增加全U-Net/LoRA rank标识。
+
+## 03:10 首个功能正结果
+
+**Full512正式completed**，resultSHA `51332a99686e4de865bdfc344e68f371b132e0d9a741c1f0410c5852563f485b`；CPU新collector重新核验result和最终checkpoint通过。全部5问法8/8正确且立即EOS，raw40条均ambient、tokens[59614,151645]，baseline全部错误，blank/donor10条均错误。389,968,388参数，deltaL2=19.940394，末64FMloss0.054692 vs相同draw LoRA0.436569。完整512updates/2048draw已对齐。8生成距训练teacher RMS0.05682–0.06772。**这只证明单题可学，不标goal完成。**
+
+- 已下载 `reports/official-alignment-results-20260913/full512-evidence.tgz`、full512-summary.json、full512-preview.png；文本展开到full512/，本地phase文本SHA和result再次通过，PNG已view。PT和4.4GiBcheckpoint留远端。训练配对报告full512-draw-comparison.json。
+- Full训练PID40541已结束。Queue112379已自动进入第一臂：native CFG1 wrapper PID190916、GPU worker PID191076（显存22624MiB）。两臂既已预注册，继续收集，不重启父实验、不取消来替换成功端点。
+- 主LoRA3500仍活跃，最后观察2786步。容器PID411798/宿主GPU PID2622580。预计03:30附近结束。
+- 完成图生成器最新共享副本 `P/runs/dreamlite-official-alignment/render_alignment_preview_v3.py`，title正确区分fullU-Net/LoRA rank；后续用它。
+- 下一步：收集两条件臂和主LoRA；事前固定全新噪声的full最终权重确认测试（继续原生CFG7.5，不基于待出对照结果挑配置），并用相同实体的事件值替换/清除检验是否仅恒定输出ambient。随后基于该证据准备多事件teacher与共享Writer训练，不能把当前单题结果充当可用版本。
+- 旧16题数据有`mixed`类型，既含event_text也含query；后续提取事件必须包括它，不能只筛type==event。之前读取前缀出现gold与首个事件不一致就是漏看mixed更新，并非原始数据错误。旧BF16 teacher仍需当前FP32读取验证，不能直接导入。
