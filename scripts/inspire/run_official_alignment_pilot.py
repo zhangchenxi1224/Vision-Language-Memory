@@ -25,6 +25,7 @@ def main():
     p.add_argument("--teacher-dreamlite",type=Path)
     p.add_argument("--official-source",type=Path)
     p.add_argument("--base-manifest",type=Path)
+    p.add_argument("--base-guidance-scale",type=float,default=7.5)
     p.add_argument("--reader", type=Path, required=True)
     p.add_argument("--output-dir", type=Path, required=True)
     p.add_argument("--expected-commit", required=True)
@@ -39,6 +40,8 @@ def main():
     p.add_argument("--deadline-unix", type=float, required=True)
     p.add_argument("--resume", action="store_true")
     a=p.parse_args()
+    if not 1.0<=a.base_guidance_scale<=100.0 or (a.model_variant!="base" and a.base_guidance_scale!=7.5):
+        raise ValueError("Base guidance must be in [1,100] and applies only to Base")
     if subprocess.check_output(["git","rev-parse","HEAD"],cwd=ROOT,text=True).strip()!=a.expected_commit:
         raise RuntimeError("Wrong checkout")
     if subprocess.check_output(["git","status","--porcelain"],cwd=ROOT,text=True).strip():
@@ -61,7 +64,7 @@ def main():
         "diffusers":diffusers.__version__,"transformers":transformers.__version__,"gpu":gpu,
         "cuda":torch.version.cuda,"target_mode":a.target_mode,"steps":a.steps,"seed":a.seed,
         "trainable_scope":a.trainable_scope,"checkpoint_interval":a.checkpoint_interval,
-        "colocate_models":a.colocate_models,
+        "colocate_models":a.colocate_models,"base_guidance_scale":a.base_guidance_scale if a.model_variant=="base" else None,
         "created_unix":time.time(),"deadline_unix":a.deadline_unix}
     write_json(a.output_dir/"dispatch.json",binding)
     parity=a.output_dir/"parity.json"
@@ -97,7 +100,7 @@ def main():
                       "--baseline-reference-result-sha256",a.baseline_reference_result_sha256])
     if a.model_variant=="base":
         train.extend(["--teacher-dreamlite",str(a.teacher_dreamlite),"--official-source",str(a.official_source),
-                      "--base-manifest",str(a.base_manifest)])
+                      "--base-manifest",str(a.base_manifest),"--base-guidance-scale",str(a.base_guidance_scale)])
     if a.resume: train.append("--resume")
     commands.append(train)
     write_json(a.output_dir/"commands.json",{"commands":commands})

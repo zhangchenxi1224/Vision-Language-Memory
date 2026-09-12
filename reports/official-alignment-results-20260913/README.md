@@ -135,3 +135,23 @@ Base预训练输出也包含列车，训练后出现纹理及残留列车。与�
 已封存[15组转移bank](source-transitions/manifest.json)，SHA为3d89168c9d36e6df5ded067e54d13128dda1a3cf2c5516600901b017ebe377f2。它仍是一个语义问题和三个不同目标；15条teacher记录只是复用原目标以绑定不同源状态/操作。三个no-op的事件文本完全相同、要求的答案不同，因而不能仅凭事件文字区分正确结果。共享转移Writer尚未训练。
 
 见[远端全文件校验摘要](source-transitions-summary.json)、[原始证据及PNG/source张量](source-transitions-evidence.tgz)、[下载后逐文件与canonical tensor复核](source-transitions-local-verification.json)。完整三条native轨迹保留在共享盘并已核验文件SHA；本地归档不含这三条大型轨迹。该临时单H200的计算已结束，证据持久化后停止并删除。
+
+## 三状态共享训练完成：引导强度对照恢复功能
+
+c90896c完成1536更新/6144训练draw，各状态恰好2048draw。本地逐个重放group/teacher/noise/sigma全部一致；result SHA4dfb56f942d7dea62ac1d52ec91a0a814df30d4f6accc1238f9310dd822dff14及最终checkpoint SHA3c4b0679f16dd7714a662cfaddcd7716f7d3d43a49920898ab19a522d77af38d核验通过。末64训练loss均值0.047572，参数deltaL2=34.318845；这些不是功能成功率。
+
+原生CFG7.5的严格正确且立即EOS结果：
+
+| 状态 | 原问 | p1 | p2 | p3 | p4 |
+|---|---:|---:|---:|---:|---:|
+| ambient | 0/8 | 4/8 | 0/8 | 0/8 | 0/8 |
+| jazz | 7/8 | 1/8 | 8/8 | 0/8 | 0/8 |
+| no active preference | 0/8 | 0/8 | 0/8 | 0/8 | 0/8 |
+
+总计20/120，且0/24状态/噪声组合同时通过五问法，因此该主设置未通过。clear常输出no music preference等表达，ambient/jazz还出现错误状态或额外文字；不改动事前评分标准。见[最终摘要](three-state-full1536-summary.json)、[原始证据](three-state-full1536-evidence.tgz)、[下载与6144draw重放核验](three-state-full1536-local-verification.json)。
+
+![三状态共享训练的原生CFG7.5结果](three-state-full1536-preview.png)
+
+依据[事先固定的诊断](../official-three-state-condition-controls-20260913.md)，同一checkpoint做两项零更新对照：**native CFG1与training_raw CFG1均为120/120正确且立即EOS，24/24状态/噪声组同时通过五问法**。每种状态各40条raw分别全为ambient、jazz、no active preference。完整phase/PT/JSON hashes、parent checkpoint绑定与冻结边界均通过核验，见[对照摘要](three-state-controls-summary.json)和[原始证据](three-state-controls-evidence.tgz)。这支持在当前样本上改变引导强度足以恢复功能，并不把原生CFG7.5失败改写成成功。
+
+下一候选保留官方native条件与28步采样，显式CFG1，不改变FM训练目标或权重；新噪声、未训练事件表达和真正RGB链式更新的[后续协议](../official-cfg1-candidate-20260913.md)已固定。仅开发评测通过还不等于完整可用更新器。15组源状态转移bank暂未训练，后续按新验证结果判断是否需要。

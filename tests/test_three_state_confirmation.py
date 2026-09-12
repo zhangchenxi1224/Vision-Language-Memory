@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from scripts.probes.official_three_state_confirmation import confirmation_plan, validate_development_rows
+from scripts.probes.official_three_state_confirmation import confirmation_plan, validate_development_rows, validate_guidance_gate
 from vision_memory.training.latent_bank_unet import stable_seed
 
 
@@ -54,3 +54,16 @@ def test_confirmation_gate_rejects_missing_duplicate_failed_and_overgenerated_ce
     changed[-1]["generated_token_ids"] = [42, 99, 151645]
     with pytest.raises(ValueError, match="every state"):
         validate_development_rows(changed, bank())
+
+
+def test_cfg1_confirmation_requires_native_control_and_new_noise_namespace():
+    old = {s for c in confirmation_plan(bank()) for s in c['seeds']}
+    new = {s for c in confirmation_plan(bank(), guidance_scale=1.0) for s in c['seeds']}
+    assert len(new)==16 and old.isdisjoint(new)
+    identity={'probe_commit':'1e4acd2bcd9cbf9f0b2878e51694c17bebe06110',
+        'parent_result_sha256':'parent','checkpoint_sha256':'weights','condition_style':'native',
+        'guidance_scale':1.0,'image_guidance_scale':1.0,'inference_steps':28,'optimizer_updates':0,'trainable_scope':'full_unet'}
+    validate_guidance_gate({'identity':identity},'parent','weights')
+    for key,value in [('condition_style','training_raw'),('checkpoint_sha256','other'),('optimizer_updates',1)]:
+        with pytest.raises(ValueError,match='native zero-update'):
+            validate_guidance_gate({'identity':{**identity,key:value}},'parent','weights')

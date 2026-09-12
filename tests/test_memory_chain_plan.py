@@ -19,3 +19,14 @@ def test_chains_cover_every_directed_overwrite_and_keep_noops_source_dependent()
     for repetition in range(4):
         seeds = [tuple(step["noise_seed"] for step in seq["steps"]) for seq in plan if seq["repetition"] == repetition]
         assert len(set(seeds)) == 1
+
+
+def test_cfg1_chains_keep_the_task_and_use_a_new_noise_namespace():
+    old=chain_plan()
+    new=chain_plan(guidance_scale=1.0)
+    old_seeds={s['noise_seed'] for q in old for s in q['steps']}
+    new_seeds={s['noise_seed'] for q in new for s in q['steps']}
+    assert len(new_seeds)==24 and old_seeds.isdisjoint(new_seeds)
+    for a,b in zip(old,new):
+        assert (a['sequence'],a['repetition'])==(b['sequence'],b['repetition'])
+        assert [{k:v for k,v in s.items() if k!='noise_seed'} for s in a['steps']]==[{k:v for k,v in s.items() if k!='noise_seed'} for s in b['steps']]

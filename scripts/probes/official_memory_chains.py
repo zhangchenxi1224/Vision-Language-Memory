@@ -14,8 +14,11 @@ from scripts.experiments.official_transition_bank import NOOP_EVENT
 from scripts.experiments.official_state_oracles import STATES
 
 
-def chain_plan(seed=20260913):
+def chain_plan(seed=20260913, *, guidance_scale=7.5):
     from vision_memory.training.latent_bank_unet import stable_seed
+    if guidance_scale not in (1.0,7.5):
+        raise ValueError("Only registered guidance protocols are supported")
+    namespace="official-rgb-memory-chain-noise-v2-cfg1" if guidance_scale==1.0 else "official-rgb-memory-chain-noise-v1"
     events = {state: (event, gold) for state, event, gold in STATES}
     orders = [("ambient", "jazz", "clear"), ("jazz", "ambient", "clear"),
               ("clear", "ambient", "jazz"), ("clear", "jazz", "ambient")]
@@ -29,7 +32,7 @@ def chain_plan(seed=20260913):
                     index = len(steps)
                     steps.append({"step": index, "operation": operation, "event_text": prompt,
                         "expected_state": state, "gold": gold,
-                        "noise_seed": stable_seed(seed, "official-rgb-memory-chain-noise-v1", repetition * 6 + index)})
+                        "noise_seed": stable_seed(seed, namespace, repetition * 6 + index)})
             plan.append({"sequence": sequence, "repetition": repetition, "steps": steps})
     return plan
 
@@ -40,6 +43,7 @@ def main():
     p.add_argument("--parent-result-sha256", required=True)
     p.add_argument("--output", type=Path, required=True)
     p.add_argument("--deadline-unix", type=float, required=True)
+    p.add_argument("--guidance-scale",type=float,choices=(1.0,7.5),default=7.5)
     p.add_argument("--worker", action="store_true")
     a = p.parse_args()
     from scripts.train import train_latent_bank_unet as train
@@ -55,7 +59,7 @@ def main():
                "HF_HUB_OFFLINE": "1", "TRANSFORMERS_OFFLINE": "1"}
         return subprocess.call([sys.executable, "-u", str(Path(__file__).resolve()), "--parent-run", str(a.parent_run),
             "--parent-result-sha256", a.parent_result_sha256, "--output", str(a.output),
-            "--deadline-unix", str(a.deadline_unix), "--worker"], env=env)
+            "--deadline-unix", str(a.deadline_unix), "--guidance-scale",str(a.guidance_scale),"--worker"], env=env)
     terminal = json.loads((a.parent_run / "terminal.json").read_text())
     if (terminal.get("state") != "completed" or terminal["training_result_sha256"] != a.parent_result_sha256
             or file_sha256(a.parent_run / "train/result.json") != a.parent_result_sha256):
@@ -71,13 +75,16 @@ def main():
     variants = groups["ambient"]["question_variants"]
     if any(g["question_variants"] != variants for g in bank["groups"]) or len(variants) != 5:
         raise ValueError("This registered chain covers one semantic question and five fixed query variants")
-    plan = chain_plan(args.seed)
+    plan = chain_plan(args.seed,guidance_scale=a.guidance_scale)
     used = {step["noise_seed"] for sequence in plan for step in sequence["steps"]}
     forbidden = {stable_seed(args.seed, "training-noise", i) for i in range(max(14000, args.steps * args.gradient_accumulation_steps))}
     for namespace, n in (("heldout-evaluation-noise", 8), ("official-prompt-control-noise", 4),
                          ("official-full-confirmation-noise-v1", 16), ("official-three-state-confirmation-noise-v1", 16),
+                         ("official-three-state-confirmation-noise-v2-cfg1", 16),
                          ("official-source-image-parity-noise-v1", 3)):
         forbidden.update(stable_seed(args.seed, namespace, i) for i in range(n))
+    if a.guidance_scale==1.0:
+        forbidden.update(stable_seed(args.seed,"official-rgb-memory-chain-noise-v1",i) for i in range(24))
     if len(used) != 24 or used.intersection(forbidden):
         raise ValueError("Chain noise plan must be fresh, with intentional pairing only across sequence orders")
     result = json.loads((a.parent_run / "train/result.json").read_text())
@@ -111,7 +118,7 @@ def main():
     frozen = train.frozen_versions(runtime["pipe"], runtime["reader"])
     identity = {"probe_commit": commit, "source_hashes": train.source_hashes(), "parent_result_sha256": a.parent_result_sha256,
         "checkpoint_sha256": result["checkpoint_sha256"], "bank_sha256": bank_sha, "plan": plan,
-        "optimizer_updates": 0, "guidance_scale": 7.5, "image_guidance_scale": 1., "native_steps": 28,
+        "optimizer_updates": 0, "guidance_scale": a.guidance_scale, "image_guidance_scale": 1., "native_steps": 28,
         "state": "only the previous generated RGB uint8 image; official VAE re-encoding at every event",
         "reader_input": "actual quantized PNG pixels, including when previous steps failed",
         "scope": "one entity and three states;16 six-event chains; no unseen-entity or multi-fact claim"}
@@ -119,7 +126,7 @@ def main():
     cells = {}
     with torch.no_grad():
         for sequence in plan:
-            memory = OfficialRGBMemory(runtime["pipe"], guidance_scale=7.5)
+            memory = OfficialRGBMemory(runtime["pipe"], guidance_scale=a.guidance_scale)
             previous_artifact = None
             for step in sequence["steps"]:
                 if time.time() >= a.deadline_unix:

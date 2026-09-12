@@ -98,6 +98,9 @@ def load_base_runtime(args, bank, *, inference_only=False):
         freeze_module(pipe.unet)
     predictor=DifferentiableDreamLiteMobileSampler.from_pipeline(pipe,checkpoint_unet=False)
     contexts={}
+    guidance=float(getattr(args,"base_guidance_scale",7.5))
+    if not 1.0<=guidance<=100.0:
+        raise ValueError("Invalid native Base inference guidance")
     image=Image.new("RGB",(1024,1024),(128,128,128))
     image_tensor=pipe.image_processor.preprocess(image)
     gray_source=pipe.prepare_image_latents(image_tensor,dtype=torch.float32,device=vd)
@@ -142,7 +145,7 @@ def load_base_runtime(args, bank, *, inference_only=False):
         if donor_pixels.ndim==3: donor_pixels=donor_pixels.unsqueeze(0)
         qid=group["question_id"]
         contexts[qid]={"source":source,"condition":condition,"effective_sigmas":effective,"num_inference_steps":28,
-            "inference_sampler":NativeBaseEditSampler(pipe,source_image=image,event_text=group["event_text"]),
+            "inference_sampler":NativeBaseEditSampler(pipe,source_image=image,event_text=group["event_text"],guidance_scale=guidance),
             "blank":blank_pixels,
             "donor":donor_pixels,"donor_answer":donor["answer"]}
         source_bindings[qid]={"bank_source_sha256":canonical_tensor_sha256(bank_source.cpu()),
@@ -163,5 +166,5 @@ def load_base_runtime(args, bank, *, inference_only=False):
         protocol_binding={"student":"official DreamLitePipelineLoRA base","base_snapshot":base_seal,
             "official_source_commit":OFFICIAL_REFERENCE_COMMIT,"vae_weights_sha256":vae_hashes,"source_bindings":source_bindings,
             "train_prompt":"raw event, upstream LoRA example","inference_prompt":"native upstream diptych+CFG",
-            "inference_guidance_scale":7.5,"inference_image_guidance_scale":1.,"inference_steps":28},
+            "inference_guidance_scale":guidance,"inference_image_guidance_scale":1.,"inference_steps":28},
         verify_additional_bindings=verify_extra)

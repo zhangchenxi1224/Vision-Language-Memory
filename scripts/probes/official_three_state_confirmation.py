@@ -17,16 +17,21 @@ PROMPTS = {"original_open", "paraphrase_1", "paraphrase_2", "paraphrase_3", "par
 GOLDS = {"ambient": "ambient", "jazz": "jazz", "clear": "no active preference"}
 
 
-def confirmation_plan(bank, seed=20260913):
+def confirmation_plan(bank, seed=20260913, *, guidance_scale=7.5):
     from vision_memory.training.latent_bank_unet import stable_seed
     groups = {g["state"]: g for g in bank["groups"]}
     if len(bank["groups"]) != 3 or set(groups) != set(GOLDS):
         raise ValueError("Exactly three fixed conditional states required")
-    seeds = [stable_seed(seed, "official-three-state-confirmation-noise-v1", i) for i in range(16)]
+    if guidance_scale not in (1.0,7.5):
+        raise ValueError("Only registered native guidance protocols are supported")
+    namespace = "official-three-state-confirmation-noise-v2-cfg1" if guidance_scale==1.0 else "official-three-state-confirmation-noise-v1"
+    seeds = [stable_seed(seed, namespace, i) for i in range(16)]
     forbidden = {stable_seed(seed, "training-noise", i) for i in range(14000)}
     for namespace, count in (("heldout-evaluation-noise", 8), ("official-prompt-control-noise", 4),
                              ("official-full-confirmation-noise-v1", 16)):
         forbidden.update(stable_seed(seed, namespace, i) for i in range(count))
+    if guidance_scale==1.0:
+        forbidden.update(stable_seed(seed,"official-three-state-confirmation-noise-v1",i) for i in range(16))
     if len(set(seeds)) != 16 or forbidden.intersection(seeds):
         raise ValueError("Confirmation noises must be new and unique")
     plan = []
@@ -51,6 +56,15 @@ def confirmation_plan(bank, seed=20260913):
                          "question_id": group["question_id"], "event": event,
                          "gold": group["answer"], "seeds": selected})
     return plan
+
+
+def validate_guidance_gate(control, result_sha, checkpoint_sha):
+    expected={"probe_commit":"1e4acd2bcd9cbf9f0b2878e51694c17bebe06110",
+        "parent_result_sha256":result_sha,"checkpoint_sha256":checkpoint_sha,
+        "condition_style":"native","guidance_scale":1.0,"image_guidance_scale":1.0,
+        "inference_steps":28,"optimizer_updates":0,"trainable_scope":"full_unet"}
+    if any(control["identity"].get(k)!=v for k,v in expected.items()):
+        raise ValueError("CFG1 confirmation requires the exact successful native zero-update control")
 
 
 def validate_development_rows(rows, bank, seed=20260913):
@@ -84,6 +98,8 @@ def main():
     p.add_argument("--parent-run", type=Path, required=True)
     p.add_argument("--output", type=Path, required=True)
     p.add_argument("--deadline-unix", type=float, required=True)
+    p.add_argument("--guidance-scale",type=float,choices=(1.0,7.5),default=7.5)
+    p.add_argument("--guidance-control-run",type=Path)
     p.add_argument("--worker", action="store_true")
     a = p.parse_args()
     from scripts.train import train_latent_bank_unet as train
@@ -95,25 +111,39 @@ def main():
     if file_sha256(args.bank_manifest) != BANK_SHA:
         raise ValueError("Parent must use the fixed complete three-state bank")
     bank, _ = load_teacher_bank(args.bank_manifest)
-    plan = confirmation_plan(bank, args.seed)
+    plan = confirmation_plan(bank, args.seed, guidance_scale=a.guidance_scale)
+    if (a.guidance_scale==1.0)!=(a.guidance_control_run is not None):
+        raise ValueError("Only CFG1 uses and requires its native control gate")
     if not a.worker:
         env = {**os.environ, **snapshot_environment(bank), **REQUIRED_DETERMINISM_ENV,
                "HF_HUB_OFFLINE": "1", "TRANSFORMERS_OFFLINE": "1"}
-        return subprocess.call([sys.executable, "-u", str(Path(__file__).resolve()), "--parent-run", str(a.parent_run),
-            "--output", str(a.output), "--deadline-unix", str(a.deadline_unix), "--worker"], env=env)
+        worker=[sys.executable, "-u", str(Path(__file__).resolve()), "--parent-run", str(a.parent_run),
+            "--output", str(a.output), "--deadline-unix", str(a.deadline_unix), "--guidance-scale",str(a.guidance_scale),"--worker"]
+        if a.guidance_control_run:
+            worker.extend(["--guidance-control-run",str(a.guidance_control_run)])
+        return subprocess.call(worker, env=env)
     terminal = json.loads((a.parent_run / "terminal.json").read_text())
     result_sha = file_sha256(a.parent_run / "train/result.json")
     if terminal.get("state") != "completed" or terminal["training_result_sha256"] != result_sha:
         raise RuntimeError("Parent must have a sealed completed endpoint")
     if args.expected_commit != PARENT_COMMIT or args.seed != 20260913 or args.trainable_scope != "full_unet" or args.steps != 1536:
         raise ValueError("Unexpected parent design")
+    result = json.loads((a.parent_run / "train/result.json").read_text())
     phase = a.parent_run / "train/trained"
+    control_gate=None
+    if a.guidance_control_run:
+        control_path=a.guidance_control_run/"complete.json"
+        control=json.loads(control_path.read_text())
+        validate_guidance_gate(control,result_sha,result["checkpoint_sha256"])
+        phase=a.guidance_control_run/"guidance1"
+        if file_sha256(phase/"complete.json")!=control["phase_complete_sha256"]:
+            raise ValueError("Native CFG1 gate evidence changed")
+        control_gate={"complete_sha256":file_sha256(control_path),"identity":control["identity"]}
     phase_complete = json.loads((phase / "complete.json").read_text())
     for name, digest in phase_complete["artifact_hashes"].items():
         if file_sha256(phase / name) != digest:
             raise ValueError("Parent development artifact changed")
     validate_development_rows([json.loads(line) for line in (phase / "generations.jsonl").read_text().splitlines()], bank)
-    result = json.loads((a.parent_run / "train/result.json").read_text())
     checkpoint = a.parent_run / "train/checkpoint-final.pt"
     if file_sha256(checkpoint) != result["checkpoint_sha256"]:
         raise RuntimeError("Parent checkpoint changed")
@@ -147,7 +177,8 @@ def main():
     frozen = train.frozen_versions(runtime["pipe"], runtime["reader"])
     identity = {"probe_commit": commit, "parent_result_sha256": result_sha, "parent_commit": PARENT_COMMIT,
         "checkpoint_sha256": result["checkpoint_sha256"], "bank_sha256": BANK_SHA, "plan": plan,
-        "inference_steps": 28, "guidance_scale": 7.5, "image_guidance_scale": 1., "optimizer_updates": 0,
+        "inference_steps": 28, "guidance_scale": a.guidance_scale, "guidance_control_gate":control_gate,
+        "image_guidance_scale": 1., "optimizer_updates": 0,
         "snapshots": runtime["snapshots"], "protocol_binding": runtime["protocol_binding"],
         "deadline_unix": a.deadline_unix, "semantic_question_count": 1, "conditional_state_count": 3,
         "scope": "Fixed three states; 16 paired fresh noises per trained event; two unseen wordings with four paired noises each; no sequential memory update test"}
@@ -180,7 +211,7 @@ def main():
             group = groups[case["question_id"]]
             context = runtime["contexts"][group["question_id"]]
             sampler = NativeBaseEditSampler(runtime["pipe"], source_image=Image.new("RGB", (1024, 1024), (128, 128, 128)),
-                event_text=case["event"], guidance_scale=7.5)
+                event_text=case["event"], guidance_scale=a.guidance_scale)
             for i, seed in enumerate(case["seeds"]):
                 if time.time() >= a.deadline_unix:
                     raise TimeoutError("Confirmation lease expired")

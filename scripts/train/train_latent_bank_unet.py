@@ -627,6 +627,8 @@ def parser() -> argparse.ArgumentParser:
     p.add_argument("--teacher-dreamlite",type=Path)
     p.add_argument("--official-source",type=Path)
     p.add_argument("--base-manifest",type=Path)
+    p.add_argument("--base-guidance-scale",type=float,default=7.5,
+                   help="Explicit native Base inference guidance; training FM is unchanged")
     p.add_argument("--reader-model", type=Path)
     p.add_argument("--dreamlite-device", default="cuda:0")
     p.add_argument("--reader-device", default="cuda:1")
@@ -654,6 +656,8 @@ def parser() -> argparse.ArgumentParser:
 
 def main() -> int:
     args = parser().parse_args()
+    if not 1.0 <= args.base_guidance_scale <= 100.0 or (args.model_variant != "base" and args.base_guidance_scale != 7.5):
+        raise ValueError("Base guidance must be in [1,100] and applies only to Base")
     if (args.steps <= 0 or args.eval_seeds < 2 or args.lora_rank <= 0 or args.lr <= 0
             or args.gradient_accumulation_steps <= 0 or args.weight_decay < 0 or args.checkpoint_interval < 1):
         raise ValueError("Positive training budget/rank/lr and at least two held-out noise seeds required")
