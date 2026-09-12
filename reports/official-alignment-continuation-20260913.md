@@ -1,5 +1,13 @@
 # Goal 接续位置
 
+## 06:06 补记：新端点验证探针已实现并部署
+
+- 最新功能源码 **0f40767** 已提交推送。新增scripts/probes/official_transition_confirmation.py，--mode single_writes/rgb_chains，绑定parent源码9628d71、bank962f0284、2880步/四开发噪声/nativeCFG1，校验900个开发单元、完整artifact/checkpoint/runtime/condition SHA。默认开发失败在加载前拒绝；--diagnostic才允许明确标成diagnostic_after_development_failure，不能覆盖原失败。记录固定/解析后计划、源文件SHA、真实raw/EOS、RGB源链接，冻结审计和结束复核，Reader查询不修改记忆。
+- 新检查tests/test_transition_confirmation.py两项通过，包含漏项/重复/伪造token评分拒绝和原始事件/新表达绑定；相关回归本次10 passed，加之前未改的覆盖后总计72项。新probe还没有实际运行最终模型（父训练尚未完成），不能把--help或CPU检查当功能确认。
+- CPU fetch/worktree exec session58377已exit0。独立远端checkout **P/repos/dreamlite-transition-validation-20260913** 锁定0f40767，实际GPU环境--help通过。训练仍使用自己的9628d71 checkout，未修改。验证输出/实例/deadline尚未派发，后续先根据训练完成时间和剩余lease决定；完整72图确认+96写链约需40分钟，不能在剩余不足时缩减已登记测试。
+- 06:06真实模型进程6087仍活跃，baseline **491/1350 raw**，未开始optimizer更新。新实例dl-transitions-h200x1-20260913保持运行，worker截止09:15。按当前速率基线可能约06:30结束，再优化约90分钟并完成配对final评测；以实际终态为准。
+- 链archive下载session34331仍活跃，900秒timeout。远端准确长度 **82017620**、SHA **66f978d0d8f4d1f59504e02ab96fe5c2126fba61f8b0d6659a7c33ce02ba737e**；本地06:02仅42040320字节，需等传输结束后完整比对再解包。不得将文件存在当作完整。如果timeout后文件不全，保留并只修复传输；旧链与模型都已经完成，不重跑它们。
+
 **05:57接续补记：5457ee1已经提交并push成功（exec session35980已exit0），包含下文待提交的确认完整archive/原始文本/PNG预览、本地核验、链摘要/96张量核验、45组bank和报告；当前唯一未跟踪项是仍在下载的cfg1-chains-evidence.tgz（session34331）。GPU6087实测baseline已150/1350回答，未到优化。不要再等已结束的push或重传已验证的confirmation包。**
 
 ## 最新状态：09月13日05:54
