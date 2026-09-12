@@ -154,4 +154,8 @@ c90896c完成1536更新/6144训练draw，各状态恰好2048draw。本地逐个�
 
 依据[事先固定的诊断](../official-three-state-condition-controls-20260913.md)，同一checkpoint做两项零更新对照：**native CFG1与training_raw CFG1均为120/120正确且立即EOS，24/24状态/噪声组同时通过五问法**。每种状态各40条raw分别全为ambient、jazz、no active preference。完整phase/PT/JSON hashes、parent checkpoint绑定与冻结边界均通过核验，见[对照摘要](three-state-controls-summary.json)和[原始证据](three-state-controls-evidence.tgz)。这支持在当前样本上改变引导强度足以恢复功能，并不把原生CFG7.5失败改写成成功。
 
+![同一checkpoint、固定首个配对噪声的三个设置](three-state-controls-preview.png)
+
+图仅展示事先排序的第一个噪声，标签是原问法；完整八个噪声、五个问法见JSON，不按视觉质量挑样本。
+
 下一候选保留官方native条件与28步采样，显式CFG1，不改变FM训练目标或权重；新噪声、未训练事件表达和真正RGB链式更新的[后续协议](../official-cfg1-candidate-20260913.md)已固定。仅开发评测通过还不等于完整可用更新器。15组源状态转移bank暂未训练，后续按新验证结果判断是否需要。

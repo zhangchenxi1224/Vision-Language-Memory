@@ -1,5 +1,15 @@
 # Goal 接续位置
 
+## 最新状态：09月13日05:20（以下历史段落不代表当前进程）
+
+- 当前源码09b324dc7574ed33c0236ee09a4f5c3526fb85bb已推送；67项相关测试通过。唯一GPU实例仍为dl-align-full-h200x1-20260913，另有CPU实例；其他本任务GPU实例已删除。
+- c90896c三状态全U-Net已完成1536更新/6144draw（各状态2048）。result SHA4dfb56f942d7dea62ac1d52ec91a0a814df30d4f6accc1238f9310dd822dff14；最终checkpoint SHA3c4b0679f16dd7714a662cfaddcd7716f7d3d43a49920898ab19a522d77af38d。原生CFG7.5仅20/120正确且立即EOS、0/24图通过全部五问法。全部draw本地精确重放，证据已提交three-state-full1536-*。旧训练PID396075和旧确认队列540574均结束，旧确认因开发门槛拒绝，没有生成新确认结果。
+- 固定1e4acd2探针的native CFG1与training_raw CFG1两臂均完成，各120/120、24/24；同一个父checkpoint、相同八噪声、零更新、冻结审计通过。完整远端PT/JSON哈希及240条matched raw核验完成，three-state-controls-*证据已下载提交。这是开发结果，不能宣称可用版本。
+- 新候选保留native条件和28步，只显式使用CFG1；固定新namespace计划已在09b324d提交。远端checkout `P/repos/dreamlite-cfg1-confirmation-20260913`；已启动一次队列 `P/runs/dreamlite-official-alignment/run-cfg1-validation-09b324d.sh`，外层日志/终态JSON为同目录09b324d-cfg1-validation-queue.log/.json。**禁止重复提交。**
+- 05:20实际确认Stage A wrapper PID956812、GPU worker PID957334（22650MiB）正在运行。输出 `P/runs/dreamlite-official-alignment/09b324d-cfg1-confirmation`，日志同路径+.log；72图、360真实回答+30控制行，独立新噪声和两种未训练事件表达。门槛绑定已成功native CFG1对照及所有哈希。
+- 队列在A技术完成后自动运行Stage B `P/runs/dreamlite-official-alignment/09b324d-cfg1-chains`，日志同路径+.log；16个六事件链、96次写入、480回答。实际生成RGB连续传递，覆盖/清除后插入相同no-op；错误后也不重置oracle，Reader查询不改图。A的功能失败仍保留，不能用B覆盖。两个worker截止06:15（1789251300），平台实例约06:40到期。
+- 15组source-dependent bank已完成输入验证但未训练；后续依据新确认/连续链失败类型决定。尚无完整可用版本结论，goal active。新报告图脚本render_three_state_controls.py待生成预览/提交；不要修改09b324d远端运行checkout。
+
 用户目标：新分支修复DreamLite与官方训练偏差，通过启智新实例实训、评测、迭代到有证据支持的可用版本。Goal已创建，仍active，未达成；不能以源码测试通过或训练结束标记complete。
 
 ## 本地与代码
