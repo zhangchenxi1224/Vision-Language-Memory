@@ -1,5 +1,7 @@
 # 新 EOS Oracle → 成功 latent 集合 → DreamLite U-Net
 
+> **历史协议，已于2026-09-13被新默认路径取代。** 下文记录旧实验的source-anchored桥、sigma≤0.5、混合初态与rank4/512配置，用于解释和重放旧产物；不得作为当前官方DreamLite训练配置。当前CLI默认目标噪声FM、source只作条件、全0–1时间域与纯噪声初态；历史重放必须显式选择`--flow-protocol legacy_anchored`并核对全部超参。参见[官方对齐审计](official-alignment-audit-20260913.md)和[真实实验结果](official-alignment-results-20260913/README.md)。桥本身描述的是另一条条件流，并非官方训练公式；下文基于旧混合部署起点的论证不适用于新纯噪声协议。
+
 本文件定义两条 Oracle 路线完成后自动执行的同一个 U-Net 学习入口。**代码已经实现不等于 GPU 实验已经完成**；实际结果必须由运行目录的 `terminal.json`、`result.json`、原始生成记录与模型 checkpoint 验证。
 
 ## 目标与可训练对象

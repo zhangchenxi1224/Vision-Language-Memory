@@ -1,5 +1,7 @@
 # Vision Learnable Memory
 
+> 2026-09-13：新增[官方DreamLite训练对齐审计](reports/official-alignment-audit-20260913.md)与[实训结果](reports/official-alignment-results-20260913/README.md)。新训练入口默认官方target/noise FM与纯噪声推理；Base采用原生官方28步pipeline。Mobile/Base512及CFG1尚未通过功能测试，3500步预算对照进行中；源码对齐不等于已经得到可用Writer。旧source-anchored文档仅供历史复现。
+
 > 2026-09-08：已同步 [旧 R11 同题多起点实验的真实结果](reports/r11-mcq-open-multistart-results-20260907/README.md)，包含汇总、原文回答、审计记录与轨迹图。
 
 This repository is the reproducible engineering shell for the DreamLite + Qwen3-VL

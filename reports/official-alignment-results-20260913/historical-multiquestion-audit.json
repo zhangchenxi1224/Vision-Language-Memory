@@ -1,0 +1,617 @@
+{
+  "source_commit": "2c0e41c899910bf0641f16ee724f85bbe3491a7e",
+  "panel_sha256": "d356238fd5c267812dcf28d214ab062fd43388bb6b53b78602f0c1e8f5b36672",
+  "verified_runs": 128,
+  "verified_updates": 32768,
+  "raw_generation_count": 3456,
+  "cells": {
+    "A/matched/original_open": {
+      "n": 64,
+      "exact_match": 60,
+      "answer_eos": 60
+    },
+    "A/matched/paraphrase_open": {
+      "n": 64,
+      "exact_match": 62,
+      "answer_eos": 62
+    },
+    "A/matched/new_rewrite_open": {
+      "n": 64,
+      "exact_match": 56,
+      "answer_eos": 56
+    },
+    "A/blank/original_open": {
+      "n": 64,
+      "exact_match": 0,
+      "answer_eos": 0
+    },
+    "A/blank/paraphrase_open": {
+      "n": 64,
+      "exact_match": 0,
+      "answer_eos": 0
+    },
+    "A/blank/new_rewrite_open": {
+      "n": 64,
+      "exact_match": 0,
+      "answer_eos": 0
+    },
+    "A/fixed_donor/original_open": {
+      "n": 64,
+      "exact_match": 4,
+      "answer_eos": 4
+    },
+    "A/fixed_donor/paraphrase_open": {
+      "n": 64,
+      "exact_match": 8,
+      "answer_eos": 8
+    },
+    "A/fixed_donor/new_rewrite_open": {
+      "n": 64,
+      "exact_match": 0,
+      "answer_eos": 0
+    },
+    "B/matched/original_open": {
+      "n": 64,
+      "exact_match": 64,
+      "answer_eos": 64
+    },
+    "B/matched/paraphrase_open": {
+      "n": 64,
+      "exact_match": 64,
+      "answer_eos": 64
+    },
+    "B/matched/new_rewrite_open": {
+      "n": 64,
+      "exact_match": 61,
+      "answer_eos": 61
+    },
+    "B/blank/original_open": {
+      "n": 64,
+      "exact_match": 0,
+      "answer_eos": 0
+    },
+    "B/blank/paraphrase_open": {
+      "n": 64,
+      "exact_match": 0,
+      "answer_eos": 0
+    },
+    "B/blank/new_rewrite_open": {
+      "n": 64,
+      "exact_match": 0,
+      "answer_eos": 0
+    },
+    "B/fixed_donor/original_open": {
+      "n": 64,
+      "exact_match": 4,
+      "answer_eos": 4
+    },
+    "B/fixed_donor/paraphrase_open": {
+      "n": 64,
+      "exact_match": 8,
+      "answer_eos": 8
+    },
+    "B/fixed_donor/new_rewrite_open": {
+      "n": 64,
+      "exact_match": 0,
+      "answer_eos": 0
+    }
+  },
+  "independent_questions": 16,
+  "repeated_seeds_per_question": 4,
+  "scope": "Historical raw outputs and artifact hashes reverified; independent BF16 VAE latent oracles, no shared Writer; no new model inference",
+  "model_reuse_limit": "Current official FM uses FP32 VAE. These old BF16-decoded endpoints require fresh readback before supervising it.",
+  "runs": [
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-000-seed-00-A",
+      "inventory_sha256": "2bdcf63e819cbc2fee9d2df42ad38cfaf7d38abf343a2b30a34bc03afd67fdf0"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-000-seed-00-B",
+      "inventory_sha256": "86379bbbe60080de5f4a1a2cc971aa5f2c32d996e4373eb61fdb4066b720d24e"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-000-seed-01-A",
+      "inventory_sha256": "9c56e17a77e93bf1d39c9c0dbeb3a055eda07a32e654bedb6ee9ee0cee0edde3"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-000-seed-01-B",
+      "inventory_sha256": "888fd36986c9cf066ae336fa84fb36e0dd0ee4e56712ff3abdaf829d58b5589e"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-000-seed-02-A",
+      "inventory_sha256": "476b308f1e665970ecce62ea86d345acc933a84e3c25fd9395bcb2b4e679cd0c"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-000-seed-02-B",
+      "inventory_sha256": "36a026c5acf2bf03b6c0de8d85cdad6a2fcb4e9e9e93dc33d6e849145200f6d9"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-000-seed-03-A",
+      "inventory_sha256": "e065d6bf90d7d8c9dd6d5f105cb9d805cc9ab530d12c9c2596caf9a3e9878479"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-000-seed-03-B",
+      "inventory_sha256": "8ec2490602aac5f3bd034df24725c7debec9e228334f1c0dcadfb0497929a837"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-002-seed-00-A",
+      "inventory_sha256": "bc4114924aa97acb7aa088c5038dc3d4624d41531303e80e030667a1d1ffebe9"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-002-seed-00-B",
+      "inventory_sha256": "c65bbd34aa07f61ea06be46d0a06768ddc3b5d0ca7989787006bd1849108d8d3"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-002-seed-01-A",
+      "inventory_sha256": "77a196ce8783bfb11e760ed5c470209afa02e3d1e14a39000a26e30e11286a5f"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-002-seed-01-B",
+      "inventory_sha256": "1d6d8551f90c645e7d6f75c5b0220367ab74076340cb9fdf96fce504085e58c4"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-002-seed-02-A",
+      "inventory_sha256": "5649d92cd29451e8e3d3342ffec364cea2dfe77b043e92fd28d520fd48398d6d"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-002-seed-02-B",
+      "inventory_sha256": "f6636a49f804c1e8596f1dca097422549990e4aeacd19a811b49c217bf70983b"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-002-seed-03-A",
+      "inventory_sha256": "53d74b64a4dc5ad8f61b8d4bc619ae5e050b20b878c1d0d58bdce7364e756d94"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-002-seed-03-B",
+      "inventory_sha256": "d9822dd15df65227cf05330b9cb793b68d29df1b9a385e51dfd1abdddcc03091"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-004-seed-00-A",
+      "inventory_sha256": "484ee4a7ba3d625ce777b211d0c873f2f0eefcbae14378c10216372b7d7adede"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-004-seed-00-B",
+      "inventory_sha256": "0c8cda4ef0a11b7a0d91d9ffc596659d5f7a6f3704eeedcb2415b0a06f1bafb6"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-004-seed-01-A",
+      "inventory_sha256": "1a9992fd005cc6f9221e927bbeee468de86b5a1b27e6f8d51f8c3060108f3caf"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-004-seed-01-B",
+      "inventory_sha256": "c4c5a205d40b2223d11fa82b940b50a1a4e8f0f67ffecdb802f80f113b73eac4"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-004-seed-02-A",
+      "inventory_sha256": "c77bbc66835fc7dfa6d91f71ba9f7b9a5460b71e72c14727046e03babbfba926"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-004-seed-02-B",
+      "inventory_sha256": "a1604488fa4ab1a1916bb1efecf288c9635841748fb3dd465e7aec325223ebc6"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-004-seed-03-A",
+      "inventory_sha256": "31266e5a251e9539c235ba36b020d88d5a3825323f42056b9d4db2846a6f7b9c"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-004-seed-03-B",
+      "inventory_sha256": "98dde255accb5bcaff312197defd94806096efe816e650c476cfe90ab41da739"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-006-seed-00-A",
+      "inventory_sha256": "c16225e455f05e4d54734d62661268d18afecd5debe0c1a68ae7a413578f69d3"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-006-seed-00-B",
+      "inventory_sha256": "3650a6b8ebe141461165353abbb6f78956b6d32801b59b8a374b59006c579696"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-006-seed-01-A",
+      "inventory_sha256": "ff6f7a2554314a402e00c1c8ca335d01e2d2cf52ddb6c74eaec9b0deacf1181b"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-006-seed-01-B",
+      "inventory_sha256": "56403252d81448201eb9d61c6a43bdb8a66ca2ffb60336eea5c413157f120d80"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-006-seed-02-A",
+      "inventory_sha256": "25ff13e838d1b39de34105e0f28c926369737a9a93c52b058f56fb2a27112d54"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-006-seed-02-B",
+      "inventory_sha256": "993b35eb2b17c2a83a3ea957e45175d50acfb0fb6f31b16dc621006e808c1e72"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-006-seed-03-A",
+      "inventory_sha256": "6b359182d33de608cdbd118ee8564be9720558814b74634fbc40a87cb5ffc1d8"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-006-seed-03-B",
+      "inventory_sha256": "edc1e55e28d5782cb5ddc8fb4aabdad23feb56a279477cf6500f3c2811f8a431"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-008-seed-00-A",
+      "inventory_sha256": "2a14b0cb740c6bcd5342a861ee8ebc28a51b54526f318cadd14a80b1174cf05d"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-008-seed-00-B",
+      "inventory_sha256": "a21919ce03ba1a3dadbe7b06ee40ffa6995bf32cc0050a88104ce77381b22cc6"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-008-seed-01-A",
+      "inventory_sha256": "efa9802f22081b46e799e6f30b36ee87abaee349e637bbbe8b1705bfea056dde"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-008-seed-01-B",
+      "inventory_sha256": "501245943fa3cc34e7f27bc9b6124d02a08229ed6338fa1608fc6fd60df12557"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-008-seed-02-A",
+      "inventory_sha256": "f5c9b56a1cc7f2fe79ea5247f2e9a31fd83e3f7cc8c203378f16d4f133c04160"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-008-seed-02-B",
+      "inventory_sha256": "57dfe9a00943207e04faa78a8d33c006576e96accd577f7b66c7e1d5ae93e784"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-008-seed-03-A",
+      "inventory_sha256": "b53bbdfc691cc29a7bb85f0feabcf1ef257e16d3d6310403356a9fea25a296a9"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-008-seed-03-B",
+      "inventory_sha256": "a315dc20f49453630ef86acc9a69cf1ed634a20cc4218a360af7c649e384e640"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-010-seed-00-A",
+      "inventory_sha256": "7a33e71e28f40e5e658ef2dfabe5ad8ccb5b21fcae751b37c1afece7f85b8f8a"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-010-seed-00-B",
+      "inventory_sha256": "980047805bf663ea805cd5ae50edbb44396bc604ff1dd55342dc9275aea32e3f"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-010-seed-01-A",
+      "inventory_sha256": "15524fde185d99f208b800532c6e26290f6b7604bcd7a6ea56562c65a161fdd1"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-010-seed-01-B",
+      "inventory_sha256": "c8ff673451593a62dccb6103ed4dac0b22f2d57736e21829f762a1e1e98a82e6"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-010-seed-02-A",
+      "inventory_sha256": "d2bc71175e49737ce2bd44646fd43ecc80ad047a4c1bcfb1ce2593523bd922fb"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-010-seed-02-B",
+      "inventory_sha256": "49e09e39f827a5cc6a297418ac63e20a38cba8c45deaf5f4f676531779935a47"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-010-seed-03-A",
+      "inventory_sha256": "8df064d21b28b97ada786464837bae5602051dccfce1a08e75c7e644d8bd652c"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-010-seed-03-B",
+      "inventory_sha256": "54fa2683586faf7cdd24c5df3de319203d110fc8226d643a7d59fcdbd4988ced"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-012-seed-00-A",
+      "inventory_sha256": "4d496a575c0c1a80e644d38d6c6f173ab4bd16ee52b946ccb11cf2daada0632a"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-012-seed-00-B",
+      "inventory_sha256": "8c585cfcd673045b0fcce826d882748949d708d0f96d3402e0fc788ad18a4f94"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-012-seed-01-A",
+      "inventory_sha256": "26b11063fdf7b902a6cafd9d4aa34b244d122d747ea28711e33d03ca4fb8f9f1"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-012-seed-01-B",
+      "inventory_sha256": "5553bb8505203d1280907bf8f6cf5e915333a8f7a72d2f7d771a653decf3f5ff"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-012-seed-02-A",
+      "inventory_sha256": "d7d01be360b01e8d980ba48b9035ecdcc5d769142bcfcd34ba28ffa4389dd260"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-012-seed-02-B",
+      "inventory_sha256": "c1cfdb079d1c772b3b27de71360e19364c8c72eba1a5052f90d627e2a6feb16d"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-012-seed-03-A",
+      "inventory_sha256": "ca55a0c7958fe6910e3f81221e9cfcb8f5c5f1d9b27199e84a445fd95a4e4fd2"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-012-seed-03-B",
+      "inventory_sha256": "85e35226b00cd39ea131df6a09dd51ef2fe9bf251a311ae7109121de7f5d4009"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-014-seed-00-A",
+      "inventory_sha256": "aad692c533b1bd1d0e10d43ede88484a7282d9f12c1be7b025eb53a9e97cea1c"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-014-seed-00-B",
+      "inventory_sha256": "a3670f0b646b6f3c0ed5a89e2bfa05652f81e63231da1cf77c928047377dc248"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-014-seed-01-A",
+      "inventory_sha256": "f243feef8f628967604ec2b4d7a95bf026e976ffb0bba4a78d1d35d33c74046e"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-014-seed-01-B",
+      "inventory_sha256": "f1b21c83410b22b68718556cb0e07aa0c827294a56411b36bed38219df18ac24"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-014-seed-02-A",
+      "inventory_sha256": "b277f71cef8f24d01549a9efd7f912ef1794646563b0c7992bfcbb7f5eee9671"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-014-seed-02-B",
+      "inventory_sha256": "71d06716a9eb72f20b9047a0933f114b9cd4cea91167bfba77bb04fd16dea834"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-014-seed-03-A",
+      "inventory_sha256": "4b13db283a821ad7e47386e01e078292cbfd26e577dd6ac62932cb203bcafcd9"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-014-seed-03-B",
+      "inventory_sha256": "c2e465e03263e2b27595a2a251a4a1cbfda165a508ca21cf5d4f484c4577c19f"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-001-seed-00-A",
+      "inventory_sha256": "b1ee5469d0ed90b515d1cdb96a1e20e623aef964c259f93cd234365190eac06c"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-001-seed-00-B",
+      "inventory_sha256": "46ed4ab42941ee7f3a3f906ff3454218b3b1c563cfeced059dd9f47a430ced24"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-001-seed-01-A",
+      "inventory_sha256": "27e8e9e271ac316c72ca5ea811b8d0c8177271a2e1045067d72d04b161364f80"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-001-seed-01-B",
+      "inventory_sha256": "c683e6706acb7e35f4603adacc5fd4afe4504166319b883a226e119e25fd0f56"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-001-seed-02-A",
+      "inventory_sha256": "b6a311171b944b7a415f270b6316541b350dca9b9c7db35d3fb6c8d452d58ffd"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-001-seed-02-B",
+      "inventory_sha256": "4279e34b66d9203d5c1e5dbba5b3915815a8041336e8a6368c324fc35b41c6fb"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-001-seed-03-A",
+      "inventory_sha256": "8c6735fc69cbb5c3c9c0450dc589e8d66695996628904aadfb6aaacfbac52520"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-001-seed-03-B",
+      "inventory_sha256": "d32475f61a1c352c97dd0d67922bb5f4b84f6bde26eb612e8c9e8d86c59d5fa6"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-003-seed-00-A",
+      "inventory_sha256": "05bd2fa5f20805d1987c6e4805e7229d518eab52184bd9b1ee7697ef0d94e79d"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-003-seed-00-B",
+      "inventory_sha256": "cc35b4dfa33c8c3293c8c70ed498f79985d608c6efec83d53b8d84bee3a0808f"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-003-seed-01-A",
+      "inventory_sha256": "a04d390481b6a53efcc2dc5a5b07aa58d3da82741f8deaeb52430213ccaf0be4"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-003-seed-01-B",
+      "inventory_sha256": "9f67cda3d4f8957a9dde3d166c9a9a6f34fb8948a70f0fcc196e4be0b8a9d1a9"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-003-seed-02-A",
+      "inventory_sha256": "9177eca8ebaf9c0c1cb00aad2df5862ade3e4af29b1baf6c39dbd7798a647e82"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-003-seed-02-B",
+      "inventory_sha256": "acd6c6971840b9a8342a6140fc22c4c46ea932345c133cd68baf49b836873686"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-003-seed-03-A",
+      "inventory_sha256": "41c711373f7c588a45664e8ac8b7fdbfe1a113aad6de2259a6ba4b29487814b5"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-003-seed-03-B",
+      "inventory_sha256": "5efb9dc6ed08cc72cd47db3bbf03e7988b1205820b2e26957316a58cf74db63c"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-005-seed-00-A",
+      "inventory_sha256": "c24bbe01b769435285013458212aec997911ece6cdaa3c10857b912e61c5c93f"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-005-seed-00-B",
+      "inventory_sha256": "52bdd124fad4d80f7e64e88754a62a2e46d6da3c7296daa1b7ee276a6e6dd4a0"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-005-seed-01-A",
+      "inventory_sha256": "a290df1be01348215fb8e00f9249b18a4bc975ab151c93cf85ed58a76b31b16e"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-005-seed-01-B",
+      "inventory_sha256": "c0cec9fa98ece798f924e95d9c64817fd08530b6f3c9fc527c437b9e38e8d69e"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-005-seed-02-A",
+      "inventory_sha256": "59141d65fe76a2007508464f843620d30de90cb62f278fa2111f1deefef2a689"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-005-seed-02-B",
+      "inventory_sha256": "1ac5a2102236d2e5277024e1d1495c270537aa9397a9bc13b4017deb46d30f43"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-005-seed-03-A",
+      "inventory_sha256": "32122fb2fffbeb001b3e63710ba801d5d6a4fb58a0bfc2342b7b0b0938ebde41"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-005-seed-03-B",
+      "inventory_sha256": "282ed0104aef2985e4d47ccd7cac3d4c0c783df6d98cda0f2b8e896c7d81cf16"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-007-seed-00-A",
+      "inventory_sha256": "d17427f727b48ea4281a07c3899b3bffd1d16b038c3e672b6c142333a553d9a9"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-007-seed-00-B",
+      "inventory_sha256": "2fa470adcc141c3e044add5eacb908a27f56ec6ed48dfce12007b94cb0e38f4c"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-007-seed-01-A",
+      "inventory_sha256": "00e519ebc317745e4240cb767b1e9d2c73e48c7593a544e964b2b8b84f7ccd02"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-007-seed-01-B",
+      "inventory_sha256": "e70369e4ef926405e652ecc5df4422a49694868f2fdc104037a674c9834f3511"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-007-seed-02-A",
+      "inventory_sha256": "b8d9dc49c7793adb141e39de4838a53fa0e43d624afc893d1ee12472f9c95b48"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-007-seed-02-B",
+      "inventory_sha256": "840670410764e5850740302a93389850cfc1218de112dd7ee2e4dde55191a88d"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-007-seed-03-A",
+      "inventory_sha256": "c170f580b74b4d8657d56d9063df920c6137b9055bdb2d4fbaaeb430cb9f3f1c"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-007-seed-03-B",
+      "inventory_sha256": "89476e4177c5f451a5d66ba95c919ad25e01c8b1072097c3a60ff205812e901c"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-009-seed-00-A",
+      "inventory_sha256": "a4135b8c37dbd951d5df7a61ee06a92db785a0788adc0f64ae16b3809c08173b"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-009-seed-00-B",
+      "inventory_sha256": "0b5481dd618bf6532c7c8f259e4a4edd46f2a9d59408f061df0c22b614435a35"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-009-seed-01-A",
+      "inventory_sha256": "3b81a8349024fee6b617579c32b09ddc114bfc6dd65145760771cc73609c98d6"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-009-seed-01-B",
+      "inventory_sha256": "32541d913d0dfc87bf39bba64f2a112ee72b836a120a21548107b0a02a8d2d1d"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-009-seed-02-A",
+      "inventory_sha256": "8152f170993191aefb5fafde935a57f12e629e3ec76862401a47517301766cff"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-009-seed-02-B",
+      "inventory_sha256": "c952bb52dc4e125c8c6c3228abb882832fcc4f4d9faab02325c1afac210b1bba"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-009-seed-03-A",
+      "inventory_sha256": "6226086810bca5a5007586007f3f4717ef69ea9cd3f489b553d604536436b964"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-009-seed-03-B",
+      "inventory_sha256": "598698aee024445e952e371eed2fd448e25204ec29407bfc99b48394e85b95ad"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-011-seed-00-A",
+      "inventory_sha256": "7514aa5e9cc5ff5e8124a6aa8b02658c370485e79918ab965625a69ec6e4eb68"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-011-seed-00-B",
+      "inventory_sha256": "68fa8118c51ed8143b3dbd2f4c1324b55c65c2d2f5d059dbae6ff6851c5ff618"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-011-seed-01-A",
+      "inventory_sha256": "e3481ca465da625bc3e6b441b991e897286dc549f56eecb81d4fd0e584e2daf9"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-011-seed-01-B",
+      "inventory_sha256": "3f6218d59590a313ca2316045e96f5b7656e5ac105a518d408f88a11181b58cf"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-011-seed-02-A",
+      "inventory_sha256": "2702abda968c9a4078bfcf36628e13cbda7398157f99f0e6b9bd9ddb3df040a1"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-011-seed-02-B",
+      "inventory_sha256": "c94fa75de9bbf82a432328376f2044b0e8c09701d2e72370d6b33fc8be57d259"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-011-seed-03-A",
+      "inventory_sha256": "4866a2ba6c45bae5704f7fdac2cb93fcf7232d7546f8f21898b69baa9ac735bb"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-011-seed-03-B",
+      "inventory_sha256": "e6aceaf34c6b59bc9eb2d39c8fe225684c94e530d1002964a4192c3e7978755b"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-013-seed-00-A",
+      "inventory_sha256": "27d54e97513c130d49cf455d5809068e562f297f60038926c57f182619416a96"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-013-seed-00-B",
+      "inventory_sha256": "0e6b33888872b97d363edc6a5a8bdb0dc3f093746992008c1f327eae79172ae0"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-013-seed-01-A",
+      "inventory_sha256": "79e6c37970f5165b1a094e990cde8755c5549db3d00372cb15c2d7ebb734506d"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-013-seed-01-B",
+      "inventory_sha256": "eeded51fe1ad12246c888c342a08121ffeb3711113e952904bc570c95bc2dd00"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-013-seed-02-A",
+      "inventory_sha256": "04e1f6fbeeddc51f5ae711451ef602dc7bd26cf442da909438a6631e7eb24f4b"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-013-seed-02-B",
+      "inventory_sha256": "53e1cc3b623bdd805e284bb2846f9712fd2e7efedb22b34ab4fb298dcf6d314c"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-013-seed-03-A",
+      "inventory_sha256": "872e558d4a2fc9458ecd1c38aabdfd1941dcc0101fff10a861c02e94cd6ab468"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-013-seed-03-B",
+      "inventory_sha256": "d1cc7365a233b45b59570c34bcc2d904d4d9df092a0e533d2d7f3cca19e577b4"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-015-seed-00-A",
+      "inventory_sha256": "f9888e6fb47dbf328e4d2924535683e898c94cd096e4792b17ecc85cd3af5649"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-015-seed-00-B",
+      "inventory_sha256": "743fca20b11985ec014e78352d0a3cabb3b9b515d28b3699ccd7ce14375efa2e"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-015-seed-01-A",
+      "inventory_sha256": "fd8cf31e3ee8b753e423f64e6ae2839b0c50f1fc953d16e7077291460446a9bc"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-015-seed-01-B",
+      "inventory_sha256": "d92d71a05158e8833fe2277d99cedfe94b6e2eb0d8de5a6cb36f864c46ee8eda"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-015-seed-02-A",
+      "inventory_sha256": "a1e0c7f0a4daf4e43c8603f87daf4bf1d692b717df91b6c6ce84b1d65e172b47"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-015-seed-02-B",
+      "inventory_sha256": "63d635e3d90c467e8b514c56b4eb0d898f0e11735cdb8c5938980a63eb6e56c9"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-015-seed-03-A",
+      "inventory_sha256": "7d573699a7729fdfa0819f3d26d4a3f291e6890816ad1c60bf4d751559284ed9"
+    },
+    {
+      "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-015-seed-03-B",
+      "inventory_sha256": "35af272bad8f83c539c32a21821f1ca4c35ac5fc7d1143dcdd22c837060a8002"
+    }
+  ]
+}
