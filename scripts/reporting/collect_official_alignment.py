@@ -35,8 +35,11 @@ def collect(root: Path):
         verification=hashlib.sha256(result_path.read_bytes()).hexdigest()==terminal["training_result_sha256"]
         if not verification: raise ValueError("Run result SHA mismatch")
         cp=root/"train/checkpoint-final.pt"
+        checkpoint_hash=hashlib.sha256()
         with cp.open("rb") as f:
-            digest=hashlib.file_digest(f,"sha256").hexdigest()
+            for block in iter(lambda:f.read(8*1024*1024),b""):
+                checkpoint_hash.update(block)
+        digest=checkpoint_hash.hexdigest()
         if digest!=result["checkpoint_sha256"]: raise ValueError("Checkpoint SHA mismatch")
     return {"run":str(root),"terminal":terminal,"result_and_checkpoint_verified":verification,
         "optimizer_steps":len(rows),"training_draws":len(draws),
