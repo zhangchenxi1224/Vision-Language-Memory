@@ -55,3 +55,11 @@
 新建 `dl-align-cpu-20260913` 读取共享盘和同步固定提交。首次 H200 请求因原资源组无可用卡而停止，改为 `dl-align-h200x2-20260913-r2`，同镜像 CUDA12.8、2 H200、40 CPU、400 GiB。设置本轮 8 小时平台上限，避免无人监控空耗；需要更多训练时按证据接续。
 
 先以哈希确定的单一训练 teacher 检查官方 FM 微调是否可学，普通训练噪声独立于评测噪声；再决定多目标及 base 对照。保留原问、四个改写、blank/donor、原始 greedy 32-token generation、EOS、几何统计。训练完成不等于功能通过；实验产物到齐前不声称已得到可用版本。
+
+## 后续实测与Base实现
+
+Mobile单目标512步已完成，原问及四种改写全部0/8；原始结果和实际生成图片见 [实验记录](official-alignment-results-20260913/README.md)。45项相关测试通过，严格确定性FP32的实际官方Mobile轨迹逐位一致。
+
+已实现Base独立运行时：直接加载官方 `DreamLitePipelineLoRA`，训练raw event、512像素conditioner、全时间域FM；评测直接调用官方28步CFG代码。因此上文“本仓库默认Mobile”的限制仅适用于Mobile臂，不能用于描述现在新增的Base臂。Base评测遵循官方原样的diptych提示词包装，与其训练示例raw event的差别完整保留并记录。
+
+Base历史下载缺失text_encoder权重，已经按官方HF revision的内容SHA补全；完整27文件封存通过，且Base/Mobile VAE权重字节相同。Base新运行 `ac34ab2-base-single-20260913` 已完成teacher复测、训练前50格真实生成并开始优化；返回完整结果前不判定功能成功。

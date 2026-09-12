@@ -1,0 +1,122 @@
+{
+  "allclose": true,
+  "atol": 0.0,
+  "cuda_peak_memory": {
+    "cuda:0": {
+      "name": "NVIDIA H200",
+      "peak_allocated_gib": 11.54189395904541,
+      "peak_reserved_gib": 13.501953125
+    }
+  },
+  "dtype": "torch.float32",
+  "final_max_abs": 0.0,
+  "frozen_gradients": {
+    "base_unet": {
+      "frozen_nonfinite_grad_elements": 0,
+      "frozen_parameter_tensors": 1075,
+      "frozen_tensors_with_grad": 0,
+      "parameter_tensors": 1075,
+      "trainable_parameter_tensors": 0
+    },
+    "internal_qwen": {
+      "frozen_nonfinite_grad_elements": 0,
+      "frozen_parameter_tensors": 625,
+      "frozen_tensors_with_grad": 0,
+      "parameter_tensors": 625,
+      "trainable_parameter_tensors": 0
+    },
+    "vae": {
+      "frozen_nonfinite_grad_elements": 0,
+      "frozen_parameter_tensors": 134,
+      "frozen_tensors_with_grad": 0,
+      "parameter_tensors": 134,
+      "trainable_parameter_tensors": 0
+    }
+  },
+  "probe": "dreamlite_parity",
+  "provenance": {
+    "arguments": {
+      "atol": 0.0,
+      "dtype": "float32",
+      "event": "the background is a quiet blue room",
+      "model": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-mobile",
+      "output_json": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/106c8eb-single-20260913/parity.json",
+      "resolution": 1024,
+      "rtol": 0.0,
+      "seed": 0,
+      "source_image": null,
+      "strict_determinism": true
+    },
+    "git": {
+      "clean": true,
+      "commit": "106c8eb62c4da4b752a60866fe74bae880ce1120",
+      "status_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "models": {
+      "dreamlite": {
+        "expected_revision": "6695c3f4be230f0493fa5dbf78be3bc4d3bb2ab4",
+        "observed_revision": "6695c3f4be230f0493fa5dbf78be3bc4d3bb2ab4",
+        "path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-mobile",
+        "repo_id": "carlofkl/DreamLite-mobile",
+        "revision_matches_lock": true
+      }
+    },
+    "runtime": {
+      "cuda_runtime": "12.8",
+      "python_pid": 41500,
+      "torch": "2.7.0a0+ecf3bae40a.nv25.02"
+    },
+    "schema_version": 1,
+    "source_image": {
+      "file_sha256": null,
+      "fixture_id": "vision-memory-rgb-blocks-v1-1024",
+      "mode": "RGB",
+      "origin": "deterministic_fixture",
+      "path": null,
+      "rgb_sha256": "c44093f3ad73d6a3d62b5bf9b8ad226f65e65afd7841d5ef3ed80bc7d14a841a",
+      "size": [
+        1024,
+        1024
+      ]
+    }
+  },
+  "rtol": 0.0,
+  "shape": [
+    1,
+    4,
+    128,
+    128
+  ],
+  "steps": [
+    {
+      "allclose": true,
+      "index": 0,
+      "max_abs": 0.0,
+      "mean_abs": 0.0
+    },
+    {
+      "allclose": true,
+      "index": 1,
+      "max_abs": 0.0,
+      "mean_abs": 0.0
+    },
+    {
+      "allclose": true,
+      "index": 2,
+      "max_abs": 0.0,
+      "mean_abs": 0.0
+    },
+    {
+      "allclose": true,
+      "index": 3,
+      "max_abs": 0.0,
+      "mean_abs": 0.0
+    },
+    {
+      "allclose": true,
+      "index": 4,
+      "max_abs": 0.0,
+      "mean_abs": 0.0
+    }
+  ]
+}
