@@ -101,3 +101,12 @@ worker deadline Unix `1789254021`（2026-09-13 07:00:21北京时间）；GPU平�
 - 完成图生成器最新共享副本 `P/runs/dreamlite-official-alignment/render_alignment_preview_v3.py`，title正确区分fullU-Net/LoRA rank；后续用它。
 - 下一步：收集两条件臂和主LoRA；事前固定全新噪声的full最终权重确认测试（继续原生CFG7.5，不基于待出对照结果挑配置），并用相同实体的事件值替换/清除检验是否仅恒定输出ambient。随后基于该证据准备多事件teacher与共享Writer训练，不能把当前单题结果充当可用版本。
 - 旧16题数据有`mixed`类型，既含event_text也含query；后续提取事件必须包括它，不能只筛type==event。之前读取前缀出现gold与首个事件不一致就是漏看mixed更新，并非原始数据错误。旧BF16 teacher仍需当前FP32读取验证，不能直接导入。
+
+## 03:22 新噪声确认已启动
+
+- 两个712c00d条件对照和queue112379都已经结束。两臂各5问法8/8正确+EOS，40matched raw均ambient。CPU已逐个核验全部PT/JSON哈希与原始token评分，下载full-condition-evidence.tgz和full-condition-summary.json，文本展开full-conditions/并再次验SHA。不要再启动这两臂。
+- 确认源码提交 `cb41fa1bc9c1cc50a6c4d178dacd6f9a89ec2765`，checkout `P/repos/dreamlite-writer-confirmation-20260913`，run `P/runs/dreamlite-official-alignment/cb41fa1-full-confirmation`，日志为run加`.log`。单卡实例dl-align-full-h200x1-20260913实际wrapper PID249356、GPU worker PID249886（03:22显存16960MiB，正在加载/生成），后来日志已见28步进度。
+- scripts/probes/official_writer_confirmation.py绑定成功full512 resultSHA51332a...，检查完整parent manifest/cursor和checkpoint；加载后所有模型冻结。16个新namespace噪声对原始事件、同前4噪声对jazz/clear事件，blank/donor各一次；24张图、130条raw答题，原生CFG7.5/28步，deadline1789251300（06:15）。无训练、不改父模型、不选择CFG对照结果。已编译并验证固定/配对/无重叠seed计划，调度前note+exactplan JSON已提交。
+- 主LoRA3500最后观察3320/3500，仍等待端点及最终校验，容器PID411798。继续收集，不能因剩余少而提前停。
+- .gitattributes新增结果目录 -text，实测即使Windows core.autocrlf=true，Git checkout过滤后仍保持full result原始SHA。证据tar仍为原始bytes来源。
+- 旧16题FP32兼容性还没有执行。若要复用：B/seed0/step256在各lane/runs/target-XXX-seed-00-B/checkpoints/step-256.pt，payload键latent_fp32，checkpoint_index.jsonl有SHA；原训练是BF16VAE、仅original_open CE+EOS。旧三问法的instruction行也不同于当前五问法，不能只换dtype后就宣称满足新bank合同。后续应固定新五问法做FP32读取，或按已验证FP32三训练问法+两留出问法重新准备同实体ambient/jazz/clear的独立目标，再训练共享Writer；取决于当前确认的条件敏感性结果。

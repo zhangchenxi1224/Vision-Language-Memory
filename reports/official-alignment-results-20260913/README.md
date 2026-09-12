@@ -101,3 +101,5 @@ Base预训练输出也包含列车，训练后出现纹理及残留列车。与�
 原始文本证据：[full512-evidence.tgz](full512-evidence.tgz)、[重新核验摘要](full512-summary.json)、[训练后raw generations](full512/train/trained/generations.jsonl)。原始PT和4.4GiB模型/优化器状态保存在远端。已检查下载后的文本哈希及result绑定，并查看真实PNG预览。
 
 默认原生CFG7.5已经通过；按事前约定，CFG1/native与CFG1/缓存训练条件的无训练对照继续执行，不替换该端点结果。相关53项测试通过。原LoRA3500仍在原实例、原代码上独立运行，最后观察2786步。下一步须固定全新未观察噪声，并检查事件值替换/清除等条件敏感性，再安排多事件目标与训练；goal仍active。
+
+两项条件对照随后均完成：native CFG1与训练缓存条件/CFG1，五问法仍全部8/8正确且立即EOS，各40个matched raw均ambient。已复核phase完整清单中的全部PT/JSON哈希，验证原始token的EOS，并下载文本证据后再次验SHA。见[两臂摘要](full-condition-summary.json)、[证据归档](full-condition-evidence.tgz)。因此该单题正结果在三种已测推理设置下成立，不依赖挑选其中一臂。固定新噪声及同实体jazz/clear事件的确认实验已预注册并启动，配置继续使用原生CFG7.5，见[确认协议](../official-writer-confirmation-20260913.md)。
