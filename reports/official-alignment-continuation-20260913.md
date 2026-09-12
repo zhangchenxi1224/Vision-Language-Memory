@@ -82,3 +82,11 @@ worker deadline Unix `1789254021`（2026-09-13 07:00:21北京时间）；GPU平�
 - 接下来先确认full baseline gate及首步/16步checkpoint，随后收集两轮最终raw答案+EOS与哈希，再决定功能迭代；goal仍active。
 
 **02:53实测更新：full baseline gate已经通过，8张初始latent/image、全部轨迹和50条raw记录均与Base512逐位/逐字段一致。核验JSON已下载为reports/official-alignment-results-20260913/full512-baseline-reference-check.json。PID40541占用45840MiB，full已31/512步，checkpoint-latest.pt为4.4GiB，已跨过16步周期保存；约1.9秒/步。主LoRA已观察2152/3500，预计端点约03:30；full端点预计03:10左右。不要重复启动。**
+
+**03:00更新：full258/512，LoRA2447/3500，均实际确认GPU进程。主LoRA的nvidia-smi宿主PID2622580对应容器内PID411798；用pgrep完整命令核验，不能因容器ps找不到宿主PID误报退出。Full节点PID40541仍有效。**
+
+- 条件诊断代码 `712c00d56323bc5c628d1766bf377beecb17c037` 已推送并部署到 `P/repos/dreamlite-condition-control-20260913`。53项针对性测试通过。预注册在reports/official-base-condition-control-20260913.md。
+- 复用scripts/probes/official_base_guidance.py，默认native CFG1；新`--condition-style training_raw`在原生28步循环中使用训练缓存condition/mask，三分支重复同一条件、CFG和imageCFG均1，恢复hook并拒绝未消费override。加载LoRA/full权重之后全部冻结，结束检查无梯度/版本不变；修复旧probe仅能审计LoRA的问题。
+- **已经排好本次full退出后的串行无训练对照，不要重复提交**：GPU上实际queue PID112379，脚本 `P/runs/dreamlite-official-alignment/run-full-condition-controls-712c00d.sh`，日志 `P/runs/dreamlite-official-alignment/712c00d-full-condition-queue.log`。检查/proc/40541/cmdline必须仍指向full run/train才等待；父进程退出后各probe各自核验completed/result/checkpoint。队列等待上限06:00（1789250400）。
+- 固定两输出：`P/runs/dreamlite-official-alignment/712c00d-full-native-guidance1` 和 `P/runs/dreamlite-official-alignment/712c00d-full-training-raw-guidance1`。每个50raw generations、8图/轨迹和complete.json；第二个phase叫training_raw_guidance1，第一个guidance1。不要使用只找train/trained的主训练collector解析这两probe，应独立读phase complete/summary/generations并验hash。
+- 队列原脚本本地.cache/run-full-condition-controls.sh；单卡H200仍只本任务使用，不修改运行中的full或LoRA源码。完成图预览标题已增加全U-Net/LoRA rank标识。

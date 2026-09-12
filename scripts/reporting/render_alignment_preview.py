@@ -11,7 +11,8 @@ a=p.parse_args()
 canvas=Image.new('RGB',(8*224,2*270+45),'white')
 draw=ImageDraw.Draw(canvas)
 identity=json.loads((a.run/'train/identity.json').read_text())
-draw.text((8,8),f"Official FM on {identity['model_variant'].title()} | same {identity['eval_seeds']} noise seeds | before / after {identity['steps']} optimizer updates",fill='black')
+scope = 'full U-Net' if identity.get('trainable_scope') == 'full_unet' else f"LoRA rank {identity['lora_rank']}"
+draw.text((8,8),f"Official FM on {identity['model_variant'].title()} ({scope}) | same {identity['eval_seeds']} noise seeds | before / after {identity['steps']} optimizer updates",fill='black')
 for row,phase in enumerate(('baseline','trained')):
     root=a.run/'train'/phase
     records=[json.loads(s) for s in (root/'generations.jsonl').read_text().splitlines()]
