@@ -1,5 +1,13 @@
 # Goal 接续位置
 
+## 07:38 接续：多问题回读probe已部署，64载荷真实CPU验证通过
+
+- 最新功能commit **5bcf6d0990e6e428c536ff21d58c0b4af69ce66b** 已push。新增scripts/probes/historical_fp32_readback.py，固定panel SHA17f00e92...，全64端点×FP32/RGB两形式×五问法640matched+80blank；零optimizer/零Writer，FP32 VAE/bf16 Reader，真实raw32-token/EOS，完整PT/PNG/hash和冻结审计。要求idle GPU且deadline至少剩40min，不能抢当前训练GPU。两新tests通过，与panel两项本次4 passed，未改累计85项；不是功能回读结果。
+- CPU fetch/worktree session23826已经exit0，**P/repos/dreamlite-historical-fp32-20260913** 固定5bcf6d0，已部署。**尚未执行GPU回读，尚未派发输出/deadline/实例。** CLI需要--panel/--base-model/--base-seal/--mobile-model/--reader-model/--output/--expected-commit/--deadline-unix；模型路径仍P/M公共固定路径。独立当前训练final/probe及实际package CUDA parity仍须先完成，面板不是新teacher bank。
+- public probe中的load_historical_latent已通过真实CPU全量载荷检查。执行本地.cache/check-historical-payloads.py的上传副本P/runs/.../check-historical-payloads.py，import远端新probe副本P/runs/.../historical_fp32_readback.py（SHA b8a4d80593f89bf8953e72a33f7c55659b9f0193260ca6bacaea6153fbc2a953），PYTHONPATH使用3c335a2 result-verification checkout及src，CUDA空、OMP/MKL1。64个step256/B端点全部weights_only加载成功，4194304值、每个FP32[1,4,128,128]、文件/张量SHA及target/seed/arm绑定均通过；CUDA未初始化、VAE/Reader调用0。
+- 输出 **P/runs/dreamlite-official-alignment/historical-fp32-payload-verification.json** 已下载，SHA **212fc526c29302b71a4dfef7657afb072d4f66983a884d349b0159d366c541db** 本地远端一致。真实CPU校验工具exec已exit0；所有上传（92257等）、下载、fetch和查询会话均已结束。新结果和说明待本轮提交。
+- 最新07:36实测训练 **2084/2880更新、elapsed3995.5s**，PID6087与collector463114存活，parent无terminal、final rows0、collector等待。当前任务仍有效进展，无阻塞；不要重启或选择中途checkpoint。下一步等完整fixed final，自动collector会核验并打包，然后按原预注册新72图/96写链及真实package parity继续；更广范围teacher兼容性也不能替代共享Writer验证。
+
 ## 07:28 接续：64个历史端点的FP32/RGB回读面板已真实封存
 
 - 上轮55e8b2f（真实CPUpackage加载证据）已提交push。当前最新功能 **acc0b68** 已push，新增scripts/experiments/prepare_historical_fp32_readback.py和两项测试（2 passed，累计未改覆盖83）；不是新Writer训练代码。**历史16题审计本来已经完成**，见historical-multiquestion-review.md和audit.json，不要重复重跑它。之前摘要只说检查root并不完整，以当前仓库审计为准：128run/32768updates/3456raw，B原问64/64、第一改写64/64、第二61/64，旧BF16 VAE，非共享Writer。
