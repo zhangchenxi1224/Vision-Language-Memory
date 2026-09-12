@@ -65,6 +65,18 @@ worker deadline Unix `1789254021`（2026-09-13 07:00:21北京时间）；GPU平�
 
 ## 接下来
 
-先继续当前Base3500，核验前512draw/loss与Base512；等待真实结果时保持进程核验及适度进度沟通，不重新启动。Base512/CFG1失败、oracle邻域相对鲁棒共同支持测试官方3500预算；若仍失败，应再区分容量、优化目标与oracle训练目标，不能无边界只加步数。成功后还须全新固定噪声、反事实事件/多题验证；目前8benchmark噪声未参与训练，但研究迭代中已反复观察，不是 untouched research holdout。
+先继续当前Base3500；其完整前512draw/loss已核验一致。等待真实结果时保持进程核验及适度进度沟通，不重新启动。Base512/CFG1失败、oracle邻域相对鲁棒共同支持测试官方3500预算；若仍失败，应再区分容量、优化目标与oracle训练目标，不能无边界只加步数。成功后还须全新固定噪声、反事实事件/多题验证；目前8benchmark噪声未参与训练，但研究迭代中已反复观察，不是 untouched research holdout。
 
 预览生成器现在版本化为scripts/reporting/render_alignment_preview.py，远端临时副本 `P/runs/dreamlite-official-alignment/render_alignment_preview_v2.py`，会从identity读正确model_variant与预算标题。旧render_alignment_preview.py硬编码Mobile，只适用于历史Mobile图。
+
+## 02:50容量对照更新
+
+- 源码提交 `b0a06f5c597fce64457748b5d81f580116174547` 已推送。51项针对性测试通过，新增完整U-Net训练范围、冻结边界、周期checkpoint精确恢复和基线数值拒绝测试。
+- Base3500在02:47实测1935/3500，仍使用原ac34ab2源码和原双H200实例，不修改它。
+- 新两卡容量实例 `dl-align-full-h200x2-20260913` 因父项目quota剩余1GPU无法调度，0步停止并删除；本轮最早的空实例 `dl-align-h200x2-20260913` 也已核实STOPPED后删除。两者均无训练产物。**保留运行中的r2实例和CPU实例。**
+- 新单卡 `dl-align-full-h200x1-20260913` RUNNING，node qb-prod-gpu2459；同project/workspace/group/NGC25.02，1H200/20CPU/200GiB/shm64，02:39:59创建，240分钟平台上限。显式将Writer和Reader放cuda:0，默认两卡训练路径不变。
+- 新checkout `P/repos/dreamlite-full-unet-20260913`，新run `P/runs/dreamlite-official-alignment/b0a06f5-full512-single-20260913`，launcher日志为run路径加`.log`，阶段日志 `stage-0-1789238966133268987.log`。已调度，GPU实际模型进程PID40541；02:50正在执行未训练baseline，尚未确认首个优化步骤。
+- 调度前预注册 `reports/official-full-unet-preregistration-20260913.md`。512更新、accum4、相同teacher/2048draw/seed/lr/wd/clip/native28CFG7.5；仅全量U-Net替代rank16 LoRA，其他模型冻结。worker deadline1789251300（06:15），早于平台06:40停止。
+- 训练前必须生成 `train/baseline-reference-check.json`：与原Base512 runtime相同、8个latent/image和全部28步轨迹逐位相同、50条raw Reader记录逐字段相同，原resultsha afd3d93c222654c2754060610a93c072449288752db3733867f8f4e1550b92b4。不通过则0步失败，调查差异，不静默放宽容差。
+- 全量checkpoint每16步、首步/末步/正常停止均保存，完整optimizer+RNG；硬中断保留physical log并重放未保存更新。默认LoRA仍每步保存。最终collector请用新checkout版本，读取通用unet_parameter_delta_l2；旧collector仅认识adapter字段。
+- 接下来先确认full baseline gate及首步/16步checkpoint，随后收集两轮最终raw答案+EOS与哈希，再决定功能迭代；goal仍active。
