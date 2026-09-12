@@ -31,6 +31,7 @@ def main():
     p.add_argument("--expected-commit", required=True)
     p.add_argument("--target-mode", choices=("single","bank"), default="single")
     p.add_argument("--steps", type=int, default=512)
+    p.add_argument("--eval-seeds", type=int, default=8)
     p.add_argument("--trainable-scope",choices=("lora","full_unet"),default="lora")
     p.add_argument("--checkpoint-interval",type=int,default=1)
     p.add_argument("--colocate-models",action="store_true")
@@ -40,6 +41,8 @@ def main():
     p.add_argument("--deadline-unix", type=float, required=True)
     p.add_argument("--resume", action="store_true")
     a=p.parse_args()
+    if a.eval_seeds < 2:
+        raise ValueError("At least two paired evaluation noise seeds are required")
     if not 1.0<=a.base_guidance_scale<=100.0 or (a.model_variant!="base" and a.base_guidance_scale!=7.5):
         raise ValueError("Base guidance must be in [1,100] and applies only to Base")
     if subprocess.check_output(["git","rev-parse","HEAD"],cwd=ROOT,text=True).strip()!=a.expected_commit:
@@ -62,7 +65,7 @@ def main():
         raise RuntimeError("CUDA 12.8 runtime required")
     binding={"commit":a.expected_commit,"bank_sha256":a.bank_sha256,"torch":torch.__version__,
         "diffusers":diffusers.__version__,"transformers":transformers.__version__,"gpu":gpu,
-        "cuda":torch.version.cuda,"target_mode":a.target_mode,"steps":a.steps,"seed":a.seed,
+        "cuda":torch.version.cuda,"target_mode":a.target_mode,"steps":a.steps,"seed":a.seed,"eval_seeds":a.eval_seeds,
         "trainable_scope":a.trainable_scope,"checkpoint_interval":a.checkpoint_interval,
         "colocate_models":a.colocate_models,"base_guidance_scale":a.base_guidance_scale if a.model_variant=="base" else None,
         "created_unix":time.time(),"deadline_unix":a.deadline_unix}
@@ -87,7 +90,7 @@ def main():
         "--dreamlite",str(a.dreamlite),"--reader-model",str(a.reader),"--expected-commit",a.expected_commit,
         "--flow-protocol","official","--prompt-style","official_raw","--target-mode",a.target_mode,
         "--steps",str(a.steps),"--seed",str(a.seed),"--lora-rank","16","--lr","5e-5",
-        "--gradient-accumulation-steps","4","--weight-decay","1e-4","--eval-seeds","8",
+        "--gradient-accumulation-steps","4","--weight-decay","1e-4","--eval-seeds",str(a.eval_seeds),
         "--deadline-unix",str(a.deadline_unix)]
     train.extend(["--model-variant",a.model_variant])
     train.extend(["--trainable-scope",a.trainable_scope,"--checkpoint-interval",str(a.checkpoint_interval)])
