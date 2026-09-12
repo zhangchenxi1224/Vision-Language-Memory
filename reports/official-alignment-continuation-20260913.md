@@ -134,3 +134,13 @@ Full确认cb41fa1也completed：原事件16新噪声×5问法80/80正确立即EO
 **当前唯一活跃GPU训练**：源码c90896c55c7b6cd6f489ccb7848ade2cff587daa，checkout `P/repos/dreamlite-three-state-writer-20260913-r2`，run `P/runs/dreamlite-official-alignment/c90896c-three-state-full1536-20260913`，stage-0-1789242667553720835.log。单H200实例 `dl-align-full-h200x1-20260913` 实际GPU PID396075、45842MiB；03:56观察28/1536更新，约1.9秒/步，已出现checkpoint。不是仅提交/加载。预注册reports/official-three-state-writer-20260913.md：fresh Base full U-Net、lr5e-5/accum4/clip1/wd1e-4、三状态各2048训练draw、原生28CFG7.5/image1；没有继承ambient-only权重。1536结束后还要完成3组baseline/trained的真实Reader评价。deadline1789251300（06:15），实例约06:40到期。55项相关测试通过。不要重启这个run。
 
 2-H200实例 `dl-align-h200x2-20260913-r2` 已实际核验无GPU计算进程，目标/旧训练证据均在共享盘且本地下载，现已stop并delete。保留上述单H200和CPU实例；不要等待已删除实例的历史PID。三状态Writer尚未功能验证，goal继续active。正在预注册新噪声及两种留出事件表达的确认测试；只有固定1536端点的每个状态/问法/噪声全部通过，才进入该确认。
+
+## 04:10 确认代码已准备，主训练继续
+
+本地新commit **1e4acd2bcd9cbf9f0b2878e51694c17bebe06110** 已产生，包含所有三状态目标证据、修复后manifest、首次失败记录、scripts/probes/official_three_state_confirmation.py、固定JSON计划和预注册。57项原套件/确认门槛测试加1项按组统计回归，共58 passed。确认方案：每状态原始事件16全新配对噪声、两种未训练事件表达各4噪声；72张图/360真实答题，加按三答案重复评分的blank/donor30行。确认脚本在任何模型加载前要求父commit/bank/1536步设计和完整已成功的120个development matched单元，拒绝重复、漏项、失败、额外token；保存全部轨迹、raw和冻结边界。不是自动调参或挑选最佳端点。
+
+本地exec session72824的git commit/gc/push已全部exit0，1e4acd2已推到origin。不要重新等待或重启它。Git common dir为D:/2026WorkExperience/VisonLearnableMemory/.git。后续audit、此续接记录、render_alignment_preview.py多状态修复另行提交。新render用(question_id,noise_seed)映射，避免三组同噪声答案覆盖，按组排版。
+
+**确认队列已实际启动，不要重复提交**。CPU已经fetch并创建 `P/repos/dreamlite-three-state-confirmation-20260913` 锁定1e4acd2，shell位于 `P/runs/dreamlite-official-alignment/run-three-state-confirmation-1e4acd2.sh`（本地.cache/run-three-state-confirmation.sh）。单H200实际bash PID540574，GPU上仍只有父训练PID396075/45842MiB。队列每20秒等父terminal到06:00，随后固定调用确认脚本，deadline06:15；失败门槛会在加载模型前拒绝。固定输出 `P/runs/dreamlite-official-alignment/1e4acd2-three-state-confirmation`，worker日志同路径加.log，queue.json记录退出码，外层nohup日志同路径加-queue.log。仅退出0还不等于功能成功，须检查complete.json、各state/style/prompt的raw/EOS和所有hash。父训练仍为c90896c，不修改其checkout。
+
+主训练最近实际观察335/1536（04:06–04:07），1536预计04:45前后结束优化，其后还有3组原生采样/Reader评测；具体以terminal/raw为准。没有新功能结果。已上传新版CPU报告器为 `P/runs/dreamlite-official-alignment/collect_groups_1e4acd2.py`（scp session73539已exit0）；其per-conditional-group计数避免constant-state被aggregate掩盖。它可先采进度，也可在端点后核验checkpoint/result并打包。原state bank遗留descriptive planned_count/successful_run_count=96来自parent，但实际每组teacher列表只有1，训练完全不读这两个字段；future exporter已改为1，正在运行的manifest保持不变，预注册也公开此点。

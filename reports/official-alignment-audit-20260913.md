@@ -2,6 +2,8 @@
 
 分支：`codex/dreamlite-official-alignment-20260913`，起点 `f68bf06`。附件为问题线索，以下以实际源码和可追溯产物为依据。
 
+截至04:08的结论：官方FM公式、完整时间域、纯噪声初态、原生scheduler与条件接口已成套实现并验证。后续真实实验使用官方Base原生28步推理。rank16 LoRA在512和3500步均未通过；相同512步的全U-Net训练通过单事件新噪声，却未通过事件替换/清除，因此还不能宣称得到可用的条件Writer。当前正以同一问题的ambient/jazz/clear三个独立可读目标训练一个共享全U-Net。完整证据与限制见[实验结果](official-alignment-results-20260913/README.md)，当前进程信息见[续接记录](official-alignment-continuation-20260913.md)。以下早期记录按实验阶段保留。
+
 ## 官方依据
 
 2026-09-13 读取官方仓库 HEAD，仍为锁定版本 `a6e20c8cc94027f37dd7c5a81b0b3b472aa18409`。
@@ -41,6 +43,7 @@
 3. 官方从训练 RGB 编码 target，本实验使用已验证的 FP32 model-space oracle endpoint。重新 decode/encode 会改变这些经搜索验证的目标，故保留并明确这一实验设计。灰图 source 的 FP32 编码及 PIL 量化差异亦不能掩盖。
 4. 官方示例 bf16，本实验保留已验证的 FP32 DreamLite/latent 与 bf16 Reader，确保 teacher 重放精度。训练步数由各实验显式记录；短程 pilot 不冒充官方 3500 步预算。
 5. 单题成功不能证明按事件写入或泛化；需进一步反事实事件和多题检查。
+6. 后续全U-Net容量对照改变了官方示例的LoRA训练范围。这是根据配对失败证据做的显式实验选择，保持官方FM/条件/采样协议，不称为原样复现官方LoRA配方。
 
 ## 以往证据核验
 
