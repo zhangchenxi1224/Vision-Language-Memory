@@ -33,6 +33,7 @@ def load_base_runtime(args, bank, *, inference_only=False):
     from vision_memory.dreamlite.conditioning import encode_image_edit_condition
     from vision_memory.dreamlite.differentiable_mobile import calculate_shift
     from vision_memory.dreamlite.native_base import NativeBaseEditSampler
+    from vision_memory.dreamlite.source_images import load_sealed_source_image
     from vision_memory.dreamlite.latent_codec import decode_model_latents_unit_interval
     from vision_memory.training.latent_bank_unet import OFFICIAL_REFERENCE_COMMIT,file_sha256
     from vision_memory.reader.open_eos import assistant_termination_contract
@@ -99,20 +100,36 @@ def load_base_runtime(args, bank, *, inference_only=False):
     contexts={}
     image=Image.new("RGB",(1024,1024),(128,128,128))
     image_tensor=pipe.image_processor.preprocess(image)
-    source=pipe.prepare_image_latents(image_tensor,dtype=torch.float32,device=vd)
+    gray_source=pipe.prepare_image_latents(image_tensor,dtype=torch.float32,device=vd)
     # Training uses the same source image encoding as official inference.
     old_gray=legacy.encode_model_latent(pipe.vae,legacy.blank_source_rgb(device=vd,dtype=torch.float32))
     sigmas=np.linspace(1.,1./28,28)
     config=pipe.scheduler.config
-    mu=calculate_shift(source.shape[-2]*source.shape[-1]//4,config.get("base_image_seq_len",256),
+    mu=calculate_shift(gray_source.shape[-2]*gray_source.shape[-1]//4,config.get("base_image_seq_len",256),
         config.get("max_image_seq_len",4096),config.get("base_shift",.5),config.get("max_shift",1.16))
     pipe.scheduler.set_timesteps(sigmas=sigmas,device=vd,mu=mu)
     effective=tuple(float(x) for x in pipe.scheduler.sigmas[:28].cpu())
     source_bindings={}
+    source_image_files={}
+    gray_image=image
+    blank_pixels=decode_model_latents_unit_interval(pipe.vae,gray_source,clamp=True).cpu()
     for group in bank["groups"]:
-        if group.get("source_kind")!="blank_gray_1024": raise ValueError("Expected the audited gray-source bank")
         bank_source=training.resolve_payload(group,"source_latent",args.bank_manifest).to(vd)
-        if not torch.equal(bank_source,old_gray): raise ValueError("Bank source cannot be replayed with base VAE")
+        if group.get("source_kind")=="blank_gray_1024":
+            image,source=gray_image,gray_source
+            if not torch.equal(bank_source,old_gray): raise ValueError("Bank source cannot be replayed with base VAE")
+            source_reason="official source PIL gray128 preprocessing instead of historical exact float gray0.5"
+        elif group.get("source_kind")=="sealed_rgb_1024":
+            image,image_path=load_sealed_source_image(group,args.bank_manifest)
+            source_image_files[image_path]=group["source_image_file_sha256"]
+            source=pipe.prepare_image_latents(pipe.image_processor.preprocess(image),dtype=torch.float32,device=vd)
+            if not torch.equal(bank_source,source):
+                raise ValueError("Sealed source latent differs from official RGB image encoding")
+            source_reason="exact sealed RGB PNG encoded by the official Base VAE for training and native inference"
+        else:
+            raise ValueError("Unsupported source kind; source provenance must be explicit")
+        if source.shape!=gray_source.shape:
+            raise ValueError("Source resolution differs from the fixed official schedule")
         condition=encode_image_edit_condition(pipe,image,group["event_text"],device=vd,dtype=torch.float32)
         donor=group.get("donor_control",bank.get("donor_control",{}))
         if not donor or donor.get("answer","").casefold()==group["answer"].casefold():
@@ -126,16 +143,21 @@ def load_base_runtime(args, bank, *, inference_only=False):
         qid=group["question_id"]
         contexts[qid]={"source":source,"condition":condition,"effective_sigmas":effective,"num_inference_steps":28,
             "inference_sampler":NativeBaseEditSampler(pipe,source_image=image,event_text=group["event_text"]),
-            "blank":decode_model_latents_unit_interval(pipe.vae,source,clamp=True).cpu(),
+            "blank":blank_pixels,
             "donor":donor_pixels,"donor_answer":donor["answer"]}
         source_bindings[qid]={"bank_source_sha256":canonical_tensor_sha256(bank_source.cpu()),
             "official_source_sha256":canonical_tensor_sha256(source.cpu()),
             "rms_difference":float((source-bank_source).double().square().mean().sqrt()),
-            "reason":"official source PIL gray128 preprocessing instead of historical exact float gray0.5"}
+            "reason":source_reason}
+        if group["source_kind"]=="sealed_rgb_1024":
+            source_bindings[qid]["source_image_file_sha256"]=group["source_image_file_sha256"]
     def verify_extra():
         verify_source()
         if verify_download_seal(args.base_manifest,args.dreamlite)!=base_seal:
             raise ValueError("Base snapshot changed")
+        for path,sha in source_image_files.items():
+            if file_sha256(path)!=sha:
+                raise ValueError("Sealed source image changed during execution")
     return dict(pipe=pipe,reader=reader,processor=processor,sampler=predictor,contexts=contexts,
         vae_device=vd,reader_device=rd,snapshots=snapshots,termination=assistant_termination_contract(reader,processor),
         protocol_binding={"student":"official DreamLitePipelineLoRA base","base_snapshot":base_seal,
