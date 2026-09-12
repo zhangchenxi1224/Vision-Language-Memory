@@ -4,8 +4,10 @@ import json
 from pathlib import Path
 import sys
 ROOT=Path(__file__).resolve().parents[2]
-sys.path.insert(0,str(ROOT/"src"))
-from vision_memory.repro.hf_snapshot import inspect_download
+# This bootstrap also runs on an internet CPU box without PyTorch installed.
+# Import the stdlib-only verifier without the repro package's CUDA helpers.
+sys.path.insert(0,str(ROOT/"src/vision_memory/repro"))
+from hf_snapshot import inspect_download
 
 
 if __name__=="__main__":
