@@ -1,6 +1,6 @@
 # Vision Learnable Memory
 
-> 最新核验（2026-09-14）：新4H200上的原生条件训练已完成固定4832更新，开发1510/1510、302图五问法全部通过，见[完整终点证据](reports/official-alignment-results-20260913/native-condition-development-review.md)。冻结旧bb权重、仅改用其raw训练条件推理的对照也从1460/1510提升至1510/1510，见[冻结条件对照](reports/official-alignment-results-20260913/raw-condition-development-review.md)。两套原始回答、实际PT与抽样/身份信息均已独立CPU核验并本地复核，支持条件不一致的影响。新原生模型的完整单次/连续RGB链/历史前缀验证正在运行，raw策略随后单独验证；仍未完成可用版本验收。
+> 最新核验（2026-09-14）：新4H200上的原生条件训练完成4832更新，开发1510/1510；完整功能验证为单次360/360、连续链480/480（16/16整链）、历史896/960。全部1990条原始回答、360张PNG及实际CLI重放已本地复核，历史改写仍失败64条，见[完整功能证据与退步分析](reports/official-alignment-results-20260913/native-condition-validation-review.md)。冻结旧bb权重的[raw条件开发对照](reports/official-alignment-results-20260913/raw-condition-development-review.md)也达到1510/1510，其完整功能验证当前实际使用新实例四张H200。尚无通过完整验收的可用版本。
 
 > 2026-09-13：[官方DreamLite训练对齐审计](reports/official-alignment-audit-20260913.md)与[实训结果](reports/official-alignment-results-20260913/README.md)。新训练入口默认官方target/noise FM、source条件与纯噪声推理；Base直接使用原生官方28步pipeline。显式`--base-guidance-scale 1`只改变Base推理，默认7.5保留。旧source-anchored文档和下方旧实验阶段记录仅供历史复现，当前结论以上方完整结果为准。
 

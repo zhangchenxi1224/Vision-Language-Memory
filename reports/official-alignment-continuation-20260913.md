@@ -1,5 +1,15 @@
 # Goal 接续位置
 
+## 09-14 05:58 原生完整功能证据已全部本地复核；raw修复入口后四卡实际运行
+
+- **Goal仍active**。03开发1510/1510，但9e完整功能为1736/1800，历史改写仍64失败，不标可用。训练、9e四路和CLI均已真正结束，不重启；全部1990raw/360PNG完整下载、本地4路重算、原训练19328draw重放及6写30读CLI复核通过。完整结果见 `results/native-condition-validation-review.md`（实际目录official-alignment-results-20260913）。
+- **完整配对**：single旧280→360，修复80；chain390→480，修复90、16/16链。prefix0旧428→416，413保留、49仍错、15新错、3修复；prefix1旧467→480，13修复。全部固定负对照tokens/pixels保持。历史总计896/960、170/192图全五问。64失败来自历史改写juice36、linen17、清除11；严格原token+立即EOS保持。原生CLI parity及reference单链functional均true，suite全功能false。
+- **9e完整archive SHA**：confirmation `27f91692a1ba02c3ff23c0ea41344c8ad23a0b79945478b4b65ead33fd133af3`；chains `e546637691a54c250ed8562321a78c1cfdb2e75bd18e973b782b7210f7156c20`；prefix0 `7d7588c7d18f63715803991d108d9206f7adfd0e9666dfe7640205c2f9e5a545`；prefix1 `4e77e7a216a4df7dd648be53db464f03502d6cf230e8b1fa0fd7d9f152d039d0`；CLI `0de0462d52c05d2582e39936d38f581d73018e33329bf1556379ec1cfb9f349f`。prefix1曾在手工传参多写一个0成为65字符，校验拒绝后重新CPU tty:false读取完整64字符，实际文件未损坏，无重新下载。prefix0 SCP82460已exit0；本地51444完整复核exit0。所有下载与本地复核现已完成，不再轮询旧句柄或重取归档。
+- **raw首次启动失败已实际修复并重新部署**：原35741bd driver1864908等待9e后发生 `No module named 'scripts'`，未开始任何GPU案例。5ef8aa8ce4edb412675aa410e01c2d2ed02b10e0增加ROOT/src sys.path、fcntl移main，外cwd隔离Python实际回归1pass。干净新 `P/repos/dreamlite-raw-functional-validation-r2-20260914@5ef8aa8full`，driver2547295，4lane父2547303–2547306，05:55实际CUDA **2548454–2548457** state全部R。status `R/5ef8aa8-raw-condition-completion-suite-status.json` stagefour_independent_validation_lanes，log `R/5ef8aa8-raw-validation-driver.log`。只用新5ef输出，旧357现场保留，勿重启。
+- **raw固定参数不变**：bb7377最终checkpoint、1f86完整raw control、zero update、动态单raw encoder三行复制、native28 CFG1 Gaussian FP32、全1990raw/1800matched/360PNG及v2包实际CLI。deadline1789350600=09:50CST，新4H200自动停止约10:51，CPU约09:25。raw尚无完整功能结果，不能将两个候选通过部分拼接。
+- **后续工作**：等待新5ef整套完成，CPU collector实际检查全部PT后下载四路完整证据，使用bb的16bc3d0 endpoint archive与bb full commit、expected-probe5ef full、`--inference-condition training_raw`完整本地重算；另生成5ef CLI归档并实际复核。原生已完整失败，若raw也失败再根据完整配对设计下一轮，历史目前单表达/stratum而音乐9表达。新增历史表达须保持31逻辑权重，并明确已观察案例回归与新测试划分，不能将测试事件加入训练后仍称独立holdout。
+- 新四卡 `dl-official-exp-h200x4-20260914` 正在实际工作；原用户r3/r2未动，旧单卡上一轮工作全结束。沿用Inspire skill，不用IAB。两个紧凑观察器均在R更新至5ef；GPU `observe-official-condition-runs.py` 验证本实例实际CUDA进程，CPU `observe-complete-condition-evidence.py` 只读取完成证据。需要CPU输出完整哈希时tty:false避免ANSI换行损坏转录。
+
 ## 09-14 05:25 两条完整开发对照均1510/1510，全部独立证据已本地复核
 
 - **本turn实质进展**：03原生条件训练真正完成终点，1f86冻结raw推理对照也真正完成；两者均1510/1510、302图五问法全部正确。对应独立CPU检查与本地完整原始记录复核全通过，证据已commit/push：原生 **a0af95a**，raw **0c147f1**。这不是部分输出、仅loss或进程启动。完整四路功能与CLI尚未完成，goal继续active。
