@@ -1,3 +1,12 @@
+## 09-14 07:44 b9完成4832更新并实际进入终点评估
+
+- **本轮进展**：b9参数更新真正完成4832/4832，最终日志elapsed3896.7965808808804秒；最终checkpoint-final.pt和parallel-parameters-step-004832.json实际存在。time1789343057.542315观察到4个CUDA训练worker仍活跃，trained分片已有28/27/28/27行，说明已进入Reader终点评估。根terminal仍不存在、trained complete尚未生成；不要将参数更新完成写成全实验或功能通过。
+- **实际4rank证明已读取**：bitwise_rank_agreement=true、world_size4/NCCL Ring Simple；4rank参数SHA均为 **29c9f6e07c4eeec6c6d32fd7f236de79efe457b8f18d4a7543d7e4f544eb02b8**。这不是checkpoint文件SHA，后者等完整result及独立collector实际核验。PID仍2916294–2916297。
+- 7b driver3222175等b9完整terminal，56 driver3609629等7b，PNG385 driver1428等前两套完成；本轮均在实际/proc中确认存活。不能因训练步数不再增长就重启或认定停滞。`R/observe-historical-wording.py`已更新并上传，显示final_checkpoint_exists、final_rank_proof_exists、trained_complete与trained_shard_rows，并识别实际功能probe/PNG Reader/CLI进程。
+- 本轮另按锁定官方源码和真实训练调用链更新对齐审计，**07d3367**已推送。明确早期LoRA/raw默认与当前full_unet/native_base配置、完整已失败9e/5ef结果、完整PNG验收；实际从固定Base快照读取unet/config.json，dropout0.0，记录eval/train模式差异但不据静态检查宣称全面数值等价。无活跃训练源码变化。
+- 预备本地`.cache/archive-wording-cli.py --suite registered|fresh`仅在对应完整suite结束后归档CLI，固定7b/56和b9 parent；**尚未上传或执行**。可届时上传CPU，再用原`verify_rgb_cli_evidence_local.py`完整复核。不要把此预备脚本当作已有CLI证据。
+- Goal active，先等完整b9开发raw/result和7b自动完整终点/PT审计，再及时下载；后续完整旧/新/PNG分数仍未知。所有本地exec/SCP已结束，无待轮询旧句柄。CPU租期约09:25，新四卡约10:51；原用户实例保持。
+
 ## 09-14 07:30 本地完整PNG归档复核入口已验证
 
 - 本轮实质进展：**e43c114** 已提交推送 `scripts/reporting/verify_png_readback_local.py`，下载完成后同时提供readback/source两归档及独立远端SHA，再实际检查source complete/raw对应、所有PNG像素和全原始回答。完整390行、78张图、压缩包解压路径和错误SHA拒绝测试已实际通过（77.65秒）。此本地入口不改活跃385远端源码，也不放宽判据。
