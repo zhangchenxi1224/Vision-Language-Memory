@@ -1,5 +1,14 @@
 # Goal 接续位置
 
+## 08:04 接续：2880步更新完成，完整final评测已启动
+
+- 实际GPU观察 **2880/2880 optimizer updates**，elapsed5517.603s。`train/checkpoint-final.pt`已经存在，4681006404bytes；目前只是存在/大小核验，最终SHA及载荷绑定仍等待completed后严格collector。08:03最新 **final_generation_rows58/1350**，parent terminal仍不存在。
+- `ps`实测训练PID6087状态Rl/存活，collector463114状态S/存活；collector仍waiting_for_training。不是训练停止，也不是完整实验完成；不能重启、换checkpoint或提前按部分raw公布功能结论。训练run仍9628d71，当前GPU仍dl-transitions-h200x1-20260913，worker/collector/实例截止仍09:15/09:20/约09:49。
+- 新可执行串行launcher **scripts/inspire/run_transition_validation_suite.sh** 已提交push **b9eec7c4da0f3547618813312d6537e0e13713e2**。CPU2 fetch/worktree会话1969已exit0；独立checkout **P/repos/dreamlite-validation-suite-20260913** 已实测相同HEAD和远端bash -n通过。尚未执行suite，未创建新验证GPU。
+- Suite须在真正completed父端点之后、**新空闲H200且实测lease至少剩90min** 执行：`bash P/repos/dreamlite-validation-suite-20260913/scripts/inspire/run_transition_validation_suite.sh DEADLINE [--diagnostic]`。development若失败必须显式diagnostic且原失败不变。脚本绑定已部署probe0f40767、collector3c335a2、package/parity281b653，拒绝dirty source/正在占GPU/已存在输出。
+- 顺序为72单图+collector、96RGB写链+collector+张量验证、**新2880端点**package导出、第一预注册六步准备、独立CLI六写30读、parity检查。所有阶段单独日志，状态 **P/runs/.../transition-validation-suite-status.json**（尚不存在）；任一工程错误停止并保留阶段。固定run输出0f40767-transition-confirmation/chains、281b653-transition-writer-package/package-parity/package-inference，归档prefix transition-confirmation和transition-chains。输出重复时拒绝，不能盲目重启suite。CLI最后阶段有deadline timeout。完成这些工作仍须原始功能结果，不能仅按queue exit0宣称可用。
+- CPU连接只能用 **dl-align-cpu2-20260913**，旧CPU已删除；新实例约15:46到期，具体实时status。所有查询、部署会话已结束，无待SCP/fetch。本轮此前2484→2880为真实连续观察等待，最终58条证明已进入final。更广16题FP32/RGB720回读尚未GPU运行，独立于本suite，后续仍需安排。
+
 ## 07:49 接续：CPU连接实例已更换，训练继续
 
 - **后续CPU exec/scp/fetch统一使用 `dl-align-cpu2-20260913`**。新实例已创建并实测RUNNING，CPU资源空间 / 前沿课题探索 / CPU资源-2 / 0,2,8 / ubuntu-inspire-base:22.04 / shm32 / 480min，节点cpu-nat-417。07:47状态剩7h58m，约15:46到期；以后以实时status为准。
