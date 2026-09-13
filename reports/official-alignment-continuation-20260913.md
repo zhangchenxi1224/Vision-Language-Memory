@@ -1,5 +1,13 @@
 # Goal 接续位置
 
+## 09-14 03:00 首步诊断已移到新四卡GPU0，实际开始加载模型
+
+- **本goal turn有实质进展**：在用户新授权/已RUNNING四卡上启动同一冻结首步诊断，与旧实例prefix1并行；不是no-progress。原等待driver378979在重新确认waiting且未建output后主动SIGTERM，状态failed/error=Bounded diagnostic interrupted是**调度迁移记录，不是模型失败**。该旧PID已退出，不能重启其launcher或再等它执行。
+- **新actual进程**：新四卡dl-official-exp-h200x4-20260914上driver **32207**、probe parent **32213**、worker **32581**，03:00实际S/Ss/Rl，pipeline6组件与Reader2权重shard加载完成，正在初始化完整151条件。尚无完成诊断结果。CUDA_VISIBLE_DEVICES=0，先单卡完成302cell三臂，其他三卡后续全四卡训练；不把此称为四卡训练。
+- 新driver状态 **P/runs/.../17f35be-first-step-quad-driver-status.json**，日志 **17f35be-first-step-quad-driver.log**；probe日志仍 **17f35be-first-step-condition.log**，输出仍 **17f35be-first-step-condition**。截止 **1789328603.7021172（约03:43CST）**，45min硬超时。代码17f35be干净源码仍P/repos/dreamlite-logical-first-step-20260914未修改。启动一次，不要重复。新driver **P/runs/.../run-first-step-on-quad-20260914.py**，SHA **7c2343578d205cb4b779c7eb84bb0bb9e20ec85642d10dce6c60a96e9a9cb741**，同内容已保存scripts/inspire/run_first_step_on_quad.py待提交；launcher同目录launch-first-step-on-quad-20260914.sh（本地.cache）。新调度协议修订已commit/push49a0e5f。
+- **旧单卡仍保留且进行完整prefix1**：suite21419、parent398849、worker399611实测live，02:56为95/560raw，后续还有collector/export/CLI。不要停止它，不要改live16bc3d0。完整prefix0archive下载句柄 **96000仍live**，最近22,717,440bytes，timeout1800，完整远端SHA19a0b435...，尚未本地重算。quad预检小json下载46283已exit0、已本地SHA/四rank检查并commit/push c37f373。
+- 下一步：检查32581实际日志/首个native逐位复现是否通过，若失败保留原因、不得放宽门控；继续收prefix0/1全archive并本地复核，CLI仍自动执行。新四卡实际模型训练尚未启动，下一轮采样/条件处理方案依完整诊断和历史矩阵决定。新四卡约10:51lease，旧单卡约05:50lease，用户原r3与其他实例不删除。
+
 ## 09-14 02:54 用户追加四卡申请：新4H200已RUNNING且通信通过
 
 - **最新用户明确授权**：新起4H200试验，保留目前实例，排到更高算力后替换。已实际创建 **dl-official-exp-h200x4-20260914**，02:51:34就绪，node **qb-prod-gpu2352**，开发区-H200-3号机房-2-cuda13.2版本、4H200/80CPU/900GiB/shm128，原NGC25.02/CUDA12.8镜像，priority4，480min自动停止（约10:51CST）。该分区当时29空闲GPU，原CUDA12.8分区仅2。无需再创建相同新实例；后续训练优先这台已就绪四卡，替代“继续等用户旧r3排队”的旧计划。
