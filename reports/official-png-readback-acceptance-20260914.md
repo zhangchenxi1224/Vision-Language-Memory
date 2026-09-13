@@ -11,3 +11,5 @@
 脚本：`scripts/probes/complete_png_readback.py`、`scripts/reporting/collect_png_readback.py`、`scripts/inspire/run_png_readback_suite.py`。固定矩阵定义在 `scripts/experiments/png_readback_protocol.py`。全量原始输出、源 complete/raw、像素绑定和 control PNG 归档；matched PNG 复用对应原验证归档。本地重算可传入原验证归档解压目录，实际复核每张 PNG 及 Reader 像素哈希。
 
 本文件是预先固定的验收要求，尚不是成功结果。即使 PNG 全通过，可支持的范围仍为这些已见实体与语义问题，以及预先固定的新事件表达；不宣称未见实体或任意多事实记忆泛化。
+
+本地归档复核入口为 `scripts/reporting/verify_png_readback_local.py`：必须同时提供 PNG readback 归档和原验证归档，以及各自独立在远端观察到的 SHA256；它安全解压后检查两个归档的 source complete/raw 绑定，再实际读取全部 matched/control PNG、重算像素 SHA 与完整原始回答。没有源归档或像素证据不能冒充完整部署验收。完整390行、78张PNG的路径测试通过，并验证错误归档哈希与被改动PNG均会拒绝。活跃远端验收仍使用固定38531f0源码，此本地入口不改变其任何案例或推理。

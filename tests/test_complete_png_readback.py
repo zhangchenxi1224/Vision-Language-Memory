@@ -122,6 +122,8 @@ def test_collector_recounts_actual_pngs_and_rejects_altered_pixels(tmp_path, mat
     source_identity = {'probe_commit': SOURCES['registered'][0], 'checkpoint_sha256': 'c' * 64,
         'registered_plan': registered, 'parent_commit': PARENT_COMMIT, 'mode': 'single_writes', 'prefix_lane': None}
     write(run / 'source-complete.json', {'identity': source_identity, 'artifact_hashes': hashes})
+    (source / 'complete.json').write_bytes((run / 'source-complete.json').read_bytes())
+    (source / 'generations.jsonl').write_bytes((run / 'source-generations.jsonl').read_bytes())
     identity = {'readback_commit': commit, 'plan': plan(), 'validation_set': 'registered', 'lane': 'confirmation',
         'source_complete_sha256': sha(run / 'source-complete.json'),
         'source_generations_sha256': hashes['generations.jsonl'], 'checkpoint_sha256': 'c' * 64}
@@ -142,3 +144,20 @@ def test_collector_recounts_actual_pngs_and_rejects_altered_pixels(tmp_path, mat
     Image.new('RGB', (1024, 1024), (127, 128, 128)).save(path)
     with pytest.raises(ValueError, match='Actual PNG differs'):
         collect(run, expected_commit=commit, source=source)
+    # Exercise the actual portable path, including independent archive hashes and
+    # complete source-to-readback binding. A passing score alone is insufficient.
+    import tarfile
+    from scripts.reporting.verify_png_readback_local import verify
+    image.save(path)
+    archives = []
+    for directory in (run, source):
+        archive_path = tmp_path / (directory.name + '.tgz')
+        with tarfile.open(archive_path, 'w:gz') as archive:
+            for item in directory.iterdir():
+                archive.add(item, arcname=item.name)
+        archives.append(archive_path)
+    portable = verify(archives[0], sha(archives[0]), archives[1], sha(archives[1]), commit)
+    assert portable['recount']['png_images_verified_here'] == 78
+    assert portable['recount']['png']['matched_correct_eos'] == 360
+    with pytest.raises(ValueError, match='observed remote SHA256'):
+        verify(archives[0], '0' * 64, archives[1], sha(archives[1]), commit)
