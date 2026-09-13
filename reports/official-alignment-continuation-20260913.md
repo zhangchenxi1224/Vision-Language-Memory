@@ -1,5 +1,15 @@
 # Goal 接续位置
 
+## 09-14 04:42 实训3887步，完整raw证据CPU复核已部署等待
+
+- 新四卡03训练最新 **3887/4832、elapsed3180.144秒**（实际观察time1789332155.70）；GPU PID204015–204018均存在、命令行均训练，瞬时状态D/R/R/R，父terminal仍不存在。9e四路功能suite仍waiting_for_fixed_endpoint。主训练和固定验证源码、预算保持，勿重复启动。
+- raw共享记录 **1000/3020**，尚无完整结果。上次在单卡实际检查1789331704.72：CUDA PID863954状态R、命令行确认raw_control；不是仅依据共享status认为运行。原1f86冻结终点对照仍使用完整151条件、截至05:40，不能对部分输出打分或宣布可用。
+- **本turn实质进展**：新增 `scripts/reporting/collect_broader_raw_condition.py`，明确独立于要求新训练日志的endpoint collector。固定1f86源码、bb终点7377...checkpoint和e78e...runtime；远端CPU逐一重读新旧604PT、完整6040raw、全部29状态、真实CPU Gaussian、最终latent和Reader像素，配对验证1510负对照及1510匹配行；归档携带完整原始回答、父计划/bank/runtime/checkpoint seal及完成记录，PT仍远端。该脚本的 `--archive --sha256 --output-prefix` 模式负责下载后本地完整重算，并明确披露没有本地PT。
+- 5项实际完整性测试通过，使用已归档bb终点构造临时且明确synthetic的测试raw臂：正常完整配对、缺行、伪造评分、负对照像素变化、优化次数身份变化。测试数据不构成新模型效果证据。`git diff --check`和语法检查通过。代码和CPU等待driver已commit/push **482ad5b**。
+- 远端CPU等待driver **1060433**，已启动于dl-align-cpu-20260914；status **P/runs/.../1f86d56-raw-evidence-driver-status.json**，log **1f86d56-raw-evidence-driver.log**，launcher **launch-raw-evidence-20260914.sh**。本地driver `scripts/inspire/collect_raw_condition_when_complete.py`，远端 **collect-raw-condition-when-complete-20260914.py**；collector远端 **collect-broader-raw-condition-20260914.py**，从干净1f86原checkout导入source，绝不修改live源码。等待raw完整driver成功且complete SHA一致再执行，05:50无完整结果则失败保留，不评分子集；CPU核验最多1h。
+- 预计新证据输出 **P/runs/.../1f86d56-raw-condition-verified-{summary.json,evidence.tgz}**。待实际生成后读远端digest、完整下载、本地运行collector的archive模式，再记录真实结果。不要重复启动等待driver，也不要在其未完成时运行同名输出collector。
+- 下一步检查两条固定终点实际进程与CPU等待状态；9e完成后需下载其全部新终点/四路功能/CLI证据并本地重算。raw即使开发全通过，独立表达/真实RGB链/CLI仍未执行，不能与9e（验证新03训练条件）混淆。用户原实例保留，goal继续active。
+
 ## 09-14 04:28 实训2856步，两条实验继续运行
 
 - 新四卡实际GPU进程204015–204018均R，`/proc`命令行确认属于03f8467训练；最新 **2856/4832、elapsed2337.225秒**，父terminal尚不存在。suite369292的status仍waiting_for_fixed_endpoint，当前还未开始最终开发或四路功能验证。
