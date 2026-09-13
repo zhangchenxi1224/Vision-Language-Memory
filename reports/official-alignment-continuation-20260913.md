@@ -1,5 +1,16 @@
 # Goal 接续位置
 
+## 09-14 04:55 四卡完成4832更新，raw完整功能suite已部署并等待
+
+- **本turn实质进展**：动态raw推理策略、显式v2参数包、完整四路功能验证/原始证据collector/本地recount/真实CLI链路均实现，执行前计划 `reports/official-raw-condition-functional-validation-20260914.md` 已固定；19项推理/包/恢复测试和8项完整矩阵/绑定测试实际通过，语法检查和diff检查通过。固定运行源码 **35741bd3eb691575ef65032ca04f7ddb23a90b76** 已commit/push，并部署至干净独立 **P/repos/dreamlite-raw-functional-validation-20260914**，不修改03/9e/1f86 live checkout。所有部署与上传工具已成功结束，无遗留句柄。
+- 原生训练在time **1789332923.94** 实际确认 **4832/4832、elapsed3942.136秒**；4个CUDA PID204015–204018仍R，尚无父terminal，最终trained raw当时为0。这里只证明参数更新结束，检查点/最终开发读取/四路验证尚未完成。9e原生suite仍在等固定终点，不能把4832日志当完成结果。
+- Raw开发对照当时共享记录 **1660/3020**，仍running；上次单卡实际liveness04:43 PID863954 R。CPU证据driver1060433仍waiting_for_full_raw_control，尚无1f86独立完整summary。不得给部分raw评分。
+- **新增接续suite实际PID1864908**，在新四卡实例dl-official-exp-h200x4-20260914，已读取`/proc/1864908/stat`确认S等待；status **P/runs/.../35741bd-raw-condition-completion-suite-status.json**，stage **waiting_for_native_suite_and_full_raw_evidence**，time1789332935.647587；log **35741bd-raw-validation-driver.log**；launcher **launch-raw-validation-20260914.sh**。截止 **1789350600=09:50CST**。勿重复启动。
+- 新suite固定bb父终点与1f86 raw对照，要求9e原生suite完整结束、CPU raw证据driver完成且实际archive SHA一致，再检查新四卡GPU确实空闲，才启动全部single/chains/prefix0/prefix1。任一依赖failed/needs_attention则保留并停止后续，不驱逐已有进程；不足1h拒绝启动。输出 **P/runs/.../35741bd-raw-condition-{confirmation,chains,prefix0,prefix1,package,parity,inference}**；沿用bb原计划全部1990raw、1800matched、360图；无新优化，不按raw开发分数选子集。
+- `NativeBaseEditSampler(..., inference_condition='training_raw')`只在明确CFG1时每次用实际source PIL+事件重新编码raw单条embedding/mask，并复制至native3分支，finally恢复全部hooks；RGBMemory每次使用上一张真实uint8图，不依赖开发bank。native默认行为保持。raw包新v2 schema显式policy，旧v1加载器拒绝，不静默改变条件。CLI由包读策略；parity准备检查包策略与验证identity相同。该实现只通过单元验证，尚不能代替真实GPU效果。
+- raw四路probe增加 `--inference-condition training_raw --raw-control-run P/runs/.../1f86d56-broader-raw-condition`，保留原native development得分且单独标记raw开发得分；collector及本地 `verify_broader_outputs_local.py` 同样必须显式 `--inference-condition training_raw` 和bb `--logical-sampling-commit`。新probe拷贝原raw complete完整字节绑定；PT/PNG/原始回答逐一核验，新增全部29状态有限FP32检查。raw本地重算可复用已归档16bc3d0 bb endpoint作为父证据；不可误用03父终点或混报9e原生结果。
+- 下一步先观察03最终开发阶段、单卡raw完整结束、CPU完整证据与9e四路suite。有完整证据后下载并本地重算；新35741bd会自动在原生suite后执行raw全功能/CLI，不需新建资源。观察器 `.cache/observe-official-condition-runs.py`已更新上传，增加native_trained_raw_rows、raw_validation、raw_evidence和实际GPU命令行分类，并容忍观测到半行训练JSON。用户原实例保留，goal继续active；没有最终功能成功证据。
+
 ## 09-14 04:42 实训3887步，完整raw证据CPU复核已部署等待
 
 - 新四卡03训练最新 **3887/4832、elapsed3180.144秒**（实际观察time1789332155.70）；GPU PID204015–204018均存在、命令行均训练，瞬时状态D/R/R/R，父terminal仍不存在。9e四路功能suite仍waiting_for_fixed_endpoint。主训练和固定验证源码、预算保持，勿重复启动。
