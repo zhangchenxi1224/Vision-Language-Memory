@@ -1,0 +1,53 @@
+{
+  "archive_sha256": "e0e8f9d4720b9717ddfa3d763c5a0e28a7c94c22021fe82b1d47b22fa357483f",
+  "bytes": 6208749,
+  "parity": {
+    "command_file_sha256": "244b3007b6dfa31b6dd3a8a0f7d4ea3a106660475b845af9fcc0279c38375ca8",
+    "expected_sha256": "b5e7d8b4110c96b7aa97d3922d61c16fe75f3a443a1a854daf4bccab05ba1e5f",
+    "inference_complete_sha256": "76f22c1da9aae1a9ac86d1d44c6c4320d2ee7fa93bb742cd26fd1e9290e59cb5",
+    "inference_results_sha256": "fd0df0dfd514ad3d613f74d39f3d6c7c93f8511abbe179e61dfc2b28b04d6cf1",
+    "mismatches": [],
+    "package_manifest_sha256": "3a8b3540c0206af0f8b86935903f4c0135749a661904fcbf53eb7256f25fa7a1",
+    "parity_pass": true,
+    "reads_compared": 30,
+    "reference_complete_sha256": "9ffa78a310a2860b2fdab8def0978776dc7238d587f10e934639a04da8900554",
+    "reference_functional_pass": false,
+    "reference_interpretation": "observed_cases_paired_diagnostic",
+    "repetition": 0,
+    "scope": "Engineering parity only. This does not certify functional correctness.",
+    "sequence": 0,
+    "writes_compared": 6
+  },
+  "scope": "All36 commands/results,30 raw reads,6 write PNGs and final persisted PNG reverified locally. Exported parameter tensors remain remote. CLI parity is separate from functional correctness.",
+  "suite": {
+    "deadline_unix": 1789335000.0,
+    "execution": "all four original matrices, sequential device0; zero optimization",
+    "functional_all_registered_correct": false,
+    "matched_results": {
+      "chains": [
+        390,
+        480
+      ],
+      "confirmation": [
+        280,
+        360
+      ],
+      "prefix0": [
+        428,
+        480
+      ],
+      "prefix1": [
+        467,
+        480
+      ]
+    },
+    "orchestrator_sha256": "61d575ff12799681be22b25a39ca86aa026da2942d4c755e936b5daa8a386ded",
+    "parent": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/bb34092-logical31-full4832",
+    "scope": "Observed cases reused as a paired diagnostic; not fresh holdouts or a usability certification.",
+    "stage": "all_registered_workloads_finished",
+    "state": "completed",
+    "time_unix": 1789326790.6288874,
+    "training_commit": "bb34092ab0d1292c87d16d9632716b218f54054b",
+    "validation_commit": "16bc3d077fa7604a0d84c3b008a80baf327b265b"
+  }
+}
