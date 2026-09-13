@@ -1,6 +1,5 @@
 """Finish the fixed4832 endpoint and run four disjoint validation lanes plus CLI replay."""
 import argparse
-import fcntl
 import json
 import math
 import os
@@ -11,6 +10,7 @@ import sys
 import time
 
 ROOT = Path(__file__).resolve().parents[2]
+sys.path[:0] = [str(ROOT), str(ROOT / 'src')]
 PROJECT = Path('/inspire/ssd/project/exploration-topic/czxs26210936')
 RUNS = PROJECT / 'runs/dreamlite-official-alignment'
 MODELS = Path('/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory')
@@ -45,6 +45,7 @@ def main():
     prefix = a.expected_commit[:7] + ('-raw-condition' if raw_control else ('-logical' if a.logical_sampling_commit else '-broader'))
     status_name = prefix + '-completion-suite' if a.logical_sampling_commit else 'broader151-completion-suite'
     status = RUNS / (status_name + '-status.json')
+    import fcntl
     lock = (RUNS / (status_name + '.lock')).open('a')
     fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
     if status.exists():
