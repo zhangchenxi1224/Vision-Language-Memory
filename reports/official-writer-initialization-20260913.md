@@ -11,3 +11,9 @@
 五项新CPU测试覆盖全参数加载、RNG不被父状态替换、真正可反向更新且AdamW第一次step为1、Base/Reader/guidance不匹配时零参数改动、显式SHA及篡改拒绝。与原包和官方FM测试本次10 passed。这是入口正确性验证，不是新模型功能验收。下一轮具体预算、种子和数据应在当前独立诊断结果审阅后固定，并以实际加载参数的baseline及完整端点评测验收。
 
 另已运行full-U-Net控制、latent-bank训练与checkpoint恢复相关回归，39 passed；本轮相关验证合计49 passed。正在运行的0f40767诊断checkout和b9eec7c4套件未修改。
+
+后续实验已在`official-transition-warm-start-plan-20260913.json`固定：训练源码d9a1a117cd497ad72d5bcc1630d657a43cebd611，初始父checkpoint b4251975...、result3d747a7c...，同一45条件bank，seed20260914，额外2880次更新/11520draw/每组256次，其余FM和优化参数不变。优化器重新初始化与噪声变化已明确记录，因此这不是单因素因果对照。四个新开发噪声的baseline与final均实测900matched，加controls各1350raw。不得依据中途分数改预算或挑checkpoint。
+
+同时预注册72单图和16组六步链：8个新事件表达与当前训练bank及前轮确认表达不相同，确认噪声与本轮/父训练和开发噪声分离。此计划由`transition_warm_start_plan.py`实际生成并验证数量及相异性；新的确认尚未运行。
+
+`scripts/inspire/run_transition_warm_start.py --deadline-unix ...`是固定实验派发入口，`--dry-run`在资产就绪后输出实际命令。它校验包来自指定失败端点、真实独立六写30读parity已通过、bank和训练checkout不变，然后将原始计划及解析后的参数包SHA复制到新run。必须使用实际lease余量至少200min的新空闲H200，覆盖baseline、追加训练和final。新run固定为`d9a1a11-transition-warm2880-seed20260914`，重复输出拒绝。**尚未派发；当前RGB链/包导出/独立重放仍在运行。**
