@@ -21,6 +21,11 @@ def test_selection_matches_previously_audited_actual_targets_and_keeps_all_quest
     assert value['training_prompts'] == ['original_open', 'paraphrase_1', 'paraphrase_2']
     assert value['additional_updates_per_target'] == 256
     assert value['cumulative_updates_per_target'] == 512
+    five = plan(bank, all_five=True)
+    assert five['training_prompts'] == ['original_open', 'paraphrase_1', 'paraphrase_2', 'paraphrase_3', 'paraphrase_4']
+    assert five['selected'] == value['selected']
+    assert five['additional_updates_per_target'] == value['additional_updates_per_target']
+    assert five['optimizer'] == value['optimizer']
     changed = copy.deepcopy(bank)
     changed['groups'].pop(3)
     with pytest.raises(ValueError):

@@ -41,14 +41,16 @@ def selection(bank):
     return result
 
 
-def plan(bank):
+def plan(bank, all_five=False):
     return {'schema': 'historical-fixed-target-refinement/v1', 'parent_bank_sha256': BANK_SHA,
         'selection_rule': 'existing member_split hash order; first training member for every question; no outcome substitution',
         'selected': selection(bank), 'questions': 16, 'old_teachers_preserved': 64,
         'initialization': 'fixed original step256 latent; fresh optimizer and seed0; not a fresh latent',
         'parent_latent_updates': 256, 'additional_updates_per_target': 256, 'cumulative_updates_per_target': 512,
         'optimizer': {'kind': 'Adam', 'lr': .05, 'betas': [.9, .999], 'eps': 1e-8, 'weight_decay': 0.},
-        'training_prompts': list(TRAIN_PROMPTS), 'prompt_schedule': 'round_robin_zero_based',
+        'training_prompts': list(TRAIN_PROMPTS) + (['paraphrase_3', 'paraphrase_4'] if all_five else []),
+        'prompt_schedule': 'round_robin_zero_based',
+        'training_prompt_mode': 'all_five_known_queries' if all_five else 'proven_three_prompt_recipe',
         'loss': 'mean_answer_ce + eos_ce', 'vae_dtype': 'float32', 'reader_dtype': 'bfloat16',
         'qualification': {'forms': list(FORMS), 'prompts': ['original_open', 'paraphrase_1', 'paraphrase_2', 'paraphrase_3', 'paraphrase_4'],
             'generation': 'greedy raw32tokens; exact gold tokens followed immediately by EOS151645',
@@ -183,7 +185,8 @@ def worker(a, bank):
             donor_pixels = decode_model_latents_unit_interval(vae, donor_latent.to(device), clamp=True).cpu()
         blank = torch.full((1, 3, 1024, 1024), 128 / 255., dtype=torch.float32)
         rt = {'vae': vae, 'reader': reader, 'processor': processor, 'vae_device': device, 'reader_device': device,
-            'termination': termination, 'training_prompts': TRAIN_PROMPTS, 'deadline_unix': a.deadline_unix,
+            'termination': termination, 'training_prompts': tuple(plan(bank, a.all_five_training_prompts)['training_prompts']),
+            'deadline_unix': a.deadline_unix,
             'target': {'inputs': group['question_variants'], 'scorer_metadata': {'gold': group['answer']}},
             'controls': {'blank': blank, 'fixed_donor': donor_pixels}}
         spec = {**item, 'run_id': f"target-{item['target_index']:02d}", 'gold': group['answer'],
@@ -218,7 +221,7 @@ def worker(a, bank):
         write(directory / 'progress.json', results)
         print(json.dumps({'target': item['target_index'], **summary}), flush=True)
     clean_source(a.expected_commit)
-    if snapshots != snapshot_bindings() or sha(a.bank) != BANK_SHA or read(a.output / 'preregistered-plan.json') != plan(bank):
+    if snapshots != snapshot_bindings() or sha(a.bank) != BANK_SHA or read(a.output / 'preregistered-plan.json') != plan(bank, a.all_five_training_prompts):
         raise ValueError('Models, parent or plan changed during refinement')
     write(directory / 'complete.json', {'state': 'completed', 'results': results,
         'all_passed': all(value['both_forms_all_five'] for value in results.values()), 'writer_success': False})
@@ -270,7 +273,9 @@ def assemble(a, bank):
         output_bank = {**copy.deepcopy(bank), 'teachers': teachers, 'groups': groups,
             'provenance': {'parent_bank': str(a.bank), 'parent_bank_sha256': BANK_SHA, 'all64_original_teachers_retained_in_parent': True,
                 'refinement_commit': a.expected_commit, 'refinement_plan_sha256': sha(a.output / 'preregistered-plan.json'),
-                'selection': plan(bank)['selection_rule'], 'scope': plan(bank)['scope']}}
+                'selection': plan(bank, a.all_five_training_prompts)['selection_rule'],
+                'training_prompt_mode': plan(bank, a.all_five_training_prompts)['training_prompt_mode'],
+                'scope': plan(bank, a.all_five_training_prompts)['scope']}}
         write(manifest, output_bank)
         load_teacher_bank(manifest)
     write(a.output / 'complete.json', {'state': 'completed', 'results': results, 'bank_sealed': passed,
@@ -288,6 +293,8 @@ def main():
     p.add_argument('--deadline-unix', type=float, required=True)
     p.add_argument('--devices', nargs=2, type=int, default=[2, 3])
     p.add_argument('--lane', type=int, choices=[0, 1])
+    p.add_argument('--all-five-training-prompts', action='store_true',
+        help='Controlled follow-up: same historical initial latents and256-update budget, allfive known queries optimized')
     a = p.parse_args()
     from scripts.reporting.collect_transition_endpoint import sha, read
     if not math.isfinite(a.deadline_unix) or a.deadline_unix <= time.time() or sha(a.bank) != BANK_SHA:
@@ -308,7 +315,7 @@ def main():
     if len(rows) != 2 or any('H200' not in row[1] or int(row[2]) < 140000 or int(row[3]) > 100 for row in rows):
         raise ValueError('Assigned GPUs must actually be idle; never evict existing validation')
     a.output.mkdir(parents=True, exist_ok=False)
-    write(a.output / 'preregistered-plan.json', plan(bank))
+    write(a.output / 'preregistered-plan.json', plan(bank, a.all_five_training_prompts))
     from vision_memory.repro.determinism import REQUIRED_DETERMINISM_ENV
     children, logs = [], []
     try:
@@ -317,6 +324,8 @@ def main():
             logs.append(log)
             command = [sys.executable, '-u', str(Path(__file__).resolve()), '--bank', str(a.bank), '--output', str(a.output),
                 '--expected-commit', a.expected_commit, '--deadline-unix', str(a.deadline_unix), '--lane', str(lane)]
+            if a.all_five_training_prompts:
+                command.append('--all-five-training-prompts')
             children.append(subprocess.Popen(command, cwd=ROOT, stdout=log, stderr=subprocess.STDOUT, start_new_session=True,
                 env={**os.environ, **REQUIRED_DETERMINISM_ENV, 'CUDA_VISIBLE_DEVICES': str(device),
                      'HF_HUB_OFFLINE': '1', 'TRANSFORMERS_OFFLINE': '1'}))
