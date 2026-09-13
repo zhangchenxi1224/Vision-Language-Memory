@@ -1,5 +1,12 @@
 # Goal 接续位置
 
+## 09-14 04:28 实训2856步，两条实验继续运行
+
+- 新四卡实际GPU进程204015–204018均R，`/proc`命令行确认属于03f8467训练；最新 **2856/4832、elapsed2337.225秒**，父terminal尚不存在。suite369292的status仍waiting_for_fixed_endpoint，当前还未开始最终开发或四路功能验证。
+- 保留单卡raw driver863564/parent863568/worker863954在04:26实际live，已真正进入training_raw_guidance1；04:28共享记录 **280/3020 raw**，不是只加载。截止05:40、旧单卡约05:50lease保持。
+- 105全分支证据与raw driver已commit/push **2c2c2a3**。上述全部下载、CPU collector和部署都已终态，无待续传工具句柄。可用小观察器 **P/runs/.../observe-official-condition-runs.py**（本地.cache同名），用GPU环境Python在指定GPU实例上执行：返回该实例实际CUDA PID与`/proc`状态、两条共享日志进度和原生suite状态。只有local_gpu_processes证明所查询实例的进程存活，另一实例的共享状态不能单独当liveness证据。
+- 下一步先实现raw控制的完整独立CPU/PT验证与本地重算工具，再观察两个固定终点；不能用部分raw、训练loss或296/302数值诊断宣布可用。03/9e/1f86三处live源码不要修改，用户实例保留，goal继续active。
+
 ## 09-14 04:23 分支数值诊断完成，完整raw条件对照实际加载
 
 - **本turn实质进展**：独立完成105f521全302格数值核验、CPU604PT重算和本地全记录复核；另外在保留单卡启动完整raw条件28步读取对照。四卡03训练仍持续更新，04:12实测1682/4832、elapsed1375.99秒、204015–204018实际live；固定suite369292仍等待。未更改03/9e运行源码、预算或指标。
