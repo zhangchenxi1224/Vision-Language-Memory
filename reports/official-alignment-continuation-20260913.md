@@ -1,5 +1,12 @@
 # Goal 接续位置
 
+## 12:43 同一四卡训练2684/4832；结果入口更新，本地新端点复核工具就绪
+
+- 本轮开始已重新确认同一84训练driver/pilot/torchrun/4rank及c2 suite全部live；最新观测 **2684/4832 optimizer updates、elapsed2143.96秒、trained partial0**。四rank **1743522/1743523/1743524/1743525** 均Ssl，suite **2361182** S，等待固定端点。**不是阻塞，不重启或改动任一live checkout**。上一goal turn为progress（suite部署、原始归档），本轮修正5份过时文档并准备新本地复核入口，训练仍持续推进。
+- 已push **4c3ff55**：README、官方审计、results/README、broader plan与RGB interface同步为实际已完成的900/900开发+340/360单图+410/480链+parity true但functional false，及当前151训练，不再把05:26/10:16旧记录放作当前结论。旧阶段记录保留并明确历史性质。
+- 新 `scripts/reporting/verify_broader_outputs_local.py` 用于最终下载证据的本地完整复核：`--endpoint-archive PATH --endpoint-sha256 REMOTE_OBSERVED_SHA --output PATH`；单份验证加 `--validation-archive PATH --validation-sha256 REMOTE_OBSERVED_SHA`，对4lane分别运行。工具绑定**c2ec407fe9f9600a23dc8009b657b7391b9aff6d**验证源码，校验archive SHA及安全成员、原计划、bank、6040raw/19328draw，复核全部新validation raw/PNG并与远端summary逐字段比较。PT本地遗漏明确。**目前仅compile/import/CLI help通过，真实最终archive尚未产生，不能称该新工具已经实际通过完整端点。** 完整实际运行仍是下一步必要工作。
+- 当前本地所有GPU观察会话61715/18372/28867均已exit0，无待传输/待wait handle。GPU训练和suite的锁定目录、输出命名及16:30deadline仍按下节；无需给远端source同步上述纯报告/本地核验提交。
+
 ## 12:31 四卡151条件训练进行中；独立验证已部署等待；两轮teacher原始证据已本地完整重算
 
 - **当前唯一GPU训练仍为84cdfdb58ace96954243de5caf427948717c9abf**，run **P/runs/.../84cdfdb-broader151-full4832**，训练checkout **P/repos/dreamlite-broader-official-writer-20260913**。driver1742376、pilot1742895、torchrun1743514、四rank1743522/1743523/1743524/1743525；最近实测 **1919/4832 optimizer updates，优化elapsed1533.91秒**，四rank均Rsl/live，suite2361182也S/live，尚未最终评估。不得重复启动或修改该checkout。goal保持active，没有阻塞。
