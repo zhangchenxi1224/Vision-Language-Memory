@@ -452,6 +452,12 @@ def flow_microbatch(args, runtime, groups, teachers, draw_index):
     state, true_velocity = (official_flow_bridge(noise, target, sigma) if official
                             else anchored_flow_bridge(context["source"], noise, target, sigma))
     condition = context["condition"]
+    augmentation = {}
+    if getattr(args, 'historical_wording_augmentation', False) and 'historical_target_index' in group:
+        from scripts.experiments.historical_wording_protocol import wording_index
+        index = wording_index(args.seed, draw_index, group['question_id'])
+        condition = context['training_condition_variants'][index]
+        augmentation = {'training_condition_variant': context['training_condition_variant_binding'][index]}
     prediction = predict_velocity(runtime["sampler"], state, context["source"], sigma,
         condition.prompt_embeds, condition.attention_mask, integer_timestep=official)
     loss = (prediction.float() - true_velocity.float()).square().mean()
@@ -459,7 +465,7 @@ def flow_microbatch(args, runtime, groups, teachers, draw_index):
         raise RuntimeError("Nonfinite U-Net flow-matching loss")
     (loss / args.gradient_accumulation_steps).backward()
     return {"question_id": group["question_id"], "teacher_id": teacher_id,
-            "noise_seed": noise_seed, "effective_sigma": sigma, "flow_matching_mse": float(loss.detach())}
+            "noise_seed": noise_seed, "effective_sigma": sigma, "flow_matching_mse": float(loss.detach()), **augmentation}
 
 
 def parallel_gradient_preflight(args, runtime, groups, teachers, parallel, parameters):
@@ -574,6 +580,13 @@ def run(args) -> dict:
     if initialization is not None:
         binding["initial_writer"] = initialization
     strategy = getattr(args, 'sampling_strategy', 'condition')
+    if getattr(args, 'historical_wording_augmentation', False):
+        if not official or args.model_variant != 'base' or args.prompt_style != 'native_base' or strategy != 'logical_condition':
+            raise ValueError('Historical augmentation requires official native Base and logical sampling')
+        from scripts.experiments.historical_wording_protocol import POLICY, variants, text_sha
+        binding['training_augmentation'] = {'policy': POLICY,
+            'event_text_sha256': {qid: [text_sha(event) for event in events] for qid, events in variants(bank).items()},
+            'writer_input': False}
     if strategy != 'condition':
         from vision_memory.training.latent_bank_unet import logical_condition_strata
         strata = logical_condition_strata(groups)
@@ -608,6 +621,15 @@ def run(args) -> dict:
         write_json(identity_path, binding)
     parallel.barrier()
     runtime = load_runtime(args, bank)
+    if getattr(args, 'historical_wording_augmentation', False):
+        augmentation_binding = runtime['training_augmentation_binding']
+        parallel.agree(augmentation_binding, 'historical training condition encodings')
+        augmentation_path = args.output_dir / 'training-condition-augmentation.json'
+        if augmentation_path.exists() and json.loads(augmentation_path.read_bytes()) != augmentation_binding:
+            raise RuntimeError('Historical condition encoding changed across resume')
+        if parallel.root:
+            write_json(augmentation_path, augmentation_binding)
+        parallel.barrier()
     runtime["should_pause"] = lambda: stop_requested[0] or bool(args.deadline_unix and time.time() >= args.deadline_unix - 90)
     pause_if_requested(runtime)
     runtime_binding = {"snapshots": runtime["snapshots"], "termination": runtime["termination"],
@@ -831,6 +853,7 @@ def parser() -> argparse.ArgumentParser:
     p.add_argument('--initial-baseline-match', type=Path)
     p.add_argument('--initial-baseline-match-result-sha256')
     p.add_argument('--sampling-strategy', choices=('condition', 'logical_condition'), default='condition')
+    p.add_argument('--historical-wording-augmentation', action='store_true')
     p.add_argument('--native-condition-baseline-control', action='store_true')
     p.add_argument("--gradient-accumulation-steps", type=int, default=4)
     p.add_argument("--weight-decay", type=float, default=1e-4)

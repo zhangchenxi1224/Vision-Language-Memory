@@ -21,24 +21,33 @@ def main():
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--expected-commit', required=True)
     parser.add_argument('--deadline-unix', type=float, required=True)
+    parser.add_argument('--historical-wording-augmentation', action='store_true')
     a = parser.parse_args()
     if not math.isfinite(a.deadline_unix) or a.deadline_unix - time.time() < 150 * 60:
         raise ValueError('Reserve150 minutes for the complete paired training run')
     clean_source(a.expected_commit)
     runs = P / 'runs/dreamlite-official-alignment'
     reference = runs / 'bb34092-logical31-full4832'
+    reference_result, make_plan = REFERENCE_RESULT, plan
+    if a.historical_wording_augmentation:
+        from scripts.experiments.historical_wording_protocol import plan as wording_plan, REFERENCE_RESULT as wording_reference_result
+        reference = runs / '03f8467-native-condition-full4832'
+        reference_result, make_plan = wording_reference_result, wording_plan
+        prior = read(runs / '5ef8aa8-raw-condition-completion-suite-status.json')
+        if prior['state'] != 'completed' or prior['stage'] != 'all_registered_workloads_finished':
+            raise ValueError('Complete the full raw-condition experiment before the wording comparison')
     bank_path = runs / '84cdfdb-broader151-full4832/bank/manifest.json'
     if sha(runs / '17f35be-first-step-verified-evidence.tgz') != FIRST_STEP_EVIDENCE:
         raise ValueError('Require the complete CPU-verified first-step diagnostic')
     package = runs / '1201efe-four-gpu-warm-package'
-    if (sha(bank_path) != BANK_SHA or sha(reference / 'train/result.json') != REFERENCE_RESULT
+    if (sha(bank_path) != BANK_SHA or sha(reference / 'train/result.json') != reference_result
             or read(reference / 'terminal.json')['state'] != 'completed'
             or sha(package / 'manifest.json') != PARENT_PACKAGE
             or read(package / 'manifest.json')['parent_checkpoint_sha256'] != PARENT_CHECKPOINT):
         raise ValueError('The sealed paired bank, reference or original initialization differs')
     if subprocess.check_output(['nvidia-smi', '--query-compute-apps=pid', '--format=csv,noheader'], text=True).strip():
         raise RuntimeError('GPUs are occupied; inspect existing work before dispatch')
-    registered = plan(read(bank_path), a.expected_commit)
+    registered = make_plan(read(bank_path), a.expected_commit)
     a.output.mkdir(parents=True, exist_ok=False)
     # Preserve actual input bytes in the evidence archive while training reads
     # the exact same source path as the reference for runtime identity equality.
@@ -56,8 +65,9 @@ def main():
         '--checkpoint-interval', '16', '--colocate-models', '--data-parallel-world-size', '4', '--seed', str(SEED),
         '--deadline-unix', str(a.deadline_unix), '--initial-writer-package', str(package),
         '--initial-writer-package-sha256', PARENT_PACKAGE, '--sampling-strategy', 'logical_condition',
-        '--prompt-style', 'native_base', '--native-condition-baseline-control',
-        '--initial-baseline-match', str(reference), '--initial-baseline-match-result-sha256', REFERENCE_RESULT]
+        '--prompt-style', 'native_base',
+        '--initial-baseline-match', str(reference), '--initial-baseline-match-result-sha256', reference_result]
+    command.append('--historical-wording-augmentation' if a.historical_wording_augmentation else '--native-condition-baseline-control')
     def record(state, **extra):
         write(a.output / 'native-condition-driver-status.json', {'state': state, 'time_unix': time.time(),
             'deadline_unix': a.deadline_unix, 'commit': a.expected_commit, **extra})

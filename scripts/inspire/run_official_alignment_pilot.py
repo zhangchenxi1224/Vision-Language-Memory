@@ -43,6 +43,7 @@ def main():
     p.add_argument('--initial-baseline-match', type=Path)
     p.add_argument('--initial-baseline-match-result-sha256')
     p.add_argument('--sampling-strategy', choices=('condition', 'logical_condition'), default='condition')
+    p.add_argument('--historical-wording-augmentation', action='store_true')
     p.add_argument('--prompt-style', choices=('official_raw', 'native_base'), default='official_raw')
     p.add_argument('--native-condition-baseline-control', action='store_true')
     p.add_argument("--seed", type=int, default=20260913)
@@ -129,6 +130,8 @@ def main():
     train.extend(["--model-variant",a.model_variant])
     train.extend(["--trainable-scope",a.trainable_scope,"--checkpoint-interval",str(a.checkpoint_interval)])
     train.extend(['--sampling-strategy', a.sampling_strategy])
+    if a.historical_wording_augmentation:
+        train.append('--historical-wording-augmentation')
     if a.native_condition_baseline_control:
         train.append('--native-condition-baseline-control')
     if a.initial_baseline_match:

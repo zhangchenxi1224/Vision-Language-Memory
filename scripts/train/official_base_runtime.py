@@ -98,6 +98,15 @@ def load_base_runtime(args, bank, *, inference_only=False):
         freeze_module(pipe.unet)
     predictor=DifferentiableDreamLiteMobileSampler.from_pipeline(pipe,checkpoint_unet=False)
     contexts={}
+    augmentation = bool(getattr(args, 'historical_wording_augmentation', False))
+    if augmentation:
+        if inference_only or args.prompt_style != 'native_base' or getattr(args, 'sampling_strategy', None) != 'logical_condition':
+            raise ValueError('Historical augmentation requires explicit native training and logical sampling')
+        from scripts.experiments.historical_wording_protocol import variants, text_sha
+        training_events = variants(bank)
+    else:
+        training_events = {}
+    augmentation_binding = {}
     guidance=float(getattr(args,"base_guidance_scale",7.5))
     if not 1.0<=guidance<=100.0:
         raise ValueError("Invalid native Base inference guidance")
@@ -149,6 +158,19 @@ def load_base_runtime(args, bank, *, inference_only=False):
             "inference_sampler":NativeBaseEditSampler(pipe,source_image=image,event_text=group["event_text"],guidance_scale=guidance),
             "blank":blank_pixels,
             "donor":donor_pixels,"donor_answer":donor["answer"]}
+        if qid in training_events:
+            if group['source_kind'] != 'blank_gray_1024':
+                raise ValueError('Registered historical prefixes require the original gray source')
+            encoded = [condition] + [condition_encoder(pipe, image, event, device=vd, dtype=torch.float32)
+                                     for event in training_events[qid][1:]]
+            if any(item.prompt_embeds.dtype != torch.float32 or not torch.isfinite(item.prompt_embeds).all() for item in encoded):
+                raise ValueError('Historical training conditions must be finite FP32')
+            contexts[qid]['training_condition_variants'] = encoded
+            augmentation_binding[qid] = [{'index': index, 'event_text_sha256': text_sha(event),
+                'prompt_embeds_sha256': canonical_tensor_sha256(item.prompt_embeds),
+                'attention_mask_sha256': canonical_tensor_sha256(item.attention_mask)}
+                for index, (event, item) in enumerate(zip(training_events[qid], encoded, strict=True))]
+            contexts[qid]['training_condition_variant_binding'] = augmentation_binding[qid]
         source_bindings[qid]={"bank_source_sha256":canonical_tensor_sha256(bank_source.cpu()),
             "official_source_sha256":canonical_tensor_sha256(source.cpu()),
             "rms_difference":float((source-bank_source).double().square().mean().sqrt()),
@@ -163,6 +185,7 @@ def load_base_runtime(args, bank, *, inference_only=False):
             if file_sha256(path)!=sha:
                 raise ValueError("Sealed source image changed during execution")
     return dict(pipe=pipe,reader=reader,processor=processor,sampler=predictor,contexts=contexts,
+        training_augmentation_binding=augmentation_binding,
         vae_device=vd,reader_device=rd,snapshots=snapshots,termination=assistant_termination_contract(reader,processor),
         protocol_binding={"student":"official DreamLitePipelineLoRA base","base_snapshot":base_seal,
             "official_source_commit":OFFICIAL_REFERENCE_COMMIT,"vae_weights_sha256":vae_hashes,"source_bindings":source_bindings,
