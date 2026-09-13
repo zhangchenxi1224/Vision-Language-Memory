@@ -17,6 +17,13 @@ from torch import Tensor
 from vision_memory.repro import canonical_tensor_sha256
 
 INSTRUCTIONS = "Use the memory image to answer.\nAnswer with a short phrase only."
+HISTORICAL_QUESTION_SUFFIXES = {
+    "original_open": "Use the memory image to answer. Answer with a short phrase only.",
+    "paraphrase_1": "Use the memory image to answer. Answer with a short phrase only.",
+    "paraphrase_2": "Return only a short phrase.",
+    "paraphrase_3": INSTRUCTIONS,
+    "paraphrase_4": "Return only a short phrase.",
+}
 START_SIGMA = 0.5
 EFFECTIVE_SIGMAS = (0.5, 0.375, 0.25, 0.125)
 # The constants above describe the legacy experiment, never official sigmas.
@@ -185,9 +192,19 @@ def load_teacher_bank(path: Path) -> tuple[dict[str, Any], dict[str, Tensor]]:
         prompts = group.get("question_variants", {})
         if len(prompts) != 5 or "original_open" not in prompts or len(set(prompts.values())) != 5:
             raise ValueError("Require original plus four distinct question-only paraphrases")
-        for query in prompts.values():
-            if not query.endswith("\n" + INSTRUCTIONS) or "\n" in query[:-len(INSTRUCTIONS)-1]:
-                raise ValueError("Question must be one line, followed by the exact two instruction lines")
+        contract = group.get("question_instruction_contract", "canonical-two-line/v1")
+        if contract == "historical-r11-five-prompts/v1":
+            if set(prompts) != set(HISTORICAL_QUESTION_SUFFIXES):
+                raise ValueError("Historical question protocol requires its exact five prompt IDs")
+            suffixes = HISTORICAL_QUESTION_SUFFIXES
+        elif contract == "canonical-two-line/v1":
+            suffixes = {prompt: INSTRUCTIONS for prompt in prompts}
+        else:
+            raise ValueError("Unsupported question instruction contract")
+        for prompt, query in prompts.items():
+            suffix = "\n" + suffixes[prompt]
+            if not query.endswith(suffix) or not query[:-len(suffix)].strip() or "\n" in query[:-len(suffix)]:
+                raise ValueError("Question must be one line followed by its exact declared instruction suffix")
         ids = group["teacher_ids"]
         if not ids or len(set(ids)) != len(ids):
             raise ValueError("Each question must have distinct successful members")
