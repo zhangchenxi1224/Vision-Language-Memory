@@ -2,6 +2,25 @@
 
 目标仍在进行。实现偏差已修复并有数值证据，但目前还没有通过功能验收的 Writer。
 
+## 当前：已完成实验与151条件实训
+
+全部准确率均要求原始gold token后立即EOS，不对回答截断、改写或放宽匹配。以下各实验的开发噪声和独立表达不同，不能把相邻数字当成同一组配对测试。
+
+| 已完成实验 | 开发matched | 独立单图matched | 连续RGB链matched | 六步整链 |
+|---|---:|---:|---:|---:|
+| 45条件串行2880步 | 880/900 | 360/360 | 430/480 | 11/16 |
+| 45条件四H200参数初始化后再训2880步 | 900/900 | 340/360 | 410/480 | 9/16 |
+
+四卡训练优化阶段2319.655秒，原串行5517.603秒；这是对应优化阶段约2.38倍加速，不包含不同耗时的模型加载和评估。全局batch保持4，实际全U-Net串行/NCCL梯度预检与四rank参数一致性已验证。四卡后续全部独立失败保留，详见[完整分析](four-gpu-warm-validation-review.md)、[开发端点](four-gpu-warm-endpoint-summary.json)、[单图](four-gpu-warm-confirmation-summary.json)与[连续链](four-gpu-warm-chains-summary.json)。[真实导出包重放](four-gpu-warm-package-parity.json)的六次写入、三十次读取逐项一致；其`reference_functional_pass=false`，不构成可用模型。
+
+新实验由`84cdfdb58ace96954243de5caf427948717c9abf`启动，151条件包括135个状态/操作/表达条件与16个历史完整前缀问题，共17道语义问题。使用已完成四卡端点参数、新AdamW、seed20260915、全局batch4，固定4832更新/19328draw，每条件128次。已观测失败表达进入训练回归集，另注册新的独立表达；训练目标和评估范围见[固定计划](../official-broader-writer-plan-20260913.md)。
+
+训练前新baseline已完整核验：**1273/1510、250/302图五问法全对**，其中状态转换1230/1350、历史前缀43/160。[完整原始文本](broader151-baseline-text.tgz)已下载并[本地重算](broader151-baseline-local-verification.json)。最终训练后结果仍待完成，不能以baseline或训练loss代替效果。
+
+历史目标构建也已闭环：同一组原始step256 latent、相同256追加步，三问法优化后156/160（15/16题全对），五问法优化后160/160（16/16题全对）。两轮各480端点raw、176中间checkpoint raw、4096更新记录、4112轨迹索引和32端点PNG已完整本地重算，远端每轮4656文件哈希均通过。见[三问法核验](historical-three-query-full-local-verification.json)、[五问法核验](historical-five-query-full-local-verification.json)及[三问法原始证据](historical-three-query-full-evidence.tgz)、[五问法原始证据](historical-five-query-full-evidence.tgz)。大型PT/中间PNG留在共享盘，本地遗漏明确；五问法全为已知teacher训练问句，目标可读不等于共享Writer学会写入。
+
+自动验证源码`c2ec407fe9f9600a23dc8009b657b7391b9aff6d`已部署，待新训练端点与GPU释放后，四卡分别执行单图、连续链及两组历史前缀验证，再核对全部像素/高斯噪声/原生轨迹，导出4832端点并实际重放独立推理。具体活跃PID、固定目录和截止时间以[续接记录](../official-alignment-continuation-20260913.md)及平台实际状态为准。下方带时间的小节均为历史阶段记录。
+
 ## 10:16 四卡迁移已进入实际参数更新
 
 用户提供的 `vlm-r11-trust-h200x4-20260907-r3` 已运行四个同步训练rank。真实全U-Net梯度预检通过，初始和首步参数四卡逐位一致；全局批量仍为4。完整新噪声baseline845/900，实际326/2880更新约264秒，尚无新的最终结果。旧两个自建单卡实例已停止，输出保留共享盘。

@@ -2,6 +2,8 @@
 
 The inference interface consumes a sealed parameter export, the pinned official Base snapshot/source, an optional frozen Reader, and a JSONL command file. It does not load a teacher bank, oracle tensor, training optimizer, event-to-answer table, or answer labels. A write supplies only event text and an explicit noise seed. A read supplies only a question; it cannot call the Writer or change stored RGB pixels. The persistent memory is the actual generated1024×1024 RGB uint8 image, re-encoded by the official VAE for the next event.
 
+Actual GPU integration has now been verified for the completed45-condition endpoints. The latest completed four-H200 package, manifest`d1536d754dc3770f3e715b1c0bfaa3278ff61e68b7bad70dce385b3b38f8a2d7`, was loaded by the independent bank-free CLI and reproduced allsix fixed writes and thirty reads exactly. The [parity record](official-alignment-results-20260913/four-gpu-warm-package-parity.json) binds the package, PNG bytes, raw input/output tokens and termination fields. It explicitly retains`reference_functional_pass=false`: the full independent suite failed some event wording and chain cases. The broader151-condition model is still training and will receive its own package and replay. The later sections describe earlier engineering stages and must not be read as the current job status.
+
 Export a completed official Base full-U-Net run:
 
 ```bash
