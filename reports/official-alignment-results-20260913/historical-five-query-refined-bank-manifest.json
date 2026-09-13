@@ -1,0 +1,1489 @@
+{
+  "bank_status": "sealed",
+  "conditional_group_count": 16,
+  "groups": [
+    {
+      "answer": "green",
+      "donor_control": {
+        "answer": "no active preference",
+        "interpretation": "fixed different-answer donor owner; response to this target query is measured, not assumed",
+        "latent_file_sha256": "e8477c80c1ded870c42e23f356f3d5d469dbda700cf7b065128a3576efb8c4bb",
+        "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-10-seed-0.pt",
+        "latent_sha256": "98321b2c03cc3cfeae504ff1d8b2900bd72e5c434b879c1fdf0a7c947668595e",
+        "owner_question_id": "r3-train-semantic-000986-historical-prefix"
+      },
+      "event_input_scope": "one gray-source write of the full ordered event-only prefix; not a live sequential-memory test",
+      "event_text": "R3 Train Standard Templates 23: For the marble lamp train 001175, remember that the preferred color is green.",
+      "historical_target_index": 0,
+      "planned_count": 1,
+      "question_id": "r3-train-semantic-001175-historical-prefix",
+      "question_instruction_contract": "historical-r11-five-prompts/v1",
+      "question_variants": {
+        "original_open": "R3 Train Standard Templates 23: Before any later update, what is the current color preference for the marble lamp train 001175?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 23: Before any later update, which color does the marble lamp train 001175 currently prefer?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 23: Before any later update, name the currently stored color preference for the marble lamp train 001175.\nReturn only a short phrase.",
+        "paraphrase_3": "Which color preference is currently stored for the marble lamp train 001175?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "Read the memory image and report the current color preference of the marble lamp train 001175.\nReturn only a short phrase."
+      },
+      "semantic_question_id": "r3-train-semantic-001175",
+      "source_event_stream": [
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 23: For the marble lamp train 001175, remember that the preferred color is green."
+        }
+      ],
+      "source_kind": "blank_gray_1024",
+      "source_latent_file_sha256": "a57d81ae0f15f3ec99a700b2cedffefd84cb09c587efb71619a8be8bd7dee8b0",
+      "source_latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/f5c9c9e-direct-multiprompt-dl-base-seed20260908/bank/conditions/r5-f1-392d41fd097d069c42218e0a-source.pt",
+      "source_latent_sha256": "5f8c07caa37de38cae96d0b0e28851b1b831bea8728182e9fbd14b1588ac3743",
+      "successful_run_count": 1,
+      "teacher_ids": [
+        "r3-train-semantic-001175-historical-prefix-refined-1205f1f132a613ba"
+      ],
+      "termination_contract": {
+        "assistant_end_token_id": 151645,
+        "assistant_end_token_text": "<|im_end|>",
+        "chat_suffix": "<|im_end|>\n",
+        "chat_suffix_token_ids": [
+          151645,
+          198
+        ],
+        "generation_eos_token_ids": [
+          151645,
+          151643
+        ],
+        "selection": "first token after an assistant answer in actual chat template, checked against generation EOS",
+        "tokenizer_eos_token_id": 151645
+      }
+    },
+    {
+      "answer": "green",
+      "donor_control": {
+        "answer": "no active preference",
+        "interpretation": "fixed different-answer donor owner; response to this target query is measured, not assumed",
+        "latent_file_sha256": "e8477c80c1ded870c42e23f356f3d5d469dbda700cf7b065128a3576efb8c4bb",
+        "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-10-seed-0.pt",
+        "latent_sha256": "98321b2c03cc3cfeae504ff1d8b2900bd72e5c434b879c1fdf0a7c947668595e",
+        "owner_question_id": "r3-train-semantic-000986-historical-prefix"
+      },
+      "event_input_scope": "one gray-source write of the full ordered event-only prefix; not a live sequential-memory test",
+      "event_text": "R3 Train Standard Templates 30: For the linen desk train 000414, remember that the preferred color is purple.\nR3 Train Standard Templates 30: For the linen desk train 000414, remember that the preferred color is green.",
+      "historical_target_index": 1,
+      "planned_count": 1,
+      "question_id": "r3-train-semantic-000414-historical-prefix",
+      "question_instruction_contract": "historical-r11-five-prompts/v1",
+      "question_variants": {
+        "original_open": "R3 Train Standard Templates 30: At this later check, what is the current color preference for the linen desk train 000414?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 30: At this later check, which color does the linen desk train 000414 currently prefer?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 30: At this later check, name the currently stored color preference for the linen desk train 000414.\nReturn only a short phrase.",
+        "paraphrase_3": "Which color preference is currently stored for the linen desk train 000414?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "Read the memory image and report the current color preference of the linen desk train 000414.\nReturn only a short phrase."
+      },
+      "semantic_question_id": "r3-train-semantic-000414",
+      "source_event_stream": [
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 30: For the linen desk train 000414, remember that the preferred color is purple."
+        },
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 30: For the linen desk train 000414, remember that the preferred color is green."
+        }
+      ],
+      "source_kind": "blank_gray_1024",
+      "source_latent_file_sha256": "a57d81ae0f15f3ec99a700b2cedffefd84cb09c587efb71619a8be8bd7dee8b0",
+      "source_latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/f5c9c9e-direct-multiprompt-dl-base-seed20260908/bank/conditions/r5-f1-392d41fd097d069c42218e0a-source.pt",
+      "source_latent_sha256": "5f8c07caa37de38cae96d0b0e28851b1b831bea8728182e9fbd14b1588ac3743",
+      "successful_run_count": 1,
+      "teacher_ids": [
+        "r3-train-semantic-000414-historical-prefix-refined-ca6ca6c17cb2ca03"
+      ],
+      "termination_contract": {
+        "assistant_end_token_id": 151645,
+        "assistant_end_token_text": "<|im_end|>",
+        "chat_suffix": "<|im_end|>\n",
+        "chat_suffix_token_ids": [
+          151645,
+          198
+        ],
+        "generation_eos_token_ids": [
+          151645,
+          151643
+        ],
+        "selection": "first token after an assistant answer in actual chat template, checked against generation EOS",
+        "tokenizer_eos_token_id": 151645
+      }
+    },
+    {
+      "answer": "juice",
+      "donor_control": {
+        "answer": "no active preference",
+        "interpretation": "fixed different-answer donor owner; response to this target query is measured, not assumed",
+        "latent_file_sha256": "c319fa1da72bfe7c758438b398852f79720918220999afcbfa46eb642b4cbd1e",
+        "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-12-seed-0.pt",
+        "latent_sha256": "ac5276b973ddc619c71ee064f9aa4b4058fb64d905e045c54a91d01b09b126af",
+        "owner_question_id": "r3-train-semantic-001048-historical-prefix"
+      },
+      "event_input_scope": "one gray-source write of the full ordered event-only prefix; not a live sequential-memory test",
+      "event_text": "R3 Train Standard Templates 15: Save juice as the current drink preference for the indigo notebook train 000271.",
+      "historical_target_index": 2,
+      "planned_count": 1,
+      "question_id": "r3-train-semantic-000271-historical-prefix",
+      "question_instruction_contract": "historical-r11-five-prompts/v1",
+      "question_variants": {
+        "original_open": "R3 Train Standard Templates 15: Before any later update, what is the current drink preference for the indigo notebook train 000271?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 15: Before any later update, which drink does the indigo notebook train 000271 currently prefer?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 15: Before any later update, name the currently stored drink preference for the indigo notebook train 000271.\nReturn only a short phrase.",
+        "paraphrase_3": "Which drink preference is currently stored for the indigo notebook train 000271?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "Read the memory image and report the current drink preference of the indigo notebook train 000271.\nReturn only a short phrase."
+      },
+      "semantic_question_id": "r3-train-semantic-000271",
+      "source_event_stream": [
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 15: Save juice as the current drink preference for the indigo notebook train 000271."
+        }
+      ],
+      "source_kind": "blank_gray_1024",
+      "source_latent_file_sha256": "a57d81ae0f15f3ec99a700b2cedffefd84cb09c587efb71619a8be8bd7dee8b0",
+      "source_latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/f5c9c9e-direct-multiprompt-dl-base-seed20260908/bank/conditions/r5-f1-392d41fd097d069c42218e0a-source.pt",
+      "source_latent_sha256": "5f8c07caa37de38cae96d0b0e28851b1b831bea8728182e9fbd14b1588ac3743",
+      "successful_run_count": 1,
+      "teacher_ids": [
+        "r3-train-semantic-000271-historical-prefix-refined-d720560109475216"
+      ],
+      "termination_contract": {
+        "assistant_end_token_id": 151645,
+        "assistant_end_token_text": "<|im_end|>",
+        "chat_suffix": "<|im_end|>\n",
+        "chat_suffix_token_ids": [
+          151645,
+          198
+        ],
+        "generation_eos_token_ids": [
+          151645,
+          151643
+        ],
+        "selection": "first token after an assistant answer in actual chat template, checked against generation EOS",
+        "tokenizer_eos_token_id": 151645
+      }
+    },
+    {
+      "answer": "juice",
+      "donor_control": {
+        "answer": "no active preference",
+        "interpretation": "fixed different-answer donor owner; response to this target query is measured, not assumed",
+        "latent_file_sha256": "c319fa1da72bfe7c758438b398852f79720918220999afcbfa46eb642b4cbd1e",
+        "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-12-seed-0.pt",
+        "latent_sha256": "ac5276b973ddc619c71ee064f9aa4b4058fb64d905e045c54a91d01b09b126af",
+        "owner_question_id": "r3-train-semantic-001048-historical-prefix"
+      },
+      "event_input_scope": "one gray-source write of the full ordered event-only prefix; not a live sequential-memory test",
+      "event_text": "R3 Train Standard Templates 26: For the amber mug train 001242, remember that the preferred drink is coffee.\nR3 Train Standard Templates 26: Replace the earlier drink preference for the amber mug train 001242 with juice.",
+      "historical_target_index": 3,
+      "planned_count": 1,
+      "question_id": "r3-train-semantic-001242-historical-prefix",
+      "question_instruction_contract": "historical-r11-five-prompts/v1",
+      "question_variants": {
+        "original_open": "R3 Train Standard Templates 26: After applying this update first, what is the current drink preference for the amber mug train 001242?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 26: After applying this update first, which drink does the amber mug train 001242 currently prefer?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 26: After applying this update first, name the currently stored drink preference for the amber mug train 001242.\nReturn only a short phrase.",
+        "paraphrase_3": "Which drink preference is currently stored for the amber mug train 001242?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "Read the memory image and report the current drink preference of the amber mug train 001242.\nReturn only a short phrase."
+      },
+      "semantic_question_id": "r3-train-semantic-001242",
+      "source_event_stream": [
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 26: For the amber mug train 001242, remember that the preferred drink is coffee."
+        },
+        {
+          "event_kind": "overwrite",
+          "event_text": "R3 Train Standard Templates 26: Replace the earlier drink preference for the amber mug train 001242 with juice."
+        }
+      ],
+      "source_kind": "blank_gray_1024",
+      "source_latent_file_sha256": "a57d81ae0f15f3ec99a700b2cedffefd84cb09c587efb71619a8be8bd7dee8b0",
+      "source_latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/f5c9c9e-direct-multiprompt-dl-base-seed20260908/bank/conditions/r5-f1-392d41fd097d069c42218e0a-source.pt",
+      "source_latent_sha256": "5f8c07caa37de38cae96d0b0e28851b1b831bea8728182e9fbd14b1588ac3743",
+      "successful_run_count": 1,
+      "teacher_ids": [
+        "r3-train-semantic-001242-historical-prefix-refined-34a0bb9af851bf6b"
+      ],
+      "termination_contract": {
+        "assistant_end_token_id": 151645,
+        "assistant_end_token_text": "<|im_end|>",
+        "chat_suffix": "<|im_end|>\n",
+        "chat_suffix_token_ids": [
+          151645,
+          198
+        ],
+        "generation_eos_token_ids": [
+          151645,
+          151643
+        ],
+        "selection": "first token after an assistant answer in actual chat template, checked against generation EOS",
+        "tokenizer_eos_token_id": 151645
+      }
+    },
+    {
+      "answer": "jazz",
+      "donor_control": {
+        "answer": "green",
+        "interpretation": "fixed different-answer donor owner; response to this target query is measured, not assumed",
+        "latent_file_sha256": "f7ac93392acd3efe1fe81e86569fed9c79fc3d4e0c6e76c7e220b5bb281b8f16",
+        "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-00-seed-0.pt",
+        "latent_sha256": "ce3344b57d82946203dcd39ee9390d442c38c862d9cf1c43a80bff3b086356fe",
+        "owner_question_id": "r3-train-semantic-001175-historical-prefix"
+      },
+      "event_input_scope": "one gray-source write of the full ordered event-only prefix; not a live sequential-memory test",
+      "event_text": "R3 Train Standard Templates 06: For the willow desk train 000550, remember that the preferred music is jazz.",
+      "historical_target_index": 4,
+      "planned_count": 1,
+      "question_id": "r3-train-semantic-000550-historical-prefix",
+      "question_instruction_contract": "historical-r11-five-prompts/v1",
+      "question_variants": {
+        "original_open": "R3 Train Standard Templates 06: Before any later update, what is the current music preference for the willow desk train 000550?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 06: Before any later update, which music does the willow desk train 000550 currently prefer?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 06: Before any later update, name the currently stored music preference for the willow desk train 000550.\nReturn only a short phrase.",
+        "paraphrase_3": "Which music preference is currently stored for the willow desk train 000550?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "Read the memory image and report the current music preference of the willow desk train 000550.\nReturn only a short phrase."
+      },
+      "semantic_question_id": "r3-train-semantic-000550",
+      "source_event_stream": [
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 06: For the willow desk train 000550, remember that the preferred music is jazz."
+        }
+      ],
+      "source_kind": "blank_gray_1024",
+      "source_latent_file_sha256": "a57d81ae0f15f3ec99a700b2cedffefd84cb09c587efb71619a8be8bd7dee8b0",
+      "source_latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/f5c9c9e-direct-multiprompt-dl-base-seed20260908/bank/conditions/r5-f1-392d41fd097d069c42218e0a-source.pt",
+      "source_latent_sha256": "5f8c07caa37de38cae96d0b0e28851b1b831bea8728182e9fbd14b1588ac3743",
+      "successful_run_count": 1,
+      "teacher_ids": [
+        "r3-train-semantic-000550-historical-prefix-refined-ee7b873a12120599"
+      ],
+      "termination_contract": {
+        "assistant_end_token_id": 151645,
+        "assistant_end_token_text": "<|im_end|>",
+        "chat_suffix": "<|im_end|>\n",
+        "chat_suffix_token_ids": [
+          151645,
+          198
+        ],
+        "generation_eos_token_ids": [
+          151645,
+          151643
+        ],
+        "selection": "first token after an assistant answer in actual chat template, checked against generation EOS",
+        "tokenizer_eos_token_id": 151645
+      }
+    },
+    {
+      "answer": "jazz",
+      "donor_control": {
+        "answer": "green",
+        "interpretation": "fixed different-answer donor owner; response to this target query is measured, not assumed",
+        "latent_file_sha256": "f7ac93392acd3efe1fe81e86569fed9c79fc3d4e0c6e76c7e220b5bb281b8f16",
+        "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-00-seed-0.pt",
+        "latent_sha256": "ce3344b57d82946203dcd39ee9390d442c38c862d9cf1c43a80bff3b086356fe",
+        "owner_question_id": "r3-train-semantic-001175-historical-prefix"
+      },
+      "event_input_scope": "one gray-source write of the full ordered event-only prefix; not a live sequential-memory test",
+      "event_text": "R3 Train Standard Templates 30: For the indigo mug train 000190, remember that the preferred music is jazz.",
+      "historical_target_index": 5,
+      "planned_count": 1,
+      "question_id": "r3-train-semantic-000190-historical-prefix",
+      "question_instruction_contract": "historical-r11-five-prompts/v1",
+      "question_variants": {
+        "original_open": "R3 Train Standard Templates 30: Before any later update, what is the current music preference for the indigo mug train 000190?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 30: Before any later update, which music does the indigo mug train 000190 currently prefer?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 30: Before any later update, name the currently stored music preference for the indigo mug train 000190.\nReturn only a short phrase.",
+        "paraphrase_3": "Which music preference is currently stored for the indigo mug train 000190?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "Read the memory image and report the current music preference of the indigo mug train 000190.\nReturn only a short phrase."
+      },
+      "semantic_question_id": "r3-train-semantic-000190",
+      "source_event_stream": [
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 30: For the indigo mug train 000190, remember that the preferred music is jazz."
+        }
+      ],
+      "source_kind": "blank_gray_1024",
+      "source_latent_file_sha256": "a57d81ae0f15f3ec99a700b2cedffefd84cb09c587efb71619a8be8bd7dee8b0",
+      "source_latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/f5c9c9e-direct-multiprompt-dl-base-seed20260908/bank/conditions/r5-f1-392d41fd097d069c42218e0a-source.pt",
+      "source_latent_sha256": "5f8c07caa37de38cae96d0b0e28851b1b831bea8728182e9fbd14b1588ac3743",
+      "successful_run_count": 1,
+      "teacher_ids": [
+        "r3-train-semantic-000190-historical-prefix-refined-963b26011bcf42d0"
+      ],
+      "termination_contract": {
+        "assistant_end_token_id": 151645,
+        "assistant_end_token_text": "<|im_end|>",
+        "chat_suffix": "<|im_end|>\n",
+        "chat_suffix_token_ids": [
+          151645,
+          198
+        ],
+        "generation_eos_token_ids": [
+          151645,
+          151643
+        ],
+        "selection": "first token after an assistant answer in actual chat template, checked against generation EOS",
+        "tokenizer_eos_token_id": 151645
+      }
+    },
+    {
+      "answer": "linen",
+      "donor_control": {
+        "answer": "no active preference",
+        "interpretation": "fixed different-answer donor owner; response to this target query is measured, not assumed",
+        "latent_file_sha256": "daaaffa8a67ab66f11d46d306ee1a101a887cced8ff933b49d9d04a8a1d5bfb9",
+        "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-14-seed-0.pt",
+        "latent_sha256": "709cec593210b13f5981b596800fa3ee8ce4fd62503c041c4a1f92bd07d7fc3b",
+        "owner_question_id": "r3-train-semantic-000250-historical-prefix"
+      },
+      "event_input_scope": "one gray-source write of the full ordered event-only prefix; not a live sequential-memory test",
+      "event_text": "R3 Train Standard Templates 00: Save leather as the current material preference for the silver lamp train 000608.\nR3 Train Standard Templates 00: Save linen as the current material preference for the silver lamp train 000608.",
+      "historical_target_index": 6,
+      "planned_count": 1,
+      "question_id": "r3-train-semantic-000608-historical-prefix",
+      "question_instruction_contract": "historical-r11-five-prompts/v1",
+      "question_variants": {
+        "original_open": "R3 Train Standard Templates 00: At this later check, what is the current material preference for the silver lamp train 000608?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 00: At this later check, which material does the silver lamp train 000608 currently prefer?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 00: At this later check, name the currently stored material preference for the silver lamp train 000608.\nReturn only a short phrase.",
+        "paraphrase_3": "Which material preference is currently stored for the silver lamp train 000608?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "Read the memory image and report the current material preference of the silver lamp train 000608.\nReturn only a short phrase."
+      },
+      "semantic_question_id": "r3-train-semantic-000608",
+      "source_event_stream": [
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 00: Save leather as the current material preference for the silver lamp train 000608."
+        },
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 00: Save linen as the current material preference for the silver lamp train 000608."
+        }
+      ],
+      "source_kind": "blank_gray_1024",
+      "source_latent_file_sha256": "a57d81ae0f15f3ec99a700b2cedffefd84cb09c587efb71619a8be8bd7dee8b0",
+      "source_latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/f5c9c9e-direct-multiprompt-dl-base-seed20260908/bank/conditions/r5-f1-392d41fd097d069c42218e0a-source.pt",
+      "source_latent_sha256": "5f8c07caa37de38cae96d0b0e28851b1b831bea8728182e9fbd14b1588ac3743",
+      "successful_run_count": 1,
+      "teacher_ids": [
+        "r3-train-semantic-000608-historical-prefix-refined-6e8fcb0b3907b51a"
+      ],
+      "termination_contract": {
+        "assistant_end_token_id": 151645,
+        "assistant_end_token_text": "<|im_end|>",
+        "chat_suffix": "<|im_end|>\n",
+        "chat_suffix_token_ids": [
+          151645,
+          198
+        ],
+        "generation_eos_token_ids": [
+          151645,
+          151643
+        ],
+        "selection": "first token after an assistant answer in actual chat template, checked against generation EOS",
+        "tokenizer_eos_token_id": 151645
+      }
+    },
+    {
+      "answer": "linen",
+      "donor_control": {
+        "answer": "no active preference",
+        "interpretation": "fixed different-answer donor owner; response to this target query is measured, not assumed",
+        "latent_file_sha256": "daaaffa8a67ab66f11d46d306ee1a101a887cced8ff933b49d9d04a8a1d5bfb9",
+        "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-14-seed-0.pt",
+        "latent_sha256": "709cec593210b13f5981b596800fa3ee8ce4fd62503c041c4a1f92bd07d7fc3b",
+        "owner_question_id": "r3-train-semantic-000250-historical-prefix"
+      },
+      "event_input_scope": "one gray-source write of the full ordered event-only prefix; not a live sequential-memory test",
+      "event_text": "R3 Train Standard Templates 05: Save ceramic as the current material preference for the amber room train 000613.\nR3 Train Standard Templates 05: The material preference for the amber room train 000613 is now linen, not the previous value.",
+      "historical_target_index": 7,
+      "planned_count": 1,
+      "question_id": "r3-train-semantic-000613-historical-prefix",
+      "question_instruction_contract": "historical-r11-five-prompts/v1",
+      "question_variants": {
+        "original_open": "R3 Train Standard Templates 05: At this later check, what is the current material preference for the amber room train 000613?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 05: At this later check, which material does the amber room train 000613 currently prefer?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 05: At this later check, name the currently stored material preference for the amber room train 000613.\nReturn only a short phrase.",
+        "paraphrase_3": "Which material preference is currently stored for the amber room train 000613?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "Read the memory image and report the current material preference of the amber room train 000613.\nReturn only a short phrase."
+      },
+      "semantic_question_id": "r3-train-semantic-000613",
+      "source_event_stream": [
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 05: Save ceramic as the current material preference for the amber room train 000613."
+        },
+        {
+          "event_kind": "overwrite",
+          "event_text": "R3 Train Standard Templates 05: The material preference for the amber room train 000613 is now linen, not the previous value."
+        }
+      ],
+      "source_kind": "blank_gray_1024",
+      "source_latent_file_sha256": "a57d81ae0f15f3ec99a700b2cedffefd84cb09c587efb71619a8be8bd7dee8b0",
+      "source_latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/f5c9c9e-direct-multiprompt-dl-base-seed20260908/bank/conditions/r5-f1-392d41fd097d069c42218e0a-source.pt",
+      "source_latent_sha256": "5f8c07caa37de38cae96d0b0e28851b1b831bea8728182e9fbd14b1588ac3743",
+      "successful_run_count": 1,
+      "teacher_ids": [
+        "r3-train-semantic-000613-historical-prefix-refined-9f9e5b555c17750f"
+      ],
+      "termination_contract": {
+        "assistant_end_token_id": 151645,
+        "assistant_end_token_text": "<|im_end|>",
+        "chat_suffix": "<|im_end|>\n",
+        "chat_suffix_token_ids": [
+          151645,
+          198
+        ],
+        "generation_eos_token_ids": [
+          151645,
+          151643
+        ],
+        "selection": "first token after an assistant answer in actual chat template, checked against generation EOS",
+        "tokenizer_eos_token_id": 151645
+      }
+    },
+    {
+      "answer": "pasta",
+      "donor_control": {
+        "answer": "green",
+        "interpretation": "fixed different-answer donor owner; response to this target query is measured, not assumed",
+        "latent_file_sha256": "f7ac93392acd3efe1fe81e86569fed9c79fc3d4e0c6e76c7e220b5bb281b8f16",
+        "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-00-seed-0.pt",
+        "latent_sha256": "ce3344b57d82946203dcd39ee9390d442c38c862d9cf1c43a80bff3b086356fe",
+        "owner_question_id": "r3-train-semantic-001175-historical-prefix"
+      },
+      "event_input_scope": "one gray-source write of the full ordered event-only prefix; not a live sequential-memory test",
+      "event_text": "R3 Train Standard Templates 07: For the indigo lamp train 000327, remember that the preferred meal is rice.\nR3 Train Standard Templates 07: Replace the earlier meal preference for the indigo lamp train 000327 with pasta.",
+      "historical_target_index": 8,
+      "planned_count": 1,
+      "question_id": "r3-train-semantic-000327-historical-prefix",
+      "question_instruction_contract": "historical-r11-five-prompts/v1",
+      "question_variants": {
+        "original_open": "R3 Train Standard Templates 07: At this later check, what is the current meal preference for the indigo lamp train 000327?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 07: At this later check, which meal does the indigo lamp train 000327 currently prefer?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 07: At this later check, name the currently stored meal preference for the indigo lamp train 000327.\nReturn only a short phrase.",
+        "paraphrase_3": "Which meal preference is currently stored for the indigo lamp train 000327?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "Read the memory image and report the current meal preference of the indigo lamp train 000327.\nReturn only a short phrase."
+      },
+      "semantic_question_id": "r3-train-semantic-000327",
+      "source_event_stream": [
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 07: For the indigo lamp train 000327, remember that the preferred meal is rice."
+        },
+        {
+          "event_kind": "overwrite",
+          "event_text": "R3 Train Standard Templates 07: Replace the earlier meal preference for the indigo lamp train 000327 with pasta."
+        }
+      ],
+      "source_kind": "blank_gray_1024",
+      "source_latent_file_sha256": "a57d81ae0f15f3ec99a700b2cedffefd84cb09c587efb71619a8be8bd7dee8b0",
+      "source_latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/f5c9c9e-direct-multiprompt-dl-base-seed20260908/bank/conditions/r5-f1-392d41fd097d069c42218e0a-source.pt",
+      "source_latent_sha256": "5f8c07caa37de38cae96d0b0e28851b1b831bea8728182e9fbd14b1588ac3743",
+      "successful_run_count": 1,
+      "teacher_ids": [
+        "r3-train-semantic-000327-historical-prefix-refined-b8bc9bca774d24c5"
+      ],
+      "termination_contract": {
+        "assistant_end_token_id": 151645,
+        "assistant_end_token_text": "<|im_end|>",
+        "chat_suffix": "<|im_end|>\n",
+        "chat_suffix_token_ids": [
+          151645,
+          198
+        ],
+        "generation_eos_token_ids": [
+          151645,
+          151643
+        ],
+        "selection": "first token after an assistant answer in actual chat template, checked against generation EOS",
+        "tokenizer_eos_token_id": 151645
+      }
+    },
+    {
+      "answer": "pasta",
+      "donor_control": {
+        "answer": "green",
+        "interpretation": "fixed different-answer donor owner; response to this target query is measured, not assumed",
+        "latent_file_sha256": "f7ac93392acd3efe1fe81e86569fed9c79fc3d4e0c6e76c7e220b5bb281b8f16",
+        "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-00-seed-0.pt",
+        "latent_sha256": "ce3344b57d82946203dcd39ee9390d442c38c862d9cf1c43a80bff3b086356fe",
+        "owner_question_id": "r3-train-semantic-001175-historical-prefix"
+      },
+      "event_input_scope": "one gray-source write of the full ordered event-only prefix; not a live sequential-memory test",
+      "event_text": "R3 Train Standard Templates 19: Save pasta as the current meal preference for the silver mug train 000147.",
+      "historical_target_index": 9,
+      "planned_count": 1,
+      "question_id": "r3-train-semantic-000147-historical-prefix",
+      "question_instruction_contract": "historical-r11-five-prompts/v1",
+      "question_variants": {
+        "original_open": "R3 Train Standard Templates 19: Before any later update, what is the current meal preference for the silver mug train 000147?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 19: Before any later update, which meal does the silver mug train 000147 currently prefer?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 19: Before any later update, name the currently stored meal preference for the silver mug train 000147.\nReturn only a short phrase.",
+        "paraphrase_3": "Which meal preference is currently stored for the silver mug train 000147?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "Read the memory image and report the current meal preference of the silver mug train 000147.\nReturn only a short phrase."
+      },
+      "semantic_question_id": "r3-train-semantic-000147",
+      "source_event_stream": [
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 19: Save pasta as the current meal preference for the silver mug train 000147."
+        }
+      ],
+      "source_kind": "blank_gray_1024",
+      "source_latent_file_sha256": "a57d81ae0f15f3ec99a700b2cedffefd84cb09c587efb71619a8be8bd7dee8b0",
+      "source_latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/f5c9c9e-direct-multiprompt-dl-base-seed20260908/bank/conditions/r5-f1-392d41fd097d069c42218e0a-source.pt",
+      "source_latent_sha256": "5f8c07caa37de38cae96d0b0e28851b1b831bea8728182e9fbd14b1588ac3743",
+      "successful_run_count": 1,
+      "teacher_ids": [
+        "r3-train-semantic-000147-historical-prefix-refined-6e896b1313c30213"
+      ],
+      "termination_contract": {
+        "assistant_end_token_id": 151645,
+        "assistant_end_token_text": "<|im_end|>",
+        "chat_suffix": "<|im_end|>\n",
+        "chat_suffix_token_ids": [
+          151645,
+          198
+        ],
+        "generation_eos_token_ids": [
+          151645,
+          151643
+        ],
+        "selection": "first token after an assistant answer in actual chat template, checked against generation EOS",
+        "tokenizer_eos_token_id": 151645
+      }
+    },
+    {
+      "answer": "no active preference",
+      "donor_control": {
+        "answer": "green",
+        "interpretation": "fixed different-answer donor owner; response to this target query is measured, not assumed",
+        "latent_file_sha256": "f7ac93392acd3efe1fe81e86569fed9c79fc3d4e0c6e76c7e220b5bb281b8f16",
+        "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-00-seed-0.pt",
+        "latent_sha256": "ce3344b57d82946203dcd39ee9390d442c38c862d9cf1c43a80bff3b086356fe",
+        "owner_question_id": "r3-train-semantic-001175-historical-prefix"
+      },
+      "event_input_scope": "one gray-source write of the full ordered event-only prefix; not a live sequential-memory test",
+      "event_text": "R3 Train Standard Templates 26: Save yellow as the current color preference for the marble backpack train 000986.\nR3 Train Standard Templates 26: Forget the current color choice for the marble backpack train 000986; none is active now.",
+      "historical_target_index": 10,
+      "planned_count": 1,
+      "question_id": "r3-train-semantic-000986-historical-prefix",
+      "question_instruction_contract": "historical-r11-five-prompts/v1",
+      "question_variants": {
+        "original_open": "R3 Train Standard Templates 26: After applying this update first, what is the current color preference for the marble backpack train 000986?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 26: After applying this update first, which color does the marble backpack train 000986 currently prefer?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 26: After applying this update first, name the currently stored color preference for the marble backpack train 000986.\nReturn only a short phrase.",
+        "paraphrase_3": "Which color preference is currently stored for the marble backpack train 000986?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "Read the memory image and report the current color preference of the marble backpack train 000986.\nReturn only a short phrase."
+      },
+      "semantic_question_id": "r3-train-semantic-000986",
+      "source_event_stream": [
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 26: Save yellow as the current color preference for the marble backpack train 000986."
+        },
+        {
+          "event_kind": "clear",
+          "event_text": "R3 Train Standard Templates 26: Forget the current color choice for the marble backpack train 000986; none is active now."
+        }
+      ],
+      "source_kind": "blank_gray_1024",
+      "source_latent_file_sha256": "a57d81ae0f15f3ec99a700b2cedffefd84cb09c587efb71619a8be8bd7dee8b0",
+      "source_latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/f5c9c9e-direct-multiprompt-dl-base-seed20260908/bank/conditions/r5-f1-392d41fd097d069c42218e0a-source.pt",
+      "source_latent_sha256": "5f8c07caa37de38cae96d0b0e28851b1b831bea8728182e9fbd14b1588ac3743",
+      "successful_run_count": 1,
+      "teacher_ids": [
+        "r3-train-semantic-000986-historical-prefix-refined-973c068b7e837057"
+      ],
+      "termination_contract": {
+        "assistant_end_token_id": 151645,
+        "assistant_end_token_text": "<|im_end|>",
+        "chat_suffix": "<|im_end|>\n",
+        "chat_suffix_token_ids": [
+          151645,
+          198
+        ],
+        "generation_eos_token_ids": [
+          151645,
+          151643
+        ],
+        "selection": "first token after an assistant answer in actual chat template, checked against generation EOS",
+        "tokenizer_eos_token_id": 151645
+      }
+    },
+    {
+      "answer": "no active preference",
+      "donor_control": {
+        "answer": "green",
+        "interpretation": "fixed different-answer donor owner; response to this target query is measured, not assumed",
+        "latent_file_sha256": "f7ac93392acd3efe1fe81e86569fed9c79fc3d4e0c6e76c7e220b5bb281b8f16",
+        "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-00-seed-0.pt",
+        "latent_sha256": "ce3344b57d82946203dcd39ee9390d442c38c862d9cf1c43a80bff3b086356fe",
+        "owner_question_id": "r3-train-semantic-001175-historical-prefix"
+      },
+      "event_input_scope": "one gray-source write of the full ordered event-only prefix; not a live sequential-memory test",
+      "event_text": "R3 Train Standard Templates 24: For the linen notebook train 000024, remember that the preferred color is yellow.\nR3 Train Standard Templates 24: Clear the saved color preference for the linen notebook train 000024.",
+      "historical_target_index": 11,
+      "planned_count": 1,
+      "question_id": "r3-train-semantic-000024-historical-prefix",
+      "question_instruction_contract": "historical-r11-five-prompts/v1",
+      "question_variants": {
+        "original_open": "R3 Train Standard Templates 24: After applying this update first, what is the current color preference for the linen notebook train 000024?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 24: After applying this update first, which color does the linen notebook train 000024 currently prefer?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 24: After applying this update first, name the currently stored color preference for the linen notebook train 000024.\nReturn only a short phrase.",
+        "paraphrase_3": "Which color preference is currently stored for the linen notebook train 000024?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "Read the memory image and report the current color preference of the linen notebook train 000024.\nReturn only a short phrase."
+      },
+      "semantic_question_id": "r3-train-semantic-000024",
+      "source_event_stream": [
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 24: For the linen notebook train 000024, remember that the preferred color is yellow."
+        },
+        {
+          "event_kind": "clear",
+          "event_text": "R3 Train Standard Templates 24: Clear the saved color preference for the linen notebook train 000024."
+        }
+      ],
+      "source_kind": "blank_gray_1024",
+      "source_latent_file_sha256": "a57d81ae0f15f3ec99a700b2cedffefd84cb09c587efb71619a8be8bd7dee8b0",
+      "source_latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/f5c9c9e-direct-multiprompt-dl-base-seed20260908/bank/conditions/r5-f1-392d41fd097d069c42218e0a-source.pt",
+      "source_latent_sha256": "5f8c07caa37de38cae96d0b0e28851b1b831bea8728182e9fbd14b1588ac3743",
+      "successful_run_count": 1,
+      "teacher_ids": [
+        "r3-train-semantic-000024-historical-prefix-refined-1e59c50fc18d0f89"
+      ],
+      "termination_contract": {
+        "assistant_end_token_id": 151645,
+        "assistant_end_token_text": "<|im_end|>",
+        "chat_suffix": "<|im_end|>\n",
+        "chat_suffix_token_ids": [
+          151645,
+          198
+        ],
+        "generation_eos_token_ids": [
+          151645,
+          151643
+        ],
+        "selection": "first token after an assistant answer in actual chat template, checked against generation EOS",
+        "tokenizer_eos_token_id": 151645
+      }
+    },
+    {
+      "answer": "no active preference",
+      "donor_control": {
+        "answer": "juice",
+        "interpretation": "fixed different-answer donor owner; response to this target query is measured, not assumed",
+        "latent_file_sha256": "34f7831466e0516c194225629b8286d1e0d8ab2a35dc90312a75689ffbc12575",
+        "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-02-seed-0.pt",
+        "latent_sha256": "768fccec2cb2227b6f27c813ca7574dde6e480e6203f5f0f53456186c6a1f781",
+        "owner_question_id": "r3-train-semantic-000271-historical-prefix"
+      },
+      "event_input_scope": "one gray-source write of the full ordered event-only prefix; not a live sequential-memory test",
+      "event_text": "R3 Train Standard Templates 24: Save cocoa as the current drink preference for the copper backpack train 001048.\nR3 Train Standard Templates 24: Forget the current drink choice for the copper backpack train 001048; none is active now.",
+      "historical_target_index": 12,
+      "planned_count": 1,
+      "question_id": "r3-train-semantic-001048-historical-prefix",
+      "question_instruction_contract": "historical-r11-five-prompts/v1",
+      "question_variants": {
+        "original_open": "R3 Train Standard Templates 24: After applying this update first, what is the current drink preference for the copper backpack train 001048?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 24: After applying this update first, which drink does the copper backpack train 001048 currently prefer?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 24: After applying this update first, name the currently stored drink preference for the copper backpack train 001048.\nReturn only a short phrase.",
+        "paraphrase_3": "Which drink preference is currently stored for the copper backpack train 001048?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "Read the memory image and report the current drink preference of the copper backpack train 001048.\nReturn only a short phrase."
+      },
+      "semantic_question_id": "r3-train-semantic-001048",
+      "source_event_stream": [
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 24: Save cocoa as the current drink preference for the copper backpack train 001048."
+        },
+        {
+          "event_kind": "clear",
+          "event_text": "R3 Train Standard Templates 24: Forget the current drink choice for the copper backpack train 001048; none is active now."
+        }
+      ],
+      "source_kind": "blank_gray_1024",
+      "source_latent_file_sha256": "a57d81ae0f15f3ec99a700b2cedffefd84cb09c587efb71619a8be8bd7dee8b0",
+      "source_latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/f5c9c9e-direct-multiprompt-dl-base-seed20260908/bank/conditions/r5-f1-392d41fd097d069c42218e0a-source.pt",
+      "source_latent_sha256": "5f8c07caa37de38cae96d0b0e28851b1b831bea8728182e9fbd14b1588ac3743",
+      "successful_run_count": 1,
+      "teacher_ids": [
+        "r3-train-semantic-001048-historical-prefix-refined-81af971030818ecb"
+      ],
+      "termination_contract": {
+        "assistant_end_token_id": 151645,
+        "assistant_end_token_text": "<|im_end|>",
+        "chat_suffix": "<|im_end|>\n",
+        "chat_suffix_token_ids": [
+          151645,
+          198
+        ],
+        "generation_eos_token_ids": [
+          151645,
+          151643
+        ],
+        "selection": "first token after an assistant answer in actual chat template, checked against generation EOS",
+        "tokenizer_eos_token_id": 151645
+      }
+    },
+    {
+      "answer": "no active preference",
+      "donor_control": {
+        "answer": "juice",
+        "interpretation": "fixed different-answer donor owner; response to this target query is measured, not assumed",
+        "latent_file_sha256": "34f7831466e0516c194225629b8286d1e0d8ab2a35dc90312a75689ffbc12575",
+        "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-02-seed-0.pt",
+        "latent_sha256": "768fccec2cb2227b6f27c813ca7574dde6e480e6203f5f0f53456186c6a1f781",
+        "owner_question_id": "r3-train-semantic-000271-historical-prefix"
+      },
+      "event_input_scope": "one gray-source write of the full ordered event-only prefix; not a live sequential-memory test",
+      "event_text": "R3 Train Standard Templates 08: For the willow chair train 001224, remember that the preferred drink is coffee.\nR3 Train Standard Templates 08: Clear the saved drink preference for the willow chair train 001224.",
+      "historical_target_index": 13,
+      "planned_count": 1,
+      "question_id": "r3-train-semantic-001224-historical-prefix",
+      "question_instruction_contract": "historical-r11-five-prompts/v1",
+      "question_variants": {
+        "original_open": "R3 Train Standard Templates 08: At this later check, what is the current drink preference for the willow chair train 001224?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 08: At this later check, which drink does the willow chair train 001224 currently prefer?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 08: At this later check, name the currently stored drink preference for the willow chair train 001224.\nReturn only a short phrase.",
+        "paraphrase_3": "Which drink preference is currently stored for the willow chair train 001224?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "Read the memory image and report the current drink preference of the willow chair train 001224.\nReturn only a short phrase."
+      },
+      "semantic_question_id": "r3-train-semantic-001224",
+      "source_event_stream": [
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 08: For the willow chair train 001224, remember that the preferred drink is coffee."
+        },
+        {
+          "event_kind": "clear",
+          "event_text": "R3 Train Standard Templates 08: Clear the saved drink preference for the willow chair train 001224."
+        }
+      ],
+      "source_kind": "blank_gray_1024",
+      "source_latent_file_sha256": "a57d81ae0f15f3ec99a700b2cedffefd84cb09c587efb71619a8be8bd7dee8b0",
+      "source_latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/f5c9c9e-direct-multiprompt-dl-base-seed20260908/bank/conditions/r5-f1-392d41fd097d069c42218e0a-source.pt",
+      "source_latent_sha256": "5f8c07caa37de38cae96d0b0e28851b1b831bea8728182e9fbd14b1588ac3743",
+      "successful_run_count": 1,
+      "teacher_ids": [
+        "r3-train-semantic-001224-historical-prefix-refined-8fb2b02162433e6b"
+      ],
+      "termination_contract": {
+        "assistant_end_token_id": 151645,
+        "assistant_end_token_text": "<|im_end|>",
+        "chat_suffix": "<|im_end|>\n",
+        "chat_suffix_token_ids": [
+          151645,
+          198
+        ],
+        "generation_eos_token_ids": [
+          151645,
+          151643
+        ],
+        "selection": "first token after an assistant answer in actual chat template, checked against generation EOS",
+        "tokenizer_eos_token_id": 151645
+      }
+    },
+    {
+      "answer": "no active preference",
+      "donor_control": {
+        "answer": "linen",
+        "interpretation": "fixed different-answer donor owner; response to this target query is measured, not assumed",
+        "latent_file_sha256": "ca18f33ab0bf22657468af64551a0335987526783f6daca52dd215bcea80a68b",
+        "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-06-seed-0.pt",
+        "latent_sha256": "d865e844b7b75576c314ac98b6616efb4b2e12be95ec7f5bcc22ae1ac1e0ef95",
+        "owner_question_id": "r3-train-semantic-000608-historical-prefix"
+      },
+      "event_input_scope": "one gray-source write of the full ordered event-only prefix; not a live sequential-memory test",
+      "event_text": "R3 Train Standard Templates 26: For the linen room train 000250, remember that the preferred material is glass.\nR3 Train Standard Templates 26: Clear the saved material preference for the linen room train 000250.",
+      "historical_target_index": 14,
+      "planned_count": 1,
+      "question_id": "r3-train-semantic-000250-historical-prefix",
+      "question_instruction_contract": "historical-r11-five-prompts/v1",
+      "question_variants": {
+        "original_open": "R3 Train Standard Templates 26: After applying this update first, what is the current material preference for the linen room train 000250?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 26: After applying this update first, which material does the linen room train 000250 currently prefer?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 26: After applying this update first, name the currently stored material preference for the linen room train 000250.\nReturn only a short phrase.",
+        "paraphrase_3": "Which material preference is currently stored for the linen room train 000250?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "Read the memory image and report the current material preference of the linen room train 000250.\nReturn only a short phrase."
+      },
+      "semantic_question_id": "r3-train-semantic-000250",
+      "source_event_stream": [
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 26: For the linen room train 000250, remember that the preferred material is glass."
+        },
+        {
+          "event_kind": "clear",
+          "event_text": "R3 Train Standard Templates 26: Clear the saved material preference for the linen room train 000250."
+        }
+      ],
+      "source_kind": "blank_gray_1024",
+      "source_latent_file_sha256": "a57d81ae0f15f3ec99a700b2cedffefd84cb09c587efb71619a8be8bd7dee8b0",
+      "source_latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/f5c9c9e-direct-multiprompt-dl-base-seed20260908/bank/conditions/r5-f1-392d41fd097d069c42218e0a-source.pt",
+      "source_latent_sha256": "5f8c07caa37de38cae96d0b0e28851b1b831bea8728182e9fbd14b1588ac3743",
+      "successful_run_count": 1,
+      "teacher_ids": [
+        "r3-train-semantic-000250-historical-prefix-refined-a46624fede353341"
+      ],
+      "termination_contract": {
+        "assistant_end_token_id": 151645,
+        "assistant_end_token_text": "<|im_end|>",
+        "chat_suffix": "<|im_end|>\n",
+        "chat_suffix_token_ids": [
+          151645,
+          198
+        ],
+        "generation_eos_token_ids": [
+          151645,
+          151643
+        ],
+        "selection": "first token after an assistant answer in actual chat template, checked against generation EOS",
+        "tokenizer_eos_token_id": 151645
+      }
+    },
+    {
+      "answer": "no active preference",
+      "donor_control": {
+        "answer": "linen",
+        "interpretation": "fixed different-answer donor owner; response to this target query is measured, not assumed",
+        "latent_file_sha256": "ca18f33ab0bf22657468af64551a0335987526783f6daca52dd215bcea80a68b",
+        "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-06-seed-0.pt",
+        "latent_sha256": "d865e844b7b75576c314ac98b6616efb4b2e12be95ec7f5bcc22ae1ac1e0ef95",
+        "owner_question_id": "r3-train-semantic-000608-historical-prefix"
+      },
+      "event_input_scope": "one gray-source write of the full ordered event-only prefix; not a live sequential-memory test",
+      "event_text": "R3 Train Standard Templates 25: Save leather as the current material preference for the amber backpack train 001209.\nR3 Train Standard Templates 25: Forget the current material choice for the amber backpack train 001209; none is active now.",
+      "historical_target_index": 15,
+      "planned_count": 1,
+      "question_id": "r3-train-semantic-001209-historical-prefix",
+      "question_instruction_contract": "historical-r11-five-prompts/v1",
+      "question_variants": {
+        "original_open": "R3 Train Standard Templates 25: After applying this update first, what is the current material preference for the amber backpack train 001209?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 25: After applying this update first, which material does the amber backpack train 001209 currently prefer?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 25: After applying this update first, name the currently stored material preference for the amber backpack train 001209.\nReturn only a short phrase.",
+        "paraphrase_3": "Which material preference is currently stored for the amber backpack train 001209?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "Read the memory image and report the current material preference of the amber backpack train 001209.\nReturn only a short phrase."
+      },
+      "semantic_question_id": "r3-train-semantic-001209",
+      "source_event_stream": [
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 25: Save leather as the current material preference for the amber backpack train 001209."
+        },
+        {
+          "event_kind": "clear",
+          "event_text": "R3 Train Standard Templates 25: Forget the current material choice for the amber backpack train 001209; none is active now."
+        }
+      ],
+      "source_kind": "blank_gray_1024",
+      "source_latent_file_sha256": "a57d81ae0f15f3ec99a700b2cedffefd84cb09c587efb71619a8be8bd7dee8b0",
+      "source_latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/f5c9c9e-direct-multiprompt-dl-base-seed20260908/bank/conditions/r5-f1-392d41fd097d069c42218e0a-source.pt",
+      "source_latent_sha256": "5f8c07caa37de38cae96d0b0e28851b1b831bea8728182e9fbd14b1588ac3743",
+      "successful_run_count": 1,
+      "teacher_ids": [
+        "r3-train-semantic-001209-historical-prefix-refined-d3022cb44e003c4d"
+      ],
+      "termination_contract": {
+        "assistant_end_token_id": 151645,
+        "assistant_end_token_text": "<|im_end|>",
+        "chat_suffix": "<|im_end|>\n",
+        "chat_suffix_token_ids": [
+          151645,
+          198
+        ],
+        "generation_eos_token_ids": [
+          151645,
+          151643
+        ],
+        "selection": "first token after an assistant answer in actual chat template, checked against generation EOS",
+        "tokenizer_eos_token_id": 151645
+      }
+    }
+  ],
+  "models": {
+    "dreamlite_mobile": {
+      "file_count": 27,
+      "manifest_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-mobile/.snapshot_manifest.json",
+      "manifest_sha256": "1bcf41b170c4b4a806bac6701cbdf4fabd5c3c53fa67415d065ab95ce2703159",
+      "model_dir": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-mobile",
+      "passed": true,
+      "repo_id": "carlofkl/DreamLite-mobile",
+      "revision": "6695c3f4be230f0493fa5dbf78be3bc4d3bb2ab4",
+      "snapshot_payload_sha256": "3fb839f465793b01ecafc4df433031a063dd7b395a050960cde57c2807031337",
+      "total_bytes": 5071894300
+    },
+    "qwen_reader": {
+      "file_count": 14,
+      "manifest_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct/.snapshot_manifest.json",
+      "manifest_sha256": "159a504daaae6dc412535978f087150a0eb8e50164afd70a8a17f83906f1127c",
+      "model_dir": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+      "passed": true,
+      "repo_id": "Qwen/Qwen3-VL-4B-Instruct",
+      "revision": "ebb281ec70b05090aa6165b016eac8ec08e71b17",
+      "snapshot_payload_sha256": "45be3ffb00017b02bffa79f4f8e6f301760ac50c0bb78b2c4e5a7fe8aa3d52c6",
+      "total_bytes": 8887292732
+    }
+  },
+  "provenance": {
+    "all64_original_teachers_retained_in_parent": true,
+    "parent_bank": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/manifest.json",
+    "parent_bank_sha256": "d54895adb15b91c3befd52c57f6248c76cf2abadb44916af830726a0736e688c",
+    "refinement_commit": "918e7d21ded6bff05133aa856f445ae6a4c089a0",
+    "refinement_plan_sha256": "939d1eacd7e3040f5ed06dfe3c48c770385b8cd538dcc5663ff9a91ed84f172c",
+    "scope": "Previously observed diagnostic questions; no untouched holdout claim. Teacher qualification is not shared-Writer success.",
+    "selection": "existing member_split hash order; first training member for every question; no outcome substitution",
+    "training_prompt_mode": "all_five_known_queries"
+  },
+  "route": "direct",
+  "schema": "latent-teacher-bank/v1",
+  "semantic_question_count": 16,
+  "snapshots": {
+    "dreamlite_mobile": {
+      "file_count": 27,
+      "manifest_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-mobile/.snapshot_manifest.json",
+      "manifest_sha256": "1bcf41b170c4b4a806bac6701cbdf4fabd5c3c53fa67415d065ab95ce2703159",
+      "model_dir": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-mobile",
+      "passed": true,
+      "repo_id": "carlofkl/DreamLite-mobile",
+      "revision": "6695c3f4be230f0493fa5dbf78be3bc4d3bb2ab4",
+      "snapshot_payload_sha256": "3fb839f465793b01ecafc4df433031a063dd7b395a050960cde57c2807031337",
+      "total_bytes": 5071894300
+    },
+    "qwen_reader": {
+      "file_count": 14,
+      "manifest_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct/.snapshot_manifest.json",
+      "manifest_sha256": "159a504daaae6dc412535978f087150a0eb8e50164afd70a8a17f83906f1127c",
+      "model_dir": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+      "passed": true,
+      "repo_id": "Qwen/Qwen3-VL-4B-Instruct",
+      "revision": "ebb281ec70b05090aa6165b016eac8ec08e71b17",
+      "snapshot_payload_sha256": "45be3ffb00017b02bffa79f4f8e6f301760ac50c0bb78b2c4e5a7fe8aa3d52c6",
+      "total_bytes": 8887292732
+    }
+  },
+  "teachers": [
+    {
+      "additional_updates": 256,
+      "answer": "green",
+      "cumulative_latent_updates": 512,
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "9c3a387c78c03ff038f99b03c65266d73885c75ebf3587c1e90144312f959246",
+      "gold_eos_appended": true,
+      "latent_file_sha256": "5e32b0b26fe75845be0bf592973c82382f507a13642a7c2e5f1589863445b17a",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/918e7d2-five-query-target-refinement/bank/latents/target-00.pt",
+      "latent_sha256": "1205f1f132a613ba1c8b1030b0b6d4077a4bef4b2073debece6893da58c4f19d",
+      "parent": {
+        "historical_checkpoint_sha256": "ef12e84de29be2a714ba0502c664a0bdd202d788edf5b9ca4355c25a1ed3c9cd",
+        "latent_sha256": "9ec0fb6e52d2c5edea54bc56279ca218bf64266cb9404ab0f46b00f4dc5bb41f",
+        "question_id": "r3-train-semantic-001175-historical-prefix",
+        "target_index": 0,
+        "teacher_id": "r3-train-semantic-001175-historical-prefix-seed-2-9ec0fb6e52d2c5ed"
+      },
+      "parent_latent_updates": 256,
+      "qualification": "both FP32 and RGB, allfive fixed queries with strict answer and immediateEOS",
+      "qualification_sha256": "c60b2f80d7afc78a282434c96ff295bf3fb23abc9e1f9f60d8afc4bc337767e2",
+      "question_id": "r3-train-semantic-001175-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/918e7d2-five-query-target-refinement/lanes/lane-0/runs/target-00",
+      "target": {
+        "answer": "green",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-001175-historical-prefix-refined-1205f1f132a613ba"
+    },
+    {
+      "additional_updates": 256,
+      "answer": "green",
+      "cumulative_latent_updates": 512,
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "8e442354b133883df291d650a0191cccc8b604b279c5f88457d3fd25b7aaba92",
+      "gold_eos_appended": true,
+      "latent_file_sha256": "11b7f64909eaf8d1c566a081ffb41896973f6d3b4ff20975e9fd1b540d456007",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/918e7d2-five-query-target-refinement/bank/latents/target-01.pt",
+      "latent_sha256": "ca6ca6c17cb2ca03eaab52f5617cb5559a8360e5c7439d742b125ffef492447c",
+      "parent": {
+        "historical_checkpoint_sha256": "f45fbe8d0664b4fada922fbf26558f72443637fe653572d9af9b9e7d2b9eeea2",
+        "latent_sha256": "401fc66a615bce22577d208d8f10060621075101299511118c7d0c681a114fd9",
+        "question_id": "r3-train-semantic-000414-historical-prefix",
+        "target_index": 1,
+        "teacher_id": "r3-train-semantic-000414-historical-prefix-seed-2-401fc66a615bce22"
+      },
+      "parent_latent_updates": 256,
+      "qualification": "both FP32 and RGB, allfive fixed queries with strict answer and immediateEOS",
+      "qualification_sha256": "b84cd1d11f53bcff95c0a95dec7afce1286fad21b82bc6eb0b327e75ca174aa7",
+      "question_id": "r3-train-semantic-000414-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/918e7d2-five-query-target-refinement/lanes/lane-1/runs/target-01",
+      "target": {
+        "answer": "green",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000414-historical-prefix-refined-ca6ca6c17cb2ca03"
+    },
+    {
+      "additional_updates": 256,
+      "answer": "juice",
+      "cumulative_latent_updates": 512,
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "0052dbe8b27044df241409d902d9ed894df72c9fcba2b19975a0cc83995f19cf",
+      "gold_eos_appended": true,
+      "latent_file_sha256": "f8530f49f17692bc847e32dee79bb5e1bc3851052bbe1f45cb666f2ddd317f40",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/918e7d2-five-query-target-refinement/bank/latents/target-02.pt",
+      "latent_sha256": "d720560109475216b391a559ec9ebb54eff42b7e4b89a43fcea0fe9c47a37c3d",
+      "parent": {
+        "historical_checkpoint_sha256": "479588d5524c0e1823cb3e61ad00702d0e21d315ea3307acfb3ca947da20ba13",
+        "latent_sha256": "9f4761f210596547b3fd4e719c8c8688e79969d6c17c469d488b02080b685b84",
+        "question_id": "r3-train-semantic-000271-historical-prefix",
+        "target_index": 2,
+        "teacher_id": "r3-train-semantic-000271-historical-prefix-seed-3-9f4761f210596547"
+      },
+      "parent_latent_updates": 256,
+      "qualification": "both FP32 and RGB, allfive fixed queries with strict answer and immediateEOS",
+      "qualification_sha256": "b3b466b2e463462f83b08aaaa21c4898d74ccf34d1ebe9e044a0e79422a7ca5b",
+      "question_id": "r3-train-semantic-000271-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/918e7d2-five-query-target-refinement/lanes/lane-0/runs/target-02",
+      "target": {
+        "answer": "juice",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000271-historical-prefix-refined-d720560109475216"
+    },
+    {
+      "additional_updates": 256,
+      "answer": "juice",
+      "cumulative_latent_updates": 512,
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "7084bdfa2b939478a09d419d756010b982d717a4f6905bd5dd9f41e17d12ca8b",
+      "gold_eos_appended": true,
+      "latent_file_sha256": "7b3c9a0e121b963cfb61fb16b43ef3fee5e65c37e9f98e5f5ac9f0bc6f62dcb7",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/918e7d2-five-query-target-refinement/bank/latents/target-03.pt",
+      "latent_sha256": "34a0bb9af851bf6b5d90c222a252bcf11c620fffde0454d92a6a9159cf15743d",
+      "parent": {
+        "historical_checkpoint_sha256": "34427820a6113f3b3c90b2fa9c2689ee215047c6aac393ad597e6db91ec12f9a",
+        "latent_sha256": "c74d77d46d09f2c6e367fbc21c12d44e952ebbbc0eccf55b62310dc0df38b10b",
+        "question_id": "r3-train-semantic-001242-historical-prefix",
+        "target_index": 3,
+        "teacher_id": "r3-train-semantic-001242-historical-prefix-seed-0-c74d77d46d09f2c6"
+      },
+      "parent_latent_updates": 256,
+      "qualification": "both FP32 and RGB, allfive fixed queries with strict answer and immediateEOS",
+      "qualification_sha256": "c59d93fc232350ee3a3c22f3cee00a405ce0cbadccf6d712446e5887bbd24695",
+      "question_id": "r3-train-semantic-001242-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/918e7d2-five-query-target-refinement/lanes/lane-1/runs/target-03",
+      "target": {
+        "answer": "juice",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-001242-historical-prefix-refined-34a0bb9af851bf6b"
+    },
+    {
+      "additional_updates": 256,
+      "answer": "jazz",
+      "cumulative_latent_updates": 512,
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "c41cd5f772b9615276c2d15beae28483f830050f22b70c8b0c398ac2a4b41ce2",
+      "gold_eos_appended": true,
+      "latent_file_sha256": "cc78533f07267f606c886a3c38837f71a90f0015ef394bb48fbda003e8465913",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/918e7d2-five-query-target-refinement/bank/latents/target-04.pt",
+      "latent_sha256": "ee7b873a12120599d4a5f9616ceee52a893e1580fe6385a064b6d0cd56124b6f",
+      "parent": {
+        "historical_checkpoint_sha256": "32871a55c922bf93dcebfd70bee355db6ffb67e46c35bdc83a54513bdf98050f",
+        "latent_sha256": "e5ce438a6d0ef6955aa9102acad14c83124f09799443e0567be721e52295ced4",
+        "question_id": "r3-train-semantic-000550-historical-prefix",
+        "target_index": 4,
+        "teacher_id": "r3-train-semantic-000550-historical-prefix-seed-1-e5ce438a6d0ef695"
+      },
+      "parent_latent_updates": 256,
+      "qualification": "both FP32 and RGB, allfive fixed queries with strict answer and immediateEOS",
+      "qualification_sha256": "8c369eff079b1b99d96d8dd06ed635772bc06e9baa99378625dcb7326d23d728",
+      "question_id": "r3-train-semantic-000550-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/918e7d2-five-query-target-refinement/lanes/lane-0/runs/target-04",
+      "target": {
+        "answer": "jazz",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000550-historical-prefix-refined-ee7b873a12120599"
+    },
+    {
+      "additional_updates": 256,
+      "answer": "jazz",
+      "cumulative_latent_updates": 512,
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "a7b3a9c1be40ff05260e5d7159f006fc5180b6557c847d5758f78b24caef3f00",
+      "gold_eos_appended": true,
+      "latent_file_sha256": "006d789c1907a22e828e609c713669d17bc0375631291ded76e10ef6438720f8",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/918e7d2-five-query-target-refinement/bank/latents/target-05.pt",
+      "latent_sha256": "963b26011bcf42d0fb3ea6d297170ffa38ca34814680f6909515924cc177142b",
+      "parent": {
+        "historical_checkpoint_sha256": "cccb54a559e32c36ed96864520f160e08ec5dd97143539573bd87ace45c5f026",
+        "latent_sha256": "881eb84be9fee7dfce47ea1650a706606ed8c21c7a00695572dbcb2682d83a98",
+        "question_id": "r3-train-semantic-000190-historical-prefix",
+        "target_index": 5,
+        "teacher_id": "r3-train-semantic-000190-historical-prefix-seed-2-881eb84be9fee7df"
+      },
+      "parent_latent_updates": 256,
+      "qualification": "both FP32 and RGB, allfive fixed queries with strict answer and immediateEOS",
+      "qualification_sha256": "16e537c57c018ddde1f68f6938c769cff36cb0a749226ffac01eae6e77bcfa48",
+      "question_id": "r3-train-semantic-000190-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/918e7d2-five-query-target-refinement/lanes/lane-1/runs/target-05",
+      "target": {
+        "answer": "jazz",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000190-historical-prefix-refined-963b26011bcf42d0"
+    },
+    {
+      "additional_updates": 256,
+      "answer": "linen",
+      "cumulative_latent_updates": 512,
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "bbc7abd1e40bd00b4a71fa60fe3261d0ae3780e48f7cfb5d581c063d08e7e1c5",
+      "gold_eos_appended": true,
+      "latent_file_sha256": "90457715d5ed58f9f23c4a7489013115629de06a1133778f0a882bd2ae79117a",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/918e7d2-five-query-target-refinement/bank/latents/target-06.pt",
+      "latent_sha256": "6e8fcb0b3907b51ad08b58f1156336b3f7f5999ec449d91744fb9789a025bc57",
+      "parent": {
+        "historical_checkpoint_sha256": "72c415227f4bfab2f9711747d050a28d53d88adcc93f1511a8fd770fdb8b68d5",
+        "latent_sha256": "1b4460b4388debf27af6ac774e2fe3ade4956f8f9835b40aa881e41a5aa4f9c5",
+        "question_id": "r3-train-semantic-000608-historical-prefix",
+        "target_index": 6,
+        "teacher_id": "r3-train-semantic-000608-historical-prefix-seed-2-1b4460b4388debf2"
+      },
+      "parent_latent_updates": 256,
+      "qualification": "both FP32 and RGB, allfive fixed queries with strict answer and immediateEOS",
+      "qualification_sha256": "32a7974740679e96ea0d344e46fd0b5cad100cb555e0f0ed1556535ca346164d",
+      "question_id": "r3-train-semantic-000608-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/918e7d2-five-query-target-refinement/lanes/lane-0/runs/target-06",
+      "target": {
+        "answer": "linen",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000608-historical-prefix-refined-6e8fcb0b3907b51a"
+    },
+    {
+      "additional_updates": 256,
+      "answer": "linen",
+      "cumulative_latent_updates": 512,
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "a1fa56eaae659b3a17e038e74ee62706363dc952448e586d24709f07b93a377b",
+      "gold_eos_appended": true,
+      "latent_file_sha256": "80a8f8f4be1e2e564c23ae5ffda75ecbaf9221622c83629ef201faa920e9fa0d",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/918e7d2-five-query-target-refinement/bank/latents/target-07.pt",
+      "latent_sha256": "9f9e5b555c17750f877d495d82f52c10cf04d42e7c8e193800b392f4b3a27d06",
+      "parent": {
+        "historical_checkpoint_sha256": "8f7da9e5b136e90f95da55380edc05c7cef128d29a76be1c3ffc83f03d09c31a",
+        "latent_sha256": "a0c46d745285ee3212b6fa4ce09229d227818abc79c4965c1f10befa9baa07d0",
+        "question_id": "r3-train-semantic-000613-historical-prefix",
+        "target_index": 7,
+        "teacher_id": "r3-train-semantic-000613-historical-prefix-seed-3-a0c46d745285ee32"
+      },
+      "parent_latent_updates": 256,
+      "qualification": "both FP32 and RGB, allfive fixed queries with strict answer and immediateEOS",
+      "qualification_sha256": "6d039f8e36d5a32b070b30b8bb6082bcad9f899c750b87b5f33f4010ff576814",
+      "question_id": "r3-train-semantic-000613-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/918e7d2-five-query-target-refinement/lanes/lane-1/runs/target-07",
+      "target": {
+        "answer": "linen",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000613-historical-prefix-refined-9f9e5b555c17750f"
+    },
+    {
+      "additional_updates": 256,
+      "answer": "pasta",
+      "cumulative_latent_updates": 512,
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "75911963ba4d51c2fd5cf9c9da8d6d03ecb2a2895c208814e47f0d33be22180c",
+      "gold_eos_appended": true,
+      "latent_file_sha256": "d988f31e9203e29df0c1e735ada88bcad974a311c08383509764e00105fd846e",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/918e7d2-five-query-target-refinement/bank/latents/target-08.pt",
+      "latent_sha256": "b8bc9bca774d24c5a40c4ad26a9ce901dd9cbc035234c82e095384037355eca1",
+      "parent": {
+        "historical_checkpoint_sha256": "a41fae0d3f8e24c6c6f968aaa8a686b27d2f55b4f7543168372c4eaa9f59b4fe",
+        "latent_sha256": "a73fc81e5fc6eb12d6e9bb6ac3b7b7e82ce598d03258c166c6d0be33ac467b7f",
+        "question_id": "r3-train-semantic-000327-historical-prefix",
+        "target_index": 8,
+        "teacher_id": "r3-train-semantic-000327-historical-prefix-seed-3-a73fc81e5fc6eb12"
+      },
+      "parent_latent_updates": 256,
+      "qualification": "both FP32 and RGB, allfive fixed queries with strict answer and immediateEOS",
+      "qualification_sha256": "a5a5b06db67eee59f511fbd74a2c4a4ebb18f5fb5733b4d00e48ac3cda278ea3",
+      "question_id": "r3-train-semantic-000327-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/918e7d2-five-query-target-refinement/lanes/lane-0/runs/target-08",
+      "target": {
+        "answer": "pasta",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000327-historical-prefix-refined-b8bc9bca774d24c5"
+    },
+    {
+      "additional_updates": 256,
+      "answer": "pasta",
+      "cumulative_latent_updates": 512,
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "6d951551a1eeaff97633782999beaa94bc79760bc373c4d37d6801950e0b33da",
+      "gold_eos_appended": true,
+      "latent_file_sha256": "b77d36eb9930b3303618ab8124d60465579db856a115bc7046573271b4cbee3b",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/918e7d2-five-query-target-refinement/bank/latents/target-09.pt",
+      "latent_sha256": "6e896b1313c30213991697ba58c16214d1d4fb113df1f6ccc8fb53d8d4dd7965",
+      "parent": {
+        "historical_checkpoint_sha256": "8f14e0243057cc489efb8f6005fd5614a00277aee3cdede45170a4246027b06d",
+        "latent_sha256": "56d80540b0893945eda498835b2fb52fd2eec2d1859e2cebcd4762b20306b2e0",
+        "question_id": "r3-train-semantic-000147-historical-prefix",
+        "target_index": 9,
+        "teacher_id": "r3-train-semantic-000147-historical-prefix-seed-0-56d80540b0893945"
+      },
+      "parent_latent_updates": 256,
+      "qualification": "both FP32 and RGB, allfive fixed queries with strict answer and immediateEOS",
+      "qualification_sha256": "d276dc8695e33f7375ed671909195ef98485dfb65ba8bf45f9ec06017e45f18b",
+      "question_id": "r3-train-semantic-000147-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/918e7d2-five-query-target-refinement/lanes/lane-1/runs/target-09",
+      "target": {
+        "answer": "pasta",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000147-historical-prefix-refined-6e896b1313c30213"
+    },
+    {
+      "additional_updates": 256,
+      "answer": "no active preference",
+      "cumulative_latent_updates": 512,
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "c87dcda885bfab532102a9b5359ae6757b324c9d29c2ada121250017ae020bea",
+      "gold_eos_appended": true,
+      "latent_file_sha256": "0e57f935418270e2dcc3024f8b4e50a78b9b77cb780d3f694948be665615f8a5",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/918e7d2-five-query-target-refinement/bank/latents/target-10.pt",
+      "latent_sha256": "973c068b7e8370578b8858f9414f9167e15a144107f774566c00599518905a9b",
+      "parent": {
+        "historical_checkpoint_sha256": "f2af49a3ebc591a35bf76c5458d26e202e3950fabda27c9ee34494eaa203f966",
+        "latent_sha256": "ac5912b26a2236ae83a5b006d05ca47a51ec9a3818bd0dbbf0016ef03d4e61b7",
+        "question_id": "r3-train-semantic-000986-historical-prefix",
+        "target_index": 10,
+        "teacher_id": "r3-train-semantic-000986-historical-prefix-seed-3-ac5912b26a2236ae"
+      },
+      "parent_latent_updates": 256,
+      "qualification": "both FP32 and RGB, allfive fixed queries with strict answer and immediateEOS",
+      "qualification_sha256": "d69a05e31a230a55476b29c08fbf61340ead3038728fa2d0d87e82d9a2f616e2",
+      "question_id": "r3-train-semantic-000986-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/918e7d2-five-query-target-refinement/lanes/lane-0/runs/target-10",
+      "target": {
+        "answer": "no active preference",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000986-historical-prefix-refined-973c068b7e837057"
+    },
+    {
+      "additional_updates": 256,
+      "answer": "no active preference",
+      "cumulative_latent_updates": 512,
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "da917a33cf600dce041aab43fb86ffdfa13e3c63109bedde2d9aa922858fc166",
+      "gold_eos_appended": true,
+      "latent_file_sha256": "15c2c6bb827df4ad42d957d745b44d74e2d621d03b72748e09ef0ca541b821cd",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/918e7d2-five-query-target-refinement/bank/latents/target-11.pt",
+      "latent_sha256": "1e59c50fc18d0f8998fa1a4efcd3dd26cec45def66b30f525eb6c457fd505735",
+      "parent": {
+        "historical_checkpoint_sha256": "0882ab11fa87156aaee874b5dc688a06619f5773794fbe5007015c839747f69e",
+        "latent_sha256": "d2f80134a5611e74f5941337057ec9be5e16dec8e5c6cdd428fd7d395da905ba",
+        "question_id": "r3-train-semantic-000024-historical-prefix",
+        "target_index": 11,
+        "teacher_id": "r3-train-semantic-000024-historical-prefix-seed-3-d2f80134a5611e74"
+      },
+      "parent_latent_updates": 256,
+      "qualification": "both FP32 and RGB, allfive fixed queries with strict answer and immediateEOS",
+      "qualification_sha256": "6eab8930a0eb3a7cf66184b82a72c213c060c1cbbd1134b237baca9216c4aa75",
+      "question_id": "r3-train-semantic-000024-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/918e7d2-five-query-target-refinement/lanes/lane-1/runs/target-11",
+      "target": {
+        "answer": "no active preference",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000024-historical-prefix-refined-1e59c50fc18d0f89"
+    },
+    {
+      "additional_updates": 256,
+      "answer": "no active preference",
+      "cumulative_latent_updates": 512,
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "80e3ba158d02740669dccf96b7dc5b28a3e17daf782fda2af1b3a44f0313c7a5",
+      "gold_eos_appended": true,
+      "latent_file_sha256": "28706616c4edff70fde1f316dbf79a029055aaea332f78ece8007a08ea85b2d6",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/918e7d2-five-query-target-refinement/bank/latents/target-12.pt",
+      "latent_sha256": "81af971030818ecb79a430bb91024f73ae140f0de69965e3b08581c5da2cf1f9",
+      "parent": {
+        "historical_checkpoint_sha256": "7305d1a39965a5ffa4fa4db7cb82a9c6daa40afc917d5af00887bc6feb833ae7",
+        "latent_sha256": "ac5276b973ddc619c71ee064f9aa4b4058fb64d905e045c54a91d01b09b126af",
+        "question_id": "r3-train-semantic-001048-historical-prefix",
+        "target_index": 12,
+        "teacher_id": "r3-train-semantic-001048-historical-prefix-seed-0-ac5276b973ddc619"
+      },
+      "parent_latent_updates": 256,
+      "qualification": "both FP32 and RGB, allfive fixed queries with strict answer and immediateEOS",
+      "qualification_sha256": "5ecd6e7bf82c72452a5d23a41e5588a76c90afb3aeeaea6b949464ff311731b1",
+      "question_id": "r3-train-semantic-001048-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/918e7d2-five-query-target-refinement/lanes/lane-0/runs/target-12",
+      "target": {
+        "answer": "no active preference",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-001048-historical-prefix-refined-81af971030818ecb"
+    },
+    {
+      "additional_updates": 256,
+      "answer": "no active preference",
+      "cumulative_latent_updates": 512,
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "9fb8c166ecc844a805cb323ece91af21c42c7bb5fe03a89b19c3294a0cb90e3a",
+      "gold_eos_appended": true,
+      "latent_file_sha256": "3af86011addb45842beda50c270712b1be8a31a1ec9798716c0c499872a162ff",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/918e7d2-five-query-target-refinement/bank/latents/target-13.pt",
+      "latent_sha256": "8fb2b02162433e6b0dd486d5a250a38eeecf6a253b82cfa54ba3e0b0191a7b6e",
+      "parent": {
+        "historical_checkpoint_sha256": "9b85211da5a91160994dc56976e6475c4fa10b38de48fc9f4d2ecd13e01d6e01",
+        "latent_sha256": "ccca72a52bcdb948e0ab373186f3c3f8204a3ef3e076a64fb1c524d95a6a88e4",
+        "question_id": "r3-train-semantic-001224-historical-prefix",
+        "target_index": 13,
+        "teacher_id": "r3-train-semantic-001224-historical-prefix-seed-2-ccca72a52bcdb948"
+      },
+      "parent_latent_updates": 256,
+      "qualification": "both FP32 and RGB, allfive fixed queries with strict answer and immediateEOS",
+      "qualification_sha256": "09ccd4f4d6c48d7b07c1ee00ef71695699f55ae316a38cfa509c79ec53a13d21",
+      "question_id": "r3-train-semantic-001224-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/918e7d2-five-query-target-refinement/lanes/lane-1/runs/target-13",
+      "target": {
+        "answer": "no active preference",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-001224-historical-prefix-refined-8fb2b02162433e6b"
+    },
+    {
+      "additional_updates": 256,
+      "answer": "no active preference",
+      "cumulative_latent_updates": 512,
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "3b67afc3a8f907339641b8ceb61f1159e0613d8dab8543c545a11ccc654b634d",
+      "gold_eos_appended": true,
+      "latent_file_sha256": "5b3460661caffba9f96b8236c362d5f058c6a392adbd57edc04e9d9a4cffe09d",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/918e7d2-five-query-target-refinement/bank/latents/target-14.pt",
+      "latent_sha256": "a46624fede3533417e44968a64441e33faca46e9a24cbc13598be5a4eee4c656",
+      "parent": {
+        "historical_checkpoint_sha256": "14adb2c21fa0bd17ea863d75cb009536722cf1948d7147a06d455e635610cf1a",
+        "latent_sha256": "709cec593210b13f5981b596800fa3ee8ce4fd62503c041c4a1f92bd07d7fc3b",
+        "question_id": "r3-train-semantic-000250-historical-prefix",
+        "target_index": 14,
+        "teacher_id": "r3-train-semantic-000250-historical-prefix-seed-0-709cec593210b13f"
+      },
+      "parent_latent_updates": 256,
+      "qualification": "both FP32 and RGB, allfive fixed queries with strict answer and immediateEOS",
+      "qualification_sha256": "7523efedf02671151160abdd506504165f0a9791a82e638eae3bc7adf17e7759",
+      "question_id": "r3-train-semantic-000250-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/918e7d2-five-query-target-refinement/lanes/lane-0/runs/target-14",
+      "target": {
+        "answer": "no active preference",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000250-historical-prefix-refined-a46624fede353341"
+    },
+    {
+      "additional_updates": 256,
+      "answer": "no active preference",
+      "cumulative_latent_updates": 512,
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "11839513272171608a9e1d8e054448da0a2f01a53676e7ca01245dc7e46773a1",
+      "gold_eos_appended": true,
+      "latent_file_sha256": "202109fa6b02f490f5ac18672a577cead2286f06bf4a99522c17d99124e9ce7a",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/918e7d2-five-query-target-refinement/bank/latents/target-15.pt",
+      "latent_sha256": "d3022cb44e003c4da746d70ad48c4ba70ca2c772dd0c0a3ec3d0cbff402a2a3e",
+      "parent": {
+        "historical_checkpoint_sha256": "82ec7aebef4b9d90d42f5d7d3ddc757f146642c515aa2af2e7f7d2d280451585",
+        "latent_sha256": "b89c347c4379fbb32ad7f934820904548a967d61c6d6d826d48668c66649eec9",
+        "question_id": "r3-train-semantic-001209-historical-prefix",
+        "target_index": 15,
+        "teacher_id": "r3-train-semantic-001209-historical-prefix-seed-2-b89c347c4379fbb3"
+      },
+      "parent_latent_updates": 256,
+      "qualification": "both FP32 and RGB, allfive fixed queries with strict answer and immediateEOS",
+      "qualification_sha256": "ae25952bdad25fa9143e5671e0323fe203230e1d9cb87b675fd09cd8931301c8",
+      "question_id": "r3-train-semantic-001209-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/918e7d2-five-query-target-refinement/lanes/lane-1/runs/target-15",
+      "target": {
+        "answer": "no active preference",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-001209-historical-prefix-refined-d3022cb44e003c4d"
+    }
+  ]
+}

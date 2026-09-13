@@ -1,0 +1,71 @@
+{
+  "global_microbatches": 4,
+  "gradient_max_absolute_error": 4.656612873077393e-10,
+  "gradient_relative_l2_error": 4.2115734627840765e-08,
+  "gradient_relative_max_error": 5.602469389227751e-08,
+  "identical_draws_and_losses": true,
+  "parallel_microbatches": [
+    {
+      "effective_sigma": 0.39250802993774414,
+      "flow_matching_mse": 0.0026923390105366707,
+      "noise_seed": 3295609906537195916,
+      "question_id": "r5-f1-392d41fd097d069c42218e0a-from-jazz-set-to-jazz-wording-0-expanded-6",
+      "teacher_id": "r5-f1-392d41fd097d069c42218e0a-from-jazz-set-to-jazz-wording-0-expanded-6-842d8d949f8bcf55"
+    },
+    {
+      "effective_sigma": 0.3416496515274048,
+      "flow_matching_mse": 0.003924921154975891,
+      "noise_seed": 703349581737675262,
+      "question_id": "r5-f1-392d41fd097d069c42218e0a-from-jazz-noop-to-jazz-wording-0-expanded-5",
+      "teacher_id": "r5-f1-392d41fd097d069c42218e0a-from-jazz-noop-to-jazz-wording-0-expanded-5-842d8d949f8bcf55"
+    },
+    {
+      "effective_sigma": 0.20776325464248657,
+      "flow_matching_mse": 0.008879155851900578,
+      "noise_seed": 5053010510421626954,
+      "question_id": "r5-f1-392d41fd097d069c42218e0a-from-jazz-clear-to-clear-wording-0-expanded-3",
+      "teacher_id": "r5-f1-392d41fd097d069c42218e0a-from-jazz-clear-to-clear-wording-0-expanded-3-c3132b6f9575ecc6"
+    },
+    {
+      "effective_sigma": 0.838670015335083,
+      "flow_matching_mse": 0.0012295182095840573,
+      "noise_seed": 3399289782449038156,
+      "question_id": "r5-f1-392d41fd097d069c42218e0a-from-gray-set-to-jazz-wording-0",
+      "teacher_id": "r5-f1-392d41fd097d069c42218e0a-from-gray-set-to-jazz-wording-0-842d8d949f8bcf55"
+    }
+  ],
+  "passed": true,
+  "relative_tolerance": 2e-06,
+  "scope": "actual full U-Net gradient only; no optimizer update or success claim",
+  "serial_microbatches": [
+    {
+      "effective_sigma": 0.39250802993774414,
+      "flow_matching_mse": 0.0026923390105366707,
+      "noise_seed": 3295609906537195916,
+      "question_id": "r5-f1-392d41fd097d069c42218e0a-from-jazz-set-to-jazz-wording-0-expanded-6",
+      "teacher_id": "r5-f1-392d41fd097d069c42218e0a-from-jazz-set-to-jazz-wording-0-expanded-6-842d8d949f8bcf55"
+    },
+    {
+      "effective_sigma": 0.3416496515274048,
+      "flow_matching_mse": 0.003924921154975891,
+      "noise_seed": 703349581737675262,
+      "question_id": "r5-f1-392d41fd097d069c42218e0a-from-jazz-noop-to-jazz-wording-0-expanded-5",
+      "teacher_id": "r5-f1-392d41fd097d069c42218e0a-from-jazz-noop-to-jazz-wording-0-expanded-5-842d8d949f8bcf55"
+    },
+    {
+      "effective_sigma": 0.20776325464248657,
+      "flow_matching_mse": 0.008879155851900578,
+      "noise_seed": 5053010510421626954,
+      "question_id": "r5-f1-392d41fd097d069c42218e0a-from-jazz-clear-to-clear-wording-0-expanded-3",
+      "teacher_id": "r5-f1-392d41fd097d069c42218e0a-from-jazz-clear-to-clear-wording-0-expanded-3-c3132b6f9575ecc6"
+    },
+    {
+      "effective_sigma": 0.838670015335083,
+      "flow_matching_mse": 0.0012295182095840573,
+      "noise_seed": 3399289782449038156,
+      "question_id": "r5-f1-392d41fd097d069c42218e0a-from-gray-set-to-jazz-wording-0",
+      "teacher_id": "r5-f1-392d41fd097d069c42218e0a-from-gray-set-to-jazz-wording-0-842d8d949f8bcf55"
+    }
+  ],
+  "world_size": 4
+}
