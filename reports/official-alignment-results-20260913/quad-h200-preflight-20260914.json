@@ -1,0 +1,62 @@
+{
+  "notebook": "dl-official-exp-h200x4-20260914",
+  "ranks": [
+    {
+      "rank": 0,
+      "pid": 9328,
+      "device": "NVIDIA H200",
+      "total_memory_bytes": 150111977472,
+      "torch": "2.7.0a0+ecf3bae40a.nv25.02",
+      "cuda_runtime": "12.8",
+      "nccl": [
+        2,
+        25,
+        1
+      ],
+      "all_reduce_exact": true
+    },
+    {
+      "rank": 1,
+      "pid": 9329,
+      "device": "NVIDIA H200",
+      "total_memory_bytes": 150111977472,
+      "torch": "2.7.0a0+ecf3bae40a.nv25.02",
+      "cuda_runtime": "12.8",
+      "nccl": [
+        2,
+        25,
+        1
+      ],
+      "all_reduce_exact": true
+    },
+    {
+      "rank": 2,
+      "pid": 9330,
+      "device": "NVIDIA H200",
+      "total_memory_bytes": 150111977472,
+      "torch": "2.7.0a0+ecf3bae40a.nv25.02",
+      "cuda_runtime": "12.8",
+      "nccl": [
+        2,
+        25,
+        1
+      ],
+      "all_reduce_exact": true
+    },
+    {
+      "rank": 3,
+      "pid": 9331,
+      "device": "NVIDIA H200",
+      "total_memory_bytes": 150111977472,
+      "torch": "2.7.0a0+ecf3bae40a.nv25.02",
+      "cuda_runtime": "12.8",
+      "nccl": [
+        2,
+        25,
+        1
+      ],
+      "all_reduce_exact": true
+    }
+  ],
+  "scope": "CUDA allocation and NCCL SUM smoke test only; not model-gradient parity or training results."
+}

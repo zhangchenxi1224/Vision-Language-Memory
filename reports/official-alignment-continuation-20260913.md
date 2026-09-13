@@ -1,5 +1,13 @@
 # Goal 接续位置
 
+## 09-14 02:54 用户追加四卡申请：新4H200已RUNNING且通信通过
+
+- **最新用户明确授权**：新起4H200试验，保留目前实例，排到更高算力后替换。已实际创建 **dl-official-exp-h200x4-20260914**，02:51:34就绪，node **qb-prod-gpu2352**，开发区-H200-3号机房-2-cuda13.2版本、4H200/80CPU/900GiB/shm128，原NGC25.02/CUDA12.8镜像，priority4，480min自动停止（约10:51CST）。该分区当时29空闲GPU，原CUDA12.8分区仅2。无需再创建相同新实例；后续训练优先这台已就绪四卡，替代“继续等用户旧r3排队”的旧计划。
+- **四卡实际预检通过**：驱动595.58.03，每卡143771MiB，启动前全部0MiB；torch2.7.0a0+ecf3bae40a.nv25.02、CUDA runtime12.8、NCCL2.25.1，四rank分配及1024元素SUM全部逐位等于10。P/runs/.../quad-h200-preflight-20260914.json，SHA **8712126ce010371815b9dc10d9f3a1d1ea4047927a7f37c93c65c7a89e384f4f**。脚本同prefix.py及run-quad-h200-preflight-20260914.sh，本地.cache有对应副本。30768已exit0，9328–9331仅为已结束的预检worker，不是训练进程。此检查不是完整模型梯度等价证明；新训练仍执行既定全模型四卡首步验证。共享GPU环境和bb checkpoint路径实际可见。
+- **旧实例保留**：当前单卡dl-logical-val-h200x1-20260914继续完成完整serial suite；用户vlm-r11-trust-h200x4-20260907-r3及其他用户实例不停止/删除。应在四卡真正接手且旧实例当前工作完成后再处理旧临时资源，不按历史记录提前清理。当前尚未在新四卡启动新模型训练；新训练协议仍需完整失败结果决定，不能把资源预检称为实验成功。
+- **prefix0已远端完整完成：428/480，76/96图全五问**（560raw含80对照、112PT全部remote检查通过）。archive SHA **19a0b435b1682d756adb338adb53866266b43d4b044c828e8c3c030226fb922d**，complete **52698200aa8240fbdb5fd52badaa643b00b223871ab4cefbd9daf44554eebbbd**。完整archive下载 **96000仍在进行**，目标.cache/16bc3d0-logical-prefix0-evidence.tgz，timeout1800；尚未本地重算，不能提前归档为验证通过。
+- **当前actual GPU主任务**：旧单卡suite21419，prefix1 parent398849/worker399611，02:54实测Rl。prefix0旧264618/264996已退出。等待driver378979仍waiting_for_complete_validation，按17f35be原协议在旧单卡随后首步对照；若将对照提前转到新四卡，必须先完成独立新启动方案，防止与该等待driver重复同一输出。当前两套live源码保持不动。
+
 ## 09-14 02:49 首步诊断已部署并排队；历史prefix0实际运行
 
 - **当前源码提交17f35be与runner提交790ddc5均已push**，本轮完整单次/chain证据均已本地重算并归档，非阻塞turn。全部传输句柄已终态，无未完成下载；下一步收prefix0/1与实际CLI的完整结果。
