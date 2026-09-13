@@ -1,5 +1,13 @@
 # Goal 接续位置
 
+## 09-14 02:43 连续写入完整本地复核通过；准备首步条件诊断
+
+- 上节单次证据已commit/push **2004052**。连续写入亦已完成：390/480、78/96图全五问、7/16整链；全90失败在清除和后续no-op，40条明确返回旧jazz/ambient，其余50为非约定无偏好回答。旧链worker132005/132729已退出，不再poll为live。
+- **新chains完整archive已下载且本地全480raw/96PNG复核成功**，85,861,869字节，SHA **61d56b95032377341a080333ac4887888c5559e8aa0daf2e857d5948ca66669b**；远端collector实际96PT通过，complete **9ffa78a310a2860b2fdab8def0978776dc7238d587f10e934639a04da8900554**。37172下载exit0、94080本地verifierexit0、63784summary下载exit0。archive/summary/local verification已放results，待本轮commit。此前单次和端点所有传输也已终态，无未完成下载。
+- **实际live仍suite21419，当前prefix0 parent264618/worker264996**；02:37实测live Rl、130/560raw，尚无完整历史结果。随后prefix1、package和CLI自动执行，截止05:30CST。保持用户四卡PENDING实例，owned单卡不要提前释放。两个GPU检查句柄12595/22648也已exit0。
+- 新`diagnose_training_loss_by_condition.py`已实际对两封存端点archive各4832step/19328draw完成，输出84cdfdb/bb34092-training-loss-by-condition.json在results。历史组最后四分之一在线loss明显下降，清除组均值近似不变；在线loss不能和端点首步误差直接作因果比较。
+- 因此准备了**新的零更新首步条件诊断**，非新训练策略：`scripts/probes/logical_first_step_condition.py`，协议`reports/official-logical-first-step-condition-plan-20260914.md`。全部151×2 cell，首先逐位复现保存的native首步，再同源/噪声比较raw训练条件首步，以及sigma0.999真实FM样本/整数999预测。保存所有速度张量，不作Reader成功判定，不替换原生推理。3项hook/条件回归测试实际通过。**尚未部署/启动该probe**；只能在serial suite全部完成且GPU空闲之后运行，不能抢占当前完整验证或改变live16bc3d0 checkout。后续新训练策略仍待完整独立结果与诊断确定。
+
 ## 09-14 02:32 单次验证完整归档；连续写入即将完成
 
 - **本轮有实质进展，goal仍active**：单次证据完整下载后本地全部390raw/72PNG重算通过；原生路径302图/8456步诊断也已核验，见303cd41。新单次严格结果280/360，56/72图全五问；全部80失败来自clear_original_training_event的16噪声，原始回答及分区在logical31-validation-review.md和logical31-single-failure-partition.json。其余280条通过。不能放宽评分或宣告可用。
