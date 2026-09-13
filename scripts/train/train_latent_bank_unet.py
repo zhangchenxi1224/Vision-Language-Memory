@@ -123,14 +123,27 @@ def trainable_unet_parameters(unet, scope="lora"):
     return [p for _,p in named]
 
 
-def verify_baseline_reference(output_dir, reference, expected_result_sha256):
+def verify_baseline_reference(output_dir, reference, expected_result_sha256, *, native_condition_control=False):
     """Fail before optimization if the co-located/full-weight baseline differs."""
     if not expected_result_sha256 or file_sha256(reference/"train/result.json")!=expected_result_sha256:
         raise RuntimeError("Reference result hash mismatch")
     terminal=json.loads((reference/"terminal.json").read_text())
     if terminal.get("state")!="completed" or terminal["training_result_sha256"]!=expected_result_sha256:
         raise RuntimeError("Reference is not a verified completed run")
-    if json.loads((output_dir/"runtime.json").read_text())!=json.loads((reference/"train/runtime.json").read_text()):
+    current_runtime=json.loads((output_dir/"runtime.json").read_text())
+    prior_runtime=json.loads((reference/"train/runtime.json").read_text())
+    if native_condition_control:
+        if (current_runtime['additional_protocol_binding']['train_prompt'] !=
+                'native Base edit, conditional row of upstream three-branch encoding'
+                or prior_runtime['additional_protocol_binding']['train_prompt'] != 'raw event, upstream LoRA example'
+                or set(current_runtime['condition_sha256']) != set(prior_runtime['condition_sha256'])
+                or not current_runtime['condition_sha256']):
+            raise RuntimeError('Unexpected native/raw training-condition control')
+        # Only the explicitly changed training condition may differ. Inference,
+        # models, source images, termination and effective sigma arrays stay exact.
+        current_runtime['condition_sha256']=prior_runtime['condition_sha256']
+        current_runtime['additional_protocol_binding']['train_prompt']=prior_runtime['additional_protocol_binding']['train_prompt']
+    if current_runtime!=prior_runtime:
         raise RuntimeError("Reference model, condition or native schedule differs")
     left,right=output_dir/"baseline",reference/"train/baseline"
     hashes=[json.loads((p/"complete.json").read_text())["artifact_hashes"] for p in (left,right)]
@@ -162,21 +175,28 @@ def verify_baseline_reference(output_dir, reference, expected_result_sha256):
     report={"reference":str(reference),"reference_result_sha256":expected_result_sha256,
         "bitwise_latents_and_images":True,"bitwise_trajectories":True,
         "identical_raw_generation_records":True,"samples":checked}
+    if native_condition_control:
+        report['explicit_training_condition_change']='official_raw -> native_base; only encoder hashes and train_prompt metadata may differ'
     write_json(output_dir/"baseline-reference-check.json",report)
     return report
 
 
-def verify_initialized_baseline_reference(output_dir, reference, expected_result_sha256):
+def verify_initialized_baseline_reference(output_dir, reference, expected_result_sha256, *, native_condition_control=False):
     """Compare two newly measured baselines from the same explicit parameter export."""
     current = json.loads((output_dir / 'identity.json').read_text())
     prior = json.loads((reference / 'train/identity.json').read_text())
     if not current.get('initial_writer') or not prior.get('initial_writer'):
         raise ValueError('Both baselines require an explicit initialized Writer')
+    if native_condition_control and (current.get('prompt_style')!='native_base' or prior.get('prompt_style')!='official_raw'
+            or current.get('model_variant')!='base' or current.get('sampling')!=prior.get('sampling')):
+        raise ValueError('Native condition control requires the same Base sampler and explicit raw/native styles')
     for key in ('initial_writer', 'bank_manifest_sha256', 'seed', 'eval_seeds', 'model_variant', 'trainable_scope',
                 'flow_protocol', 'prompt_style', 'steps', 'lr', 'gradient_accumulation_steps', 'weight_decay'):
+        if key=='prompt_style' and native_condition_control:
+            continue
         if current.get(key) != prior.get(key):
             raise ValueError('Controlled sampler baseline differs in ' + key)
-    return verify_baseline_reference(output_dir, reference, expected_result_sha256)
+    return verify_baseline_reference(output_dir, reference, expected_result_sha256, native_condition_control=native_condition_control)
 
 
 def frozen_audit(pipe, reader, versions: dict[str, int], *, scope="lora") -> None:
@@ -565,6 +585,12 @@ def run(args) -> dict:
             raise ValueError('Initialized baseline match requires its result SHA and an explicit parameter initialization')
         binding['initial_baseline_match'] = {'reference': str(args.initial_baseline_match),
             'result_sha256': args.initial_baseline_match_result_sha256, 'baseline_is_measured_again': True}
+        if getattr(args, 'native_condition_baseline_control', False):
+            if args.model_variant!='base' or args.prompt_style!='native_base':
+                raise ValueError('Native condition baseline control requires Base/native_base')
+            binding['initial_baseline_match']['training_condition_control']='official_raw -> native_base'
+    elif getattr(args, 'native_condition_baseline_control', False):
+        raise ValueError('Native condition control requires a sealed initialized baseline reference')
     if parallel.enabled:
         binding["data_parallel"] = {"world_size": parallel.world,
             "nccl_algorithm": "Ring", "nccl_protocol": "Simple", "gradient_bucket_bytes": 32 * 1024 * 1024,
@@ -619,7 +645,8 @@ def run(args) -> dict:
         outcome = None
         if parallel.root:
             try:
-                verify_initialized_baseline_reference(args.output_dir, args.initial_baseline_match, args.initial_baseline_match_result_sha256)
+                verify_initialized_baseline_reference(args.output_dir, args.initial_baseline_match, args.initial_baseline_match_result_sha256,
+                    native_condition_control=getattr(args, 'native_condition_baseline_control', False))
                 outcome = {'passed': True}
             except Exception as error:
                 outcome = {'passed': False, 'error': str(error)}
@@ -804,10 +831,11 @@ def parser() -> argparse.ArgumentParser:
     p.add_argument('--initial-baseline-match', type=Path)
     p.add_argument('--initial-baseline-match-result-sha256')
     p.add_argument('--sampling-strategy', choices=('condition', 'logical_condition'), default='condition')
+    p.add_argument('--native-condition-baseline-control', action='store_true')
     p.add_argument("--gradient-accumulation-steps", type=int, default=4)
     p.add_argument("--weight-decay", type=float, default=1e-4)
     p.add_argument("--flow-protocol", choices=("official", "legacy_anchored"), default="official")
-    p.add_argument("--prompt-style", choices=("official_raw", "mobile_diptych"), default="official_raw")
+    p.add_argument("--prompt-style", choices=("official_raw", "mobile_diptych", "native_base"), default="official_raw")
     p.add_argument("--target-mode", choices=("bank", "single"), default="bank")
     p.add_argument("--eval-seeds", type=int, default=8)
     p.add_argument("--resume", action="store_true")

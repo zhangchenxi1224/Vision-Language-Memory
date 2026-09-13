@@ -43,6 +43,8 @@ def main():
     p.add_argument('--initial-baseline-match', type=Path)
     p.add_argument('--initial-baseline-match-result-sha256')
     p.add_argument('--sampling-strategy', choices=('condition', 'logical_condition'), default='condition')
+    p.add_argument('--prompt-style', choices=('official_raw', 'native_base'), default='official_raw')
+    p.add_argument('--native-condition-baseline-control', action='store_true')
     p.add_argument("--seed", type=int, default=20260913)
     p.add_argument("--deadline-unix", type=float, required=True)
     p.add_argument("--resume", action="store_true")
@@ -92,6 +94,13 @@ def main():
         binding.update(initial_writer_package=str(a.initial_writer_package.resolve()),
                        initial_writer_package_manifest_sha256=a.initial_writer_package_sha256)
     binding['sampling_strategy'] = a.sampling_strategy
+    if a.prompt_style!='official_raw':
+        if a.model_variant!='base':raise ValueError('native_base conditioning is restricted to Base')
+        binding['training_prompt_style']=a.prompt_style
+    if a.native_condition_baseline_control:
+        if not a.initial_baseline_match or a.prompt_style!='native_base':
+            raise ValueError('Native condition control requires a reference and native_base style')
+        binding['native_condition_baseline_control']=True
     if a.initial_baseline_match:
         binding['initial_baseline_match'] = {'reference': str(a.initial_baseline_match), 'result_sha256': a.initial_baseline_match_result_sha256}
     write_json(a.output_dir/"dispatch.json",binding)
@@ -113,13 +122,15 @@ def main():
     train=[sys.executable,"-u",str(ROOT/"scripts/train/train_latent_bank_unet.py"),
         "--bank-manifest",str(a.bank_manifest),"--output-dir",str(a.output_dir/"train"),
         "--dreamlite",str(a.dreamlite),"--reader-model",str(a.reader),"--expected-commit",a.expected_commit,
-        "--flow-protocol","official","--prompt-style","official_raw","--target-mode",a.target_mode,
+        "--flow-protocol","official","--prompt-style",a.prompt_style,"--target-mode",a.target_mode,
         "--steps",str(a.steps),"--seed",str(a.seed),"--lora-rank","16","--lr","5e-5",
         "--gradient-accumulation-steps","4","--weight-decay","1e-4","--eval-seeds",str(a.eval_seeds),
         "--deadline-unix",str(a.deadline_unix)]
     train.extend(["--model-variant",a.model_variant])
     train.extend(["--trainable-scope",a.trainable_scope,"--checkpoint-interval",str(a.checkpoint_interval)])
     train.extend(['--sampling-strategy', a.sampling_strategy])
+    if a.native_condition_baseline_control:
+        train.append('--native-condition-baseline-control')
     if a.initial_baseline_match:
         train.extend(['--initial-baseline-match', str(a.initial_baseline_match),
             '--initial-baseline-match-result-sha256', a.initial_baseline_match_result_sha256])

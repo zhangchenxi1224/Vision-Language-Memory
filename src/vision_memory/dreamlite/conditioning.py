@@ -25,6 +25,22 @@ def official_mobile_edit_prompt(event_text: str) -> str:
 
 
 @torch.no_grad()
+def encode_native_base_edit_condition(pipeline: Any, source_image: Any, event_text: str,
+                                     *, device: Any, dtype: Any) -> EditConditioning:
+    """Cache the exact conditional row requested by upstream Base edit inference.
+
+    Preserve all three encoder prompts before selecting the conditional row so
+    padding and multimodal positions agree with native inference. This is an
+    explicit alternative to the upstream LoRA example's raw-event training input.
+    """
+    embeds, mask = pipeline.encode_prompt(mode="edit", prompts=["", "", official_mobile_edit_prompt(event_text)],
+        image=source_image, device=device, dtype=dtype)
+    if embeds.ndim != 3 or embeds.shape[0] != 3 or mask.shape != embeds.shape[:2]:
+        raise ValueError("Unexpected native Base three-branch condition shape")
+    return EditConditioning(embeds[2:3].detach().clone(), mask[2:3].detach().clone())
+
+
+@torch.no_grad()
 def encode_image_edit_condition(pipeline: Any, source_image: Any, event_text: str,
                                 *, device: Any, dtype: Any,
                                 prompt_style: str = "official_raw") -> EditConditioning:

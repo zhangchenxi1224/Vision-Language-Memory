@@ -1,0 +1,70 @@
+{
+  "archive_sha256": "24cdf7bb88dc23298167a165d3c011cde066a1c866bfdfe0944ee2d9149ec611",
+  "cells_verified": 302,
+  "partitions": {
+    "all": {
+      "arms": {
+        "native_sigma1": {
+          "maximum_mse": 0.2034429843277648,
+          "mean_mse": 0.008984598390711356,
+          "median_mse": 0.0006789820912198358
+        },
+        "training_raw_sigma0.999_integer999": {
+          "maximum_mse": 0.009086538656397112,
+          "mean_mse": 0.0009694265976096598,
+          "median_mse": 0.0006251533042436061
+        },
+        "training_raw_sigma1": {
+          "maximum_mse": 0.008974163014921481,
+          "mean_mse": 0.0009622916024661964,
+          "median_mse": 0.0006234277150169905
+        }
+      },
+      "cells": 302,
+      "raw_mse_lower_than_native": 279
+    },
+    "development_all_five_correct": {
+      "arms": {
+        "native_sigma1": {
+          "maximum_mse": 0.15302065895726097,
+          "mean_mse": 0.0036722472992709258,
+          "median_mse": 0.0006737469048863223
+        },
+        "training_raw_sigma0.999_integer999": {
+          "maximum_mse": 0.009086538656397112,
+          "mean_mse": 0.0009791704972393902,
+          "median_mse": 0.0006214647753383175
+        },
+        "training_raw_sigma1": {
+          "maximum_mse": 0.008974163014921481,
+          "mean_mse": 0.0009718944829614271,
+          "median_mse": 0.0006226713218990185
+        }
+      },
+      "cells": 292,
+      "raw_mse_lower_than_native": 269
+    },
+    "development_not_all_five_correct": {
+      "arms": {
+        "native_sigma1": {
+          "maximum_mse": 0.2034429843277648,
+          "mean_mse": 0.16410525026077188,
+          "median_mse": 0.1546722413006804
+        },
+        "training_raw_sigma0.999_integer999": {
+          "maximum_mse": 0.0007698862018447709,
+          "mean_mse": 0.0006849047284215289,
+          "median_mse": 0.0006847680733709952
+        },
+        "training_raw_sigma1": {
+          "maximum_mse": 0.0007804589616518364,
+          "mean_mse": 0.0006818874920054604,
+          "median_mse": 0.0006833381433494491
+        }
+      },
+      "cells": 10,
+      "raw_mse_lower_than_native": 10
+    }
+  },
+  "scope": "All portable cells joined to independent sealed development geometry and loss partitions recounted. Full velocity/PT/Euler recomputation happened remotely on CPU, not locally."
+}

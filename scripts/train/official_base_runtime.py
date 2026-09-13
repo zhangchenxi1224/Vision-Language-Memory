@@ -30,7 +30,7 @@ def load_base_runtime(args, bank, *, inference_only=False):
     from vision_memory.repro.hf_snapshot import verify_download_seal
     from vision_memory.repro import canonical_tensor_sha256
     from vision_memory.dreamlite import DifferentiableDreamLiteMobileSampler,freeze_module
-    from vision_memory.dreamlite.conditioning import encode_image_edit_condition
+    from vision_memory.dreamlite.conditioning import encode_image_edit_condition, encode_native_base_edit_condition
     from vision_memory.dreamlite.differentiable_mobile import calculate_shift
     from vision_memory.dreamlite.native_base import NativeBaseEditSampler
     from vision_memory.dreamlite.source_images import load_sealed_source_image
@@ -39,8 +39,8 @@ def load_base_runtime(args, bank, *, inference_only=False):
     from vision_memory.reader.open_eos import assistant_termination_contract
     if not all((args.teacher_dreamlite,args.official_source,args.base_manifest)):
         raise ValueError("Base training requires teacher Mobile snapshot, pinned official source and sealed base snapshot")
-    if args.flow_protocol!="official" or args.prompt_style!="official_raw":
-        raise ValueError("Base arm implements the official raw-prompt FM training protocol")
+    if args.flow_protocol!="official" or args.prompt_style not in ("official_raw", "native_base"):
+        raise ValueError("Base requires official FM and an explicit raw or native Base training condition")
     source_root=args.official_source.resolve()
     def verify_source():
         if subprocess.check_output(["git","rev-parse","HEAD"],cwd=source_root,text=True).strip()!=OFFICIAL_REFERENCE_COMMIT:
@@ -133,7 +133,8 @@ def load_base_runtime(args, bank, *, inference_only=False):
             raise ValueError("Unsupported source kind; source provenance must be explicit")
         if source.shape!=gray_source.shape:
             raise ValueError("Source resolution differs from the fixed official schedule")
-        condition=encode_image_edit_condition(pipe,image,group["event_text"],device=vd,dtype=torch.float32)
+        condition_encoder=encode_image_edit_condition if args.prompt_style=="official_raw" else encode_native_base_edit_condition
+        condition=condition_encoder(pipe,image,group["event_text"],device=vd,dtype=torch.float32)
         donor=group.get("donor_control",bank.get("donor_control",{}))
         if not donor or donor.get("answer","").casefold()==group["answer"].casefold():
             raise ValueError("Different-answer donor required")
@@ -165,6 +166,7 @@ def load_base_runtime(args, bank, *, inference_only=False):
         vae_device=vd,reader_device=rd,snapshots=snapshots,termination=assistant_termination_contract(reader,processor),
         protocol_binding={"student":"official DreamLitePipelineLoRA base","base_snapshot":base_seal,
             "official_source_commit":OFFICIAL_REFERENCE_COMMIT,"vae_weights_sha256":vae_hashes,"source_bindings":source_bindings,
-            "train_prompt":"raw event, upstream LoRA example","inference_prompt":"native upstream diptych+CFG",
+            "train_prompt":("raw event, upstream LoRA example" if args.prompt_style=="official_raw" else
+                "native Base edit, conditional row of upstream three-branch encoding"),"inference_prompt":"native upstream diptych+CFG",
             "inference_guidance_scale":guidance,"inference_image_guidance_scale":1.,"inference_steps":28},
         verify_additional_bindings=verify_extra)
