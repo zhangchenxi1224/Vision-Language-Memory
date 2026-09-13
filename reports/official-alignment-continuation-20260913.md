@@ -1,5 +1,13 @@
 # Goal 接续位置
 
+## 09-14 02:49 首步诊断已部署并排队；历史prefix0实际运行
+
+- **当前源码提交17f35be与runner提交790ddc5均已push**，本轮完整单次/chain证据均已本地重算并归档，非阻塞turn。全部传输句柄已终态，无未完成下载；下一步收prefix0/1与实际CLI的完整结果。
+- **新增等待driver实际PID378979，S状态**，P/runs/.../17f35be-first-step-driver-status.json为`waiting_for_complete_validation`；log同前缀.log。远端3项CPU回归tests实际通过（1.34s）。driver脚本 **P/runs/.../run_first_step_after_validation-20260914.py**，实际SHA **9b08f6b40861d2042033779df4c55b3d141fd1a579e24836e36213a188f3491c**；launcher **P/runs/.../launch-first-step-after-validation.sh**。它不创建CUDA上下文，等待serial suite完整completed（包括CLI），失败则停止，不绕过。绝不能重复启动；当前尚未执行首步模型诊断。
+- probe源码 **17f35be7baf9e63376103b1da5d5f3bc84da2af1**已实际部署到 **P/repos/dreamlite-logical-first-step-20260914**，干净detach。独立git clone --shared借用completed bb仓库对象（不改其checkout），sparse保留src/scripts/tests/configs/root锁及historical-fp32-readback-panel.json。**不要删除其借用对象的bb旧repo，勿修改该新probe checkout。** CPU第一次fetch origin失败因为该origin无分支，已保留终态；显式GitHubURL fetch后实际成功，75533结束，不重复fetch。live16bc3d0源码未修改。
+- 新诊断输出将是 **P/runs/.../17f35be-first-step-condition**，log同prefix.log；截至02:49目录未被worker创建，不能称已跑完。driver截止 **1789334100=05:15CST**，必须至少剩45分钟才开始，否则保留失败。三臂全302cell、原生首步强制逐位复现、全部速度PT、raw训练条件与sigma0.999真实FM样本，没有优化与Reader新评分。完成后还需完整PT/JSON远端复核、下载并本地重算；不能把该诊断作为可用模型。
+- **当前GPU主进程仍suite21419、prefix0 parent264618/worker264996**，02:49实测Rl；02:46已有355/560raw，尚无完整prefix结果。其后prefix1、export/parity，再上面的零更新诊断。owned单GPU lease约05:50；**等这两项有界工作都完成后清理owned dl-logical-val-h200x1-20260914**，不是只等serial完成就立即stop。CPU dl-align-cpu-20260914仍约09:25到期。用户四卡不得stop/delete，后续新训练优先待其RUNNING。
+
 ## 09-14 02:43 连续写入完整本地复核通过；准备首步条件诊断
 
 - 上节单次证据已commit/push **2004052**。连续写入亦已完成：390/480、78/96图全五问、7/16整链；全90失败在清除和后续no-op，40条明确返回旧jazz/ambient，其余50为非约定无偏好回答。旧链worker132005/132729已退出，不再poll为live。
