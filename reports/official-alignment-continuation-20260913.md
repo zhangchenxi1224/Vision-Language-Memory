@@ -1,5 +1,14 @@
 # Goal 接续位置
 
+## 09-14 03:58 新条件训练实际更新，基线及首步已独立完整复核
+
+- **本turn属于实质进展**：新03训练已完成全部基线并实际开始优化；03:56实测 **519/4832步、elapsed422.4748秒**，四CUDA进程204015–204018实际live，suite369292仍S等待父终点。训练/验证目录、固定03/9e源码、08:00/10:20截止均不变。不是进程只启动或只看锁文件，也不能称终点或新模型效果已完成。所有旧实例仍保留。
+- **完整基线门控两次通过**：训练实际门控后，独立CPU **810670**（已结束）在临时目录用symlink读取真实基线、完整重验新旧 **604份PT**、全部3020raw、latent/RGB/29状态，不改live产物。baseline **1273/1510**、250/302图全五问，音乐1230/1350、历史43/160，与原始初始化完全相同。初始四rank参数相同，首步四rank参数全为 **d05d1037339423e27695d89bab9d9635a46d2b95c6e6229bf7a6ee23b8b32134**，确实已更新。完整actual梯度与首4draw/loss核验亦通过。
+- collector `scripts/reporting/collect_native_condition_baseline.py`已上传远端 `P/runs/.../collect-native-condition-baseline-20260914.py` 并实际成功；CPU执行句柄46683已exit0。输出 **03f8467-native-baseline-verified-summary.json** SHA **8280d4b8f0ed6bf914c774f972b6a1372350b07353cd41cb11452e75bc38c519**；archive **03f8467-native-baseline-verified-evidence.tgz**，310,938bytes，SHA **7df86fc16dd1882c847a3fefa809c9c64041a77a1b67b3fb755e71b615558e24**。已完整下载（51381 exit0），`verify_native_condition_baseline_local.py`实际重算3020raw/所有便携哈希/固定计划/首步证据成功（58556 exit0）。三证据文件在results已归档，PT仍在远端。无未完成SCP或exec句柄，勿重复collector到同名输出。
+- 基线check SHA **c75cdcd9ee24931a9a200a6fc7da59ec38aa4452a4ccd011019ed07ab293ebd5**；初态四rank证据 **498c750c0a7b3016e78580715194be8899c507d13b2c4f145624fe4c0e901882**；gradient **1b221f82b123e351007826ad7f0ea6cc4b49c716fc27c435301923701fd2a92d**；step1 **b18ece76092069c43c558d28e5e6fc4967bc74093cd7563b59d9772df13f1f22**。
+- **前轮完整配对已分析并push33b761a**：全1990raw按case/condition/noise/query对齐，问题、事件、gold相同，负对照不变。历史原170条正确全部保留、新增725正确、65仍错；single新增80错误，chain新增80错误且原10错未修复。65历史失败分别juice33、linen13、clear19；原始输出保留于 `logical31-paired-raw-comparison.json`，注册archive全SHA在邻近registration。更新审计/README，明确早期三状态条件对照通过不能推广到151条件，新native训练是有证据的条件变量，不是更改FM或重评分。
+- 下一步继续等实际固定4832终点及369292全四路/CLI；收全PT验证与便携archive，本地完整重算。保持goal完整功能要求，不能以本次基线/首步或loss为可用证据。
+
 ## 09-14 03:41 新四卡基线推进，后续全验证已真实排队
 
 - **最新运行**：训练driver202374/pilot203373，实际CUDA workers **204015–204018**，约44GiB/卡，已通过真实全UNet串行/四卡梯度对照：relative L2 **3.618480262226297e-08**、relative max **9.37668047695423e-08**，阈值2e-6，4draw/loss完全一致。03:40仍baseline，各rank日志已到340raw；不能称实际4832步优化或新功能评估已完成。训练硬截止08:00，实例约10:51租期结束。
