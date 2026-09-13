@@ -54,6 +54,7 @@ def main():
     parser.add_argument('--logical-sampling-commit')
     parser.add_argument('--inference-condition', choices=('native', 'training_raw'), default='native')
     parser.add_argument('--raw-control-run', type=Path)
+    parser.add_argument('--validation-set', choices=('registered', 'fresh_wording_v1'), default='registered')
     a = parser.parse_args()
     if (a.inference_condition == 'training_raw') != (a.raw_control_run is not None):
         raise ValueError('Raw inference validation requires an explicit complete raw-control run')
@@ -75,6 +76,12 @@ def main():
             or not args.data_parallel or args.gradient_accumulation_steps != 4):
         raise ValueError('Broader training command differs from the fixed plan')
     registered = read(a.parent_run / 'preregistered-experiment.json')
+    fresh_validation = a.validation_set == 'fresh_wording_v1'
+    if fresh_validation:
+        if a.inference_condition != 'native':
+            raise ValueError('Fresh wording acceptance is registered for native inference')
+        from scripts.experiments.fresh_wording_validation import plan as fresh_plan
+        registered = fresh_plan(registered, bank)
     selected_cases(registered, a.mode, a.prefix_lane)
     if not a.worker:
         return subprocess.call([sys.executable, '-u', str(Path(__file__).resolve()), *sys.argv[1:], '--worker'],
@@ -142,6 +149,11 @@ def main():
         'optimizer_updates': 0, 'guidance_scale': 1., 'native_steps': 28, 'deadline_unix': a.deadline_unix,
         'reader_input': 'actual stored RGB uint8 pixels' if a.mode == 'rgb_chains' else 'decoded FP32 image; PNG is a quantized visualization',
         'scope': registered['scope']}
+    if fresh_validation:
+        from scripts.experiments.fresh_wording_validation import digest
+        identity.update(validation_set=a.validation_set, validation_plan_sha256=digest(registered),
+            interpretation='fresh_event_wording_seen_semantic_questions', scope=registered['validation_scope'])
+        train.write_json(a.output / 'validation-plan.json', registered)
     if raw_complete is not None:
         # Keep the original complete bytes for collection and portable auditing.
         raw_bytes = (a.raw_control_run/'complete.json').read_bytes()

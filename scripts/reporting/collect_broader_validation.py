@@ -131,13 +131,25 @@ def verify_tensors(run, rows, mode):
 
 
 def collect(run, parent, bank_path, expected_probe_commit, *, text_only=False, logical_sampling_commit=None,
-            inference_condition='native'):
+            inference_condition='native', validation_set='registered'):
     run, parent, bank_path = map(Path, (run, parent, bank_path))
     bank, _, result = parent_binding(parent, bank_path, logical_sampling_commit=logical_sampling_commit)
     parent_commit, _, plan_sha = registered_protocol(bank, logical_sampling_commit)
     registered = read(parent / 'preregistered-experiment.json')
     complete = read(run / 'complete.json')
     identity = complete['identity']
+    if validation_set not in ('registered', 'fresh_wording_v1') or identity.get('validation_set', 'registered') != validation_set:
+        raise ValueError('Explicit validation set differs from the recorded experiment')
+    fresh_validation = validation_set == 'fresh_wording_v1'
+    if fresh_validation:
+        from scripts.experiments.fresh_wording_validation import plan as fresh_plan, digest
+        if inference_condition != 'native':
+            raise ValueError('Fresh validation requires native inference')
+        registered = fresh_plan(registered, bank)
+        if (read(run / 'validation-plan.json') != registered
+                or sha(run / 'validation-plan.json') != digest(registered)
+                or identity.get('validation_plan_sha256') != digest(registered)):
+            raise ValueError('Fresh validation plan differs from its complete fixed registration')
     if inference_condition not in ('native', 'training_raw') or identity.get('inference_condition', 'native') != inference_condition:
         raise ValueError('Explicit validation inference condition differs')
     if read(run / 'identity.json') != identity or len(expected_probe_commit) != 40:
@@ -154,10 +166,14 @@ def collect(run, parent, bank_path, expected_probe_commit, *, text_only=False, l
     development, _ = phase_summary(jsonl(after / 'generations.jsonl'), bank, 'trained')
     interpretation = ('observed_cases_paired_diagnostic' if logical_sampling_commit else
         ('fresh_confirmation' if development['correct_eos'] == 1510 else 'diagnostic_after_development_failure'))
+    if fresh_validation:
+        interpretation = 'fresh_event_wording_seen_semantic_questions'
     if identity['interpretation'] != interpretation or identity['development_correct_eos'] != development['correct_eos']:
         raise ValueError('Parent development outcome or validation interpretation changed')
     rows = jsonl(run / 'generations.jsonl')
     summary, artifacts, cases = summarize_rows(rows, registered, bank, identity['mode'], identity['prefix_lane'])
+    if fresh_validation:
+        artifacts.add('validation-plan.json')
     if inference_condition == 'training_raw':
         from scripts.probes.official_broader_confirmation import raw_control_reference
         if logical_sampling_commit != 'bb34092ab0d1292c87d16d9632716b218f54054b':
@@ -207,9 +223,10 @@ if __name__ == '__main__':
     parser.add_argument('--text-only', action='store_true')
     parser.add_argument('--logical-sampling-commit')
     parser.add_argument('--inference-condition', choices=('native', 'training_raw'), default='native')
+    parser.add_argument('--validation-set', choices=('registered', 'fresh_wording_v1'), default='registered')
     a = parser.parse_args()
     summary = collect(a.run, a.parent, a.bank, a.expected_probe_commit, text_only=a.text_only,
-        logical_sampling_commit=a.logical_sampling_commit, inference_condition=a.inference_condition)
+        logical_sampling_commit=a.logical_sampling_commit, inference_condition=a.inference_condition, validation_set=a.validation_set)
     output = Path(str(a.output_prefix) + '-summary.json')
     output.write_text(json.dumps(summary, indent=2, sort_keys=True) + '\n')
     if not a.text_only:

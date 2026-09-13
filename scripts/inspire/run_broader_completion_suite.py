@@ -25,6 +25,8 @@ def main():
     parser.add_argument('--inference-condition', choices=('native', 'training_raw'), default='native')
     parser.add_argument('--raw-control-run', type=Path)
     parser.add_argument('--prior-suite-status', type=Path)
+    parser.add_argument('--validation-set', choices=('registered', 'fresh_wording_v1'), default='registered')
+    parser.add_argument('--prior-validation-status', type=Path)
     a = parser.parse_args()
     if not math.isfinite(a.deadline_unix) or a.deadline_unix <= time.time():
         raise ValueError('A finite future suite deadline is required')
@@ -35,6 +37,14 @@ def main():
         raise ValueError('Paired sampling validation requires explicit parent path and exact training commit')
     parent = a.parent_run or RUNS / '84cdfdb-broader151-full4832'
     raw_control = a.inference_condition == 'training_raw'
+    fresh_validation = a.validation_set == 'fresh_wording_v1'
+    if fresh_validation:
+        if (raw_control or a.logical_sampling_commit != 'b9f90e956eea7bda15f638c8877919941ce4fec5'
+                or parent != RUNS / 'b9f90e9-historical-wording-full4832'
+                or a.prior_validation_status != RUNS / '7b82309-logical-completion-suite-status.json'):
+            raise ValueError('Fresh acceptance requires the fixed b9 endpoint and its full registered suite')
+    elif a.prior_validation_status is not None:
+        raise ValueError('Prior validation dependency is specific to fresh acceptance')
     if raw_control:
         if (a.logical_sampling_commit != 'bb34092ab0d1292c87d16d9632716b218f54054b'
                 or a.raw_control_run != RUNS/'1f86d56-broader-raw-condition'
@@ -43,6 +53,8 @@ def main():
     elif a.raw_control_run is not None or a.prior_suite_status is not None:
         raise ValueError('Raw-control dependencies require explicit raw inference policy')
     prefix = a.expected_commit[:7] + ('-raw-condition' if raw_control else ('-logical' if a.logical_sampling_commit else '-broader'))
+    if fresh_validation:
+        prefix = a.expected_commit[:7] + '-fresh-wording'
     status_name = prefix + '-completion-suite' if a.logical_sampling_commit else 'broader151-completion-suite'
     status = RUNS / (status_name + '-status.json')
     import fcntl
@@ -54,6 +66,7 @@ def main():
     cpu_env = {**env, 'CUDA_VISIBLE_DEVICES': ''}
     protocol_arguments = ['--logical-sampling-commit', a.logical_sampling_commit] if a.logical_sampling_commit else []
     condition_arguments = ['--inference-condition', 'training_raw'] if raw_control else []
+    validation_arguments = ['--validation-set', a.validation_set] if fresh_validation else []
     def record(stage, state, **extra):
         temporary = status.with_suffix('.json.tmp')
         temporary.write_text(json.dumps({'stage': stage, 'state': state, 'time_unix': time.time(),
@@ -91,6 +104,20 @@ def main():
     outputs = {label: RUNS / (prefix + '-' + label) for _, label, _, _ in lanes}
     package, prepared, inference = [RUNS / (prefix + '-' + label) for label in ('package', 'parity', 'inference')]
     try:
+        if fresh_validation:
+            record('waiting_for_registered_suite', 'waiting')
+            while True:
+                if time.time() >= a.deadline_unix:
+                    raise TimeoutError('Registered suite did not finish before fresh acceptance deadline')
+                if a.prior_validation_status.exists():
+                    prior = json.loads(a.prior_validation_status.read_bytes())
+                    if prior['validation_commit'] != '7b82309eb49e913d8f028230ac5f79c743d28a46' or prior['parent'] != str(parent):
+                        raise ValueError('The preceding validation identity changed')
+                    if prior['state'] in ('failed', 'needs_attention'):
+                        raise RuntimeError('The registered suite failed operationally; inspect its evidence')
+                    if prior['state'] == 'completed' and prior['stage'] == 'all_registered_workloads_finished':
+                        break
+                time.sleep(15)
         if raw_control:
             record('waiting_for_native_suite_and_full_raw_evidence', 'waiting')
             while True:
@@ -125,10 +152,10 @@ def main():
         if any(path.exists() for path in (*outputs.values(), package, prepared, inference)):
             raise ValueError('Output exists; refuse duplicate execution')
         bank = parent / 'bank/manifest.json'
-        if not raw_control:
+        if not raw_control and not fresh_validation:
             execute('scripts/reporting/collect_broader_endpoint.py', ['--run', parent, '--bank', bank,
                 '--output-prefix', RUNS / (prefix + '-endpoint'), *protocol_arguments], 'endpoint-collection')
-        if a.logical_sampling_commit == 'b9f90e956eea7bda15f638c8877919941ce4fec5':
+        if a.logical_sampling_commit == 'b9f90e956eea7bda15f638c8877919941ce4fec5' and not fresh_validation:
             execute('scripts/reporting/collect_native_endpoint_tensors.py', ['--run', parent,
                 '--output-prefix', RUNS / (prefix + '-final-tensors'),
                 '--expected-source-commit', a.expected_commit, *protocol_arguments], 'final-tensor-collection')
@@ -138,7 +165,7 @@ def main():
                 command = [sys.executable, '-u', str(ROOT / 'scripts/probes/official_broader_confirmation.py'),
                     '--parent-run', str(parent), '--output', str(outputs[label]), '--mode', mode,
                     '--device', str(device), '--deadline-unix', str(a.deadline_unix), '--diagnostic', *protocol_arguments,
-                    *condition_arguments]
+                    *condition_arguments, *validation_arguments]
                 if raw_control:
                     command += ['--raw-control-run', str(a.raw_control_run)]
                 if lane is not None:
@@ -166,7 +193,7 @@ def main():
         for label, output in outputs.items():
             execute('scripts/reporting/collect_broader_validation.py', ['--run', output, '--parent', parent,
                 '--bank', bank, '--output-prefix', output, '--expected-probe-commit', a.expected_commit,
-                *protocol_arguments, *condition_arguments], label + '-collection')
+                *protocol_arguments, *condition_arguments, *validation_arguments], label + '-collection')
             summaries[label] = json.loads(Path(str(output) + '-summary.json').read_bytes())
         execute('scripts/inference/export_rgb_writer.py', ['--parent-run', parent, '--output', package,
             *condition_arguments], 'package-export')
@@ -181,7 +208,8 @@ def main():
         record('all_registered_workloads_finished', 'completed',
             functional_all_registered_correct=all(value['all_generated_correct_eos'] for value in summaries.values()),
             matched_results={label: [value['matched_correct_eos'], value['matched_rows']] for label, value in summaries.items()},
-            scope=('Observed c2ec407 cases reused as a paired sampling diagnostic; no fresh holdout claim.' if a.logical_sampling_commit else
+            scope=('New event wording and noise on seen semantic questions, complete four lanes and actual CLI replay.' if fresh_validation else
+                'Observed c2ec407 cases reused as a paired sampling diagnostic; no fresh holdout claim.' if a.logical_sampling_commit else
                 'Seen questions; fresh transition expressions and noise, historical original/reworded full prefixes. Not unseen entities or simultaneous multi-fact retention.'))
         return 0
     except BaseException as error:

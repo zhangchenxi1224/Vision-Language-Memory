@@ -46,6 +46,14 @@ def replay_registration(identity, *, four_gpu_warm_start=False, broader=False, l
         if sha(bank_path) != BANK_SHA:
             raise ValueError('Registered broader bank changed')
         parent_commit, registered, plan_sha = registered_protocol(read_json(bank_path), logical_sampling_commit)
+        validation_set = identity.get('validation_set', 'registered')
+        if validation_set == 'fresh_wording_v1':
+            from scripts.experiments.fresh_wording_validation import plan as fresh_plan, digest
+            registered = fresh_plan(registered, read_json(bank_path))
+            if identity.get('validation_plan_sha256') != digest(registered):
+                raise ValueError('Fresh CLI replay registration changed')
+        elif validation_set != 'registered':
+            raise ValueError('Unknown validation set for CLI replay')
         if identity['bank_sha256'] != BANK_SHA or identity['plan_file_sha256'] != plan_sha:
             raise ValueError('Broader bank or preregistration changed')
         # All sequence IDs/operations/seeds are fixed; original event strings
