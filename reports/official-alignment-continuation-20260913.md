@@ -1,3 +1,9 @@
+## 09-14 07:30 本地完整PNG归档复核入口已验证
+
+- 本轮实质进展：**e43c114** 已提交推送 `scripts/reporting/verify_png_readback_local.py`，下载完成后同时提供readback/source两归档及独立远端SHA，再实际检查source complete/raw对应、所有PNG像素和全原始回答。完整390行、78张图、压缩包解压路径和错误SHA拒绝测试已实际通过（77.65秒）。此本地入口不改活跃385远端源码，也不放宽判据。
+- 最新已观察训练time1789342186.3127077：**3823/4832**、elapsed3078.7133638709784秒；4CUDA PID仍在运行，7b/56/385三个driver均实际/proc存活并等待。无terminal、无完整最终分数。训练和三个已启动验收不得重复部署或重启。
+- 无未完成本地exec/SCP句柄。继续等待真正终点及完整验证；按输出就绪顺序及时下载，CPU租期约09:25，新四卡约10:51。新本地PNG入口参数：--readback-archive、--readback-sha256、--source-archive、--source-sha256、--expected-commit38531f04c2f2d6337ce2ede6dba5950f901ebe53、--output。以上参数名与值需要分开传入。
+
 ## 09-14 07:25 完整 PNG 验收已部署并实际排队
 
 - 新源码 **38531f04c2f2d6337ce2ede6dba5950f901ebe53** 已提交推送，远端干净 **P/repos/dreamlite-png-readback-20260914**。部署句柄96992已exit0、两个SCP和启动句柄都exit0；不要重复部署/启动。新鲜计划远端SHA再次正确。`P` 是 /inspire/ssd/project/exploration-topic/czxs26210936；`R` 是 P/runs/dreamlite-official-alignment。
