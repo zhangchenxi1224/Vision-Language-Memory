@@ -18,6 +18,7 @@ COMMIT = '84cdfdb58ace96954243de5caf427948717c9abf'
 BANK_SHA = 'c27cd65dab809deabb5f2cb08891517d3590244651d08a8c6763c84fea901592'
 PLAN_SHA = 'c4a6986edf1330e27af5b91e5105ad6e3806040f01d562f791edbd392bd16834'
 NATIVE_CONDITION_COMMIT = '03f8467e5a1201c2dbd9d12484bf2338d7837727'
+HISTORICAL_WORDING_COMMIT = 'b9f90e956eea7bda15f638c8877919941ce4fec5'
 # Independently observed in the complete720-row historical readback and the
 # sealed transition positive controls, not inferred from each scored output.
 GOLD_IDS = {'ambient': [59614], 'jazz': [73, 9802], 'no active preference': [2152, 4541, 21933],
@@ -77,7 +78,9 @@ def registered_protocol(bank, logical_sampling_commit=None):
         return COMMIT, training_plan(BANK_SHA, COMMIT), PLAN_SHA
     # The explicit training commit selects the preregistered condition control.
     # Never infer a different protocol from mutable run metadata or its score.
-    if logical_sampling_commit == NATIVE_CONDITION_COMMIT:
+    if logical_sampling_commit == HISTORICAL_WORDING_COMMIT:
+        from scripts.experiments.historical_wording_protocol import plan
+    elif logical_sampling_commit == NATIVE_CONDITION_COMMIT:
         from scripts.experiments.native_condition_protocol import plan
     else:
         from scripts.experiments.logical_sampling_protocol import plan
@@ -94,7 +97,7 @@ def parent_binding(run, bank_path, *, logical_sampling_commit=None):
     if read(run / 'preregistered-experiment.json') != registered:
         raise ValueError('Fixed4832-update protocol differs')
     identity = read(run / 'train/identity.json')
-    native_condition = commit == NATIVE_CONDITION_COMMIT
+    native_condition = commit in (NATIVE_CONDITION_COMMIT, HISTORICAL_WORDING_COMMIT)
     for key, expected in {'git_commit': commit, 'steps': 4832, 'seed': SEED, 'eval_seeds': 2,
             'bank_manifest_sha256': BANK_SHA, 'model_variant': 'base', 'flow_protocol': 'official',
             'trainable_scope': 'full_unet', 'gradient_accumulation_steps': 4}.items():
@@ -110,7 +113,7 @@ def parent_binding(run, bank_path, *, logical_sampling_commit=None):
             raise ValueError('Logical sampling identity changed')
         check = read(run / 'train/baseline-reference-check.json')
         binding = identity['initial_baseline_match']
-        if native_condition and (binding.get('training_condition_control') != 'official_raw -> native_base'
+        if commit == NATIVE_CONDITION_COMMIT and (binding.get('training_condition_control') != 'official_raw -> native_base'
                 or check.get('explicit_training_condition_change') !=
                     'official_raw -> native_base; only encoder hashes and train_prompt metadata may differ'):
             raise ValueError('Missing explicit native-condition baseline control')
@@ -130,6 +133,14 @@ def parent_binding(run, bank_path, *, logical_sampling_commit=None):
             or initial['parent_optimizer_steps'] != 2880):
         raise ValueError('Parameter-only initialization differs')
     runtime = read(run / 'train/runtime.json')['additional_protocol_binding']
+    if commit == HISTORICAL_WORDING_COMMIT:
+        from scripts.reporting.verify_historical_condition_draws import verify_seal
+        verify_seal(bank, identity, read(run / 'train/runtime.json'),
+            read(run / 'train/training-condition-augmentation.json'), registered)
+        if 'training_condition_control' in identity['initial_baseline_match']:
+            raise ValueError('Wording comparison must preserve native training condition and exact baseline runtime')
+    elif 'training_augmentation' in identity:
+        raise ValueError('Unregistered training condition augmentation')
     expected_prompt = ('native Base edit, conditional row of upstream three-branch encoding'
         if native_condition else 'raw event, upstream LoRA example')
     if runtime.get('train_prompt') != expected_prompt:
@@ -201,6 +212,11 @@ def collect(run, bank_path, *, text_only=False, logical_sampling_commit=None):
         elif before != after:
             raise ValueError('A fixed negative control changed')
     rows, draws = jsonl(run / 'train/training.jsonl'), []
+    wording = logical_sampling_commit == HISTORICAL_WORDING_COMMIT
+    augmentation_counts, augmentation_seal = {}, None
+    if wording:
+        from scripts.reporting.verify_historical_condition_draws import verify_draw
+        augmentation_seal = read(run / 'train/training-condition-augmentation.json')
     if len(rows) != 4832:
         raise ValueError('Wrong fixed optimizer update count')
     for index, row in enumerate(rows):
@@ -213,12 +229,21 @@ def collect(run, bank_path, *, text_only=False, logical_sampling_commit=None):
                 raise ValueError('Draw does not match deterministic replay')
             if not math.isfinite(draw['flow_matching_mse']):
                 raise ValueError('Nonfinite training loss')
+            if wording:
+                selected = verify_draw(group, draw, index * 4 + micro, augmentation_seal)
+                if selected is not None:
+                    qid, expression = selected
+                    augmentation_counts.setdefault(qid, Counter())[expression] += 1
+            elif 'training_condition_variant' in draw:
+                raise ValueError('Unregistered condition change in a training draw')
             draws.append(draw)
     counts = Counter(draw['question_id'] for draw in draws)
     expected_counts = (read(run / 'preregistered-experiment.json')['sampling']['exact_draws_per_group']
         if logical_sampling_commit else {group['question_id']: 128 for group in bank['groups']})
     if counts != expected_counts:
         raise ValueError('Missing or unbalanced condition exposure')
+    if wording and augmentation_counts != read(run / 'preregistered-experiment.json')['training_augmentation']['exact_draws_per_expression']:
+        raise ValueError('Historical expression exposure differs from the complete registered draw stream')
     if logical_sampling_commit and not text_only:
         from scripts.train.train_latent_bank_unet import verify_initialized_baseline_reference
         # Recheck actual tensors/raws against the original initialization at
@@ -226,7 +251,11 @@ def collect(run, bank_path, *, text_only=False, logical_sampling_commit=None):
         gate = identity['initial_baseline_match']
         verify_initialized_baseline_reference(run / 'train', Path(gate['reference']), gate['result_sha256'],
             native_condition_control=logical_sampling_commit == NATIVE_CONDITION_COMMIT)
-    return {'identity': identity, 'result_sha256': sha(run / 'train/result.json'), 'checkpoint_sha256': result['checkpoint_sha256'],
+    extra = ({'training_augmentation_evidence': {
+        'seal_sha256': sha(run / 'train/training-condition-augmentation.json'),
+        'exact_draws_per_expression': augmentation_counts,
+        'scope': 'All recorded event/embedding/mask bindings checked against the fixed plan and each actual draw. Embedding tensors are not independently re-encoded in this CPU collector.'}} if wording else {})
+    return {**extra, 'identity': identity, 'result_sha256': sha(run / 'train/result.json'), 'checkpoint_sha256': result['checkpoint_sha256'],
         'phases': phases, 'matched_pairs': changes, 'optimizer_steps': 4832, 'exact_draws_replayed': len(draws),
         'draws_per_group': counts, 'sigma_min': min(draw['effective_sigma'] for draw in draws),
         'sigma_max': max(draw['effective_sigma'] for draw in draws), 'sigma_above_half': sum(draw['effective_sigma'] > .5 for draw in draws),

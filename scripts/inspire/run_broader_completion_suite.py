@@ -128,6 +128,10 @@ def main():
         if not raw_control:
             execute('scripts/reporting/collect_broader_endpoint.py', ['--run', parent, '--bank', bank,
                 '--output-prefix', RUNS / (prefix + '-endpoint'), *protocol_arguments], 'endpoint-collection')
+        if a.logical_sampling_commit == 'b9f90e956eea7bda15f638c8877919941ce4fec5':
+            execute('scripts/reporting/collect_native_endpoint_tensors.py', ['--run', parent,
+                '--output-prefix', RUNS / (prefix + '-final-tensors'),
+                '--expected-source-commit', a.expected_commit, *protocol_arguments], 'final-tensor-collection')
         children, logs = [], []
         try:
             for mode, label, device, lane in lanes:

@@ -33,12 +33,15 @@ def check_payload(payload, question, seed, image_sha):
         'final_latent_sha256': canonical_tensor_sha256(latent), 'finite_fp32_states': 29}
 
 
-def inspect(run, *, text_only=False, recorded_cells=None):
+def inspect(run, *, text_only=False, recorded_cells=None, logical_sampling_commit=None):
     from scripts.reporting.collect_transition_endpoint import read, jsonl, sha
-    from scripts.reporting.collect_broader_endpoint import parent_binding, phase_summary, NATIVE_CONDITION_COMMIT
+    from scripts.reporting.collect_broader_endpoint import parent_binding, phase_summary, NATIVE_CONDITION_COMMIT, HISTORICAL_WORDING_COMMIT
     from scripts.experiments.broader_writer_protocol import SEED
     from vision_memory.training.latent_bank_unet import stable_seed
-    bank, identity, result = parent_binding(run, run/'bank/manifest.json', logical_sampling_commit=NATIVE_CONDITION_COMMIT)
+    logical_sampling_commit = logical_sampling_commit or NATIVE_CONDITION_COMMIT
+    if logical_sampling_commit not in (NATIVE_CONDITION_COMMIT, HISTORICAL_WORDING_COMMIT):
+        raise ValueError('Require a registered native-condition training run')
+    bank, identity, result = parent_binding(run, run/'bank/manifest.json', logical_sampling_commit=logical_sampling_commit)
     if sha(run/'train/runtime.json') != RUNTIME:
         raise ValueError('Actual native training runtime changed')
     phase = run/'train/trained'
@@ -100,6 +103,8 @@ def main():
     parser.add_argument('--output-prefix', type=Path, required=True)
     parser.add_argument('--archive', type=Path)
     parser.add_argument('--sha256')
+    parser.add_argument('--logical-sampling-commit')
+    parser.add_argument('--expected-source-commit', default=SOURCE)
     args = parser.parse_args()
     sys.path[:0] = [str(args.source_root), str(args.source_root/'src')]
     from scripts.reporting.collect_transition_endpoint import read, sha
@@ -113,7 +118,7 @@ def main():
                 path = (root/name).resolve()
                 if not path.is_relative_to(root.resolve()) or sha(path) != digest:
                     raise ValueError('Portable final native evidence seal differs')
-            summary = inspect(root, text_only=True, recorded_cells=recorded['cells'])
+            summary = inspect(root, text_only=True, recorded_cells=recorded['cells'], logical_sampling_commit=args.logical_sampling_commit)
             compare_recount(recorded, summary, {'portable_sha256'})
         summary = {'archive_sha256': args.sha256, 'raw_rows_recounted': 3020, 'tensor_cells_recounted': 302,
             'correct_eos': summary['development']['correct_eos'],
@@ -121,15 +126,19 @@ def main():
     else:
         if args.run is None:
             parser.error('Remote inspection requires --run')
-        if (subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=args.source_root, text=True).strip() != SOURCE
+        if (len(args.expected_source_commit) != 40
+                or subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=args.source_root, text=True).strip() != args.expected_source_commit
                 or subprocess.check_output(['git', 'status', '--porcelain'], cwd=args.source_root, text=True).strip()):
             raise ValueError('Require the fixed clean native validation source')
         import torch
         torch.set_num_threads(1)
-        summary = inspect(args.run)
+        summary = inspect(args.run, logical_sampling_commit=args.logical_sampling_commit)
         names = ['bank/manifest.json', 'preregistered-experiment.json', 'terminal.json', 'train/identity.json',
             'train/runtime.json', 'train/result.json', 'train/baseline-reference-check.json',
             'train/trained/complete.json', 'train/trained/summary.json', 'train/trained/generations.jsonl']
+        from scripts.reporting.collect_broader_endpoint import HISTORICAL_WORDING_COMMIT
+        if args.logical_sampling_commit == HISTORICAL_WORDING_COMMIT:
+            names.append('train/training-condition-augmentation.json')
         summary['portable_sha256'] = {name: sha(args.run/name) for name in names}
     output = Path(str(args.output_prefix)+'-summary.json')
     archive_path = Path(str(args.output_prefix)+'-evidence.tgz')
