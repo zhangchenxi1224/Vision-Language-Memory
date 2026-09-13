@@ -77,22 +77,40 @@ def main():
     p.add_argument('--deadline-unix', type=float, required=True)
     p.add_argument('--diagnostic', action='store_true', help='Explicit diagnostic if the complete development endpoint failed')
     p.add_argument('--worker', action='store_true')
+    p.add_argument('--four-gpu-warm-start', action='store_true')
+    p.add_argument('--device', type=int, default=0, help='GPU for this independent batch-one validation process')
     a = p.parse_args()
     from scripts.train import train_latent_bank_unet as train
     from scripts.inspire.run_oracle_to_unet_pipeline import snapshot_environment
     from vision_memory.repro.determinism import REQUIRED_DETERMINISM_ENV
     from vision_memory.training.latent_bank_unet import file_sha256, load_teacher_bank
     command = json.loads((a.parent_run / 'commands.json').read_text())['commands'][-1]
-    args = train.parser().parse_args(command[3:])
-    if (args.expected_commit != PARENT_COMMIT or file_sha256(args.bank_manifest) != BANK_SHA
-            or args.steps != 2880 or args.eval_seeds != 4 or args.seed != 20260913
+    script_indices = [i for i, part in enumerate(command) if Path(part).name == 'train_latent_bank_unet.py']
+    if len(script_indices) != 1:
+        raise ValueError('Cannot identify the exact training entry point')
+    args = train.parser().parse_args(command[script_indices[0] + 1:])
+    parent_commit = '046c1f1d1c398dbd08578d7c4ba6814343fea0d5' if a.four_gpu_warm_start else PARENT_COMMIT
+    expected_seed = 20260914 if a.four_gpu_warm_start else 20260913
+    if (args.expected_commit != parent_commit or file_sha256(args.bank_manifest) != BANK_SHA
+            or args.steps != 2880 or args.eval_seeds != 4 or args.seed != expected_seed
             or args.trainable_scope != 'full_unet' or args.model_variant != 'base'
             or args.base_guidance_scale != 1.0 or args.flow_protocol != 'official'):
         raise ValueError('Require the fixed45-group transition training design')
     bank, _ = load_teacher_bank(args.bank_manifest)
-    registered = plan(args.seed)
-    if json.loads((ROOT / 'reports/official-transition-validation-plan-20260913.json').read_text()) != registered:
-        raise ValueError('Validation plan changed from its preregistration')
+    if a.four_gpu_warm_start:
+        from scripts.experiments.transition_warm_start_plan import plan as warm_plan
+        registered = warm_plan()['validation']
+        plan_path = ROOT / 'reports/official-transition-warm-start-plan-20260913.json'
+        if json.loads(plan_path.read_bytes()) != warm_plan() or json.loads((a.parent_run / 'preregistered-experiment.json').read_bytes()) != warm_plan():
+            raise ValueError('Warm-start confirmation preregistration changed')
+        if (not args.data_parallel or args.gradient_accumulation_steps != 4
+                or args.initial_writer_package_sha256 != '4bf5562e09ba9064f8ac4e6bed64aa38ffa9205757028e5c9e2ba0516c4a14a6'):
+            raise ValueError('Warm-start parent initialization or parallel protocol differs')
+    else:
+        registered = plan(args.seed)
+        plan_path = ROOT / 'reports/official-transition-validation-plan-20260913.json'
+        if json.loads(plan_path.read_text()) != registered:
+            raise ValueError('Validation plan changed from its preregistration')
     original, resolved = resolve_events(registered, bank)
     variants = original['ambient']['question_variants']
     if set(variants) != set(PROMPTS) or any(g['question_variants'] != variants for g in bank['groups']):
@@ -104,6 +122,9 @@ def main():
                '--output', str(a.output), '--mode', a.mode, '--deadline-unix', str(a.deadline_unix), '--worker']
         if a.diagnostic:
             cmd.append('--diagnostic')
+        if a.four_gpu_warm_start:
+            cmd.append('--four-gpu-warm-start')
+        cmd.extend(['--device', str(a.device)])
         return subprocess.call(cmd, env=env)
     result_path = a.parent_run / 'train/result.json'
     result_sha = file_sha256(result_path)
@@ -116,7 +137,7 @@ def main():
     for name, digest in complete['artifact_hashes'].items():
         if Path(name).name != name or file_sha256(phase / name) != digest:
             raise ValueError('Parent evaluation artifact changed')
-    gate = development_gate([json.loads(line) for line in (phase / 'generations.jsonl').read_text().splitlines()], bank)
+    gate = development_gate([json.loads(line) for line in (phase / 'generations.jsonl').read_text().splitlines()], bank, args.seed)
     if not gate['all_correct_eos'] and not a.diagnostic:
         raise ValueError(f"Development failed: {gate['correct_eos']}/900; only an explicitly labelled diagnostic may proceed")
     checkpoint = a.parent_run / 'train/checkpoint-final.pt'
@@ -133,6 +154,10 @@ def main():
     from vision_memory.dreamlite.rgb_memory import OfficialRGBMemory
     from scripts.train.official_base_runtime import audit_inference_only_runtime
     configure_strict_cuda_determinism(args.seed)
+    if a.device < 0 or a.device >= torch.cuda.device_count():
+        raise ValueError('Requested validation GPU does not exist')
+    args.dreamlite_device = args.reader_device = f'cuda:{a.device}'
+    args.colocate_models = True
     if torch.cuda.mem_get_info(torch.device(args.dreamlite_device))[0] < 70 * 1024**3:
         raise RuntimeError('Require70GiB available GPU memory; do not evict other work')
     a.output.mkdir(parents=True, exist_ok=False)
@@ -152,8 +177,8 @@ def main():
         module.eval().requires_grad_(False)
     frozen = train.frozen_versions(runtime['pipe'], runtime['reader'])
     identity = {'probe_commit': commit, 'probe_file_sha256': file_sha256(Path(__file__)),
-        'plan_file_sha256': file_sha256(ROOT / 'reports/official-transition-validation-plan-20260913.json'),
-        'source_hashes': train.source_hashes(), 'parent_commit': PARENT_COMMIT, 'parent_result_sha256': result_sha,
+        'plan_file_sha256': file_sha256(plan_path),
+        'source_hashes': train.source_hashes(), 'parent_commit': parent_commit, 'parent_result_sha256': result_sha,
         'checkpoint_sha256': result['checkpoint_sha256'], 'bank_sha256': BANK_SHA,
         'registered_plan': registered, 'resolved_plan': resolved, 'mode': a.mode, 'development_gate': gate,
         'interpretation': 'diagnostic_after_development_failure' if not gate['all_correct_eos'] else 'fresh_confirmation',
@@ -241,7 +266,7 @@ def main():
     if (file_sha256(result_path) != result_sha or file_sha256(checkpoint) != result['checkpoint_sha256']
             or file_sha256(args.bank_manifest) != BANK_SHA or train.source_hashes() != identity['source_hashes']
             or file_sha256(Path(__file__)) != identity['probe_file_sha256']
-            or file_sha256(ROOT / 'reports/official-transition-validation-plan-20260913.json') != identity['plan_file_sha256']):
+            or file_sha256(plan_path) != identity['plan_file_sha256']):
         raise RuntimeError('Parent weights, result, bank, or validation source changed')
     train.write_json(a.output / 'complete.json', {'identity': identity, 'cells': cells,
         'all_generated_correct_eos': all(c['correct_eos'] == c['n'] for k, c in cells.items()

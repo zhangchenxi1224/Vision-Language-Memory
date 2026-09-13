@@ -34,15 +34,22 @@ def write_json(path, value):
     Path(path).write_text(json.dumps(value, indent=2, sort_keys=True) + '\n')
 
 
-def prepare(reference, package, output):
+def prepare(reference, package, output, *, four_gpu_warm_start=False):
     from scripts.probes.transition_validation_plan import plan
     from vision_memory.dreamlite.writer_package import inspect_package
     reference, package, output = map(Path, (reference, package, output))
     manifest = inspect_package(package)
     complete = read_json(reference / 'complete.json')
     identity = complete['identity']
-    if (identity['mode'] != 'rgb_chains' or identity['registered_plan'] != plan(20260913)
-            or identity['parent_commit'] != '9628d7142db5a81a9d11a35b89d0515ef32d2e4f'
+    if four_gpu_warm_start:
+        from scripts.experiments.transition_warm_start_plan import plan as warm_plan
+        registered = warm_plan()['validation']
+        parent_commit = '046c1f1d1c398dbd08578d7c4ba6814343fea0d5'
+    else:
+        registered = plan(20260913)
+        parent_commit = '9628d7142db5a81a9d11a35b89d0515ef32d2e4f'
+    if (identity['mode'] != 'rgb_chains' or identity['registered_plan'] != registered
+            or identity['parent_commit'] != parent_commit
             or manifest['parent_checkpoint_sha256'] != identity['checkpoint_sha256']
             or manifest['parent_result_sha256'] != identity['parent_result_sha256']
             or manifest['guidance_scale'] != identity['guidance_scale']):
@@ -131,12 +138,13 @@ def main():
     p = sub.add_parser('prepare')
     for name in ('reference', 'package', 'output'):
         p.add_argument('--' + name, type=Path, required=True)
+    p.add_argument('--four-gpu-warm-start', action='store_true')
     p = sub.add_parser('verify')
     for name in ('prepared', 'inference'):
         p.add_argument('--' + name, type=Path, required=True)
     args = parser.parse_args()
     if args.mode == 'prepare':
-        prepare(args.reference, args.package, args.output)
+        prepare(args.reference, args.package, args.output, four_gpu_warm_start=args.four_gpu_warm_start)
         return 0
     result = verify(args.prepared, args.inference)
     print(json.dumps(result))

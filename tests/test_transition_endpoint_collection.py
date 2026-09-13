@@ -37,3 +37,18 @@ def test_forged_gold_tokenization_and_changed_query_image_are_rejected():
     changed[1]['image_sha256'] = 'different-image-for-the-second-query'
     with pytest.raises(ValueError, match='different images'):
         phase_summary(changed, bank, 'baseline')
+
+
+def test_warm_start_seed_matrix_is_explicit_and_cannot_accept_old_seeds():
+    from scripts.reporting.collect_transition_endpoint import seed
+    rows, bank = actual_baseline()
+    with pytest.raises(ValueError, match='Unexpected'):
+        phase_summary(rows, bank, 'baseline', 20260914)
+    # A synthetic seed-remapped fixture tests coverage only, not model accuracy.
+    rows = copy.deepcopy(rows)
+    remap = {seed(i): seed(i, 20260914) for i in range(4)}
+    for row in rows:
+        if row['noise_seed'] is not None:
+            row['noise_seed'] = remap[row['noise_seed']]
+    summary, _ = phase_summary(rows, bank, 'baseline', 20260914)
+    assert summary['raw_rows'] == 1350 and summary['generated_images'] == 180

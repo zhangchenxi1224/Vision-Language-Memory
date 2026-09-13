@@ -98,26 +98,37 @@ def summarize_rows(rows, resolved, variants, mode):
     return summary, artifacts
 
 
-def collect(run, parent, bank_path, plan_path, *, text_only=False):
+def collect(run, parent, bank_path, plan_path, *, text_only=False, four_gpu_warm_start=False, expected_probe_commit=None):
     from scripts.probes.official_transition_confirmation import development_gate, resolve_events
     from scripts.probes.transition_validation_plan import plan
     run, parent, bank_path, plan_path = map(Path, (run, parent, bank_path, plan_path))
-    if sha(bank_path) != BANK_SHA or read(plan_path) != plan(20260913):
+    if four_gpu_warm_start:
+        from scripts.experiments.transition_warm_start_plan import plan as warm_plan
+        from scripts.reporting.collect_transition_endpoint import FOUR_GPU_COMMIT
+        if not expected_probe_commit or len(expected_probe_commit) != 40:
+            raise ValueError('Warm-start validation requires the explicitly locked probe commit')
+        registered = warm_plan()['validation']
+        expected_file = warm_plan()
+        parent_commit, training_seed, probe_commit = FOUR_GPU_COMMIT, 20260914, expected_probe_commit
+    else:
+        registered = expected_file = plan(20260913)
+        parent_commit, training_seed, probe_commit = COMMIT, 20260913, PROBE_COMMIT
+    if sha(bank_path) != BANK_SHA or read(plan_path) != expected_file:
         raise ValueError('Bank or preregistered validation plan changed')
     bank = read(bank_path)
-    original, resolved = resolve_events(read(plan_path), bank)
+    original, resolved = resolve_events(registered, bank)
     complete = read(run / 'complete.json')
     identity = complete['identity']
     if read(run / 'identity.json') != identity:
         raise ValueError('Identity file differs from the seal')
-    for key, value in {'parent_commit': COMMIT, 'probe_commit': PROBE_COMMIT, 'bank_sha256': BANK_SHA,
+    for key, value in {'parent_commit': parent_commit, 'probe_commit': probe_commit, 'bank_sha256': BANK_SHA,
                        'optimizer_updates': 0, 'guidance_scale': 1., 'image_guidance_scale': 1., 'native_steps': 28,
-                       'registered_plan': read(plan_path), 'resolved_plan': resolved, 'plan_file_sha256': sha(plan_path)}.items():
+                       'registered_plan': registered, 'resolved_plan': resolved, 'plan_file_sha256': sha(plan_path)}.items():
         if identity.get(key) != value:
             raise ValueError('Unexpected validation identity: ' + key)
     terminal, result = read(parent / 'terminal.json'), read(parent / 'train/result.json')
     parent_identity = read(parent / 'train/identity.json')
-    for key, value in {'git_commit': COMMIT, 'steps': 2880, 'bank_manifest_sha256': BANK_SHA,
+    for key, value in {'git_commit': parent_commit, 'seed': training_seed, 'steps': 2880, 'bank_manifest_sha256': BANK_SHA,
                        'trainable_scope': 'full_unet', 'model_variant': 'base', 'flow_protocol': 'official'}.items():
         if parent_identity.get(key) != value:
             raise ValueError('Unexpected parent identity: ' + key)
@@ -129,8 +140,8 @@ def collect(run, parent, bank_path, plan_path, *, text_only=False):
     if sha(parent_rows_path) != read(parent / 'train/trained/complete.json')['artifact_hashes']['generations.jsonl']:
         raise ValueError('Parent development raw changed')
     parent_rows = jsonl(parent_rows_path)
-    phase_summary(parent_rows, bank, 'trained')
-    gate = json.loads(json.dumps(development_gate(parent_rows, bank)))
+    phase_summary(parent_rows, bank, 'trained', training_seed)
+    gate = json.loads(json.dumps(development_gate(parent_rows, bank, training_seed)))
     interpretation = 'fresh_confirmation' if gate['all_correct_eos'] else 'diagnostic_after_development_failure'
     if identity['development_gate'] != gate or identity['interpretation'] != interpretation:
         raise ValueError('The development failure or validation interpretation was changed')
@@ -169,8 +180,11 @@ def main():
     for name in ('run', 'parent', 'bank', 'plan', 'output-prefix'):
         p.add_argument('--' + name, type=Path, required=True)
     p.add_argument('--text-only', action='store_true')
+    p.add_argument('--four-gpu-warm-start', action='store_true')
+    p.add_argument('--expected-probe-commit')
     a = p.parse_args()
-    summary = collect(a.run, a.parent, a.bank, a.plan, text_only=a.text_only)
+    summary = collect(a.run, a.parent, a.bank, a.plan, text_only=a.text_only,
+                      four_gpu_warm_start=a.four_gpu_warm_start, expected_probe_commit=a.expected_probe_commit)
     out = Path(str(a.output_prefix) + '-summary.json')
     out.write_text(json.dumps(summary, indent=2, sort_keys=True) + '\n')
     if not a.text_only:
