@@ -1,5 +1,13 @@
 # Goal 接续位置
 
+## 10:38 更广16题训练数据已真实构建；当前四卡优化超过1900步
+
+- 本轮开始实测训练四rank181990–181993、suite470773均存活，1144步；后续实测1684和**1906/2880、elapsed1523.86s**，baseline845/900、final仍0。仍属固定046训练，不能修改/重启；suite仍等待完成。未取得新端点，goal active。上轮归档补齐已commit/push **8f81c1f8f849225bdfca592afdaa4cb6ebf996a7**；所有旧下载/verify会话都结束。
+- 新 **7ee3a927d0abc7ead642fdc3e9795498efa20171** 添加显式 `historical-r11-five-prompts/v1`。现有默认三行格式不变，历史原问/改写按各自固定suffix完整保留，拒绝额外问题行及任意suffix；没有把历史问句改写成更容易版本。新增bank构建器保留16目标×4原始step256/B端点，全部64均由FP32和RGB原问+EOS正例资格支持；五问法只有57/64通过的失败原样保留，不按改写表现过滤七个端点。28相关tests实际通过。
+- Builder已部署 **P/repos/dreamlite-historical-writer-bank-20260913**，CPU隐藏CUDA在用户实例真实执行完成（78691已exit0），无GPU初始化/零optimizer。实际输出 **P/runs/.../7ee3a92-historical-writer-bank/manifest.json** SHA **d54895adb15b91c3befd52c57f6248c76cf2abadb44916af830726a0736e688c**，64新rawFP32latent副本、16groups，load_teacher_bank真实通过。此处不是新Writer训练，不是GPUruntime确认，不要声称16题已学会。
+- Manifest和complete已完整下载（87500/93047已exit0），本地 `verify_historical_writer_bank_local.py` 已实际通过全16事件/问句字节、64teacher/source memberships、128original positives、720raw失败保留及固定donor选择。64新latent副本仍远端，本地遗漏明示。报告 **official-historical-writer-bank-20260913.md**、results **historical-writer-bank-{manifest,complete,local-verification}.json**；新证据/本地verifier待本轮提交。没有待传输会话。
+- 这份新bank用于后续更广seen-question共享Writer：每组灰源+完整1/2事件有序prefix、4原始教师，全部问法已经用于历史资格检查，不能冒充freshholdout。当前没有启动更广training或锁定其预算/初始化。先完成当前固定warm端点和独立链验收，再据结果安排四卡后续；仍须更广Writer功能证据，单实体通过不足以宣布goal完成。
+
 ## 10:25 证据归档补齐，四卡稳定优化
 
 - 上节独立single/chain原始归档、四卡预检/首步证据及review均已提交push **fc5148904672fc9910ab8e783d4b0e26fb3dc1be**，不是待提交。训练仍固定046、validation1201、套件ff17，不要fetch/修改正在执行的checkout。
