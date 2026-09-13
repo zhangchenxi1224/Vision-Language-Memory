@@ -1,8 +1,8 @@
 # Vision Learnable Memory
 
-> 最新端点（2026-09-13 13:40）：151条件四卡训练已完成4832更新，开发集1377/1510；音乐状态转换1340/1350，16个历史问题仅37/160，多题功能仍失败。全部6040raw/19328draw已在本地重算；四路独立验证正在运行。见[完整端点分析](reports/official-alignment-results-20260913/broader151-endpoint-review.md)。下方简介保留此前实验阶段，不能用单题改善代替多题验收。
+> 最新核验（2026-09-14）：同初始化、同4832更新的逻辑条件均衡对照已完成，历史开发160/160，音乐1300/1350，总计1460/1510，仍有清除失败。全部6040raw/19328draw已本地重算，完整tensor复核和独立验证待完成。见[采样对照结果](reports/official-alignment-results-20260913/logical31-development-review.md)。前一轮四路独立验证已全部归档：360/360单次、470/480连续链、170/960历史前缀，见[完整失败分析](reports/official-alignment-results-20260913/broader151-validation-review.md)。尚无通过功能验收的版本。
 
-> 2026-09-13：[官方DreamLite训练对齐审计](reports/official-alignment-audit-20260913.md)与[实训结果](reports/official-alignment-results-20260913/README.md)。新训练入口默认官方target/noise FM、source条件与纯噪声推理；Base直接使用原生官方28步pipeline。已完成的四H200全U-Net训练开发集900/900，但独立单图340/360、连续RGB链410/480（9/16整链），尚未通过功能验收。扩展到151条件、17道语义问题的新训练正在用户四H200实例上运行；独立验证自动接续。显式`--base-guidance-scale 1`只改变Base推理，默认7.5保留。旧source-anchored文档仅供历史复现。
+> 2026-09-13：[官方DreamLite训练对齐审计](reports/official-alignment-audit-20260913.md)与[实训结果](reports/official-alignment-results-20260913/README.md)。新训练入口默认官方target/noise FM、source条件与纯噪声推理；Base直接使用原生官方28步pipeline。显式`--base-guidance-scale 1`只改变Base推理，默认7.5保留。旧source-anchored文档和下方旧实验阶段记录仅供历史复现，当前结论以上方完整结果为准。
 
 > 2026-09-08：已同步 [旧 R11 同题多起点实验的真实结果](reports/r11-mcq-open-multistart-results-20260907/README.md)，包含汇总、原文回答、审计记录与轨迹图。
 
