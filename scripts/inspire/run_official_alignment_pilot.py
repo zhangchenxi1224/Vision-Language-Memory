@@ -37,12 +37,18 @@ def main():
     p.add_argument("--colocate-models",action="store_true")
     p.add_argument("--baseline-reference",type=Path)
     p.add_argument("--baseline-reference-result-sha256")
+    p.add_argument("--initial-writer-package",type=Path)
+    p.add_argument("--initial-writer-package-sha256")
     p.add_argument("--seed", type=int, default=20260913)
     p.add_argument("--deadline-unix", type=float, required=True)
     p.add_argument("--resume", action="store_true")
     a=p.parse_args()
     if a.eval_seeds < 2:
         raise ValueError("At least two paired evaluation noise seeds are required")
+    if bool(a.initial_writer_package) != bool(a.initial_writer_package_sha256):
+        raise ValueError("Initial Writer package requires its manifest SHA256")
+    if a.initial_writer_package and (a.model_variant != "base" or a.trainable_scope != "full_unet" or a.baseline_reference):
+        raise ValueError("Initial Writer requires Base/full-U-Net and a new measured baseline")
     if not 1.0<=a.base_guidance_scale<=100.0 or (a.model_variant!="base" and a.base_guidance_scale!=7.5):
         raise ValueError("Base guidance must be in [1,100] and applies only to Base")
     if subprocess.check_output(["git","rev-parse","HEAD"],cwd=ROOT,text=True).strip()!=a.expected_commit:
@@ -69,6 +75,9 @@ def main():
         "trainable_scope":a.trainable_scope,"checkpoint_interval":a.checkpoint_interval,
         "colocate_models":a.colocate_models,"base_guidance_scale":a.base_guidance_scale if a.model_variant=="base" else None,
         "created_unix":time.time(),"deadline_unix":a.deadline_unix}
+    if a.initial_writer_package:
+        binding.update(initial_writer_package=str(a.initial_writer_package.resolve()),
+                       initial_writer_package_manifest_sha256=a.initial_writer_package_sha256)
     write_json(a.output_dir/"dispatch.json",binding)
     parity=a.output_dir/"parity.json"
     commands=[]
@@ -94,6 +103,9 @@ def main():
         "--deadline-unix",str(a.deadline_unix)]
     train.extend(["--model-variant",a.model_variant])
     train.extend(["--trainable-scope",a.trainable_scope,"--checkpoint-interval",str(a.checkpoint_interval)])
+    if a.initial_writer_package:
+        train.extend(["--initial-writer-package",str(a.initial_writer_package),
+                      "--initial-writer-package-sha256",a.initial_writer_package_sha256])
     if a.colocate_models:
         train.extend(["--colocate-models","--reader-device","cuda:0"])
     if a.baseline_reference:

@@ -434,6 +434,8 @@ def run(args) -> dict:
     groups = training_groups(bank, args.target_mode)
     semantic_questions = {g.get("semantic_question_id", g["question_id"]) for g in groups}
     official = is_official_flow(args)
+    from vision_memory.training.writer_initialization import initial_writer_binding, apply_initial_writer
+    initialization = initial_writer_binding(args)
     inference_steps=28 if args.model_variant=="base" else 4
     binding = {"schema": "latent-bank-unet/v2", "git_commit": commit, "source_hashes": source_hashes(),
         "bank_manifest_sha256": file_sha256(args.bank_manifest), "route": bank["route"],
@@ -461,6 +463,8 @@ def run(args) -> dict:
         "dreamlite_model_path": str(args.dreamlite.resolve()), "reader_model_path": str(args.reader_model.resolve()),
         "target_split": {g["question_id"]: dict(zip(("train", "heldout"), member_split(g["teacher_ids"]))) for g in groups},
         "generalization_scope": "single-question Writer mechanism" if len(semantic_questions) == 1 else "seen-question Writer; no held-out-question claim"}
+    if initialization is not None:
+        binding["initial_writer"] = initialization
     identity_path = args.output_dir / "identity.json"
     if identity_path.exists() and json.loads(identity_path.read_text(encoding="utf-8")) != binding:
         raise RuntimeError("Output directory belongs to another bank/source/budget")
@@ -478,6 +482,8 @@ def run(args) -> dict:
         raise RuntimeError("Model/runtime identity changed")
     write_json(runtime_path, runtime_binding)
     binding = {**binding, **runtime_binding}
+    if initialization is not None:
+        apply_initial_writer(args, runtime, initialization)
     pipe, reader = runtime["pipe"], runtime["reader"]
     frozen = frozen_versions(pipe, reader)
     parameters = trainable_unet_parameters(pipe.unet,scope)
@@ -485,7 +491,8 @@ def run(args) -> dict:
     optimizer = torch.optim.AdamW(parameters, lr=args.lr, betas=(.9, .999), eps=1e-8, weight_decay=args.weight_decay)
     checkpoint = args.output_dir / "checkpoint-latest.pt"
     verify_training_teacher_readback(args, runtime, groups, teachers)
-    # Baseline is evaluated on the untrained adapter (LoRA B=0), before resume load.
+    # Measure the declared starting parameters before any new update or resume
+    # load: pretrained/zero LoRA by default, or an explicitly sealed warm start.
     baseline = evaluate(args, runtime, bank, teachers, "baseline")
     if getattr(args,"baseline_reference",None):
         verify_baseline_reference(args.output_dir,args.baseline_reference,args.baseline_reference_result_sha256)
@@ -597,6 +604,8 @@ def run(args) -> dict:
     for snapshot in runtime["snapshots"].values():
         verify_snapshot_binding(snapshot)
     runtime.get("verify_additional_bindings",lambda:None)()
+    if initialization is not None and initial_writer_binding(args) != initialization:
+        raise RuntimeError("Initial Writer package changed during the new experiment")
     delta = sum(float((p.detach().cpu() - initial_parameters[n]).double().square().sum())
                 for n,p in pipe.unet.named_parameters() if p.requires_grad)
     if not delta > 0:
@@ -642,6 +651,8 @@ def parser() -> argparse.ArgumentParser:
     p.add_argument("--colocate-models",action="store_true")
     p.add_argument("--baseline-reference",type=Path)
     p.add_argument("--baseline-reference-result-sha256")
+    p.add_argument("--initial-writer-package", type=Path)
+    p.add_argument("--initial-writer-package-sha256")
     p.add_argument("--gradient-accumulation-steps", type=int, default=4)
     p.add_argument("--weight-decay", type=float, default=1e-4)
     p.add_argument("--flow-protocol", choices=("official", "legacy_anchored"), default="official")
