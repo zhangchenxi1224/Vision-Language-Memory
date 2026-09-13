@@ -30,6 +30,6 @@
 
 09-14 补齐：prefix0 为 428/480、76/96 图五问法全对；prefix1 为 467/480、90/96 图五问法全对。两份完整 archive 已下载并验证远端 SHA，再由本地完整重算全部 raw、19328 次训练抽样及192张 PNG；PT 在远端实际核验。本地读取包含 Unicode 的原始回答时使用 UTF-8，不修改回答或评分。prefix0 SHA 为 `19a0b435b1682d756adb338adb53866266b43d4b044c828e8c3c030226fb922d`，prefix1 为 `7aabfe0290289cac192f0c06b422e9d87c3862bf7512664859f292bb8151dba4`。全四路共1990条原始记录、360张PNG均完成本地重算。
 
-真实导出 CLI 已在旧单卡完成6次写入、30次读取，parity_pass=true、reference_functional_pass=false：工程一致性通过，但模型仍有功能失败。其完整本地证据归档另行记录。
+真实导出 CLI 已在旧单卡完成6次写入、30次读取，parity_pass=true、reference_functional_pass=false：工程一致性通过，但模型仍有功能失败。完整 archive `16bc3d0-logical-cli-evidence.tgz` 为6,208,749字节，远端/本地SHA **e0e8f9d4720b9717ddfa3d763c5a0e28a7c94c22021fe82b1d47b22fa357483f**。独立本地复核全部36条command/result、30次原始读取、6次写入PNG及最终持久PNG与原始parity记录一致；不把仅相同的错误回答算成功。
 
 抽样改动显著改善历史前缀，却损害清除和连续更新，不能交付为可用版本。下一轮固定相同预算与抽样，只改变训练条件编码，依据全302格真实首步速度对照进行；保持官方原生推理不变。
