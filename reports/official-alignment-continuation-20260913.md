@@ -1,5 +1,15 @@
 # Goal 接续位置
 
+## 09-14 05:04 原生终点评估分片1733行，独立最终PT核验已部署
+
+- **本turn实质进展**：补齐原生03最终302份开发PT的独立CPU内容核验，代码 `scripts/reporting/collect_native_endpoint_tensors.py` 与CPU等待driver `scripts/inspire/collect_native_tensors_when_complete.py` 已commit/push **a426c76**。不是重新跑训练/开发评分：现有9e endpoint collector检查完整文件SHA、训练draw和baseline，但未逐份打开最终trained PT核验实际Gaussian/所有29状态/对应Reader像素；新工具只补这一证据缺口。6项实际测试通过（完整轨迹、非有限中间态、起点混source、像素变化、半精度、错误seed），语法/diff检查通过。
+- 固定source仍用干净 **P/repos/dreamlite-native-validation-20260914@9e27050ea3fe1e7d54fe81714244f93ae07bac81**；新collector作为外部脚本上传 **P/runs/.../collect-native-endpoint-tensors-20260914.py**，不修改live03/9e/1f86/35741bd源码。它要求parent_binding精确03原生协议、实际runtime SHA **b97bf55f679cb94805ef769b9e748f09a55182a8f36fb9dcb48c6fcfb7bdd1a0**，重验实际最终checkpoint、每份PT SHA、真实CPU高斯、最终latent/图像、29个有限FP32状态，完整3020raw按既有gold+EOS重算。输出含全部302 tensor-cell绑定、完整原始回答与父plan/bank/runtime/result/complete seals；PT和checkpoint留远端，明确披露。
+- **CPU等待进程1171301已实际确认S**（dl-align-cpu-20260914）；status **03f8467-native-tensors-driver-status.json**，statewaiting_for_complete_native_endpoint，time1789333400.9062757；log **03f8467-native-tensors-driver.log**，launcher **launch-native-tensor-evidence-20260914.sh**，远端driver **collect-native-tensors-when-complete-20260914.py**。等待9e原生suite越过完整endpoint-collection后执行，08:00仍无完整endpoint则失败保留，CPU核验最多1h。勿重复启动。全部上传/启动/检查工具已终态，无未决句柄。
+- 预计证据输出 **P/runs/.../03f8467-native-final-tensors-{summary.json,evidence.tgz}**；完成后读远端实际digest、完整下载、本地运行同collector的 `--archive --sha256 --output-prefix` 模式复核所有3020raw与302绑定。此证据补充9e完整endpoint/四路/CLI证据，不能替代它们。
+- **当前GPU实际状态**（time1789333457.965，05:04CST）：03仍4832更新，4个CUDA PID204015–204018均R。trained分片分别 **436/432/440/425，共1733条**；merged train/trained/generations.jsonl仍0是四rank尚未合并，**不是评估没开始**。实际stage log已打印各rank trained阶段。父terminal仍null，9e原生suitewaiting。不要误因merged空而重启。
+- Raw单卡共享记录 **2120/3020**，state running；本turn实际在单卡查询time1789333056.73确认CUDA863954 R。CPUraw证据1060433仍waiting；新四卡raw功能suite1864908/35741bd仍waiting_for_native_suite_and_full_raw_evidence，未占GPU。其部署参数/截止09:50与上节相同。
+- 小观察器已更新并上传，增加 **native_trained_shard_rows** 和 **native_tensor_evidence**，同时保留该实例实际CUDA命令行与状态。下一步优先等待完整终点/两个CPU核验，下载并本地重算真实结果，继续9e与35741bd全部四路功能/CLI。用户原实例保留；goal继续active，当前不具备最终分数或可用模型证据。
+
 ## 09-14 04:55 四卡完成4832更新，raw完整功能suite已部署并等待
 
 - **本turn实质进展**：动态raw推理策略、显式v2参数包、完整四路功能验证/原始证据collector/本地recount/真实CLI链路均实现，执行前计划 `reports/official-raw-condition-functional-validation-20260914.md` 已固定；19项推理/包/恢复测试和8项完整矩阵/绑定测试实际通过，语法检查和diff检查通过。固定运行源码 **35741bd3eb691575ef65032ca04f7ddb23a90b76** 已commit/push，并部署至干净独立 **P/repos/dreamlite-raw-functional-validation-20260914**，不修改03/9e/1f86 live checkout。所有部署与上传工具已成功结束，无遗留句柄。
