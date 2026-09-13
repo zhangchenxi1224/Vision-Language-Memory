@@ -73,6 +73,8 @@ def evaluate(runtime, image, *, spec, step, directory, all_prompts):
     with storage.preserve_rng():
         for condition, pixels in conditions.items():
             for prompt_id, query in prompts.items():
+                if time.time() >= runtime.get('deadline_unix', float('inf')):
+                    raise TimeoutError('Oracle deadline reached during readback; partial evidence retained')
                 output = teacher(runtime, pixels, prompt_id)
                 gold_ids = output.target_ids[0, :output.answer_token_count].cpu().tolist()
                 generated = generate_short_answer(model=runtime['reader'], processor=runtime['processor'],
@@ -114,6 +116,8 @@ def run_one(*, spec, initial, reference, runtime, output_dir):
     try:
         replay.write_json(directory / 'initial_reproducibility.json', gradient_gate(oracle, runtime))
         for step in range(257):
+            if time.time() >= runtime.get('deadline_unix', float('inf')):
+                raise TimeoutError('Oracle deadline reached; saved trajectory retained')
             current = oracle.latent_fp32.detach().cpu().clone()
             path = directory / 'latents' / f'step-{step:03d}.pt'
             sha = storage.save_tensor_payload(path, {'optimizer_step': step, 'latent_fp32': current})
