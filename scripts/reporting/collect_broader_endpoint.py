@@ -17,6 +17,7 @@ from vision_memory.training.latent_bank_unet import stable_seed, balanced_draw
 COMMIT = '84cdfdb58ace96954243de5caf427948717c9abf'
 BANK_SHA = 'c27cd65dab809deabb5f2cb08891517d3590244651d08a8c6763c84fea901592'
 PLAN_SHA = 'c4a6986edf1330e27af5b91e5105ad6e3806040f01d562f791edbd392bd16834'
+NATIVE_CONDITION_COMMIT = '03f8467e5a1201c2dbd9d12484bf2338d7837727'
 # Independently observed in the complete720-row historical readback and the
 # sealed transition positive controls, not inferred from each scored output.
 GOLD_IDS = {'ambient': [59614], 'jazz': [73, 9802], 'no active preference': [2152, 4541, 21933],
@@ -74,7 +75,12 @@ def phase_summary(rows, bank, phase):
 def registered_protocol(bank, logical_sampling_commit=None):
     if logical_sampling_commit is None:
         return COMMIT, training_plan(BANK_SHA, COMMIT), PLAN_SHA
-    from scripts.experiments.logical_sampling_protocol import plan
+    # The explicit training commit selects the preregistered condition control.
+    # Never infer a different protocol from mutable run metadata or its score.
+    if logical_sampling_commit == NATIVE_CONDITION_COMMIT:
+        from scripts.experiments.native_condition_protocol import plan
+    else:
+        from scripts.experiments.logical_sampling_protocol import plan
     registered = plan(bank, logical_sampling_commit)
     digest = hashlib.sha256((json.dumps(registered, indent=2, sort_keys=True) + '\n').encode()).hexdigest()
     return logical_sampling_commit, registered, digest
@@ -88,11 +94,14 @@ def parent_binding(run, bank_path, *, logical_sampling_commit=None):
     if read(run / 'preregistered-experiment.json') != registered:
         raise ValueError('Fixed4832-update protocol differs')
     identity = read(run / 'train/identity.json')
+    native_condition = commit == NATIVE_CONDITION_COMMIT
     for key, expected in {'git_commit': commit, 'steps': 4832, 'seed': SEED, 'eval_seeds': 2,
             'bank_manifest_sha256': BANK_SHA, 'model_variant': 'base', 'flow_protocol': 'official',
             'trainable_scope': 'full_unet', 'gradient_accumulation_steps': 4}.items():
         if identity.get(key) != expected:
             raise ValueError('Unexpected broader training identity: ' + key)
+    if identity.get('prompt_style') != ('native_base' if native_condition else 'official_raw'):
+        raise ValueError('Training condition protocol differs from the explicit registered commit')
     if logical_sampling_commit:
         sampling = registered['sampling']
         expected = {'strategy': 'logical_condition', 'strata': sampling['strata'],
@@ -101,6 +110,10 @@ def parent_binding(run, bank_path, *, logical_sampling_commit=None):
             raise ValueError('Logical sampling identity changed')
         check = read(run / 'train/baseline-reference-check.json')
         binding = identity['initial_baseline_match']
+        if native_condition and (binding.get('training_condition_control') != 'official_raw -> native_base'
+                or check.get('explicit_training_condition_change') !=
+                    'official_raw -> native_base; only encoder hashes and train_prompt metadata may differ'):
+            raise ValueError('Missing explicit native-condition baseline control')
         if (check['reference_result_sha256'] != registered['reference_result_sha256']
                 or binding['result_sha256'] != registered['reference_result_sha256']
                 or check['reference'] != binding['reference'] or binding['baseline_is_measured_again'] is not True
@@ -117,6 +130,10 @@ def parent_binding(run, bank_path, *, logical_sampling_commit=None):
             or initial['parent_optimizer_steps'] != 2880):
         raise ValueError('Parameter-only initialization differs')
     runtime = read(run / 'train/runtime.json')['additional_protocol_binding']
+    expected_prompt = ('native Base edit, conditional row of upstream three-branch encoding'
+        if native_condition else 'raw event, upstream LoRA example')
+    if runtime.get('train_prompt') != expected_prompt:
+        raise ValueError('Actual training prompt encoding differs from the registered protocol')
     if runtime['inference_guidance_scale'] != 1. or runtime['inference_steps'] != 28:
         raise ValueError('Native inference protocol changed')
     if set(runtime['source_bindings']) != {group['question_id'] for group in bank['groups']}:
@@ -207,7 +224,8 @@ def collect(run, bank_path, *, text_only=False, logical_sampling_commit=None):
         # Recheck actual tensors/raws against the original initialization at
         # collection time; a stored pass flag alone is insufficient.
         gate = identity['initial_baseline_match']
-        verify_initialized_baseline_reference(run / 'train', Path(gate['reference']), gate['result_sha256'])
+        verify_initialized_baseline_reference(run / 'train', Path(gate['reference']), gate['result_sha256'],
+            native_condition_control=logical_sampling_commit == NATIVE_CONDITION_COMMIT)
     return {'identity': identity, 'result_sha256': sha(run / 'train/result.json'), 'checkpoint_sha256': result['checkpoint_sha256'],
         'phases': phases, 'matched_pairs': changes, 'optimizer_steps': 4832, 'exact_draws_replayed': len(draws),
         'draws_per_group': counts, 'sigma_min': min(draw['effective_sigma'] for draw in draws),

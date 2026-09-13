@@ -77,3 +77,17 @@ def test_native_condition_plan_preserves_exact_prior_draws_budget_and_native_inf
     assert current['training_prompt_style']=='native_base'
     assert current['reference_result_sha256']==REFERENCE_RESULT
     assert 'Only training condition encoding changes' in current['budget_change']
+
+
+def test_collector_selects_only_the_exact_registered_native_training_commit():
+    import hashlib
+    from scripts.reporting.collect_broader_endpoint import registered_protocol, NATIVE_CONDITION_COMMIT
+    from scripts.experiments.native_condition_protocol import plan, REFERENCE_COMMIT
+    from scripts.experiments.logical_sampling_protocol import plan as logical_plan
+    bank={'groups':actual_groups()}
+    commit,registered,digest=registered_protocol(bank,NATIVE_CONDITION_COMMIT)
+    assert commit==NATIVE_CONDITION_COMMIT and registered==plan(bank,commit)
+    assert digest==hashlib.sha256((json.dumps(registered,indent=2,sort_keys=True)+'\n').encode()).hexdigest()
+    prior,registered,_=registered_protocol(bank,REFERENCE_COMMIT)
+    assert registered==logical_plan(bank,prior)
+    assert registered_protocol(bank,'a'*40)[1]['schema']!=plan(bank,commit)['schema']

@@ -1,5 +1,13 @@
 # Goal 接续位置
 
+## 09-14 03:32 原生条件对照已提交到新四卡，旧验证全部完成
+
+- **当前新训练**：干净训练源码 `03f8467e5a1201c2dbd9d12484bf2338d7837727` 已独立部署 `P/repos/dreamlite-native-condition-20260914`，不修改16/17旧checkout。新4H200 `dl-official-exp-h200x4-20260914` 上 driver **202374**、pilot **203373** 已启动，run `P/runs/.../03f8467-native-condition-full4832`，状态文件 `native-condition-driver-status.json`，启动时running，截止 **1789344000=08:00CST**。plan SHA **a744792e813aac8da2ad2a0ed774b2ba31cba6ab72a51b4bbc680d1df57fa5528**。这时尚未观察实际优化步；须检查pilot.log和基线门控/梯度证据，不能把进程启动当训练完成。launcher远端 `launch-native-condition-20260914.sh`，外层日志 `03f8467-native-condition-driver.log`。不要再次启动。
+- **唯一实验变量**：相同原d1536d初始化、新AdamW、4832更新/global4/同19328draw/31逻辑抽样，训练条件由raw event改为官方Base三分支完整encode_prompt后提取row2与mask。保留官方目标噪声FM、全sigma、纯高斯初态、原生28步/CFG1推理。新编码是明确偏离官方LoRA原始文本示例以匹配官方Base推理，不称原样复现。所有302基线输出/PT/29轨迹/raw必须逐位一致，仅训练embedding哈希和train_prompt元数据可不同。
+- **首步诊断已完整结束并核验**：17f35be输出全302格×3臂，302真实原生首步均逐位重现旧GPU轨迹；906个实际速度MSE在CPU重算、全部PT/教师/噪声/更新复核。10个失败格native首步平均MSE .16410525，raw条件 .000681887，全部10格raw更低。全证据SHA `24cdf7bb88dc23298167a165d3c011cde066a1c866bfdfe0944ee2d9149ec611`，已本地验证归档03f8467。诊断driver32207及probe32213/32581均已结束，不再等待它们。条件差异包含批处理/padding，不单归因模板，也不是新功能准确率。
+- **旧验证完成**：serial suite21419 completed，single280/360、chains390/480与7/16整链、prefix0 428/480、prefix1 467/480；真实CLI6write30read parity true但功能false。所有四路1990raw/360PNG全archive已下载、本地重算；prefix0/1新增本地归档。旧1H200工作已结束，按用户最新要求保留；用户r3/r2不动。新四卡实际训练后再判断临时资源替换，不能重复申请相同四卡。
+- 新训练需要后续独立完整四路验证、endpoint全PT/抽样复核及CLI重放。正在扩展现有collector显式按训练commit03f8467选择原生条件计划；仍使用 `--logical-sampling-commit 03f8467...` 传递固定训练身份，比较矩阵完全保持，必须单独固定新验证源码。当前不能直接在03训练checkout运行仅支持旧协议的collector。
+
 ## 09-14 03:00 首步诊断已移到新四卡GPU0，实际开始加载模型
 
 - **本goal turn有实质进展**：在用户新授权/已RUNNING四卡上启动同一冻结首步诊断，与旧实例prefix1并行；不是no-progress。原等待driver378979在重新确认waiting且未建output后主动SIGTERM，状态failed/error=Bounded diagnostic interrupted是**调度迁移记录，不是模型失败**。该旧PID已退出，不能重启其launcher或再等它执行。
