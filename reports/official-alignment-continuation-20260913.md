@@ -1,5 +1,17 @@
 # Goal 接续位置
 
+## 08:46 接续：完整880/900失败已核验，新GPU独立诊断真实运行
+
+- **原9628d71训练/评测/collector均真实完成，旧GPU dl-transitions-h200x1-20260913已stop/delete。不要再poll旧6087/463114或旧实例。** 完整1350final，matched880/900、176/180图五问法全部正确；baseline0/900；20错全是4张jazz→clear图回答jazz，wording0三噪声、wording2一噪声。父terminal为completed仅表示工作结束，development gate为false。
+- final result SHA **3d747a7c5ba97430587aa11d4787e708df7bc2ebfee8430c4a358ee7ea28f8c8**；checkpoint SHA **b4251975684314171ae35bfbd1db2e4009b14a39eeb5e5127834824fd6d8cdf1**。collector已实际核验360PT、2700raw、11520draw、每组256次及不变controls；sigma min2.682209014892578e-06/max0.9999300837516785/高于半区5717次。
+- 本地已完整下载summary、archive、geometry、collector-status，所有SCP已exit0无待传输。summary SHA **ed3355a203129562aced3fcfde5eb8ea170569cf376bc67e09dd09a1f1c1e27c**；archive **1639169bytes** SHA **18d4e8f71b123853dffb829ef2daeadeadf17c9915eef1d0a6517960b62b1ee5**；geometry SHA **40cbc010b5f51bfa8c587f667b72ba32a645c5a075c5686c2c7f0d98b4c129f5**。均在results中以transition-wording-endpoint-*或transition-wording-state-geometry.json命名。不要重复下载。
+- 新 `scripts/reporting/verify_transition_endpoint_local.py` 已真实运行成功，会话79366已exit0：解包临时目录，独立重放全部2700raw/11520draw，生成transition-wording-endpoint-local-verification.json；明确361个远端PT/checkpoint缺失，本地没有数值重算大张量。全文分析见results/transition-wording-endpoint-review.md。新证据/本地工具/报告待本轮commit。
+- 新 **cb60fc2** 的`scripts/reporting/transition_state_geometry.py`已push并部署到 **P/repos/dreamlite-transition-geometry-20260913**，fetch会话63875已exit0。实际在旧GPU上的CPU隐藏CUDA执行成功，会话40627已exit0；核验180张量/3教师/900raw，4失败图全部最近jazz(RMS0.0196–0.0233)，距clear约0.4193–0.4212。这是生成旧状态的诊断依据，不把距离当语义验收或因果证明。全部输入大张量留共享盘。旧GPU在以上完成、本地核验通过、确认nvidia-smi无进程且旧PIDs消失后才释放。
+- **唯一当前owned GPU：dl-transval-h200x1-20260913，RUNNING**，新建08:32:49，开发区-H200-3号机房-2-cuda12.8版本，ngc-pytorch:25.02-cuda12.8.0-py3，1H200/20CPU/200GiB/shm64，节点qb-prod-gpu2136，240min约12:33到期；suite deadline **1789272000=12:00CST**。CLI不允许H200 SSH/rtunnel，直接exec --workspace 分布式训练空间加外层tty:true已验证；无IAB。CPU仍dl-align-cpu2-20260913。
+- 已实际执行一次 **P/runs/.../launch-transition-validation.sh**（本地.cache同名，上传会话已结束），调用b9eec7c4 checkout suite和 **--diagnostic**。**suite PID32512，真正GPU worker PID33032**，08:43ps都live，日志已出现ambient_original_training_event-seed-06及真实28步采样。当前stage single_writes/state running，不是只建实例或只写计划。不能重复launch或套件重启已有输出。
+- 状态 **P/runs/.../transition-validation-suite-status.json**，PID文件同前缀.pid，总日志同前缀.log；stage日志 **0f40767-transition-confirmation.log**。已完成的端点summary是launcher前置。输出single **0f40767-transition-confirmation**，chain **0f40767-transition-chains**，后续package/parity/inference均281b653-transition-*；固定b9suite串行运行collectors、96PT审计、新端点导出和独立六写30读重放。完整独立结果尚无，开发失败必须仍保留。下步检查同一live33032/32512、完成stage后下载核验，依实际失败调整下一训练，不能因局部正确或queue exit0宣称可用。
+- 更广16题FP32/RGB720回读probe仍 **未GPU派发**，已部署5bcf6d0 checkout和17f00e92面板，不在当前suite中；当前独立诊断完成后用剩余idle资源继续。没有新的训练优化进程。goal仍active，无阻塞。
+
 ## 08:04 接续：2880步更新完成，完整final评测已启动
 
 - 实际GPU观察 **2880/2880 optimizer updates**，elapsed5517.603s。`train/checkpoint-final.pt`已经存在，4681006404bytes；目前只是存在/大小核验，最终SHA及载荷绑定仍等待completed后严格collector。08:03最新 **final_generation_rows58/1350**，parent terminal仍不存在。

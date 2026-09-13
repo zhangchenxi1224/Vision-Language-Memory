@@ -2,6 +2,12 @@
 
 目标仍在进行。实现偏差已修复并有数值证据，但目前还没有通过功能验收的 Writer。
 
+## 08:44 固定2880步端点已完整核验
+
+新45条件组训练完成，开发集从0/900提高到 **880/900**，176/180图五问法全通过。20个失败回答全部是jazz源图清除后仍回答jazz，涉及4张图、两种事件表达；全部4图latent也最接近jazz教师。开发验收失败，不能宣布版本可用。详见[端点分析](transition-wording-endpoint-review.md)、[严格摘要](transition-wording-endpoint-summary.json)、[本地复核](transition-wording-endpoint-local-verification.json)及[完整原始文本归档](transition-wording-endpoint-evidence.tgz)。
+
+两个phase共2700raw、全部11520次抽样及远端checkpoint/360PT已核验，证据SHA本地远端一致。新H200实例已开始预注册单图、RGB链和独立推理诊断；完整结果仍待生成。下文06:43的训练中描述是历史记录。
+
 ## 06:43 新训练基线已封存，优化进行中
 
 45 条件组的完整未训练 baseline 已结束：1,350 条原始回答，其中900条matched严格正确且立即EOS为0/900。45组teacher原问直接读取45/45，36组非灰源PNG的官方编码与已封存source latent完全一致。新full-U-Net训练已实际进入优化；06:38观察279/2880更新，尚无最终训练效果结论。
