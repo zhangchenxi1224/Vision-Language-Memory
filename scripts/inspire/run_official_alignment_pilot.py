@@ -40,6 +40,9 @@ def main():
     p.add_argument("--baseline-reference-result-sha256")
     p.add_argument("--initial-writer-package",type=Path)
     p.add_argument("--initial-writer-package-sha256")
+    p.add_argument('--initial-baseline-match', type=Path)
+    p.add_argument('--initial-baseline-match-result-sha256')
+    p.add_argument('--sampling-strategy', choices=('condition', 'logical_condition'), default='condition')
     p.add_argument("--seed", type=int, default=20260913)
     p.add_argument("--deadline-unix", type=float, required=True)
     p.add_argument("--resume", action="store_true")
@@ -50,6 +53,8 @@ def main():
         raise ValueError("Initial Writer package requires its manifest SHA256")
     if a.initial_writer_package and (a.model_variant != "base" or a.trainable_scope != "full_unet" or a.baseline_reference):
         raise ValueError("Initial Writer requires Base/full-U-Net and a new measured baseline")
+    if bool(a.initial_baseline_match) != bool(a.initial_baseline_match_result_sha256) or (a.initial_baseline_match and not a.initial_writer_package):
+        raise ValueError('Initialized baseline match requires the reference result SHA and explicit starting parameters')
     if not 1.0<=a.base_guidance_scale<=100.0 or (a.model_variant!="base" and a.base_guidance_scale!=7.5):
         raise ValueError("Base guidance must be in [1,100] and applies only to Base")
     if subprocess.check_output(["git","rev-parse","HEAD"],cwd=ROOT,text=True).strip()!=a.expected_commit:
@@ -86,6 +91,9 @@ def main():
     if a.initial_writer_package:
         binding.update(initial_writer_package=str(a.initial_writer_package.resolve()),
                        initial_writer_package_manifest_sha256=a.initial_writer_package_sha256)
+    binding['sampling_strategy'] = a.sampling_strategy
+    if a.initial_baseline_match:
+        binding['initial_baseline_match'] = {'reference': str(a.initial_baseline_match), 'result_sha256': a.initial_baseline_match_result_sha256}
     write_json(a.output_dir/"dispatch.json",binding)
     parity=a.output_dir/"parity.json"
     commands=[]
@@ -111,6 +119,10 @@ def main():
         "--deadline-unix",str(a.deadline_unix)]
     train.extend(["--model-variant",a.model_variant])
     train.extend(["--trainable-scope",a.trainable_scope,"--checkpoint-interval",str(a.checkpoint_interval)])
+    train.extend(['--sampling-strategy', a.sampling_strategy])
+    if a.initial_baseline_match:
+        train.extend(['--initial-baseline-match', str(a.initial_baseline_match),
+            '--initial-baseline-match-result-sha256', a.initial_baseline_match_result_sha256])
     if a.initial_writer_package:
         train.extend(["--initial-writer-package",str(a.initial_writer_package),
                       "--initial-writer-package-sha256",a.initial_writer_package_sha256])
@@ -141,11 +153,15 @@ def main():
                 "returncode":completed.returncode,"command":command,"time_unix":time.time()})
             return completed.returncode
     result=json.loads((a.output_dir/"train/result.json").read_text())
+    actual_identity = json.loads((a.output_dir / 'train/identity.json').read_text())
     write_json(a.output_dir/"terminal.json",{"state":"completed","training_result_sha256":file_sha256(a.output_dir/"train/result.json"),
         "matched_all_five_prompts_correct":result["trained"]["matched_all_five_prompts_correct"],
         "matched_all_five_prompts_answer_eos":result["trained"]["matched_all_five_prompts_answer_eos"],
         "matched_question_noise_pairs":result["trained"]["matched_question_noise_pairs"],
-        "scope":"single-question regression evaluation; not evidence of event-conditioned generalization", "time_unix":time.time()})
+        'semantic_question_count': actual_identity['semantic_question_count'],
+        'conditional_group_count': actual_identity['conditional_group_count'],
+        'scope': actual_identity['generalization_scope'] + '; development evaluation, not independent functional confirmation',
+        'time_unix': time.time()})
     return 0
 
 

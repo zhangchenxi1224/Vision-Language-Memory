@@ -101,15 +101,61 @@ def member_split(teacher_ids: list[str]) -> tuple[list[str], list[str]]:
     return [x for x in ordered if x not in held], held
 
 
+def logical_condition_strata(groups: list[dict[str, Any]]) -> dict[str, list[int]]:
+    """Equal-weight source/operation cases, with rewordings nested inside a case.
+
+    These are data-loader metadata only. They never enter the Writer condition.
+    Require explicit historical/transition provenance rather than infer semantics
+    from an answer, a prompt substring, or a model's observed success.
+    """
+    strata, representatives, seen = {}, {}, set()
+    for index, group in enumerate(groups):
+        qid = group['question_id']
+        if qid in seen:
+            raise ValueError('Repeated conditional group')
+        seen.add(qid)
+        if group.get('parent_transition_group') and 'historical_target_index' not in group:
+            key = 'transition:' + group['parent_transition_group']
+            signature = tuple(group[name] for name in ('source_state', 'operation', 'target_state', 'source_latent_sha256', 'answer'))
+            signature += (group['question_variants'],)
+        elif 'historical_target_index' in group and not group.get('parent_transition_group'):
+            key = 'historical:' + qid
+            signature = (group['historical_target_index'],)
+        else:
+            raise ValueError('Logical sampling requires explicit nonoverlapping transition/prefix provenance')
+        if key in representatives and representatives[key] != signature:
+            raise ValueError('A logical condition mixes different source, operation or question semantics')
+        representatives[key] = signature
+        strata.setdefault(key, []).append(index)
+    if not strata:
+        raise ValueError('Logical sampling requires nonempty conditions')
+    return {key: sorted(indices, key=lambda index: groups[index]['question_id']) for key, indices in sorted(strata.items())}
+
+
 def balanced_draw(groups: list[dict[str, Any]], seed: int, step: int, *,
-                  max_sigma: float = 1.0) -> tuple[dict[str, Any], str, int, float]:
-    """Each complete cycle visits every question once; sample a member uniformly."""
-    if not groups or not math.isfinite(max_sigma) or not 0 < max_sigma <= 1:
+                  max_sigma: float = 1.0, sampling_strategy: str = 'condition') -> tuple[dict[str, Any], str, int, float]:
+    """Visit each declared data unit once per cycle; never average target tensors."""
+    if not groups or step < 0 or not math.isfinite(max_sigma) or not 0 < max_sigma <= 1:
         raise ValueError("Nonempty groups and max_sigma in (0, 1] required")
-    cycle, offset = divmod(step, len(groups))
-    order_generator = torch.Generator().manual_seed(stable_seed(seed, "question-order", cycle))
-    order = torch.randperm(len(groups), generator=order_generator).tolist()
-    group = groups[order[offset]]
+    if sampling_strategy == 'condition':
+        # Preserve the original condition-uniform draw stream bit-for-bit.
+        cycle, offset = divmod(step, len(groups))
+        order_generator = torch.Generator().manual_seed(stable_seed(seed, "question-order", cycle))
+        order = torch.randperm(len(groups), generator=order_generator).tolist()
+        group = groups[order[offset]]
+    elif sampling_strategy == 'logical_condition':
+        strata = logical_condition_strata(groups)
+        keys = list(strata)
+        cycle, offset = divmod(step, len(keys))
+        rng_order = torch.Generator().manual_seed(stable_seed(seed, 'logical-condition-order', cycle))
+        key = keys[int(torch.randperm(len(keys), generator=rng_order)[offset])]
+        members = strata[key]
+        expression_cycle, expression_offset = divmod(cycle, len(members))
+        rng_expression = torch.Generator().manual_seed(stable_seed(seed, 'logical-expression-order:' + key, expression_cycle))
+        member = int(torch.randperm(len(members), generator=rng_expression)[expression_offset])
+        group = groups[members[member]]
+    else:
+        raise ValueError('Unknown explicit sampling strategy')
     train, _ = member_split(group["teacher_ids"])
     rng = torch.Generator().manual_seed(stable_seed(seed, "bank-member-and-sigma", step))
     teacher_id = train[int(torch.randint(len(train), (), generator=rng))]

@@ -146,7 +146,7 @@ def verify_baseline_reference(output_dir, reference, expected_result_sha256):
             values.append(torch.load(directory/name,map_location="cpu",weights_only=True))
         if values[0]["noise_seed"]!=values[1]["noise_seed"] or any(
             not torch.equal(values[0][k],values[1][k]) for k in ("latent","image")):
-            raise RuntimeError("Baseline is not bitwise equal to the original two-GPU LoRA-zero baseline")
+            raise RuntimeError("Baseline is not bitwise equal to the sealed reference baseline")
         paths=[v["trajectory"] for v in values]
         if len(paths[0])!=len(paths[1]) or any(not torch.equal(x,y) for x,y in zip(*paths)):
             raise RuntimeError("Baseline native trajectories differ from reference")
@@ -164,6 +164,19 @@ def verify_baseline_reference(output_dir, reference, expected_result_sha256):
         "identical_raw_generation_records":True,"samples":checked}
     write_json(output_dir/"baseline-reference-check.json",report)
     return report
+
+
+def verify_initialized_baseline_reference(output_dir, reference, expected_result_sha256):
+    """Compare two newly measured baselines from the same explicit parameter export."""
+    current = json.loads((output_dir / 'identity.json').read_text())
+    prior = json.loads((reference / 'train/identity.json').read_text())
+    if not current.get('initial_writer') or not prior.get('initial_writer'):
+        raise ValueError('Both baselines require an explicit initialized Writer')
+    for key in ('initial_writer', 'bank_manifest_sha256', 'seed', 'eval_seeds', 'model_variant', 'trainable_scope',
+                'flow_protocol', 'prompt_style', 'steps', 'lr', 'gradient_accumulation_steps', 'weight_decay'):
+        if current.get(key) != prior.get(key):
+            raise ValueError('Controlled sampler baseline differs in ' + key)
+    return verify_baseline_reference(output_dir, reference, expected_result_sha256)
 
 
 def frozen_audit(pipe, reader, versions: dict[str, int], *, scope="lora") -> None:
@@ -411,7 +424,7 @@ def evaluate(args, runtime, bank, teachers, phase: str) -> dict:
 def flow_microbatch(args, runtime, groups, teachers, draw_index):
     official = is_official_flow(args)
     group, teacher_id, noise_seed, sigma = balanced_draw(groups, args.seed, draw_index,
-                                                       max_sigma=1.0 if official else START_SIGMA)
+        max_sigma=1.0 if official else START_SIGMA, sampling_strategy=getattr(args, 'sampling_strategy', 'condition'))
     context = runtime["contexts"][group["question_id"]]
     noise = torch.randn(context["source"].shape, generator=torch.Generator().manual_seed(noise_seed),
                         dtype=torch.float32).to(runtime["vae_device"])
@@ -540,6 +553,18 @@ def run(args) -> dict:
         "generalization_scope": "single-question Writer mechanism" if len(semantic_questions) == 1 else "seen-question Writer; no held-out-question claim"}
     if initialization is not None:
         binding["initial_writer"] = initialization
+    strategy = getattr(args, 'sampling_strategy', 'condition')
+    if strategy != 'condition':
+        from vision_memory.training.latent_bank_unet import logical_condition_strata
+        strata = logical_condition_strata(groups)
+        binding['sampling'] = {'strategy': strategy, 'strata': {key: [groups[index]['question_id'] for index in indices]
+            for key, indices in strata.items()}, 'within_stratum': 'balanced seeded expression cycles',
+            'writer_input': False}
+    if getattr(args, 'initial_baseline_match', None):
+        if initialization is None or getattr(args, 'baseline_reference', None) or not args.initial_baseline_match_result_sha256:
+            raise ValueError('Initialized baseline match requires its result SHA and an explicit parameter initialization')
+        binding['initial_baseline_match'] = {'reference': str(args.initial_baseline_match),
+            'result_sha256': args.initial_baseline_match_result_sha256, 'baseline_is_measured_again': True}
     if parallel.enabled:
         binding["data_parallel"] = {"world_size": parallel.world,
             "nccl_algorithm": "Ring", "nccl_protocol": "Simple", "gradient_bucket_bytes": 32 * 1024 * 1024,
@@ -590,6 +615,18 @@ def run(args) -> dict:
     baseline = parallel.evaluate(args, runtime, bank, teachers, "baseline", sys.modules[__name__])
     if getattr(args,"baseline_reference",None):
         verify_baseline_reference(args.output_dir,args.baseline_reference,args.baseline_reference_result_sha256)
+    if getattr(args, 'initial_baseline_match', None):
+        outcome = None
+        if parallel.root:
+            try:
+                verify_initialized_baseline_reference(args.output_dir, args.initial_baseline_match, args.initial_baseline_match_result_sha256)
+                outcome = {'passed': True}
+            except Exception as error:
+                outcome = {'passed': False, 'error': str(error)}
+        # Propagate a failed check to every replica before any optimizer update.
+        outcome = parallel.gather(outcome)[0]
+        if not outcome['passed']:
+            raise RuntimeError('Initialized baseline comparison failed: ' + outcome['error'])
     step = 0
     if checkpoint.exists():
         if not args.resume:
@@ -764,6 +801,9 @@ def parser() -> argparse.ArgumentParser:
     p.add_argument("--baseline-reference-result-sha256")
     p.add_argument("--initial-writer-package", type=Path)
     p.add_argument("--initial-writer-package-sha256")
+    p.add_argument('--initial-baseline-match', type=Path)
+    p.add_argument('--initial-baseline-match-result-sha256')
+    p.add_argument('--sampling-strategy', choices=('condition', 'logical_condition'), default='condition')
     p.add_argument("--gradient-accumulation-steps", type=int, default=4)
     p.add_argument("--weight-decay", type=float, default=1e-4)
     p.add_argument("--flow-protocol", choices=("official", "legacy_anchored"), default="official")
