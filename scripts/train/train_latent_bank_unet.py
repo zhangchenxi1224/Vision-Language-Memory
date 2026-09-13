@@ -408,12 +408,86 @@ def evaluate(args, runtime, bank, teachers, phase: str) -> dict:
     return summary
 
 
+def flow_microbatch(args, runtime, groups, teachers, draw_index):
+    official = is_official_flow(args)
+    group, teacher_id, noise_seed, sigma = balanced_draw(groups, args.seed, draw_index,
+                                                       max_sigma=1.0 if official else START_SIGMA)
+    context = runtime["contexts"][group["question_id"]]
+    noise = torch.randn(context["source"].shape, generator=torch.Generator().manual_seed(noise_seed),
+                        dtype=torch.float32).to(runtime["vae_device"])
+    target = teachers[teacher_id].to(runtime["vae_device"])
+    state, true_velocity = (official_flow_bridge(noise, target, sigma) if official
+                            else anchored_flow_bridge(context["source"], noise, target, sigma))
+    condition = context["condition"]
+    prediction = predict_velocity(runtime["sampler"], state, context["source"], sigma,
+        condition.prompt_embeds, condition.attention_mask, integer_timestep=official)
+    loss = (prediction.float() - true_velocity.float()).square().mean()
+    if not torch.isfinite(loss):
+        raise RuntimeError("Nonfinite U-Net flow-matching loss")
+    (loss / args.gradient_accumulation_steps).backward()
+    return {"question_id": group["question_id"], "teacher_id": teacher_id,
+            "noise_seed": noise_seed, "effective_sigma": sigma, "flow_matching_mse": float(loss.detach())}
+
+
+def parallel_gradient_preflight(args, runtime, groups, teachers, parallel, parameters):
+    """Compare the actual full U-Net's first four draws without optimizer updates."""
+    if not parallel.enabled:
+        return
+    from vision_memory.training.synchronous_parallel import microbatch_indices, reduce_gradients
+    from vision_memory.training.checkpoint import _rng_state, _restore_rng_state
+    rng = _rng_state()
+    serial_rows, serial_grads = [], []
+    if parallel.root:
+        for i in range(args.gradient_accumulation_steps):
+            serial_rows.append(flow_microbatch(args, runtime, groups, teachers, i))
+        serial_grads = [p.grad.detach().cpu().clone() for p in parameters]
+    for p in parameters:
+        p.grad = None
+    parallel.barrier()
+    local_rows = [flow_microbatch(args, runtime, groups, teachers, i)
+                  for i in microbatch_indices(args.gradient_accumulation_steps, parallel.world, parallel.rank)]
+    reduce_gradients(parameters)
+    gathered = parallel.gather(local_rows)
+    report = None
+    if parallel.root:
+        rows = [gathered[i % parallel.world][i // parallel.world] for i in range(args.gradient_accumulation_steps)]
+        error2, reference2, max_error, max_reference = 0., 0., 0., 0.
+        for p, reference in zip(parameters, serial_grads):
+            actual = p.grad.detach().cpu()
+            delta = (actual - reference).double()
+            error2 += float(delta.square().sum())
+            reference2 += float(reference.double().square().sum())
+            max_error = max(max_error, float(delta.abs().max()))
+            max_reference = max(max_reference, float(reference.abs().max()))
+        relative_l2 = (error2 / max(reference2, 1e-30)) ** .5
+        relative_max = max_error / max(max_reference, 1e-30)
+        report = {"scope": "actual full U-Net gradient only; no optimizer update or success claim",
+            "global_microbatches": args.gradient_accumulation_steps, "world_size": parallel.world,
+            "serial_microbatches": serial_rows, "parallel_microbatches": rows,
+            "identical_draws_and_losses": rows == serial_rows, "gradient_relative_l2_error": relative_l2,
+            "gradient_max_absolute_error": max_error, "gradient_relative_max_error": relative_max,
+            "relative_tolerance": 2e-6,
+            "passed": rows == serial_rows and relative_l2 <= 2e-6 and relative_max <= 2e-6}
+        write_json(args.output_dir / "parallel-gradient-preflight.json", report)
+    reports = parallel.gather(report)
+    for p in parameters:
+        p.grad = None
+    _restore_rng_state(rng)
+    if reports[0]["passed"] is not True:
+        raise RuntimeError("Actual full-U-Net serial/parallel gradient comparison failed")
+
+
 def run(args) -> dict:
     import fcntl
     from scripts.inspire.model_snapshot_manifest import verify_snapshot_binding
+    from vision_memory.training.synchronous_parallel import ParallelExecution, microbatch_indices, reduce_gradients
+    from vision_memory.training.checkpoint import _rng_state, _restore_rng_state
+    parallel = ParallelExecution(args)
     args.output_dir.mkdir(parents=True, exist_ok=True)
-    lock = (args.output_dir / ".training.lock").open("a")
-    fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    if parallel.root:
+        lock = (args.output_dir / ".training.lock").open("a")
+        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    parallel.barrier()
     scope=getattr(args,"trainable_scope","lora")
     interval=getattr(args,"checkpoint_interval",1)
     if interval<1 or (scope=="full_unet" and (args.model_variant!="base" or not is_official_flow(args))):
@@ -442,7 +516,8 @@ def run(args) -> dict:
         "steps": args.steps, "seed": args.seed, "lr": args.lr, "lora_rank": args.lora_rank if scope=="lora" else None,
         "trainable_scope":scope,"checkpoint_interval":interval,
         "colocate_models":getattr(args,"colocate_models",False),
-        "dreamlite_device":args.dreamlite_device,"reader_device":args.reader_device,
+        "dreamlite_device":"rank-local-cuda" if parallel.enabled else args.dreamlite_device,
+        "reader_device":"rank-local-cuda" if parallel.enabled else args.reader_device,
         "baseline_reference":str(args.baseline_reference) if getattr(args,"baseline_reference",None) else None,
         "baseline_reference_result_sha256":getattr(args,"baseline_reference_result_sha256",None),
         "checkpoint_recovery":"exact saved optimizer/RNG; replay unsaved updates after a hard interruption",
@@ -465,10 +540,22 @@ def run(args) -> dict:
         "generalization_scope": "single-question Writer mechanism" if len(semantic_questions) == 1 else "seen-question Writer; no held-out-question claim"}
     if initialization is not None:
         binding["initial_writer"] = initialization
+    if parallel.enabled:
+        binding["data_parallel"] = {"world_size": parallel.world,
+            "nccl_algorithm": "Ring", "nccl_protocol": "Simple", "gradient_bucket_bytes": 32 * 1024 * 1024,
+            "global_microbatches_per_update": args.gradient_accumulation_steps,
+            "local_microbatches_per_update": args.gradient_accumulation_steps // parallel.world,
+            "gradient_reduction": "SUM(loss/global_microbatches gradients), then global clip and AdamW",
+            "draw_assignment": "global draw index = step*global_microbatches + rank + local_micro*world_size",
+            "evaluation": "native batch-one inference; disjoint complete condition groups by rank",
+            "serial_numerical_equivalence": "same objective and draws; reduction order can change FP32 rounding"}
+    parallel.agree(binding, "training identity")
     identity_path = args.output_dir / "identity.json"
     if identity_path.exists() and json.loads(identity_path.read_text(encoding="utf-8")) != binding:
         raise RuntimeError("Output directory belongs to another bank/source/budget")
-    write_json(identity_path, binding)
+    if parallel.root:
+        write_json(identity_path, binding)
+    parallel.barrier()
     runtime = load_runtime(args, bank)
     runtime["should_pause"] = lambda: stop_requested[0] or bool(args.deadline_unix and time.time() >= args.deadline_unix - 90)
     pause_if_requested(runtime)
@@ -480,20 +567,27 @@ def run(args) -> dict:
     runtime_path = args.output_dir / "runtime.json"
     if runtime_path.exists() and json.loads(runtime_path.read_text(encoding="utf-8")) != runtime_binding:
         raise RuntimeError("Model/runtime identity changed")
-    write_json(runtime_path, runtime_binding)
+    parallel.agree(runtime_binding, "model/runtime identity")
+    if parallel.root:
+        write_json(runtime_path, runtime_binding)
+    parallel.barrier()
     binding = {**binding, **runtime_binding}
     if initialization is not None:
         apply_initial_writer(args, runtime, initialization)
     pipe, reader = runtime["pipe"], runtime["reader"]
     frozen = frozen_versions(pipe, reader)
     parameters = trainable_unet_parameters(pipe.unet,scope)
+    initial_rank_check = parallel.check_parameters(pipe.unet)
+    if parallel.enabled and parallel.root:
+        write_json(args.output_dir / "parallel-initial-parameters.json", initial_rank_check)
     initial_parameters = {n: p.detach().cpu().clone() for n,p in pipe.unet.named_parameters() if p.requires_grad}
     optimizer = torch.optim.AdamW(parameters, lr=args.lr, betas=(.9, .999), eps=1e-8, weight_decay=args.weight_decay)
     checkpoint = args.output_dir / "checkpoint-latest.pt"
-    verify_training_teacher_readback(args, runtime, groups, teachers)
+    parallel_gradient_preflight(args, runtime, groups, teachers, parallel, parameters)
+    parallel.teacher_readback(args, runtime, groups, teachers, sys.modules[__name__])
     # Measure the declared starting parameters before any new update or resume
     # load: pretrained/zero LoRA by default, or an explicitly sealed warm start.
-    baseline = evaluate(args, runtime, bank, teachers, "baseline")
+    baseline = parallel.evaluate(args, runtime, bank, teachers, "baseline", sys.modules[__name__])
     if getattr(args,"baseline_reference",None):
         verify_baseline_reference(args.output_dir,args.baseline_reference,args.baseline_reference_result_sha256)
     step = 0
@@ -502,13 +596,20 @@ def run(args) -> dict:
             raise RuntimeError("Checkpoint exists; use --resume for exact recovery")
         loaded = load_training_checkpoint(checkpoint, trainable_module=pipe.unet, optimizer=optimizer,
                                           expected_manifest=binding)
+        if parallel.enabled:
+            states = loaded["trainer_state"].get("distributed_rng_states", [])
+            if len(states) != parallel.world:
+                raise RuntimeError("Checkpoint lacks exact per-rank RNG states")
+            _restore_rng_state(states[parallel.rank])
         step = int(loaded["optimizer_step"])
         if not 0 <= step <= args.steps:
             raise RuntimeError("Checkpoint optimizer cursor is outside its bound budget")
-        if step:
+        if step and parallel.root:
             write_json(args.output_dir / "metrics" / f"step-{step:06d}.json", loaded["trainer_state"]["metrics_row"])
     elif args.resume and (args.output_dir / "training.jsonl").exists():
         raise RuntimeError("Metrics exist without a recoverable optimizer checkpoint")
+    parallel.barrier()
+    parallel.check_parameters(pipe.unet)
     # Canonical metric files recover the tiny checkpoint-to-log write interval.
     log_rows = []
     for i in range(1, step + 1):
@@ -517,13 +618,15 @@ def run(args) -> dict:
             raise RuntimeError("Optimizer metric sequence is corrupt")
         log_rows.append(metric)
     log_path = args.output_dir / "training.jsonl"
-    if args.resume and log_path.exists():
+    if parallel.root and args.resume and log_path.exists():
         # Preserve the physical pre-recovery history, including any updates
         # beyond the last periodic checkpoint that must be replayed exactly.
         log_path.rename(args.output_dir / f"training-before-recovery-{time.time_ns()}.jsonl")
     temporary_log = log_path.with_suffix(".jsonl.tmp")
-    temporary_log.write_text("".join(json.dumps(row, sort_keys=True) + "\n" for row in log_rows), encoding="utf-8")
-    temporary_log.replace(log_path)
+    if parallel.root:
+        temporary_log.write_text("".join(json.dumps(row, sort_keys=True) + "\n" for row in log_rows), encoding="utf-8")
+        temporary_log.replace(log_path)
+    parallel.barrier()
     question_updates = Counter(q for row in log_rows for q in {m["question_id"] for m in row["microbatches"]})
     teacher_updates = Counter(t for row in log_rows for t in {m["teacher_id"] for m in row["microbatches"]})
     last_saved_step=step
@@ -531,35 +634,30 @@ def run(args) -> dict:
     def save_current():
         nonlocal last_saved_step
         if step>last_saved_step:
-            save_training_checkpoint(checkpoint, trainable_module=pipe.unet, optimizer=optimizer,
-                epoch=0, episode_cursor=step, optimizer_step=step, manifest=binding, trainer_state={"metrics_row":last_row})
+            trainer_state = {"metrics_row": last_row}
+            if parallel.enabled:
+                trainer_state["distributed_rng_states"] = parallel.gather(_rng_state())
+            if parallel.root:
+                save_training_checkpoint(checkpoint, trainable_module=pipe.unet, optimizer=optimizer,
+                    epoch=0, episode_cursor=step, optimizer_step=step, manifest=binding, trainer_state=trainer_state)
+            parallel.barrier()
             last_saved_step=step
     started = time.monotonic()
     while step < args.steps:
-        if runtime["should_pause"]():
+        stop_now = parallel.any_stop(runtime["should_pause"]())
+        if stop_now:
             save_current()
-        pause_if_requested(runtime)
+            raise TrainingPaused("A rank requested pause or reached the configured deadline")
         optimizer.zero_grad(set_to_none=True)
         microbatches = []
-        for micro in range(args.gradient_accumulation_steps):
+        for micro in microbatch_indices(args.gradient_accumulation_steps, parallel.world, parallel.rank):
             draw_index = step * args.gradient_accumulation_steps + micro
-            group, teacher_id, noise_seed, sigma = balanced_draw(groups, args.seed, draw_index,
-                                                               max_sigma=1.0 if official else START_SIGMA)
-            context = runtime["contexts"][group["question_id"]]
-            noise = torch.randn(context["source"].shape, generator=torch.Generator().manual_seed(noise_seed),
-                                dtype=torch.float32).to(runtime["vae_device"])
-            target = teachers[teacher_id].to(runtime["vae_device"])
-            state, true_velocity = (official_flow_bridge(noise, target, sigma) if official
-                                    else anchored_flow_bridge(context["source"], noise, target, sigma))
-            condition = context["condition"]
-            prediction = predict_velocity(runtime["sampler"], state, context["source"], sigma,
-                condition.prompt_embeds, condition.attention_mask, integer_timestep=official)
-            loss = (prediction.float() - true_velocity.float()).square().mean()
-            if not torch.isfinite(loss):
-                raise RuntimeError("Nonfinite U-Net flow-matching loss")
-            (loss / args.gradient_accumulation_steps).backward()
-            microbatches.append({"question_id": group["question_id"], "teacher_id": teacher_id,
-                "noise_seed": noise_seed, "effective_sigma": sigma, "flow_matching_mse": float(loss.detach())})
+            microbatches.append(flow_microbatch(args, runtime, groups, teachers, draw_index))
+        if parallel.enabled:
+            reduce_gradients(parameters)
+            gathered = parallel.gather(microbatches)
+            microbatches = [gathered[i % parallel.world][i // parallel.world]
+                            for i in range(args.gradient_accumulation_steps)]
         grads = [p.grad for p in parameters if p.grad is not None]
         if not grads or not all(torch.isfinite(g).all() for g in grads) or not any((g != 0).any() for g in grads):
             raise RuntimeError("Trainable U-Net parameters have no finite nonzero gradient")
@@ -569,32 +667,42 @@ def run(args) -> dict:
         if not all(torch.isfinite(p).all() for p in parameters):
             raise RuntimeError("Nonfinite trainable U-Net parameter")
         step += 1
-        row = {"optimizer_step": step, "question_id": group["question_id"], "teacher_id": teacher_id,
-               "noise_seed": noise_seed, "effective_sigma": sigma,
+        row = {"optimizer_step": step, **{k: microbatches[-1][k]
+               for k in ("question_id", "teacher_id", "noise_seed", "effective_sigma")},
                "flow_matching_mse": sum(m["flow_matching_mse"] for m in microbatches) / len(microbatches),
                "microbatches": microbatches,
                ("lora_grad_norm_before_clip" if scope=="lora" else "unet_grad_norm_before_clip"): norm,
                "elapsed_since_resume_seconds": time.monotonic() - started}
         last_row=row
-        if checkpoint_due(step,args.steps,interval,stopping=runtime["should_pause"]()):
+        stop_now = parallel.any_stop(runtime["should_pause"]())
+        if checkpoint_due(step,args.steps,interval,stopping=stop_now):
             save_current()
-        write_json(args.output_dir / "metrics" / f"step-{step:06d}.json", row)
-        append_jsonl(args.output_dir / "training.jsonl", row)
+        if parallel.root:
+            write_json(args.output_dir / "metrics" / f"step-{step:06d}.json", row)
+            append_jsonl(args.output_dir / "training.jsonl", row)
+        if parallel.enabled and (step == 1 or step == args.steps):
+            rank_check = parallel.check_parameters(pipe.unet)
+            if parallel.root:
+                write_json(args.output_dir / f"parallel-parameters-step-{step:06d}.json", rank_check)
         question_updates.update({m["question_id"] for m in microbatches})
         teacher_updates.update({m["teacher_id"] for m in microbatches})
         if step % 16 == 0 or step == 1:
-            print(json.dumps({"stage": "unet_training", **row}), flush=True)
+            if parallel.root:
+                print(json.dumps({"stage": "unet_training", **row}), flush=True)
             frozen_audit(pipe, reader, frozen,scope=scope)
-        del loss, prediction, state, target, true_velocity, grads
-        if stop_requested[0] or (args.deadline_unix and time.time() >= args.deadline_unix - 90):
+        del grads
+        if stop_now:
             save_current()
             result = {"status": "paused", "optimizer_steps": step, "checkpoint": str(checkpoint),
                       "reason": "signal or configured deadline; resume preserves optimizer/RNG"}
-            write_json(args.output_dir / "terminal.json", result)
+            if parallel.root:
+                write_json(args.output_dir / "terminal.json", result)
             return result
     # Keep a durable final adapter/optimizer before costly Reader evaluation.
-    atomic_tensor(args.output_dir / "checkpoint-final.pt", torch.load(checkpoint, map_location="cpu", weights_only=False))
-    after = evaluate(args, runtime, bank, teachers, "trained")
+    if parallel.root:
+        atomic_tensor(args.output_dir / "checkpoint-final.pt", torch.load(checkpoint, map_location="cpu", weights_only=False))
+    parallel.barrier()
+    after = parallel.evaluate(args, runtime, bank, teachers, "trained", sys.modules[__name__])
     paired = paired_evaluation(*[[json.loads(line) for line in (args.output_dir / phase / "generations.jsonl").read_text(encoding="utf-8").splitlines()]
                                  for phase in ("baseline", "trained")])
     frozen_audit(pipe, reader, frozen,scope=scope)
@@ -621,9 +729,11 @@ def run(args) -> dict:
         "excluded_questions_without_success": bank.get("excluded_question_ids", []),
         "route_comparison_limit": "Same total optimizer budget does not imply same per-question exposure when bank question counts differ; route EM differences are not a causal bank-quality comparison",
         "checkpoint_sha256": file_sha256(args.output_dir / "checkpoint-final.pt")}
-    write_json(args.output_dir / "result.json", result)
-    write_json(args.output_dir / "terminal.json", {"status": "completed", "optimizer_steps": step,
-        "result_sha256": file_sha256(args.output_dir / "result.json"), "checkpoint_sha256": result["checkpoint_sha256"]})
+    if parallel.root:
+        write_json(args.output_dir / "result.json", result)
+        write_json(args.output_dir / "terminal.json", {"status": "completed", "optimizer_steps": step,
+            "result_sha256": file_sha256(args.output_dir / "result.json"), "checkpoint_sha256": result["checkpoint_sha256"]})
+    parallel.barrier()
     return result
 
 
@@ -649,6 +759,7 @@ def parser() -> argparse.ArgumentParser:
     p.add_argument("--trainable-scope",choices=("lora","full_unet"),default="lora")
     p.add_argument("--checkpoint-interval",type=int,default=1)
     p.add_argument("--colocate-models",action="store_true")
+    p.add_argument("--data-parallel", action="store_true")
     p.add_argument("--baseline-reference",type=Path)
     p.add_argument("--baseline-reference-result-sha256")
     p.add_argument("--initial-writer-package", type=Path)
@@ -686,11 +797,13 @@ def main() -> int:
     except TrainingPaused as error:
         checkpoint = args.output_dir / "checkpoint-latest.pt"
         step = int(torch.load(checkpoint, map_location="cpu", weights_only=False)["optimizer_step"]) if checkpoint.exists() else 0
-        write_json(args.output_dir / "terminal.json", {"status": "paused", "optimizer_steps": step,
+        terminal_name = "terminal.json" if int(os.environ.get("RANK", "0")) == 0 else "terminal-rank-" + os.environ["RANK"] + ".json"
+        write_json(args.output_dir / terminal_name, {"status": "paused", "optimizer_steps": step,
             "checkpoint": str(checkpoint) if checkpoint.exists() else None, "reason": str(error)})
         return 75
     except BaseException as error:
-        write_json(args.output_dir / "failure.json", {"status": "failed", "error": str(error),
+        failure_name = "failure.json" if int(os.environ.get("RANK", "0")) == 0 else "failure-rank-" + os.environ["RANK"] + ".json"
+        write_json(args.output_dir / failure_name, {"status": "failed", "error": str(error),
             "traceback": traceback.format_exc(), "time_unix": time.time()})
         raise
 

@@ -35,6 +35,7 @@ def main():
     p.add_argument("--trainable-scope",choices=("lora","full_unet"),default="lora")
     p.add_argument("--checkpoint-interval",type=int,default=1)
     p.add_argument("--colocate-models",action="store_true")
+    p.add_argument("--data-parallel-world-size", type=int, default=1)
     p.add_argument("--baseline-reference",type=Path)
     p.add_argument("--baseline-reference-result-sha256")
     p.add_argument("--initial-writer-package",type=Path)
@@ -60,11 +61,16 @@ def main():
     bank,_=load_teacher_bank(a.bank_manifest)
     gpu=subprocess.check_output(["nvidia-smi","--query-gpu=name,memory.total,memory.used","--format=csv,noheader,nounits"],text=True)
     rows=[r.split(",") for r in gpu.strip().splitlines()]
-    expected_gpus=1 if a.colocate_models else 2
+    if a.data_parallel_world_size not in (1, 2, 4) or (a.data_parallel_world_size > 1 and
+            (not a.colocate_models or a.model_variant != "base" or a.trainable_scope != "full_unet")):
+        raise ValueError("Parallel pilot requires two/four colocated Base/full-U-Net replicas")
+    expected_gpus=a.data_parallel_world_size if a.data_parallel_world_size > 1 else (1 if a.colocate_models else 2)
     if len(rows)!=expected_gpus or any("H200" not in r[0] or int(r[1])<140000 or int(r[2])>100 for r in rows):
         raise RuntimeError(f"Need {expected_gpus} idle full-memory H200s: {gpu}")
     env={**os.environ, **snapshot_environment(bank), **REQUIRED_DETERMINISM_ENV,
          "PYTHONUNBUFFERED":"1", "HF_HUB_OFFLINE":"1", "TRANSFORMERS_OFFLINE":"1"}
+    if a.data_parallel_world_size > 1:
+        env.update(NCCL_ALGO="Ring", NCCL_PROTO="Simple")
     a.output_dir.mkdir(parents=True,exist_ok=True)
     import torch, diffusers, transformers
     if not torch.cuda.is_available() or torch.version.cuda != "12.8":
@@ -75,6 +81,8 @@ def main():
         "trainable_scope":a.trainable_scope,"checkpoint_interval":a.checkpoint_interval,
         "colocate_models":a.colocate_models,"base_guidance_scale":a.base_guidance_scale if a.model_variant=="base" else None,
         "created_unix":time.time(),"deadline_unix":a.deadline_unix}
+    if a.data_parallel_world_size > 1:
+        binding["data_parallel_world_size"] = a.data_parallel_world_size
     if a.initial_writer_package:
         binding.update(initial_writer_package=str(a.initial_writer_package.resolve()),
                        initial_writer_package_manifest_sha256=a.initial_writer_package_sha256)
@@ -117,6 +125,9 @@ def main():
         train.extend(["--teacher-dreamlite",str(a.teacher_dreamlite),"--official-source",str(a.official_source),
                       "--base-manifest",str(a.base_manifest),"--base-guidance-scale",str(a.base_guidance_scale)])
     if a.resume: train.append("--resume")
+    if a.data_parallel_world_size > 1:
+        train = [sys.executable, "-m", "torch.distributed.run", "--standalone", "--nnodes=1",
+                 "--nproc-per-node=" + str(a.data_parallel_world_size)] + train[2:] + ["--data-parallel"]
     commands.append(train)
     write_json(a.output_dir/"commands.json",{"commands":commands})
     for i,command in enumerate(commands):
@@ -124,7 +135,9 @@ def main():
         with (a.output_dir/f"stage-{i}-{time.time_ns()}.log").open("w") as log:
             completed=subprocess.run(command,cwd=ROOT,env=env,stdout=log,stderr=subprocess.STDOUT)
         if completed.returncode:
-            write_json(a.output_dir/"terminal.json",{"state":"paused" if completed.returncode==75 else "failed",
+            child_terminal = a.output_dir / "train/terminal.json"
+            paused = completed.returncode == 75 or (child_terminal.exists() and json.loads(child_terminal.read_text()).get("status") == "paused")
+            write_json(a.output_dir/"terminal.json",{"state":"paused" if paused else "failed",
                 "returncode":completed.returncode,"command":command,"time_unix":time.time()})
             return completed.returncode
     result=json.loads((a.output_dir/"train/result.json").read_text())
