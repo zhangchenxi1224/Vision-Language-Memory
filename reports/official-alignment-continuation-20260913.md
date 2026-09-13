@@ -1,5 +1,14 @@
 # Goal 接续位置
 
+## 09-14 04:23 分支数值诊断完成，完整raw条件对照实际加载
+
+- **本turn实质进展**：独立完成105f521全302格数值核验、CPU604PT重算和本地全记录复核；另外在保留单卡启动完整raw条件28步读取对照。四卡03训练仍持续更新，04:12实测1682/4832、elapsed1375.99秒、204015–204018实际live；固定suite369292仍等待。未更改03/9e运行源码、预算或指标。
+- **单卡当前工作**：dl-logical-val-h200x1-20260914，raw driver **863564**、probe parent **863568**、实际CUDA worker **863954**（04:22占22.6GiB、Reader加载完成）。干净固定源码 **1f86d56fd51cfd6b96ba4cba39bcbfc26093d251** 在 **P/repos/dreamlite-broader-raw-control-20260914**；输出 **P/runs/.../1f86d56-broader-raw-condition**，log同prefix.log，status **1f86d56-broader-raw-driver-status.json** running，外层log **1f86d56-broader-raw-driver.log**。截止 **1789335600=05:40CST**，旧单GPU约05:50lease，启动时确保75min。launcher **launch-broader-raw-control-20260914.sh**，driver远端 **run-broader-raw-control-20260914.py**、本地 `scripts/inspire/run_broader_raw_condition_control.py`。勿重复启动、勿修改该live checkout或停止单卡。
+- Raw控制冻结bb最终4832权重，仅使用其真实raw训练embedding/mask替代native包装，保留native28/source branches/CFG1与151条件×2noise×5query及负对照；phase **training_raw_guidance1**，应产3020raw/302PT，直接比较bb原native1460/1510。0优化，不与新四卡训练混报。即使开发全通过仍须独立表达/RGB链/CLI；当前无完整raw功能结果。**其独立CPU collector及后续功能验证仍需实现/执行**；不能误用要求完整训练日志的endpoint collector到零更新probe目录。
+- **105诊断已结束**：driver796066/parent796068/worker796430全终态，不再等待。固定源码 **105f52140f80f562e8d077422fef480931fdd506** 在 **P/repos/dreamlite-native-branch-parity-20260914**，run **105f521-native-branch-parity**，driverstatus **105f521-native-branch-driver-status.json** completed，velocity_parity_pass **false**。这是完整执行成功、数值阈值非全通过，不是执行失败。全部302格encoder/mask/source/noise匹配、native首步速度与Euler复现17原记录；相对L2最大 **1.592526e-6**，相对最大值误差最大 **3.368092e-6**，双2e-6门槛 **296/302**，6格均clear。int1000/float1000全部差值0。阈值不改，不据此单独解释功能错误或改动正在训练的实验。
+- CPU `collect_native_branch_parity.py`实际检查新旧604PT、原始高斯、真实source hash、Euler和误差，句柄51192已exit0。archive **105f521-native-branch-verified-evidence.tgz**，157,908bytes，SHA **cd9796d7a0e650b148afa3b08abf3758c8c8e3c9dff487dedfbdfae10e7eb279**；summary **27114ec2e85cdb61c9ead43220209aaddc1ca798d187260231eaf49a8d301907**；complete **0f6db794a2ea8ae0d5249ae335340d5234100794b943b64ec98a3b43416a5795**。已完整下载并运行 `verify_native_branch_parity_local.py` 全302格重算，三文件在results归档。无未完成SCP或exec句柄。
+- 原始03基线604PT/3020raw已独立完整核验并pushf1ded23；105诊断及raw控制实现/计划push1f86d56。新训练终点、四路功能与raw读取结果均待完成，goal保持active，用户原r3/r2均保留。
+
 ## 09-14 03:58 新条件训练实际更新，基线及首步已独立完整复核
 
 - **本turn属于实质进展**：新03训练已完成全部基线并实际开始优化；03:56实测 **519/4832步、elapsed422.4748秒**，四CUDA进程204015–204018实际live，suite369292仍S等待父终点。训练/验证目录、固定03/9e源码、08:00/10:20截止均不变。不是进程只启动或只看锁文件，也不能称终点或新模型效果已完成。所有旧实例仍保留。
