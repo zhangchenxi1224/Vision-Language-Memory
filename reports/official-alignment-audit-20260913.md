@@ -2,7 +2,7 @@
 
 分支：`codex/dreamlite-official-alignment-20260913`，起点 `f68bf06`。附件为问题线索，以下以实际源码和可追溯产物为依据。
 
-当前结论：官方FM公式、完整时间域、纯噪声初态、原生scheduler已成套实现并验证，真实实验使用官方Base原生28步推理。新4H200上相同4832步预算的原生条件编码训练对照已完成，开发 **1510/1510、302图五问法全部通过**；完整原始记录、抽样序列与实际最终PT已独立核验并本地复核。上一版31逻辑条件抽样对照开发1460/1510，其单次280/360、连续链390/480（7/16整链）、历史895/960均未全过，CLI重放一致不能消除功能失败。新模型四路功能验证正在实际运行，尚未取得完整可用版本验收。详见[新终点证据](official-alignment-results-20260913/native-condition-development-review.md)、[实验结果](official-alignment-results-20260913/README.md)及[续接记录](official-alignment-continuation-20260913.md)。以下早期记录按实验阶段保留。
+当前结论：官方FM公式、完整时间域、纯噪声初态、原生scheduler已成套实现并验证，真实实验使用官方Base原生28步推理。4832步原生条件编码对照已完成，开发 **1510/1510、302图五问法全部通过**；完整功能单写360/360、连续链480/480，但历史改写896/960，仍64条失败。冻结raw条件推理对照历史904/960，仍56条失败。两套完整原始记录、PNG、实际最终PT审计和CLI重放都已收集并本地复核，不能再把这些已完成的失败实验描述为等待结果。当前新4H200正运行仅增加历史训练表达的b9对照；原回归、新表达及完整PNG读取验收均已部署等待，尚无完整可用版本。详见[原生完整结果](official-alignment-results-20260913/native-condition-validation-review.md)、[raw完整结果](official-alignment-results-20260913/raw-condition-validation-review.md)及[续接记录](official-alignment-continuation-20260913.md)。以下早期记录按实验阶段保留。
 
 ## 官方依据
 
@@ -22,7 +22,7 @@
 
 09-14的固定bb34092模型三臂对照覆盖全部302格：真实native首步、相同sigma1的raw条件首步、sigma0.999/整数999的真实训练样本。全部302个native首步逐位重现原轨迹，全部速度PT和906个MSE经CPU复核。10个开发失败格的native平均速度MSE为0.16410525，raw为0.000681887；这支持检验条件差异，不能替代完整28步生成与Reader测试，也不能把差异只归因于文本模板而忽略批处理和padding。新训练取官方完整三分支编码的第三行及mask，推理原样保留；属于明确的训练配方变化，详见[固定计划](official-native-condition-training-plan-20260914.md)。
 
-## 本次成套修复
+## 成套修复与早期默认设置
 
 | 项目 | 历史实验 | 新默认 |
 |---|---|---|
@@ -40,6 +40,18 @@
 
 历史源码通过 Git 保留；共享诊断 helper 的旧调用仍复现 anchored 路径。新 CLI 默认为 `--flow-protocol official`，旧比较臂必须明确选择 `legacy_anchored`。不同协议不得混用旧 checkpoint。
 
+### 当前实训路径逐项核对（09-14）
+
+当前b9使用显式full_unet/native_base/FP32/CFG1配置，所以上表中的LoRA和raw event是早期默认设置，不是当前训练范围与条件。核对实际调用链：
+
+- `flow_microbatch()`在official分支只调用`official_flow_bridge(noise, target, sigma)`。该函数没有source参数；返回`(1-sigma)*target+sigma*noise`和`noise-target`，不会经旧anchored桥。
+- `balanced_draw()`在official分支取完整`torch.rand`区间；`predict_velocity(..., integer_timestep=True)`要求1000单位并取整。source仅在宽度维拼接给U-Net，损失裁回目标半边后使用FP32均方误差。这与官方训练源码的相应操作一致。
+- Base评估的`NativeBaseEditSampler`把实际初态固定为独立Gaussian，调用锁定官方pipeline完成全部28步；同时核对官方source编码、实际29个状态、有效sigma从1至0。推理时间没有错误地套用训练的整数化，也没有把Mobile的原始四步表当作Base有效时间表。
+- 当前训练条件取官方Base三prompt完整编码批次的第三行及mask，保持真实padding。历史9表达仅改变此条件输入，不改变source/teacher/noise/sigma流或31逻辑条件的权重；此项是已公开的训练配方变化，不宣称等同官方raw LoRA示例。
+- 官方示例调用`unet.train()`，本实验固定`unet.eval()`并仍对明确选中的参数反向传播。09-14直接检查当前固定Base快照的实际`unet/config.json`，其`dropout`为0.0；官方自定义模型源码中未发现BatchNorm或显式`self.training`条件分支。此配置观察用于解释模式差异，不能代替数值等价证明，也不据此改变正在运行的训练。
+
+单次与历史前缀的已有评分读FP32解码像素，实际部署读量化PNG；因此另外固定[3980条完整PNG读取验收](official-png-readback-acceptance-20260914.md)。源码协议对齐、开发集通过和CLI重放一致都不能代替该完整功能证据。
+
 ## 必须公开的剩余区别
 
 1. 官方 LoRA 示例训练 DreamLite-base，历史主路径加载Mobile（蒸馏后的四步模型）。最早Mobile适配不能称为官方Base复现；后续已建立固定Base快照的独立训练与原生28步对照，目前候选使用Base。
@@ -49,7 +61,7 @@
 5. 单题成功不能证明按事件写入或泛化；需进一步反事实事件和多题检查。
 6. 后续全U-Net容量对照改变了官方示例的LoRA训练范围。这是根据配对失败证据做的显式实验选择，保持官方FM/条件/采样协议，不称为原样复现官方LoRA配方。
 7. 官方示例将batch prompts替换为同一个default_prompt，属于固定风格示例；本任务学习多个事件条件是额外实验任务。不能假定官方示例本身已证明多状态记忆更新。
-8. 当前候选CFG1是根据固定零更新诊断得到的显式推理选择，默认官方CFG7.5的失败端点保留。三状态仍属于同一个实体、同一道语义问题；新噪声、事件改写、RGB连续更新和更广范围的功能需分别验证。
+8. 当前候选CFG1是根据固定零更新诊断得到的显式推理选择，默认官方CFG7.5的失败端点保留。早期三状态属于同一个实体、同一道语义问题；当前151条件对应17道已见语义问题。新噪声、事件改写、RGB连续更新和更广范围的功能仍需分别验证，不能将表达数量当作未见问题数量。
 
 ## 以往证据核验
 
