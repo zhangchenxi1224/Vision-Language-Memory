@@ -1,3 +1,12 @@
+## 09-14 07:16 四卡训练继续；旧/新验收已排队；新增完整 PNG 验收
+
+- Goal 仍 active。b9 在新实例 dl-official-exp-h200x4-20260914 实际运行，time1789341379 最新2826/4832步、elapsed2275.0207秒，4个CUDA进程2916294–2916297都在。完整基线通过；7b driver3222175 等待终点，56 driver3609629 等待7b完整suite。不要重复启动或修改这三套活跃源码。
+- 7b 源码已支持 b9 全19328draw/16×9实际表达选择审计及最终302实际PT完整审计，之后四路1990raw及CLI。56 独立固定新表达/新噪声计划SHA ba77e8c2ab8742bdcda703ae12071b504ea99c33173d0ebad314ddc10292fb6b，之后仍跑完整四路和新链CLI。功能失败仍保留并继续完整观察，操作失败才排查。
+- 实际训练输入部分审计已完成：907更新/3628draw逐个重放source/teacher/noise/sigma与表达embedding/mask选择；16个历史条件各9表达都实际观察到。仅为训练输入证据，不是功能分数。文件b9f90e9-training-input-audit-step-000907.json已下载，SHA 7b61de20cbd53261c34b2e13b323a4bc7756cb4bcf784c3028ffc85880079147；本地只核对文件SHA，远端CPU实际重放。全部旧下载/部署句柄已结束。
+- 新发现具体部署差异：单次和历史验证Reader读取FP32像素，PNG只是量化保存；CLI实际uint8转float/255。新增完整PNG验收代码和预先固定报告，覆盖旧/新全部3980raw、3600matched、796输入图。等待56完整结束和实际GPU空闲后运行，不改b9/7b/56。源matched PNG直接读取，全部76 control从原PT舍入保存再读；生成前不做target CE，之后原GOLD_IDS+EOS严格评分；全960条链必须像素/token一致。需部署新的干净commit并启动run_png_readback_suite.py，目前尚未部署。
+- 5ef raw完整四路和CLI全部下载、本地复核和逐行配对，已d545e5e提交推送；结果1744/1800，历史904/960，见raw-condition-validation-review.md。无残余SCP句柄，勿重复旧工作。
+- 最新平台列表：新4H200 RUNNING；原用户r3 PENDING、r2已RUNNING，均未停止或删除。旧单卡dl-logical-val-h200x1已STOPPED（租期结束）。新四卡租期约10:51，CPU约09:25；7b截止10:20、56截止10:30。继续使用新卡训练，保留原实例。
+
 # Goal 接续位置
 
 ## 09-14 06:22 raw完整功能仍56失败；历史表达覆盖新实训四卡已启动

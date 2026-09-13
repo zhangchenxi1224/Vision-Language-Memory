@@ -1,6 +1,6 @@
 # Vision Learnable Memory
 
-> 最新核验（2026-09-14）：原生条件训练与冻结raw条件推理均通过1510/1510开发、360/360单次和480/480连续链；完整历史改写分别为896/960、904/960，仍64/56失败。两套完整原始回答、PNG及实际CLI重放已本地复核，见[原生结果](reports/official-alignment-results-20260913/native-condition-validation-review.md)与[raw结果及逐条退步](reports/official-alignment-results-20260913/raw-condition-validation-review.md)。下一轮仅扩充历史训练表述，保持官方FM、原生推理和抽样权重，已在新4H200通过真实梯度预检，正在完整基线阶段。尚无通过完整验收的可用版本。
+> 最新核验（2026-09-14）：原生条件训练与冻结raw条件推理均通过1510/1510开发、360/360单次和480/480连续链；完整历史改写分别为896/960、904/960，仍64/56失败。两套完整原始回答、PNG及实际CLI重放已本地复核，见[原生结果](reports/official-alignment-results-20260913/native-condition-validation-review.md)与[raw结果及逐条退步](reports/official-alignment-results-20260913/raw-condition-validation-review.md)。下一轮仅扩充历史训练表述，保持官方FM、原生推理和抽样权重，已在新4H200通过真实梯度预检及完整基线，正在训练。原回归和[新表达验收](reports/official-fresh-wording-acceptance-20260914.md)已部署等待；另固定[完整PNG读取验收](reports/official-png-readback-acceptance-20260914.md)，检查实际持久化后的功能。尚无通过完整验收的可用版本。
 
 > 2026-09-13：[官方DreamLite训练对齐审计](reports/official-alignment-audit-20260913.md)与[实训结果](reports/official-alignment-results-20260913/README.md)。新训练入口默认官方target/noise FM、source条件与纯噪声推理；Base直接使用原生官方28步pipeline。显式`--base-guidance-scale 1`只改变Base推理，默认7.5保留。旧source-anchored文档和下方旧实验阶段记录仅供历史复现，当前结论以上方完整结果为准。
 
