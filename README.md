@@ -1,5 +1,7 @@
 # Vision Learnable Memory
 
+> 最新端点（2026-09-13 13:40）：151条件四卡训练已完成4832更新，开发集1377/1510；音乐状态转换1340/1350，16个历史问题仅37/160，多题功能仍失败。全部6040raw/19328draw已在本地重算；四路独立验证正在运行。见[完整端点分析](reports/official-alignment-results-20260913/broader151-endpoint-review.md)。下方简介保留此前实验阶段，不能用单题改善代替多题验收。
+
 > 2026-09-13：[官方DreamLite训练对齐审计](reports/official-alignment-audit-20260913.md)与[实训结果](reports/official-alignment-results-20260913/README.md)。新训练入口默认官方target/noise FM、source条件与纯噪声推理；Base直接使用原生官方28步pipeline。已完成的四H200全U-Net训练开发集900/900，但独立单图340/360、连续RGB链410/480（9/16整链），尚未通过功能验收。扩展到151条件、17道语义问题的新训练正在用户四H200实例上运行；独立验证自动接续。显式`--base-guidance-scale 1`只改变Base推理，默认7.5保留。旧source-anchored文档仅供历史复现。
 
 > 2026-09-08：已同步 [旧 R11 同题多起点实验的真实结果](reports/r11-mcq-open-multistart-results-20260907/README.md)，包含汇总、原文回答、审计记录与轨迹图。
