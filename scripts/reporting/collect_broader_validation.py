@@ -104,13 +104,17 @@ def verify_tensors(run, rows, mode):
         path = run / row['image_artifact']
         payload = torch.load(path.with_suffix('.pt'), map_location='cpu', weights_only=True)
         pixels = payload['image']
+        if pixels.dtype != torch.float32 or not torch.isfinite(pixels).all() or pixels.min() < 0 or pixels.max() > 1:
+            raise ValueError('Expected finite FP32 Reader pixels in the unit interval')
         if canonical_tensor_sha256(pixels) != row['image_sha256']:
             raise ValueError('Reader row differs from captured pixels')
         if row['condition'] != 'matched':
             continue
         trajectory = payload['trajectory']
         if (len(trajectory) != 29 or not torch.equal(trajectory[0], payload['noise'])
-                or not torch.equal(trajectory[-1], payload['latent'])):
+                or not torch.equal(trajectory[-1], payload['latent'])
+                or any(value.dtype != torch.float32 or value.shape != payload['noise'].shape
+                    or not torch.isfinite(value).all() for value in trajectory)):
             raise ValueError('Native trajectory start or endpoint differs')
         noise = torch.randn(payload['noise'].shape, generator=torch.Generator().manual_seed(row['noise_seed']), dtype=torch.float32)
         if not torch.equal(noise, payload['noise']):
@@ -126,13 +130,16 @@ def verify_tensors(run, rows, mode):
     return len(selected)
 
 
-def collect(run, parent, bank_path, expected_probe_commit, *, text_only=False, logical_sampling_commit=None):
+def collect(run, parent, bank_path, expected_probe_commit, *, text_only=False, logical_sampling_commit=None,
+            inference_condition='native'):
     run, parent, bank_path = map(Path, (run, parent, bank_path))
     bank, _, result = parent_binding(parent, bank_path, logical_sampling_commit=logical_sampling_commit)
     parent_commit, _, plan_sha = registered_protocol(bank, logical_sampling_commit)
     registered = read(parent / 'preregistered-experiment.json')
     complete = read(run / 'complete.json')
     identity = complete['identity']
+    if inference_condition not in ('native', 'training_raw') or identity.get('inference_condition', 'native') != inference_condition:
+        raise ValueError('Explicit validation inference condition differs')
     if read(run / 'identity.json') != identity or len(expected_probe_commit) != 40:
         raise ValueError('Validation identity or explicit probe commit missing')
     for key, value in {'probe_commit': expected_probe_commit, 'parent_commit': parent_commit, 'bank_sha256': BANK_SHA,
@@ -151,6 +158,18 @@ def collect(run, parent, bank_path, expected_probe_commit, *, text_only=False, l
         raise ValueError('Parent development outcome or validation interpretation changed')
     rows = jsonl(run / 'generations.jsonl')
     summary, artifacts, cases = summarize_rows(rows, registered, bank, identity['mode'], identity['prefix_lane'])
+    if inference_condition == 'training_raw':
+        from scripts.probes.official_broader_confirmation import raw_control_reference
+        if logical_sampling_commit != 'bb34092ab0d1292c87d16d9632716b218f54054b':
+            raise ValueError('Raw inference control requires the fixed bb parent')
+        raw_path = run/'raw-control-complete.json'
+        if sha(raw_path) != identity['raw_control_complete_sha256']:
+            raise ValueError('Raw development reference changed')
+        correct = raw_control_reference(read(raw_path), development, sha(parent/'train/result.json'), result['checkpoint_sha256'])
+        if (identity['raw_condition_development_correct_eos'] != correct
+                or identity['condition_encoding'] != 'single raw event on actual current RGB source, recomputed for every write'):
+            raise ValueError('Raw inference condition registration changed')
+        artifacts.add('raw-control-complete.json')
     if (identity['selected_cases'] != cases or complete['cells'] != summary['cells']
             or complete['all_generated_correct_eos'] != summary['all_generated_correct_eos']
             or set(complete['artifact_hashes']) != artifacts):
@@ -187,9 +206,10 @@ if __name__ == '__main__':
     parser.add_argument('--expected-probe-commit', required=True)
     parser.add_argument('--text-only', action='store_true')
     parser.add_argument('--logical-sampling-commit')
+    parser.add_argument('--inference-condition', choices=('native', 'training_raw'), default='native')
     a = parser.parse_args()
     summary = collect(a.run, a.parent, a.bank, a.expected_probe_commit, text_only=a.text_only,
-        logical_sampling_commit=a.logical_sampling_commit)
+        logical_sampling_commit=a.logical_sampling_commit, inference_condition=a.inference_condition)
     output = Path(str(a.output_prefix) + '-summary.json')
     output.write_text(json.dumps(summary, indent=2, sort_keys=True) + '\n')
     if not a.text_only:

@@ -14,7 +14,8 @@ def pipeline():
         prepare_image_latents=lambda image, **kw: image.clone())
 
 
-def test_recurrent_writer_uses_previous_generated_rgb_and_reads_do_not_edit(monkeypatch):
+@pytest.mark.parametrize('condition', ['native', 'training_raw'])
+def test_recurrent_writer_uses_previous_generated_rgb_and_reads_do_not_edit(monkeypatch, condition):
     edits = []
     class Sampler:
         def __init__(self, pipe, **kwargs):
@@ -24,7 +25,7 @@ def test_recurrent_writer_uses_previous_generated_rgb_and_reads_do_not_edit(monk
             return SimpleNamespace(latents=torch.ones(1, 4, 2, 2), trajectory=(kwargs["noise_latents"],))
     monkeypatch.setattr(rgb_memory, "NativeBaseEditSampler", Sampler)
     monkeypatch.setattr(rgb_memory, "decode_model_latents_unit_interval", lambda *a, **k: torch.full((1, 3, 1024, 1024), .25))
-    memory = rgb_memory.OfficialRGBMemory(pipeline())
+    memory = rgb_memory.OfficialRGBMemory(pipeline(), guidance_scale=1., inference_condition=condition)
     first = memory.write("set a value", seed=1)
     assert first.image.getpixel((0, 0)) == (64, 64, 64)
     assert first.pixels[0, 0, 0, 0] == 64 / 255.
@@ -37,6 +38,7 @@ def test_recurrent_writer_uses_previous_generated_rgb_and_reads_do_not_edit(monk
     assert edits[1][0]["source_image"].getpixel((0, 0)) == (64, 64, 64)
     torch.testing.assert_close(edits[1][1]["source_latents"], torch.full((1, 4, 2, 2), 64 / 255.), rtol=0, atol=0)
     assert edits[1][0]["event_text"] == "keep the value unchanged"
+    assert all(edit[0]['inference_condition'] == condition for edit in edits)
 
 
 def test_failed_edit_and_model_mutation_cannot_silently_change_memory(monkeypatch):

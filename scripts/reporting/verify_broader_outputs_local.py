@@ -43,7 +43,7 @@ def compare_recount(remote, local, excluded):
 
 
 def verify(endpoint_archive, endpoint_digest, *, validation_archive=None, validation_digest=None,
-           logical_sampling_commit=None, expected_probe_commit=PROBE_COMMIT):
+           logical_sampling_commit=None, expected_probe_commit=PROBE_COMMIT, inference_condition='native'):
     with tempfile.TemporaryDirectory(prefix='broader-evidence-', dir=ROOT / '.cache') as temporary:
         root = Path(temporary)
         parent = root / 'parent'
@@ -59,7 +59,7 @@ def verify(endpoint_archive, endpoint_digest, *, validation_archive=None, valida
             if sha(run / 'preregistered-plan.json') != sha(parent / 'preregistered-experiment.json'):
                 raise ValueError('Validation archive carries a different original plan')
             validation = validation_collect(run, parent, parent / 'bank/manifest.json', expected_probe_commit,
-                text_only=True, logical_sampling_commit=logical_sampling_commit)
+                text_only=True, logical_sampling_commit=logical_sampling_commit, inference_condition=inference_condition)
             compare_recount(read(run / 'verified-summary.json'), validation,
                 {'artifacts_omitted_locally', 'all_files_verified_here', 'pixel_noise_trajectory_tensors_checked'})
             from PIL import Image
@@ -84,13 +84,15 @@ if __name__ == '__main__':
     parser.add_argument('--validation-sha256')
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--logical-sampling-commit')
+    parser.add_argument('--inference-condition', choices=('native', 'training_raw'), default='native')
     parser.add_argument('--expected-probe-commit', default=PROBE_COMMIT)
     args = parser.parse_args()
     if bool(args.validation_archive) != bool(args.validation_sha256):
         parser.error('Validation archive and independently observed SHA256 must be supplied together')
     result = verify(args.endpoint_archive, args.endpoint_sha256,
         validation_archive=args.validation_archive, validation_digest=args.validation_sha256,
-        logical_sampling_commit=args.logical_sampling_commit, expected_probe_commit=args.expected_probe_commit)
+        logical_sampling_commit=args.logical_sampling_commit, expected_probe_commit=args.expected_probe_commit,
+        inference_condition=args.inference_condition)
     args.output.write_text(json.dumps(result, indent=2, sort_keys=True) + '\n')
     concise = {'endpoint': {phase: summary['correct_eos'] for phase, summary in result['endpoint_recount']['phases'].items()},
         'actual_draws_replayed': result['endpoint_recount']['exact_draws_replayed']}

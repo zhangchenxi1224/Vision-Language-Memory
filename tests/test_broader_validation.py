@@ -127,3 +127,31 @@ def test_logical_sampling_replay_requires_explicit_new_source_and_registered_wei
     broken['registered_plan']['sampling']['exact_draws_per_stratum'][next(iter(plan['sampling']['strata']))] += 1
     with pytest.raises(ValueError):
         replay_registration(broken, broader=True, logical_sampling_commit=commit)
+
+
+def test_raw_control_reference_requires_full_matrix_same_parent_and_original_development(actual):
+    from scripts.probes.official_broader_confirmation import raw_control_reference
+    from scripts.reporting.collect_broader_raw_condition import PROBE, CHECKPOINT, RUNTIME, PHASE
+    bank, _ = actual
+    native, _ = phase_summary(phase_rows(bank), bank, 'baseline')
+    raw = copy.deepcopy(native)
+    raw['phase'] = PHASE
+    identity = {'probe_commit': PROBE, 'checkpoint_sha256': CHECKPOINT, 'parent_runtime_sha256': RUNTIME,
+        'parent_result_sha256': 'fixed-parent-result', 'bank_sha256': BANK_SHA, 'optimizer_updates': 0,
+        'guidance_scale': 1., 'image_guidance_scale': 1., 'native_steps': 28, 'groups': 151,
+        'raw_rows': 3020, 'matched_rows': 1510}
+    complete = {'identity': identity, 'phase': PHASE, 'native_summary': native,
+        'raw_summary': raw, 'development_all_correct_eos': True}
+    assert raw_control_reference(complete, native, 'fixed-parent-result', CHECKPOINT) == 1510
+    for mutation in ('rows', 'checkpoint', 'native', 'pass'):
+        changed = copy.deepcopy(complete)
+        if mutation == 'rows':
+            changed['raw_summary']['raw_rows'] -= 1
+        elif mutation == 'checkpoint':
+            changed['identity']['checkpoint_sha256'] = 'other'
+        elif mutation == 'native':
+            changed['native_summary']['correct_eos'] -= 1
+        else:
+            changed['development_all_correct_eos'] = False
+        with pytest.raises(ValueError, match='complete fixed'):
+            raw_control_reference(changed, native, 'fixed-parent-result', CHECKPOINT)

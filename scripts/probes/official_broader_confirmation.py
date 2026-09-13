@@ -25,6 +25,22 @@ def selected_cases(registered, mode, lane):
     return registered['transition_validation'][mode]
 
 
+def raw_control_reference(complete, native_development, parent_result_sha256, checkpoint_sha256):
+    from scripts.reporting.collect_broader_raw_condition import PROBE, CHECKPOINT, RUNTIME, PHASE
+    identity = complete['identity']
+    expected = {'probe_commit': PROBE, 'checkpoint_sha256': CHECKPOINT, 'parent_runtime_sha256': RUNTIME,
+        'parent_result_sha256': parent_result_sha256, 'bank_sha256': BANK_SHA, 'optimizer_updates': 0,
+        'guidance_scale': 1., 'image_guidance_scale': 1., 'native_steps': 28, 'groups': 151,
+        'raw_rows': 3020, 'matched_rows': 1510}
+    if (checkpoint_sha256 != CHECKPOINT or any(identity.get(key) != value for key, value in expected.items())
+            or complete['phase'] != PHASE or complete['native_summary'] != native_development
+            or complete['raw_summary']['raw_rows'] != 3020 or complete['raw_summary']['matched_rows'] != 1510
+            or complete['raw_summary']['generated_images'] != 302
+            or complete['development_all_correct_eos'] != (complete['raw_summary']['correct_eos'] == 1510)):
+        raise ValueError('Require the complete fixed frozen raw-condition development control')
+    return complete['raw_summary']['correct_eos']
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--parent-run', type=Path, required=True)
@@ -36,7 +52,13 @@ def main():
     parser.add_argument('--diagnostic', action='store_true')
     parser.add_argument('--worker', action='store_true')
     parser.add_argument('--logical-sampling-commit')
+    parser.add_argument('--inference-condition', choices=('native', 'training_raw'), default='native')
+    parser.add_argument('--raw-control-run', type=Path)
     a = parser.parse_args()
+    if (a.inference_condition == 'training_raw') != (a.raw_control_run is not None):
+        raise ValueError('Raw inference validation requires an explicit complete raw-control run')
+    if a.inference_condition == 'training_raw' and a.logical_sampling_commit != 'bb34092ab0d1292c87d16d9632716b218f54054b':
+        raise ValueError('Raw inference control is registered only for the fixed bb endpoint')
     if not math.isfinite(a.deadline_unix) or a.deadline_unix <= time.time():
         raise ValueError('A finite future validation deadline is required')
     from scripts.train import train_latent_bank_unet as train
@@ -68,6 +90,13 @@ def main():
             raise ValueError('Parent raw evaluation changed')
     development, _ = phase_summary(jsonl(after / 'generations.jsonl'), bank, 'trained')
     passed = development['correct_eos'] == 1510
+    raw_complete = None
+    if a.raw_control_run is not None:
+        raw_complete = read(a.raw_control_run/'complete.json')
+        raw_correct = raw_control_reference(raw_complete, development, sha(a.parent_run/'train/result.json'), parent_result['checkpoint_sha256'])
+        if sha(a.raw_control_run/raw_complete['phase']/'complete.json') != raw_complete['phase_complete_sha256']:
+            raise ValueError('Raw control phase seal changed')
+        passed = raw_correct == 1510
     if not passed and not a.diagnostic:
         raise ValueError('Development failed; explicit diagnostic label required')
     checkpoint = a.parent_run / 'train/checkpoint-final.pt'
@@ -113,6 +142,14 @@ def main():
         'optimizer_updates': 0, 'guidance_scale': 1., 'native_steps': 28, 'deadline_unix': a.deadline_unix,
         'reader_input': 'actual stored RGB uint8 pixels' if a.mode == 'rgb_chains' else 'decoded FP32 image; PNG is a quantized visualization',
         'scope': registered['scope']}
+    if raw_complete is not None:
+        # Keep the original complete bytes for collection and portable auditing.
+        raw_bytes = (a.raw_control_run/'complete.json').read_bytes()
+        (a.output/'raw-control-complete.json').write_bytes(raw_bytes)
+        identity.update(inference_condition='training_raw',
+            raw_control_complete_sha256=sha(a.output/'raw-control-complete.json'),
+            raw_condition_development_correct_eos=raw_correct,
+            condition_encoding='single raw event on actual current RGB source, recomputed for every write')
     train.write_json(a.output / 'identity.json', identity)
     cells, expected = {}, {}
     def deadline():
@@ -141,7 +178,7 @@ def main():
             raise ValueError('Registered prefix query or answer differs from the bank')
         context = runtime['contexts'][group['question_id']]
         sampler = NativeBaseEditSampler(runtime['pipe'], source_image=Image.new('RGB', (1024, 1024), (128, 128, 128)),
-                                       event_text=case['event_text'], guidance_scale=1.)
+                                       event_text=case['event_text'], guidance_scale=1., inference_condition=a.inference_condition)
         for index, seed in enumerate(case['noise_seeds']):
             deadline()
             noise = torch.randn(context['source'].shape, generator=torch.Generator().manual_seed(seed)).to(runtime['vae_device'])
@@ -178,7 +215,7 @@ def main():
         else:
             variants = original['ambient']['question_variants']
             for sequence in cases:
-                memory = OfficialRGBMemory(runtime['pipe'], guidance_scale=1.)
+                memory = OfficialRGBMemory(runtime['pipe'], guidance_scale=1., inference_condition=a.inference_condition)
                 previous = None
                 for step in sequence['steps']:
                     deadline()

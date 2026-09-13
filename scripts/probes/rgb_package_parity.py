@@ -74,7 +74,7 @@ def replay_registration(identity, *, four_gpu_warm_start=False, broader=False, l
 
 
 def prepare(reference, package, output, *, four_gpu_warm_start=False, broader=False, logical_sampling_commit=None):
-    from vision_memory.dreamlite.writer_package import inspect_package
+    from vision_memory.dreamlite.writer_package import inspect_package, package_inference_condition
     reference, package, output = map(Path, (reference, package, output))
     manifest = inspect_package(package)
     complete = read_json(reference / 'complete.json')
@@ -83,7 +83,8 @@ def prepare(reference, package, output, *, four_gpu_warm_start=False, broader=Fa
         logical_sampling_commit=logical_sampling_commit)
     if (manifest['parent_checkpoint_sha256'] != identity['checkpoint_sha256']
             or manifest['parent_result_sha256'] != identity['parent_result_sha256']
-            or manifest['guidance_scale'] != identity['guidance_scale']):
+            or manifest['guidance_scale'] != identity['guidance_scale']
+            or package_inference_condition(manifest) != identity.get('inference_condition', 'native')):
         raise ValueError('Require the registered RGB chain and the exact exported endpoint')
     for name, digest in complete['artifact_hashes'].items():
         if Path(name).name != name or sha(reference / name) != digest:

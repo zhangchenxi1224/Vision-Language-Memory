@@ -15,12 +15,14 @@ def write_json(path, value):
     path.write_text(json.dumps(value))
 
 
-def parent_fixture(root):
+def parent_fixture(root, *, prompt_style=None):
     module = torch.nn.Linear(2, 3)
     identity = {'model_variant': 'base', 'trainable_scope': 'full_unet', 'flow_protocol': 'official',
                 'steps': 2, 'git_commit': 'training-commit', 'bank_manifest_sha256': 'bank-sha',
                 'semantic_question_count': 1, 'conditional_group_count': 3,
                 'teacher_data_that_must_not_be_exported': 'SECRET_TEACHER_ANSWER'}
+    if prompt_style is not None:
+        identity['prompt_style'] = prompt_style
     runtime = {'additional_protocol_binding': {'official_source_commit': UPSTREAM, 'inference_steps': 28,
                  'inference_guidance_scale': 1., 'base_snapshot': {'revision': 'base-revision'},
                  'source_bindings': {'SECRET_TEACHER_QUERY': 'bank-context'}},

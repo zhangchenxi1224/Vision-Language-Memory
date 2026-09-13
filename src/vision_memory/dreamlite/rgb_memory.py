@@ -28,9 +28,13 @@ class OfficialRGBMemory:
     always invokes a native edit, including a no-op or distractor event.
     """
 
-    def __init__(self, pipeline, *, image: Image.Image | None = None, guidance_scale: float = 7.5):
+    def __init__(self, pipeline, *, image: Image.Image | None = None, guidance_scale: float = 7.5,
+                 inference_condition: str = "native"):
         self.pipeline = pipeline
         self.guidance_scale = guidance_scale
+        if inference_condition not in ("native", "training_raw") or (inference_condition == "training_raw" and guidance_scale != 1.):
+            raise ValueError("Unsupported RGB inference condition/guidance combination")
+        self.inference_condition = inference_condition
         self._image = (image if image is not None else Image.new("RGB", (1024, 1024), (128, 128, 128))).copy()
         if self._image.mode != "RGB" or self._image.size != (1024, 1024):
             raise ValueError("Memory must be an exact RGB 1024x1024 image")
@@ -68,7 +72,8 @@ class OfficialRGBMemory:
         device = next(pipe.vae.parameters()).device
         source = pipe.prepare_image_latents(pipe.image_processor.preprocess(source_image), dtype=torch.float32, device=device)
         noise = torch.randn(source.shape, generator=torch.Generator().manual_seed(seed), dtype=torch.float32).to(device)
-        sampler = NativeBaseEditSampler(pipe, source_image=source_image, event_text=event, guidance_scale=self.guidance_scale)
+        sampler = NativeBaseEditSampler(pipe, source_image=source_image, event_text=event, guidance_scale=self.guidance_scale,
+                                       inference_condition=self.inference_condition)
         output = sampler(source_latents=source, noise_latents=noise, num_steps=28)
         decoded = decode_model_latents_unit_interval(pipe.vae, output.latents, clamp=True).cpu()
         if decoded.shape != (1, 3, 1024, 1024) or not torch.isfinite(decoded).all():

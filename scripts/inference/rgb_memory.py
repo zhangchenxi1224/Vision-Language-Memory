@@ -77,7 +77,7 @@ def main():
     from PIL import Image
     import torch
     from vision_memory.repro import configure_strict_cuda_determinism
-    from vision_memory.dreamlite.writer_package import load_writer_package, file_sha
+    from vision_memory.dreamlite.writer_package import load_writer_package, file_sha, package_inference_condition
     from vision_memory.dreamlite.rgb_memory import OfficialRGBMemory
     from vision_memory.reader.open_answer import generate_short_answer
     configure_strict_cuda_determinism(20260913)
@@ -91,7 +91,8 @@ def main():
     if a.initial_image:
         with Image.open(a.initial_image) as image:
             initial = image.copy()
-    memory = OfficialRGBMemory(pipe, image=initial, guidance_scale=manifest['guidance_scale'])
+    memory = OfficialRGBMemory(pipe, image=initial, guidance_scale=manifest['guidance_scale'],
+                               inference_condition=package_inference_condition(manifest))
     loaded_reader = None
 
     def read_image(image, query):

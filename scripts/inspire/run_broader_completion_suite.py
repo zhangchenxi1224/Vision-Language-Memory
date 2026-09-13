@@ -22,6 +22,9 @@ def main():
     parser.add_argument('--expected-commit', required=True)
     parser.add_argument('--logical-sampling-commit')
     parser.add_argument('--parent-run', type=Path)
+    parser.add_argument('--inference-condition', choices=('native', 'training_raw'), default='native')
+    parser.add_argument('--raw-control-run', type=Path)
+    parser.add_argument('--prior-suite-status', type=Path)
     a = parser.parse_args()
     if not math.isfinite(a.deadline_unix) or a.deadline_unix <= time.time():
         raise ValueError('A finite future suite deadline is required')
@@ -31,7 +34,15 @@ def main():
     if bool(a.logical_sampling_commit) != bool(a.parent_run):
         raise ValueError('Paired sampling validation requires explicit parent path and exact training commit')
     parent = a.parent_run or RUNS / '84cdfdb-broader151-full4832'
-    prefix = a.expected_commit[:7] + ('-logical' if a.logical_sampling_commit else '-broader')
+    raw_control = a.inference_condition == 'training_raw'
+    if raw_control:
+        if (a.logical_sampling_commit != 'bb34092ab0d1292c87d16d9632716b218f54054b'
+                or a.raw_control_run != RUNS/'1f86d56-broader-raw-condition'
+                or a.prior_suite_status != RUNS/'9e27050-logical-completion-suite-status.json'):
+            raise ValueError('Require fixed raw control and prior native suite before reusing four GPUs')
+    elif a.raw_control_run is not None or a.prior_suite_status is not None:
+        raise ValueError('Raw-control dependencies require explicit raw inference policy')
+    prefix = a.expected_commit[:7] + ('-raw-condition' if raw_control else ('-logical' if a.logical_sampling_commit else '-broader'))
     status_name = prefix + '-completion-suite' if a.logical_sampling_commit else 'broader151-completion-suite'
     status = RUNS / (status_name + '-status.json')
     lock = (RUNS / (status_name + '.lock')).open('a')
@@ -41,6 +52,7 @@ def main():
     env = {**os.environ, 'OMP_NUM_THREADS': '1', 'MKL_NUM_THREADS': '1', 'HF_HUB_OFFLINE': '1', 'TRANSFORMERS_OFFLINE': '1'}
     cpu_env = {**env, 'CUDA_VISIBLE_DEVICES': ''}
     protocol_arguments = ['--logical-sampling-commit', a.logical_sampling_commit] if a.logical_sampling_commit else []
+    condition_arguments = ['--inference-condition', 'training_raw'] if raw_control else []
     def record(stage, state, **extra):
         temporary = status.with_suffix('.json.tmp')
         temporary.write_text(json.dumps({'stage': stage, 'state': state, 'time_unix': time.time(),
@@ -78,6 +90,22 @@ def main():
     outputs = {label: RUNS / (prefix + '-' + label) for _, label, _, _ in lanes}
     package, prepared, inference = [RUNS / (prefix + '-' + label) for label in ('package', 'parity', 'inference')]
     try:
+        if raw_control:
+            record('waiting_for_native_suite_and_full_raw_evidence', 'waiting')
+            while True:
+                paths = [a.prior_suite_status, RUNS/'1f86d56-raw-evidence-driver-status.json']
+                states = [json.loads(path.read_bytes()) for path in paths]
+                if any(state['state'] in ('failed', 'needs_attention') for state in states):
+                    raise RuntimeError('A prerequisite failed; preserve it and inspect before more GPU work')
+                if all(state['state'] == 'completed' for state in states):
+                    break
+                if time.time() >= a.deadline_unix:
+                    raise TimeoutError('Native suite or full raw evidence did not finish before the deadline')
+                time.sleep(20)
+            from scripts.reporting.collect_transition_endpoint import sha
+            evidence = RUNS/'1f86d56-raw-condition-verified-evidence.tgz'
+            if sha(evidence) != states[1]['archive_sha256']:
+                raise ValueError('Independent full raw evidence archive differs from CPU completion')
         record('waiting_for_fixed_endpoint', 'waiting')
         while not (parent / 'terminal.json').exists():
             if time.time() >= a.deadline_unix:
@@ -96,14 +124,18 @@ def main():
         if any(path.exists() for path in (*outputs.values(), package, prepared, inference)):
             raise ValueError('Output exists; refuse duplicate execution')
         bank = parent / 'bank/manifest.json'
-        execute('scripts/reporting/collect_broader_endpoint.py', ['--run', parent, '--bank', bank,
-            '--output-prefix', RUNS / (prefix + '-endpoint'), *protocol_arguments], 'endpoint-collection')
+        if not raw_control:
+            execute('scripts/reporting/collect_broader_endpoint.py', ['--run', parent, '--bank', bank,
+                '--output-prefix', RUNS / (prefix + '-endpoint'), *protocol_arguments], 'endpoint-collection')
         children, logs = [], []
         try:
             for mode, label, device, lane in lanes:
                 command = [sys.executable, '-u', str(ROOT / 'scripts/probes/official_broader_confirmation.py'),
                     '--parent-run', str(parent), '--output', str(outputs[label]), '--mode', mode,
-                    '--device', str(device), '--deadline-unix', str(a.deadline_unix), '--diagnostic', *protocol_arguments]
+                    '--device', str(device), '--deadline-unix', str(a.deadline_unix), '--diagnostic', *protocol_arguments,
+                    *condition_arguments]
+                if raw_control:
+                    command += ['--raw-control-run', str(a.raw_control_run)]
                 if lane is not None:
                     command += ['--prefix-lane', str(lane)]
                 log = (RUNS / (prefix + '-' + label + '.log')).open('w')
@@ -128,9 +160,11 @@ def main():
         summaries = {}
         for label, output in outputs.items():
             execute('scripts/reporting/collect_broader_validation.py', ['--run', output, '--parent', parent,
-                '--bank', bank, '--output-prefix', output, '--expected-probe-commit', a.expected_commit, *protocol_arguments], label + '-collection')
+                '--bank', bank, '--output-prefix', output, '--expected-probe-commit', a.expected_commit,
+                *protocol_arguments, *condition_arguments], label + '-collection')
             summaries[label] = json.loads(Path(str(output) + '-summary.json').read_bytes())
-        execute('scripts/inference/export_rgb_writer.py', ['--parent-run', parent, '--output', package], 'package-export')
+        execute('scripts/inference/export_rgb_writer.py', ['--parent-run', parent, '--output', package,
+            *condition_arguments], 'package-export')
         execute('scripts/probes/rgb_package_parity.py', ['prepare', '--reference', outputs['chains'], '--package', package,
             '--output', prepared, '--broader', *protocol_arguments], 'package-prepare')
         execute('scripts/inference/rgb_memory.py', ['--package', package,

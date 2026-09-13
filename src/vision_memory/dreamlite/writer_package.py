@@ -9,6 +9,7 @@ import sys
 import torch
 
 SCHEMA = 'dreamlite-official-rgb-writer/v1'
+RAW_CONDITION_SCHEMA = 'dreamlite-official-rgb-writer/v2'
 UPSTREAM = 'a6e20c8cc94027f37dd7c5a81b0b3b472aa18409'
 
 
@@ -20,7 +21,7 @@ def file_sha(path):
     return h.hexdigest()
 
 
-def export_completed_writer(parent_run, output):
+def export_completed_writer(parent_run, output, *, inference_condition='native'):
     """Export a completed experimental endpoint; do not certify it as usable."""
     parent_run, output = Path(parent_run), Path(output)
     train = parent_run / 'train'
@@ -49,6 +50,11 @@ def export_completed_writer(parent_run, output):
     binding = runtime['additional_protocol_binding']
     if binding['official_source_commit'] != UPSTREAM or binding['inference_steps'] != 28:
         raise ValueError('Unexpected source or sampling protocol')
+    if inference_condition not in ('native', 'training_raw'):
+        raise ValueError('Unknown exported inference condition')
+    if inference_condition == 'training_raw' and (identity.get('prompt_style') != 'official_raw'
+            or binding['inference_guidance_scale'] != 1.):
+        raise ValueError('Raw inference control requires raw-event training and guidance_scale=1')
     output.mkdir(parents=True, exist_ok=False)
     torch.save({name: tensor.detach().cpu().contiguous() for name, tensor in state.items()}, output / 'unet-parameters.pt')
     base = binding['base_snapshot']
@@ -66,11 +72,26 @@ def export_completed_writer(parent_run, output):
         'writer_dtype': 'float32', 'reader_dtype': 'bfloat16',
         'persistent_state': 'only the previous generated1024x1024 RGB uint8 image',
         'runtime_inputs': 'base snapshot, pinned official source, optional frozen Reader, event/query stream; no teacher bank'}
+    if inference_condition == 'training_raw':
+        # Old v1 loaders must reject this package rather than silently use native
+        # diptych encoding with weights validated under a different condition.
+        manifest.update(schema=RAW_CONDITION_SCHEMA, inference_condition='training_raw',
+            condition_encoding='single raw-event encoder batch on current RGB, repeated into native three branches')
     (output / 'manifest.json').write_text(json.dumps(manifest, indent=2, sort_keys=True) + '\n')
     if file_sha(checkpoint) != result['checkpoint_sha256'] or file_sha(train / 'result.json') != terminal['training_result_sha256']:
         raise RuntimeError('Parent changed during export; exported package is not sealed')
     (output / 'complete.json').write_text(json.dumps({'manifest_sha256': file_sha(output / 'manifest.json')}, indent=2) + '\n')
     return manifest
+
+
+def package_inference_condition(manifest):
+    if manifest.get('schema') == SCHEMA and manifest.get('inference_condition', 'native') == 'native':
+        return 'native'
+    if (manifest.get('schema') == RAW_CONDITION_SCHEMA and manifest.get('inference_condition') == 'training_raw'
+            and manifest.get('guidance_scale') == 1.
+            and manifest.get('condition_encoding') == 'single raw-event encoder batch on current RGB, repeated into native three branches'):
+        return 'training_raw'
+    raise ValueError('Unsupported writer package condition protocol')
 
 
 def inspect_package(package):
@@ -79,7 +100,8 @@ def inspect_package(package):
     if file_sha(package / 'manifest.json') != complete['manifest_sha256']:
         raise ValueError('Package manifest changed')
     manifest = json.loads((package / 'manifest.json').read_text())
-    if (manifest.get('schema') != SCHEMA or manifest.get('weights') != 'unet-parameters.pt'
+    package_inference_condition(manifest)
+    if (manifest.get('weights') != 'unet-parameters.pt'
             or manifest.get('official_source_commit') != UPSTREAM or manifest.get('native_steps') != 28
             or manifest.get('image_guidance_scale') != 1. or not 1. <= manifest.get('guidance_scale', 0) <= 100.):
         raise ValueError('Unsupported writer package protocol')
