@@ -34,16 +34,20 @@ def write_json(path, value):
     Path(path).write_text(json.dumps(value, indent=2, sort_keys=True) + '\n')
 
 
-def replay_registration(identity, *, four_gpu_warm_start=False, broader=False):
+def replay_registration(identity, *, four_gpu_warm_start=False, broader=False, logical_sampling_commit=None):
     from scripts.probes.transition_validation_plan import plan
+    if logical_sampling_commit and not broader:
+        raise ValueError('Logical sampling uses the explicit broader replay matrix')
     if broader:
         if four_gpu_warm_start:
             raise ValueError('Select one parent protocol')
-        from scripts.reporting.collect_broader_endpoint import COMMIT, BANK_SHA, PLAN_SHA
-        from scripts.experiments.broader_writer_protocol import training_plan
-        if identity['bank_sha256'] != BANK_SHA or identity['plan_file_sha256'] != PLAN_SHA:
+        from scripts.reporting.collect_broader_endpoint import registered_protocol, BANK_SHA
+        bank_path = ROOT / 'reports/official-alignment-results-20260913/broader151-bank-manifest.json'
+        if sha(bank_path) != BANK_SHA:
+            raise ValueError('Registered broader bank changed')
+        parent_commit, registered, plan_sha = registered_protocol(read_json(bank_path), logical_sampling_commit)
+        if identity['bank_sha256'] != BANK_SHA or identity['plan_file_sha256'] != plan_sha:
             raise ValueError('Broader bank or preregistration changed')
-        registered, parent_commit = training_plan(BANK_SHA, COMMIT), COMMIT
         # All sequence IDs/operations/seeds are fixed; original event strings
         # are resolved against the actual sealed bank before this probe runs.
         sequence = identity['selected_cases'][0]
@@ -69,13 +73,14 @@ def replay_registration(identity, *, four_gpu_warm_start=False, broader=False):
     return sequence
 
 
-def prepare(reference, package, output, *, four_gpu_warm_start=False, broader=False):
+def prepare(reference, package, output, *, four_gpu_warm_start=False, broader=False, logical_sampling_commit=None):
     from vision_memory.dreamlite.writer_package import inspect_package
     reference, package, output = map(Path, (reference, package, output))
     manifest = inspect_package(package)
     complete = read_json(reference / 'complete.json')
     identity = complete['identity']
-    sequence = replay_registration(identity, four_gpu_warm_start=four_gpu_warm_start, broader=broader)
+    sequence = replay_registration(identity, four_gpu_warm_start=four_gpu_warm_start, broader=broader,
+        logical_sampling_commit=logical_sampling_commit)
     if (manifest['parent_checkpoint_sha256'] != identity['checkpoint_sha256']
             or manifest['parent_result_sha256'] != identity['parent_result_sha256']
             or manifest['guidance_scale'] != identity['guidance_scale']):
@@ -165,12 +170,14 @@ def main():
         p.add_argument('--' + name, type=Path, required=True)
     p.add_argument('--four-gpu-warm-start', action='store_true')
     p.add_argument('--broader', action='store_true')
+    p.add_argument('--logical-sampling-commit')
     p = sub.add_parser('verify')
     for name in ('prepared', 'inference'):
         p.add_argument('--' + name, type=Path, required=True)
     args = parser.parse_args()
     if args.mode == 'prepare':
-        prepare(args.reference, args.package, args.output, four_gpu_warm_start=args.four_gpu_warm_start, broader=args.broader)
+        prepare(args.reference, args.package, args.output, four_gpu_warm_start=args.four_gpu_warm_start, broader=args.broader,
+            logical_sampling_commit=args.logical_sampling_commit)
         return 0
     result = verify(args.prepared, args.inference)
     print(json.dumps(result))

@@ -8,7 +8,7 @@ import tarfile
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path[:0] = [str(ROOT), str(ROOT / 'src')]
-from scripts.reporting.collect_broader_endpoint import parent_binding, phase_summary, strict_pass, COMMIT, BANK_SHA, PLAN_SHA
+from scripts.reporting.collect_broader_endpoint import parent_binding, phase_summary, strict_pass, registered_protocol, BANK_SHA
 from scripts.reporting.collect_transition_endpoint import read, jsonl, sha
 from scripts.probes.official_transition_confirmation import resolve_events
 from scripts.probes.official_broader_confirmation import selected_cases
@@ -126,16 +126,17 @@ def verify_tensors(run, rows, mode):
     return len(selected)
 
 
-def collect(run, parent, bank_path, expected_probe_commit, *, text_only=False):
+def collect(run, parent, bank_path, expected_probe_commit, *, text_only=False, logical_sampling_commit=None):
     run, parent, bank_path = map(Path, (run, parent, bank_path))
-    bank, _, result = parent_binding(parent, bank_path)
+    bank, _, result = parent_binding(parent, bank_path, logical_sampling_commit=logical_sampling_commit)
+    parent_commit, _, plan_sha = registered_protocol(bank, logical_sampling_commit)
     registered = read(parent / 'preregistered-experiment.json')
     complete = read(run / 'complete.json')
     identity = complete['identity']
     if read(run / 'identity.json') != identity or len(expected_probe_commit) != 40:
         raise ValueError('Validation identity or explicit probe commit missing')
-    for key, value in {'probe_commit': expected_probe_commit, 'parent_commit': COMMIT, 'bank_sha256': BANK_SHA,
-            'plan_file_sha256': PLAN_SHA, 'registered_plan': registered, 'optimizer_updates': 0, 'guidance_scale': 1.,
+    for key, value in {'probe_commit': expected_probe_commit, 'parent_commit': parent_commit, 'bank_sha256': BANK_SHA,
+            'plan_file_sha256': plan_sha, 'registered_plan': registered, 'optimizer_updates': 0, 'guidance_scale': 1.,
             'native_steps': 28, 'checkpoint_sha256': result['checkpoint_sha256'],
             'parent_result_sha256': sha(parent / 'train/result.json')}.items():
         if identity.get(key) != value:
@@ -144,7 +145,8 @@ def collect(run, parent, bank_path, expected_probe_commit, *, text_only=False):
     if sha(after / 'generations.jsonl') != read(after / 'complete.json')['artifact_hashes']['generations.jsonl']:
         raise ValueError('Parent raw evaluation changed')
     development, _ = phase_summary(jsonl(after / 'generations.jsonl'), bank, 'trained')
-    interpretation = 'fresh_confirmation' if development['correct_eos'] == 1510 else 'diagnostic_after_development_failure'
+    interpretation = ('observed_cases_paired_diagnostic' if logical_sampling_commit else
+        ('fresh_confirmation' if development['correct_eos'] == 1510 else 'diagnostic_after_development_failure'))
     if identity['interpretation'] != interpretation or identity['development_correct_eos'] != development['correct_eos']:
         raise ValueError('Parent development outcome or validation interpretation changed')
     rows = jsonl(run / 'generations.jsonl')
@@ -184,8 +186,10 @@ if __name__ == '__main__':
         parser.add_argument('--' + name, type=Path, required=True)
     parser.add_argument('--expected-probe-commit', required=True)
     parser.add_argument('--text-only', action='store_true')
+    parser.add_argument('--logical-sampling-commit')
     a = parser.parse_args()
-    summary = collect(a.run, a.parent, a.bank, a.expected_probe_commit, text_only=a.text_only)
+    summary = collect(a.run, a.parent, a.bank, a.expected_probe_commit, text_only=a.text_only,
+        logical_sampling_commit=a.logical_sampling_commit)
     output = Path(str(a.output_prefix) + '-summary.json')
     output.write_text(json.dumps(summary, indent=2, sort_keys=True) + '\n')
     if not a.text_only:

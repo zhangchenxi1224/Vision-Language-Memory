@@ -20,21 +20,27 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--deadline-unix', type=float, required=True)
     parser.add_argument('--expected-commit', required=True)
+    parser.add_argument('--logical-sampling-commit')
+    parser.add_argument('--parent-run', type=Path)
     a = parser.parse_args()
     if not math.isfinite(a.deadline_unix) or a.deadline_unix <= time.time():
         raise ValueError('A finite future suite deadline is required')
     if (len(a.expected_commit) != 40 or subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip() != a.expected_commit
             or subprocess.check_output(['git', 'status', '--porcelain'], cwd=ROOT, text=True).strip()):
         raise ValueError('Require the explicitly locked clean validation source')
-    parent = RUNS / '84cdfdb-broader151-full4832'
-    prefix = a.expected_commit[:7] + '-broader'
-    status = RUNS / 'broader151-completion-suite-status.json'
-    lock = (RUNS / 'broader151-completion-suite.lock').open('a')
+    if bool(a.logical_sampling_commit) != bool(a.parent_run):
+        raise ValueError('Paired sampling validation requires explicit parent path and exact training commit')
+    parent = a.parent_run or RUNS / '84cdfdb-broader151-full4832'
+    prefix = a.expected_commit[:7] + ('-logical' if a.logical_sampling_commit else '-broader')
+    status_name = prefix + '-completion-suite' if a.logical_sampling_commit else 'broader151-completion-suite'
+    status = RUNS / (status_name + '-status.json')
+    lock = (RUNS / (status_name + '.lock')).open('a')
     fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
     if status.exists():
         raise ValueError('Suite already has evidence; inspect before resuming any stage')
     env = {**os.environ, 'OMP_NUM_THREADS': '1', 'MKL_NUM_THREADS': '1', 'HF_HUB_OFFLINE': '1', 'TRANSFORMERS_OFFLINE': '1'}
     cpu_env = {**env, 'CUDA_VISIBLE_DEVICES': ''}
+    protocol_arguments = ['--logical-sampling-commit', a.logical_sampling_commit] if a.logical_sampling_commit else []
     def record(stage, state, **extra):
         temporary = status.with_suffix('.json.tmp')
         temporary.write_text(json.dumps({'stage': stage, 'state': state, 'time_unix': time.time(),
@@ -91,13 +97,13 @@ def main():
             raise ValueError('Output exists; refuse duplicate execution')
         bank = parent / 'bank/manifest.json'
         execute('scripts/reporting/collect_broader_endpoint.py', ['--run', parent, '--bank', bank,
-            '--output-prefix', RUNS / (prefix + '-endpoint')], 'endpoint-collection')
+            '--output-prefix', RUNS / (prefix + '-endpoint'), *protocol_arguments], 'endpoint-collection')
         children, logs = [], []
         try:
             for mode, label, device, lane in lanes:
                 command = [sys.executable, '-u', str(ROOT / 'scripts/probes/official_broader_confirmation.py'),
                     '--parent-run', str(parent), '--output', str(outputs[label]), '--mode', mode,
-                    '--device', str(device), '--deadline-unix', str(a.deadline_unix), '--diagnostic']
+                    '--device', str(device), '--deadline-unix', str(a.deadline_unix), '--diagnostic', *protocol_arguments]
                 if lane is not None:
                     command += ['--prefix-lane', str(lane)]
                 log = (RUNS / (prefix + '-' + label + '.log')).open('w')
@@ -122,11 +128,11 @@ def main():
         summaries = {}
         for label, output in outputs.items():
             execute('scripts/reporting/collect_broader_validation.py', ['--run', output, '--parent', parent,
-                '--bank', bank, '--output-prefix', output, '--expected-probe-commit', a.expected_commit], label + '-collection')
+                '--bank', bank, '--output-prefix', output, '--expected-probe-commit', a.expected_commit, *protocol_arguments], label + '-collection')
             summaries[label] = json.loads(Path(str(output) + '-summary.json').read_bytes())
         execute('scripts/inference/export_rgb_writer.py', ['--parent-run', parent, '--output', package], 'package-export')
         execute('scripts/probes/rgb_package_parity.py', ['prepare', '--reference', outputs['chains'], '--package', package,
-            '--output', prepared, '--broader'], 'package-prepare')
+            '--output', prepared, '--broader', *protocol_arguments], 'package-prepare')
         execute('scripts/inference/rgb_memory.py', ['--package', package,
             '--base-model', MODELS / 'DreamLite-base-a9a0f15-20260907',
             '--official-source', PROJECT / 'Vision-Language-Memory/third_party/DreamLite',
@@ -136,7 +142,8 @@ def main():
         record('all_registered_workloads_finished', 'completed',
             functional_all_registered_correct=all(value['all_generated_correct_eos'] for value in summaries.values()),
             matched_results={label: [value['matched_correct_eos'], value['matched_rows']] for label, value in summaries.items()},
-            scope='Seen questions; fresh transition expressions and noise, historical original/reworded full prefixes. Not unseen entities or simultaneous multi-fact retention.')
+            scope=('Observed c2ec407 cases reused as a paired sampling diagnostic; no fresh holdout claim.' if a.logical_sampling_commit else
+                'Seen questions; fresh transition expressions and noise, historical original/reworded full prefixes. Not unseen entities or simultaneous multi-fact retention.'))
         return 0
     except BaseException as error:
         record('suite_error', 'failed', error=str(error), functional_success=False)

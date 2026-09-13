@@ -10,7 +10,7 @@ import time
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path[:0] = [str(ROOT), str(ROOT / 'src')]
-from scripts.reporting.collect_broader_endpoint import parent_binding, phase_summary, strict_pass, COMMIT, BANK_SHA, PLAN_SHA
+from scripts.reporting.collect_broader_endpoint import parent_binding, phase_summary, strict_pass, registered_protocol, BANK_SHA
 from scripts.reporting.collect_transition_endpoint import read, jsonl, sha
 from scripts.probes.official_transition_confirmation import resolve_events
 
@@ -35,6 +35,7 @@ def main():
     parser.add_argument('--deadline-unix', type=float, required=True)
     parser.add_argument('--diagnostic', action='store_true')
     parser.add_argument('--worker', action='store_true')
+    parser.add_argument('--logical-sampling-commit')
     a = parser.parse_args()
     if not math.isfinite(a.deadline_unix) or a.deadline_unix <= time.time():
         raise ValueError('A finite future validation deadline is required')
@@ -46,8 +47,9 @@ def main():
     if len(indices) != 1:
         raise ValueError('Missing unique training entry point')
     args = train.parser().parse_args(command[indices[0] + 1:])
-    bank, parent_identity, parent_result = parent_binding(a.parent_run, args.bank_manifest)
-    if (args.expected_commit != COMMIT or args.steps != 4832 or args.seed != 20260915 or args.eval_seeds != 2
+    bank, parent_identity, parent_result = parent_binding(a.parent_run, args.bank_manifest, logical_sampling_commit=a.logical_sampling_commit)
+    parent_commit, _, plan_sha = registered_protocol(bank, a.logical_sampling_commit)
+    if (args.expected_commit != parent_commit or args.steps != 4832 or args.seed != 20260915 or args.eval_seeds != 2
             or not args.data_parallel or args.gradient_accumulation_steps != 4):
         raise ValueError('Broader training command differs from the fixed plan')
     registered = read(a.parent_run / 'preregistered-experiment.json')
@@ -102,11 +104,12 @@ def main():
     original, resolved = resolve_events(registered['transition_validation'], transitions)
     cases = selected_cases({**registered, 'transition_validation': resolved}, a.mode, a.prefix_lane)
     identity = {'probe_commit': commit, 'probe_file_sha256': sha(Path(__file__)), 'source_hashes': train.source_hashes(),
-        'parent_commit': COMMIT, 'parent_result_sha256': sha(a.parent_run / 'train/result.json'),
-        'checkpoint_sha256': parent_result['checkpoint_sha256'], 'bank_sha256': BANK_SHA, 'plan_file_sha256': PLAN_SHA,
+        'parent_commit': parent_commit, 'parent_result_sha256': sha(a.parent_run / 'train/result.json'),
+        'checkpoint_sha256': parent_result['checkpoint_sha256'], 'bank_sha256': BANK_SHA, 'plan_file_sha256': plan_sha,
         'registered_plan': registered, 'selected_cases': cases, 'mode': a.mode, 'prefix_lane': a.prefix_lane,
         'development_correct_eos': development['correct_eos'],
-        'interpretation': 'fresh_confirmation' if passed else 'diagnostic_after_development_failure',
+        'interpretation': ('observed_cases_paired_diagnostic' if a.logical_sampling_commit else
+            ('fresh_confirmation' if passed else 'diagnostic_after_development_failure')),
         'optimizer_updates': 0, 'guidance_scale': 1., 'native_steps': 28, 'deadline_unix': a.deadline_unix,
         'reader_input': 'actual stored RGB uint8 pixels' if a.mode == 'rgb_chains' else 'decoded FP32 image; PNG is a quantized visualization',
         'scope': registered['scope']}
@@ -198,7 +201,7 @@ def main():
     audit_inference_only_runtime(runtime, frozen)
     runtime['verify_additional_bindings']()
     if (sha(checkpoint) != parent_result['checkpoint_sha256'] or sha(args.bank_manifest) != BANK_SHA
-            or sha(a.parent_run / 'preregistered-experiment.json') != PLAN_SHA
+            or sha(a.parent_run / 'preregistered-experiment.json') != plan_sha
             or sha(a.parent_run / 'train/result.json') != identity['parent_result_sha256']
             or train.source_hashes() != identity['source_hashes'] or sha(Path(__file__)) != identity['probe_file_sha256']):
         raise ValueError('Model, plan, bank or source changed during validation')

@@ -71,18 +71,44 @@ def phase_summary(rows, bank, phase):
         'partitions': partitions, 'cells': cells}, pairs
 
 
-def parent_binding(run, bank_path):
-    if sha(bank_path) != BANK_SHA or sha(run / 'preregistered-experiment.json') != PLAN_SHA:
-        raise ValueError('Fixed broader bank or plan changed')
+def registered_protocol(bank, logical_sampling_commit=None):
+    if logical_sampling_commit is None:
+        return COMMIT, training_plan(BANK_SHA, COMMIT), PLAN_SHA
+    from scripts.experiments.logical_sampling_protocol import plan
+    registered = plan(bank, logical_sampling_commit)
+    digest = hashlib.sha256((json.dumps(registered, indent=2, sort_keys=True) + '\n').encode()).hexdigest()
+    return logical_sampling_commit, registered, digest
+
+
+def parent_binding(run, bank_path, *, logical_sampling_commit=None):
     bank = read(bank_path)
-    if read(run / 'preregistered-experiment.json') != training_plan(BANK_SHA, COMMIT):
+    commit, registered, plan_sha = registered_protocol(bank, logical_sampling_commit)
+    if sha(bank_path) != BANK_SHA or sha(run / 'preregistered-experiment.json') != plan_sha:
+        raise ValueError('Fixed broader bank or plan changed')
+    if read(run / 'preregistered-experiment.json') != registered:
         raise ValueError('Fixed4832-update protocol differs')
     identity = read(run / 'train/identity.json')
-    for key, expected in {'git_commit': COMMIT, 'steps': 4832, 'seed': SEED, 'eval_seeds': 2,
+    for key, expected in {'git_commit': commit, 'steps': 4832, 'seed': SEED, 'eval_seeds': 2,
             'bank_manifest_sha256': BANK_SHA, 'model_variant': 'base', 'flow_protocol': 'official',
             'trainable_scope': 'full_unet', 'gradient_accumulation_steps': 4}.items():
         if identity.get(key) != expected:
             raise ValueError('Unexpected broader training identity: ' + key)
+    if logical_sampling_commit:
+        sampling = registered['sampling']
+        expected = {'strategy': 'logical_condition', 'strata': sampling['strata'],
+            'within_stratum': 'balanced seeded expression cycles', 'writer_input': False}
+        if identity.get('sampling') != expected:
+            raise ValueError('Logical sampling identity changed')
+        check = read(run / 'train/baseline-reference-check.json')
+        binding = identity['initial_baseline_match']
+        if (check['reference_result_sha256'] != registered['reference_result_sha256']
+                or binding['result_sha256'] != registered['reference_result_sha256']
+                or check['reference'] != binding['reference'] or binding['baseline_is_measured_again'] is not True
+                or any(check.get(key) is not True for key in ('bitwise_latents_and_images', 'bitwise_trajectories', 'identical_raw_generation_records'))
+                or len(check['samples']) != 302 or len(set(check['samples'])) != 302):
+            raise ValueError('Missing full paired baseline gate')
+    elif 'sampling' in identity or 'initial_baseline_match' in identity:
+        raise ValueError('Original condition-uniform experiment changed')
     parallel = identity['data_parallel']
     if (parallel['world_size'], parallel['global_microbatches_per_update'], parallel['local_microbatches_per_update']) != (4, 4, 1):
         raise ValueError('Parallel/global batch protocol differs')
@@ -111,9 +137,9 @@ def parent_binding(run, bank_path):
     return bank, identity, result
 
 
-def collect(run, bank_path, *, text_only=False):
+def collect(run, bank_path, *, text_only=False, logical_sampling_commit=None):
     run, bank_path = Path(run), Path(bank_path)
-    bank, identity, result = parent_binding(run, bank_path)
+    bank, identity, result = parent_binding(run, bank_path, logical_sampling_commit=logical_sampling_commit)
     omitted, proof = [], {}
     def verify(path, digest):
         if text_only and path.suffix == '.pt' and not path.exists():
@@ -164,15 +190,24 @@ def collect(run, bank_path, *, text_only=False):
         if row['optimizer_step'] != index + 1 or len(row['microbatches']) != 4:
             raise ValueError('Wrong optimizer sequence or global batch')
         for micro, draw in enumerate(row['microbatches']):
-            group, teacher, noise, sigma = balanced_draw(bank['groups'], SEED, index * 4 + micro)
+            group, teacher, noise, sigma = balanced_draw(bank['groups'], SEED, index * 4 + micro,
+                sampling_strategy='logical_condition' if logical_sampling_commit else 'condition')
             if (draw['question_id'], draw['teacher_id'], draw['noise_seed'], draw['effective_sigma']) != (group['question_id'], teacher, noise, sigma):
                 raise ValueError('Draw does not match deterministic replay')
             if not math.isfinite(draw['flow_matching_mse']):
                 raise ValueError('Nonfinite training loss')
             draws.append(draw)
     counts = Counter(draw['question_id'] for draw in draws)
-    if set(counts) != {group['question_id'] for group in bank['groups']} or set(counts.values()) != {128}:
+    expected_counts = (read(run / 'preregistered-experiment.json')['sampling']['exact_draws_per_group']
+        if logical_sampling_commit else {group['question_id']: 128 for group in bank['groups']})
+    if counts != expected_counts:
         raise ValueError('Missing or unbalanced condition exposure')
+    if logical_sampling_commit and not text_only:
+        from scripts.train.train_latent_bank_unet import verify_initialized_baseline_reference
+        # Recheck actual tensors/raws against the original initialization at
+        # collection time; a stored pass flag alone is insufficient.
+        gate = identity['initial_baseline_match']
+        verify_initialized_baseline_reference(run / 'train', Path(gate['reference']), gate['result_sha256'])
     return {'identity': identity, 'result_sha256': sha(run / 'train/result.json'), 'checkpoint_sha256': result['checkpoint_sha256'],
         'phases': phases, 'matched_pairs': changes, 'optimizer_steps': 4832, 'exact_draws_replayed': len(draws),
         'draws_per_group': counts, 'sigma_min': min(draw['effective_sigma'] for draw in draws),
@@ -187,8 +222,9 @@ if __name__ == '__main__':
     for name in ('run', 'bank', 'output-prefix'):
         parser.add_argument('--' + name, type=Path, required=True)
     parser.add_argument('--text-only', action='store_true')
+    parser.add_argument('--logical-sampling-commit')
     a = parser.parse_args()
-    summary = collect(a.run, a.bank, text_only=a.text_only)
+    summary = collect(a.run, a.bank, text_only=a.text_only, logical_sampling_commit=a.logical_sampling_commit)
     path = Path(str(a.output_prefix) + '-summary.json')
     path.write_text(json.dumps(summary, indent=2, sort_keys=True) + '\n')
     if not a.text_only:

@@ -110,3 +110,20 @@ def test_two_prefix_lanes_exhaust_all_targets_and_fixed_package_replay(actual):
             broken['registered_plan']['optimizer_steps'] += 1
         with pytest.raises(ValueError):
             replay_registration(broken, broader=True)
+
+
+def test_logical_sampling_replay_requires_explicit_new_source_and_registered_weighting(actual):
+    from scripts.reporting.collect_broader_endpoint import registered_protocol
+    bank, _ = actual
+    commit = 'bb34092ab0d1292c87d16d9632716b218f54054b'
+    parent, plan, digest = registered_protocol(bank, commit)
+    _, _, cases = expected_rows(plan, bank, 'rgb_chains', None)
+    identity = {'registered_plan': plan, 'parent_commit': parent, 'bank_sha256': BANK_SHA,
+        'plan_file_sha256': digest, 'mode': 'rgb_chains', 'selected_cases': cases}
+    assert replay_registration(identity, broader=True, logical_sampling_commit=commit) == cases[0]
+    with pytest.raises(ValueError):
+        replay_registration(identity, broader=True)
+    broken = copy.deepcopy(identity)
+    broken['registered_plan']['sampling']['exact_draws_per_stratum'][next(iter(plan['sampling']['strata']))] += 1
+    with pytest.raises(ValueError):
+        replay_registration(broken, broader=True, logical_sampling_commit=commit)
