@@ -1,5 +1,12 @@
 # Goal 接续位置
 
+## 12:49 四卡3135/4832，两个已停用自建单卡实例完成清理
+
+- 最新同一训练 **3135/4832** 更新、优化elapsed **2501.91秒**，四rank1743522/1743523/1743524/1743525均Rsl/live；suite2361182 S/live，仍等待84固定端点。没有最终trained记录，没有训练或验证重启。此前goal turn为progress（过时文档修正、本地复核工具），本轮重新核实实际live handles并完成闲置资源清理；不是阻塞。
+- 已实时查询 **dl-warm-h200x1-20260913** 与 **dl-transval-h200x1-20260913** 均STOPPED，核对共享盘旧产物后，CLI `notebook delete ... --workspace 分布式训练空间 --yes` 两次均明确返回 **OK Notebook deleted**。**这两个临时自建实例现在已deleted，取代下方“stop未delete”的旧记录，不要再尝试连接或重启。** 用户 **vlm-r11-trust-h200x4-20260907-r3** 保持运行，CPU2也保留作证据传输。
+- 清理前从仍运行CPU2真实读取共享盘：d9旧paused terminal SHA **ff4b8059e7c8c763a9792e47139444a783045ef02d0bcc60e73576e2d515ff2a**；0f40767 single complete **09b81a27529936b8c1c87332e6882f544cf4e3c780f33793f971aab2b2f9aee5**、chains complete **af13003c0ea71dd782486057787a282981e168ad19b353726528dc4100a7923e**；5bc历史readback complete **091eb3d68eba1553ff7f34dab7a620e044003443ac811064ccd3730dee890a0e**；281b旧package parity **d21adbef0cafc0435cc954378ab2d0d4b9a1ff8872ce066edf3d8d4861483fa2**。旧raw/模型/归档均在项目共享盘，未删除任何共享文件。
+- 本轮观察9803、资源8357均已exit0，无待工具会话。下一步仍等待真实4832端点及c2自动完整验证，用已提交的本地复核工具处理实际生成的archive，不以正在训练、loss或单图正确替代goal验收。训练与验证checkout锁定84/c2不变，截止16:30CST。
+
 ## 12:43 同一四卡训练2684/4832；结果入口更新，本地新端点复核工具就绪
 
 - 本轮开始已重新确认同一84训练driver/pilot/torchrun/4rank及c2 suite全部live；最新观测 **2684/4832 optimizer updates、elapsed2143.96秒、trained partial0**。四rank **1743522/1743523/1743524/1743525** 均Ssl，suite **2361182** S，等待固定端点。**不是阻塞，不重启或改动任一live checkout**。上一goal turn为progress（suite部署、原始归档），本轮修正5份过时文档并准备新本地复核入口，训练仍持续推进。
