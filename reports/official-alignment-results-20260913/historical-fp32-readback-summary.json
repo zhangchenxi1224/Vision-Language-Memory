@@ -1,0 +1,163 @@
+{
+  "actual_tensor_reverification": true,
+  "artifacts_omitted_locally": [],
+  "checked_members": [
+    "target-000-seed-00",
+    "target-000-seed-01",
+    "target-000-seed-02",
+    "target-000-seed-03",
+    "target-002-seed-00",
+    "target-002-seed-01",
+    "target-002-seed-02",
+    "target-002-seed-03",
+    "target-004-seed-00",
+    "target-004-seed-01",
+    "target-004-seed-02",
+    "target-004-seed-03",
+    "target-006-seed-00",
+    "target-006-seed-01",
+    "target-006-seed-02",
+    "target-006-seed-03",
+    "target-008-seed-00",
+    "target-008-seed-01",
+    "target-008-seed-02",
+    "target-008-seed-03",
+    "target-010-seed-00",
+    "target-010-seed-01",
+    "target-010-seed-02",
+    "target-010-seed-03",
+    "target-012-seed-00",
+    "target-012-seed-01",
+    "target-012-seed-02",
+    "target-012-seed-03",
+    "target-014-seed-00",
+    "target-014-seed-01",
+    "target-014-seed-02",
+    "target-014-seed-03",
+    "target-001-seed-00",
+    "target-001-seed-01",
+    "target-001-seed-02",
+    "target-001-seed-03",
+    "target-003-seed-00",
+    "target-003-seed-01",
+    "target-003-seed-02",
+    "target-003-seed-03",
+    "target-005-seed-00",
+    "target-005-seed-01",
+    "target-005-seed-02",
+    "target-005-seed-03",
+    "target-007-seed-00",
+    "target-007-seed-01",
+    "target-007-seed-02",
+    "target-007-seed-03",
+    "target-009-seed-00",
+    "target-009-seed-01",
+    "target-009-seed-02",
+    "target-009-seed-03",
+    "target-011-seed-00",
+    "target-011-seed-01",
+    "target-011-seed-02",
+    "target-011-seed-03",
+    "target-013-seed-00",
+    "target-013-seed-01",
+    "target-013-seed-02",
+    "target-013-seed-03",
+    "target-015-seed-00",
+    "target-015-seed-01",
+    "target-015-seed-02",
+    "target-015-seed-03"
+  ],
+  "complete_sha256": "091eb3d68eba1553ff7f34dab7a620e044003443ac811064ccd3730dee890a0e",
+  "panel_sha256": "17f00e924ea8a2e66999fd63fb45db8848be8f1c91083155b4a21f9d011b45b5",
+  "png_count": 65,
+  "raw_rows": 720,
+  "scope": "Direct historical oracle compatibility only; no shared Writer result or validation-based replacement of teachers.",
+  "summary": {
+    "all_matched_correct_eos": false,
+    "cells": {
+      "blank/rgb_uint8/original_open": {
+        "correct_eos": 0,
+        "n": 16
+      },
+      "blank/rgb_uint8/paraphrase_1": {
+        "correct_eos": 0,
+        "n": 16
+      },
+      "blank/rgb_uint8/paraphrase_2": {
+        "correct_eos": 0,
+        "n": 16
+      },
+      "blank/rgb_uint8/paraphrase_3": {
+        "correct_eos": 0,
+        "n": 16
+      },
+      "blank/rgb_uint8/paraphrase_4": {
+        "correct_eos": 0,
+        "n": 16
+      },
+      "matched/fp32_vae_decoded/original_open": {
+        "correct_eos": 64,
+        "n": 64
+      },
+      "matched/fp32_vae_decoded/paraphrase_1": {
+        "correct_eos": 64,
+        "n": 64
+      },
+      "matched/fp32_vae_decoded/paraphrase_2": {
+        "correct_eos": 61,
+        "n": 64
+      },
+      "matched/fp32_vae_decoded/paraphrase_3": {
+        "correct_eos": 63,
+        "n": 64
+      },
+      "matched/fp32_vae_decoded/paraphrase_4": {
+        "correct_eos": 60,
+        "n": 64
+      },
+      "matched/rgb_uint8/original_open": {
+        "correct_eos": 64,
+        "n": 64
+      },
+      "matched/rgb_uint8/paraphrase_1": {
+        "correct_eos": 64,
+        "n": 64
+      },
+      "matched/rgb_uint8/paraphrase_2": {
+        "correct_eos": 61,
+        "n": 64
+      },
+      "matched/rgb_uint8/paraphrase_3": {
+        "correct_eos": 63,
+        "n": 64
+      },
+      "matched/rgb_uint8/paraphrase_4": {
+        "correct_eos": 60,
+        "n": 64
+      }
+    },
+    "members_passing_both_forms_all_five": 57,
+    "passing_members_per_target": {
+      "0": 4,
+      "1": 4,
+      "10": 4,
+      "11": 3,
+      "12": 4,
+      "13": 4,
+      "14": 2,
+      "15": 3,
+      "2": 4,
+      "3": 3,
+      "4": 3,
+      "5": 3,
+      "6": 4,
+      "7": 4,
+      "8": 4,
+      "9": 4
+    },
+    "raw_rows": 720,
+    "scope": "Direct oracle compatibility readback only; no Writer trained or evaluated.",
+    "shared_writer_success": false,
+    "targets_passing_all_four_seeds": 10
+  }
+}

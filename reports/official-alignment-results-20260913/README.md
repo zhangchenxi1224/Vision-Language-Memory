@@ -2,6 +2,12 @@
 
 目标仍在进行。实现偏差已修复并有数值证据，但目前还没有通过功能验收的 Writer。
 
+## 10:16 四卡迁移已进入实际参数更新
+
+用户提供的 `vlm-r11-trust-h200x4-20260907-r3` 已运行四个同步训练rank。真实全U-Net梯度预检通过，初始和首步参数四卡逐位一致；全局批量仍为4。完整新噪声baseline845/900，实际326/2880更新约264秒，尚无新的最终结果。旧两个自建单卡实例已停止，输出保留共享盘。
+
+上一端点的独立单图360/360，但真实RGB链430/480、11/16整链通过，清除仍是主要失败。完整本地证据、导出包实际回放以及当前训练设置见[独立诊断与四卡后续](transition-independent-review.md)。下方08:44等段落保留为历史记录。
+
 ## 08:44 固定2880步端点已完整核验
 
 新45条件组训练完成，开发集从0/900提高到 **880/900**，176/180图五问法全通过。20个失败回答全部是jazz源图清除后仍回答jazz，涉及4张图、两种事件表达；全部4图latent也最接近jazz教师。开发验收失败，不能宣布版本可用。详见[端点分析](transition-wording-endpoint-review.md)、[严格摘要](transition-wording-endpoint-summary.json)、[本地复核](transition-wording-endpoint-local-verification.json)及[完整原始文本归档](transition-wording-endpoint-evidence.tgz)。
