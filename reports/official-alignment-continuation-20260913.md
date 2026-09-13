@@ -1,5 +1,13 @@
 # Goal 接续位置
 
+## 09-14 02:32 单次验证完整归档；连续写入即将完成
+
+- **本轮有实质进展，goal仍active**：单次证据完整下载后本地全部390raw/72PNG重算通过；原生路径302图/8456步诊断也已核验，见303cd41。新单次严格结果280/360，56/72图全五问；全部80失败来自clear_original_training_event的16噪声，原始回答及分区在logical31-validation-review.md和logical31-single-failure-partition.json。其余280条通过。不能放宽评分或宣告可用。
+- 单次archive **64,114,706字节，SHA be548e5bc63560ccb3578c58a8824f91cf2f3a34b8c3ccd0b02f0f26593e973d**；SCP60164已明确600秒timeout退出，原61,102,080字节前缀SHA a6a152505f8df0823b385e12c5397d3d219cf97112e509b6fc66e7b4deacf388校验后，补3,012,626字节尾部SHA2455d62bc49f3bb665794930507227d5dfbd2630dd27ea61cfa6e802d31be1c9，完整校验通过。新20925/24312均exit0，27103本地verifier实际exit0，无待传输。完整archive、summary、local verification、tail metadata和failure partition已复制results待提交。
+- **当前实际运行**：owned dl-logical-val-h200x1-20260914，suite21419，chains parent132005/worker132729实测live；02:32已475/480raw，还没有complete.json，不能当作全矩阵结果。single parent26091/worker26811和collector130634均已完成，不再poll为live。下一步collector自动运行，随后prefix0/prefix1、export及真实CLI parity。截止05:30CST，lease约05:50；不可修改live16bc3d0 checkout、不可重复launch旧quad runner。
+- 用户 **vlm-r11-trust-h200x4-20260907-r3** 02:27仍实际PENDING，保留，不stop/delete；owned单卡完成后清理，后续训练优先用户四卡。CPU dl-align-cpu-20260914可用，约09:25 lease到期；已上传prepare-transfer-tail-20260914.py，原prepare_transfer_tail.py也存在。CPU geometry177374、native path245800均已exit0，不再当作live。
+- 原生路径完整SHA1e4b2625a3ade8802edee4719e4f025098dec35e532f234a99e8b16b5abf0d18，302图初态与各自Gaussian逐位相等。10张开发失败图28步估计从未以正确teacher为最近；6张jazz清除始终更接近jazz，4张gray清除距离所有teacher较大，不能由最近类别推断语义。该诊断支持检查条件训练覆盖，不支持仅改末步。等完整历史改写/连续写入结果后确定下一轮有界实验，尚未实现或启动新的训练策略。
+
 ## 09-14 02:05 完整端点与张量诊断已核验；单H200完整验证正在运行
 
 - **新active GPU为owned临时 `dl-logical-val-h200x1-20260914`**：开发区-H200-3号机房-2-cuda12.8版本、NGC25.02、1H200/20CPU/200GiB/shm64、nodeqb-prod-gpu2459。约01:50 RUNNING，240min自动停，job截止 **1789335000=05:30CST**。用户四卡 **vlm-r11-trust-h200x4-20260907-r3** 最新仍PENDING，保留，绝不stop/delete。新单卡用于按顺序执行原完整四路验证，未缩减cases；结束后清理owned单卡，继续用户四卡训练。

@@ -1,6 +1,6 @@
 # Vision Learnable Memory
 
-> 最新核验（2026-09-14）：同初始化、同4832更新的逻辑条件均衡对照已完成，历史开发160/160，音乐1300/1350，总计1460/1510，仍有清除失败。完整tensor/基线复核和本地6040raw/19328draw重算均已通过，独立验证正在执行。见[采样对照结果](reports/official-alignment-results-20260913/logical31-development-review.md)。前一轮四路独立验证已全部归档：360/360单次、470/480连续链、170/960历史前缀，见[完整失败分析](reports/official-alignment-results-20260913/broader151-validation-review.md)。尚无通过功能验收的版本。
+> 最新核验（2026-09-14）：同初始化、同4832更新的逻辑条件均衡对照已完成，历史开发160/160，音乐1300/1350，总计1460/1510。完整tensor/基线复核和本地6040raw/19328draw重算均已通过。新单次独立验证退步为280/360，80条失败均来自灰图清除的原始表达；全部raw/72PNG已本地复核，连续写入与历史前缀验证继续执行，见[采样对照验证](reports/official-alignment-results-20260913/logical31-validation-review.md)。前一轮四路结果为360/360单次、470/480连续链、170/960历史前缀，见[完整失败分析](reports/official-alignment-results-20260913/broader151-validation-review.md)。尚无通过功能验收的版本。
 
 > 2026-09-13：[官方DreamLite训练对齐审计](reports/official-alignment-audit-20260913.md)与[实训结果](reports/official-alignment-results-20260913/README.md)。新训练入口默认官方target/noise FM、source条件与纯噪声推理；Base直接使用原生官方28步pipeline。显式`--base-guidance-scale 1`只改变Base推理，默认7.5保留。旧source-anchored文档和下方旧实验阶段记录仅供历史复现，当前结论以上方完整结果为准。
 
