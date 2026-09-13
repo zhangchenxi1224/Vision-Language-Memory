@@ -1,6 +1,6 @@
 # Vision Learnable Memory
 
-> 最新核验（2026-09-14）：同初始化、同4832更新的逻辑条件均衡对照已完成，历史开发160/160，音乐1300/1350，总计1460/1510。完整tensor/基线复核和本地6040raw/19328draw重算均已通过。新单次独立验证退步为280/360，连续写入390/480、7/16整链；两矩阵全部raw/168PNG已本地复核，失败集中在清除及后续保持。历史前缀验证继续执行，见[采样对照验证](reports/official-alignment-results-20260913/logical31-validation-review.md)；结束后接[首步条件诊断](reports/official-logical-first-step-condition-plan-20260914.md)。前一轮四路结果为360/360单次、470/480连续链、170/960历史前缀，见[完整失败分析](reports/official-alignment-results-20260913/broader151-validation-review.md)。尚无通过功能验收的版本。
+> 最新核验（2026-09-14）：逻辑条件均衡对照已完成全部验证，开发1460/1510、单次280/360、连续写入390/480（7/16整链）、历史前缀895/960；全部1990条验证raw/360PNG和真实CLI重放已本地复核，见[完整结果](reports/official-alignment-results-20260913/logical31-validation-review.md)。全302格真实首步对照发现训练raw条件与原生Base条件的显著差异，新4H200已启动[相同预算的原生条件训练对照](reports/official-native-condition-training-plan-20260914.md)，保留官方FM与原生推理。当前仍在基线重测，尚无新训练效果，也无通过功能验收的版本。
 
 > 2026-09-13：[官方DreamLite训练对齐审计](reports/official-alignment-audit-20260913.md)与[实训结果](reports/official-alignment-results-20260913/README.md)。新训练入口默认官方target/noise FM、source条件与纯噪声推理；Base直接使用原生官方28步pipeline。显式`--base-guidance-scale 1`只改变Base推理，默认7.5保留。旧source-anchored文档和下方旧实验阶段记录仅供历史复现，当前结论以上方完整结果为准。
 
@@ -16,8 +16,11 @@ cluster.
 The current branch uses the pinned upstream DreamLite Base pipeline with target/noise
 flow matching over the full training time interval, source-image conditioning, pure-noise
 initialization, and native 28-step inference. The tested candidate trains the full U-Net
-and uses explicit CFG1 at inference. This differs from the official LoRA example's
-trainable parameter scope; the [audit](reports/official-alignment-audit-20260913.md)
+and uses explicit CFG1 at inference. The active comparison also encodes training
+events using the conditional row of upstream Base's full three-prompt edit batch,
+instead of the upstream LoRA example's raw event. This changes training conditioning
+only; native inference remains fixed. These differences in trainable parameters and
+training conditions are explicit; the [audit](reports/official-alignment-audit-20260913.md)
 records that choice and the remaining experimental differences.
 
 Recurrent validation carries the actual generated RGB PNG between events and applies

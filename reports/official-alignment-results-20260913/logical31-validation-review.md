@@ -33,3 +33,7 @@
 真实导出 CLI 已在旧单卡完成6次写入、30次读取，parity_pass=true、reference_functional_pass=false：工程一致性通过，但模型仍有功能失败。完整 archive `16bc3d0-logical-cli-evidence.tgz` 为6,208,749字节，远端/本地SHA **e0e8f9d4720b9717ddfa3d763c5a0e28a7c94c22021fe82b1d47b22fa357483f**。独立本地复核全部36条command/result、30次原始读取、6次写入PNG及最终持久PNG与原始parity记录一致；不把仅相同的错误回答算成功。
 
 抽样改动显著改善历史前缀，却损害清除和连续更新，不能交付为可用版本。下一轮固定相同预算与抽样，只改变训练条件编码，依据全302格真实首步速度对照进行；保持官方原生推理不变。
+
+两轮全1990条验证raw现已按case、condition、noise和query逐条配对，并检查query/gold/event完全相同、固定负对照输出与图像不变，见[逐格配对结果](logical31-paired-raw-comparison.json)。历史前缀原先170条正确全部保留，新增725条正确，剩65条仍错；单次写入新增80条错误，连续更新也新增80条错误，原先10条链内错误均未修复。这是同一组格子的转换统计，不是只比较两个总分。
+
+历史剩余65条中，33条应答juice却返回无偏好或coffee，13条应答linen却返回未指定或silver等错误，19条应答约定的no active preference却返回其他原始文本。prefix1的13条失败均属于后一类，包括11条no preference、1条no drink preferred和1条混合语言异常输出；不将它们重新记为正确。既有严格评分保持，当前对照仍必须同时检查历史改善是否保留以及清除/链失败是否修复。
