@@ -34,23 +34,49 @@ def write_json(path, value):
     Path(path).write_text(json.dumps(value, indent=2, sort_keys=True) + '\n')
 
 
-def prepare(reference, package, output, *, four_gpu_warm_start=False):
+def replay_registration(identity, *, four_gpu_warm_start=False, broader=False):
     from scripts.probes.transition_validation_plan import plan
+    if broader:
+        if four_gpu_warm_start:
+            raise ValueError('Select one parent protocol')
+        from scripts.reporting.collect_broader_endpoint import COMMIT, BANK_SHA, PLAN_SHA
+        from scripts.experiments.broader_writer_protocol import training_plan
+        if identity['bank_sha256'] != BANK_SHA or identity['plan_file_sha256'] != PLAN_SHA:
+            raise ValueError('Broader bank or preregistration changed')
+        registered, parent_commit = training_plan(BANK_SHA, COMMIT), COMMIT
+        # All sequence IDs/operations/seeds are fixed; original event strings
+        # are resolved against the actual sealed bank before this probe runs.
+        sequence = identity['selected_cases'][0]
+        fixed = registered['transition_validation']['rgb_chains'][0]
+        if any(sequence[key] != value for key, value in fixed.items() if key != 'steps'):
+            raise ValueError('Broader replay is not the first registered sequence')
+        if len(sequence['steps']) != len(fixed['steps']) or any(
+                any(actual.get(key) != value for key, value in expected.items())
+                for actual, expected in zip(sequence['steps'], fixed['steps'], strict=True)):
+            raise ValueError('Broader replay sequence changed')
+    elif four_gpu_warm_start:
+        from scripts.experiments.transition_warm_start_plan import plan as warm_plan
+        registered = warm_plan()['validation']
+        parent_commit = '046c1f1d1c398dbd08578d7c4ba6814343fea0d5'
+        sequence = identity['resolved_plan']['rgb_chains'][0]
+    else:
+        registered = plan(20260913)
+        parent_commit = '9628d7142db5a81a9d11a35b89d0515ef32d2e4f'
+        sequence = identity['resolved_plan']['rgb_chains'][0]
+    if (identity['mode'] != 'rgb_chains' or identity['registered_plan'] != registered
+            or identity['parent_commit'] != parent_commit):
+        raise ValueError('Require the fixed registered RGB chain')
+    return sequence
+
+
+def prepare(reference, package, output, *, four_gpu_warm_start=False, broader=False):
     from vision_memory.dreamlite.writer_package import inspect_package
     reference, package, output = map(Path, (reference, package, output))
     manifest = inspect_package(package)
     complete = read_json(reference / 'complete.json')
     identity = complete['identity']
-    if four_gpu_warm_start:
-        from scripts.experiments.transition_warm_start_plan import plan as warm_plan
-        registered = warm_plan()['validation']
-        parent_commit = '046c1f1d1c398dbd08578d7c4ba6814343fea0d5'
-    else:
-        registered = plan(20260913)
-        parent_commit = '9628d7142db5a81a9d11a35b89d0515ef32d2e4f'
-    if (identity['mode'] != 'rgb_chains' or identity['registered_plan'] != registered
-            or identity['parent_commit'] != parent_commit
-            or manifest['parent_checkpoint_sha256'] != identity['checkpoint_sha256']
+    sequence = replay_registration(identity, four_gpu_warm_start=four_gpu_warm_start, broader=broader)
+    if (manifest['parent_checkpoint_sha256'] != identity['checkpoint_sha256']
             or manifest['parent_result_sha256'] != identity['parent_result_sha256']
             or manifest['guidance_scale'] != identity['guidance_scale']):
         raise ValueError('Require the registered RGB chain and the exact exported endpoint')
@@ -58,7 +84,6 @@ def prepare(reference, package, output, *, four_gpu_warm_start=False):
         if Path(name).name != name or sha(reference / name) != digest:
             raise ValueError('Reference artifact changed: ' + name)
     # Always the first preregistered sequence; never choose a successful one.
-    sequence = identity['resolved_plan']['rgb_chains'][0]
     rows = [json.loads(line) for line in (reference / 'generations.jsonl').read_text().splitlines()]
     selected = [r for r in rows if (r['sequence'], r['repetition']) == (sequence['sequence'], sequence['repetition'])]
     commands, expected, images = [], [], []
@@ -139,12 +164,13 @@ def main():
     for name in ('reference', 'package', 'output'):
         p.add_argument('--' + name, type=Path, required=True)
     p.add_argument('--four-gpu-warm-start', action='store_true')
+    p.add_argument('--broader', action='store_true')
     p = sub.add_parser('verify')
     for name in ('prepared', 'inference'):
         p.add_argument('--' + name, type=Path, required=True)
     args = parser.parse_args()
     if args.mode == 'prepare':
-        prepare(args.reference, args.package, args.output, four_gpu_warm_start=args.four_gpu_warm_start)
+        prepare(args.reference, args.package, args.output, four_gpu_warm_start=args.four_gpu_warm_start, broader=args.broader)
         return 0
     result = verify(args.prepared, args.inference)
     print(json.dumps(result))
