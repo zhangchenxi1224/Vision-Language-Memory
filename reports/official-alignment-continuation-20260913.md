@@ -1,5 +1,12 @@
 # Goal 接续位置
 
+## 10:25 证据归档补齐，四卡稳定优化
+
+- 上节独立single/chain原始归档、四卡预检/首步证据及review均已提交push **fc5148904672fc9910ab8e783d4b0e26fb3dc1be**，不是待提交。训练仍固定046、validation1201、套件ff17，不要fetch/修改正在执行的checkout。
+- 历史readback归档61321已exit0、61,365,808bytes，完整SHA **b002f07d9ab7ca37f7dadebf8282a0ac0fb312f8a38d37b21bcfbe04b5ddc5c5**。新增 `scripts/reporting/verify_historical_readback_local.py` 已实际执行成功（83387已exit0），全部65PNG/720raw/原始面板和覆盖重算通过；64PT仍远端，缺失清单明确。完整归档、local-verification与工具待本轮提交；没有待下载会话。下节“61321仍在下载”已过时。
+- 10:23附近最新实际 **847/2880更新、679.26秒**，baseline845/900，final0；训练和后续套件PIDs都实测存活。套件470773的stage仍waiting_for_fixed_endpoint。这不是阻塞或新结论；保持原fixed预算，完成后自动严格collector及fresh independent验证。
+- 用户实例生命周期已实查：本轮2026-09-13 09:17:55启动，running；平台CLI lifecycle没有给停止期限。当前代码自己有限截止（训练12:00、后续12:30），没有擅自更改用户实例生命周期。后续需要更长实验先检查资源实际仍可用；不得stop/delete用户实例。
+
 ## 10:16 用户四H200已实际训练，等待固定终点与自动独立验证
 
 - **优先保留用户实例 vlm-r11-trust-h200x4-20260907-r3，不得stop/delete。** 四H200/80CPU/900GiB/shm128、ngc25.02 CUDA12.8、nodeqb-prod-gpu2104，四卡实际空闲核验后迁入。旧dl-warm-h200x1和dl-transval-h200x1均已stop，未delete；不要再轮询其旧worker。CPU2仍运行，约15:46截止。
