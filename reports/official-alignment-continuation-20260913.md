@@ -1,3 +1,13 @@
+## 09-14 07:25 完整 PNG 验收已部署并实际排队
+
+- 新源码 **38531f04c2f2d6337ce2ede6dba5950f901ebe53** 已提交推送，远端干净 **P/repos/dreamlite-png-readback-20260914**。部署句柄96992已exit0、两个SCP和启动句柄都exit0；不要重复部署/启动。新鲜计划远端SHA再次正确。`P` 是 /inspire/ssd/project/exploration-topic/czxs26210936；`R` 是 P/runs/dreamlite-official-alignment。
+- PNG driver **1428** 已在新4H200的实际/proc中确认存活，stateS；status **R/38531f0-png-readback-status.json**，stagewaiting_for_both_complete_suites/statewaiting，time1789341856.9551573。log **R/38531f0-png-readback-driver.log**；deadline1789353600=10:40 CST。只等待7b和56完成以及实际GPU空闲，没有提前占卡。
+- PNG按registered、fresh_wording_v1顺序各4GPU并行Reader，输出 **R/38531f0-png-readback-{registered,fresh_wording_v1}-{confirmation,chains,prefix0,prefix1}**。同名前缀生成-evidence.tgz与-summary.json。全部3980原始读取、3600matched、796实际输入PNG，源全部PT及完整source seal先重核，再从磁盘PNG读取；链全960行pixel/token逐一比较。不会据先前失败挑案例，也不追加训练。当前无PNG实测分数。
+- 18个相关检查通过（17个矩阵/转换/旧新计划/入口；另1个完整390行、78实际PNG collector与图像篡改拒绝）。4个新Python模块编译通过，git diff --check通过。该测试证据不是模型功能结果。
+- 最新GPU观察time1789341889.4809105：b9 **3455/4832**、elapsed2781.3822657069713秒；四CUDA PID2916294–2916297在。7b driver3222175与56 driver3609629仍实际等待。`R/observe-historical-wording.py`已更新，可同时显示训练、7b、56、PNG的实际/proc及status。旧observe-official-condition-runs.py不描述b9，勿据旧输出误判新训练停止。
+- 下一步：等b9完整终点，7b自动收集全部训练和实际302最终PT后跑四路/CLI；56继续完整新表达；385继续全PNG。收集7b和56各完整endpoint/四路raw+PNG/CLI，下载和本地完整重算，不能只有总分。PNG archive不重复匹配PNG，复用对应7b/56归档解压目录；用 `scripts/reporting/collect_png_readback.py --run PNG归档解压目录 --source 对应原验证归档解压目录 --expected-commit 38531f04c2f2d6337ce2ede6dba5950f901ebe53 --output-prefix 本地复核前缀` 实际检查所有PNG像素并重算全行。若不提供source，仅control PNG可本地检查，不能称全部像素复核。
+- Goal仍active，尚无完整可用候选。原用户r3继续PENDING、r2RUNNING，均保留。新卡租期约10:51、CPU约09:25，及时收集证据。保持所有活跃源码不变，有问题另开修复checkout并保存失败现场。当前无未完成本地exec/SCP句柄。
+
 ## 09-14 07:16 四卡训练继续；旧/新验收已排队；新增完整 PNG 验收
 
 - Goal 仍 active。b9 在新实例 dl-official-exp-h200x4-20260914 实际运行，time1789341379 最新2826/4832步、elapsed2275.0207秒，4个CUDA进程2916294–2916297都在。完整基线通过；7b driver3222175 等待终点，56 driver3609629 等待7b完整suite。不要重复启动或修改这三套活跃源码。
