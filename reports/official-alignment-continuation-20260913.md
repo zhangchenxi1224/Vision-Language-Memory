@@ -2,6 +2,8 @@
 
 ## 09-14 06:22 raw完整功能仍56失败；历史表达覆盖新实训四卡已启动
 
+06:24补充：b9真实串行/四卡全U-Net梯度预检已通过，relativeL2 **3.618480262226297e-08**、relativeMax **9.37668047695423e-08**（阈值2e-6）。增强条件seal已实际生成，四rank当前各60条baseline raw，尚未完成完整基线或进入参数更新。实际CUDA2916294–2916297仍全R。唯一下载22170仍在运行，继续同句柄。
+
 - **本turn有实质进展，goal仍active**：5ef raw四路及CLI全完成，原生64历史失败并非只改推理条件就能全修复。新b9f90e9训练代码/固定计划已提交推送，20项相关测试通过，最后新增有限FP32/恢复一致性检查后6项实际microbatch/表达测试再次通过，四训练rank已实际占GPU。当前尚在模型/条件加载，不能称baseline通过或已经参数更新。
 - **实际新实训**：源码 **b9f90e956eea7bda15f638c8877919941ce4fec5**，干净 `P/repos/dreamlite-historical-wording-20260914`，run **R/b9f90e9-historical-wording-full4832**。新4H200实例不变。driver **2915119**，pilot **2915768**，torchrun父 **2916289**，实际CUDA **2916294–2916297**；06:21:09本实例/proc状态四rank全R。驱动status在run/native-condition-driver-status.json；外层log **R/b9f90e9-historical-wording-driver.log**。不要再次运行launcher或修改该源码目录。
 - **已实际核对的计划SHA**：**a35d3986439dab371f3bfd90243ed948bba3c3a4f4fd0887d3021e38dead081e**，本地`.cache/check-historical-training-plan.py`重放完整19328draw后与远端实际文件一致。原d153参数初始化、新AdamW、4832更新、31逻辑权重、全部source/teacher/noise/sigma不变；native条件训练/native28 CFG1推理。仅16历史条件各增8训练表述，保留原始共9，每表达69–70次；音乐不变。新表述来自原始事件语义，不用query/gold，且排除已有验证原文。没有修改151bank/qid/teacher。条件缓存仅训练使用，开发和推理仍原条件；实际draw记录所选index/event/embedding/mask哈希，4rank协商，恢复时拒绝编码变化。`
