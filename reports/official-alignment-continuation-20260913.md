@@ -1,5 +1,14 @@
 # Goal 接续位置
 
+## 11:01 四卡固定端点完成900/900；独立验证已真实运行
+
+- **046c1f1 四卡训练已经 completed；不要重启或再轮询旧180440/181990–181993。** 2880更新/11520draw、优化2319.655秒。完整baseline845/900→trained **900/900、180/180图五问法全对**，同噪声配对845保持正确、55由错转对。该结论只覆盖当前单实体45组开发条件，goal仍active，未声称整体可用。
+- 最终result SHA **be4d654f73161d939f04985a8f832e033e05620f1e362d5460745b9f5710ebae**；checkpoint SHA **e04a3d5c90abbe37f230d4282129057240f4db4bee5ffe4b92936b294029d053**。四rank最终参数hash均 **0025dd0c573218179857beaf7e48a4dc7f9d86af5c07056962bea34fb3f6294d**，proof SHA **992dfc47dc16901f9b87f29f21a51a70097c45232bde1a719ecb6c4f011ba121**。完整远端collector已成功核验全部360PT/checkpoint/raw/draw/原计划/四卡proof，不是只读summary。
+- 新endpoint summary SHA **33005e144b724d54d011ade178e58656f6c38992a1f393561c4d0c049412135e**；archive **1,843,569bytes** SHA **48b0b321f9da4c600e512106ec19941922d601ae1766b9797f48affc0554586a**。两文件已完整下载，本地新 `verify_four_gpu_endpoint_local.py` 已实际通过全部2700raw、11520draw及四卡证据核验（会话97733已exit0）。大型361个PT/checkpoint仅远端有，本地遗漏明确。没有待传输会话。
+- **自动suite470773仍LIVE**，已进入 `independent_single_writes_and_rgb_chains`，parent PIDs **1317973/1317974**，容器内真正GPU workers **1318347/1318346**；nvidia-smi另一个PID命名空间显示2086345/2086346，不要把它们用于容器ps。11:02实测两个child均Rl，各22.6GiB，single/chain已各60raw。source仍固定1201efe，single输出1201efe-four-gpu-warm-confirmation，chain输出1201efe-four-gpu-warm-chains；其余package/parity路径及12:30deadline见下10:16。两张卡跑完整各自矩阵；**不要重复launch suite，最终single/chain仍待完成**。用户四卡实例不允许stop/delete。
+- 本地 `verify_transition_validation_local.py` 已增加显式four-gpu-warm prefixes和新父archive SHA参数，使用原归档plan bytes与固定1201 probe绑定；旧prefix默认不变。端点/validation collector/plan相关6tests本轮实际通过。后续等真实collector归档后下载全文件再执行；不要把准备脚本当新功能证据。
+- 前两轮新证据已经commit/push **01a326c2ce64d5d571108b8712882cba17d6d057**（真实16题/64bank）和 **acaae6b**（真实固定hash目标诊断）。后者实际16selected为154/160、14/16全部通过；target3 par4无法读juice，target14 par3/4回答no preference而非no active preference，后者是严格词面失败，不能说保留旧状态。拟在所有16固定目标上按既往三训练问法/Adam.05/额外256步做latent-only refinement；**尚未实现、未派发、无更广Writer新训练**。原64目标不替换/不丢弃，已知诊断问法不能冒称fresh holdout。优先完成当前新端点独立链评估，再安排更广功能证据。
+
 ## 10:38 更广16题训练数据已真实构建；当前四卡优化超过1900步
 
 - 本轮开始实测训练四rank181990–181993、suite470773均存活，1144步；后续实测1684和**1906/2880、elapsed1523.86s**，baseline845/900、final仍0。仍属固定046训练，不能修改/重启；suite仍等待完成。未取得新端点，goal active。上轮归档补齐已commit/push **8f81c1f8f849225bdfca592afdaa4cb6ebf996a7**；所有旧下载/verify会话都结束。

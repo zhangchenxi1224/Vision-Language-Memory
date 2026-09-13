@@ -12,17 +12,22 @@ from scripts.reporting.collect_transition_validation import collect
 from scripts.reporting.collect_transition_endpoint import sha
 
 p = argparse.ArgumentParser(description=__doc__)
-p.add_argument('--prefix', choices=('transition-confirmation', 'transition-chains'), required=True)
+p.add_argument('--prefix', choices=('transition-confirmation', 'transition-chains',
+                                   'four-gpu-warm-confirmation', 'four-gpu-warm-chains'), required=True)
 p.add_argument('--summary-sha256', required=True)
 p.add_argument('--archive-sha256', required=True)
+p.add_argument('--parent-archive-sha256', help='Required for the new four-GPU endpoint')
 a = p.parse_args()
+warm = a.prefix.startswith('four-gpu-warm-')
+if warm and not a.parent_archive_sha256:
+    p.error('--parent-archive-sha256 is required for four-GPU validation')
 directory = ROOT / 'reports/official-alignment-results-20260913'
 summary_path = directory / (a.prefix + '-summary.json')
 archive_path = directory / (a.prefix + '-evidence.tgz')
-parent_archive = directory / 'transition-wording-endpoint-evidence.tgz'
+parent_archive = directory / ('four-gpu-warm-endpoint-evidence.tgz' if warm else 'transition-wording-endpoint-evidence.tgz')
 if sha(summary_path) != a.summary_sha256 or sha(archive_path) != a.archive_sha256:
     raise ValueError('Downloaded validation differs from its remote digest')
-parent_sha = '18d4e8f71b123853dffb829ef2daeadeadf17c9915eef1d0a6517960b62b1ee5'
+parent_sha = a.parent_archive_sha256 if warm else '18d4e8f71b123853dffb829ef2daeadeadf17c9915eef1d0a6517960b62b1ee5'
 if sha(parent_archive) != parent_sha:
     raise ValueError('Downloaded parent evidence changed')
 remote = json.loads(summary_path.read_bytes())
@@ -35,7 +40,9 @@ with tempfile.TemporaryDirectory(prefix='dreamlite-validation-') as temporary:
     if (run / 'verified-summary.json').read_bytes() != summary_path.read_bytes():
         raise ValueError('Archived validation summary differs')
     local = collect(run, parent, directory / 'transition-wording-bank-manifest.json',
-                    run / 'preregistered-plan.json', text_only=True)
+                    run / 'preregistered-plan.json', text_only=True,
+                    four_gpu_warm_start=warm,
+                    **({'expected_probe_commit': '1201efe53f0a8886ff854d03a42432f84bb7fb07'} if warm else {}))
     for key in remote:
         if key not in ('all_files_verified_here', 'verified_files', 'artifacts_omitted_locally') and local[key] != remote[key]:
             raise ValueError('Local validation differs: ' + key)
