@@ -1,0 +1,50 @@
+{
+  "archive_sha256": "e9b5db3031144060162195203d6ed01ddc5681dd3a7c6b230135d4e0e3083f89",
+  "bytes": 6455300,
+  "parity": {
+    "command_file_sha256": "244b3007b6dfa31b6dd3a8a0f7d4ea3a106660475b845af9fcc0279c38375ca8",
+    "expected_sha256": "a0204d055e40155c108673ffee57e58cd337ab93f30b2d2ab06a0cbeeb946225",
+    "inference_complete_sha256": "4b06cc32715a6bccabb37aeabe706b78f5fc974f71a1ec1843c2343d3d89339c",
+    "inference_results_sha256": "eb56d2cd89129a14107154dc9996208e944c996ed5e5922a186915464ba6de21",
+    "mismatches": [],
+    "package_manifest_sha256": "9f22aec16ef50e77a2387741965c7f31d6d3362ff67f21d5d8f6ab97c0883486",
+    "parity_pass": true,
+    "reads_compared": 30,
+    "reference_complete_sha256": "a793b342505d5b84d357231d3b9a7663ac82e9f8e191f82ae7425daf0fe7f9eb",
+    "reference_functional_pass": true,
+    "reference_interpretation": "observed_cases_paired_diagnostic",
+    "repetition": 0,
+    "scope": "Engineering parity only. This does not certify functional correctness.",
+    "sequence": 0,
+    "writes_compared": 6
+  },
+  "scope": "All36 commands/results,30 raw reads,6 write PNGs and final persisted PNG reverified locally. Exported parameter tensors remain remote. CLI parity is separate from functional correctness.",
+  "suite": {
+    "deadline_unix": 1789350600.0,
+    "functional_all_registered_correct": false,
+    "matched_results": {
+      "chains": [
+        480,
+        480
+      ],
+      "confirmation": [
+        360,
+        360
+      ],
+      "prefix0": [
+        438,
+        480
+      ],
+      "prefix1": [
+        466,
+        480
+      ]
+    },
+    "parent": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/bb34092-logical31-full4832",
+    "scope": "Observed c2ec407 cases reused as a paired sampling diagnostic; no fresh holdout claim.",
+    "stage": "all_registered_workloads_finished",
+    "state": "completed",
+    "time_unix": 1789337226.983024,
+    "validation_commit": "5ef8aa8ce4edb412675aa410e01c2d2ed02b10e0"
+  }
+}
