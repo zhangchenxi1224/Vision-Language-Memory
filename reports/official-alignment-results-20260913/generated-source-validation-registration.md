@@ -27,6 +27,18 @@ complete PNG readback follow sequentially. All use deadline1789406700, or
 2026-09-15 01:25 CST, before the observed allocation's automatic stop.
 No new trained endpoint or functional score is claimed yet.
 
+The subsequent four-rank startup gate also passed. All four initial parameter
+digests equal the fixed4f `16bf3923...` digest. Actual serial and four-rank draws
+and losses were identical; gradient relative L2 error was
+`3.846881746819174e-08` and relative maximum error was
+`5.316059966006986e-08`, both below the unchanged `2e-6` tolerance.
+`b62ec02-four-rank-startup-proof.json` binds both complete gate reports to the
+actual training registration, identity, runtime and both augmentation seals.
+Its independently observed remote SHA256 is
+`e877db9ac63a285a9180229fa7545f702cb67abf1b591f467ce9d38a7a10fcdb`.
+Full baseline generation is now running; this startup gate does not assert
+baseline equality, completed optimization, or functional acceptance.
+
 ## Registration and earlier deployment observations
 
 The next training source is `b62ec027ad725aeb6ecc772aa85e7a3ff6e49b36`.

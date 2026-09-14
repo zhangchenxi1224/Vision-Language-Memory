@@ -1,0 +1,172 @@
+{
+  "files_sha256": {
+    "preregistered-experiment.json": "86a6bba8fa438da673af73223cfe2d3ab57759564159c05385b151d828e5c922",
+    "train/identity.json": "674389d50499569538f2161538463c0c07becf6e29a000f07ab331b0828c7e28",
+    "train/parallel-gradient-preflight.json": "93831d719985fe955cdc337db4d75eb8d2fe25977e6dbebb58ee85a7be8f099f",
+    "train/parallel-initial-parameters.json": "c8e9464259e4a16750476070ad284d2abe88cf55bfe7f35f3171b54c7192cade",
+    "train/runtime.json": "b97bf55f679cb94805ef769b9e748f09a55182a8f36fb9dcb48c6fcfb7bdd1a0",
+    "train/training-condition-augmentation.json": "bfdcfacc5925a42f80aec0203b1b4a2bd197391525e5f7ff25162288051b0467",
+    "train/training-source-augmentation.json": "1e8d052088605ff59974a1dedfaee8e42b70d12087edac8253a9b56ca2175ac0"
+  },
+  "gradient_gate": {
+    "global_microbatches": 4,
+    "gradient_max_absolute_error": 2.3283064365386963e-10,
+    "gradient_relative_l2_error": 3.846881746819174e-08,
+    "gradient_relative_max_error": 5.316059966006986e-08,
+    "identical_draws_and_losses": true,
+    "parallel_microbatches": [
+      {
+        "effective_sigma": 0.39250802993774414,
+        "flow_matching_mse": 0.0007503988454118371,
+        "noise_seed": 3295609906537195916,
+        "question_id": "r5-f1-392d41fd097d069c42218e0a-from-gray-set-to-ambient-wording-0-expanded-3",
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-from-gray-set-to-ambient-wording-0-expanded-3-e910e9b89ed3861e"
+      },
+      {
+        "effective_sigma": 0.3416496515274048,
+        "flow_matching_mse": 0.013514932245016098,
+        "noise_seed": 703349581737675262,
+        "question_id": "r3-train-semantic-001224-historical-prefix",
+        "teacher_id": "r3-train-semantic-001224-historical-prefix-refined-8fb2b02162433e6b",
+        "training_condition_variant": {
+          "attention_mask_sha256": "7b262ea5becc07b33552f0d60bc6b7a6a7c1add6eeab6823c7b00724b30a356e",
+          "event_text_sha256": "1a39f9ca294bf7f0669607e22793207098d33c5dc9000d67de6d0a9e1cb5e0a7",
+          "index": 0,
+          "prompt_embeds_sha256": "37181c953e838c1c83a4179251fa9048cb3991d0d6f9bf18e0eec1b4b8ff582c"
+        }
+      },
+      {
+        "effective_sigma": 0.20776325464248657,
+        "flow_matching_mse": 0.0011937252711504698,
+        "noise_seed": 5053010510421626954,
+        "question_id": "r5-f1-392d41fd097d069c42218e0a-from-jazz-set-to-ambient-wording-2",
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-from-jazz-set-to-ambient-wording-2-e910e9b89ed3861e",
+        "training_source_variant": {
+          "attention_mask_sha256": "7b0662ebe22d1e1392ed4c8e99acffeefd91249cc93f66829cea303c28a43c59",
+          "event_text_sha256": "754bc4d13df58bbf5570b4f65d71c28f3cae7c625202ca064ee9351081f48214",
+          "index": 5,
+          "prompt_embeds_sha256": "1b8e3de21d091a6d6583180a9433ef034e245db1541c8eddaa3c44c0aa7a574a",
+          "source_image_file_sha256": "ef642ec478c9168b73b77555e2ae3360061f167ec23ec92072fbfa6a398f2c6b",
+          "source_latent_sha256": "c387ade653c84f8ea40d89478e447bff410c53950f30247894e2e827c1896a01"
+        }
+      },
+      {
+        "effective_sigma": 0.838670015335083,
+        "flow_matching_mse": 0.0003779206599574536,
+        "noise_seed": 3399289782449038156,
+        "question_id": "r5-f1-392d41fd097d069c42218e0a-from-jazz-clear-to-clear-wording-0-expanded-8",
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-from-jazz-clear-to-clear-wording-0-expanded-8-c3132b6f9575ecc6",
+        "training_source_variant": {
+          "attention_mask_sha256": "2fac89578ea9cf3df7f2c26bb2843f4e8003f28a1ca0a94fb179cd098a1b711d",
+          "event_text_sha256": "fc39b9de4e6b390986a45ee283f4cd48fb39c42877ae6ef7f4e5156faa01bf27",
+          "index": 3,
+          "prompt_embeds_sha256": "c1fe8dc9e0d5521dd7edce13a0adc048f5014988464e8386773fceb306b95d71",
+          "source_image_file_sha256": "7561dfa4c2e51cab25481ee5649d21a498b94af997d5e0806112d2ca1650f9bc",
+          "source_latent_sha256": "078e4b482ce3179c64a4fb3f6bee06fc8e21d378fed2812f552b29f82c34ab01"
+        }
+      }
+    ],
+    "passed": true,
+    "relative_tolerance": 2e-06,
+    "scope": "actual full U-Net gradient only; no optimizer update or success claim",
+    "serial_microbatches": [
+      {
+        "effective_sigma": 0.39250802993774414,
+        "flow_matching_mse": 0.0007503988454118371,
+        "noise_seed": 3295609906537195916,
+        "question_id": "r5-f1-392d41fd097d069c42218e0a-from-gray-set-to-ambient-wording-0-expanded-3",
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-from-gray-set-to-ambient-wording-0-expanded-3-e910e9b89ed3861e"
+      },
+      {
+        "effective_sigma": 0.3416496515274048,
+        "flow_matching_mse": 0.013514932245016098,
+        "noise_seed": 703349581737675262,
+        "question_id": "r3-train-semantic-001224-historical-prefix",
+        "teacher_id": "r3-train-semantic-001224-historical-prefix-refined-8fb2b02162433e6b",
+        "training_condition_variant": {
+          "attention_mask_sha256": "7b262ea5becc07b33552f0d60bc6b7a6a7c1add6eeab6823c7b00724b30a356e",
+          "event_text_sha256": "1a39f9ca294bf7f0669607e22793207098d33c5dc9000d67de6d0a9e1cb5e0a7",
+          "index": 0,
+          "prompt_embeds_sha256": "37181c953e838c1c83a4179251fa9048cb3991d0d6f9bf18e0eec1b4b8ff582c"
+        }
+      },
+      {
+        "effective_sigma": 0.20776325464248657,
+        "flow_matching_mse": 0.0011937252711504698,
+        "noise_seed": 5053010510421626954,
+        "question_id": "r5-f1-392d41fd097d069c42218e0a-from-jazz-set-to-ambient-wording-2",
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-from-jazz-set-to-ambient-wording-2-e910e9b89ed3861e",
+        "training_source_variant": {
+          "attention_mask_sha256": "7b0662ebe22d1e1392ed4c8e99acffeefd91249cc93f66829cea303c28a43c59",
+          "event_text_sha256": "754bc4d13df58bbf5570b4f65d71c28f3cae7c625202ca064ee9351081f48214",
+          "index": 5,
+          "prompt_embeds_sha256": "1b8e3de21d091a6d6583180a9433ef034e245db1541c8eddaa3c44c0aa7a574a",
+          "source_image_file_sha256": "ef642ec478c9168b73b77555e2ae3360061f167ec23ec92072fbfa6a398f2c6b",
+          "source_latent_sha256": "c387ade653c84f8ea40d89478e447bff410c53950f30247894e2e827c1896a01"
+        }
+      },
+      {
+        "effective_sigma": 0.838670015335083,
+        "flow_matching_mse": 0.0003779206599574536,
+        "noise_seed": 3399289782449038156,
+        "question_id": "r5-f1-392d41fd097d069c42218e0a-from-jazz-clear-to-clear-wording-0-expanded-8",
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-from-jazz-clear-to-clear-wording-0-expanded-8-c3132b6f9575ecc6",
+        "training_source_variant": {
+          "attention_mask_sha256": "2fac89578ea9cf3df7f2c26bb2843f4e8003f28a1ca0a94fb179cd098a1b711d",
+          "event_text_sha256": "fc39b9de4e6b390986a45ee283f4cd48fb39c42877ae6ef7f4e5156faa01bf27",
+          "index": 3,
+          "prompt_embeds_sha256": "c1fe8dc9e0d5521dd7edce13a0adc048f5014988464e8386773fceb306b95d71",
+          "source_image_file_sha256": "7561dfa4c2e51cab25481ee5649d21a498b94af997d5e0806112d2ca1650f9bc",
+          "source_latent_sha256": "078e4b482ce3179c64a4fb3f6bee06fc8e21d378fed2812f552b29f82c34ab01"
+        }
+      }
+    ],
+    "world_size": 4
+  },
+  "initial_parameters": {
+    "backend": "nccl",
+    "bitwise_rank_agreement": true,
+    "devices": [
+      {
+        "device": "0",
+        "local_rank": 0,
+        "name": "NVIDIA H200",
+        "pid": 60713,
+        "rank": 0
+      },
+      {
+        "device": "1",
+        "local_rank": 1,
+        "name": "NVIDIA H200",
+        "pid": 60714,
+        "rank": 1
+      },
+      {
+        "device": "2",
+        "local_rank": 2,
+        "name": "NVIDIA H200",
+        "pid": 60715,
+        "rank": 2
+      },
+      {
+        "device": "3",
+        "local_rank": 3,
+        "name": "NVIDIA H200",
+        "pid": 60716,
+        "rank": 3
+      }
+    ],
+    "nccl_algorithm": "Ring",
+    "nccl_protocol": "Simple",
+    "parameter_sha256_by_rank": [
+      "16bf39236d6828dc9bc7ed7168f7e10092ccc9ea4868647f9f7c62b0d6a73975",
+      "16bf39236d6828dc9bc7ed7168f7e10092ccc9ea4868647f9f7c62b0d6a73975",
+      "16bf39236d6828dc9bc7ed7168f7e10092ccc9ea4868647f9f7c62b0d6a73975",
+      "16bf39236d6828dc9bc7ed7168f7e10092ccc9ea4868647f9f7c62b0d6a73975"
+    ],
+    "world_size": 4
+  },
+  "observed_time_unix": 1789379984.0865016,
+  "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/b62ec02-generated-source-full4832",
+  "scope": "Four-rank initialization and actual serial/parallel gradient gate; baseline and endpoint remain pending."
+}
