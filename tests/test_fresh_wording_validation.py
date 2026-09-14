@@ -98,15 +98,21 @@ def test_continuation_reuses_every_observed_case_and_preserves_lineage(fixed):
         plan(changed, bank)
 
 
-@pytest.mark.parametrize('continuation', [False, True])
-def test_complete_collector_preserves_fresh_vs_observed_provenance(fixed, monkeypatch, tmp_path, continuation):
+@pytest.mark.parametrize('parent', ['original', 'continuation', 'native_baseline'])
+def test_complete_collector_preserves_fresh_vs_observed_provenance(fixed, monkeypatch, tmp_path, parent):
     from scripts.reporting import collect_broader_validation as collector
     from scripts.reporting.collect_broader_endpoint import CLEAR_RETENTION_COMMIT, BANK_SHA
     from scripts.experiments.clear_retention_protocol import plan as continuation_plan
     bank, training, _ = fixed
-    commit = CLEAR_RETENTION_COMMIT if continuation else PARENT_COMMIT
-    if continuation:
+    observed = parent != 'original'
+    commit = CLEAR_RETENTION_COMMIT if parent == 'continuation' else PARENT_COMMIT
+    if parent == 'continuation':
         training = continuation_plan(bank, commit)
+    elif parent == 'native_baseline':
+        from scripts.experiments.fresh_wording_validation import NATIVE_BASELINE_COMMIT
+        from scripts.experiments.native_condition_protocol import plan as native_plan
+        commit = NATIVE_BASELINE_COMMIT
+        training = native_plan(bank, commit)
     registered = plan(training, bank)
     expected, artifacts, cases = expected_rows(registered, bank, 'single_writes', None)
     rows = [{**meta, 'image_sha256': hashlib.sha256(meta['image_artifact'].encode()).hexdigest(),
@@ -116,7 +122,7 @@ def test_complete_collector_preserves_fresh_vs_observed_provenance(fixed, monkey
     summary, _, _ = summarize_rows(rows, registered, bank, 'single_writes', None)
     artifacts.add('validation-plan.json')
     run, parent = tmp_path / 'run', tmp_path / 'parent'
-    label = ('observed_wording_regression_seen_semantic_questions' if continuation
+    label = ('observed_wording_regression_seen_semantic_questions' if observed
         else 'fresh_event_wording_seen_semantic_questions')
     probe = 'e' * 40
     identity = {'validation_set': 'fresh_wording_v1', 'validation_plan_sha256': digest(registered),
@@ -144,8 +150,36 @@ def test_complete_collector_preserves_fresh_vs_observed_provenance(fixed, monkey
         logical_sampling_commit=commit, validation_set='fresh_wording_v1')
     assert actual['interpretation'] == label
     assert (actual['raw_rows'], actual['matched_correct_eos']) == (390, 360)
-    identity['interpretation'] = ('fresh_event_wording_seen_semantic_questions' if continuation
+    identity['interpretation'] = ('fresh_event_wording_seen_semantic_questions' if observed
         else 'observed_wording_regression_seen_semantic_questions')
     with pytest.raises(ValueError, match='validation interpretation changed'):
         collector.collect(run, parent, tmp_path / 'bank.json', probe, text_only=True,
             logical_sampling_commit=commit, validation_set='fresh_wording_v1')
+
+
+def test_native_baseline_preserves_all_observed_cells_and_actual_cli_plan(fixed):
+    from scripts.experiments.fresh_wording_validation import NATIVE_BASELINE_COMMIT
+    from scripts.experiments.native_condition_protocol import plan as native_plan
+    from scripts.probes.rgb_package_parity import replay_registration
+    bank, _, original = fixed
+    training = native_plan(bank, NATIVE_BASELINE_COMMIT)
+    assert digest(training) == 'a744792e813aac8da2ad2a0ed774b2ba31cba6ab72a51b4bbc680d1df57fa528'
+    baseline = plan(training, bank)
+    assert baseline['transition_validation'] == original['transition_validation']
+    assert baseline['prefix_validation'] == original['prefix_validation']
+    assert baseline['reused_validation_plan_sha256'] == digest(original)
+    assert 'not a new holdout' in baseline['validation_exposure']
+    for key in training:
+        if key not in ('transition_validation', 'prefix_validation', 'validation_exposure', 'validation_scope', 'validation_set'):
+            assert baseline[key] == training[key]
+    for mode, lane in (('single_writes', None), ('rgb_chains', None), ('historical_prefixes', 0), ('historical_prefixes', 1)):
+        assert expected_rows(baseline, bank, mode, lane) == expected_rows(original, bank, mode, lane)
+    identity = {'bank_sha256': 'c27cd65dab809deabb5f2cb08891517d3590244651d08a8c6763c84fea901592',
+        'plan_file_sha256': digest(training), 'validation_set': 'fresh_wording_v1',
+        'validation_plan_sha256': digest(baseline), 'selected_cases': baseline['transition_validation']['rgb_chains'],
+        'registered_plan': baseline, 'mode': 'rgb_chains', 'parent_commit': NATIVE_BASELINE_COMMIT}
+    assert replay_registration(identity, broader=True, logical_sampling_commit=NATIVE_BASELINE_COMMIT) == baseline['transition_validation']['rgb_chains'][0]
+    changed = copy.deepcopy(training)
+    changed['optimizer']['lr'] = 1e-5
+    with pytest.raises(ValueError, match='fixed training registration'):
+        plan(changed, bank)

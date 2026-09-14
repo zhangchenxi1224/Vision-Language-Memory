@@ -10,6 +10,7 @@ from vision_memory.training.latent_bank_unet import stable_seed
 VALIDATION_SET = 'fresh_wording_v1'
 PARENT_COMMIT = 'b9f90e956eea7bda15f638c8877919941ce4fec5'
 EXPECTED_PLAN_SHA = 'ba77e8c2ab8742bdcda703ae12071b504ea99c33173d0ebad314ddc10292fb6b'
+NATIVE_BASELINE_COMMIT = '03f8467e5a1201c2dbd9d12484bf2338d7837727'
 
 
 def event(entity, topic, operation, value, style):
@@ -53,6 +54,19 @@ def all_seeds(value):
 
 
 def plan(training, bank):
+    if training['training_commit'] == NATIVE_BASELINE_COMMIT:
+        from scripts.experiments.native_condition_protocol import plan as native_plan
+        from scripts.experiments.historical_wording_protocol import plan as wording_plan
+        if training != native_plan(bank, NATIVE_BASELINE_COMMIT):
+            raise ValueError('Native baseline differs from its fixed training registration')
+        original = plan(wording_plan(bank, PARENT_COMMIT), bank)
+        value = copy.deepcopy(training)
+        for key in ('transition_validation', 'prefix_validation', 'validation_set', 'validation_scope'):
+            value[key] = copy.deepcopy(original[key])
+        value['validation_exposure'] = 'Previously observed fresh_wording_v1 cases and noise reused in full to measure the fixed 03 parent baseline; not a new holdout.'
+        value['reused_validation_plan_sha256'] = EXPECTED_PLAN_SHA
+        value['diagnostic_purpose'] = 'Measure all original observed-expression cells on the unchanged 03 endpoint before attributing 4f errors to continuation training.'
+        return value
     continuation_commit = '4fbc85725d78427235757ace2661d086b896a97f'
     if training['training_commit'] == continuation_commit:
         from scripts.experiments.clear_retention_protocol import plan as continuation_plan

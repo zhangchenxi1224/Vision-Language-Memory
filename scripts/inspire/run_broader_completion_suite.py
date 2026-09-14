@@ -39,9 +39,15 @@ def main():
     raw_control = a.inference_condition == 'training_raw'
     fresh_validation = a.validation_set == 'fresh_wording_v1'
     continuation = a.logical_sampling_commit == '4fbc85725d78427235757ace2661d086b896a97f'
+    native_baseline = a.logical_sampling_commit == '03f8467e5a1201c2dbd9d12484bf2338d7837727'
     prior_validation_commit = '7b82309eb49e913d8f028230ac5f79c743d28a46'
     if fresh_validation:
-        if continuation:
+        if native_baseline:
+            prior_validation_commit = '9e27050ea3fe1e7d54fe81714244f93ae07bac81'
+            if (raw_control or parent != RUNS / '03f8467-native-condition-full4832'
+                    or a.prior_validation_status != RUNS / '9e27050-logical-completion-suite-status.json'):
+                raise ValueError('Native baseline requires the fixed 03 endpoint and its complete registered suite')
+        elif continuation:
             prior_validation_commit = a.expected_commit
             if (raw_control or parent != RUNS / '4fbc857-clear-retention-full4832'
                     or a.prior_validation_status != RUNS / (a.expected_commit[:7] + '-logical-completion-suite-status.json')):
@@ -215,7 +221,8 @@ def main():
         record('all_registered_workloads_finished', 'completed',
             functional_all_registered_correct=all(value['all_generated_correct_eos'] for value in summaries.values()),
             matched_results={label: [value['matched_correct_eos'], value['matched_rows']] for label, value in summaries.items()},
-            scope=('Previously observed complete wording/noise matrices used as continuation regression, with all four lanes and real CLI replay.' if continuation else
+            scope=('Previously observed complete wording/noise matrices measured on the fixed 03 parent endpoint, all four lanes and actual CLI replay; not a new holdout.' if native_baseline and fresh_validation else
+                'Previously observed complete wording/noise matrices used as continuation regression, with all four lanes and real CLI replay.' if continuation else
                 'New event wording and noise on seen semantic questions, complete four lanes and actual CLI replay.' if fresh_validation else
                 'Observed c2ec407 cases reused as a paired sampling diagnostic; no fresh holdout claim.' if a.logical_sampling_commit else
                 'Seen questions; fresh transition expressions and noise, historical original/reworded full prefixes. Not unseen entities or simultaneous multi-fact retention.'))
