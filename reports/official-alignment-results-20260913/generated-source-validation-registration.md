@@ -1,5 +1,34 @@
 # Generated-source continuation: complete validation registration
 
+## Execution update: 2026-09-14, after new allocation
+
+`dl-source-aug-h200x4-20260914` obtained four H200s on `qb-prod-gpu911`.
+Actual CUDA12.8 / Torch2.7.0a0+ecf3bae40a.nv25.02 / NCCL2.25.1 / AVX512 and
+the three clean source checkouts were verified in the new container. See
+`generated-source-instance-runtime-20260914.json` for the observed runtime.
+
+The complete `c83aca0-source-runtime-preflight-r2` passed at Unix time
+1789379425.4063559 (2026-09-14 17:50:25 CST): all972 source/condition pairs,
+all27 actual finite-gradient draws, unchanged parameters and the final source-file
+integrity recheck. The archive is 78,264 bytes, SHA256
+`9811cd1fba14018db54379e8822f3e3a466b19bf92441d170d38398a249372e8`.
+The archive was downloaded and its complete metadata recounted locally.
+`source-path-fix-preflight-comparison.json` additionally shows identical bytes
+before and after the type fix for canonical runtime, all source-condition bindings,
+selected draws and recorded losses. Earlier failed attempts remain failed.
+
+The full `b62ec02-generated-source-full4832` job has now been dispatched on this
+new notebook. Live processes were observed: driver58922 and four GPU workers
+60713–60716. At that observation the workers were preparing the full runtime;
+the four-rank gradient gate and newly measured baseline still precede optimization.
+The full validation chain was also started (supervisor83262). Its original suite
+is explicitly `waiting_for_fixed_endpoint`; the observed-expression suite and
+complete PNG readback follow sequentially. All use deadline1789406700, or
+2026-09-15 01:25 CST, before the observed allocation's automatic stop.
+No new trained endpoint or functional score is claimed yet.
+
+## Registration and earlier deployment observations
+
 The next training source is `b62ec027ad725aeb6ecc772aa85e7a3ff6e49b36`.
 It fixes the concrete source-path type error found by the zero-update GPU probe.
 The earlier `ef163b26e33f62c496ed0da8744ebb7bf1163873` training version and its

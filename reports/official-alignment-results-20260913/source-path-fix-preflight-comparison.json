@@ -1,0 +1,30 @@
+{
+  "all_compared_payloads_identical": true,
+  "archives": {
+    "b82228e-source-runtime-preflight": "4728906f1e12b889817052ca3116cdc9b1b6abdadd427cd58195e9ccc30459f7",
+    "c83aca0-source-runtime-preflight-r2": "9811cd1fba14018db54379e8822f3e3a466b19bf92441d170d38398a249372e8"
+  },
+  "payload_comparison": {
+    "gradient-draws.json": {
+      "bytes_equal": true,
+      "new_sha256": "81704c7977aa4ec226a89f779771b717534b7a553b05d2c12d36f174173e6cb6",
+      "old_sha256": "81704c7977aa4ec226a89f779771b717534b7a553b05d2c12d36f174173e6cb6"
+    },
+    "runtime.json": {
+      "bytes_equal": true,
+      "new_sha256": "b97bf55f679cb94805ef769b9e748f09a55182a8f36fb9dcb48c6fcfb7bdd1a0",
+      "old_sha256": "b97bf55f679cb94805ef769b9e748f09a55182a8f36fb9dcb48c6fcfb7bdd1a0"
+    },
+    "selected-draws.json": {
+      "bytes_equal": true,
+      "new_sha256": "661b369b55f33aad47650dfcaecffaa2e2e27c5376dcca41a96c462eb616596d",
+      "old_sha256": "661b369b55f33aad47650dfcaecffaa2e2e27c5376dcca41a96c462eb616596d"
+    },
+    "training-source-augmentation.json": {
+      "bytes_equal": true,
+      "new_sha256": "1e8d052088605ff59974a1dedfaee8e42b70d12087edac8253a9b56ca2175ac0",
+      "old_sha256": "1e8d052088605ff59974a1dedfaee8e42b70d12087edac8253a9b56ca2175ac0"
+    }
+  },
+  "scope": "Compares actual preflight metadata before and after the Path-key fix: canonical runtime, all972 source/condition hashes, chosen27 draw indices and recorded losses. Does not convert the old failed preflight into a pass, and does not replace the full baseline or four-rank gradient gate."
+}
