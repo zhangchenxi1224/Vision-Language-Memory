@@ -1,3 +1,10 @@
+## 09-14 15:21 三轮实际训练损失分析完成，03对照继续运行
+
+- 完整4f表达/PNG证据 **ae01977** 已成功推送，原push72958 exit0；不要重启推送或下载旧档。
+- 新分析 `scripts/reporting/compare_training_loss_partitions.py` 已实际读取03/b9/4f各4832步、19328个microbatch，独立校验原归档SHA，确认三轮条件/teacher/noise/sigma流逐项相同、四microbatch均值符合记录。音乐清除每轮2496抽样、1210个sigma>0.5；4f清除最后1208步MSE0.009634，低于03的0.024194，但其原注册链仍退步。完整统计/结论在 `clear-retention-training-loss-partitions.json` 和 `clear-retention-training-loss-review.md`。不能把训练loss替代语义结果，也不能只因loss仍降而盲目加步数。
+- 03对照新实际观察1789370382.8741548：driver3795100、四包装3795109–3795112及四执行worker3798209–3798212全部存活，四H200均100%、约22690MiB。四路各110 raw/22 PNG，尚未complete。identity全部确认03 checkpoint d473825、零优化步、native28/CFG1、ff862df源码、计划5bc4d577，使用observed_wording_regression标签。须继续同一进程，未有新完整得分。
+- 新收集观察helper `.cache/inspect-03-observed-baseline-evidence.py` 已通过CPU-r3上传同名R路径（56525 exit0）。它只对suite已越过collector阶段的关闭归档计算独立SHA；完成后可显式加 `--archive-cli` 做一次exclusive CLI归档。当前尚未执行这个归档动作，不要在完成前执行。之后本地验证复用原03 endpoint：`9e27050-logical-endpoint-evidence.tgz` SHA `68c8c7f5c0b19703cd1b1b555f9a4d0dfd193e532534a1eb0c046cf80e5c04a4`，logical commit03、expected probe ff862df、validation set fresh_wording_v1。
+
 ## 09-14 15:13 本轮全量本地证据闭合，03完整表达对照已启动
 
 - 新固定源码 **ff862dfcc5139921db3d4b8ff4b546ef1197a694** 已在独立目录部署成功，干净HEAD和计划SHA检查通过。03对照driver **3795100** 已启动；15:13实际/proc观察包装3795109–3795112、执行worker3798209–3798212均存活，stage four_independent_validation_lanes，刚开始父模型检查/加载，四路尚0 raw/0 PNG，GPU显存尚0，不能报告新分数。输出 `R/ff862df-fresh-wording-{confirmation,chains,prefix0,prefix1}`，status `R/ff862df-fresh-wording-completion-suite-status.json`，deadline17:20。新只读观察脚本 `R/observe-03-observed-baseline.py` 已上传；不要再运行launch或deploy。
