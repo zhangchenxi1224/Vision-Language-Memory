@@ -1,3 +1,12 @@
+## 09-14 11:12 清除交叉诊断已完整本地复核；下一轮继续训练准备
+
+- 32/32 实际 CLI 任务已完成，无需重跑。全部 112 PNG、32 命令、320 读数本地复核通过；旧权重配旧/新来源各80/80，新权重配旧/新来源各60/80，对角逐像素/token复现通过。见 `official-alignment-results-20260913/clear-source-swap-review.md` 及完整本地 verification。
+- 完整74,725,032字节 XZ已下载、复核；SHA ff462a3b60763332df1a7ea4c1ea980eb6022a01c8d96d5d0e658a34670647b8。61318下载句柄已exit0。所有b9/7b/56/385和此次交叉证据均完成，勿重下载或重跑。
+- 新4H200 `dl-clear-retain-h200x4-20260914` 已实际RUNNING，节点qb-prod-gpu911，4×143771MiB显存实际空闲。11:01平台显示剩余23688秒。尚未启动下一轮训练。
+- CPU传输使用新实例 `dl-align-cpu-20260914-r2`，旧CPU自然租期到期后保存，本任务未强停。原用户实例及上一轮GPU对象均保留。
+- 新实验计划：03已训练参数(package ef4d4a91…，checkpoint d473825a…)、fresh AdamW1e-5、历史9表达增强、logical31、4832额外更新。训练前重新生成完整302图/3020raw，与03 trained阶段比较；只允许raw phase标签不同，参数谱系、实际checkpoint字节、张量轨迹、raw和runtime均须一致。此轮共同改变初始化与lr，非单因素消融。
+- Goal active。连续清除尚未全部通过，不能宣布可用。已观察的fresh_wording_v1在本轮是回归集，不能再称新holdout。下列旧时间段记录保留历史，不代表当前任务仍在运行。
+
 ## 09-14 09:18 两套功能与全PNG已复核，新四卡源图交叉诊断运行
 
 - **50ebdba59fbb00ac567fae87ec061cd23a43c8a9已推送**，aa4c647也已推送。7b、56、385全部归档、raw/PNG、本地完整复核和报告均已提交；**不要重复下载、重算或重启b9/7b/56/385**。所有原SCP/verifier/push句柄已结束。Goal active，仍有清空错误，无阻塞。

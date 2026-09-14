@@ -123,7 +123,7 @@ def trainable_unet_parameters(unet, scope="lora"):
     return [p for _,p in named]
 
 
-def verify_baseline_reference(output_dir, reference, expected_result_sha256, *, native_condition_control=False):
+def verify_baseline_reference(output_dir, reference, expected_result_sha256, *, native_condition_control=False, reference_phase='baseline'):
     """Fail before optimization if the co-located/full-weight baseline differs."""
     if not expected_result_sha256 or file_sha256(reference/"train/result.json")!=expected_result_sha256:
         raise RuntimeError("Reference result hash mismatch")
@@ -145,7 +145,9 @@ def verify_baseline_reference(output_dir, reference, expected_result_sha256, *, 
         current_runtime['additional_protocol_binding']['train_prompt']=prior_runtime['additional_protocol_binding']['train_prompt']
     if current_runtime!=prior_runtime:
         raise RuntimeError("Reference model, condition or native schedule differs")
-    left,right=output_dir/"baseline",reference/"train/baseline"
+    if reference_phase not in ('baseline', 'trained') or (reference_phase == 'trained' and native_condition_control):
+        raise ValueError('Unsupported baseline reference phase or combined condition change')
+    left,right=output_dir/"baseline",reference/'train'/reference_phase
     hashes=[json.loads((p/"complete.json").read_text())["artifact_hashes"] for p in (left,right)]
     names=[{n for n in h if n.endswith(".pt")} for h in hashes]
     if names[0]!=names[1] or not names[0]:
@@ -170,6 +172,12 @@ def verify_baseline_reference(output_dir, reference, expected_result_sha256, *, 
         if file_sha256(path)!=h[path.name]:
             raise RuntimeError("Baseline generation evidence changed")
         records.append([json.loads(x) for x in path.read_text().splitlines()])
+    if reference_phase == 'trained':
+        for rows, phase in zip(records, ('baseline', 'trained')):
+            if any(row.get('phase') != phase for row in rows):
+                raise RuntimeError('Unexpected raw generation phase')
+        # Only the administrative phase label changes at a parameter restart.
+        records = [[{key: value for key, value in row.items() if key != 'phase'} for row in rows] for rows in records]
     if records[0]!=records[1]:
         raise RuntimeError("Baseline raw generations/CE differ from reference")
     report={"reference":str(reference),"reference_result_sha256":expected_result_sha256,
@@ -177,16 +185,36 @@ def verify_baseline_reference(output_dir, reference, expected_result_sha256, *, 
         "identical_raw_generation_records":True,"samples":checked}
     if native_condition_control:
         report['explicit_training_condition_change']='official_raw -> native_base; only encoder hashes and train_prompt metadata may differ'
+    if reference_phase == 'trained':
+        report['reference_phase'] = 'trained'
+        report['raw_comparison_exclusion'] = 'phase label only: baseline versus trained'
     write_json(output_dir/"baseline-reference-check.json",report)
     return report
 
 
-def verify_initialized_baseline_reference(output_dir, reference, expected_result_sha256, *, native_condition_control=False):
+def verify_initialized_baseline_reference(output_dir, reference, expected_result_sha256, *, native_condition_control=False, reference_phase='baseline'):
     """Compare two newly measured baselines from the same explicit parameter export."""
     current = json.loads((output_dir / 'identity.json').read_text())
     prior = json.loads((reference / 'train/identity.json').read_text())
     if not current.get('initial_writer') or not prior.get('initial_writer'):
         raise ValueError('Both baselines require an explicit initialized Writer')
+    if reference_phase not in ('baseline', 'trained'):
+        raise ValueError('Unsupported initialized reference phase')
+    if reference_phase == 'trained':
+        if native_condition_control:
+            raise ValueError('Continuation cannot also change the condition protocol')
+        result_path = reference / 'train/result.json'
+        if file_sha256(result_path) != expected_result_sha256:
+            raise ValueError('Continuation reference result differs')
+        result = json.loads(result_path.read_text())
+        initial = current['initial_writer']
+        if (result.get('status') != 'completed'
+                or initial.get('parent_commit') != prior.get('git_commit')
+                or initial.get('parent_result_sha256') != expected_result_sha256
+                or initial.get('parent_checkpoint_sha256') != result.get('checkpoint_sha256')
+                or initial.get('parent_optimizer_steps') != result.get('optimizer_steps')
+                or file_sha256(reference / 'train/checkpoint-latest.pt') != result.get('checkpoint_sha256')):
+            raise ValueError('Continuation initial parameters do not bind the completed trained reference')
     if native_condition_control and (current.get('prompt_style')!='native_base' or prior.get('prompt_style')!='official_raw'
             or current.get('model_variant')!='base' or current.get('sampling')!=prior.get('sampling')):
         raise ValueError('Native condition control requires the same Base sampler and explicit raw/native styles')
@@ -194,9 +222,12 @@ def verify_initialized_baseline_reference(output_dir, reference, expected_result
                 'flow_protocol', 'prompt_style', 'steps', 'lr', 'gradient_accumulation_steps', 'weight_decay'):
         if key=='prompt_style' and native_condition_control:
             continue
+        if reference_phase == 'trained' and key in ('initial_writer', 'lr'):
+            continue
         if current.get(key) != prior.get(key):
             raise ValueError('Controlled sampler baseline differs in ' + key)
-    return verify_baseline_reference(output_dir, reference, expected_result_sha256, native_condition_control=native_condition_control)
+    return verify_baseline_reference(output_dir, reference, expected_result_sha256,
+        native_condition_control=native_condition_control, reference_phase=reference_phase)
 
 
 def frozen_audit(pipe, reader, versions: dict[str, int], *, scope="lora") -> None:
@@ -598,6 +629,8 @@ def run(args) -> dict:
             raise ValueError('Initialized baseline match requires its result SHA and an explicit parameter initialization')
         binding['initial_baseline_match'] = {'reference': str(args.initial_baseline_match),
             'result_sha256': args.initial_baseline_match_result_sha256, 'baseline_is_measured_again': True}
+        if getattr(args, 'initial_baseline_reference_phase', 'baseline') == 'trained':
+            binding['initial_baseline_match']['reference_phase'] = 'trained'
         if getattr(args, 'native_condition_baseline_control', False):
             if args.model_variant!='base' or args.prompt_style!='native_base':
                 raise ValueError('Native condition baseline control requires Base/native_base')
@@ -668,7 +701,8 @@ def run(args) -> dict:
         if parallel.root:
             try:
                 verify_initialized_baseline_reference(args.output_dir, args.initial_baseline_match, args.initial_baseline_match_result_sha256,
-                    native_condition_control=getattr(args, 'native_condition_baseline_control', False))
+                    native_condition_control=getattr(args, 'native_condition_baseline_control', False),
+                    reference_phase=getattr(args, 'initial_baseline_reference_phase', 'baseline'))
                 outcome = {'passed': True}
             except Exception as error:
                 outcome = {'passed': False, 'error': str(error)}
@@ -852,6 +886,7 @@ def parser() -> argparse.ArgumentParser:
     p.add_argument("--initial-writer-package-sha256")
     p.add_argument('--initial-baseline-match', type=Path)
     p.add_argument('--initial-baseline-match-result-sha256')
+    p.add_argument('--initial-baseline-reference-phase', choices=('baseline', 'trained'), default='baseline')
     p.add_argument('--sampling-strategy', choices=('condition', 'logical_condition'), default='condition')
     p.add_argument('--historical-wording-augmentation', action='store_true')
     p.add_argument('--native-condition-baseline-control', action='store_true')
@@ -869,6 +904,8 @@ def parser() -> argparse.ArgumentParser:
 
 def main() -> int:
     args = parser().parse_args()
+    if args.initial_baseline_reference_phase != 'baseline' and not args.initial_baseline_match:
+        raise ValueError('Trained-phase restart requires an explicit baseline reference')
     if not 1.0 <= args.base_guidance_scale <= 100.0 or (args.model_variant != "base" and args.base_guidance_scale != 7.5):
         raise ValueError("Base guidance must be in [1,100] and applies only to Base")
     if (args.steps <= 0 or args.eval_seeds < 2 or args.lora_rank <= 0 or args.lr <= 0

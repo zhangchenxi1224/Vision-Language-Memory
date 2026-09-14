@@ -22,7 +22,10 @@ def main():
     parser.add_argument('--expected-commit', required=True)
     parser.add_argument('--deadline-unix', type=float, required=True)
     parser.add_argument('--historical-wording-augmentation', action='store_true')
+    parser.add_argument('--clear-retention-continuation', action='store_true')
     a = parser.parse_args()
+    if a.clear_retention_continuation and not a.historical_wording_augmentation:
+        raise ValueError('Clear retention continuation requires the registered historical augmentation')
     if not math.isfinite(a.deadline_unix) or a.deadline_unix - time.time() < 150 * 60:
         raise ValueError('Reserve150 minutes for the complete paired training run')
     clean_source(a.expected_commit)
@@ -40,10 +43,21 @@ def main():
     if sha(runs / '17f35be-first-step-verified-evidence.tgz') != FIRST_STEP_EVIDENCE:
         raise ValueError('Require the complete CPU-verified first-step diagnostic')
     package = runs / '1201efe-four-gpu-warm-package'
+    package_sha, checkpoint_sha, learning_rate = PARENT_PACKAGE, PARENT_CHECKPOINT, 5e-5
+    if a.clear_retention_continuation:
+        from scripts.experiments.clear_retention_protocol import (plan as retention_plan,
+            PARENT_PACKAGE as retention_package, PARENT_CHECKPOINT as retention_checkpoint,
+            SOURCE_SWAP_RESULT, LEARNING_RATE)
+        diagnostic = runs / 'clear-source-swap-20260914/outputs/result.json'
+        if sha(diagnostic) != SOURCE_SWAP_RESULT or read(diagnostic)['diagonal_parity_pass'] is not True:
+            raise ValueError('Require the completed source-swap diagnostic before continuation')
+        package = runs / '9e27050-logical-package'
+        package_sha, checkpoint_sha, learning_rate = retention_package, retention_checkpoint, LEARNING_RATE
+        make_plan = retention_plan
     if (sha(bank_path) != BANK_SHA or sha(reference / 'train/result.json') != reference_result
             or read(reference / 'terminal.json')['state'] != 'completed'
-            or sha(package / 'manifest.json') != PARENT_PACKAGE
-            or read(package / 'manifest.json')['parent_checkpoint_sha256'] != PARENT_CHECKPOINT):
+            or sha(package / 'manifest.json') != package_sha
+            or read(package / 'manifest.json')['parent_checkpoint_sha256'] != checkpoint_sha):
         raise ValueError('The sealed paired bank, reference or original initialization differs')
     if subprocess.check_output(['nvidia-smi', '--query-compute-apps=pid', '--format=csv,noheader'], text=True).strip():
         raise RuntimeError('GPUs are occupied; inspect existing work before dispatch')
@@ -64,10 +78,12 @@ def main():
         '--target-mode', 'single', '--steps', '4832', '--eval-seeds', '2', '--trainable-scope', 'full_unet',
         '--checkpoint-interval', '16', '--colocate-models', '--data-parallel-world-size', '4', '--seed', str(SEED),
         '--deadline-unix', str(a.deadline_unix), '--initial-writer-package', str(package),
-        '--initial-writer-package-sha256', PARENT_PACKAGE, '--sampling-strategy', 'logical_condition',
+        '--initial-writer-package-sha256', package_sha, '--sampling-strategy', 'logical_condition', '--lr', str(learning_rate),
         '--prompt-style', 'native_base',
         '--initial-baseline-match', str(reference), '--initial-baseline-match-result-sha256', reference_result]
     command.append('--historical-wording-augmentation' if a.historical_wording_augmentation else '--native-condition-baseline-control')
+    if a.clear_retention_continuation:
+        command.extend(['--initial-baseline-reference-phase', 'trained'])
     def record(state, **extra):
         write(a.output / 'native-condition-driver-status.json', {'state': state, 'time_unix': time.time(),
             'deadline_unix': a.deadline_unix, 'commit': a.expected_commit, **extra})
