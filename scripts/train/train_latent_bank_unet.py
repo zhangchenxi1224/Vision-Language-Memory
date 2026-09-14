@@ -483,13 +483,19 @@ def flow_microbatch(args, runtime, groups, teachers, draw_index):
     state, true_velocity = (official_flow_bridge(noise, target, sigma) if official
                             else anchored_flow_bridge(context["source"], noise, target, sigma))
     condition = context["condition"]
+    source = context["source"]
     augmentation = {}
+    if getattr(args, 'generated_source_pool', None) and group.get('source_kind') == 'sealed_rgb_1024':
+        from scripts.train.generated_source_augmentation import source_variant_index
+        index = source_variant_index(args.seed, draw_index, group['question_id'])
+        source, condition = context['training_source_variants'][index]
+        augmentation['training_source_variant'] = context['training_source_variant_binding'][index]
     if getattr(args, 'historical_wording_augmentation', False) and 'historical_target_index' in group:
         from scripts.experiments.historical_wording_protocol import wording_index
         index = wording_index(args.seed, draw_index, group['question_id'])
         condition = context['training_condition_variants'][index]
-        augmentation = {'training_condition_variant': context['training_condition_variant_binding'][index]}
-    prediction = predict_velocity(runtime["sampler"], state, context["source"], sigma,
+        augmentation['training_condition_variant'] = context['training_condition_variant_binding'][index]
+    prediction = predict_velocity(runtime["sampler"], state, source, sigma,
         condition.prompt_embeds, condition.attention_mask, integer_timestep=official)
     loss = (prediction.float() - true_velocity.float()).square().mean()
     if not torch.isfinite(loss):
@@ -646,6 +652,10 @@ def run(args) -> dict:
             "draw_assignment": "global draw index = step*global_microbatches + rank + local_micro*world_size",
             "evaluation": "native batch-one inference; disjoint complete condition groups by rank",
             "serial_numerical_equivalence": "same objective and draws; reduction order can change FP32 rounding"}
+    from scripts.train.generated_source_augmentation import source_pool_binding
+    generated_pool = source_pool_binding(args)
+    if generated_pool is not None:
+        binding['generated_source_pool'] = generated_pool
     parallel.agree(binding, "training identity")
     identity_path = args.output_dir / "identity.json"
     if identity_path.exists() and json.loads(identity_path.read_text(encoding="utf-8")) != binding:
@@ -654,6 +664,15 @@ def run(args) -> dict:
         write_json(identity_path, binding)
     parallel.barrier()
     runtime = load_runtime(args, bank)
+    if getattr(args, 'generated_source_pool', None):
+        source_binding = runtime['generated_source_augmentation_binding']
+        parallel.agree(source_binding, 'generated source PNG and native condition encodings')
+        source_binding_path = args.output_dir / 'training-source-augmentation.json'
+        if source_binding_path.exists() and json.loads(source_binding_path.read_bytes()) != source_binding:
+            raise RuntimeError('Generated source condition changed across resume')
+        if parallel.root:
+            write_json(source_binding_path, source_binding)
+        parallel.barrier()
     if getattr(args, 'historical_wording_augmentation', False):
         augmentation_binding = runtime['training_augmentation_binding']
         parallel.agree(augmentation_binding, 'historical training condition encodings')
@@ -889,6 +908,8 @@ def parser() -> argparse.ArgumentParser:
     p.add_argument('--initial-baseline-reference-phase', choices=('baseline', 'trained'), default='baseline')
     p.add_argument('--sampling-strategy', choices=('condition', 'logical_condition'), default='condition')
     p.add_argument('--historical-wording-augmentation', action='store_true')
+    p.add_argument('--generated-source-pool', type=Path)
+    p.add_argument('--generated-source-pool-sha256')
     p.add_argument('--native-condition-baseline-control', action='store_true')
     p.add_argument("--gradient-accumulation-steps", type=int, default=4)
     p.add_argument("--weight-decay", type=float, default=1e-4)

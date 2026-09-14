@@ -177,6 +177,13 @@ def load_base_runtime(args, bank, *, inference_only=False):
             "reason":source_reason}
         if group["source_kind"]=="sealed_rgb_1024":
             source_bindings[qid]["source_image_file_sha256"]=group["source_image_file_sha256"]
+    generated_source_binding = {}
+    if getattr(args, 'generated_source_pool', None) or getattr(args, 'generated_source_pool_sha256', None):
+        if inference_only:
+            raise ValueError('Generated source variation is training-only')
+        from scripts.train.generated_source_augmentation import install_source_variants, source_pool_binding
+        generated_pool_binding = source_pool_binding(args)
+        generated_source_binding = install_source_variants(args, bank, pipe, contexts, source_image_files)
     def verify_extra():
         verify_source()
         if verify_download_seal(args.base_manifest,args.dreamlite)!=base_seal:
@@ -184,8 +191,11 @@ def load_base_runtime(args, bank, *, inference_only=False):
         for path,sha in source_image_files.items():
             if file_sha256(path)!=sha:
                 raise ValueError("Sealed source image changed during execution")
+        if generated_source_binding and source_pool_binding(args) != generated_pool_binding:
+            raise ValueError('Generated source pool identity changed during execution')
     return dict(pipe=pipe,reader=reader,processor=processor,sampler=predictor,contexts=contexts,
         training_augmentation_binding=augmentation_binding,
+        generated_source_augmentation_binding=generated_source_binding,
         vae_device=vd,reader_device=rd,snapshots=snapshots,termination=assistant_termination_contract(reader,processor),
         protocol_binding={"student":"official DreamLitePipelineLoRA base","base_snapshot":base_seal,
             "official_source_commit":OFFICIAL_REFERENCE_COMMIT,"vae_weights_sha256":vae_hashes,"source_bindings":source_bindings,

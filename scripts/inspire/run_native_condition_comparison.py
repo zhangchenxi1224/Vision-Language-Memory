@@ -23,9 +23,12 @@ def main():
     parser.add_argument('--deadline-unix', type=float, required=True)
     parser.add_argument('--historical-wording-augmentation', action='store_true')
     parser.add_argument('--clear-retention-continuation', action='store_true')
+    parser.add_argument('--generated-source-continuation', action='store_true')
     a = parser.parse_args()
     if a.clear_retention_continuation and not a.historical_wording_augmentation:
         raise ValueError('Clear retention continuation requires the registered historical augmentation')
+    if a.generated_source_continuation and (not a.historical_wording_augmentation or a.clear_retention_continuation):
+        raise ValueError('Generated-source continuation requires historical augmentation and its separate4f initialization')
     if not math.isfinite(a.deadline_unix) or a.deadline_unix - time.time() < 150 * 60:
         raise ValueError('Reserve150 minutes for the complete paired training run')
     clean_source(a.expected_commit)
@@ -54,6 +57,19 @@ def main():
         package = runs / '9e27050-logical-package'
         package_sha, checkpoint_sha, learning_rate = retention_package, retention_checkpoint, LEARNING_RATE
         make_plan = retention_plan
+    source_pool = None
+    if a.generated_source_continuation:
+        from scripts.experiments.generated_source_training_protocol import (plan as generated_plan,
+            POOL_MANIFEST_SHA, REFERENCE_RESULT as generated_reference_result)
+        from scripts.experiments.generated_source_pool_protocol import PACKAGE_SHA, CHECKPOINT_SHA
+        source_pool = runs / '90b41a2-generated-source-pool/manifest.json'
+        if sha(source_pool) != POOL_MANIFEST_SHA or read(source_pool).get('qualified_for_training') is not True:
+            raise ValueError('Require the entire qualified generated-source pool')
+        reference = runs / '4fbc857-clear-retention-full4832'
+        reference_result = generated_reference_result
+        package = runs / 'e372f3c-logical-package'
+        package_sha, checkpoint_sha, learning_rate = PACKAGE_SHA, CHECKPOINT_SHA, 1e-5
+        make_plan = generated_plan
     if (sha(bank_path) != BANK_SHA or sha(reference / 'train/result.json') != reference_result
             or read(reference / 'terminal.json')['state'] != 'completed'
             or sha(package / 'manifest.json') != package_sha
@@ -82,8 +98,10 @@ def main():
         '--prompt-style', 'native_base',
         '--initial-baseline-match', str(reference), '--initial-baseline-match-result-sha256', reference_result]
     command.append('--historical-wording-augmentation' if a.historical_wording_augmentation else '--native-condition-baseline-control')
-    if a.clear_retention_continuation:
+    if a.clear_retention_continuation or a.generated_source_continuation:
         command.extend(['--initial-baseline-reference-phase', 'trained'])
+    if source_pool is not None:
+        command.extend(['--generated-source-pool', str(source_pool), '--generated-source-pool-sha256', POOL_MANIFEST_SHA])
     def record(state, **extra):
         write(a.output / 'native-condition-driver-status.json', {'state': state, 'time_unix': time.time(),
             'deadline_unix': a.deadline_unix, 'commit': a.expected_commit, **extra})
