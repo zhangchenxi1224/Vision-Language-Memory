@@ -59,6 +59,45 @@ def test_pool_flag_requires_explicit_integrity_binding():
         source_pool_binding(SimpleNamespace(generated_source_pool=Path('pool/manifest.json')))
 
 
+def test_installed_source_registry_supports_actual_file_integrity_recheck(tmp_path, monkeypatch):
+    from PIL import Image
+    from scripts.train.generated_source_augmentation import install_source_variants
+    from vision_memory.training.latent_bank_unet import file_sha256
+    records = []
+    latent = torch.ones(1, 4, 2, 2)
+    for state in ('ambient', 'jazz', 'clear'):
+        for index in range(8):
+            job = f'{state}-{index:02d}'
+            png, tensor = tmp_path/(job+'.png'), tmp_path/(job+'.pt')
+            Image.new('RGB', (16, 16), (index, 128, 128)).save(png)
+            torch.save({'source_latent': latent}, tensor)
+            records.append({'state': state, 'job': job, 'png': png.name,
+                'tensor': tensor.name, 'png_sha256': file_sha256(png)})
+    manifest = {'records': records}
+    manifest_path = tmp_path/'manifest.json'
+    manifest_path.write_text(json.dumps(manifest))
+    monkeypatch.setattr('scripts.train.generated_source_augmentation.source_pool_binding',
+        lambda args: {'manifest': str(manifest_path)})
+    monkeypatch.setattr('scripts.train.generated_source_augmentation.plan', lambda: {})
+    monkeypatch.setattr('scripts.probes.generate_training_source_pool.collect', lambda *args: manifest)
+    condition = SimpleNamespace(prompt_embeds=torch.ones(1, 2, 3), attention_mask=torch.ones(1, 2))
+    monkeypatch.setattr('vision_memory.dreamlite.conditioning.encode_native_base_edit_condition', lambda *args, **kwargs: condition)
+    pipe = SimpleNamespace(image_processor=SimpleNamespace(preprocess=lambda image: image),
+        prepare_image_latents=lambda *args, **kwargs: latent)
+    groups = [{'question_id': f'{state}-{i}', 'source_state': state, 'source_kind': 'sealed_rgb_1024',
+        'wording_index': i % 9, 'event_text': 'fixture', 'source_image_file_sha256': 'a'*64}
+        for state in ('ambient', 'jazz', 'clear') for i in range(36)]
+    contexts = {g['question_id']: {'source': latent, 'condition': condition} for g in groups}
+    files = {}
+    bindings = install_source_variants(SimpleNamespace(dreamlite_device='cpu'), {'groups': groups}, pipe, contexts, files)
+    assert len(bindings) == 108 and len(files) == 24
+    # This is the actual consumer contract in official_base_runtime.verify_extra.
+    assert all(file_sha256(path) == digest for path, digest in files.items())
+    changed = next(iter(files))
+    changed.write_bytes(b'changed source PNG')
+    assert file_sha256(changed) != files[changed]
+
+
 def test_complete_training_plan_binds_4f_and_keeps_full_budget():
     from scripts.experiments.generated_source_training_protocol import plan, REFERENCE_COMMIT, REFERENCE_RESULT
     path = Path(__file__).resolve().parents[1] / 'reports/official-alignment-results-20260913/broader151-bank-manifest.json'

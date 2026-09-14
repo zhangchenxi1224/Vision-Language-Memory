@@ -87,7 +87,7 @@ def install_source_variants(args, bank, pipe, contexts, source_image_files):
             saved = torch.load(pool / record['tensor'], map_location='cpu', weights_only=True)['source_latent']
             if not torch.equal(source.cpu(), saved):
                 raise ValueError('Generated PNG source differs from official VAE encoding in the training runtime')
-            source_image_files[str(path)] = record['png_sha256']
+            source_image_files[path] = record['png_sha256']
             generated[state].append((image, source, record))
     encoded_binding = {}
     for group in bank['groups']:
