@@ -1,3 +1,14 @@
+## 09-14 14:05 原注册远端1790/1800，链和CLI已本地复核
+
+- e372原注册suite于1789364567.374212正常completed，真实CLI也完成。远端完整1790/1800：single360、chain470、prefix0/1各480。single/chain完整归档和raw/PNG已本地复核，CLI6写30读parity true但整体functional false。详见 [完整链证据](official-alignment-results-20260913/clear-retention-chain-review.md)。两历史分路尚在下载，勿把全1800描述为已本地复核。
+- 完整480链格相对03保留470、退步10；相对b9保留460、修复10、仍错10、无新增链退步。剩余是sequence-0-rep-2-step-4及step-5，各5问应no active preference而实际jazz。新本地比较 `clear-retention-chain-paired-comparison.json` 包含全部配对，不能据总分声称已可用。
+- 新表达回归已自动启动，实际四CUDA worker3097260–3097263、包装3092520–3092523；原注册driver640212已正常退出，fresh640213与PNG640214仍活跃，勿重跑原suite。最近观察fresh单次390raw完成，其余三lane约405raw；须重新观察实时进程。仍用4f checkpoint/e372源码，deadline17:20。
+- 整文件SCP曾超时并留下残缺，CPU连接refresh已完成；现在8MiB分块、逐块hash、整文件hash方式传输。confirmation/chains已成功完整重建，替换原已终止下载的残缺文件，两个本地verifier正常exit0。原prefix0/1 gzip各约105.6MB，完整XZ仍大于GitHub100MiB，保留原始gzip的完整分块，不使用删减归档。
+- 本地 `.cache/e372f3c-logical-{confirmation,chains,prefix0,prefix1}-parts/manifest.json` 已下载并与远端独立hash绑定；详见 `.cache/e372f3c-logical-closed-artifacts.json`。`.cache/download-clear-validation-chunks.py --workers 1 --ignore-target-cache` 可跳过已校验块，仅补缺失块。当前prefix0下载handle77608、prefix1重试handle24753仍活跃；不可重复启动。prefix1前handle45157已明确失败，当前24753是该终止后恢复，GPU任务未重启。
+- 新 `scripts/reporting/assemble_portable_archive.py` 已用完整8块66562791字节实物重建，最终SHA与远端confirmation一致。待prefix全块校验后，将其manifest和全部part保存到results，再用该工具重建并做完整本地验证；不要提交大于100MiB的单文件。
+- 用户另要求完整实验汇报，新任务 **01a09e7e-0bce-73d0-ac9b-4ea6253db52d**（DreamLite 全部实验结果与进度汇报）已创建并开始整理，产物独立写 `C:/Users/Expedition/dreamlite-experiment-summary-20260914/`。该任务只汇报；本任务继续管理实验。最新本地链数据已发给新任务。
+- Goal active。当前只完成部分旧清除修复，仍需完整表达回归/PNG结果和进一步修复迭代，不得把源码对齐或开发全对当作目标已完成。
+
 ## 09-14 13:28 完整开发终点已本地复核，四路功能评估运行
 
 - 4f训练根terminal于1789362738.8464324正常completed，4832次更新及完整302图评估全部结束。此前训练rank已正常退出，禁止重新启动训练。result SHA `2ee5290101c83f1b53088fba8ae294e5fb71cd42f223580eb588c7ad2001a605`，checkpoint SHA `7294684170578dfc617b4fafcea97e6480c08642ca4f1e5967ff8966aa103182`。
