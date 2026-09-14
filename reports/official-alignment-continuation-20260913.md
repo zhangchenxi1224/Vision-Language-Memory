@@ -1,3 +1,11 @@
+## 09-14 13:28 完整开发终点已本地复核，四路功能评估运行
+
+- 4f训练根terminal于1789362738.8464324正常completed，4832次更新及完整302图评估全部结束。此前训练rank已正常退出，禁止重新启动训练。result SHA `2ee5290101c83f1b53088fba8ae294e5fb71cd42f223580eb588c7ad2001a605`，checkpoint SHA `7294684170578dfc617b4fafcea97e6480c08642ca4f1e5967ff8966aa103182`。
+- 完整终点归档、最终PT审计归档及两份原summary已下载，原summary SHA与归档内原字节一致。本地实际重算6040 raw、19328 draw和302个最终张量审计绑定，初始化及终点均1510/1510、302图五问全过。详见 [本轮开发证据](official-alignment-results-20260913/clear-retention-development-review.md)。大PT/checkpoint在远端CPU实际检查，未声称本地含这些文件。所有本地下载/复核句柄已正常结束，勿重跑。
+- 13:23真实GPU/proc：e372原注册suite的实际worker **2710423–2710426**均R，四卡100%利用率，包装进程2707501–2707504存活。驱动640212运行，640213和640214按依赖等待。仍为同一固定4f checkpoint和e372验证源码；禁止修改活跃源码、选择中间checkpoint或重启任一suite。
+- 下一步等四路全部完成，CPU `inspect-clear-retention-evidence.py`只对已经关闭的完整归档计算SHA，再下载全部PNG/raw进行本地复核；CLI helper `archive-clear-retention-cli.py --suite registered|fresh`仅在对应suite completed后各执行一次。随后全量PNG自动进行。GPU observer新增各lane的PNG/raw计数只用于进度，真实/proc仍为存活依据。
+- 资源不变：GPU `dl-clear-retain-h200x4-20260914`，CPU `dl-align-cpu-20260914-r2`，整体验证deadline17:20。原实例对象保留。Goal active，不能用开发全对替代连续清除与历史表达验收。
+
 ## 09-14 12:55 固定4832更新完成，四卡参数一致，完整trained评估已启动
 
 - 真实GPU观察time1789361706.8462641：**4832/4832**记录齐全，更新elapsed4108.952822511084秒（约68.5分钟）。四rank478724–478727仍实际运行，trained阶段各已生成2个PT，说明已进入更新后的完整302图评估；此时尚无train/result或terminal完成状态，不能称整个实验结束。

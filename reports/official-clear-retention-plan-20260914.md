@@ -1,5 +1,7 @@
 # 03 原生 Writer 继续训练及清除保留试验
 
+**13:28进展：**固定4832次额外更新及完整开发评估已经完成；本地重算6040 raw/19328 draw，前后均1510/1510，302图五问全过。最终302张量的远端CPU审计和本地绑定复核也完成。四路功能评估正在实际GPU运行，后续表达回归、CLI和PNG按依赖等待；不能认定本轮可用。见 [完整开发证据](official-alignment-results-20260913/clear-retention-development-review.md)。下文启动时状态按历史保留。
+
 训练源码：`4fbc85725d78427235757ace2661d086b896a97f`。新实例 `dl-clear-retain-h200x4-20260914`，节点 `qb-prod-gpu911`，4×H200、80 CPU、900 GiB RAM、128 GiB shared memory。原实例对象保留；上一轮 `dl-official-exp-h200x4-20260914` 已自然到期 STOPPED。
 
 2026-09-14 11:24 已启动，driver PID 476384，pilot 477729，四个训练 rank 为 478724–478727。11:28 实际观察四 rank 存活、GPU 已加载约44 GiB/rank。四 rank 初始参数逐位相同，SHA256 均为 `4a41876c30d6e8d8b5de5ac71af91fee97ae23f77a1299863dde1d32572fce90`，与03最终参数证据相符。梯度预检和完整基线尚在运行，尚无本轮训练结果。
