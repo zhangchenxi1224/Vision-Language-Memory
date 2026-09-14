@@ -213,7 +213,7 @@ def verify_initialized_baseline_reference(output_dir, reference, expected_result
                 or initial.get('parent_result_sha256') != expected_result_sha256
                 or initial.get('parent_checkpoint_sha256') != result.get('checkpoint_sha256')
                 or initial.get('parent_optimizer_steps') != result.get('optimizer_steps')
-                or file_sha256(reference / 'train/checkpoint-latest.pt') != result.get('checkpoint_sha256')):
+                or file_sha256(reference / 'train/checkpoint-final.pt') != result.get('checkpoint_sha256')):
             raise ValueError('Continuation initial parameters do not bind the completed trained reference')
     if native_condition_control and (current.get('prompt_style')!='native_base' or prior.get('prompt_style')!='official_raw'
             or current.get('model_variant')!='base' or current.get('sampling')!=prior.get('sampling')):

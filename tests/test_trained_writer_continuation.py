@@ -16,7 +16,7 @@ def continuation(root):
         (directory / 'generations.jsonl').write_text(json.dumps({'phase': label, 'raw': 'green', 'output_ids': [13250, 151645]}) + '\n')
         write_json(directory / 'complete.json', {'artifact_hashes': {
             path.name: file_sha256(path) for path in directory.iterdir() if path.name != 'complete.json'}})
-    checkpoint = reference / 'train/checkpoint-latest.pt'
+    checkpoint = reference / 'train/checkpoint-final.pt'
     checkpoint.write_bytes(b'sealed parent parameters')
     result = {'status': 'completed', 'optimizer_steps': 4832, 'checkpoint_sha256': file_sha256(checkpoint)}
     write_json(reference / 'train/result.json', result)
@@ -52,7 +52,7 @@ def test_restart_rejects_actual_payload_or_protocol_changes(tmp_path, mutation):
     current, reference, identity, digest = continuation(tmp_path)
     phase = current / 'baseline'
     if mutation == 'checkpoint':
-        (reference / 'train/checkpoint-latest.pt').write_bytes(b'changed')
+        (reference / 'train/checkpoint-final.pt').write_bytes(b'changed')
     elif mutation == 'runtime':
         write_json(current / 'runtime.json', {'models_and_protocol': 'different'})
     elif mutation == 'seed':
