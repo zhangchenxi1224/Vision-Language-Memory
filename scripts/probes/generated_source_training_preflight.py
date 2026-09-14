@@ -1,4 +1,4 @@
-"""Read-only GPU runtime and gradient checks of the exact ef163b2 training implementation."""
+"""Read-only GPU runtime and gradient checks of the exact b62ec02 training implementation."""
 import argparse
 import hashlib
 import json
@@ -9,7 +9,7 @@ import subprocess
 import sys
 import time
 
-TRAINING_COMMIT = 'ef163b26e33f62c496ed0da8744ebb7bf1163873'
+TRAINING_COMMIT = 'b62ec027ad725aeb6ecc772aa85e7a3ff6e49b36'
 PARAMETERS_SHA = '16bf39236d6828dc9bc7ed7168f7e10092ccc9ea4868647f9f7c62b0d6a73975'
 RUNTIME_SHA = 'b97bf55f679cb94805ef769b9e748f09a55182a8f36fb9dcb48c6fcfb7bdd1a0'
 
