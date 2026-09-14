@@ -1,3 +1,11 @@
+## 09-14 11:28 新4H200已启动固定4832继续训练
+
+- 当前训练 **4fbc85725d78427235757ace2661d086b896a97f**，run `R/4fbc857-clear-retention-full4832`，immutable源码 `P/repos/dreamlite-clear-retention-20260914`，新GPU `dl-clear-retain-h200x4-20260914`。实际driver476384、pilot477729、elastic478719、rank478724–478727存活。四rank初始参数SHA均4a41876c…，与03最终参数一致。完整基线/梯度预检运行中，尚无本轮分数，不可重启。
+- 实际计划SHA70854e73d122a0976ff41bfb1397badf5fbe69034bfd9e4ef258b10caa4e1b7b与本地登记匹配。训练deadline1789366500=14:15。详见 `official-clear-retention-plan-20260914.md`。
+- 下阶段评估代码已实现：03-trained初始化谱系、lr1e-5严格校验，完整旧注册集+原56表达回归、CLI、全PNG矩阵。后者明确为已观察回归。尚未部署/启动验证suite；必须另建固定源码目录，不修改当前训练目录。
+- 新传输CPU `dl-align-cpu-20260914-r2`。旧实验GPU现平台明确STOPPED（自然租期结束），对象保留。原始部署fetch363298进程组因重复传输大量历史归档被主动终止并确认退出；替代shallow/promisor sparse部署40970已exit0，不再等待旧85866超时句柄。
+- 本地训练初始化18项、checkpoint修正10项、评估29项、PNG11+1项通过。所有历史与source-swap原始证据完整本地复核结束。Goal active，继续等实际检查通过并推进训练/验证。
+
 ## 09-14 11:12 清除交叉诊断已完整本地复核；下一轮继续训练准备
 
 - 32/32 实际 CLI 任务已完成，无需重跑。全部 112 PNG、32 命令、320 读数本地复核通过；旧权重配旧/新来源各80/80，新权重配旧/新来源各60/80，对角逐像素/token复现通过。见 `official-alignment-results-20260913/clear-source-swap-review.md` 及完整本地 verification。

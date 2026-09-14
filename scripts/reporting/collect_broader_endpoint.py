@@ -19,6 +19,7 @@ BANK_SHA = 'c27cd65dab809deabb5f2cb08891517d3590244651d08a8c6763c84fea901592'
 PLAN_SHA = 'c4a6986edf1330e27af5b91e5105ad6e3806040f01d562f791edbd392bd16834'
 NATIVE_CONDITION_COMMIT = '03f8467e5a1201c2dbd9d12484bf2338d7837727'
 HISTORICAL_WORDING_COMMIT = 'b9f90e956eea7bda15f638c8877919941ce4fec5'
+CLEAR_RETENTION_COMMIT = '4fbc85725d78427235757ace2661d086b896a97f'
 # Independently observed in the complete720-row historical readback and the
 # sealed transition positive controls, not inferred from each scored output.
 GOLD_IDS = {'ambient': [59614], 'jazz': [73, 9802], 'no active preference': [2152, 4541, 21933],
@@ -78,7 +79,9 @@ def registered_protocol(bank, logical_sampling_commit=None):
         return COMMIT, training_plan(BANK_SHA, COMMIT), PLAN_SHA
     # The explicit training commit selects the preregistered condition control.
     # Never infer a different protocol from mutable run metadata or its score.
-    if logical_sampling_commit == HISTORICAL_WORDING_COMMIT:
+    if logical_sampling_commit == CLEAR_RETENTION_COMMIT:
+        from scripts.experiments.clear_retention_protocol import plan
+    elif logical_sampling_commit == HISTORICAL_WORDING_COMMIT:
         from scripts.experiments.historical_wording_protocol import plan
     elif logical_sampling_commit == NATIVE_CONDITION_COMMIT:
         from scripts.experiments.native_condition_protocol import plan
@@ -97,10 +100,12 @@ def parent_binding(run, bank_path, *, logical_sampling_commit=None):
     if read(run / 'preregistered-experiment.json') != registered:
         raise ValueError('Fixed4832-update protocol differs')
     identity = read(run / 'train/identity.json')
-    native_condition = commit in (NATIVE_CONDITION_COMMIT, HISTORICAL_WORDING_COMMIT)
+    continuation = commit == CLEAR_RETENTION_COMMIT
+    native_condition = commit in (NATIVE_CONDITION_COMMIT, HISTORICAL_WORDING_COMMIT, CLEAR_RETENTION_COMMIT)
     for key, expected in {'git_commit': commit, 'steps': 4832, 'seed': SEED, 'eval_seeds': 2,
             'bank_manifest_sha256': BANK_SHA, 'model_variant': 'base', 'flow_protocol': 'official',
-            'trainable_scope': 'full_unet', 'gradient_accumulation_steps': 4}.items():
+            'trainable_scope': 'full_unet', 'gradient_accumulation_steps': 4,
+            'lr': registered['optimizer']['lr'], 'weight_decay': registered['optimizer']['weight_decay']}.items():
         if identity.get(key) != expected:
             raise ValueError('Unexpected broader training identity: ' + key)
     if identity.get('prompt_style') != ('native_base' if native_condition else 'official_raw'):
@@ -113,6 +118,11 @@ def parent_binding(run, bank_path, *, logical_sampling_commit=None):
             raise ValueError('Logical sampling identity changed')
         check = read(run / 'train/baseline-reference-check.json')
         binding = identity['initial_baseline_match']
+        if continuation and (binding.get('reference_phase') != 'trained' or check.get('reference_phase') != 'trained'
+                or check.get('raw_comparison_exclusion') != 'phase label only: baseline versus trained'):
+            raise ValueError('Continuation must compare the measured baseline to the trained parent')
+        if not continuation and ('reference_phase' in binding or 'reference_phase' in check):
+            raise ValueError('Unregistered trained-parent comparison')
         if commit == NATIVE_CONDITION_COMMIT and (binding.get('training_condition_control') != 'official_raw -> native_base'
                 or check.get('explicit_training_condition_change') !=
                     'official_raw -> native_base; only encoder hashes and train_prompt metadata may differ'):
@@ -129,11 +139,15 @@ def parent_binding(run, bank_path, *, logical_sampling_commit=None):
     if (parallel['world_size'], parallel['global_microbatches_per_update'], parallel['local_microbatches_per_update']) != (4, 4, 1):
         raise ValueError('Parallel/global batch protocol differs')
     initial = identity['initial_writer']
-    if (initial['manifest_sha256'] != PARENT_PACKAGE or initial['parent_checkpoint_sha256'] != PARENT_CHECKPOINT
-            or initial['parent_optimizer_steps'] != 2880):
+    if (initial['manifest_sha256'] != registered['initial_package_manifest_sha256']
+            or initial['parent_checkpoint_sha256'] != registered['parent_checkpoint_sha256']
+            or initial['parent_optimizer_steps'] != (4832 if continuation else 2880)):
         raise ValueError('Parameter-only initialization differs')
+    if continuation and (initial['parent_commit'] != registered['reference_commit']
+            or initial['parent_result_sha256'] != registered['reference_result_sha256']):
+        raise ValueError('Continuation parameter export has different trained-parent lineage')
     runtime = read(run / 'train/runtime.json')['additional_protocol_binding']
-    if commit == HISTORICAL_WORDING_COMMIT:
+    if commit in (HISTORICAL_WORDING_COMMIT, CLEAR_RETENTION_COMMIT):
         from scripts.reporting.verify_historical_condition_draws import verify_seal
         verify_seal(bank, identity, read(run / 'train/runtime.json'),
             read(run / 'train/training-condition-augmentation.json'), registered)
@@ -187,8 +201,10 @@ def collect(run, bank_path, *, text_only=False, logical_sampling_commit=None):
         elif (not value['bitwise_rank_agreement'] or len(value['parameter_sha256_by_rank']) != 4
                 or len(set(value['parameter_sha256_by_rank'])) != 1):
             raise ValueError('Four ranks have different parameters')
-        if name == 'parallel-initial-parameters.json' and set(value['parameter_sha256_by_rank']) != {
-                '0025dd0c573218179857beaf7e48a4dc7f9d86af5c07056962bea34fb3f6294d'}:
+        expected_initial = ('4a41876c30d6e8d8b5de5ac71af91fee97ae23f77a1299863dde1d32572fce90'
+            if logical_sampling_commit == CLEAR_RETENTION_COMMIT else
+            '0025dd0c573218179857beaf7e48a4dc7f9d86af5c07056962bea34fb3f6294d')
+        if name == 'parallel-initial-parameters.json' and set(value['parameter_sha256_by_rank']) != {expected_initial}:
             raise ValueError('Initial parameters differ from the verified warm endpoint')
         proof[name] = sha(path)
     phases, pairs = {}, {}
@@ -212,7 +228,7 @@ def collect(run, bank_path, *, text_only=False, logical_sampling_commit=None):
         elif before != after:
             raise ValueError('A fixed negative control changed')
     rows, draws = jsonl(run / 'train/training.jsonl'), []
-    wording = logical_sampling_commit == HISTORICAL_WORDING_COMMIT
+    wording = logical_sampling_commit in (HISTORICAL_WORDING_COMMIT, CLEAR_RETENTION_COMMIT)
     augmentation_counts, augmentation_seal = {}, None
     if wording:
         from scripts.reporting.verify_historical_condition_draws import verify_draw
@@ -250,7 +266,8 @@ def collect(run, bank_path, *, text_only=False, logical_sampling_commit=None):
         # collection time; a stored pass flag alone is insufficient.
         gate = identity['initial_baseline_match']
         verify_initialized_baseline_reference(run / 'train', Path(gate['reference']), gate['result_sha256'],
-            native_condition_control=logical_sampling_commit == NATIVE_CONDITION_COMMIT)
+            native_condition_control=logical_sampling_commit == NATIVE_CONDITION_COMMIT,
+            reference_phase='trained' if logical_sampling_commit == CLEAR_RETENTION_COMMIT else 'baseline')
     extra = ({'training_augmentation_evidence': {
         'seal_sha256': sha(run / 'train/training-condition-augmentation.json'),
         'exact_draws_per_expression': augmentation_counts,

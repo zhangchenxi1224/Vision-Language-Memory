@@ -19,6 +19,21 @@ from scripts.reporting.collect_broader_validation import expected_rows
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def test_continuation_png_registration_preserves_complete_matrix():
+    from scripts.experiments.png_readback_protocol import source_spec
+    commit = 'a' * 40
+    sources, parent = source_spec(commit)
+    registered = plan(commit)
+    assert parent == '4fbc85725d78427235757ace2661d086b896a97f'
+    assert sources == {'registered': (commit, 'aaaaaaa-logical'), 'fresh_wording_v1': (commit, 'aaaaaaa-fresh-wording')}
+    for key in ('lanes', 'total_raw_rows', 'total_matched_rows', 'total_images', 'generation', 'scoring', 'chain_parity'):
+        assert registered[key] == plan()[key]
+    assert 'previously observed' in registered['scope']
+    assert source_spec() == (SOURCES, PARENT_COMMIT)
+    with pytest.raises(ValueError, match='full continuation validation commit'):
+        plan('short')
+
+
 @pytest.fixture(scope='module')
 def matrices():
     bank = json.loads((ROOT / 'reports/official-alignment-results-20260913/broader151-bank-manifest.json').read_bytes())

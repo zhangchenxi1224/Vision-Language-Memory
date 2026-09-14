@@ -53,6 +53,21 @@ def all_seeds(value):
 
 
 def plan(training, bank):
+    continuation_commit = '4fbc85725d78427235757ace2661d086b896a97f'
+    if training['training_commit'] == continuation_commit:
+        from scripts.experiments.clear_retention_protocol import plan as continuation_plan
+        from scripts.experiments.historical_wording_protocol import plan as wording_plan
+        if training != continuation_plan(bank, continuation_commit):
+            raise ValueError('Continuation differs from its fixed training registration')
+        # Reuse exactly the fully sealed b9 validation cases and noise. Their
+        # prior observation must remain explicit when selecting this repair.
+        original = plan(wording_plan(bank, PARENT_COMMIT), bank)
+        value = copy.deepcopy(training)
+        for key in ('transition_validation', 'prefix_validation', 'validation_set', 'validation_scope'):
+            value[key] = copy.deepcopy(original[key])
+        value['validation_exposure'] = 'Previously observed fresh_wording_v1 cases and noise reused in full as continuation regression tests; not a new holdout.'
+        value['reused_validation_plan_sha256'] = EXPECTED_PLAN_SHA
+        return value
     if training['training_commit'] != PARENT_COMMIT:
         raise ValueError('Fresh validation is fixed to the b9 training endpoint')
     from pathlib import Path

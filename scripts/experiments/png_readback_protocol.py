@@ -11,9 +11,20 @@ LANES = {'confirmation': ('single_writes', None, 390, 360, 78),
          'prefix1': ('historical_prefixes', 1, 560, 480, 112)}
 
 
-def plan():
-    return {'policy': 'complete-png-readback-v1', 'parent_commit': PARENT_COMMIT,
-        'sources': {key: {'commit': value[0], 'prefix': value[1]} for key, value in SOURCES.items()},
+def source_spec(continuation_validation_commit=None):
+    if continuation_validation_commit is None:
+        return SOURCES, PARENT_COMMIT
+    commit = continuation_validation_commit
+    if len(commit) != 40 or any(char not in '0123456789abcdef' for char in commit):
+        raise ValueError('Require the explicit full continuation validation commit')
+    return {'registered': (commit, commit[:7] + '-logical'),
+        'fresh_wording_v1': (commit, commit[:7] + '-fresh-wording')}, '4fbc85725d78427235757ace2661d086b896a97f'
+
+
+def plan(continuation_validation_commit=None):
+    sources, parent = source_spec(continuation_validation_commit)
+    value = {'policy': 'complete-png-readback-v1', 'parent_commit': parent,
+        'sources': {key: {'commit': item[0], 'prefix': item[1]} for key, item in sources.items()},
         'lanes': {key: dict(zip(('mode', 'prefix_lane', 'raw_rows', 'matched_rows', 'images'), value))
                   for key, value in LANES.items()},
         'total_raw_rows': 3980, 'total_matched_rows': 3600, 'total_images': 796,
@@ -24,6 +35,9 @@ def plan():
         'chain_parity': 'all 960 original chain pixels and generated token sequences must match',
         'selection': 'all registered cells regardless of prior outcome; no training, retries or best-of selection',
         'scope': 'PNG deployment for seen entities and semantic questions, including fixed fresh event wording'}
+    if continuation_validation_commit is not None:
+        value['scope'] = 'PNG deployment for seen entities and questions; both complete expression suites are previously observed continuation regressions.'
+    return value
 
 
 def png_pixels(image):

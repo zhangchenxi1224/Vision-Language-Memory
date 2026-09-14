@@ -38,8 +38,15 @@ def main():
     parent = a.parent_run or RUNS / '84cdfdb-broader151-full4832'
     raw_control = a.inference_condition == 'training_raw'
     fresh_validation = a.validation_set == 'fresh_wording_v1'
+    continuation = a.logical_sampling_commit == '4fbc85725d78427235757ace2661d086b896a97f'
+    prior_validation_commit = '7b82309eb49e913d8f028230ac5f79c743d28a46'
     if fresh_validation:
-        if (raw_control or a.logical_sampling_commit != 'b9f90e956eea7bda15f638c8877919941ce4fec5'
+        if continuation:
+            prior_validation_commit = a.expected_commit
+            if (raw_control or parent != RUNS / '4fbc857-clear-retention-full4832'
+                    or a.prior_validation_status != RUNS / (a.expected_commit[:7] + '-logical-completion-suite-status.json')):
+                raise ValueError('Continuation regression requires its own complete registered suite')
+        elif (raw_control or a.logical_sampling_commit != 'b9f90e956eea7bda15f638c8877919941ce4fec5'
                 or parent != RUNS / 'b9f90e9-historical-wording-full4832'
                 or a.prior_validation_status != RUNS / '7b82309-logical-completion-suite-status.json'):
             raise ValueError('Fresh acceptance requires the fixed b9 endpoint and its full registered suite')
@@ -111,7 +118,7 @@ def main():
                     raise TimeoutError('Registered suite did not finish before fresh acceptance deadline')
                 if a.prior_validation_status.exists():
                     prior = json.loads(a.prior_validation_status.read_bytes())
-                    if prior['validation_commit'] != '7b82309eb49e913d8f028230ac5f79c743d28a46' or prior['parent'] != str(parent):
+                    if prior['validation_commit'] != prior_validation_commit or prior['parent'] != str(parent):
                         raise ValueError('The preceding validation identity changed')
                     if prior['state'] in ('failed', 'needs_attention'):
                         raise RuntimeError('The registered suite failed operationally; inspect its evidence')
@@ -155,7 +162,7 @@ def main():
         if not raw_control and not fresh_validation:
             execute('scripts/reporting/collect_broader_endpoint.py', ['--run', parent, '--bank', bank,
                 '--output-prefix', RUNS / (prefix + '-endpoint'), *protocol_arguments], 'endpoint-collection')
-        if a.logical_sampling_commit == 'b9f90e956eea7bda15f638c8877919941ce4fec5' and not fresh_validation:
+        if a.logical_sampling_commit in ('b9f90e956eea7bda15f638c8877919941ce4fec5', '4fbc85725d78427235757ace2661d086b896a97f') and not fresh_validation:
             execute('scripts/reporting/collect_native_endpoint_tensors.py', ['--run', parent,
                 '--output-prefix', RUNS / (prefix + '-final-tensors'),
                 '--expected-source-commit', a.expected_commit, *protocol_arguments], 'final-tensor-collection')
@@ -208,7 +215,8 @@ def main():
         record('all_registered_workloads_finished', 'completed',
             functional_all_registered_correct=all(value['all_generated_correct_eos'] for value in summaries.values()),
             matched_results={label: [value['matched_correct_eos'], value['matched_rows']] for label, value in summaries.items()},
-            scope=('New event wording and noise on seen semantic questions, complete four lanes and actual CLI replay.' if fresh_validation else
+            scope=('Previously observed complete wording/noise matrices used as continuation regression, with all four lanes and real CLI replay.' if continuation else
+                'New event wording and noise on seen semantic questions, complete four lanes and actual CLI replay.' if fresh_validation else
                 'Observed c2ec407 cases reused as a paired sampling diagnostic; no fresh holdout claim.' if a.logical_sampling_commit else
                 'Seen questions; fresh transition expressions and noise, historical original/reworded full prefixes. Not unseen entities or simultaneous multi-fact retention.'))
         return 0

@@ -19,8 +19,12 @@ def main():
     p.add_argument('--reader-model', type=Path, required=True)
     p.add_argument('--expected-commit', required=True)
     p.add_argument('--deadline-unix', type=float, required=True)
+    p.add_argument('--continuation-validation-commit')
     a = p.parse_args()
-    from scripts.experiments.png_readback_protocol import SOURCES, LANES, plan
+    from scripts.experiments.png_readback_protocol import source_spec, LANES, plan
+    sources, _ = source_spec(a.continuation_validation_commit)
+    protocol_arguments = (['--continuation-validation-commit', a.continuation_validation_commit]
+        if a.continuation_validation_commit else [])
     if (len(a.expected_commit) != 40 or subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip() != a.expected_commit
             or subprocess.check_output(['git', 'status', '--porcelain'], cwd=ROOT, text=True).strip()):
         raise ValueError('Require the exact clean source commit')
@@ -51,17 +55,18 @@ def main():
                 child.wait()
     env = {**os.environ, 'OMP_NUM_THREADS': '1', 'MKL_NUM_THREADS': '1', 'HF_HUB_OFFLINE': '1', 'TRANSFORMERS_OFFLINE': '1'}
     try:
-        record('waiting_for_both_complete_suites', 'waiting', plan=plan())
+        record('waiting_for_both_complete_suites', 'waiting', plan=plan(a.continuation_validation_commit))
         while True:
             deadline()
             done = []
-            for _, (commit, source_prefix) in SOURCES.items():
+            for _, (commit, source_prefix) in sources.items():
                 path = a.runs / (source_prefix + '-completion-suite-status.json')
                 if not path.exists():
                     done.append(False)
                     continue
                 value = json.loads(path.read_bytes())
-                if value['validation_commit'] != commit or value['parent'] != str(a.runs / 'b9f90e9-historical-wording-full4832'):
+                parent_name = ('4fbc857-clear-retention-full4832' if a.continuation_validation_commit else 'b9f90e9-historical-wording-full4832')
+                if value['validation_commit'] != commit or value['parent'] != str(a.runs / parent_name):
                     raise ValueError('Preceding suite identity differs')
                 if value['state'] in ('failed', 'needs_attention'):
                     raise RuntimeError('Preceding suite failed operationally; preserve and inspect it')
@@ -73,7 +78,7 @@ def main():
             deadline()
             time.sleep(15)
         summaries = {}
-        for validation_set, (_, source_prefix) in SOURCES.items():
+        for validation_set, (_, source_prefix) in sources.items():
             children, logs, outputs = [], [], {}
             try:
                 for device, lane in enumerate(LANES):
@@ -86,7 +91,7 @@ def main():
                     command = [sys.executable, '-u', str(ROOT / 'scripts/probes/complete_png_readback.py'),
                         '--runs', str(a.runs), '--reader-model', str(a.reader_model), '--output', str(output),
                         '--validation-set', validation_set, '--lane', lane, '--device', str(device),
-                        '--expected-commit', a.expected_commit, '--deadline-unix', str(a.deadline_unix)]
+                        '--expected-commit', a.expected_commit, '--deadline-unix', str(a.deadline_unix), *protocol_arguments]
                     children.append(subprocess.Popen(command, cwd=ROOT, env=env, stdout=log, stderr=subprocess.STDOUT, start_new_session=True))
                 record('reading_' + validation_set, 'running', worker_pids=[child.pid for child in children])
                 while any(child.poll() is None for child in children):
@@ -105,7 +110,7 @@ def main():
                 deadline()
                 command = [sys.executable, '-u', str(ROOT / 'scripts/reporting/collect_png_readback.py'),
                     '--run', str(output), '--source', str(a.runs / (source_prefix + '-' + lane)),
-                    '--expected-commit', a.expected_commit, '--output-prefix', str(output), '--archive']
+                    '--expected-commit', a.expected_commit, '--output-prefix', str(output), '--archive', *protocol_arguments]
                 with Path(str(output) + '-collection.log').open('w') as log:
                     child = subprocess.Popen(command, cwd=ROOT, env={**env, 'CUDA_VISIBLE_DEVICES': ''},
                         stdout=log, stderr=subprocess.STDOUT, start_new_session=True)

@@ -152,7 +152,8 @@ def main():
     if fresh_validation:
         from scripts.experiments.fresh_wording_validation import digest
         identity.update(validation_set=a.validation_set, validation_plan_sha256=digest(registered),
-            interpretation='fresh_event_wording_seen_semantic_questions', scope=registered['validation_scope'])
+            interpretation=('observed_wording_regression_seen_semantic_questions' if 'reused_validation_plan_sha256' in registered
+                else 'fresh_event_wording_seen_semantic_questions'), scope=registered['validation_scope'])
         train.write_json(a.output / 'validation-plan.json', registered)
     if raw_complete is not None:
         # Keep the original complete bytes for collection and portable auditing.

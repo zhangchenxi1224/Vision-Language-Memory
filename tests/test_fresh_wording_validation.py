@@ -75,3 +75,24 @@ def test_actual_cli_registration_accepts_only_the_fresh_sequence(fixed):
     changed['selected_cases'][0]['steps'][0]['event_text']='Substitute a previously tested expression.'
     with pytest.raises(ValueError,match='sequence changed'):
         replay_registration(changed,broader=True,logical_sampling_commit=PARENT_COMMIT)
+
+
+def test_continuation_reuses_every_observed_case_and_preserves_lineage(fixed):
+    from scripts.experiments.clear_retention_protocol import plan as continuation_plan
+    from scripts.reporting.collect_broader_endpoint import CLEAR_RETENTION_COMMIT, registered_protocol
+    bank, _, original = fixed
+    training = continuation_plan(bank, CLEAR_RETENTION_COMMIT)
+    assert registered_protocol(bank, CLEAR_RETENTION_COMMIT)[1] == training
+    regression = plan(training, bank)
+    assert regression['transition_validation'] == original['transition_validation']
+    assert regression['prefix_validation'] == original['prefix_validation']
+    assert regression['reused_validation_plan_sha256'] == digest(original)
+    assert 'not a new holdout' in regression['validation_exposure']
+    assert regression['parent_checkpoint_sha256'] == training['parent_checkpoint_sha256']
+    assert regression['optimizer']['lr'] == 1e-5
+    for mode, lane in (('single_writes', None), ('rgb_chains', None), ('historical_prefixes', 0), ('historical_prefixes', 1)):
+        assert expected_rows(regression, bank, mode, lane) == expected_rows(original, bank, mode, lane)
+    changed = copy.deepcopy(training)
+    changed['optimizer']['lr'] = 5e-5
+    with pytest.raises(ValueError, match='fixed training registration'):
+        plan(changed, bank)

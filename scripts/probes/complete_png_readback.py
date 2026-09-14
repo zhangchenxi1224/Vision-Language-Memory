@@ -22,12 +22,14 @@ def main():
     p.add_argument('--expected-commit', required=True)
     p.add_argument('--deadline-unix', type=float, required=True)
     p.add_argument('--worker', action='store_true')
+    p.add_argument('--continuation-validation-commit')
     a = p.parse_args()
     from vision_memory.repro.determinism import REQUIRED_DETERMINISM_ENV
     if not a.worker:
         return subprocess.call([sys.executable, '-u', str(Path(__file__).resolve()), *sys.argv[1:], '--worker'],
             env={**os.environ, **REQUIRED_DETERMINISM_ENV, 'HF_HUB_OFFLINE': '1', 'TRANSFORMERS_OFFLINE': '1'})
-    from scripts.experiments.png_readback_protocol import SOURCES, LANES, PARENT_COMMIT, plan, png_pixels, compare
+    from scripts.experiments.png_readback_protocol import source_spec, LANES, plan, png_pixels, compare
+    sources, parent_commit = source_spec(a.continuation_validation_commit)
     from scripts.reporting.collect_transition_endpoint import read, sha, jsonl
     from scripts.reporting.collect_broader_validation import collect
     from scripts.reporting.collect_broader_endpoint import GOLD_IDS
@@ -37,13 +39,13 @@ def main():
         raise ValueError('Require the fixed clean readback source')
     if not math.isfinite(a.deadline_unix) or time.time() >= a.deadline_unix:
         raise ValueError('Require a finite future deadline')
-    commit, prefix = SOURCES[a.validation_set]
+    commit, prefix = sources[a.validation_set]
     source = a.runs / (prefix + '-' + a.lane)
-    parent = a.runs / 'b9f90e9-historical-wording-full4832'
+    parent = a.runs / ('4fbc857-clear-retention-full4832' if a.continuation_validation_commit else 'b9f90e9-historical-wording-full4832')
     # Full prior suite already audits trajectories. This independently rechecks all
     # source file hashes, fixed cases, raw tokens, parent checkpoint and identities.
     source_summary = collect(source, parent, parent / 'bank/manifest.json', commit, text_only=True,
-        logical_sampling_commit=PARENT_COMMIT, validation_set=a.validation_set)
+        logical_sampling_commit=parent_commit, validation_set=a.validation_set)
     if source_summary['artifacts_omitted_locally']:
         raise ValueError('Actual source tensors must exist for independent PNG binding')
     mode, lane, raw_count, _, image_count = LANES[a.lane]
@@ -79,7 +81,7 @@ def main():
     reader.eval().requires_grad_(False)
     versions = {name: int(value._version) for name, value in reader.named_parameters()}
     a.output.mkdir(parents=True, exist_ok=False)
-    identity = {'readback_commit': a.expected_commit, 'plan': plan(), 'validation_set': a.validation_set,
+    identity = {'readback_commit': a.expected_commit, 'plan': plan(a.continuation_validation_commit), 'validation_set': a.validation_set,
         'lane': a.lane, 'source_complete_sha256': sha(source / 'complete.json'),
         'source_generations_sha256': sha(source / 'generations.jsonl'), 'source_path': str(source),
         'package_manifest_sha256': sha(package_path), 'reader_snapshot': expected,
