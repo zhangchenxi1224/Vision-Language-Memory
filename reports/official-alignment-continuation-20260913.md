@@ -1,3 +1,11 @@
+## 09-14 11:47 完整03-trained基线复现通过，已进入真实参数更新
+
+- GPU实际验证完整302/302新生成latent、RGB及全部29步trajectory逐位等于03 trained；全部raw记录相同，仅administrative phase标签baseline/trained不同。检查在首次优化前由四rank共同通过，未借用父模型基线文件。
+- 实际门槛报告已下载原始11048字节到 `official-alignment-results-20260913/4fbc857-initial-baseline-reference-check.json`，本地SHA256 `37e37f05056d21adeecc30afe45e6de557d2416ea7c0c291af23746c7eb6c1ee`；本地核对302唯一samples及三个比较布尔值。这里是远端实际张量比较的原报告，不是本地重新比较全部PT的声明；完整终点评估仍由e372 suite采集。
+- 真实GPU观察time1789357668.974493：四rank478724–478727仍R，已记录**127/4832** optimizer steps，elapsed110.389秒，最新FM MSE0.003319495590403676、grad norm0.029287852346897125，sigma0.9071442484855652。loss不代表功能成功。
+- 三个e372评估驱动640212/640213/640214仍存活并按依赖等待。原有训练476384/pilot477729继续，不改源码、不重启、不提前选checkpoint。GPU/CPU、固定commit、deadline和路径见下节。
+- 此轮从135到302基线的等待均有真实/proc和GPU计算核验；现已完成基线门槛并推进参数更新，无阻塞。当前无未结束本地工具句柄。`.cache/observe-clear-retention.py`及R同名helper已支持`--compact`，可减小输出；不影响训练或评分源码。
+
 ## 09-14 11:34 四卡预检通过，训练及完整验证链均有存活进程
 
 - 真实GPU观察time1789356853.4152436：训练rank478724–478727均R，4卡约44GiB、100%利用率。初始参数逐位匹配03 endpoint；梯度preflight passed，相对L2 `4.047132680232797e-08`、relative max `9.02379502557885e-08`，固定阈值2e-6。baseline各rank已26个PT（共104/302），尚未完成基线检查、尚无优化后效果结论。
