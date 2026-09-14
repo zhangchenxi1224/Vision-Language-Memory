@@ -2,11 +2,13 @@
 
 分支：`codex/dreamlite-official-alignment-20260913`，起点 `f68bf06`。附件为问题线索，以下以实际源码和可追溯产物为依据。
 
-当前结论（09-14 15:24）：官方FM公式、完整时间域、纯噪声初态、原生scheduler已成套实现并验证，真实实验使用官方Base原生28步推理。03原生条件模型完成4832步，开发1510/1510、功能1736/1800，连续链480/480但历史改写仍失败64条。b9历史表达增强完成：开发1510/1510、原功能1780/1800、另一套表达1740/1800，PNG读取3520/3600。4f从03继续训练也已完成：开发1510/1510、原功能1790/1800、同一套已观察表达1750/1800；全量PNG读回3540/3600。上述各轮完整原始证据和PNG均已本地复核；当前仍60条连续清除及随后保持错误，尚不支持完整可用。
+当前结论（09-14 15:55）：官方FM公式、完整时间域、纯噪声初态、原生scheduler已成套实现并验证，真实实验使用官方Base原生28步推理。03原生条件模型完成4832步，开发1510/1510、功能1736/1800，连续链480/480但历史改写仍失败64条。b9历史表达增强完成：开发1510/1510、原功能1780/1800、另一套表达1740/1800，PNG读取3520/3600。4f从03继续训练也已完成：开发1510/1510、原功能1790/1800、同一套已观察表达1750/1800；全量PNG读回3540/3600。上述各轮完整原始证据和PNG均已本地复核；当前仍60条连续清除及随后保持错误，尚不支持完整可用。
 
 针对b9新增的连续清除退化，完整32任务/320读数的来源图与权重交叉诊断中，03权重配两种来源均80/80，b9权重配两种来源均60/80，两个对角组合逐项复现原结果。它支持在这些观察案例中排查参数更新造成的退化，不能据此推断所有来源分布都无影响。4f从03已训练参数开始，以fresh AdamW1e-5保留完整历史表达增强和4832额外更新；完整302图、轨迹和raw的初始化复现已实际通过。两套全量逐格比较均相对b9修复10条、没有新增错误，但原注册链仍相对03退步10条。初始化和学习率共同改变，不能作单因素归因。全部训练draw分析确认清除样本与sigma高半区实际被覆盖，FM损失降低也未保证功能全对。
 
-当前4H200正在执行固定03检查点的完整已观察表达对照，源码ff862df，零优化步、相同1800 matched格及实际CLI重放，用于区分已有表达弱点与继续训练退步，尚无该对照完整结果。详见[4f原注册结果](official-alignment-results-20260913/clear-retention-registered-review.md)、[4f表达回归](official-alignment-results-20260913/clear-retention-observed-wording-review.md)、[全量PNG](official-alignment-results-20260913/clear-retention-png-validation-review.md)、[实际训练损失分析](official-alignment-results-20260913/clear-retention-training-loss-review.md)、[03对照固定计划](official-03-observed-wording-baseline-plan-20260914.md)及[实际运行记录](official-alignment-continuation-20260913.md)。两套已观察表达均属于回归集。以下早期记录按实验阶段保留。
+09-14 15:55：固定03的完整已观察表达对照已结束并全部本地复核，1721/1800（360、440、452、469）。全1990 raw、360生成PNG与真实CLI六写三十读齐全。相对03，4f保留1711、修复39历史、新增10链错误、40链仍错；b9保留1701、修复39、新增20、40仍错。全部负对照保持。两类错误并存，不能把4f50条全归于遗忘。完整配对与独立哈希见[03对照报告](official-alignment-results-20260913/03-observed-wording-baseline-review.md)。训练目标未完成；没有新训练已启动。
+
+详见[4f原注册结果](official-alignment-results-20260913/clear-retention-registered-review.md)、[4f表达回归](official-alignment-results-20260913/clear-retention-observed-wording-review.md)、[全量PNG](official-alignment-results-20260913/clear-retention-png-validation-review.md)、[实际训练损失分析](official-alignment-results-20260913/clear-retention-training-loss-review.md)、[03对照固定计划](official-03-observed-wording-baseline-plan-20260914.md)及[实际运行记录](official-alignment-continuation-20260913.md)。两套已观察表达均属于回归集。以下早期记录按实验阶段保留。
 
 ## 官方依据
 
