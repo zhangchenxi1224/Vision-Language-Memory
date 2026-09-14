@@ -2,6 +2,25 @@
 
 ## Execution update: 2026-09-14, after new allocation
 
+At Unix time 1789383905.6168113 (19:05:05 CST), the actual driver, four
+training workers and validation waiter were all live. Optimization reached
+3,487 of the fixed 4,832 updates. The complete measured baseline gate passed:
+302 images/latents and their full trajectories match the trained4f parent
+bitwise, and all 3,020 raw generation records match except the administrative
+phase label. This establishes parameter restart parity, not a new trained result.
+
+The entire baseline raw-record archive was independently downloaded and recounted
+locally with `scripts/reporting/verify_generated_source_baseline_local.py`:
+`b62ec02-complete-baseline-raw-evidence.tgz`, 599,397 bytes, SHA256
+`a8764af237bb41a8382dd063d021d64b8b5bd27ba6a24c966700c8779c9efa2e`.
+Both phases contain all 3,020 registered cells and score 1,510/1,510 matched
+token-plus-immediate-EOS responses. The adjacent local-verification JSON records
+the complete recount, exact parent lineage and canonical runtime identity.
+Tensor payloads and checkpoints remain remote; their equality is recorded by
+the actual GPU baseline gate, not independently recomputed from this raw archive.
+The fixed trained endpoint, both functional suites, CLI and PNG acceptance remain
+pending. Earlier observations below are retained as execution history.
+
 `dl-source-aug-h200x4-20260914` obtained four H200s on `qb-prod-gpu911`.
 Actual CUDA12.8 / Torch2.7.0a0+ecf3bae40a.nv25.02 / NCCL2.25.1 / AVX512 and
 the three clean source checkouts were verified in the new container. See
