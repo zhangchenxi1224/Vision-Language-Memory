@@ -20,7 +20,7 @@ def source_spec(continuation_validation_commit=None, continuation_training_commi
     if len(commit) != 40 or any(char not in '0123456789abcdef' for char in commit):
         raise ValueError('Require the explicit full continuation validation commit')
     parent = continuation_training_commit or '4fbc85725d78427235757ace2661d086b896a97f'
-    if parent not in ('4fbc85725d78427235757ace2661d086b896a97f', 'ef163b26e33f62c496ed0da8744ebb7bf1163873'):
+    if parent not in ('4fbc85725d78427235757ace2661d086b896a97f', 'b62ec027ad725aeb6ecc772aa85e7a3ff6e49b36'):
         raise ValueError('Unregistered continuation training source')
     return {'registered': (commit, commit[:7] + '-logical'),
         'fresh_wording_v1': (commit, commit[:7] + '-fresh-wording')}, parent
@@ -29,7 +29,7 @@ def source_spec(continuation_validation_commit=None, continuation_training_commi
 def parent_run_name(parent):
     return {PARENT_COMMIT: 'b9f90e9-historical-wording-full4832',
         '4fbc85725d78427235757ace2661d086b896a97f': '4fbc857-clear-retention-full4832',
-        'ef163b26e33f62c496ed0da8744ebb7bf1163873': 'ef163b2-generated-source-full4832'}[parent]
+        'b62ec027ad725aeb6ecc772aa85e7a3ff6e49b36': 'b62ec02-generated-source-full4832'}[parent]
 
 
 def plan(continuation_validation_commit=None, continuation_training_commit=None):

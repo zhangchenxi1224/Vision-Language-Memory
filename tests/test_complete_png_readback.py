@@ -109,7 +109,7 @@ def test_collector_recounts_actual_pngs_and_rejects_altered_pixels(tmp_path, mat
     protocol = {}
     parent_commit, source_commit = PARENT_COMMIT, SOURCES['registered'][0]
     if generated_sources:
-        parent_commit, source_commit = 'ef163b26e33f62c496ed0da8744ebb7bf1163873', 'd' * 40
+        parent_commit, source_commit = 'b62ec027ad725aeb6ecc772aa85e7a3ff6e49b36', 'd' * 40
         registered = json.loads((ROOT / 'reports/official-alignment-results-20260913/generated-source-training-preregistered.json').read_bytes())
         protocol = {'continuation_validation_commit': source_commit, 'continuation_training_commit': parent_commit}
     original = rows_for(registered, bank, 'single_writes', None)

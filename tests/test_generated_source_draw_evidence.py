@@ -67,10 +67,10 @@ def test_seal_rejects_substitution_or_incomplete_source_coverage(sealed, field):
 def test_generated_png_protocol_keeps_all_cases_and_rejects_wrong_parent():
     from scripts.experiments.png_readback_protocol import plan, source_spec, parent_run_name
     commit = 'c' * 40
-    generated = 'ef163b26e33f62c496ed0da8744ebb7bf1163873'
+    generated = 'b62ec027ad725aeb6ecc772aa85e7a3ff6e49b36'
     actual = plan(commit, generated)
     assert actual['parent_commit'] == generated
-    assert parent_run_name(generated) == 'ef163b2-generated-source-full4832'
+    assert parent_run_name(generated) == 'b62ec02-generated-source-full4832'
     for field in ('lanes', 'total_raw_rows', 'total_matched_rows', 'total_images', 'generation', 'scoring', 'chain_parity'):
         assert actual[field] == plan()[field]
     with pytest.raises(ValueError):

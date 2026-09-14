@@ -57,20 +57,20 @@
   "prefix_validation": {
     "cases": [
       {
-        "case": "fresh-target-00-style-0",
+        "case": "target-00-style-0",
         "event_semantics": [
           {
             "operation": "set",
             "value": "green"
           }
         ],
-        "event_text": "The marble lamp train 001175 has selected green for color. Treat this as its latest preference.",
+        "event_text": "R3 Train Standard Templates 23: For the marble lamp train 001175, remember that the preferred color is green.",
         "gold": "green",
         "noise_seeds": [
-          7680110852302156008,
-          8615066999209226183,
-          6766027243983144170,
-          8648919535836908046
+          7528082326027640478,
+          5670684672102277559,
+          3201598992058387303,
+          883842241565108433
         ],
         "question_id": "r3-train-semantic-001175-historical-prefix",
         "question_variants": {
@@ -80,24 +80,24 @@
           "paraphrase_3": "Which color preference is currently stored for the marble lamp train 001175?\nUse the memory image to answer.\nAnswer with a short phrase only.",
           "paraphrase_4": "Read the memory image and report the current color preference of the marble lamp train 001175.\nReturn only a short phrase."
         },
-        "style": "fresh_prefix_wording_0",
+        "style": "original_prefix",
         "target_index": 0
       },
       {
-        "case": "fresh-target-00-style-1",
+        "case": "target-00-style-1",
         "event_semantics": [
           {
             "operation": "set",
             "value": "green"
           }
         ],
-        "event_text": "For the record, the marble lamp train 001175's preferred color has changed to green; keep the latest value.",
+        "event_text": "For the marble lamp train 001175, the color preference should now be green; store this choice.",
         "gold": "green",
         "noise_seeds": [
-          7172389801460662899,
-          4514840725722100071,
-          3514367425537361273,
-          8214169442236016245
+          5910869475657165547,
+          87657102650860005,
+          3416438355134239271,
+          7235177665176549656
         ],
         "question_id": "r3-train-semantic-001175-historical-prefix",
         "question_variants": {
@@ -107,24 +107,24 @@
           "paraphrase_3": "Which color preference is currently stored for the marble lamp train 001175?\nUse the memory image to answer.\nAnswer with a short phrase only.",
           "paraphrase_4": "Read the memory image and report the current color preference of the marble lamp train 001175.\nReturn only a short phrase."
         },
-        "style": "fresh_prefix_wording_1",
+        "style": "new_prefix_wording_1",
         "target_index": 0
       },
       {
-        "case": "fresh-target-00-style-2",
+        "case": "target-00-style-2",
         "event_semantics": [
           {
             "operation": "set",
             "value": "green"
           }
         ],
-        "event_text": "Apply this new preference to the marble lamp train 001175: green for color, superseding the choice on record.",
+        "event_text": "Update the marble lamp train 001175's remembered color selection to green.",
         "gold": "green",
         "noise_seeds": [
-          3246743963884707488,
-          4538015098462234741,
-          4911266213114628847,
-          603287439238241906
+          6249965778080892647,
+          7630059001711357140,
+          5545359657109958642,
+          2194511666405921852
         ],
         "question_id": "r3-train-semantic-001175-historical-prefix",
         "question_variants": {
@@ -134,11 +134,11 @@
           "paraphrase_3": "Which color preference is currently stored for the marble lamp train 001175?\nUse the memory image to answer.\nAnswer with a short phrase only.",
           "paraphrase_4": "Read the memory image and report the current color preference of the marble lamp train 001175.\nReturn only a short phrase."
         },
-        "style": "fresh_prefix_wording_2",
+        "style": "new_prefix_wording_2",
         "target_index": 0
       },
       {
-        "case": "fresh-target-01-style-0",
+        "case": "target-01-style-0",
         "event_semantics": [
           {
             "operation": "set",
@@ -149,13 +149,13 @@
             "value": "green"
           }
         ],
-        "event_text": "The linen desk train 000414 has selected purple for color. Treat this as its latest preference.\nThe linen desk train 000414 has selected green for color. Treat this as its latest preference.",
+        "event_text": "R3 Train Standard Templates 30: For the linen desk train 000414, remember that the preferred color is purple.\nR3 Train Standard Templates 30: For the linen desk train 000414, remember that the preferred color is green.",
         "gold": "green",
         "noise_seeds": [
-          5449293180670119836,
-          7197569627334509517,
-          8760351243087295511,
-          4459708512605955868
+          7686278190716186491,
+          876674693808805566,
+          61556784453323896,
+          6213395553730830972
         ],
         "question_id": "r3-train-semantic-000414-historical-prefix",
         "question_variants": {
@@ -165,11 +165,11 @@
           "paraphrase_3": "Which color preference is currently stored for the linen desk train 000414?\nUse the memory image to answer.\nAnswer with a short phrase only.",
           "paraphrase_4": "Read the memory image and report the current color preference of the linen desk train 000414.\nReturn only a short phrase."
         },
-        "style": "fresh_prefix_wording_0",
+        "style": "original_prefix",
         "target_index": 1
       },
       {
-        "case": "fresh-target-01-style-1",
+        "case": "target-01-style-1",
         "event_semantics": [
           {
             "operation": "set",
@@ -180,13 +180,13 @@
             "value": "green"
           }
         ],
-        "event_text": "For the record, the linen desk train 000414's preferred color has changed to purple; keep the latest value.\nFor the record, the linen desk train 000414's preferred color has changed to green; keep the latest value.",
+        "event_text": "For the linen desk train 000414, the color preference should now be purple; store this choice.\nFor the linen desk train 000414, the color preference should now be green; store this choice.",
         "gold": "green",
         "noise_seeds": [
-          5618166877984844085,
-          5970887315087045249,
-          7460386054012975433,
-          743974977954802347
+          5841485366580453974,
+          6865182937565051309,
+          7351011756559675130,
+          8045891528963107650
         ],
         "question_id": "r3-train-semantic-000414-historical-prefix",
         "question_variants": {
@@ -196,11 +196,11 @@
           "paraphrase_3": "Which color preference is currently stored for the linen desk train 000414?\nUse the memory image to answer.\nAnswer with a short phrase only.",
           "paraphrase_4": "Read the memory image and report the current color preference of the linen desk train 000414.\nReturn only a short phrase."
         },
-        "style": "fresh_prefix_wording_1",
+        "style": "new_prefix_wording_1",
         "target_index": 1
       },
       {
-        "case": "fresh-target-01-style-2",
+        "case": "target-01-style-2",
         "event_semantics": [
           {
             "operation": "set",
@@ -211,13 +211,13 @@
             "value": "green"
           }
         ],
-        "event_text": "Apply this new preference to the linen desk train 000414: purple for color, superseding the choice on record.\nApply this new preference to the linen desk train 000414: green for color, superseding the choice on record.",
+        "event_text": "Update the linen desk train 000414's remembered color selection to purple.\nUpdate the linen desk train 000414's remembered color selection to green.",
         "gold": "green",
         "noise_seeds": [
-          5902537652068976980,
-          5968983706834953284,
-          5139024815774404993,
-          4457034780582346933
+          6384688312500264598,
+          170619574017204455,
+          5236662646103397826,
+          6514965564524919717
         ],
         "question_id": "r3-train-semantic-000414-historical-prefix",
         "question_variants": {
@@ -227,24 +227,24 @@
           "paraphrase_3": "Which color preference is currently stored for the linen desk train 000414?\nUse the memory image to answer.\nAnswer with a short phrase only.",
           "paraphrase_4": "Read the memory image and report the current color preference of the linen desk train 000414.\nReturn only a short phrase."
         },
-        "style": "fresh_prefix_wording_2",
+        "style": "new_prefix_wording_2",
         "target_index": 1
       },
       {
-        "case": "fresh-target-02-style-0",
+        "case": "target-02-style-0",
         "event_semantics": [
           {
             "operation": "set",
             "value": "juice"
           }
         ],
-        "event_text": "The indigo notebook train 000271 has selected juice for drink. Treat this as its latest preference.",
+        "event_text": "R3 Train Standard Templates 15: Save juice as the current drink preference for the indigo notebook train 000271.",
         "gold": "juice",
         "noise_seeds": [
-          468676108987600503,
-          4299549767276209796,
-          2585331633874120272,
-          3676408390706722908
+          9117348526637317560,
+          4770328219396087951,
+          156911059150625854,
+          3429221810950131869
         ],
         "question_id": "r3-train-semantic-000271-historical-prefix",
         "question_variants": {
@@ -254,24 +254,24 @@
           "paraphrase_3": "Which drink preference is currently stored for the indigo notebook train 000271?\nUse the memory image to answer.\nAnswer with a short phrase only.",
           "paraphrase_4": "Read the memory image and report the current drink preference of the indigo notebook train 000271.\nReturn only a short phrase."
         },
-        "style": "fresh_prefix_wording_0",
+        "style": "original_prefix",
         "target_index": 2
       },
       {
-        "case": "fresh-target-02-style-1",
+        "case": "target-02-style-1",
         "event_semantics": [
           {
             "operation": "set",
             "value": "juice"
           }
         ],
-        "event_text": "For the record, the indigo notebook train 000271's preferred drink has changed to juice; keep the latest value.",
+        "event_text": "For the indigo notebook train 000271, the drink preference should now be juice; store this choice.",
         "gold": "juice",
         "noise_seeds": [
-          4844963486706761170,
-          8913040307494039223,
-          3122827878725640545,
-          8220940809497305970
+          2048676963427789885,
+          4417316212901315636,
+          8185176600131740213,
+          5439383575025614124
         ],
         "question_id": "r3-train-semantic-000271-historical-prefix",
         "question_variants": {
@@ -281,24 +281,24 @@
           "paraphrase_3": "Which drink preference is currently stored for the indigo notebook train 000271?\nUse the memory image to answer.\nAnswer with a short phrase only.",
           "paraphrase_4": "Read the memory image and report the current drink preference of the indigo notebook train 000271.\nReturn only a short phrase."
         },
-        "style": "fresh_prefix_wording_1",
+        "style": "new_prefix_wording_1",
         "target_index": 2
       },
       {
-        "case": "fresh-target-02-style-2",
+        "case": "target-02-style-2",
         "event_semantics": [
           {
             "operation": "set",
             "value": "juice"
           }
         ],
-        "event_text": "Apply this new preference to the indigo notebook train 000271: juice for drink, superseding the choice on record.",
+        "event_text": "Update the indigo notebook train 000271's remembered drink selection to juice.",
         "gold": "juice",
         "noise_seeds": [
-          4205273332966746198,
-          8774120501162707173,
-          8808698431468864854,
-          6175190693236011817
+          6996475231352876123,
+          8251278914113368460,
+          1455094446859851866,
+          6151203838416008362
         ],
         "question_id": "r3-train-semantic-000271-historical-prefix",
         "question_variants": {
@@ -308,11 +308,11 @@
           "paraphrase_3": "Which drink preference is currently stored for the indigo notebook train 000271?\nUse the memory image to answer.\nAnswer with a short phrase only.",
           "paraphrase_4": "Read the memory image and report the current drink preference of the indigo notebook train 000271.\nReturn only a short phrase."
         },
-        "style": "fresh_prefix_wording_2",
+        "style": "new_prefix_wording_2",
         "target_index": 2
       },
       {
-        "case": "fresh-target-03-style-0",
+        "case": "target-03-style-0",
         "event_semantics": [
           {
             "operation": "set",
@@ -323,13 +323,13 @@
             "value": "juice"
           }
         ],
-        "event_text": "The amber mug train 001242 has selected coffee for drink. Treat this as its latest preference.\nThe amber mug train 001242 has selected juice for drink. Treat this as its latest preference.",
+        "event_text": "R3 Train Standard Templates 26: For the amber mug train 001242, remember that the preferred drink is coffee.\nR3 Train Standard Templates 26: Replace the earlier drink preference for the amber mug train 001242 with juice.",
         "gold": "juice",
         "noise_seeds": [
-          7415266782741977773,
-          6248711749022357307,
-          9046834116783667165,
-          533383192070590272
+          3866744521454426309,
+          930187591033563645,
+          431906099514008429,
+          1856915100001369358
         ],
         "question_id": "r3-train-semantic-001242-historical-prefix",
         "question_variants": {
@@ -339,11 +339,11 @@
           "paraphrase_3": "Which drink preference is currently stored for the amber mug train 001242?\nUse the memory image to answer.\nAnswer with a short phrase only.",
           "paraphrase_4": "Read the memory image and report the current drink preference of the amber mug train 001242.\nReturn only a short phrase."
         },
-        "style": "fresh_prefix_wording_0",
+        "style": "original_prefix",
         "target_index": 3
       },
       {
-        "case": "fresh-target-03-style-1",
+        "case": "target-03-style-1",
         "event_semantics": [
           {
             "operation": "set",
@@ -354,13 +354,13 @@
             "value": "juice"
           }
         ],
-        "event_text": "For the record, the amber mug train 001242's preferred drink has changed to coffee; keep the latest value.\nFor the record, the amber mug train 001242's preferred drink has changed to juice; keep the latest value.",
+        "event_text": "For the amber mug train 001242, the drink preference should now be coffee; store this choice.\nFor the amber mug train 001242, the drink preference should now be juice; store this choice.",
         "gold": "juice",
         "noise_seeds": [
-          132727813592564121,
-          8513505226501795784,
-          3747157719520996548,
-          689906260927211209
+          368075540681580195,
+          286405604275714871,
+          7626136721351764387,
+          2976498969916846438
         ],
         "question_id": "r3-train-semantic-001242-historical-prefix",
         "question_variants": {
@@ -370,11 +370,11 @@
           "paraphrase_3": "Which drink preference is currently stored for the amber mug train 001242?\nUse the memory image to answer.\nAnswer with a short phrase only.",
           "paraphrase_4": "Read the memory image and report the current drink preference of the amber mug train 001242.\nReturn only a short phrase."
         },
-        "style": "fresh_prefix_wording_1",
+        "style": "new_prefix_wording_1",
         "target_index": 3
       },
       {
-        "case": "fresh-target-03-style-2",
+        "case": "target-03-style-2",
         "event_semantics": [
           {
             "operation": "set",
@@ -385,13 +385,13 @@
             "value": "juice"
           }
         ],
-        "event_text": "Apply this new preference to the amber mug train 001242: coffee for drink, superseding the choice on record.\nApply this new preference to the amber mug train 001242: juice for drink, superseding the choice on record.",
+        "event_text": "Update the amber mug train 001242's remembered drink selection to coffee.\nUpdate the amber mug train 001242's remembered drink selection to juice.",
         "gold": "juice",
         "noise_seeds": [
-          7872857136079723235,
-          7009325151269770673,
-          2563559378496347928,
-          3849833505429761329
+          8542388652506169024,
+          5084171134845328557,
+          5630069417008125113,
+          3078577168251694860
         ],
         "question_id": "r3-train-semantic-001242-historical-prefix",
         "question_variants": {
@@ -401,24 +401,24 @@
           "paraphrase_3": "Which drink preference is currently stored for the amber mug train 001242?\nUse the memory image to answer.\nAnswer with a short phrase only.",
           "paraphrase_4": "Read the memory image and report the current drink preference of the amber mug train 001242.\nReturn only a short phrase."
         },
-        "style": "fresh_prefix_wording_2",
+        "style": "new_prefix_wording_2",
         "target_index": 3
       },
       {
-        "case": "fresh-target-04-style-0",
+        "case": "target-04-style-0",
         "event_semantics": [
           {
             "operation": "set",
             "value": "jazz"
           }
         ],
-        "event_text": "The willow desk train 000550 has selected jazz for music. Treat this as its latest preference.",
+        "event_text": "R3 Train Standard Templates 06: For the willow desk train 000550, remember that the preferred music is jazz.",
         "gold": "jazz",
         "noise_seeds": [
-          2505809796968154896,
-          2288099422779735050,
-          1981188662564264768,
-          6039618479099279988
+          8882005122748551107,
+          7947642109380673369,
+          4702399298402977319,
+          6538520336277400032
         ],
         "question_id": "r3-train-semantic-000550-historical-prefix",
         "question_variants": {
@@ -428,24 +428,24 @@
           "paraphrase_3": "Which music preference is currently stored for the willow desk train 000550?\nUse the memory image to answer.\nAnswer with a short phrase only.",
           "paraphrase_4": "Read the memory image and report the current music preference of the willow desk train 000550.\nReturn only a short phrase."
         },
-        "style": "fresh_prefix_wording_0",
+        "style": "original_prefix",
         "target_index": 4
       },
       {
-        "case": "fresh-target-04-style-1",
+        "case": "target-04-style-1",
         "event_semantics": [
           {
             "operation": "set",
             "value": "jazz"
           }
         ],
-        "event_text": "For the record, the willow desk train 000550's preferred music has changed to jazz; keep the latest value.",
+        "event_text": "For the willow desk train 000550, the music preference should now be jazz; store this choice.",
         "gold": "jazz",
         "noise_seeds": [
-          1232287109070870537,
-          9068186401621956808,
-          3287290835456620639,
-          5744950229709017524
+          2954597381029944975,
+          5879402501880824804,
+          1596402980917204660,
+          5692373069971586826
         ],
         "question_id": "r3-train-semantic-000550-historical-prefix",
         "question_variants": {
@@ -455,24 +455,24 @@
           "paraphrase_3": "Which music preference is currently stored for the willow desk train 000550?\nUse the memory image to answer.\nAnswer with a short phrase only.",
           "paraphrase_4": "Read the memory image and report the current music preference of the willow desk train 000550.\nReturn only a short phrase."
         },
-        "style": "fresh_prefix_wording_1",
+        "style": "new_prefix_wording_1",
         "target_index": 4
       },
       {
-        "case": "fresh-target-04-style-2",
+        "case": "target-04-style-2",
         "event_semantics": [
           {
             "operation": "set",
             "value": "jazz"
           }
         ],
-        "event_text": "Apply this new preference to the willow desk train 000550: jazz for music, superseding the choice on record.",
+        "event_text": "Update the willow desk train 000550's remembered music selection to jazz.",
         "gold": "jazz",
         "noise_seeds": [
-          6509304241085477258,
-          9033414120200509587,
-          1689159891170514160,
-          3939395665174684746
+          4773289308365824777,
+          1662500563369655578,
+          3285063925023301448,
+          4773873448313947711
         ],
         "question_id": "r3-train-semantic-000550-historical-prefix",
         "question_variants": {
@@ -482,24 +482,24 @@
           "paraphrase_3": "Which music preference is currently stored for the willow desk train 000550?\nUse the memory image to answer.\nAnswer with a short phrase only.",
           "paraphrase_4": "Read the memory image and report the current music preference of the willow desk train 000550.\nReturn only a short phrase."
         },
-        "style": "fresh_prefix_wording_2",
+        "style": "new_prefix_wording_2",
         "target_index": 4
       },
       {
-        "case": "fresh-target-05-style-0",
+        "case": "target-05-style-0",
         "event_semantics": [
           {
             "operation": "set",
             "value": "jazz"
           }
         ],
-        "event_text": "The indigo mug train 000190 has selected jazz for music. Treat this as its latest preference.",
+        "event_text": "R3 Train Standard Templates 30: For the indigo mug train 000190, remember that the preferred music is jazz.",
         "gold": "jazz",
         "noise_seeds": [
-          8996363710004761867,
-          3478324552219729772,
-          4382653423950906591,
-          4684871000241809774
+          8877452053844266979,
+          6869234269558025551,
+          8008951021378995358,
+          6128255047173949906
         ],
         "question_id": "r3-train-semantic-000190-historical-prefix",
         "question_variants": {
@@ -509,24 +509,24 @@
           "paraphrase_3": "Which music preference is currently stored for the indigo mug train 000190?\nUse the memory image to answer.\nAnswer with a short phrase only.",
           "paraphrase_4": "Read the memory image and report the current music preference of the indigo mug train 000190.\nReturn only a short phrase."
         },
-        "style": "fresh_prefix_wording_0",
+        "style": "original_prefix",
         "target_index": 5
       },
       {
-        "case": "fresh-target-05-style-1",
+        "case": "target-05-style-1",
         "event_semantics": [
           {
             "operation": "set",
             "value": "jazz"
           }
         ],
-        "event_text": "For the record, the indigo mug train 000190's preferred music has changed to jazz; keep the latest value.",
+        "event_text": "For the indigo mug train 000190, the music preference should now be jazz; store this choice.",
         "gold": "jazz",
         "noise_seeds": [
-          1457888425744746552,
-          2525387510533050638,
-          2176015525925676228,
-          3804020527792988302
+          6688206927661754500,
+          3900898623465209889,
+          3591726093921556476,
+          5473768961577666800
         ],
         "question_id": "r3-train-semantic-000190-historical-prefix",
         "question_variants": {
@@ -536,24 +536,24 @@
           "paraphrase_3": "Which music preference is currently stored for the indigo mug train 000190?\nUse the memory image to answer.\nAnswer with a short phrase only.",
           "paraphrase_4": "Read the memory image and report the current music preference of the indigo mug train 000190.\nReturn only a short phrase."
         },
-        "style": "fresh_prefix_wording_1",
+        "style": "new_prefix_wording_1",
         "target_index": 5
       },
       {
-        "case": "fresh-target-05-style-2",
+        "case": "target-05-style-2",
         "event_semantics": [
           {
             "operation": "set",
             "value": "jazz"
           }
         ],
-        "event_text": "Apply this new preference to the indigo mug train 000190: jazz for music, superseding the choice on record.",
+        "event_text": "Update the indigo mug train 000190's remembered music selection to jazz.",
         "gold": "jazz",
         "noise_seeds": [
-          5815098277018745019,
-          8644840352945608228,
-          8052403710037458537,
-          402181289688585667
+          9178311450134424712,
+          8039670857819986954,
+          1942667915685911652,
+          8103758309002425830
         ],
         "question_id": "r3-train-semantic-000190-historical-prefix",
         "question_variants": {
@@ -563,11 +563,11 @@
           "paraphrase_3": "Which music preference is currently stored for the indigo mug train 000190?\nUse the memory image to answer.\nAnswer with a short phrase only.",
           "paraphrase_4": "Read the memory image and report the current music preference of the indigo mug train 000190.\nReturn only a short phrase."
         },
-        "style": "fresh_prefix_wording_2",
+        "style": "new_prefix_wording_2",
         "target_index": 5
       },
       {
-        "case": "fresh-target-06-style-0",
+        "case": "target-06-style-0",
         "event_semantics": [
           {
             "operation": "set",
@@ -578,13 +578,13 @@
             "value": "linen"
           }
         ],
-        "event_text": "The silver lamp train 000608 has selected leather for material. Treat this as its latest preference.\nThe silver lamp train 000608 has selected linen for material. Treat this as its latest preference.",
+        "event_text": "R3 Train Standard Templates 00: Save leather as the current material preference for the silver lamp train 000608.\nR3 Train Standard Templates 00: Save linen as the current material preference for the silver lamp train 000608.",
         "gold": "linen",
         "noise_seeds": [
-          181294217874019958,
-          366449643616967090,
-          2775102266767365702,
-          5976108260191554933
+          7743899008798009156,
+          5220245308268853904,
+          4852712909480786430,
+          3696963961617429231
         ],
         "question_id": "r3-train-semantic-000608-historical-prefix",
         "question_variants": {
@@ -594,11 +594,11 @@
           "paraphrase_3": "Which material preference is currently stored for the silver lamp train 000608?\nUse the memory image to answer.\nAnswer with a short phrase only.",
           "paraphrase_4": "Read the memory image and report the current material preference of the silver lamp train 000608.\nReturn only a short phrase."
         },
-        "style": "fresh_prefix_wording_0",
+        "style": "original_prefix",
         "target_index": 6
       },
       {
-        "case": "fresh-target-06-style-1",
+        "case": "target-06-style-1",
         "event_semantics": [
           {
             "operation": "set",
@@ -609,13 +609,13 @@
             "value": "linen"
           }
         ],
-        "event_text": "For the record, the silver lamp train 000608's preferred material has changed to leather; keep the latest value.\nFor the record, the silver lamp train 000608's preferred material has changed to linen; keep the latest value.",
+        "event_text": "For the silver lamp train 000608, the material preference should now be leather; store this choice.\nFor the silver lamp train 000608, the material preference should now be linen; store this choice.",
         "gold": "linen",
         "noise_seeds": [
-          3755288933242449476,
-          2520227575209196886,
-          7513819357410401027,
-          4857695008880134951
+          1389915265308043186,
+          4861986870928108616,
+          7440431639903043294,
+          6380192283596278048
         ],
         "question_id": "r3-train-semantic-000608-historical-prefix",
         "question_variants": {
@@ -625,11 +625,11 @@
           "paraphrase_3": "Which material preference is currently stored for the silver lamp train 000608?\nUse the memory image to answer.\nAnswer with a short phrase only.",
           "paraphrase_4": "Read the memory image and report the current material preference of the silver lamp train 000608.\nReturn only a short phrase."
         },
-        "style": "fresh_prefix_wording_1",
+        "style": "new_prefix_wording_1",
         "target_index": 6
       },
       {
-        "case": "fresh-target-06-style-2",
+        "case": "target-06-style-2",
         "event_semantics": [
           {
             "operation": "set",
@@ -640,13 +640,13 @@
             "value": "linen"
           }
         ],
-        "event_text": "Apply this new preference to the silver lamp train 000608: leather for material, superseding the choice on record.\nApply this new preference to the silver lamp train 000608: linen for material, superseding the choice on record.",
+        "event_text": "Update the silver lamp train 000608's remembered material selection to leather.\nUpdate the silver lamp train 000608's remembered material selection to linen.",
         "gold": "linen",
         "noise_seeds": [
-          4502471706630100278,
-          3234705716771990708,
-          8434445142721052882,
-          1238182798946386623
+          3951880056937290575,
+          5611305991265370671,
+          6098040404486887707,
+          5150980452394629746
         ],
         "question_id": "r3-train-semantic-000608-historical-prefix",
         "question_variants": {
@@ -656,11 +656,11 @@
           "paraphrase_3": "Which material preference is currently stored for the silver lamp train 000608?\nUse the memory image to answer.\nAnswer with a short phrase only.",
           "paraphrase_4": "Read the memory image and report the current material preference of the silver lamp train 000608.\nReturn only a short phrase."
         },
-        "style": "fresh_prefix_wording_2",
+        "style": "new_prefix_wording_2",
         "target_index": 6
       },
       {
-        "case": "fresh-target-07-style-0",
+        "case": "target-07-style-0",
         "event_semantics": [
           {
             "operation": "set",
@@ -671,13 +671,13 @@
             "value": "linen"
           }
         ],
-        "event_text": "The amber room train 000613 has selected ceramic for material. Treat this as its latest preference.\nThe amber room train 000613 has selected linen for material. Treat this as its latest preference.",
+        "event_text": "R3 Train Standard Templates 05: Save ceramic as the current material preference for the amber room train 000613.\nR3 Train Standard Templates 05: The material preference for the amber room train 000613 is now linen, not the previous value.",
         "gold": "linen",
         "noise_seeds": [
-          3353811177850577696,
-          582019369708006189,
-          7334356239767295114,
-          4959299877290451665
+          7424182662227142916,
+          4912433295898042983,
+          6015717753694673291,
+          7516295001790076500
         ],
         "question_id": "r3-train-semantic-000613-historical-prefix",
         "question_variants": {
@@ -687,11 +687,11 @@
           "paraphrase_3": "Which material preference is currently stored for the amber room train 000613?\nUse the memory image to answer.\nAnswer with a short phrase only.",
           "paraphrase_4": "Read the memory image and report the current material preference of the amber room train 000613.\nReturn only a short phrase."
         },
-        "style": "fresh_prefix_wording_0",
+        "style": "original_prefix",
         "target_index": 7
       },
       {
-        "case": "fresh-target-07-style-1",
+        "case": "target-07-style-1",
         "event_semantics": [
           {
             "operation": "set",
@@ -702,13 +702,13 @@
             "value": "linen"
           }
         ],
-        "event_text": "For the record, the amber room train 000613's preferred material has changed to ceramic; keep the latest value.\nFor the record, the amber room train 000613's preferred material has changed to linen; keep the latest value.",
+        "event_text": "For the amber room train 000613, the material preference should now be ceramic; store this choice.\nFor the amber room train 000613, the material preference should now be linen; store this choice.",
         "gold": "linen",
         "noise_seeds": [
-          4551781668731946627,
-          4357818822892743657,
-          4625983186560757588,
-          559558578674145589
+          6836835068916011615,
+          7505448821024031605,
+          9033008461507891438,
+          7050454722738122121
         ],
         "question_id": "r3-train-semantic-000613-historical-prefix",
         "question_variants": {
@@ -718,11 +718,11 @@
           "paraphrase_3": "Which material preference is currently stored for the amber room train 000613?\nUse the memory image to answer.\nAnswer with a short phrase only.",
           "paraphrase_4": "Read the memory image and report the current material preference of the amber room train 000613.\nReturn only a short phrase."
         },
-        "style": "fresh_prefix_wording_1",
+        "style": "new_prefix_wording_1",
         "target_index": 7
       },
       {
-        "case": "fresh-target-07-style-2",
+        "case": "target-07-style-2",
         "event_semantics": [
           {
             "operation": "set",
@@ -733,13 +733,13 @@
             "value": "linen"
           }
         ],
-        "event_text": "Apply this new preference to the amber room train 000613: ceramic for material, superseding the choice on record.\nApply this new preference to the amber room train 000613: linen for material, superseding the choice on record.",
+        "event_text": "Update the amber room train 000613's remembered material selection to ceramic.\nUpdate the amber room train 000613's remembered material selection to linen.",
         "gold": "linen",
         "noise_seeds": [
-          7777812308345645201,
-          6941432255120881945,
-          5574883508681771388,
-          2864075462688748224
+          3283788342636842421,
+          2914261388674378473,
+          5354529393904260425,
+          5358646128229929945
         ],
         "question_id": "r3-train-semantic-000613-historical-prefix",
         "question_variants": {
@@ -749,11 +749,11 @@
           "paraphrase_3": "Which material preference is currently stored for the amber room train 000613?\nUse the memory image to answer.\nAnswer with a short phrase only.",
           "paraphrase_4": "Read the memory image and report the current material preference of the amber room train 000613.\nReturn only a short phrase."
         },
-        "style": "fresh_prefix_wording_2",
+        "style": "new_prefix_wording_2",
         "target_index": 7
       },
       {
-        "case": "fresh-target-08-style-0",
+        "case": "target-08-style-0",
         "event_semantics": [
           {
             "operation": "set",
@@ -764,13 +764,13 @@
             "value": "pasta"
           }
         ],
-        "event_text": "The indigo lamp train 000327 has selected rice for meal. Treat this as its latest preference.\nThe indigo lamp train 000327 has selected pasta for meal. Treat this as its latest preference.",
+        "event_text": "R3 Train Standard Templates 07: For the indigo lamp train 000327, remember that the preferred meal is rice.\nR3 Train Standard Templates 07: Replace the earlier meal preference for the indigo lamp train 000327 with pasta.",
         "gold": "pasta",
         "noise_seeds": [
-          3496497718088446768,
-          7291148868827659871,
-          2604359910690233999,
-          1778205388721091735
+          4994005441987793682,
+          2366465547082202900,
+          736855449138103894,
+          9017108710626117508
         ],
         "question_id": "r3-train-semantic-000327-historical-prefix",
         "question_variants": {
@@ -780,11 +780,11 @@
           "paraphrase_3": "Which meal preference is currently stored for the indigo lamp train 000327?\nUse the memory image to answer.\nAnswer with a short phrase only.",
           "paraphrase_4": "Read the memory image and report the current meal preference of the indigo lamp train 000327.\nReturn only a short phrase."
         },
-        "style": "fresh_prefix_wording_0",
+        "style": "original_prefix",
         "target_index": 8
       },
       {
-        "case": "fresh-target-08-style-1",
+        "case": "target-08-style-1",
         "event_semantics": [
           {
             "operation": "set",
@@ -795,13 +795,13 @@
             "value": "pasta"
           }
         ],
-        "event_text": "For the record, the indigo lamp train 000327's preferred meal has changed to rice; keep the latest value.\nFor the record, the indigo lamp train 000327's preferred meal has changed to pasta; keep the latest value.",
+        "event_text": "For the indigo lamp train 000327, the meal preference should now be rice; store this choice.\nFor the indigo lamp train 000327, the meal preference should now be pasta; store this choice.",
         "gold": "pasta",
         "noise_seeds": [
-          5709704701896592281,
-          8821280141797347612,
-          2050432033756907576,
-          2954115806246718241
+          6841161748590438706,
+          7977475170570503502,
+          8067099657930443368,
+          6999030551197509193
         ],
         "question_id": "r3-train-semantic-000327-historical-prefix",
         "question_variants": {
@@ -811,11 +811,11 @@
           "paraphrase_3": "Which meal preference is currently stored for the indigo lamp train 000327?\nUse the memory image to answer.\nAnswer with a short phrase only.",
           "paraphrase_4": "Read the memory image and report the current meal preference of the indigo lamp train 000327.\nReturn only a short phrase."
         },
-        "style": "fresh_prefix_wording_1",
+        "style": "new_prefix_wording_1",
         "target_index": 8
       },
       {
-        "case": "fresh-target-08-style-2",
+        "case": "target-08-style-2",
         "event_semantics": [
           {
             "operation": "set",
@@ -826,13 +826,13 @@
             "value": "pasta"
           }
         ],
-        "event_text": "Apply this new preference to the indigo lamp train 000327: rice for meal, superseding the choice on record.\nApply this new preference to the indigo lamp train 000327: pasta for meal, superseding the choice on record.",
+        "event_text": "Update the indigo lamp train 000327's remembered meal selection to rice.\nUpdate the indigo lamp train 000327's remembered meal selection to pasta.",
         "gold": "pasta",
         "noise_seeds": [
-          5603127830387795833,
-          5589083933405419463,
-          4587963903603074931,
-          2019735452057513175
+          3219866788110842653,
+          1393780094968615907,
+          6456106771974599897,
+          6678473343026269286
         ],
         "question_id": "r3-train-semantic-000327-historical-prefix",
         "question_variants": {
@@ -842,24 +842,24 @@
           "paraphrase_3": "Which meal preference is currently stored for the indigo lamp train 000327?\nUse the memory image to answer.\nAnswer with a short phrase only.",
           "paraphrase_4": "Read the memory image and report the current meal preference of the indigo lamp train 000327.\nReturn only a short phrase."
         },
-        "style": "fresh_prefix_wording_2",
+        "style": "new_prefix_wording_2",
         "target_index": 8
       },
       {
-        "case": "fresh-target-09-style-0",
+        "case": "target-09-style-0",
         "event_semantics": [
           {
             "operation": "set",
             "value": "pasta"
           }
         ],
-        "event_text": "The silver mug train 000147 has selected pasta for meal. Treat this as its latest preference.",
+        "event_text": "R3 Train Standard Templates 19: Save pasta as the current meal preference for the silver mug train 000147.",
         "gold": "pasta",
         "noise_seeds": [
-          8592743078144438448,
-          6148391264407331143,
-          3082528882664255997,
-          8953063386352301506
+          6475239921375204260,
+          4862477295300437577,
+          6532221702590257990,
+          33826613697601427
         ],
         "question_id": "r3-train-semantic-000147-historical-prefix",
         "question_variants": {
@@ -869,24 +869,24 @@
           "paraphrase_3": "Which meal preference is currently stored for the silver mug train 000147?\nUse the memory image to answer.\nAnswer with a short phrase only.",
           "paraphrase_4": "Read the memory image and report the current meal preference of the silver mug train 000147.\nReturn only a short phrase."
         },
-        "style": "fresh_prefix_wording_0",
+        "style": "original_prefix",
         "target_index": 9
       },
       {
-        "case": "fresh-target-09-style-1",
+        "case": "target-09-style-1",
         "event_semantics": [
           {
             "operation": "set",
             "value": "pasta"
           }
         ],
-        "event_text": "For the record, the silver mug train 000147's preferred meal has changed to pasta; keep the latest value.",
+        "event_text": "For the silver mug train 000147, the meal preference should now be pasta; store this choice.",
         "gold": "pasta",
         "noise_seeds": [
-          9123569052121993396,
-          7899795730114070912,
-          4773353260063142575,
-          3025451567419743503
+          1870289389953477854,
+          5988068282612295703,
+          7592718987118716173,
+          4816049884634528638
         ],
         "question_id": "r3-train-semantic-000147-historical-prefix",
         "question_variants": {
@@ -896,24 +896,24 @@
           "paraphrase_3": "Which meal preference is currently stored for the silver mug train 000147?\nUse the memory image to answer.\nAnswer with a short phrase only.",
           "paraphrase_4": "Read the memory image and report the current meal preference of the silver mug train 000147.\nReturn only a short phrase."
         },
-        "style": "fresh_prefix_wording_1",
+        "style": "new_prefix_wording_1",
         "target_index": 9
       },
       {
-        "case": "fresh-target-09-style-2",
+        "case": "target-09-style-2",
         "event_semantics": [
           {
             "operation": "set",
             "value": "pasta"
           }
         ],
-        "event_text": "Apply this new preference to the silver mug train 000147: pasta for meal, superseding the choice on record.",
+        "event_text": "Update the silver mug train 000147's remembered meal selection to pasta.",
         "gold": "pasta",
         "noise_seeds": [
-          8201746938106222316,
-          1963591234763397393,
-          4159721555508410475,
-          80630270201116055
+          3957797329440374500,
+          3957930301817737123,
+          7851939823573170390,
+          8980789240689562650
         ],
         "question_id": "r3-train-semantic-000147-historical-prefix",
         "question_variants": {
@@ -923,11 +923,11 @@
           "paraphrase_3": "Which meal preference is currently stored for the silver mug train 000147?\nUse the memory image to answer.\nAnswer with a short phrase only.",
           "paraphrase_4": "Read the memory image and report the current meal preference of the silver mug train 000147.\nReturn only a short phrase."
         },
-        "style": "fresh_prefix_wording_2",
+        "style": "new_prefix_wording_2",
         "target_index": 9
       },
       {
-        "case": "fresh-target-10-style-0",
+        "case": "target-10-style-0",
         "event_semantics": [
           {
             "operation": "set",
@@ -938,13 +938,13 @@
             "value": "no active preference"
           }
         ],
-        "event_text": "The marble backpack train 000986 has selected yellow for color. Treat this as its latest preference.\nWithdraw the marble backpack train 000986's color choice entirely, leaving no preferred option on record.",
+        "event_text": "R3 Train Standard Templates 26: Save yellow as the current color preference for the marble backpack train 000986.\nR3 Train Standard Templates 26: Forget the current color choice for the marble backpack train 000986; none is active now.",
         "gold": "no active preference",
         "noise_seeds": [
-          8315055500441376528,
-          8043945183516245407,
-          2612956754583167013,
-          2743480714643216288
+          64633772372416732,
+          9107959842513114893,
+          6086474147122237452,
+          3411071501844800408
         ],
         "question_id": "r3-train-semantic-000986-historical-prefix",
         "question_variants": {
@@ -954,11 +954,11 @@
           "paraphrase_3": "Which color preference is currently stored for the marble backpack train 000986?\nUse the memory image to answer.\nAnswer with a short phrase only.",
           "paraphrase_4": "Read the memory image and report the current color preference of the marble backpack train 000986.\nReturn only a short phrase."
         },
-        "style": "fresh_prefix_wording_0",
+        "style": "original_prefix",
         "target_index": 10
       },
       {
-        "case": "fresh-target-10-style-1",
+        "case": "target-10-style-1",
         "event_semantics": [
           {
             "operation": "set",
@@ -969,13 +969,13 @@
             "value": "no active preference"
           }
         ],
-        "event_text": "For the record, the marble backpack train 000986's preferred color has changed to yellow; keep the latest value.\nThe marble backpack train 000986 has opted out of its color preference. Remove the remembered selection.",
+        "event_text": "For the marble backpack train 000986, the color preference should now be yellow; store this choice.\nRemove the saved color selection for the marble backpack train 000986.",
         "gold": "no active preference",
         "noise_seeds": [
-          1487350776209860069,
-          5279215530335659551,
-          2682006819399465049,
-          4852922601712429848
+          7424008590895103140,
+          3315545308530153634,
+          251517042018027416,
+          9145712172758417285
         ],
         "question_id": "r3-train-semantic-000986-historical-prefix",
         "question_variants": {
@@ -985,11 +985,11 @@
           "paraphrase_3": "Which color preference is currently stored for the marble backpack train 000986?\nUse the memory image to answer.\nAnswer with a short phrase only.",
           "paraphrase_4": "Read the memory image and report the current color preference of the marble backpack train 000986.\nReturn only a short phrase."
         },
-        "style": "fresh_prefix_wording_1",
+        "style": "new_prefix_wording_1",
         "target_index": 10
       },
       {
-        "case": "fresh-target-10-style-2",
+        "case": "target-10-style-2",
         "event_semantics": [
           {
             "operation": "set",
@@ -1000,13 +1000,13 @@
             "value": "no active preference"
           }
         ],
-        "event_text": "Apply this new preference to the marble backpack train 000986: yellow for color, superseding the choice on record.\nThere should be no preferred color assigned to the marble backpack train 000986 anymore; discard the saved value.",
+        "event_text": "Update the marble backpack train 000986's remembered color selection to yellow.\nThere is no longer an active color choice for the marble backpack train 000986; erase it.",
         "gold": "no active preference",
         "noise_seeds": [
-          3223047560853017592,
-          2830934566675130730,
-          96810067452976869,
-          424462343384871777
+          7573935891125429377,
+          6824266761776361041,
+          8548428811282236318,
+          5070474284961524500
         ],
         "question_id": "r3-train-semantic-000986-historical-prefix",
         "question_variants": {
@@ -1016,11 +1016,11 @@
           "paraphrase_3": "Which color preference is currently stored for the marble backpack train 000986?\nUse the memory image to answer.\nAnswer with a short phrase only.",
           "paraphrase_4": "Read the memory image and report the current color preference of the marble backpack train 000986.\nReturn only a short phrase."
         },
-        "style": "fresh_prefix_wording_2",
+        "style": "new_prefix_wording_2",
         "target_index": 10
       },
       {
-        "case": "fresh-target-11-style-0",
+        "case": "target-11-style-0",
         "event_semantics": [
           {
             "operation": "set",
@@ -1031,13 +1031,13 @@
             "value": "no active preference"
           }
         ],
-        "event_text": "The linen notebook train 000024 has selected yellow for color. Treat this as its latest preference.\nWithdraw the linen notebook train 000024's color choice entirely, leaving no preferred option on record.",
+        "event_text": "R3 Train Standard Templates 24: For the linen notebook train 000024, remember that the preferred color is yellow.\nR3 Train Standard Templates 24: Clear the saved color preference for the linen notebook train 000024.",
         "gold": "no active preference",
         "noise_seeds": [
-          7107609137290527482,
-          7433933195151861229,
-          8123248116295145010,
-          3163445320959515429
+          7280513467197773961,
+          17144480071006649,
+          5455725344477910934,
+          7949221576238470436
         ],
         "question_id": "r3-train-semantic-000024-historical-prefix",
         "question_variants": {
@@ -1047,11 +1047,11 @@
           "paraphrase_3": "Which color preference is currently stored for the linen notebook train 000024?\nUse the memory image to answer.\nAnswer with a short phrase only.",
           "paraphrase_4": "Read the memory image and report the current color preference of the linen notebook train 000024.\nReturn only a short phrase."
         },
-        "style": "fresh_prefix_wording_0",
+        "style": "original_prefix",
         "target_index": 11
       },
       {
-        "case": "fresh-target-11-style-1",
+        "case": "target-11-style-1",
         "event_semantics": [
           {
             "operation": "set",
@@ -1062,13 +1062,13 @@
             "value": "no active preference"
           }
         ],
-        "event_text": "For the record, the linen notebook train 000024's preferred color has changed to yellow; keep the latest value.\nThe linen notebook train 000024 has opted out of its color preference. Remove the remembered selection.",
+        "event_text": "For the linen notebook train 000024, the color preference should now be yellow; store this choice.\nRemove the saved color selection for the linen notebook train 000024.",
         "gold": "no active preference",
         "noise_seeds": [
-          8401751017650744209,
-          5259026449996661243,
-          8217005268902156346,
-          2801897866378026061
+          8745108635323291970,
+          237838325970744463,
+          32460910130281655,
+          1051740632816554210
         ],
         "question_id": "r3-train-semantic-000024-historical-prefix",
         "question_variants": {
@@ -1078,11 +1078,11 @@
           "paraphrase_3": "Which color preference is currently stored for the linen notebook train 000024?\nUse the memory image to answer.\nAnswer with a short phrase only.",
           "paraphrase_4": "Read the memory image and report the current color preference of the linen notebook train 000024.\nReturn only a short phrase."
         },
-        "style": "fresh_prefix_wording_1",
+        "style": "new_prefix_wording_1",
         "target_index": 11
       },
       {
-        "case": "fresh-target-11-style-2",
+        "case": "target-11-style-2",
         "event_semantics": [
           {
             "operation": "set",
@@ -1093,13 +1093,13 @@
             "value": "no active preference"
           }
         ],
-        "event_text": "Apply this new preference to the linen notebook train 000024: yellow for color, superseding the choice on record.\nThere should be no preferred color assigned to the linen notebook train 000024 anymore; discard the saved value.",
+        "event_text": "Update the linen notebook train 000024's remembered color selection to yellow.\nThere is no longer an active color choice for the linen notebook train 000024; erase it.",
         "gold": "no active preference",
         "noise_seeds": [
-          1867516337357048987,
-          4352211642092482472,
-          8849777137860061101,
-          4169484727153697726
+          6210487675149675502,
+          3286251738318969402,
+          2804252740760157815,
+          4170697874913344682
         ],
         "question_id": "r3-train-semantic-000024-historical-prefix",
         "question_variants": {
@@ -1109,11 +1109,11 @@
           "paraphrase_3": "Which color preference is currently stored for the linen notebook train 000024?\nUse the memory image to answer.\nAnswer with a short phrase only.",
           "paraphrase_4": "Read the memory image and report the current color preference of the linen notebook train 000024.\nReturn only a short phrase."
         },
-        "style": "fresh_prefix_wording_2",
+        "style": "new_prefix_wording_2",
         "target_index": 11
       },
       {
-        "case": "fresh-target-12-style-0",
+        "case": "target-12-style-0",
         "event_semantics": [
           {
             "operation": "set",
@@ -1124,13 +1124,13 @@
             "value": "no active preference"
           }
         ],
-        "event_text": "The copper backpack train 001048 has selected cocoa for drink. Treat this as its latest preference.\nWithdraw the copper backpack train 001048's drink choice entirely, leaving no preferred option on record.",
+        "event_text": "R3 Train Standard Templates 24: Save cocoa as the current drink preference for the copper backpack train 001048.\nR3 Train Standard Templates 24: Forget the current drink choice for the copper backpack train 001048; none is active now.",
         "gold": "no active preference",
         "noise_seeds": [
-          3260760360322569426,
-          7406180164666046857,
-          3924727816136818823,
-          5649105944502189878
+          7763337024245094821,
+          4333565846436080917,
+          9065808306755008928,
+          6162813254933766367
         ],
         "question_id": "r3-train-semantic-001048-historical-prefix",
         "question_variants": {
@@ -1140,11 +1140,11 @@
           "paraphrase_3": "Which drink preference is currently stored for the copper backpack train 001048?\nUse the memory image to answer.\nAnswer with a short phrase only.",
           "paraphrase_4": "Read the memory image and report the current drink preference of the copper backpack train 001048.\nReturn only a short phrase."
         },
-        "style": "fresh_prefix_wording_0",
+        "style": "original_prefix",
         "target_index": 12
       },
       {
-        "case": "fresh-target-12-style-1",
+        "case": "target-12-style-1",
         "event_semantics": [
           {
             "operation": "set",
@@ -1155,13 +1155,13 @@
             "value": "no active preference"
           }
         ],
-        "event_text": "For the record, the copper backpack train 001048's preferred drink has changed to cocoa; keep the latest value.\nThe copper backpack train 001048 has opted out of its drink preference. Remove the remembered selection.",
+        "event_text": "For the copper backpack train 001048, the drink preference should now be cocoa; store this choice.\nRemove the saved drink selection for the copper backpack train 001048.",
         "gold": "no active preference",
         "noise_seeds": [
-          2431844941034232537,
-          3322145615360281089,
-          6495081927282220474,
-          690894690898683929
+          8456063936901837480,
+          5231337955375525130,
+          2480785483489885314,
+          5886783617053937214
         ],
         "question_id": "r3-train-semantic-001048-historical-prefix",
         "question_variants": {
@@ -1171,11 +1171,11 @@
           "paraphrase_3": "Which drink preference is currently stored for the copper backpack train 001048?\nUse the memory image to answer.\nAnswer with a short phrase only.",
           "paraphrase_4": "Read the memory image and report the current drink preference of the copper backpack train 001048.\nReturn only a short phrase."
         },
-        "style": "fresh_prefix_wording_1",
+        "style": "new_prefix_wording_1",
         "target_index": 12
       },
       {
-        "case": "fresh-target-12-style-2",
+        "case": "target-12-style-2",
         "event_semantics": [
           {
             "operation": "set",
@@ -1186,13 +1186,13 @@
             "value": "no active preference"
           }
         ],
-        "event_text": "Apply this new preference to the copper backpack train 001048: cocoa for drink, superseding the choice on record.\nThere should be no preferred drink assigned to the copper backpack train 001048 anymore; discard the saved value.",
+        "event_text": "Update the copper backpack train 001048's remembered drink selection to cocoa.\nThere is no longer an active drink choice for the copper backpack train 001048; erase it.",
         "gold": "no active preference",
         "noise_seeds": [
-          3968174763289327814,
-          3122699840969031158,
-          1007054450897883816,
-          2745774378635964928
+          6061607067060356355,
+          6359456755209289512,
+          7592586429538749020,
+          2225175876732475028
         ],
         "question_id": "r3-train-semantic-001048-historical-prefix",
         "question_variants": {
@@ -1202,11 +1202,11 @@
           "paraphrase_3": "Which drink preference is currently stored for the copper backpack train 001048?\nUse the memory image to answer.\nAnswer with a short phrase only.",
           "paraphrase_4": "Read the memory image and report the current drink preference of the copper backpack train 001048.\nReturn only a short phrase."
         },
-        "style": "fresh_prefix_wording_2",
+        "style": "new_prefix_wording_2",
         "target_index": 12
       },
       {
-        "case": "fresh-target-13-style-0",
+        "case": "target-13-style-0",
         "event_semantics": [
           {
             "operation": "set",
@@ -1217,13 +1217,13 @@
             "value": "no active preference"
           }
         ],
-        "event_text": "The willow chair train 001224 has selected coffee for drink. Treat this as its latest preference.\nWithdraw the willow chair train 001224's drink choice entirely, leaving no preferred option on record.",
+        "event_text": "R3 Train Standard Templates 08: For the willow chair train 001224, remember that the preferred drink is coffee.\nR3 Train Standard Templates 08: Clear the saved drink preference for the willow chair train 001224.",
         "gold": "no active preference",
         "noise_seeds": [
-          4596418113395466067,
-          6178721368984384604,
-          5321135142747807195,
-          4875107168894893084
+          381078271618350909,
+          3681585040741763313,
+          3603069522077057095,
+          5741795124608185126
         ],
         "question_id": "r3-train-semantic-001224-historical-prefix",
         "question_variants": {
@@ -1233,11 +1233,11 @@
           "paraphrase_3": "Which drink preference is currently stored for the willow chair train 001224?\nUse the memory image to answer.\nAnswer with a short phrase only.",
           "paraphrase_4": "Read the memory image and report the current drink preference of the willow chair train 001224.\nReturn only a short phrase."
         },
-        "style": "fresh_prefix_wording_0",
+        "style": "original_prefix",
         "target_index": 13
       },
       {
-        "case": "fresh-target-13-style-1",
+        "case": "target-13-style-1",
         "event_semantics": [
           {
             "operation": "set",
@@ -1248,13 +1248,13 @@
             "value": "no active preference"
           }
         ],
-        "event_text": "For the record, the willow chair train 001224's preferred drink has changed to coffee; keep the latest value.\nThe willow chair train 001224 has opted out of its drink preference. Remove the remembered selection.",
+        "event_text": "For the willow chair train 001224, the drink preference should now be coffee; store this choice.\nRemove the saved drink selection for the willow chair train 001224.",
         "gold": "no active preference",
         "noise_seeds": [
-          6493808888798674444,
-          2301346761949199399,
-          4942942939568696096,
-          7582897642527194182
+          4808896038644482958,
+          1673819897018651426,
+          7522815731648366316,
+          4088837432171581528
         ],
         "question_id": "r3-train-semantic-001224-historical-prefix",
         "question_variants": {
@@ -1264,11 +1264,11 @@
           "paraphrase_3": "Which drink preference is currently stored for the willow chair train 001224?\nUse the memory image to answer.\nAnswer with a short phrase only.",
           "paraphrase_4": "Read the memory image and report the current drink preference of the willow chair train 001224.\nReturn only a short phrase."
         },
-        "style": "fresh_prefix_wording_1",
+        "style": "new_prefix_wording_1",
         "target_index": 13
       },
       {
-        "case": "fresh-target-13-style-2",
+        "case": "target-13-style-2",
         "event_semantics": [
           {
             "operation": "set",
@@ -1279,13 +1279,13 @@
             "value": "no active preference"
           }
         ],
-        "event_text": "Apply this new preference to the willow chair train 001224: coffee for drink, superseding the choice on record.\nThere should be no preferred drink assigned to the willow chair train 001224 anymore; discard the saved value.",
+        "event_text": "Update the willow chair train 001224's remembered drink selection to coffee.\nThere is no longer an active drink choice for the willow chair train 001224; erase it.",
         "gold": "no active preference",
         "noise_seeds": [
-          3543579409584880596,
-          8217022860040045221,
-          3874891164218177850,
-          8347259464669166944
+          4366357182025633464,
+          465827664820160288,
+          3882394047147028863,
+          4612588067515574571
         ],
         "question_id": "r3-train-semantic-001224-historical-prefix",
         "question_variants": {
@@ -1295,11 +1295,11 @@
           "paraphrase_3": "Which drink preference is currently stored for the willow chair train 001224?\nUse the memory image to answer.\nAnswer with a short phrase only.",
           "paraphrase_4": "Read the memory image and report the current drink preference of the willow chair train 001224.\nReturn only a short phrase."
         },
-        "style": "fresh_prefix_wording_2",
+        "style": "new_prefix_wording_2",
         "target_index": 13
       },
       {
-        "case": "fresh-target-14-style-0",
+        "case": "target-14-style-0",
         "event_semantics": [
           {
             "operation": "set",
@@ -1310,13 +1310,13 @@
             "value": "no active preference"
           }
         ],
-        "event_text": "The linen room train 000250 has selected glass for material. Treat this as its latest preference.\nWithdraw the linen room train 000250's material choice entirely, leaving no preferred option on record.",
+        "event_text": "R3 Train Standard Templates 26: For the linen room train 000250, remember that the preferred material is glass.\nR3 Train Standard Templates 26: Clear the saved material preference for the linen room train 000250.",
         "gold": "no active preference",
         "noise_seeds": [
-          1302174014426712820,
-          7005379710361251599,
-          3510741788342063044,
-          8869341435534274688
+          881356333640676228,
+          2369350426408877246,
+          8735902547810589191,
+          4602882341593393549
         ],
         "question_id": "r3-train-semantic-000250-historical-prefix",
         "question_variants": {
@@ -1326,11 +1326,11 @@
           "paraphrase_3": "Which material preference is currently stored for the linen room train 000250?\nUse the memory image to answer.\nAnswer with a short phrase only.",
           "paraphrase_4": "Read the memory image and report the current material preference of the linen room train 000250.\nReturn only a short phrase."
         },
-        "style": "fresh_prefix_wording_0",
+        "style": "original_prefix",
         "target_index": 14
       },
       {
-        "case": "fresh-target-14-style-1",
+        "case": "target-14-style-1",
         "event_semantics": [
           {
             "operation": "set",
@@ -1341,13 +1341,13 @@
             "value": "no active preference"
           }
         ],
-        "event_text": "For the record, the linen room train 000250's preferred material has changed to glass; keep the latest value.\nThe linen room train 000250 has opted out of its material preference. Remove the remembered selection.",
+        "event_text": "For the linen room train 000250, the material preference should now be glass; store this choice.\nRemove the saved material selection for the linen room train 000250.",
         "gold": "no active preference",
         "noise_seeds": [
-          1441088155731128889,
-          1712011822222670732,
-          2898235716240026610,
-          8394041036282487221
+          6263287873550722550,
+          8200403415861503982,
+          5234149041532057404,
+          1230503619117441584
         ],
         "question_id": "r3-train-semantic-000250-historical-prefix",
         "question_variants": {
@@ -1357,11 +1357,11 @@
           "paraphrase_3": "Which material preference is currently stored for the linen room train 000250?\nUse the memory image to answer.\nAnswer with a short phrase only.",
           "paraphrase_4": "Read the memory image and report the current material preference of the linen room train 000250.\nReturn only a short phrase."
         },
-        "style": "fresh_prefix_wording_1",
+        "style": "new_prefix_wording_1",
         "target_index": 14
       },
       {
-        "case": "fresh-target-14-style-2",
+        "case": "target-14-style-2",
         "event_semantics": [
           {
             "operation": "set",
@@ -1372,13 +1372,13 @@
             "value": "no active preference"
           }
         ],
-        "event_text": "Apply this new preference to the linen room train 000250: glass for material, superseding the choice on record.\nThere should be no preferred material assigned to the linen room train 000250 anymore; discard the saved value.",
+        "event_text": "Update the linen room train 000250's remembered material selection to glass.\nThere is no longer an active material choice for the linen room train 000250; erase it.",
         "gold": "no active preference",
         "noise_seeds": [
-          1247395305664721707,
-          8600099699029817059,
-          6800510449539852942,
-          1722627933973616106
+          4280967919119649816,
+          5933106544171294387,
+          9203651546543752210,
+          6765795456116750007
         ],
         "question_id": "r3-train-semantic-000250-historical-prefix",
         "question_variants": {
@@ -1388,11 +1388,11 @@
           "paraphrase_3": "Which material preference is currently stored for the linen room train 000250?\nUse the memory image to answer.\nAnswer with a short phrase only.",
           "paraphrase_4": "Read the memory image and report the current material preference of the linen room train 000250.\nReturn only a short phrase."
         },
-        "style": "fresh_prefix_wording_2",
+        "style": "new_prefix_wording_2",
         "target_index": 14
       },
       {
-        "case": "fresh-target-15-style-0",
+        "case": "target-15-style-0",
         "event_semantics": [
           {
             "operation": "set",
@@ -1403,13 +1403,13 @@
             "value": "no active preference"
           }
         ],
-        "event_text": "The amber backpack train 001209 has selected leather for material. Treat this as its latest preference.\nWithdraw the amber backpack train 001209's material choice entirely, leaving no preferred option on record.",
+        "event_text": "R3 Train Standard Templates 25: Save leather as the current material preference for the amber backpack train 001209.\nR3 Train Standard Templates 25: Forget the current material choice for the amber backpack train 001209; none is active now.",
         "gold": "no active preference",
         "noise_seeds": [
-          3787651913763899741,
-          661772837827078582,
-          1951767128403102419,
-          1367396883056634938
+          4070665315064148776,
+          328255247512428547,
+          3694629433341816412,
+          204950063980251774
         ],
         "question_id": "r3-train-semantic-001209-historical-prefix",
         "question_variants": {
@@ -1419,11 +1419,11 @@
           "paraphrase_3": "Which material preference is currently stored for the amber backpack train 001209?\nUse the memory image to answer.\nAnswer with a short phrase only.",
           "paraphrase_4": "Read the memory image and report the current material preference of the amber backpack train 001209.\nReturn only a short phrase."
         },
-        "style": "fresh_prefix_wording_0",
+        "style": "original_prefix",
         "target_index": 15
       },
       {
-        "case": "fresh-target-15-style-1",
+        "case": "target-15-style-1",
         "event_semantics": [
           {
             "operation": "set",
@@ -1434,13 +1434,13 @@
             "value": "no active preference"
           }
         ],
-        "event_text": "For the record, the amber backpack train 001209's preferred material has changed to leather; keep the latest value.\nThe amber backpack train 001209 has opted out of its material preference. Remove the remembered selection.",
+        "event_text": "For the amber backpack train 001209, the material preference should now be leather; store this choice.\nRemove the saved material selection for the amber backpack train 001209.",
         "gold": "no active preference",
         "noise_seeds": [
-          4687654740147611470,
-          4425512531289152375,
-          5378854295713177458,
-          8751220421742590047
+          7285559710199289427,
+          2247866434359223911,
+          9084504148911523334,
+          8285852148134113271
         ],
         "question_id": "r3-train-semantic-001209-historical-prefix",
         "question_variants": {
@@ -1450,11 +1450,11 @@
           "paraphrase_3": "Which material preference is currently stored for the amber backpack train 001209?\nUse the memory image to answer.\nAnswer with a short phrase only.",
           "paraphrase_4": "Read the memory image and report the current material preference of the amber backpack train 001209.\nReturn only a short phrase."
         },
-        "style": "fresh_prefix_wording_1",
+        "style": "new_prefix_wording_1",
         "target_index": 15
       },
       {
-        "case": "fresh-target-15-style-2",
+        "case": "target-15-style-2",
         "event_semantics": [
           {
             "operation": "set",
@@ -1465,13 +1465,13 @@
             "value": "no active preference"
           }
         ],
-        "event_text": "Apply this new preference to the amber backpack train 001209: leather for material, superseding the choice on record.\nThere should be no preferred material assigned to the amber backpack train 001209 anymore; discard the saved value.",
+        "event_text": "Update the amber backpack train 001209's remembered material selection to leather.\nThere is no longer an active material choice for the amber backpack train 001209; erase it.",
         "gold": "no active preference",
         "noise_seeds": [
-          161455938080279883,
-          1509454640969775525,
-          8048587207352977651,
-          1611740219824608557
+          2480374238827612324,
+          3814108011429491974,
+          2320806671819134190,
+          7761117281198963779
         ],
         "question_id": "r3-train-semantic-001209-historical-prefix",
         "question_variants": {
@@ -1481,7 +1481,7 @@
           "paraphrase_3": "Which material preference is currently stored for the amber backpack train 001209?\nUse the memory image to answer.\nAnswer with a short phrase only.",
           "paraphrase_4": "Read the memory image and report the current material preference of the amber backpack train 001209.\nReturn only a short phrase."
         },
-        "style": "fresh_prefix_wording_2",
+        "style": "new_prefix_wording_2",
         "target_index": 15
       }
     ],
@@ -1492,7 +1492,6 @@
   "reference_commit": "4fbc85725d78427235757ace2661d086b896a97f",
   "reference_phase": "trained",
   "reference_result_sha256": "2ee5290101c83f1b53088fba8ae294e5fb71cd42f223580eb588c7ad2001a605",
-  "reused_validation_plan_sha256": "ba77e8c2ab8742bdcda703ae12071b504ea99c33173d0ebad314ddc10292fb6b",
   "sampling": {
     "exact_draws_per_group": {
       "r3-train-semantic-000024-historical-prefix": 624,
@@ -2268,7 +2267,7 @@
     "policy": "historical-nine-expressions-v1",
     "selection_metadata_is_writer_input": false
   },
-  "training_commit": "b62ec027ad725aeb6ecc772aa85e7a3ff6e49b36",
+  "training_commit": "ef163b26e33f62c496ed0da8744ebb7bf1163873",
   "training_condition": "Upstream Base edit prompts [empty,empty,diptych(event)] with the original source image; cache only conditional row2 and its exact mask. No target/query/teacher metadata in condition.",
   "training_prompt_style": "native_base",
   "training_seed": 20260915,
@@ -2280,56 +2279,50 @@
         "sequence": 0,
         "steps": [
           {
-            "event_style": "fresh_wording_0",
-            "event_text": "The indigo desk train 001123 has selected ambient for music. Treat this as its latest preference.",
+            "event_style": "original_training_event",
             "expected_state": "ambient",
             "gold": "ambient",
-            "noise_seed": 102219754209479254,
+            "noise_seed": 699826200536400605,
             "operation": "write",
             "step": 0
           },
           {
-            "event_style": "fresh_wording_0",
-            "event_text": "Only the delivery date for the indigo desk train 001123 changed. Its remembered music preference is still valid.",
+            "event_style": "original_training_event",
             "expected_state": "ambient",
             "gold": "ambient",
-            "noise_seed": 3704523215777661360,
+            "noise_seed": 9111262552466024587,
             "operation": "noop",
             "step": 1
           },
           {
-            "event_style": "fresh_wording_0",
-            "event_text": "The indigo desk train 001123 has selected jazz for music. Treat this as its latest preference.",
+            "event_style": "original_training_event",
             "expected_state": "jazz",
             "gold": "jazz",
-            "noise_seed": 7338015090277828526,
+            "noise_seed": 6511820160817381022,
             "operation": "write",
             "step": 2
           },
           {
-            "event_style": "fresh_wording_0",
-            "event_text": "Only the delivery date for the indigo desk train 001123 changed. Its remembered music preference is still valid.",
+            "event_style": "original_training_event",
             "expected_state": "jazz",
             "gold": "jazz",
-            "noise_seed": 4644104876123492716,
+            "noise_seed": 3354266518343178020,
             "operation": "noop",
             "step": 3
           },
           {
-            "event_style": "fresh_wording_0",
-            "event_text": "Withdraw the indigo desk train 001123's music choice entirely, leaving no preferred option on record.",
+            "event_style": "original_training_event",
             "expected_state": "clear",
             "gold": "no active preference",
-            "noise_seed": 3863531961906451772,
+            "noise_seed": 2131912196400401604,
             "operation": "write",
             "step": 4
           },
           {
-            "event_style": "fresh_wording_0",
-            "event_text": "Only the delivery date for the indigo desk train 001123 changed. Its remembered music preference is still valid.",
+            "event_style": "original_training_event",
             "expected_state": "clear",
             "gold": "no active preference",
-            "noise_seed": 969918130105764748,
+            "noise_seed": 2656956143768143679,
             "operation": "noop",
             "step": 5
           }
@@ -2340,56 +2333,50 @@
         "sequence": 0,
         "steps": [
           {
-            "event_style": "fresh_wording_1",
-            "event_text": "For the record, the indigo desk train 001123's preferred music has changed to ambient; keep the latest value.",
+            "event_style": "original_training_event",
             "expected_state": "ambient",
             "gold": "ambient",
-            "noise_seed": 1254771252702464744,
+            "noise_seed": 5598324840285363999,
             "operation": "write",
             "step": 0
           },
           {
-            "event_style": "fresh_wording_1",
-            "event_text": "This update concerns the indigo desk train 001123's stock record, so carry its existing music preference forward.",
+            "event_style": "original_training_event",
             "expected_state": "ambient",
             "gold": "ambient",
-            "noise_seed": 2619877079512508227,
+            "noise_seed": 3015336159032914154,
             "operation": "noop",
             "step": 1
           },
           {
-            "event_style": "fresh_wording_1",
-            "event_text": "For the record, the indigo desk train 001123's preferred music has changed to jazz; keep the latest value.",
+            "event_style": "original_training_event",
             "expected_state": "jazz",
             "gold": "jazz",
-            "noise_seed": 7744802096813484750,
+            "noise_seed": 1282633177513741978,
             "operation": "write",
             "step": 2
           },
           {
-            "event_style": "fresh_wording_1",
-            "event_text": "This update concerns the indigo desk train 001123's stock record, so carry its existing music preference forward.",
+            "event_style": "original_training_event",
             "expected_state": "jazz",
             "gold": "jazz",
-            "noise_seed": 8109335725812712568,
+            "noise_seed": 7306879907647729818,
             "operation": "noop",
             "step": 3
           },
           {
-            "event_style": "fresh_wording_1",
-            "event_text": "The indigo desk train 001123 has opted out of its music preference. Remove the remembered selection.",
+            "event_style": "original_training_event",
             "expected_state": "clear",
             "gold": "no active preference",
-            "noise_seed": 4918567908730640430,
+            "noise_seed": 298778651906951988,
             "operation": "write",
             "step": 4
           },
           {
-            "event_style": "fresh_wording_1",
-            "event_text": "This update concerns the indigo desk train 001123's stock record, so carry its existing music preference forward.",
+            "event_style": "original_training_event",
             "expected_state": "clear",
             "gold": "no active preference",
-            "noise_seed": 7287102825540375448,
+            "noise_seed": 3490967365986822586,
             "operation": "noop",
             "step": 5
           }
@@ -2400,56 +2387,56 @@
         "sequence": 0,
         "steps": [
           {
-            "event_style": "fresh_wording_2",
-            "event_text": "Apply this new preference to the indigo desk train 001123: ambient for music, superseding the choice on record.",
+            "event_style": "new_wording_1",
+            "event_text": "Please remember the following music selection for the indigo desk train 001123: ambient. This supersedes the old selection.",
             "expected_state": "ambient",
             "gold": "ambient",
-            "noise_seed": 1024742575366899978,
+            "noise_seed": 3151082195773862966,
             "operation": "write",
             "step": 0
           },
           {
-            "event_style": "fresh_wording_2",
-            "event_text": "Preserve whichever music choice the indigo desk train 001123 already has; the notice concerns an unrelated repair.",
+            "event_style": "new_wording_1",
+            "event_text": "The address record for the indigo desk train 001123 was checked. Its remembered music preference must remain unchanged.",
             "expected_state": "ambient",
             "gold": "ambient",
-            "noise_seed": 1206291379493763268,
+            "noise_seed": 6163781668603612160,
             "operation": "noop",
             "step": 1
           },
           {
-            "event_style": "fresh_wording_2",
-            "event_text": "Apply this new preference to the indigo desk train 001123: jazz for music, superseding the choice on record.",
+            "event_style": "new_wording_1",
+            "event_text": "Please remember the following music selection for the indigo desk train 001123: jazz. This supersedes the old selection.",
             "expected_state": "jazz",
             "gold": "jazz",
-            "noise_seed": 2217443417532828629,
+            "noise_seed": 7589142266220562158,
             "operation": "write",
             "step": 2
           },
           {
-            "event_style": "fresh_wording_2",
-            "event_text": "Preserve whichever music choice the indigo desk train 001123 already has; the notice concerns an unrelated repair.",
+            "event_style": "new_wording_1",
+            "event_text": "The address record for the indigo desk train 001123 was checked. Its remembered music preference must remain unchanged.",
             "expected_state": "jazz",
             "gold": "jazz",
-            "noise_seed": 5399688332507464434,
+            "noise_seed": 4122135321611100772,
             "operation": "noop",
             "step": 3
           },
           {
-            "event_style": "fresh_wording_2",
-            "event_text": "There should be no preferred music assigned to the indigo desk train 001123 anymore; discard the saved value.",
+            "event_style": "new_wording_1",
+            "event_text": "Cancel the remembered music selection for the indigo desk train 001123. There is no replacement preference.",
             "expected_state": "clear",
             "gold": "no active preference",
-            "noise_seed": 168386745456828632,
+            "noise_seed": 2443284468016666842,
             "operation": "write",
             "step": 4
           },
           {
-            "event_style": "fresh_wording_2",
-            "event_text": "Preserve whichever music choice the indigo desk train 001123 already has; the notice concerns an unrelated repair.",
+            "event_style": "new_wording_1",
+            "event_text": "The address record for the indigo desk train 001123 was checked. Its remembered music preference must remain unchanged.",
             "expected_state": "clear",
             "gold": "no active preference",
-            "noise_seed": 5021932224203895657,
+            "noise_seed": 3709238863620638780,
             "operation": "noop",
             "step": 5
           }
@@ -2460,56 +2447,56 @@
         "sequence": 0,
         "steps": [
           {
-            "event_style": "fresh_wording_0",
-            "event_text": "The indigo desk train 001123 has selected ambient for music. Treat this as its latest preference.",
+            "event_style": "new_wording_2",
+            "event_text": "Going forward, ambient is the preferred music for the indigo desk train 001123; retain that information.",
             "expected_state": "ambient",
             "gold": "ambient",
-            "noise_seed": 6334643714663462918,
+            "noise_seed": 8386814706363455936,
             "operation": "write",
             "step": 0
           },
           {
-            "event_style": "fresh_wording_0",
-            "event_text": "Only the delivery date for the indigo desk train 001123 changed. Its remembered music preference is still valid.",
+            "event_style": "new_wording_2",
+            "event_text": "Leave the stored music information for the indigo desk train 001123 exactly as before; this update concerns scheduling only.",
             "expected_state": "ambient",
             "gold": "ambient",
-            "noise_seed": 8867555571421685479,
+            "noise_seed": 3911647907646944839,
             "operation": "noop",
             "step": 1
           },
           {
-            "event_style": "fresh_wording_0",
-            "event_text": "The indigo desk train 001123 has selected jazz for music. Treat this as its latest preference.",
+            "event_style": "new_wording_2",
+            "event_text": "Going forward, jazz is the preferred music for the indigo desk train 001123; retain that information.",
             "expected_state": "jazz",
             "gold": "jazz",
-            "noise_seed": 5923789555243459122,
+            "noise_seed": 5658985207134988798,
             "operation": "write",
             "step": 2
           },
           {
-            "event_style": "fresh_wording_0",
-            "event_text": "Only the delivery date for the indigo desk train 001123 changed. Its remembered music preference is still valid.",
+            "event_style": "new_wording_2",
+            "event_text": "Leave the stored music information for the indigo desk train 001123 exactly as before; this update concerns scheduling only.",
             "expected_state": "jazz",
             "gold": "jazz",
-            "noise_seed": 3066622725089868660,
+            "noise_seed": 6359579755045482989,
             "operation": "noop",
             "step": 3
           },
           {
-            "event_style": "fresh_wording_0",
-            "event_text": "Withdraw the indigo desk train 001123's music choice entirely, leaving no preferred option on record.",
+            "event_style": "new_wording_2",
+            "event_text": "The music entry for the indigo desk train 001123 should be empty now; remove its previously remembered choice.",
             "expected_state": "clear",
             "gold": "no active preference",
-            "noise_seed": 5901537420491278832,
+            "noise_seed": 4136854574369164583,
             "operation": "write",
             "step": 4
           },
           {
-            "event_style": "fresh_wording_0",
-            "event_text": "Only the delivery date for the indigo desk train 001123 changed. Its remembered music preference is still valid.",
+            "event_style": "new_wording_2",
+            "event_text": "Leave the stored music information for the indigo desk train 001123 exactly as before; this update concerns scheduling only.",
             "expected_state": "clear",
             "gold": "no active preference",
-            "noise_seed": 3918455681660461212,
+            "noise_seed": 3987201669035478660,
             "operation": "noop",
             "step": 5
           }
@@ -2520,56 +2507,50 @@
         "sequence": 1,
         "steps": [
           {
-            "event_style": "fresh_wording_0",
-            "event_text": "The indigo desk train 001123 has selected jazz for music. Treat this as its latest preference.",
+            "event_style": "original_training_event",
             "expected_state": "jazz",
             "gold": "jazz",
-            "noise_seed": 102219754209479254,
+            "noise_seed": 699826200536400605,
             "operation": "write",
             "step": 0
           },
           {
-            "event_style": "fresh_wording_0",
-            "event_text": "Only the delivery date for the indigo desk train 001123 changed. Its remembered music preference is still valid.",
+            "event_style": "original_training_event",
             "expected_state": "jazz",
             "gold": "jazz",
-            "noise_seed": 3704523215777661360,
+            "noise_seed": 9111262552466024587,
             "operation": "noop",
             "step": 1
           },
           {
-            "event_style": "fresh_wording_0",
-            "event_text": "The indigo desk train 001123 has selected ambient for music. Treat this as its latest preference.",
+            "event_style": "original_training_event",
             "expected_state": "ambient",
             "gold": "ambient",
-            "noise_seed": 7338015090277828526,
+            "noise_seed": 6511820160817381022,
             "operation": "write",
             "step": 2
           },
           {
-            "event_style": "fresh_wording_0",
-            "event_text": "Only the delivery date for the indigo desk train 001123 changed. Its remembered music preference is still valid.",
+            "event_style": "original_training_event",
             "expected_state": "ambient",
             "gold": "ambient",
-            "noise_seed": 4644104876123492716,
+            "noise_seed": 3354266518343178020,
             "operation": "noop",
             "step": 3
           },
           {
-            "event_style": "fresh_wording_0",
-            "event_text": "Withdraw the indigo desk train 001123's music choice entirely, leaving no preferred option on record.",
+            "event_style": "original_training_event",
             "expected_state": "clear",
             "gold": "no active preference",
-            "noise_seed": 3863531961906451772,
+            "noise_seed": 2131912196400401604,
             "operation": "write",
             "step": 4
           },
           {
-            "event_style": "fresh_wording_0",
-            "event_text": "Only the delivery date for the indigo desk train 001123 changed. Its remembered music preference is still valid.",
+            "event_style": "original_training_event",
             "expected_state": "clear",
             "gold": "no active preference",
-            "noise_seed": 969918130105764748,
+            "noise_seed": 2656956143768143679,
             "operation": "noop",
             "step": 5
           }
@@ -2580,56 +2561,50 @@
         "sequence": 1,
         "steps": [
           {
-            "event_style": "fresh_wording_1",
-            "event_text": "For the record, the indigo desk train 001123's preferred music has changed to jazz; keep the latest value.",
+            "event_style": "original_training_event",
             "expected_state": "jazz",
             "gold": "jazz",
-            "noise_seed": 1254771252702464744,
+            "noise_seed": 5598324840285363999,
             "operation": "write",
             "step": 0
           },
           {
-            "event_style": "fresh_wording_1",
-            "event_text": "This update concerns the indigo desk train 001123's stock record, so carry its existing music preference forward.",
+            "event_style": "original_training_event",
             "expected_state": "jazz",
             "gold": "jazz",
-            "noise_seed": 2619877079512508227,
+            "noise_seed": 3015336159032914154,
             "operation": "noop",
             "step": 1
           },
           {
-            "event_style": "fresh_wording_1",
-            "event_text": "For the record, the indigo desk train 001123's preferred music has changed to ambient; keep the latest value.",
+            "event_style": "original_training_event",
             "expected_state": "ambient",
             "gold": "ambient",
-            "noise_seed": 7744802096813484750,
+            "noise_seed": 1282633177513741978,
             "operation": "write",
             "step": 2
           },
           {
-            "event_style": "fresh_wording_1",
-            "event_text": "This update concerns the indigo desk train 001123's stock record, so carry its existing music preference forward.",
+            "event_style": "original_training_event",
             "expected_state": "ambient",
             "gold": "ambient",
-            "noise_seed": 8109335725812712568,
+            "noise_seed": 7306879907647729818,
             "operation": "noop",
             "step": 3
           },
           {
-            "event_style": "fresh_wording_1",
-            "event_text": "The indigo desk train 001123 has opted out of its music preference. Remove the remembered selection.",
+            "event_style": "original_training_event",
             "expected_state": "clear",
             "gold": "no active preference",
-            "noise_seed": 4918567908730640430,
+            "noise_seed": 298778651906951988,
             "operation": "write",
             "step": 4
           },
           {
-            "event_style": "fresh_wording_1",
-            "event_text": "This update concerns the indigo desk train 001123's stock record, so carry its existing music preference forward.",
+            "event_style": "original_training_event",
             "expected_state": "clear",
             "gold": "no active preference",
-            "noise_seed": 7287102825540375448,
+            "noise_seed": 3490967365986822586,
             "operation": "noop",
             "step": 5
           }
@@ -2640,56 +2615,56 @@
         "sequence": 1,
         "steps": [
           {
-            "event_style": "fresh_wording_2",
-            "event_text": "Apply this new preference to the indigo desk train 001123: jazz for music, superseding the choice on record.",
+            "event_style": "new_wording_1",
+            "event_text": "Please remember the following music selection for the indigo desk train 001123: jazz. This supersedes the old selection.",
             "expected_state": "jazz",
             "gold": "jazz",
-            "noise_seed": 1024742575366899978,
+            "noise_seed": 3151082195773862966,
             "operation": "write",
             "step": 0
           },
           {
-            "event_style": "fresh_wording_2",
-            "event_text": "Preserve whichever music choice the indigo desk train 001123 already has; the notice concerns an unrelated repair.",
+            "event_style": "new_wording_1",
+            "event_text": "The address record for the indigo desk train 001123 was checked. Its remembered music preference must remain unchanged.",
             "expected_state": "jazz",
             "gold": "jazz",
-            "noise_seed": 1206291379493763268,
+            "noise_seed": 6163781668603612160,
             "operation": "noop",
             "step": 1
           },
           {
-            "event_style": "fresh_wording_2",
-            "event_text": "Apply this new preference to the indigo desk train 001123: ambient for music, superseding the choice on record.",
+            "event_style": "new_wording_1",
+            "event_text": "Please remember the following music selection for the indigo desk train 001123: ambient. This supersedes the old selection.",
             "expected_state": "ambient",
             "gold": "ambient",
-            "noise_seed": 2217443417532828629,
+            "noise_seed": 7589142266220562158,
             "operation": "write",
             "step": 2
           },
           {
-            "event_style": "fresh_wording_2",
-            "event_text": "Preserve whichever music choice the indigo desk train 001123 already has; the notice concerns an unrelated repair.",
+            "event_style": "new_wording_1",
+            "event_text": "The address record for the indigo desk train 001123 was checked. Its remembered music preference must remain unchanged.",
             "expected_state": "ambient",
             "gold": "ambient",
-            "noise_seed": 5399688332507464434,
+            "noise_seed": 4122135321611100772,
             "operation": "noop",
             "step": 3
           },
           {
-            "event_style": "fresh_wording_2",
-            "event_text": "There should be no preferred music assigned to the indigo desk train 001123 anymore; discard the saved value.",
+            "event_style": "new_wording_1",
+            "event_text": "Cancel the remembered music selection for the indigo desk train 001123. There is no replacement preference.",
             "expected_state": "clear",
             "gold": "no active preference",
-            "noise_seed": 168386745456828632,
+            "noise_seed": 2443284468016666842,
             "operation": "write",
             "step": 4
           },
           {
-            "event_style": "fresh_wording_2",
-            "event_text": "Preserve whichever music choice the indigo desk train 001123 already has; the notice concerns an unrelated repair.",
+            "event_style": "new_wording_1",
+            "event_text": "The address record for the indigo desk train 001123 was checked. Its remembered music preference must remain unchanged.",
             "expected_state": "clear",
             "gold": "no active preference",
-            "noise_seed": 5021932224203895657,
+            "noise_seed": 3709238863620638780,
             "operation": "noop",
             "step": 5
           }
@@ -2700,56 +2675,56 @@
         "sequence": 1,
         "steps": [
           {
-            "event_style": "fresh_wording_0",
-            "event_text": "The indigo desk train 001123 has selected jazz for music. Treat this as its latest preference.",
+            "event_style": "new_wording_2",
+            "event_text": "Going forward, jazz is the preferred music for the indigo desk train 001123; retain that information.",
             "expected_state": "jazz",
             "gold": "jazz",
-            "noise_seed": 6334643714663462918,
+            "noise_seed": 8386814706363455936,
             "operation": "write",
             "step": 0
           },
           {
-            "event_style": "fresh_wording_0",
-            "event_text": "Only the delivery date for the indigo desk train 001123 changed. Its remembered music preference is still valid.",
+            "event_style": "new_wording_2",
+            "event_text": "Leave the stored music information for the indigo desk train 001123 exactly as before; this update concerns scheduling only.",
             "expected_state": "jazz",
             "gold": "jazz",
-            "noise_seed": 8867555571421685479,
+            "noise_seed": 3911647907646944839,
             "operation": "noop",
             "step": 1
           },
           {
-            "event_style": "fresh_wording_0",
-            "event_text": "The indigo desk train 001123 has selected ambient for music. Treat this as its latest preference.",
+            "event_style": "new_wording_2",
+            "event_text": "Going forward, ambient is the preferred music for the indigo desk train 001123; retain that information.",
             "expected_state": "ambient",
             "gold": "ambient",
-            "noise_seed": 5923789555243459122,
+            "noise_seed": 5658985207134988798,
             "operation": "write",
             "step": 2
           },
           {
-            "event_style": "fresh_wording_0",
-            "event_text": "Only the delivery date for the indigo desk train 001123 changed. Its remembered music preference is still valid.",
+            "event_style": "new_wording_2",
+            "event_text": "Leave the stored music information for the indigo desk train 001123 exactly as before; this update concerns scheduling only.",
             "expected_state": "ambient",
             "gold": "ambient",
-            "noise_seed": 3066622725089868660,
+            "noise_seed": 6359579755045482989,
             "operation": "noop",
             "step": 3
           },
           {
-            "event_style": "fresh_wording_0",
-            "event_text": "Withdraw the indigo desk train 001123's music choice entirely, leaving no preferred option on record.",
+            "event_style": "new_wording_2",
+            "event_text": "The music entry for the indigo desk train 001123 should be empty now; remove its previously remembered choice.",
             "expected_state": "clear",
             "gold": "no active preference",
-            "noise_seed": 5901537420491278832,
+            "noise_seed": 4136854574369164583,
             "operation": "write",
             "step": 4
           },
           {
-            "event_style": "fresh_wording_0",
-            "event_text": "Only the delivery date for the indigo desk train 001123 changed. Its remembered music preference is still valid.",
+            "event_style": "new_wording_2",
+            "event_text": "Leave the stored music information for the indigo desk train 001123 exactly as before; this update concerns scheduling only.",
             "expected_state": "clear",
             "gold": "no active preference",
-            "noise_seed": 3918455681660461212,
+            "noise_seed": 3987201669035478660,
             "operation": "noop",
             "step": 5
           }
@@ -2760,56 +2735,50 @@
         "sequence": 2,
         "steps": [
           {
-            "event_style": "fresh_wording_0",
-            "event_text": "Withdraw the indigo desk train 001123's music choice entirely, leaving no preferred option on record.",
+            "event_style": "original_training_event",
             "expected_state": "clear",
             "gold": "no active preference",
-            "noise_seed": 102219754209479254,
+            "noise_seed": 699826200536400605,
             "operation": "write",
             "step": 0
           },
           {
-            "event_style": "fresh_wording_0",
-            "event_text": "Only the delivery date for the indigo desk train 001123 changed. Its remembered music preference is still valid.",
+            "event_style": "original_training_event",
             "expected_state": "clear",
             "gold": "no active preference",
-            "noise_seed": 3704523215777661360,
+            "noise_seed": 9111262552466024587,
             "operation": "noop",
             "step": 1
           },
           {
-            "event_style": "fresh_wording_0",
-            "event_text": "The indigo desk train 001123 has selected ambient for music. Treat this as its latest preference.",
+            "event_style": "original_training_event",
             "expected_state": "ambient",
             "gold": "ambient",
-            "noise_seed": 7338015090277828526,
+            "noise_seed": 6511820160817381022,
             "operation": "write",
             "step": 2
           },
           {
-            "event_style": "fresh_wording_0",
-            "event_text": "Only the delivery date for the indigo desk train 001123 changed. Its remembered music preference is still valid.",
+            "event_style": "original_training_event",
             "expected_state": "ambient",
             "gold": "ambient",
-            "noise_seed": 4644104876123492716,
+            "noise_seed": 3354266518343178020,
             "operation": "noop",
             "step": 3
           },
           {
-            "event_style": "fresh_wording_0",
-            "event_text": "The indigo desk train 001123 has selected jazz for music. Treat this as its latest preference.",
+            "event_style": "original_training_event",
             "expected_state": "jazz",
             "gold": "jazz",
-            "noise_seed": 3863531961906451772,
+            "noise_seed": 2131912196400401604,
             "operation": "write",
             "step": 4
           },
           {
-            "event_style": "fresh_wording_0",
-            "event_text": "Only the delivery date for the indigo desk train 001123 changed. Its remembered music preference is still valid.",
+            "event_style": "original_training_event",
             "expected_state": "jazz",
             "gold": "jazz",
-            "noise_seed": 969918130105764748,
+            "noise_seed": 2656956143768143679,
             "operation": "noop",
             "step": 5
           }
@@ -2820,56 +2789,50 @@
         "sequence": 2,
         "steps": [
           {
-            "event_style": "fresh_wording_1",
-            "event_text": "The indigo desk train 001123 has opted out of its music preference. Remove the remembered selection.",
+            "event_style": "original_training_event",
             "expected_state": "clear",
             "gold": "no active preference",
-            "noise_seed": 1254771252702464744,
+            "noise_seed": 5598324840285363999,
             "operation": "write",
             "step": 0
           },
           {
-            "event_style": "fresh_wording_1",
-            "event_text": "This update concerns the indigo desk train 001123's stock record, so carry its existing music preference forward.",
+            "event_style": "original_training_event",
             "expected_state": "clear",
             "gold": "no active preference",
-            "noise_seed": 2619877079512508227,
+            "noise_seed": 3015336159032914154,
             "operation": "noop",
             "step": 1
           },
           {
-            "event_style": "fresh_wording_1",
-            "event_text": "For the record, the indigo desk train 001123's preferred music has changed to ambient; keep the latest value.",
+            "event_style": "original_training_event",
             "expected_state": "ambient",
             "gold": "ambient",
-            "noise_seed": 7744802096813484750,
+            "noise_seed": 1282633177513741978,
             "operation": "write",
             "step": 2
           },
           {
-            "event_style": "fresh_wording_1",
-            "event_text": "This update concerns the indigo desk train 001123's stock record, so carry its existing music preference forward.",
+            "event_style": "original_training_event",
             "expected_state": "ambient",
             "gold": "ambient",
-            "noise_seed": 8109335725812712568,
+            "noise_seed": 7306879907647729818,
             "operation": "noop",
             "step": 3
           },
           {
-            "event_style": "fresh_wording_1",
-            "event_text": "For the record, the indigo desk train 001123's preferred music has changed to jazz; keep the latest value.",
+            "event_style": "original_training_event",
             "expected_state": "jazz",
             "gold": "jazz",
-            "noise_seed": 4918567908730640430,
+            "noise_seed": 298778651906951988,
             "operation": "write",
             "step": 4
           },
           {
-            "event_style": "fresh_wording_1",
-            "event_text": "This update concerns the indigo desk train 001123's stock record, so carry its existing music preference forward.",
+            "event_style": "original_training_event",
             "expected_state": "jazz",
             "gold": "jazz",
-            "noise_seed": 7287102825540375448,
+            "noise_seed": 3490967365986822586,
             "operation": "noop",
             "step": 5
           }
@@ -2880,56 +2843,56 @@
         "sequence": 2,
         "steps": [
           {
-            "event_style": "fresh_wording_2",
-            "event_text": "There should be no preferred music assigned to the indigo desk train 001123 anymore; discard the saved value.",
+            "event_style": "new_wording_1",
+            "event_text": "Cancel the remembered music selection for the indigo desk train 001123. There is no replacement preference.",
             "expected_state": "clear",
             "gold": "no active preference",
-            "noise_seed": 1024742575366899978,
+            "noise_seed": 3151082195773862966,
             "operation": "write",
             "step": 0
           },
           {
-            "event_style": "fresh_wording_2",
-            "event_text": "Preserve whichever music choice the indigo desk train 001123 already has; the notice concerns an unrelated repair.",
+            "event_style": "new_wording_1",
+            "event_text": "The address record for the indigo desk train 001123 was checked. Its remembered music preference must remain unchanged.",
             "expected_state": "clear",
             "gold": "no active preference",
-            "noise_seed": 1206291379493763268,
+            "noise_seed": 6163781668603612160,
             "operation": "noop",
             "step": 1
           },
           {
-            "event_style": "fresh_wording_2",
-            "event_text": "Apply this new preference to the indigo desk train 001123: ambient for music, superseding the choice on record.",
+            "event_style": "new_wording_1",
+            "event_text": "Please remember the following music selection for the indigo desk train 001123: ambient. This supersedes the old selection.",
             "expected_state": "ambient",
             "gold": "ambient",
-            "noise_seed": 2217443417532828629,
+            "noise_seed": 7589142266220562158,
             "operation": "write",
             "step": 2
           },
           {
-            "event_style": "fresh_wording_2",
-            "event_text": "Preserve whichever music choice the indigo desk train 001123 already has; the notice concerns an unrelated repair.",
+            "event_style": "new_wording_1",
+            "event_text": "The address record for the indigo desk train 001123 was checked. Its remembered music preference must remain unchanged.",
             "expected_state": "ambient",
             "gold": "ambient",
-            "noise_seed": 5399688332507464434,
+            "noise_seed": 4122135321611100772,
             "operation": "noop",
             "step": 3
           },
           {
-            "event_style": "fresh_wording_2",
-            "event_text": "Apply this new preference to the indigo desk train 001123: jazz for music, superseding the choice on record.",
+            "event_style": "new_wording_1",
+            "event_text": "Please remember the following music selection for the indigo desk train 001123: jazz. This supersedes the old selection.",
             "expected_state": "jazz",
             "gold": "jazz",
-            "noise_seed": 168386745456828632,
+            "noise_seed": 2443284468016666842,
             "operation": "write",
             "step": 4
           },
           {
-            "event_style": "fresh_wording_2",
-            "event_text": "Preserve whichever music choice the indigo desk train 001123 already has; the notice concerns an unrelated repair.",
+            "event_style": "new_wording_1",
+            "event_text": "The address record for the indigo desk train 001123 was checked. Its remembered music preference must remain unchanged.",
             "expected_state": "jazz",
             "gold": "jazz",
-            "noise_seed": 5021932224203895657,
+            "noise_seed": 3709238863620638780,
             "operation": "noop",
             "step": 5
           }
@@ -2940,56 +2903,56 @@
         "sequence": 2,
         "steps": [
           {
-            "event_style": "fresh_wording_0",
-            "event_text": "Withdraw the indigo desk train 001123's music choice entirely, leaving no preferred option on record.",
+            "event_style": "new_wording_2",
+            "event_text": "The music entry for the indigo desk train 001123 should be empty now; remove its previously remembered choice.",
             "expected_state": "clear",
             "gold": "no active preference",
-            "noise_seed": 6334643714663462918,
+            "noise_seed": 8386814706363455936,
             "operation": "write",
             "step": 0
           },
           {
-            "event_style": "fresh_wording_0",
-            "event_text": "Only the delivery date for the indigo desk train 001123 changed. Its remembered music preference is still valid.",
+            "event_style": "new_wording_2",
+            "event_text": "Leave the stored music information for the indigo desk train 001123 exactly as before; this update concerns scheduling only.",
             "expected_state": "clear",
             "gold": "no active preference",
-            "noise_seed": 8867555571421685479,
+            "noise_seed": 3911647907646944839,
             "operation": "noop",
             "step": 1
           },
           {
-            "event_style": "fresh_wording_0",
-            "event_text": "The indigo desk train 001123 has selected ambient for music. Treat this as its latest preference.",
+            "event_style": "new_wording_2",
+            "event_text": "Going forward, ambient is the preferred music for the indigo desk train 001123; retain that information.",
             "expected_state": "ambient",
             "gold": "ambient",
-            "noise_seed": 5923789555243459122,
+            "noise_seed": 5658985207134988798,
             "operation": "write",
             "step": 2
           },
           {
-            "event_style": "fresh_wording_0",
-            "event_text": "Only the delivery date for the indigo desk train 001123 changed. Its remembered music preference is still valid.",
+            "event_style": "new_wording_2",
+            "event_text": "Leave the stored music information for the indigo desk train 001123 exactly as before; this update concerns scheduling only.",
             "expected_state": "ambient",
             "gold": "ambient",
-            "noise_seed": 3066622725089868660,
+            "noise_seed": 6359579755045482989,
             "operation": "noop",
             "step": 3
           },
           {
-            "event_style": "fresh_wording_0",
-            "event_text": "The indigo desk train 001123 has selected jazz for music. Treat this as its latest preference.",
+            "event_style": "new_wording_2",
+            "event_text": "Going forward, jazz is the preferred music for the indigo desk train 001123; retain that information.",
             "expected_state": "jazz",
             "gold": "jazz",
-            "noise_seed": 5901537420491278832,
+            "noise_seed": 4136854574369164583,
             "operation": "write",
             "step": 4
           },
           {
-            "event_style": "fresh_wording_0",
-            "event_text": "Only the delivery date for the indigo desk train 001123 changed. Its remembered music preference is still valid.",
+            "event_style": "new_wording_2",
+            "event_text": "Leave the stored music information for the indigo desk train 001123 exactly as before; this update concerns scheduling only.",
             "expected_state": "jazz",
             "gold": "jazz",
-            "noise_seed": 3918455681660461212,
+            "noise_seed": 3987201669035478660,
             "operation": "noop",
             "step": 5
           }
@@ -3000,56 +2963,50 @@
         "sequence": 3,
         "steps": [
           {
-            "event_style": "fresh_wording_0",
-            "event_text": "Withdraw the indigo desk train 001123's music choice entirely, leaving no preferred option on record.",
+            "event_style": "original_training_event",
             "expected_state": "clear",
             "gold": "no active preference",
-            "noise_seed": 102219754209479254,
+            "noise_seed": 699826200536400605,
             "operation": "write",
             "step": 0
           },
           {
-            "event_style": "fresh_wording_0",
-            "event_text": "Only the delivery date for the indigo desk train 001123 changed. Its remembered music preference is still valid.",
+            "event_style": "original_training_event",
             "expected_state": "clear",
             "gold": "no active preference",
-            "noise_seed": 3704523215777661360,
+            "noise_seed": 9111262552466024587,
             "operation": "noop",
             "step": 1
           },
           {
-            "event_style": "fresh_wording_0",
-            "event_text": "The indigo desk train 001123 has selected jazz for music. Treat this as its latest preference.",
+            "event_style": "original_training_event",
             "expected_state": "jazz",
             "gold": "jazz",
-            "noise_seed": 7338015090277828526,
+            "noise_seed": 6511820160817381022,
             "operation": "write",
             "step": 2
           },
           {
-            "event_style": "fresh_wording_0",
-            "event_text": "Only the delivery date for the indigo desk train 001123 changed. Its remembered music preference is still valid.",
+            "event_style": "original_training_event",
             "expected_state": "jazz",
             "gold": "jazz",
-            "noise_seed": 4644104876123492716,
+            "noise_seed": 3354266518343178020,
             "operation": "noop",
             "step": 3
           },
           {
-            "event_style": "fresh_wording_0",
-            "event_text": "The indigo desk train 001123 has selected ambient for music. Treat this as its latest preference.",
+            "event_style": "original_training_event",
             "expected_state": "ambient",
             "gold": "ambient",
-            "noise_seed": 3863531961906451772,
+            "noise_seed": 2131912196400401604,
             "operation": "write",
             "step": 4
           },
           {
-            "event_style": "fresh_wording_0",
-            "event_text": "Only the delivery date for the indigo desk train 001123 changed. Its remembered music preference is still valid.",
+            "event_style": "original_training_event",
             "expected_state": "ambient",
             "gold": "ambient",
-            "noise_seed": 969918130105764748,
+            "noise_seed": 2656956143768143679,
             "operation": "noop",
             "step": 5
           }
@@ -3060,56 +3017,50 @@
         "sequence": 3,
         "steps": [
           {
-            "event_style": "fresh_wording_1",
-            "event_text": "The indigo desk train 001123 has opted out of its music preference. Remove the remembered selection.",
+            "event_style": "original_training_event",
             "expected_state": "clear",
             "gold": "no active preference",
-            "noise_seed": 1254771252702464744,
+            "noise_seed": 5598324840285363999,
             "operation": "write",
             "step": 0
           },
           {
-            "event_style": "fresh_wording_1",
-            "event_text": "This update concerns the indigo desk train 001123's stock record, so carry its existing music preference forward.",
+            "event_style": "original_training_event",
             "expected_state": "clear",
             "gold": "no active preference",
-            "noise_seed": 2619877079512508227,
+            "noise_seed": 3015336159032914154,
             "operation": "noop",
             "step": 1
           },
           {
-            "event_style": "fresh_wording_1",
-            "event_text": "For the record, the indigo desk train 001123's preferred music has changed to jazz; keep the latest value.",
+            "event_style": "original_training_event",
             "expected_state": "jazz",
             "gold": "jazz",
-            "noise_seed": 7744802096813484750,
+            "noise_seed": 1282633177513741978,
             "operation": "write",
             "step": 2
           },
           {
-            "event_style": "fresh_wording_1",
-            "event_text": "This update concerns the indigo desk train 001123's stock record, so carry its existing music preference forward.",
+            "event_style": "original_training_event",
             "expected_state": "jazz",
             "gold": "jazz",
-            "noise_seed": 8109335725812712568,
+            "noise_seed": 7306879907647729818,
             "operation": "noop",
             "step": 3
           },
           {
-            "event_style": "fresh_wording_1",
-            "event_text": "For the record, the indigo desk train 001123's preferred music has changed to ambient; keep the latest value.",
+            "event_style": "original_training_event",
             "expected_state": "ambient",
             "gold": "ambient",
-            "noise_seed": 4918567908730640430,
+            "noise_seed": 298778651906951988,
             "operation": "write",
             "step": 4
           },
           {
-            "event_style": "fresh_wording_1",
-            "event_text": "This update concerns the indigo desk train 001123's stock record, so carry its existing music preference forward.",
+            "event_style": "original_training_event",
             "expected_state": "ambient",
             "gold": "ambient",
-            "noise_seed": 7287102825540375448,
+            "noise_seed": 3490967365986822586,
             "operation": "noop",
             "step": 5
           }
@@ -3120,56 +3071,56 @@
         "sequence": 3,
         "steps": [
           {
-            "event_style": "fresh_wording_2",
-            "event_text": "There should be no preferred music assigned to the indigo desk train 001123 anymore; discard the saved value.",
+            "event_style": "new_wording_1",
+            "event_text": "Cancel the remembered music selection for the indigo desk train 001123. There is no replacement preference.",
             "expected_state": "clear",
             "gold": "no active preference",
-            "noise_seed": 1024742575366899978,
+            "noise_seed": 3151082195773862966,
             "operation": "write",
             "step": 0
           },
           {
-            "event_style": "fresh_wording_2",
-            "event_text": "Preserve whichever music choice the indigo desk train 001123 already has; the notice concerns an unrelated repair.",
+            "event_style": "new_wording_1",
+            "event_text": "The address record for the indigo desk train 001123 was checked. Its remembered music preference must remain unchanged.",
             "expected_state": "clear",
             "gold": "no active preference",
-            "noise_seed": 1206291379493763268,
+            "noise_seed": 6163781668603612160,
             "operation": "noop",
             "step": 1
           },
           {
-            "event_style": "fresh_wording_2",
-            "event_text": "Apply this new preference to the indigo desk train 001123: jazz for music, superseding the choice on record.",
+            "event_style": "new_wording_1",
+            "event_text": "Please remember the following music selection for the indigo desk train 001123: jazz. This supersedes the old selection.",
             "expected_state": "jazz",
             "gold": "jazz",
-            "noise_seed": 2217443417532828629,
+            "noise_seed": 7589142266220562158,
             "operation": "write",
             "step": 2
           },
           {
-            "event_style": "fresh_wording_2",
-            "event_text": "Preserve whichever music choice the indigo desk train 001123 already has; the notice concerns an unrelated repair.",
+            "event_style": "new_wording_1",
+            "event_text": "The address record for the indigo desk train 001123 was checked. Its remembered music preference must remain unchanged.",
             "expected_state": "jazz",
             "gold": "jazz",
-            "noise_seed": 5399688332507464434,
+            "noise_seed": 4122135321611100772,
             "operation": "noop",
             "step": 3
           },
           {
-            "event_style": "fresh_wording_2",
-            "event_text": "Apply this new preference to the indigo desk train 001123: ambient for music, superseding the choice on record.",
+            "event_style": "new_wording_1",
+            "event_text": "Please remember the following music selection for the indigo desk train 001123: ambient. This supersedes the old selection.",
             "expected_state": "ambient",
             "gold": "ambient",
-            "noise_seed": 168386745456828632,
+            "noise_seed": 2443284468016666842,
             "operation": "write",
             "step": 4
           },
           {
-            "event_style": "fresh_wording_2",
-            "event_text": "Preserve whichever music choice the indigo desk train 001123 already has; the notice concerns an unrelated repair.",
+            "event_style": "new_wording_1",
+            "event_text": "The address record for the indigo desk train 001123 was checked. Its remembered music preference must remain unchanged.",
             "expected_state": "ambient",
             "gold": "ambient",
-            "noise_seed": 5021932224203895657,
+            "noise_seed": 3709238863620638780,
             "operation": "noop",
             "step": 5
           }
@@ -3180,56 +3131,56 @@
         "sequence": 3,
         "steps": [
           {
-            "event_style": "fresh_wording_0",
-            "event_text": "Withdraw the indigo desk train 001123's music choice entirely, leaving no preferred option on record.",
+            "event_style": "new_wording_2",
+            "event_text": "The music entry for the indigo desk train 001123 should be empty now; remove its previously remembered choice.",
             "expected_state": "clear",
             "gold": "no active preference",
-            "noise_seed": 6334643714663462918,
+            "noise_seed": 8386814706363455936,
             "operation": "write",
             "step": 0
           },
           {
-            "event_style": "fresh_wording_0",
-            "event_text": "Only the delivery date for the indigo desk train 001123 changed. Its remembered music preference is still valid.",
+            "event_style": "new_wording_2",
+            "event_text": "Leave the stored music information for the indigo desk train 001123 exactly as before; this update concerns scheduling only.",
             "expected_state": "clear",
             "gold": "no active preference",
-            "noise_seed": 8867555571421685479,
+            "noise_seed": 3911647907646944839,
             "operation": "noop",
             "step": 1
           },
           {
-            "event_style": "fresh_wording_0",
-            "event_text": "The indigo desk train 001123 has selected jazz for music. Treat this as its latest preference.",
+            "event_style": "new_wording_2",
+            "event_text": "Going forward, jazz is the preferred music for the indigo desk train 001123; retain that information.",
             "expected_state": "jazz",
             "gold": "jazz",
-            "noise_seed": 5923789555243459122,
+            "noise_seed": 5658985207134988798,
             "operation": "write",
             "step": 2
           },
           {
-            "event_style": "fresh_wording_0",
-            "event_text": "Only the delivery date for the indigo desk train 001123 changed. Its remembered music preference is still valid.",
+            "event_style": "new_wording_2",
+            "event_text": "Leave the stored music information for the indigo desk train 001123 exactly as before; this update concerns scheduling only.",
             "expected_state": "jazz",
             "gold": "jazz",
-            "noise_seed": 3066622725089868660,
+            "noise_seed": 6359579755045482989,
             "operation": "noop",
             "step": 3
           },
           {
-            "event_style": "fresh_wording_0",
-            "event_text": "The indigo desk train 001123 has selected ambient for music. Treat this as its latest preference.",
+            "event_style": "new_wording_2",
+            "event_text": "Going forward, ambient is the preferred music for the indigo desk train 001123; retain that information.",
             "expected_state": "ambient",
             "gold": "ambient",
-            "noise_seed": 5901537420491278832,
+            "noise_seed": 4136854574369164583,
             "operation": "write",
             "step": 4
           },
           {
-            "event_style": "fresh_wording_0",
-            "event_text": "Only the delivery date for the indigo desk train 001123 changed. Its remembered music preference is still valid.",
+            "event_style": "new_wording_2",
+            "event_text": "Leave the stored music information for the indigo desk train 001123 exactly as before; this update concerns scheduling only.",
             "expected_state": "ambient",
             "gold": "ambient",
-            "noise_seed": 3918455681660461212,
+            "noise_seed": 3987201669035478660,
             "operation": "noop",
             "step": 5
           }
@@ -3239,152 +3190,147 @@
     "scope": "one entity and three states; no unseen-entity or multi-fact claim",
     "single_writes": [
       {
-        "event_text": "The indigo desk train 001123 has selected ambient for music. Treat this as its latest preference.",
         "gold": "ambient",
         "noise_seeds": [
-          1361491566752643926,
-          1726637082100963841,
-          2324124314960237039,
-          858242868407891728,
-          1370334395867657689,
-          595447594627661707,
-          1539616951772116346,
-          4087548307257746277,
-          7101427069023534922,
-          676645832943872150,
-          8151228549355366735,
-          9039960973841537944,
-          5061106591979613630,
-          3108266958786213752,
-          2938904924877408352,
-          1912886022895541066
+          7561261358279700160,
+          2355747618932515889,
+          3198668133529642042,
+          7208142222796258190,
+          4354284046329115145,
+          558004619832333434,
+          7274393877173571647,
+          4385989952531771213,
+          4318972383531733565,
+          3158808814937224730,
+          110013835632920803,
+          4694123666555657986,
+          6525657737279429890,
+          7327560847374569239,
+          3679708256289816614,
+          3228960161556474807
         ],
         "state": "ambient",
-        "style": "fresh_wording_0"
+        "style": "original_training_event"
       },
       {
-        "event_text": "For the record, the indigo desk train 001123's preferred music has changed to ambient; keep the latest value.",
+        "event_text": "Please remember the following music selection for the indigo desk train 001123: ambient. This supersedes the old selection.",
         "gold": "ambient",
         "noise_seeds": [
-          1361491566752643926,
-          1726637082100963841,
-          2324124314960237039,
-          858242868407891728
+          7561261358279700160,
+          2355747618932515889,
+          3198668133529642042,
+          7208142222796258190
         ],
         "state": "ambient",
-        "style": "fresh_wording_1"
+        "style": "new_wording_1"
       },
       {
-        "event_text": "Apply this new preference to the indigo desk train 001123: ambient for music, superseding the choice on record.",
+        "event_text": "Going forward, ambient is the preferred music for the indigo desk train 001123; retain that information.",
         "gold": "ambient",
         "noise_seeds": [
-          1361491566752643926,
-          1726637082100963841,
-          2324124314960237039,
-          858242868407891728
+          7561261358279700160,
+          2355747618932515889,
+          3198668133529642042,
+          7208142222796258190
         ],
         "state": "ambient",
-        "style": "fresh_wording_2"
+        "style": "new_wording_2"
       },
       {
-        "event_text": "The indigo desk train 001123 has selected jazz for music. Treat this as its latest preference.",
         "gold": "jazz",
         "noise_seeds": [
-          1361491566752643926,
-          1726637082100963841,
-          2324124314960237039,
-          858242868407891728,
-          1370334395867657689,
-          595447594627661707,
-          1539616951772116346,
-          4087548307257746277,
-          7101427069023534922,
-          676645832943872150,
-          8151228549355366735,
-          9039960973841537944,
-          5061106591979613630,
-          3108266958786213752,
-          2938904924877408352,
-          1912886022895541066
+          7561261358279700160,
+          2355747618932515889,
+          3198668133529642042,
+          7208142222796258190,
+          4354284046329115145,
+          558004619832333434,
+          7274393877173571647,
+          4385989952531771213,
+          4318972383531733565,
+          3158808814937224730,
+          110013835632920803,
+          4694123666555657986,
+          6525657737279429890,
+          7327560847374569239,
+          3679708256289816614,
+          3228960161556474807
         ],
         "state": "jazz",
-        "style": "fresh_wording_0"
+        "style": "original_training_event"
       },
       {
-        "event_text": "For the record, the indigo desk train 001123's preferred music has changed to jazz; keep the latest value.",
+        "event_text": "Please remember the following music selection for the indigo desk train 001123: jazz. This supersedes the old selection.",
         "gold": "jazz",
         "noise_seeds": [
-          1361491566752643926,
-          1726637082100963841,
-          2324124314960237039,
-          858242868407891728
+          7561261358279700160,
+          2355747618932515889,
+          3198668133529642042,
+          7208142222796258190
         ],
         "state": "jazz",
-        "style": "fresh_wording_1"
+        "style": "new_wording_1"
       },
       {
-        "event_text": "Apply this new preference to the indigo desk train 001123: jazz for music, superseding the choice on record.",
+        "event_text": "Going forward, jazz is the preferred music for the indigo desk train 001123; retain that information.",
         "gold": "jazz",
         "noise_seeds": [
-          1361491566752643926,
-          1726637082100963841,
-          2324124314960237039,
-          858242868407891728
+          7561261358279700160,
+          2355747618932515889,
+          3198668133529642042,
+          7208142222796258190
         ],
         "state": "jazz",
-        "style": "fresh_wording_2"
+        "style": "new_wording_2"
       },
       {
-        "event_text": "Withdraw the indigo desk train 001123's music choice entirely, leaving no preferred option on record.",
         "gold": "no active preference",
         "noise_seeds": [
-          1361491566752643926,
-          1726637082100963841,
-          2324124314960237039,
-          858242868407891728,
-          1370334395867657689,
-          595447594627661707,
-          1539616951772116346,
-          4087548307257746277,
-          7101427069023534922,
-          676645832943872150,
-          8151228549355366735,
-          9039960973841537944,
-          5061106591979613630,
-          3108266958786213752,
-          2938904924877408352,
-          1912886022895541066
+          7561261358279700160,
+          2355747618932515889,
+          3198668133529642042,
+          7208142222796258190,
+          4354284046329115145,
+          558004619832333434,
+          7274393877173571647,
+          4385989952531771213,
+          4318972383531733565,
+          3158808814937224730,
+          110013835632920803,
+          4694123666555657986,
+          6525657737279429890,
+          7327560847374569239,
+          3679708256289816614,
+          3228960161556474807
         ],
         "state": "clear",
-        "style": "fresh_wording_0"
+        "style": "original_training_event"
       },
       {
-        "event_text": "The indigo desk train 001123 has opted out of its music preference. Remove the remembered selection.",
+        "event_text": "Cancel the remembered music selection for the indigo desk train 001123. There is no replacement preference.",
         "gold": "no active preference",
         "noise_seeds": [
-          1361491566752643926,
-          1726637082100963841,
-          2324124314960237039,
-          858242868407891728
+          7561261358279700160,
+          2355747618932515889,
+          3198668133529642042,
+          7208142222796258190
         ],
         "state": "clear",
-        "style": "fresh_wording_1"
+        "style": "new_wording_1"
       },
       {
-        "event_text": "There should be no preferred music assigned to the indigo desk train 001123 anymore; discard the saved value.",
+        "event_text": "The music entry for the indigo desk train 001123 should be empty now; remove its previously remembered choice.",
         "gold": "no active preference",
         "noise_seeds": [
-          1361491566752643926,
-          1726637082100963841,
-          2324124314960237039,
-          858242868407891728
+          7561261358279700160,
+          2355747618932515889,
+          3198668133529642042,
+          7208142222796258190
         ],
         "state": "clear",
-        "style": "fresh_wording_2"
+        "style": "new_wording_2"
       }
     ]
   },
-  "validation_exposure": "Previously observed fresh_wording_v1 cases and noise reused in full as continuation regression tests; not a new holdout.",
-  "validation_scope": "Complete1990 raw rows,1800 matched answers,360 generated images; all16 historical targets and16 actual six-write RGB chains. Not unseen entities or simultaneous multi-fact memory.",
-  "validation_set": "fresh_wording_v1"
+  "validation_exposure": "Both functional suites are previously observed regressions. The24 training source images use independent newly fixed training noise and are not holdout data."
 }

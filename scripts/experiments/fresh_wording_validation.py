@@ -68,7 +68,7 @@ def plan(training, bank):
         value['diagnostic_purpose'] = 'Measure all original observed-expression cells on the unchanged 03 endpoint before attributing 4f errors to continuation training.'
         return value
     continuation_commit = '4fbc85725d78427235757ace2661d086b896a97f'
-    generated_source_commit = 'ef163b26e33f62c496ed0da8744ebb7bf1163873'
+    generated_source_commit = 'b62ec027ad725aeb6ecc772aa85e7a3ff6e49b36'
     if training['training_commit'] in (continuation_commit, generated_source_commit):
         if training['training_commit'] == generated_source_commit:
             from scripts.experiments.generated_source_training_protocol import plan as continuation_plan

@@ -20,7 +20,7 @@ PLAN_SHA = 'c4a6986edf1330e27af5b91e5105ad6e3806040f01d562f791edbd392bd16834'
 NATIVE_CONDITION_COMMIT = '03f8467e5a1201c2dbd9d12484bf2338d7837727'
 HISTORICAL_WORDING_COMMIT = 'b9f90e956eea7bda15f638c8877919941ce4fec5'
 CLEAR_RETENTION_COMMIT = '4fbc85725d78427235757ace2661d086b896a97f'
-GENERATED_SOURCE_COMMIT = 'ef163b26e33f62c496ed0da8744ebb7bf1163873'
+GENERATED_SOURCE_COMMIT = 'b62ec027ad725aeb6ecc772aa85e7a3ff6e49b36'
 # Independently observed in the complete720-row historical readback and the
 # sealed transition positive controls, not inferred from each scored output.
 GOLD_IDS = {'ambient': [59614], 'jazz': [73, 9802], 'no active preference': [2152, 4541, 21933],
