@@ -1,6 +1,6 @@
 # Vision Learnable Memory
 
-> 最新核验（2026-09-14）：新4H200完成历史表达增强训练，开发1510/1510；完整旧案例为1780/1800。全部1990条原始回答、360张PNG与实际CLI已本地复核：历史前缀修复64条，但连续链新增20条错误（460/480，14/16整链）。见[完整功能与逐条退步](reports/official-alignment-results-20260913/historical-wording-validation-review.md)及[完整开发证据](reports/official-alignment-results-20260913/historical-wording-development-review.md)。[新表达验收](reports/official-fresh-wording-acceptance-20260914.md)正在完成，[完整PNG读取验收](reports/official-png-readback-acceptance-20260914.md)随后执行。尚无通过完整验收的可用版本。
+> 最新核验（2026-09-14）：新4H200完成历史表达增强训练，开发1510/1510；[旧案例](reports/official-alignment-results-20260913/historical-wording-validation-review.md)1780/1800，[固定新表述](reports/official-alignment-results-20260913/fresh-wording-validation-review.md)1740/1800。两套完整raw、PNG及实际CLI已本地复核；历史前缀均全对，连续链仍分别20/60条清空及后续保持不变失败。[完整PNG读回](reports/official-alignment-results-20260913/png-readback-validation-review.md)全部3980raw、796张PNG本地复核为3520/3600，没有匹配答案翻转。继续[权重与源图交叉诊断](reports/official-clear-source-swap-plan-20260914.md)；尚无通过完整验收的可用版本。
 
 > 2026-09-13：[官方DreamLite训练对齐审计](reports/official-alignment-audit-20260913.md)与[实训结果](reports/official-alignment-results-20260913/README.md)。新训练入口默认官方target/noise FM、source条件与纯噪声推理；Base直接使用原生官方28步pipeline。显式`--base-guidance-scale 1`只改变Base推理，默认7.5保留。旧source-anchored文档和下方旧实验阶段记录仅供历史复现，当前结论以上方完整结果为准。
 

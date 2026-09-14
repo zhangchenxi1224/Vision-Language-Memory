@@ -1,0 +1,6462 @@
+{
+  "readback_archive_sha256": "4ab15adc2e7d5cb1abed538ab84abadafa1e9f56482a0ec91af39165dc0b0d90",
+  "source_archive_sha256": "259aba3a18cb4423212f7e520aa1de7ca8c80b63d53c712320803153f444beb0",
+  "recount": {
+    "identity": {
+      "checkpoint_sha256": "34f33ea7cd9b209d80c460c91bc102c06b48ad40a54b6fbb224f5f1637529348",
+      "inference_cli_source_sha256": "b008a388dea27a61794cca8ce3cd6a2be71b4019964a66d4862798157884f96d",
+      "lane": "chains",
+      "optimizer_updates": 0,
+      "package_manifest_sha256": "bb9c4398cc609bb808bd0a45c9a0ae876ac657fcd6bb88acad09d2a78105a8fa",
+      "plan": {
+        "chain_parity": "all 960 original chain pixels and generated token sequences must match",
+        "controls": "all blank/donor source PT images rounded to uint8 PNG before reading",
+        "generation": {
+          "do_sample": false,
+          "gold_before_generation": false,
+          "max_new_tokens": 32
+        },
+        "lanes": {
+          "chains": {
+            "images": 96,
+            "matched_rows": 480,
+            "mode": "rgb_chains",
+            "prefix_lane": null,
+            "raw_rows": 480
+          },
+          "confirmation": {
+            "images": 78,
+            "matched_rows": 360,
+            "mode": "single_writes",
+            "prefix_lane": null,
+            "raw_rows": 390
+          },
+          "prefix0": {
+            "images": 112,
+            "matched_rows": 480,
+            "mode": "historical_prefixes",
+            "prefix_lane": 0,
+            "raw_rows": 560
+          },
+          "prefix1": {
+            "images": 112,
+            "matched_rows": 480,
+            "mode": "historical_prefixes",
+            "prefix_lane": 1,
+            "raw_rows": 560
+          }
+        },
+        "parent_commit": "b9f90e956eea7bda15f638c8877919941ce4fec5",
+        "pixel_path": "PIL RGB PNG -> numpy uint8 copy -> NCHW float32 / 255 -> frozen Reader",
+        "policy": "complete-png-readback-v1",
+        "scope": "PNG deployment for seen entities and semantic questions, including fixed fresh event wording",
+        "scoring": "original sealed GOLD_IDS plus immediate EOS 151645; no normalization",
+        "selection": "all registered cells regardless of prior outcome; no training, retries or best-of selection",
+        "sources": {
+          "fresh_wording_v1": {
+            "commit": "56b56a8e845821867d599dd795b166800cc9e300",
+            "prefix": "56b56a8-fresh-wording"
+          },
+          "registered": {
+            "commit": "7b82309eb49e913d8f028230ac5f79c743d28a46",
+            "prefix": "7b82309-logical"
+          }
+        },
+        "total_images": 796,
+        "total_matched_rows": 3600,
+        "total_raw_rows": 3980
+      },
+      "readback_commit": "38531f04c2f2d6337ce2ede6dba5950f901ebe53",
+      "reader_snapshot": {
+        "manifest_sha256": "159a504daaae6dc412535978f087150a0eb8e50164afd70a8a17f83906f1127c",
+        "repo_id": "Qwen/Qwen3-VL-4B-Instruct",
+        "revision": "ebb281ec70b05090aa6165b016eac8ec08e71b17",
+        "snapshot_payload_sha256": "45be3ffb00017b02bffa79f4f8e6f301760ac50c0bb78b2c4e5a7fe8aa3d52c6"
+      },
+      "source_complete_sha256": "d7030e5e5834599a7a1cae1d17415a609d2d8907e285e686a7e40e7c9b4ed04a",
+      "source_generations_sha256": "cf277803c424a284f221326d40e9c1ed733b8b0ff69ed9390fd3b21e77f115f5",
+      "source_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7b82309-logical-chains",
+      "validation_set": "registered"
+    },
+    "original": {
+      "mode": "rgb_chains",
+      "prefix_lane": null,
+      "raw_rows": 480,
+      "groups": {
+        "sequence-0-rep-0-step-0": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-0-rep-0-step-1": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-0-rep-0-step-2": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-0-rep-0-step-3": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-0-rep-0-step-4": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-0-rep-0-step-5": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-0-rep-1-step-0": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-0-rep-1-step-1": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-0-rep-1-step-2": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-0-rep-1-step-3": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-0-rep-1-step-4": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-0-rep-1-step-5": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-0-rep-2-step-0": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-0-rep-2-step-1": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-0-rep-2-step-2": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-0-rep-2-step-3": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-0-rep-2-step-4": {
+          "n": 5,
+          "correct_eos": 0,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-0-rep-2-step-5": {
+          "n": 5,
+          "correct_eos": 0,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-0-rep-3-step-0": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-0-rep-3-step-1": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-0-rep-3-step-2": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-0-rep-3-step-3": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-0-rep-3-step-4": {
+          "n": 5,
+          "correct_eos": 0,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-0-rep-3-step-5": {
+          "n": 5,
+          "correct_eos": 0,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-1-rep-0-step-0": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-1-rep-0-step-1": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-1-rep-0-step-2": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-1-rep-0-step-3": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-1-rep-0-step-4": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-1-rep-0-step-5": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-1-rep-1-step-0": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-1-rep-1-step-1": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-1-rep-1-step-2": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-1-rep-1-step-3": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-1-rep-1-step-4": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-1-rep-1-step-5": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-1-rep-2-step-0": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-1-rep-2-step-1": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-1-rep-2-step-2": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-1-rep-2-step-3": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-1-rep-2-step-4": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-1-rep-2-step-5": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-1-rep-3-step-0": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-1-rep-3-step-1": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-1-rep-3-step-2": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-1-rep-3-step-3": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-1-rep-3-step-4": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-1-rep-3-step-5": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-2-rep-0-step-0": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-2-rep-0-step-1": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-2-rep-0-step-2": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-2-rep-0-step-3": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-2-rep-0-step-4": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-2-rep-0-step-5": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-2-rep-1-step-0": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-2-rep-1-step-1": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-2-rep-1-step-2": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-2-rep-1-step-3": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-2-rep-1-step-4": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-2-rep-1-step-5": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-2-rep-2-step-0": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-2-rep-2-step-1": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-2-rep-2-step-2": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-2-rep-2-step-3": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-2-rep-2-step-4": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-2-rep-2-step-5": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-2-rep-3-step-0": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-2-rep-3-step-1": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-2-rep-3-step-2": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-2-rep-3-step-3": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-2-rep-3-step-4": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-2-rep-3-step-5": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-3-rep-0-step-0": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-3-rep-0-step-1": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-3-rep-0-step-2": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-3-rep-0-step-3": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-3-rep-0-step-4": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-3-rep-0-step-5": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-3-rep-1-step-0": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-3-rep-1-step-1": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-3-rep-1-step-2": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-3-rep-1-step-3": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-3-rep-1-step-4": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-3-rep-1-step-5": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-3-rep-2-step-0": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-3-rep-2-step-1": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-3-rep-2-step-2": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-3-rep-2-step-3": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-3-rep-2-step-4": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-3-rep-2-step-5": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-3-rep-3-step-0": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-3-rep-3-step-1": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-3-rep-3-step-2": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-3-rep-3-step-3": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-3-rep-3-step-4": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-3-rep-3-step-5": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        }
+      },
+      "cells": {
+        "sequence-0-rep-0-step-0/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-0/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-0/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-0/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-0/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-1/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-1/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-1/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-1/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-1/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-2/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-2/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-2/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-2/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-2/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-3/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-3/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-3/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-3/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-3/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-4/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-4/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-4/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-4/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-4/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-5/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-5/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-5/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-5/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-5/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-0/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-0/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-0/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-0/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-0/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-1/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-1/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-1/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-1/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-1/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-2/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-2/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-2/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-2/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-2/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-3/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-3/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-3/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-3/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-3/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-4/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-4/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-4/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-4/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-4/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-5/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-5/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-5/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-5/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-5/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-0/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-0/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-0/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-0/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-0/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-1/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-1/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-1/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-1/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-1/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-2/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-2/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-2/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-2/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-2/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-3/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-3/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-3/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-3/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-3/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-4/original_open": {
+          "n": 1,
+          "correct_eos": 0,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-4/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 0,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-4/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 0,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-4/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 0,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-4/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 0,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-5/original_open": {
+          "n": 1,
+          "correct_eos": 0,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-5/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 0,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-5/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 0,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-5/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 0,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-5/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 0,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-0/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-0/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-0/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-0/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-0/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-1/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-1/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-1/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-1/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-1/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-2/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-2/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-2/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-2/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-2/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-3/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-3/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-3/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-3/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-3/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-4/original_open": {
+          "n": 1,
+          "correct_eos": 0,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-4/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 0,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-4/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 0,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-4/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 0,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-4/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 0,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-5/original_open": {
+          "n": 1,
+          "correct_eos": 0,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-5/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 0,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-5/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 0,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-5/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 0,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-5/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 0,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-0/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-0/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-0/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-0/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-0/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-1/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-1/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-1/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-1/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-1/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-2/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-2/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-2/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-2/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-2/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-3/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-3/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-3/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-3/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-3/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-4/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-4/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-4/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-4/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-4/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-5/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-5/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-5/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-5/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-5/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-0/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-0/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-0/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-0/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-0/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-1/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-1/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-1/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-1/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-1/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-2/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-2/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-2/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-2/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-2/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-3/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-3/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-3/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-3/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-3/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-4/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-4/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-4/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-4/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-4/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-5/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-5/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-5/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-5/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-5/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-0/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-0/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-0/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-0/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-0/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-1/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-1/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-1/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-1/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-1/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-2/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-2/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-2/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-2/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-2/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-3/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-3/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-3/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-3/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-3/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-4/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-4/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-4/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-4/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-4/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-5/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-5/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-5/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-5/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-5/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-0/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-0/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-0/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-0/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-0/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-1/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-1/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-1/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-1/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-1/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-2/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-2/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-2/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-2/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-2/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-3/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-3/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-3/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-3/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-3/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-4/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-4/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-4/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-4/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-4/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-5/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-5/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-5/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-5/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-5/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-0/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-0/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-0/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-0/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-0/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-1/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-1/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-1/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-1/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-1/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-2/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-2/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-2/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-2/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-2/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-3/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-3/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-3/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-3/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-3/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-4/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-4/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-4/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-4/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-4/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-5/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-5/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-5/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-5/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-5/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-0/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-0/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-0/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-0/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-0/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-1/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-1/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-1/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-1/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-1/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-2/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-2/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-2/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-2/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-2/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-3/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-3/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-3/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-3/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-3/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-4/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-4/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-4/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-4/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-4/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-5/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-5/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-5/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-5/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-5/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-0/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-0/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-0/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-0/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-0/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-1/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-1/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-1/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-1/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-1/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-2/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-2/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-2/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-2/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-2/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-3/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-3/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-3/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-3/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-3/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-4/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-4/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-4/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-4/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-4/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-5/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-5/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-5/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-5/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-5/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-0/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-0/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-0/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-0/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-0/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-1/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-1/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-1/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-1/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-1/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-2/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-2/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-2/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-2/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-2/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-3/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-3/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-3/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-3/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-3/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-4/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-4/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-4/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-4/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-4/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-5/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-5/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-5/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-5/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-5/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-0/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-0/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-0/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-0/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-0/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-1/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-1/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-1/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-1/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-1/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-2/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-2/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-2/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-2/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-2/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-3/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-3/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-3/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-3/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-3/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-4/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-4/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-4/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-4/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-4/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-5/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-5/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-5/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-5/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-5/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-0/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-0/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-0/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-0/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-0/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-1/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-1/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-1/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-1/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-1/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-2/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-2/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-2/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-2/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-2/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-3/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-3/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-3/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-3/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-3/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-4/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-4/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-4/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-4/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-4/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-5/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-5/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-5/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-5/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-5/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-0/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-0/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-0/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-0/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-0/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-1/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-1/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-1/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-1/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-1/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-2/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-2/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-2/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-2/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-2/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-3/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-3/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-3/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-3/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-3/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-4/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-4/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-4/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-4/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-4/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-5/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-5/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-5/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-5/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-5/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-0/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-0/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-0/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-0/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-0/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-1/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-1/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-1/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-1/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-1/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-2/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-2/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-2/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-2/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-2/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-3/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-3/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-3/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-3/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-3/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-4/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-4/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-4/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-4/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-4/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-5/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-5/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-5/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-5/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-5/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        }
+      },
+      "matched_rows": 480,
+      "matched_correct_eos": 460,
+      "generated_images": 96,
+      "all_five_prompt_images": 92,
+      "all_generated_correct_eos": false,
+      "chain_count": 16,
+      "complete_chains_correct_eos": 14
+    },
+    "png": {
+      "mode": "rgb_chains",
+      "prefix_lane": null,
+      "raw_rows": 480,
+      "groups": {
+        "sequence-0-rep-0-step-0": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-0-rep-0-step-1": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-0-rep-0-step-2": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-0-rep-0-step-3": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-0-rep-0-step-4": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-0-rep-0-step-5": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-0-rep-1-step-0": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-0-rep-1-step-1": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-0-rep-1-step-2": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-0-rep-1-step-3": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-0-rep-1-step-4": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-0-rep-1-step-5": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-0-rep-2-step-0": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-0-rep-2-step-1": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-0-rep-2-step-2": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-0-rep-2-step-3": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-0-rep-2-step-4": {
+          "n": 5,
+          "correct_eos": 0,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-0-rep-2-step-5": {
+          "n": 5,
+          "correct_eos": 0,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-0-rep-3-step-0": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-0-rep-3-step-1": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-0-rep-3-step-2": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-0-rep-3-step-3": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-0-rep-3-step-4": {
+          "n": 5,
+          "correct_eos": 0,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-0-rep-3-step-5": {
+          "n": 5,
+          "correct_eos": 0,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-1-rep-0-step-0": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-1-rep-0-step-1": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-1-rep-0-step-2": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-1-rep-0-step-3": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-1-rep-0-step-4": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-1-rep-0-step-5": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-1-rep-1-step-0": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-1-rep-1-step-1": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-1-rep-1-step-2": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-1-rep-1-step-3": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-1-rep-1-step-4": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-1-rep-1-step-5": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-1-rep-2-step-0": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-1-rep-2-step-1": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-1-rep-2-step-2": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-1-rep-2-step-3": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-1-rep-2-step-4": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-1-rep-2-step-5": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-1-rep-3-step-0": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-1-rep-3-step-1": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-1-rep-3-step-2": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-1-rep-3-step-3": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-1-rep-3-step-4": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-1-rep-3-step-5": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-2-rep-0-step-0": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-2-rep-0-step-1": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-2-rep-0-step-2": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-2-rep-0-step-3": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-2-rep-0-step-4": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-2-rep-0-step-5": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-2-rep-1-step-0": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-2-rep-1-step-1": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-2-rep-1-step-2": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-2-rep-1-step-3": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-2-rep-1-step-4": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-2-rep-1-step-5": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-2-rep-2-step-0": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-2-rep-2-step-1": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-2-rep-2-step-2": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-2-rep-2-step-3": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-2-rep-2-step-4": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-2-rep-2-step-5": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-2-rep-3-step-0": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-2-rep-3-step-1": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-2-rep-3-step-2": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-2-rep-3-step-3": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-2-rep-3-step-4": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-2-rep-3-step-5": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-3-rep-0-step-0": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-3-rep-0-step-1": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-3-rep-0-step-2": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-3-rep-0-step-3": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-3-rep-0-step-4": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-3-rep-0-step-5": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-3-rep-1-step-0": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-3-rep-1-step-1": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-3-rep-1-step-2": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-3-rep-1-step-3": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-3-rep-1-step-4": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-3-rep-1-step-5": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-3-rep-2-step-0": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-3-rep-2-step-1": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-3-rep-2-step-2": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-3-rep-2-step-3": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-3-rep-2-step-4": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-3-rep-2-step-5": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-3-rep-3-step-0": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-3-rep-3-step-1": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "no active preference": 5
+          }
+        },
+        "sequence-3-rep-3-step-2": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-3-rep-3-step-3": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "jazz": 5
+          }
+        },
+        "sequence-3-rep-3-step-4": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        },
+        "sequence-3-rep-3-step-5": {
+          "n": 5,
+          "correct_eos": 5,
+          "condition": "matched",
+          "raw": {
+            "ambient": 5
+          }
+        }
+      },
+      "cells": {
+        "sequence-0-rep-0-step-0/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-0/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-0/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-0/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-0/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-1/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-1/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-1/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-1/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-1/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-2/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-2/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-2/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-2/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-2/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-3/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-3/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-3/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-3/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-3/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-4/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-4/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-4/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-4/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-4/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-5/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-5/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-5/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-5/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-0-step-5/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-0/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-0/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-0/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-0/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-0/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-1/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-1/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-1/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-1/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-1/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-2/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-2/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-2/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-2/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-2/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-3/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-3/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-3/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-3/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-3/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-4/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-4/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-4/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-4/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-4/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-5/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-5/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-5/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-5/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-1-step-5/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-0/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-0/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-0/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-0/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-0/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-1/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-1/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-1/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-1/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-1/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-2/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-2/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-2/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-2/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-2/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-3/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-3/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-3/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-3/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-3/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-4/original_open": {
+          "n": 1,
+          "correct_eos": 0,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-4/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 0,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-4/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 0,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-4/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 0,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-4/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 0,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-5/original_open": {
+          "n": 1,
+          "correct_eos": 0,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-5/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 0,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-5/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 0,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-5/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 0,
+          "condition": "matched"
+        },
+        "sequence-0-rep-2-step-5/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 0,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-0/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-0/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-0/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-0/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-0/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-1/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-1/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-1/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-1/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-1/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-2/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-2/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-2/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-2/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-2/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-3/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-3/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-3/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-3/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-3/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-4/original_open": {
+          "n": 1,
+          "correct_eos": 0,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-4/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 0,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-4/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 0,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-4/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 0,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-4/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 0,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-5/original_open": {
+          "n": 1,
+          "correct_eos": 0,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-5/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 0,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-5/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 0,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-5/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 0,
+          "condition": "matched"
+        },
+        "sequence-0-rep-3-step-5/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 0,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-0/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-0/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-0/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-0/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-0/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-1/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-1/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-1/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-1/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-1/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-2/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-2/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-2/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-2/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-2/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-3/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-3/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-3/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-3/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-3/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-4/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-4/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-4/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-4/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-4/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-5/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-5/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-5/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-5/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-0-step-5/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-0/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-0/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-0/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-0/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-0/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-1/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-1/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-1/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-1/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-1/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-2/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-2/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-2/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-2/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-2/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-3/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-3/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-3/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-3/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-3/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-4/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-4/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-4/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-4/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-4/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-5/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-5/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-5/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-5/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-1-step-5/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-0/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-0/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-0/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-0/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-0/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-1/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-1/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-1/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-1/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-1/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-2/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-2/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-2/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-2/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-2/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-3/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-3/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-3/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-3/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-3/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-4/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-4/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-4/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-4/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-4/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-5/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-5/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-5/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-5/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-2-step-5/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-0/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-0/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-0/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-0/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-0/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-1/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-1/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-1/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-1/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-1/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-2/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-2/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-2/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-2/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-2/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-3/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-3/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-3/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-3/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-3/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-4/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-4/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-4/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-4/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-4/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-5/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-5/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-5/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-5/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-1-rep-3-step-5/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-0/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-0/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-0/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-0/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-0/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-1/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-1/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-1/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-1/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-1/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-2/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-2/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-2/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-2/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-2/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-3/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-3/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-3/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-3/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-3/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-4/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-4/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-4/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-4/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-4/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-5/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-5/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-5/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-5/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-0-step-5/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-0/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-0/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-0/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-0/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-0/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-1/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-1/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-1/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-1/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-1/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-2/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-2/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-2/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-2/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-2/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-3/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-3/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-3/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-3/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-3/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-4/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-4/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-4/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-4/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-4/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-5/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-5/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-5/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-5/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-1-step-5/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-0/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-0/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-0/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-0/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-0/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-1/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-1/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-1/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-1/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-1/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-2/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-2/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-2/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-2/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-2/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-3/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-3/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-3/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-3/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-3/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-4/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-4/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-4/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-4/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-4/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-5/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-5/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-5/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-5/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-2-step-5/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-0/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-0/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-0/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-0/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-0/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-1/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-1/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-1/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-1/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-1/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-2/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-2/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-2/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-2/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-2/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-3/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-3/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-3/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-3/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-3/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-4/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-4/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-4/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-4/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-4/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-5/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-5/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-5/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-5/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-2-rep-3-step-5/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-0/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-0/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-0/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-0/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-0/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-1/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-1/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-1/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-1/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-1/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-2/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-2/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-2/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-2/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-2/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-3/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-3/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-3/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-3/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-3/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-4/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-4/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-4/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-4/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-4/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-5/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-5/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-5/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-5/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-0-step-5/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-0/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-0/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-0/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-0/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-0/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-1/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-1/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-1/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-1/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-1/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-2/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-2/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-2/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-2/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-2/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-3/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-3/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-3/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-3/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-3/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-4/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-4/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-4/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-4/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-4/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-5/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-5/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-5/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-5/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-1-step-5/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-0/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-0/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-0/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-0/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-0/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-1/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-1/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-1/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-1/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-1/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-2/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-2/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-2/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-2/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-2/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-3/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-3/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-3/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-3/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-3/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-4/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-4/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-4/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-4/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-4/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-5/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-5/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-5/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-5/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-2-step-5/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-0/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-0/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-0/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-0/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-0/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-1/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-1/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-1/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-1/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-1/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-2/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-2/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-2/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-2/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-2/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-3/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-3/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-3/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-3/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-3/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-4/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-4/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-4/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-4/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-4/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-5/original_open": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-5/paraphrase_1": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-5/paraphrase_2": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-5/paraphrase_3": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        },
+        "sequence-3-rep-3-step-5/paraphrase_4": {
+          "n": 1,
+          "correct_eos": 1,
+          "condition": "matched"
+        }
+      },
+      "matched_rows": 480,
+      "matched_correct_eos": 460,
+      "generated_images": 96,
+      "all_five_prompt_images": 92,
+      "all_generated_correct_eos": false,
+      "chain_count": 16,
+      "complete_chains_correct_eos": 14
+    },
+    "paired_matched": {
+      "retained_correct": 460,
+      "fixed": 0,
+      "regressed": 0,
+      "still_wrong": 20
+    },
+    "chain_rows_exact": 480,
+    "chain_parity_passed": true,
+    "png_images_verified_here": 96,
+    "all_png_pixels_verified_here": true,
+    "complete_sha256": "854c2a89c306f2c457836822be467a7bb80cca0baa7f68cff8a4b47d1affab1d"
+  },
+  "scope": "Every raw record and actual persisted PNG pixel checked locally. Original FP32 PT tensors remain remote; no local FP32 trajectory claim."
+}

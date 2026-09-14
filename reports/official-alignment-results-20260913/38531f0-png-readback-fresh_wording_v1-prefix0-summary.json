@@ -1,0 +1,2803 @@
+{
+  "identity": {
+    "checkpoint_sha256": "34f33ea7cd9b209d80c460c91bc102c06b48ad40a54b6fbb224f5f1637529348",
+    "inference_cli_source_sha256": "b008a388dea27a61794cca8ce3cd6a2be71b4019964a66d4862798157884f96d",
+    "lane": "prefix0",
+    "optimizer_updates": 0,
+    "package_manifest_sha256": "bb9c4398cc609bb808bd0a45c9a0ae876ac657fcd6bb88acad09d2a78105a8fa",
+    "plan": {
+      "chain_parity": "all 960 original chain pixels and generated token sequences must match",
+      "controls": "all blank/donor source PT images rounded to uint8 PNG before reading",
+      "generation": {
+        "do_sample": false,
+        "gold_before_generation": false,
+        "max_new_tokens": 32
+      },
+      "lanes": {
+        "chains": {
+          "images": 96,
+          "matched_rows": 480,
+          "mode": "rgb_chains",
+          "prefix_lane": null,
+          "raw_rows": 480
+        },
+        "confirmation": {
+          "images": 78,
+          "matched_rows": 360,
+          "mode": "single_writes",
+          "prefix_lane": null,
+          "raw_rows": 390
+        },
+        "prefix0": {
+          "images": 112,
+          "matched_rows": 480,
+          "mode": "historical_prefixes",
+          "prefix_lane": 0,
+          "raw_rows": 560
+        },
+        "prefix1": {
+          "images": 112,
+          "matched_rows": 480,
+          "mode": "historical_prefixes",
+          "prefix_lane": 1,
+          "raw_rows": 560
+        }
+      },
+      "parent_commit": "b9f90e956eea7bda15f638c8877919941ce4fec5",
+      "pixel_path": "PIL RGB PNG -> numpy uint8 copy -> NCHW float32 / 255 -> frozen Reader",
+      "policy": "complete-png-readback-v1",
+      "scope": "PNG deployment for seen entities and semantic questions, including fixed fresh event wording",
+      "scoring": "original sealed GOLD_IDS plus immediate EOS 151645; no normalization",
+      "selection": "all registered cells regardless of prior outcome; no training, retries or best-of selection",
+      "sources": {
+        "fresh_wording_v1": {
+          "commit": "56b56a8e845821867d599dd795b166800cc9e300",
+          "prefix": "56b56a8-fresh-wording"
+        },
+        "registered": {
+          "commit": "7b82309eb49e913d8f028230ac5f79c743d28a46",
+          "prefix": "7b82309-logical"
+        }
+      },
+      "total_images": 796,
+      "total_matched_rows": 3600,
+      "total_raw_rows": 3980
+    },
+    "readback_commit": "38531f04c2f2d6337ce2ede6dba5950f901ebe53",
+    "reader_snapshot": {
+      "manifest_sha256": "159a504daaae6dc412535978f087150a0eb8e50164afd70a8a17f83906f1127c",
+      "repo_id": "Qwen/Qwen3-VL-4B-Instruct",
+      "revision": "ebb281ec70b05090aa6165b016eac8ec08e71b17",
+      "snapshot_payload_sha256": "45be3ffb00017b02bffa79f4f8e6f301760ac50c0bb78b2c4e5a7fe8aa3d52c6"
+    },
+    "source_complete_sha256": "ff5679e50ce908ee15e44612280c30e733dce6208d2b893147c42bd27ffd071a",
+    "source_generations_sha256": "8bd940912acc4564459b6c4d41116ae251beb2ddc1072892e6214e9261b43ca6",
+    "source_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/56b56a8-fresh-wording-prefix0",
+    "validation_set": "fresh_wording_v1"
+  },
+  "original": {
+    "mode": "historical_prefixes",
+    "prefix_lane": 0,
+    "raw_rows": 560,
+    "groups": {
+      "fresh-target-00-style-0": {
+        "n": 20,
+        "correct_eos": 20,
+        "condition": "matched",
+        "raw": {
+          "green": 20
+        }
+      },
+      "fresh-target-00-style-1": {
+        "n": 20,
+        "correct_eos": 20,
+        "condition": "matched",
+        "raw": {
+          "green": 20
+        }
+      },
+      "fresh-target-00-style-2": {
+        "n": 20,
+        "correct_eos": 20,
+        "condition": "matched",
+        "raw": {
+          "green": 20
+        }
+      },
+      "fresh-target-02-style-0": {
+        "n": 20,
+        "correct_eos": 20,
+        "condition": "matched",
+        "raw": {
+          "juice": 20
+        }
+      },
+      "fresh-target-02-style-1": {
+        "n": 20,
+        "correct_eos": 20,
+        "condition": "matched",
+        "raw": {
+          "juice": 20
+        }
+      },
+      "fresh-target-02-style-2": {
+        "n": 20,
+        "correct_eos": 20,
+        "condition": "matched",
+        "raw": {
+          "juice": 20
+        }
+      },
+      "fresh-target-04-style-0": {
+        "n": 20,
+        "correct_eos": 20,
+        "condition": "matched",
+        "raw": {
+          "jazz": 20
+        }
+      },
+      "fresh-target-04-style-1": {
+        "n": 20,
+        "correct_eos": 20,
+        "condition": "matched",
+        "raw": {
+          "jazz": 20
+        }
+      },
+      "fresh-target-04-style-2": {
+        "n": 20,
+        "correct_eos": 20,
+        "condition": "matched",
+        "raw": {
+          "jazz": 20
+        }
+      },
+      "fresh-target-06-style-0": {
+        "n": 20,
+        "correct_eos": 20,
+        "condition": "matched",
+        "raw": {
+          "linen": 20
+        }
+      },
+      "fresh-target-06-style-1": {
+        "n": 20,
+        "correct_eos": 20,
+        "condition": "matched",
+        "raw": {
+          "linen": 20
+        }
+      },
+      "fresh-target-06-style-2": {
+        "n": 20,
+        "correct_eos": 20,
+        "condition": "matched",
+        "raw": {
+          "linen": 20
+        }
+      },
+      "fresh-target-08-style-0": {
+        "n": 20,
+        "correct_eos": 20,
+        "condition": "matched",
+        "raw": {
+          "pasta": 20
+        }
+      },
+      "fresh-target-08-style-1": {
+        "n": 20,
+        "correct_eos": 20,
+        "condition": "matched",
+        "raw": {
+          "pasta": 20
+        }
+      },
+      "fresh-target-08-style-2": {
+        "n": 20,
+        "correct_eos": 20,
+        "condition": "matched",
+        "raw": {
+          "pasta": 20
+        }
+      },
+      "fresh-target-10-style-0": {
+        "n": 20,
+        "correct_eos": 20,
+        "condition": "matched",
+        "raw": {
+          "no active preference": 20
+        }
+      },
+      "fresh-target-10-style-1": {
+        "n": 20,
+        "correct_eos": 20,
+        "condition": "matched",
+        "raw": {
+          "no active preference": 20
+        }
+      },
+      "fresh-target-10-style-2": {
+        "n": 20,
+        "correct_eos": 20,
+        "condition": "matched",
+        "raw": {
+          "no active preference": 20
+        }
+      },
+      "fresh-target-12-style-0": {
+        "n": 20,
+        "correct_eos": 20,
+        "condition": "matched",
+        "raw": {
+          "no active preference": 20
+        }
+      },
+      "fresh-target-12-style-1": {
+        "n": 20,
+        "correct_eos": 20,
+        "condition": "matched",
+        "raw": {
+          "no active preference": 20
+        }
+      },
+      "fresh-target-12-style-2": {
+        "n": 20,
+        "correct_eos": 20,
+        "condition": "matched",
+        "raw": {
+          "no active preference": 20
+        }
+      },
+      "fresh-target-14-style-0": {
+        "n": 20,
+        "correct_eos": 20,
+        "condition": "matched",
+        "raw": {
+          "no active preference": 20
+        }
+      },
+      "fresh-target-14-style-1": {
+        "n": 20,
+        "correct_eos": 20,
+        "condition": "matched",
+        "raw": {
+          "no active preference": 20
+        }
+      },
+      "fresh-target-14-style-2": {
+        "n": 20,
+        "correct_eos": 20,
+        "condition": "matched",
+        "raw": {
+          "no active preference": 20
+        }
+      },
+      "target-14_blank": {
+        "n": 5,
+        "correct_eos": 0,
+        "condition": "blank",
+        "raw": {
+          "None": 3,
+          "Gray": 2
+        }
+      },
+      "target-14_donor": {
+        "n": 5,
+        "correct_eos": 0,
+        "condition": "donor",
+        "raw": {
+          "linen": 5
+        }
+      },
+      "target-2_blank": {
+        "n": 5,
+        "correct_eos": 0,
+        "condition": "blank",
+        "raw": {
+          "No drink preference recorded.": 2,
+          "None": 1,
+          "None stored.": 1,
+          "none": 1
+        }
+      },
+      "target-2_donor": {
+        "n": 5,
+        "correct_eos": 0,
+        "condition": "donor",
+        "raw": {
+          "no active preference": 5
+        }
+      },
+      "target-8_blank": {
+        "n": 5,
+        "correct_eos": 0,
+        "condition": "blank",
+        "raw": {
+          "none": 2,
+          "None": 1,
+          "None stored": 1,
+          "No meal preference recorded.": 1
+        }
+      },
+      "target-8_donor": {
+        "n": 5,
+        "correct_eos": 0,
+        "condition": "donor",
+        "raw": {
+          "none": 4,
+          "no preference": 1
+        }
+      },
+      "target-4_blank": {
+        "n": 5,
+        "correct_eos": 0,
+        "condition": "blank",
+        "raw": {
+          "No music preference recorded.": 2,
+          "None": 1,
+          "No music preference stored.": 1,
+          "none": 1
+        }
+      },
+      "target-4_donor": {
+        "n": 5,
+        "correct_eos": 0,
+        "condition": "donor",
+        "raw": {
+          "no music preference": 2,
+          "none": 2,
+          "rock music": 1
+        }
+      },
+      "target-6_blank": {
+        "n": 5,
+        "correct_eos": 0,
+        "condition": "blank",
+        "raw": {
+          "Not specified": 1,
+          "None": 2,
+          "Silver": 1,
+          "No material preference specified.": 1
+        }
+      },
+      "target-6_donor": {
+        "n": 5,
+        "correct_eos": 0,
+        "condition": "donor",
+        "raw": {
+          "no active preference": 3,
+          "no preference": 1,
+          "No preference.": 1
+        }
+      },
+      "target-10_blank": {
+        "n": 5,
+        "correct_eos": 0,
+        "condition": "blank",
+        "raw": {
+          "gray": 3,
+          "Gray": 2
+        }
+      },
+      "target-10_donor": {
+        "n": 5,
+        "correct_eos": 0,
+        "condition": "donor",
+        "raw": {
+          "green": 5
+        }
+      },
+      "target-12_blank": {
+        "n": 5,
+        "correct_eos": 0,
+        "condition": "blank",
+        "raw": {
+          "none": 2,
+          "None": 1,
+          "None stored": 1,
+          "No drink preference recorded.": 1
+        }
+      },
+      "target-12_donor": {
+        "n": 5,
+        "correct_eos": 0,
+        "condition": "donor",
+        "raw": {
+          "juice": 5
+        }
+      },
+      "target-0_blank": {
+        "n": 5,
+        "correct_eos": 0,
+        "condition": "blank",
+        "raw": {
+          "gray": 3,
+          "Gray": 2
+        }
+      },
+      "target-0_donor": {
+        "n": 5,
+        "correct_eos": 0,
+        "condition": "donor",
+        "raw": {
+          "no active preference": 5
+        }
+      }
+    },
+    "cells": {
+      "fresh-target-00-style-0/original_open": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-00-style-0/paraphrase_1": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-00-style-0/paraphrase_2": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-00-style-0/paraphrase_3": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-00-style-0/paraphrase_4": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-00-style-1/original_open": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-00-style-1/paraphrase_1": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-00-style-1/paraphrase_2": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-00-style-1/paraphrase_3": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-00-style-1/paraphrase_4": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-00-style-2/original_open": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-00-style-2/paraphrase_1": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-00-style-2/paraphrase_2": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-00-style-2/paraphrase_3": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-00-style-2/paraphrase_4": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-02-style-0/original_open": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-02-style-0/paraphrase_1": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-02-style-0/paraphrase_2": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-02-style-0/paraphrase_3": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-02-style-0/paraphrase_4": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-02-style-1/original_open": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-02-style-1/paraphrase_1": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-02-style-1/paraphrase_2": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-02-style-1/paraphrase_3": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-02-style-1/paraphrase_4": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-02-style-2/original_open": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-02-style-2/paraphrase_1": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-02-style-2/paraphrase_2": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-02-style-2/paraphrase_3": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-02-style-2/paraphrase_4": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-04-style-0/original_open": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-04-style-0/paraphrase_1": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-04-style-0/paraphrase_2": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-04-style-0/paraphrase_3": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-04-style-0/paraphrase_4": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-04-style-1/original_open": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-04-style-1/paraphrase_1": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-04-style-1/paraphrase_2": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-04-style-1/paraphrase_3": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-04-style-1/paraphrase_4": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-04-style-2/original_open": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-04-style-2/paraphrase_1": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-04-style-2/paraphrase_2": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-04-style-2/paraphrase_3": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-04-style-2/paraphrase_4": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-06-style-0/original_open": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-06-style-0/paraphrase_1": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-06-style-0/paraphrase_2": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-06-style-0/paraphrase_3": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-06-style-0/paraphrase_4": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-06-style-1/original_open": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-06-style-1/paraphrase_1": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-06-style-1/paraphrase_2": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-06-style-1/paraphrase_3": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-06-style-1/paraphrase_4": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-06-style-2/original_open": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-06-style-2/paraphrase_1": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-06-style-2/paraphrase_2": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-06-style-2/paraphrase_3": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-06-style-2/paraphrase_4": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-08-style-0/original_open": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-08-style-0/paraphrase_1": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-08-style-0/paraphrase_2": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-08-style-0/paraphrase_3": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-08-style-0/paraphrase_4": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-08-style-1/original_open": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-08-style-1/paraphrase_1": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-08-style-1/paraphrase_2": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-08-style-1/paraphrase_3": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-08-style-1/paraphrase_4": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-08-style-2/original_open": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-08-style-2/paraphrase_1": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-08-style-2/paraphrase_2": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-08-style-2/paraphrase_3": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-08-style-2/paraphrase_4": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-10-style-0/original_open": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-10-style-0/paraphrase_1": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-10-style-0/paraphrase_2": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-10-style-0/paraphrase_3": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-10-style-0/paraphrase_4": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-10-style-1/original_open": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-10-style-1/paraphrase_1": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-10-style-1/paraphrase_2": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-10-style-1/paraphrase_3": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-10-style-1/paraphrase_4": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-10-style-2/original_open": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-10-style-2/paraphrase_1": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-10-style-2/paraphrase_2": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-10-style-2/paraphrase_3": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-10-style-2/paraphrase_4": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-12-style-0/original_open": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-12-style-0/paraphrase_1": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-12-style-0/paraphrase_2": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-12-style-0/paraphrase_3": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-12-style-0/paraphrase_4": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-12-style-1/original_open": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-12-style-1/paraphrase_1": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-12-style-1/paraphrase_2": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-12-style-1/paraphrase_3": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-12-style-1/paraphrase_4": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-12-style-2/original_open": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-12-style-2/paraphrase_1": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-12-style-2/paraphrase_2": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-12-style-2/paraphrase_3": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-12-style-2/paraphrase_4": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-14-style-0/original_open": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-14-style-0/paraphrase_1": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-14-style-0/paraphrase_2": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-14-style-0/paraphrase_3": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-14-style-0/paraphrase_4": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-14-style-1/original_open": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-14-style-1/paraphrase_1": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-14-style-1/paraphrase_2": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-14-style-1/paraphrase_3": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-14-style-1/paraphrase_4": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-14-style-2/original_open": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-14-style-2/paraphrase_1": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-14-style-2/paraphrase_2": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-14-style-2/paraphrase_3": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-14-style-2/paraphrase_4": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "target-14_blank/original_open": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-14_blank/paraphrase_1": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-14_blank/paraphrase_2": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-14_blank/paraphrase_3": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-14_blank/paraphrase_4": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-14_donor/original_open": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-14_donor/paraphrase_1": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-14_donor/paraphrase_2": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-14_donor/paraphrase_3": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-14_donor/paraphrase_4": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-2_blank/original_open": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-2_blank/paraphrase_1": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-2_blank/paraphrase_2": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-2_blank/paraphrase_3": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-2_blank/paraphrase_4": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-2_donor/original_open": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-2_donor/paraphrase_1": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-2_donor/paraphrase_2": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-2_donor/paraphrase_3": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-2_donor/paraphrase_4": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-8_blank/original_open": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-8_blank/paraphrase_1": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-8_blank/paraphrase_2": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-8_blank/paraphrase_3": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-8_blank/paraphrase_4": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-8_donor/original_open": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-8_donor/paraphrase_1": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-8_donor/paraphrase_2": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-8_donor/paraphrase_3": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-8_donor/paraphrase_4": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-4_blank/original_open": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-4_blank/paraphrase_1": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-4_blank/paraphrase_2": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-4_blank/paraphrase_3": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-4_blank/paraphrase_4": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-4_donor/original_open": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-4_donor/paraphrase_1": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-4_donor/paraphrase_2": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-4_donor/paraphrase_3": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-4_donor/paraphrase_4": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-6_blank/original_open": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-6_blank/paraphrase_1": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-6_blank/paraphrase_2": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-6_blank/paraphrase_3": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-6_blank/paraphrase_4": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-6_donor/original_open": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-6_donor/paraphrase_1": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-6_donor/paraphrase_2": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-6_donor/paraphrase_3": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-6_donor/paraphrase_4": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-10_blank/original_open": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-10_blank/paraphrase_1": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-10_blank/paraphrase_2": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-10_blank/paraphrase_3": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-10_blank/paraphrase_4": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-10_donor/original_open": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-10_donor/paraphrase_1": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-10_donor/paraphrase_2": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-10_donor/paraphrase_3": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-10_donor/paraphrase_4": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-12_blank/original_open": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-12_blank/paraphrase_1": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-12_blank/paraphrase_2": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-12_blank/paraphrase_3": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-12_blank/paraphrase_4": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-12_donor/original_open": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-12_donor/paraphrase_1": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-12_donor/paraphrase_2": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-12_donor/paraphrase_3": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-12_donor/paraphrase_4": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-0_blank/original_open": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-0_blank/paraphrase_1": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-0_blank/paraphrase_2": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-0_blank/paraphrase_3": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-0_blank/paraphrase_4": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-0_donor/original_open": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-0_donor/paraphrase_1": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-0_donor/paraphrase_2": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-0_donor/paraphrase_3": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-0_donor/paraphrase_4": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      }
+    },
+    "matched_rows": 480,
+    "matched_correct_eos": 480,
+    "generated_images": 96,
+    "all_five_prompt_images": 96,
+    "all_generated_correct_eos": true
+  },
+  "png": {
+    "mode": "historical_prefixes",
+    "prefix_lane": 0,
+    "raw_rows": 560,
+    "groups": {
+      "fresh-target-00-style-0": {
+        "n": 20,
+        "correct_eos": 20,
+        "condition": "matched",
+        "raw": {
+          "green": 20
+        }
+      },
+      "fresh-target-00-style-1": {
+        "n": 20,
+        "correct_eos": 20,
+        "condition": "matched",
+        "raw": {
+          "green": 20
+        }
+      },
+      "fresh-target-00-style-2": {
+        "n": 20,
+        "correct_eos": 20,
+        "condition": "matched",
+        "raw": {
+          "green": 20
+        }
+      },
+      "fresh-target-02-style-0": {
+        "n": 20,
+        "correct_eos": 20,
+        "condition": "matched",
+        "raw": {
+          "juice": 20
+        }
+      },
+      "fresh-target-02-style-1": {
+        "n": 20,
+        "correct_eos": 20,
+        "condition": "matched",
+        "raw": {
+          "juice": 20
+        }
+      },
+      "fresh-target-02-style-2": {
+        "n": 20,
+        "correct_eos": 20,
+        "condition": "matched",
+        "raw": {
+          "juice": 20
+        }
+      },
+      "fresh-target-04-style-0": {
+        "n": 20,
+        "correct_eos": 20,
+        "condition": "matched",
+        "raw": {
+          "jazz": 20
+        }
+      },
+      "fresh-target-04-style-1": {
+        "n": 20,
+        "correct_eos": 20,
+        "condition": "matched",
+        "raw": {
+          "jazz": 20
+        }
+      },
+      "fresh-target-04-style-2": {
+        "n": 20,
+        "correct_eos": 20,
+        "condition": "matched",
+        "raw": {
+          "jazz": 20
+        }
+      },
+      "fresh-target-06-style-0": {
+        "n": 20,
+        "correct_eos": 20,
+        "condition": "matched",
+        "raw": {
+          "linen": 20
+        }
+      },
+      "fresh-target-06-style-1": {
+        "n": 20,
+        "correct_eos": 20,
+        "condition": "matched",
+        "raw": {
+          "linen": 20
+        }
+      },
+      "fresh-target-06-style-2": {
+        "n": 20,
+        "correct_eos": 20,
+        "condition": "matched",
+        "raw": {
+          "linen": 20
+        }
+      },
+      "fresh-target-08-style-0": {
+        "n": 20,
+        "correct_eos": 20,
+        "condition": "matched",
+        "raw": {
+          "pasta": 20
+        }
+      },
+      "fresh-target-08-style-1": {
+        "n": 20,
+        "correct_eos": 20,
+        "condition": "matched",
+        "raw": {
+          "pasta": 20
+        }
+      },
+      "fresh-target-08-style-2": {
+        "n": 20,
+        "correct_eos": 20,
+        "condition": "matched",
+        "raw": {
+          "pasta": 20
+        }
+      },
+      "fresh-target-10-style-0": {
+        "n": 20,
+        "correct_eos": 20,
+        "condition": "matched",
+        "raw": {
+          "no active preference": 20
+        }
+      },
+      "fresh-target-10-style-1": {
+        "n": 20,
+        "correct_eos": 20,
+        "condition": "matched",
+        "raw": {
+          "no active preference": 20
+        }
+      },
+      "fresh-target-10-style-2": {
+        "n": 20,
+        "correct_eos": 20,
+        "condition": "matched",
+        "raw": {
+          "no active preference": 20
+        }
+      },
+      "fresh-target-12-style-0": {
+        "n": 20,
+        "correct_eos": 20,
+        "condition": "matched",
+        "raw": {
+          "no active preference": 20
+        }
+      },
+      "fresh-target-12-style-1": {
+        "n": 20,
+        "correct_eos": 20,
+        "condition": "matched",
+        "raw": {
+          "no active preference": 20
+        }
+      },
+      "fresh-target-12-style-2": {
+        "n": 20,
+        "correct_eos": 20,
+        "condition": "matched",
+        "raw": {
+          "no active preference": 20
+        }
+      },
+      "fresh-target-14-style-0": {
+        "n": 20,
+        "correct_eos": 20,
+        "condition": "matched",
+        "raw": {
+          "no active preference": 20
+        }
+      },
+      "fresh-target-14-style-1": {
+        "n": 20,
+        "correct_eos": 20,
+        "condition": "matched",
+        "raw": {
+          "no active preference": 20
+        }
+      },
+      "fresh-target-14-style-2": {
+        "n": 20,
+        "correct_eos": 20,
+        "condition": "matched",
+        "raw": {
+          "no active preference": 20
+        }
+      },
+      "target-14_blank": {
+        "n": 5,
+        "correct_eos": 0,
+        "condition": "blank",
+        "raw": {
+          "None": 3,
+          "Gray": 2
+        }
+      },
+      "target-14_donor": {
+        "n": 5,
+        "correct_eos": 0,
+        "condition": "donor",
+        "raw": {
+          "linen": 5
+        }
+      },
+      "target-2_blank": {
+        "n": 5,
+        "correct_eos": 0,
+        "condition": "blank",
+        "raw": {
+          "No drink preference recorded.": 2,
+          "None": 1,
+          "None stored.": 1,
+          "none": 1
+        }
+      },
+      "target-2_donor": {
+        "n": 5,
+        "correct_eos": 0,
+        "condition": "donor",
+        "raw": {
+          "no active preference": 5
+        }
+      },
+      "target-8_blank": {
+        "n": 5,
+        "correct_eos": 0,
+        "condition": "blank",
+        "raw": {
+          "none": 2,
+          "None": 1,
+          "None stored": 1,
+          "No meal preference recorded.": 1
+        }
+      },
+      "target-8_donor": {
+        "n": 5,
+        "correct_eos": 0,
+        "condition": "donor",
+        "raw": {
+          "none": 4,
+          "no preference": 1
+        }
+      },
+      "target-4_blank": {
+        "n": 5,
+        "correct_eos": 0,
+        "condition": "blank",
+        "raw": {
+          "No music preference recorded.": 2,
+          "None": 1,
+          "No music preference stored.": 1,
+          "none": 1
+        }
+      },
+      "target-4_donor": {
+        "n": 5,
+        "correct_eos": 0,
+        "condition": "donor",
+        "raw": {
+          "no music preference": 2,
+          "none": 2,
+          "rock music": 1
+        }
+      },
+      "target-6_blank": {
+        "n": 5,
+        "correct_eos": 0,
+        "condition": "blank",
+        "raw": {
+          "None": 3,
+          "Silver": 1,
+          "No material preference specified.": 1
+        }
+      },
+      "target-6_donor": {
+        "n": 5,
+        "correct_eos": 0,
+        "condition": "donor",
+        "raw": {
+          "no active preference": 3,
+          "no preference": 1,
+          "No preference.": 1
+        }
+      },
+      "target-10_blank": {
+        "n": 5,
+        "correct_eos": 0,
+        "condition": "blank",
+        "raw": {
+          "gray": 3,
+          "Gray": 2
+        }
+      },
+      "target-10_donor": {
+        "n": 5,
+        "correct_eos": 0,
+        "condition": "donor",
+        "raw": {
+          "green": 5
+        }
+      },
+      "target-12_blank": {
+        "n": 5,
+        "correct_eos": 0,
+        "condition": "blank",
+        "raw": {
+          "none": 2,
+          "None": 1,
+          "None stored": 1,
+          "No drink preference recorded.": 1
+        }
+      },
+      "target-12_donor": {
+        "n": 5,
+        "correct_eos": 0,
+        "condition": "donor",
+        "raw": {
+          "juice": 5
+        }
+      },
+      "target-0_blank": {
+        "n": 5,
+        "correct_eos": 0,
+        "condition": "blank",
+        "raw": {
+          "gray": 3,
+          "Gray": 2
+        }
+      },
+      "target-0_donor": {
+        "n": 5,
+        "correct_eos": 0,
+        "condition": "donor",
+        "raw": {
+          "no active preference": 5
+        }
+      }
+    },
+    "cells": {
+      "fresh-target-00-style-0/original_open": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-00-style-0/paraphrase_1": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-00-style-0/paraphrase_2": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-00-style-0/paraphrase_3": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-00-style-0/paraphrase_4": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-00-style-1/original_open": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-00-style-1/paraphrase_1": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-00-style-1/paraphrase_2": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-00-style-1/paraphrase_3": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-00-style-1/paraphrase_4": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-00-style-2/original_open": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-00-style-2/paraphrase_1": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-00-style-2/paraphrase_2": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-00-style-2/paraphrase_3": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-00-style-2/paraphrase_4": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-02-style-0/original_open": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-02-style-0/paraphrase_1": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-02-style-0/paraphrase_2": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-02-style-0/paraphrase_3": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-02-style-0/paraphrase_4": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-02-style-1/original_open": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-02-style-1/paraphrase_1": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-02-style-1/paraphrase_2": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-02-style-1/paraphrase_3": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-02-style-1/paraphrase_4": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-02-style-2/original_open": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-02-style-2/paraphrase_1": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-02-style-2/paraphrase_2": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-02-style-2/paraphrase_3": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-02-style-2/paraphrase_4": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-04-style-0/original_open": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-04-style-0/paraphrase_1": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-04-style-0/paraphrase_2": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-04-style-0/paraphrase_3": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-04-style-0/paraphrase_4": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-04-style-1/original_open": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-04-style-1/paraphrase_1": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-04-style-1/paraphrase_2": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-04-style-1/paraphrase_3": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-04-style-1/paraphrase_4": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-04-style-2/original_open": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-04-style-2/paraphrase_1": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-04-style-2/paraphrase_2": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-04-style-2/paraphrase_3": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-04-style-2/paraphrase_4": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-06-style-0/original_open": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-06-style-0/paraphrase_1": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-06-style-0/paraphrase_2": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-06-style-0/paraphrase_3": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-06-style-0/paraphrase_4": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-06-style-1/original_open": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-06-style-1/paraphrase_1": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-06-style-1/paraphrase_2": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-06-style-1/paraphrase_3": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-06-style-1/paraphrase_4": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-06-style-2/original_open": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-06-style-2/paraphrase_1": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-06-style-2/paraphrase_2": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-06-style-2/paraphrase_3": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-06-style-2/paraphrase_4": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-08-style-0/original_open": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-08-style-0/paraphrase_1": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-08-style-0/paraphrase_2": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-08-style-0/paraphrase_3": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-08-style-0/paraphrase_4": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-08-style-1/original_open": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-08-style-1/paraphrase_1": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-08-style-1/paraphrase_2": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-08-style-1/paraphrase_3": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-08-style-1/paraphrase_4": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-08-style-2/original_open": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-08-style-2/paraphrase_1": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-08-style-2/paraphrase_2": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-08-style-2/paraphrase_3": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-08-style-2/paraphrase_4": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-10-style-0/original_open": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-10-style-0/paraphrase_1": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-10-style-0/paraphrase_2": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-10-style-0/paraphrase_3": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-10-style-0/paraphrase_4": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-10-style-1/original_open": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-10-style-1/paraphrase_1": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-10-style-1/paraphrase_2": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-10-style-1/paraphrase_3": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-10-style-1/paraphrase_4": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-10-style-2/original_open": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-10-style-2/paraphrase_1": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-10-style-2/paraphrase_2": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-10-style-2/paraphrase_3": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-10-style-2/paraphrase_4": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-12-style-0/original_open": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-12-style-0/paraphrase_1": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-12-style-0/paraphrase_2": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-12-style-0/paraphrase_3": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-12-style-0/paraphrase_4": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-12-style-1/original_open": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-12-style-1/paraphrase_1": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-12-style-1/paraphrase_2": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-12-style-1/paraphrase_3": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-12-style-1/paraphrase_4": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-12-style-2/original_open": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-12-style-2/paraphrase_1": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-12-style-2/paraphrase_2": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-12-style-2/paraphrase_3": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-12-style-2/paraphrase_4": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-14-style-0/original_open": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-14-style-0/paraphrase_1": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-14-style-0/paraphrase_2": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-14-style-0/paraphrase_3": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-14-style-0/paraphrase_4": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-14-style-1/original_open": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-14-style-1/paraphrase_1": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-14-style-1/paraphrase_2": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-14-style-1/paraphrase_3": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-14-style-1/paraphrase_4": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-14-style-2/original_open": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-14-style-2/paraphrase_1": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-14-style-2/paraphrase_2": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-14-style-2/paraphrase_3": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "fresh-target-14-style-2/paraphrase_4": {
+        "n": 4,
+        "correct_eos": 4,
+        "condition": "matched"
+      },
+      "target-14_blank/original_open": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-14_blank/paraphrase_1": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-14_blank/paraphrase_2": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-14_blank/paraphrase_3": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-14_blank/paraphrase_4": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-14_donor/original_open": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-14_donor/paraphrase_1": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-14_donor/paraphrase_2": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-14_donor/paraphrase_3": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-14_donor/paraphrase_4": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-2_blank/original_open": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-2_blank/paraphrase_1": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-2_blank/paraphrase_2": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-2_blank/paraphrase_3": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-2_blank/paraphrase_4": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-2_donor/original_open": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-2_donor/paraphrase_1": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-2_donor/paraphrase_2": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-2_donor/paraphrase_3": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-2_donor/paraphrase_4": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-8_blank/original_open": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-8_blank/paraphrase_1": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-8_blank/paraphrase_2": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-8_blank/paraphrase_3": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-8_blank/paraphrase_4": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-8_donor/original_open": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-8_donor/paraphrase_1": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-8_donor/paraphrase_2": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-8_donor/paraphrase_3": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-8_donor/paraphrase_4": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-4_blank/original_open": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-4_blank/paraphrase_1": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-4_blank/paraphrase_2": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-4_blank/paraphrase_3": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-4_blank/paraphrase_4": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-4_donor/original_open": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-4_donor/paraphrase_1": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-4_donor/paraphrase_2": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-4_donor/paraphrase_3": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-4_donor/paraphrase_4": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-6_blank/original_open": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-6_blank/paraphrase_1": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-6_blank/paraphrase_2": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-6_blank/paraphrase_3": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-6_blank/paraphrase_4": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-6_donor/original_open": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-6_donor/paraphrase_1": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-6_donor/paraphrase_2": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-6_donor/paraphrase_3": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-6_donor/paraphrase_4": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-10_blank/original_open": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-10_blank/paraphrase_1": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-10_blank/paraphrase_2": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-10_blank/paraphrase_3": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-10_blank/paraphrase_4": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-10_donor/original_open": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-10_donor/paraphrase_1": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-10_donor/paraphrase_2": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-10_donor/paraphrase_3": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-10_donor/paraphrase_4": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-12_blank/original_open": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-12_blank/paraphrase_1": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-12_blank/paraphrase_2": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-12_blank/paraphrase_3": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-12_blank/paraphrase_4": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-12_donor/original_open": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-12_donor/paraphrase_1": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-12_donor/paraphrase_2": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-12_donor/paraphrase_3": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-12_donor/paraphrase_4": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-0_blank/original_open": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-0_blank/paraphrase_1": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-0_blank/paraphrase_2": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-0_blank/paraphrase_3": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-0_blank/paraphrase_4": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "blank"
+      },
+      "target-0_donor/original_open": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-0_donor/paraphrase_1": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-0_donor/paraphrase_2": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-0_donor/paraphrase_3": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      },
+      "target-0_donor/paraphrase_4": {
+        "n": 1,
+        "correct_eos": 0,
+        "condition": "donor"
+      }
+    },
+    "matched_rows": 480,
+    "matched_correct_eos": 480,
+    "generated_images": 96,
+    "all_five_prompt_images": 96,
+    "all_generated_correct_eos": true
+  },
+  "paired_matched": {
+    "retained_correct": 480,
+    "fixed": 0,
+    "regressed": 0,
+    "still_wrong": 0
+  },
+  "chain_rows_exact": 0,
+  "chain_parity_passed": true,
+  "png_images_verified_here": 112,
+  "all_png_pixels_verified_here": true,
+  "complete_sha256": "d6a351c30f21cfe14088addd3d5cb4bbad5c5482863564f29be514f099c6dca6",
+  "archive_sha256": "c4982b49048f83d78c5936792f6b92ea6ac703f183f009e7362db3cdfbe8143c"
+}
