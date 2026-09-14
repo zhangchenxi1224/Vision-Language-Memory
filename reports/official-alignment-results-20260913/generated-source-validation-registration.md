@@ -74,3 +74,31 @@ As of these observations, the new four-H200 notebook remains pending and no new
 optimizer updates have run. A completed zero-update probe still cannot replace
 the full measured baseline, four-rank gradient parity, optimization, or functional
 acceptance. The goal remains incomplete.
+
+## Verified deployment for the next allocation
+
+Project root is `/inspire/ssd/project/exploration-topic/czxs26210936`; the run root
+is `runs/dreamlite-official-alignment` below it.
+
+- Training: `repos/dreamlite-generated-source-training-r3-20260914`, clean
+  `b62ec027ad725aeb6ecc772aa85e7a3ff6e49b36`. This is an independent Git worktree;
+  the earlier `training-r2` shared-clone attempt failed before deployment.
+- Probe: `repos/dreamlite-generated-source-preflight-r3-20260914`, clean
+  `c83aca055df8bb71b11e28ac242f0471f516d8da`.
+- Validation: `repos/dreamlite-generated-source-validation-r2-20260914`, clean
+  `2c5189a0847acd6653b687031ab13e6cd4cfc53f`.
+- Queued notebook: `dl-source-aug-h200x4-20260914`, four H200s, still `PENDING`
+  when checked at 2026-09-14 17:34:52 CST. Recheck actual allocation, environment,
+  GPU processes and remaining lease before launching anything.
+
+Three uploaded shell helpers accept an explicitly verified future Unix deadline:
+`launch-generated-source-preflight-next-20260914.sh`,
+`launch-generated-source-training-r2-20260914.sh`, and
+`run-generated-source-full-validation-r2-20260914.sh`.
+They are in the run root; shell syntax and successful uploads were checked.
+The first produces `c83aca0-source-runtime-preflight-r2`; the second refuses to
+start unless that exact retry passed, and produces `b62ec02-generated-source-full4832`.
+The third uses the exact `2c5189a` source to execute both functional suites and PNG
+readback. None of these next-run helpers has been launched. The original
+`launch-generated-source-training-20260914.sh` now exits 75 immediately so the
+known-bad `ef163b2` run cannot be launched accidentally.
