@@ -9,14 +9,14 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path[:0] = [str(ROOT), str(ROOT / 'src')]
 
 
-def collect(run, *, expected_commit, source=None, continuation_validation_commit=None):
+def collect(run, *, expected_commit, source=None, continuation_validation_commit=None, continuation_training_commit=None):
     from scripts.reporting.collect_transition_endpoint import sha, read, jsonl
     from scripts.experiments.png_readback_protocol import plan, source_spec, LANES, compare, png_pixels
-    sources, expected_parent = source_spec(continuation_validation_commit)
+    sources, expected_parent = source_spec(continuation_validation_commit, continuation_training_commit)
     from scripts.reporting.collect_broader_endpoint import BANK_SHA, registered_protocol
     run = Path(run)
     complete, identity = read(run / 'complete.json'), read(run / 'identity.json')
-    if complete['identity'] != identity or identity['readback_commit'] != expected_commit or identity['plan'] != plan(continuation_validation_commit):
+    if complete['identity'] != identity or identity['readback_commit'] != expected_commit or identity['plan'] != plan(continuation_validation_commit, continuation_training_commit):
         raise ValueError('PNG identity or plan differs')
     for name, digest in complete['artifact_hashes'].items():
         if Path(name).name != name or sha(run / name) != digest:
@@ -90,10 +90,11 @@ def main():
     p.add_argument('--output-prefix', type=Path, required=True)
     p.add_argument('--archive', action='store_true')
     p.add_argument('--continuation-validation-commit')
+    p.add_argument('--continuation-training-commit')
     a = p.parse_args()
     from scripts.reporting.collect_transition_endpoint import sha
     summary = collect(a.run, expected_commit=a.expected_commit, source=a.source,
-        continuation_validation_commit=a.continuation_validation_commit)
+        continuation_validation_commit=a.continuation_validation_commit, continuation_training_commit=a.continuation_training_commit)
     if a.archive:
         archive = Path(str(a.output_prefix) + '-evidence.tgz')
         with tarfile.open(archive, 'w:gz') as tar:

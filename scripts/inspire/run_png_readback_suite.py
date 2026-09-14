@@ -20,11 +20,14 @@ def main():
     p.add_argument('--expected-commit', required=True)
     p.add_argument('--deadline-unix', type=float, required=True)
     p.add_argument('--continuation-validation-commit')
+    p.add_argument('--continuation-training-commit')
     a = p.parse_args()
-    from scripts.experiments.png_readback_protocol import source_spec, LANES, plan
-    sources, _ = source_spec(a.continuation_validation_commit)
+    from scripts.experiments.png_readback_protocol import source_spec, parent_run_name, LANES, plan
+    sources, parent_commit = source_spec(a.continuation_validation_commit, a.continuation_training_commit)
     protocol_arguments = (['--continuation-validation-commit', a.continuation_validation_commit]
         if a.continuation_validation_commit else [])
+    if a.continuation_training_commit:
+        protocol_arguments += ['--continuation-training-commit', a.continuation_training_commit]
     if (len(a.expected_commit) != 40 or subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip() != a.expected_commit
             or subprocess.check_output(['git', 'status', '--porcelain'], cwd=ROOT, text=True).strip()):
         raise ValueError('Require the exact clean source commit')
@@ -55,7 +58,7 @@ def main():
                 child.wait()
     env = {**os.environ, 'OMP_NUM_THREADS': '1', 'MKL_NUM_THREADS': '1', 'HF_HUB_OFFLINE': '1', 'TRANSFORMERS_OFFLINE': '1'}
     try:
-        record('waiting_for_both_complete_suites', 'waiting', plan=plan(a.continuation_validation_commit))
+        record('waiting_for_both_complete_suites', 'waiting', plan=plan(a.continuation_validation_commit, a.continuation_training_commit))
         while True:
             deadline()
             done = []
@@ -65,7 +68,7 @@ def main():
                     done.append(False)
                     continue
                 value = json.loads(path.read_bytes())
-                parent_name = ('4fbc857-clear-retention-full4832' if a.continuation_validation_commit else 'b9f90e9-historical-wording-full4832')
+                parent_name = parent_run_name(parent_commit)
                 if value['validation_commit'] != commit or value['parent'] != str(a.runs / parent_name):
                     raise ValueError('Preceding suite identity differs')
                 if value['state'] in ('failed', 'needs_attention'):

@@ -11,18 +11,29 @@ LANES = {'confirmation': ('single_writes', None, 390, 360, 78),
          'prefix1': ('historical_prefixes', 1, 560, 480, 112)}
 
 
-def source_spec(continuation_validation_commit=None):
+def source_spec(continuation_validation_commit=None, continuation_training_commit=None):
     if continuation_validation_commit is None:
+        if continuation_training_commit is not None:
+            raise ValueError('Explicit continuation training requires its validation source commit')
         return SOURCES, PARENT_COMMIT
     commit = continuation_validation_commit
     if len(commit) != 40 or any(char not in '0123456789abcdef' for char in commit):
         raise ValueError('Require the explicit full continuation validation commit')
+    parent = continuation_training_commit or '4fbc85725d78427235757ace2661d086b896a97f'
+    if parent not in ('4fbc85725d78427235757ace2661d086b896a97f', 'ef163b26e33f62c496ed0da8744ebb7bf1163873'):
+        raise ValueError('Unregistered continuation training source')
     return {'registered': (commit, commit[:7] + '-logical'),
-        'fresh_wording_v1': (commit, commit[:7] + '-fresh-wording')}, '4fbc85725d78427235757ace2661d086b896a97f'
+        'fresh_wording_v1': (commit, commit[:7] + '-fresh-wording')}, parent
 
 
-def plan(continuation_validation_commit=None):
-    sources, parent = source_spec(continuation_validation_commit)
+def parent_run_name(parent):
+    return {PARENT_COMMIT: 'b9f90e9-historical-wording-full4832',
+        '4fbc85725d78427235757ace2661d086b896a97f': '4fbc857-clear-retention-full4832',
+        'ef163b26e33f62c496ed0da8744ebb7bf1163873': 'ef163b2-generated-source-full4832'}[parent]
+
+
+def plan(continuation_validation_commit=None, continuation_training_commit=None):
+    sources, parent = source_spec(continuation_validation_commit, continuation_training_commit)
     value = {'policy': 'complete-png-readback-v1', 'parent_commit': parent,
         'sources': {key: {'commit': item[0], 'prefix': item[1]} for key, item in sources.items()},
         'lanes': {key: dict(zip(('mode', 'prefix_lane', 'raw_rows', 'matched_rows', 'images'), value))

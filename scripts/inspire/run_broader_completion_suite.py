@@ -38,7 +38,8 @@ def main():
     parent = a.parent_run or RUNS / '84cdfdb-broader151-full4832'
     raw_control = a.inference_condition == 'training_raw'
     fresh_validation = a.validation_set == 'fresh_wording_v1'
-    continuation = a.logical_sampling_commit == '4fbc85725d78427235757ace2661d086b896a97f'
+    generated_source = a.logical_sampling_commit == 'ef163b26e33f62c496ed0da8744ebb7bf1163873'
+    continuation = generated_source or a.logical_sampling_commit == '4fbc85725d78427235757ace2661d086b896a97f'
     native_baseline = a.logical_sampling_commit == '03f8467e5a1201c2dbd9d12484bf2338d7837727'
     prior_validation_commit = '7b82309eb49e913d8f028230ac5f79c743d28a46'
     if fresh_validation:
@@ -49,7 +50,8 @@ def main():
                 raise ValueError('Native baseline requires the fixed 03 endpoint and its complete registered suite')
         elif continuation:
             prior_validation_commit = a.expected_commit
-            if (raw_control or parent != RUNS / '4fbc857-clear-retention-full4832'
+            expected_parent = 'ef163b2-generated-source-full4832' if generated_source else '4fbc857-clear-retention-full4832'
+            if (raw_control or parent != RUNS / expected_parent
                     or a.prior_validation_status != RUNS / (a.expected_commit[:7] + '-logical-completion-suite-status.json')):
                 raise ValueError('Continuation regression requires its own complete registered suite')
         elif (raw_control or a.logical_sampling_commit != 'b9f90e956eea7bda15f638c8877919941ce4fec5'
@@ -168,7 +170,7 @@ def main():
         if not raw_control and not fresh_validation:
             execute('scripts/reporting/collect_broader_endpoint.py', ['--run', parent, '--bank', bank,
                 '--output-prefix', RUNS / (prefix + '-endpoint'), *protocol_arguments], 'endpoint-collection')
-        if a.logical_sampling_commit in ('b9f90e956eea7bda15f638c8877919941ce4fec5', '4fbc85725d78427235757ace2661d086b896a97f') and not fresh_validation:
+        if a.logical_sampling_commit in ('b9f90e956eea7bda15f638c8877919941ce4fec5', '4fbc85725d78427235757ace2661d086b896a97f', 'ef163b26e33f62c496ed0da8744ebb7bf1163873') and not fresh_validation:
             execute('scripts/reporting/collect_native_endpoint_tensors.py', ['--run', parent,
                 '--output-prefix', RUNS / (prefix + '-final-tensors'),
                 '--expected-source-commit', a.expected_commit, *protocol_arguments], 'final-tensor-collection')

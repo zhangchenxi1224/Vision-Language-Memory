@@ -99,12 +99,19 @@ def test_plan_has_complete_totals_and_entrypoints_work_outside_checkout(tmp_path
         assert result.returncode == 0, result.stderr
 
 
-def test_collector_recounts_actual_pngs_and_rejects_altered_pixels(tmp_path, matrices):
+@pytest.mark.parametrize('generated_sources', [False, True])
+def test_collector_recounts_actual_pngs_and_rejects_altered_pixels(tmp_path, matrices, generated_sources):
     from scripts.reporting.collect_png_readback import collect
     from scripts.reporting.collect_transition_endpoint import sha
     from vision_memory.repro import canonical_tensor_sha256
     bank, plans = matrices
     registered = plans['registered']
+    protocol = {}
+    parent_commit, source_commit = PARENT_COMMIT, SOURCES['registered'][0]
+    if generated_sources:
+        parent_commit, source_commit = 'ef163b26e33f62c496ed0da8744ebb7bf1163873', 'd' * 40
+        registered = json.loads((ROOT / 'reports/official-alignment-results-20260913/generated-source-training-preregistered.json').read_bytes())
+        protocol = {'continuation_validation_commit': source_commit, 'continuation_training_commit': parent_commit}
     original = rows_for(registered, bank, 'single_writes', None)
     run, source = tmp_path / 'readback', tmp_path / 'source'
     run.mkdir()
@@ -134,12 +141,12 @@ def test_collector_recounts_actual_pngs_and_rejects_altered_pixels(tmp_path, mat
             'png_file_sha256': sha(png_path), 'png_name': png_name,
             'png_location': 'source' if matched else 'readback', 'image_sha256': pixel_sha,
             'pixel_max_abs_change': 0.0}
-    source_identity = {'probe_commit': SOURCES['registered'][0], 'checkpoint_sha256': 'c' * 64,
-        'registered_plan': registered, 'parent_commit': PARENT_COMMIT, 'mode': 'single_writes', 'prefix_lane': None}
+    source_identity = {'probe_commit': source_commit, 'checkpoint_sha256': 'c' * 64,
+        'registered_plan': registered, 'parent_commit': parent_commit, 'mode': 'single_writes', 'prefix_lane': None}
     write(run / 'source-complete.json', {'identity': source_identity, 'artifact_hashes': hashes})
     (source / 'complete.json').write_bytes((run / 'source-complete.json').read_bytes())
     (source / 'generations.jsonl').write_bytes((run / 'source-generations.jsonl').read_bytes())
-    identity = {'readback_commit': commit, 'plan': plan(), 'validation_set': 'registered', 'lane': 'confirmation',
+    identity = {'readback_commit': commit, 'plan': plan(**protocol), 'validation_set': 'registered', 'lane': 'confirmation',
         'source_complete_sha256': sha(run / 'source-complete.json'),
         'source_generations_sha256': hashes['generations.jsonl'], 'checkpoint_sha256': 'c' * 64}
     write(run / 'identity.json', identity)
@@ -151,14 +158,14 @@ def test_collector_recounts_actual_pngs_and_rejects_altered_pixels(tmp_path, mat
     write(run / 'complete.json', {'identity': identity, 'raw_rows': 390, 'images_checked': 78,
         'all_matched_correct_eos': True, 'chain_parity_passed': True,
         'artifact_hashes': {path.name: sha(path) for path in run.iterdir()}})
-    result = collect(run, expected_commit=commit, source=source)
+    result = collect(run, expected_commit=commit, source=source, **protocol)
     assert result['all_png_pixels_verified_here']
     assert result['png_images_verified_here'] == 78
     assert result['png']['matched_correct_eos'] == 360
     path = next(source.glob('*.png'))
     Image.new('RGB', (1024, 1024), (127, 128, 128)).save(path)
     with pytest.raises(ValueError, match='Actual PNG differs'):
-        collect(run, expected_commit=commit, source=source)
+        collect(run, expected_commit=commit, source=source, **protocol)
     # Exercise the actual portable path, including independent archive hashes and
     # complete source-to-readback binding. A passing score alone is insufficient.
     import tarfile
@@ -171,8 +178,8 @@ def test_collector_recounts_actual_pngs_and_rejects_altered_pixels(tmp_path, mat
             for item in directory.iterdir():
                 archive.add(item, arcname=item.name)
         archives.append(archive_path)
-    portable = verify(archives[0], sha(archives[0]), archives[1], sha(archives[1]), commit)
+    portable = verify(archives[0], sha(archives[0]), archives[1], sha(archives[1]), commit, **protocol)
     assert portable['recount']['png_images_verified_here'] == 78
     assert portable['recount']['png']['matched_correct_eos'] == 360
     with pytest.raises(ValueError, match='observed remote SHA256'):
-        verify(archives[0], '0' * 64, archives[1], sha(archives[1]), commit)
+        verify(archives[0], '0' * 64, archives[1], sha(archives[1]), commit, **protocol)

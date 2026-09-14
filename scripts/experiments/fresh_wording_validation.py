@@ -68,10 +68,14 @@ def plan(training, bank):
         value['diagnostic_purpose'] = 'Measure all original observed-expression cells on the unchanged 03 endpoint before attributing 4f errors to continuation training.'
         return value
     continuation_commit = '4fbc85725d78427235757ace2661d086b896a97f'
-    if training['training_commit'] == continuation_commit:
-        from scripts.experiments.clear_retention_protocol import plan as continuation_plan
+    generated_source_commit = 'ef163b26e33f62c496ed0da8744ebb7bf1163873'
+    if training['training_commit'] in (continuation_commit, generated_source_commit):
+        if training['training_commit'] == generated_source_commit:
+            from scripts.experiments.generated_source_training_protocol import plan as continuation_plan
+        else:
+            from scripts.experiments.clear_retention_protocol import plan as continuation_plan
         from scripts.experiments.historical_wording_protocol import plan as wording_plan
-        if training != continuation_plan(bank, continuation_commit):
+        if training != continuation_plan(bank, training['training_commit']):
             raise ValueError('Continuation differs from its fixed training registration')
         # Reuse exactly the fully sealed b9 validation cases and noise. Their
         # prior observation must remain explicit when selecting this repair.

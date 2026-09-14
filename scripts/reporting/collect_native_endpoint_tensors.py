@@ -35,11 +35,11 @@ def check_payload(payload, question, seed, image_sha):
 
 def inspect(run, *, text_only=False, recorded_cells=None, logical_sampling_commit=None):
     from scripts.reporting.collect_transition_endpoint import read, jsonl, sha
-    from scripts.reporting.collect_broader_endpoint import parent_binding, phase_summary, NATIVE_CONDITION_COMMIT, HISTORICAL_WORDING_COMMIT, CLEAR_RETENTION_COMMIT
+    from scripts.reporting.collect_broader_endpoint import parent_binding, phase_summary, NATIVE_CONDITION_COMMIT, HISTORICAL_WORDING_COMMIT, CLEAR_RETENTION_COMMIT, GENERATED_SOURCE_COMMIT
     from scripts.experiments.broader_writer_protocol import SEED
     from vision_memory.training.latent_bank_unet import stable_seed
     logical_sampling_commit = logical_sampling_commit or NATIVE_CONDITION_COMMIT
-    if logical_sampling_commit not in (NATIVE_CONDITION_COMMIT, HISTORICAL_WORDING_COMMIT, CLEAR_RETENTION_COMMIT):
+    if logical_sampling_commit not in (NATIVE_CONDITION_COMMIT, HISTORICAL_WORDING_COMMIT, CLEAR_RETENTION_COMMIT, GENERATED_SOURCE_COMMIT):
         raise ValueError('Require a registered native-condition training run')
     bank, identity, result = parent_binding(run, run/'bank/manifest.json', logical_sampling_commit=logical_sampling_commit)
     if sha(run/'train/runtime.json') != RUNTIME:
@@ -136,9 +136,11 @@ def main():
         names = ['bank/manifest.json', 'preregistered-experiment.json', 'terminal.json', 'train/identity.json',
             'train/runtime.json', 'train/result.json', 'train/baseline-reference-check.json',
             'train/trained/complete.json', 'train/trained/summary.json', 'train/trained/generations.jsonl']
-        from scripts.reporting.collect_broader_endpoint import HISTORICAL_WORDING_COMMIT, CLEAR_RETENTION_COMMIT
-        if args.logical_sampling_commit in (HISTORICAL_WORDING_COMMIT, CLEAR_RETENTION_COMMIT):
+        from scripts.reporting.collect_broader_endpoint import HISTORICAL_WORDING_COMMIT, CLEAR_RETENTION_COMMIT, GENERATED_SOURCE_COMMIT
+        if args.logical_sampling_commit in (HISTORICAL_WORDING_COMMIT, CLEAR_RETENTION_COMMIT, GENERATED_SOURCE_COMMIT):
             names.append('train/training-condition-augmentation.json')
+        if args.logical_sampling_commit == GENERATED_SOURCE_COMMIT:
+            names.append('train/training-source-augmentation.json')
         summary['portable_sha256'] = {name: sha(args.run/name) for name in names}
     output = Path(str(args.output_prefix)+'-summary.json')
     archive_path = Path(str(args.output_prefix)+'-evidence.tgz')

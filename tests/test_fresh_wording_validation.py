@@ -77,12 +77,18 @@ def test_actual_cli_registration_accepts_only_the_fresh_sequence(fixed):
         replay_registration(changed,broader=True,logical_sampling_commit=PARENT_COMMIT)
 
 
-def test_continuation_reuses_every_observed_case_and_preserves_lineage(fixed):
-    from scripts.experiments.clear_retention_protocol import plan as continuation_plan
-    from scripts.reporting.collect_broader_endpoint import CLEAR_RETENTION_COMMIT, registered_protocol
+@pytest.mark.parametrize('generated_sources', [False, True])
+def test_continuation_reuses_every_observed_case_and_preserves_lineage(fixed, generated_sources):
+    from scripts.reporting.collect_broader_endpoint import CLEAR_RETENTION_COMMIT, GENERATED_SOURCE_COMMIT, registered_protocol
+    if generated_sources:
+        from scripts.experiments.generated_source_training_protocol import plan as continuation_plan
+        training_commit = GENERATED_SOURCE_COMMIT
+    else:
+        from scripts.experiments.clear_retention_protocol import plan as continuation_plan
+        training_commit = CLEAR_RETENTION_COMMIT
     bank, _, original = fixed
-    training = continuation_plan(bank, CLEAR_RETENTION_COMMIT)
-    assert registered_protocol(bank, CLEAR_RETENTION_COMMIT)[1] == training
+    training = continuation_plan(bank, training_commit)
+    assert registered_protocol(bank, training_commit)[1] == training
     regression = plan(training, bank)
     assert regression['transition_validation'] == original['transition_validation']
     assert regression['prefix_validation'] == original['prefix_validation']
@@ -98,7 +104,7 @@ def test_continuation_reuses_every_observed_case_and_preserves_lineage(fixed):
         plan(changed, bank)
 
 
-@pytest.mark.parametrize('parent', ['original', 'continuation', 'native_baseline'])
+@pytest.mark.parametrize('parent', ['original', 'continuation', 'native_baseline', 'generated_sources'])
 def test_complete_collector_preserves_fresh_vs_observed_provenance(fixed, monkeypatch, tmp_path, parent):
     from scripts.reporting import collect_broader_validation as collector
     from scripts.reporting.collect_broader_endpoint import CLEAR_RETENTION_COMMIT, BANK_SHA
@@ -108,6 +114,11 @@ def test_complete_collector_preserves_fresh_vs_observed_provenance(fixed, monkey
     commit = CLEAR_RETENTION_COMMIT if parent == 'continuation' else PARENT_COMMIT
     if parent == 'continuation':
         training = continuation_plan(bank, commit)
+    elif parent == 'generated_sources':
+        from scripts.reporting.collect_broader_endpoint import GENERATED_SOURCE_COMMIT
+        from scripts.experiments.generated_source_training_protocol import plan as generated_plan
+        commit = GENERATED_SOURCE_COMMIT
+        training = generated_plan(bank, commit)
     elif parent == 'native_baseline':
         from scripts.experiments.fresh_wording_validation import NATIVE_BASELINE_COMMIT
         from scripts.experiments.native_condition_protocol import plan as native_plan
