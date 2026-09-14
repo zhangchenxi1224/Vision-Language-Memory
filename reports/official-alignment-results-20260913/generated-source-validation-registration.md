@@ -2,6 +2,17 @@
 
 ## Execution update: 2026-09-14, after new allocation
 
+The separate complete final-tensor inspection also finished. Its portable archive
+`2c5189a-logical-final-tensors-evidence.tgz` is443,681 bytes, independently observed
+SHA256 `585dff087765fd3a55671dcc239a05bbafa2830389373aa9b3dd67aef9b6efc2`.
+Remote CPU inspection covered all302 final native PT artifacts, each29-state
+FP32 trajectory, Gaussian initial state, final latent and Reader pixels. The
+downloaded archive passed the existing local verifier: all3,020 raw answers and
+all302 tensor-audit bindings were recounted, with1,510/1,510 matched reads.
+See `2c5189a-logical-final-tensors-local-verification-summary.json`. Actual tensor
+payloads and checkpoint remain remote; the portable archive does not independently
+recreate or recheck their numeric values locally. Functional evaluation is ongoing.
+
 The fixed training endpoint completed at Unix time1789386105.8734047
 (2026-09-14 19:41:45 CST), with exactly4,832 optimizer updates. Its result SHA256
 is `28b1ae810e2e0c9de5c222b9022ed37e5e09168085f2ac60882e121ca941aa35`;
