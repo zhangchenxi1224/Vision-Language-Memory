@@ -93,6 +93,8 @@ def main():
             'pid': os.getpid(), 'training_commit': TRAINING_COMMIT, 'probe_commit': a.expected_probe_commit, 'optimizer_updates': 0})
         configure_strict_cuda_determinism(args.seed)
         bank, teachers = load_teacher_bank(args.bank_manifest)
+        from scripts.inspire.run_oracle_to_unet_pipeline import snapshot_environment
+        os.environ.update(snapshot_environment(bank))
         indices = selected_draws(bank)
         save('selected-draws.json', {'rule': 'First actual draw for each source-state/source-choice combination; fixed before loading model or observing losses.', 'indices': indices})
         runtime = training.load_runtime(args, bank)
