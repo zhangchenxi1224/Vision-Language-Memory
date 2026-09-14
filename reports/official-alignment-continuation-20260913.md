@@ -1,3 +1,12 @@
+## 09-14 11:34 四卡预检通过，训练及完整验证链均有存活进程
+
+- 真实GPU观察time1789356853.4152436：训练rank478724–478727均R，4卡约44GiB、100%利用率。初始参数逐位匹配03 endpoint；梯度preflight passed，相对L2 `4.047132680232797e-08`、relative max `9.02379502557885e-08`，固定阈值2e-6。baseline各rank已26个PT（共104/302），尚未完成基线检查、尚无优化后效果结论。
+- 实际identity已确认lr1e-5、steps4832、seed20260915、official FM、native_base、initial baseline reference_phase=trained和03 resultbc9ddf6a…。训练driver476384/pilot477729仍活跃，不可重复启动。
+- 完整验证源码 **e372f3cf7330ffbfbfe6570a75cd9b80c6011dbc** 已部署到 `P/repos/dreamlite-clear-retention-validation-20260914`，depth1/blob:none/sparse、实际HEAD及clean检查通过（部署80910 exit0）。训练源码4f独立保持不变。
+- 三个实际进程已启动并确认存活：**640212** 原注册suite等待4f训练终点，**640213** observed fresh_wording_v1回归等待原注册suite，**640214** PNG等待两suite；deadline1789377600=17:20。状态 `R/e372f3c-{logical,fresh-wording}-completion-suite-status.json` 与 `R/e372f3c-png-readback-status.json`，对应driver日志/pid为 `R/e372f3c-{logical,fresh-wording,png-readback}-driver.{log,pid}`。勿重复启动或用旧7b/56/385结果替代本轮。
+- 当前GPU `dl-clear-retain-h200x4-20260914`，CPU `dl-align-cpu-20260914-r2`。原用户r3平台仍PENDING。上一轮实验GPU自然STOPPED，对象未删除。
+- 当前无未结束本地工具句柄。观察helper本地`.cache/observe-clear-retention.py`已上传R同名，必须在GPU以原venv Python执行才能核验真实/proc与GPU，不用状态文件代替进程证据。训练/验证进程仍运行，Goal active。
+
 ## 09-14 11:28 新4H200已启动固定4832继续训练
 
 - 当前训练 **4fbc85725d78427235757ace2661d086b896a97f**，run `R/4fbc857-clear-retention-full4832`，immutable源码 `P/repos/dreamlite-clear-retention-20260914`，新GPU `dl-clear-retain-h200x4-20260914`。实际driver476384、pilot477729、elastic478719、rank478724–478727存活。四rank初始参数SHA均4a41876c…，与03最终参数一致。完整基线/梯度预检运行中，尚无本轮分数，不可重启。
