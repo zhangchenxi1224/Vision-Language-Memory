@@ -1,3 +1,14 @@
+## 09-14 08:04 b9完整开发1510/1510，两套终点证据已本地复核
+
+- **本轮实质进展**：b9根terminal于1789343971.9516258（08:00）completed，完整3020条最终raw/302张图五问全过，1510/1510。全训练已完成，不得重启旧2916294–2916297；它们已经退出。result SHA **f939f80c79fcd625eceab04551e57fe5c2a571957e521fad74be108929b7047f**，实际checkpoint文件SHA **34f33ea7cd9b209d80c460c91bc102c06b48ad40a54b6fbb224f5f1637529348**。相对初始化1273保留、237修复；音乐1230→1350/1350，历史43→160/160；前03也1510，不能据开发总分宣称表达增强解决了独立失败。
+- **7b实际完整终点collector和最终PT审计已结束**，继而进入四路功能。终点archive **7b82309-logical-endpoint-evidence.tgz**，5779807bytes，SHA **5d6e92f5154241b5a03b42e3a267540c4386ceacf84b196f4e64fb7895eb228d**；summary SHA **8e58122436ecac69d5784f2c941e099166d1f47c2163583a34cdcac343fe9733**。完整下载76813 exit0，本地verify_broader_outputs_local实际重算6040raw+19328draw、每历史表达绑定及次数，88919 exit0。
+- **独立最终302 PT**：archive **7b82309-logical-final-tensors-evidence.tgz**，386911bytes，SHA **e2ac6ac74e6f8366e63b1449aa73eee363679e1bfb57170cdf392102552f5d38**；summary SHA **7a0da3611bc1fb8118185bcc63d2a9c01fcef59a27ae9e409f56a365d975f5de**。下载57088 exit0，本地collect_native_endpoint_tensors重算3020raw和302审计绑定，95432 exit0。PT和checkpoint在远端实际核验，本地不包含这些大张量。两份远端summary已从归档提取原字节并核对独立SHA。
+- 16历史条件各9表达实际每表达69–70draw、合计9975，condition seal bfdcfacc5925a42f80aec0203b1b4a2bd197391525e5f7ff25162288051b0467。全19328draw中9583次sigma>0.5，范围0.00006788969039916992–0.9999235272407532。最终4rank参数SHA29c9f6e07c4eeec6c6d32fd7f236de79efe457b8f18d4a7543d7e4f544eb02b8；final rank proof文件SHA e1584d600a041ea9c542c4b160eeee0a66c024f0fc7e08c8d0c86caa33679c24。运行时SHA仍b97bf55f679cb94805ef769b9e748f09a55182a8f36fb9dcb48c6fcfb7bdd1a0。
+- **当前真实GPU工作**：7b driver3222175，stagefour_independent_validation_lanes/time1789344043.4607117；父726721–726724，time1789344228.7516115（08:03）实际CUDA **728637/728638/728639/728641**均R，在新4H200上运行。输出R/7b82309-logical-{confirmation,chains,prefix0,prefix1}。56 driver3609629继续等7b完整四路/CLI，385 PNG driver1428继续等前两套；勿重复启动任何suite。
+- 详细证据见 **results/historical-wording-development-review.md**（实际目录official-alignment-results-20260913）。本轮新增6个7b终点archive/summary/local-verification文件及报告，README更新为开发完成、功能尚未完成。Goal active。
+- 远端R新增 **inspect-wording-evidence.py** 已上传并实际执行成功：CPU tty:false执行可取得独立完整SHA和已就绪archive列表。它按固定driver已前进至后续阶段来判定前一collector已成功退出，防止summary先写而tgz未关闭时下载；不把status当GPU实际存活证据（存活仍用GPU observer）。R/**archive-wording-cli.py**已上传，但尚未执行；对应suite完成后用--suite registered或fresh生成完整CLI归档。旧说明“尚未上传”已过期。
+- 所有本地exec/SCP句柄已结束（包括11567/93196等）。后续及时逐路下载7b/56完整raw/PNG，用已下载7b endpoint archive作两套共同parent并显式b9full、expected probe分别7bfull/56full，fresh额外--validation-set fresh_wording_v1。PNG之后用verify_png_readback_local和对应原验证归档完整重算。CPU租期约09:25，新卡10:51；全部用户原实例仍保留。
+
 ## 09-14 07:44 b9完成4832更新并实际进入终点评估
 
 - **本轮进展**：b9参数更新真正完成4832/4832，最终日志elapsed3896.7965808808804秒；最终checkpoint-final.pt和parallel-parameters-step-004832.json实际存在。time1789343057.542315观察到4个CUDA训练worker仍活跃，trained分片已有28/27/28/27行，说明已进入Reader终点评估。根terminal仍不存在、trained complete尚未生成；不要将参数更新完成写成全实验或功能通过。
