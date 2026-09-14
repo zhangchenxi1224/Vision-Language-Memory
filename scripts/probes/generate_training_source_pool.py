@@ -93,10 +93,27 @@ def worker(a, registered):
         'package_sha256': PACKAGE_SHA, 'reads_sha256': digest(directory / 'reads.jsonl'), 'records': records})
 
 
-def collect(a, registered):
+def collect(a, registered, *, noise_reference=None):
+    """Recount everything; optionally bind noise to an independently sealed native replay.
+
+    Training/generation use the default exact local RNG check. A reporting caller
+    on a different CPU/PyTorch build must verify the reference file's independent
+    SHA before supplying it; this path compares exact hashes, never tolerances.
+    """
     import torch
     from PIL import Image
     from vision_memory.repro import canonical_tensor_sha256
+    reference_rows = None
+    if noise_reference is not None:
+        if (noise_reference.get('schema') != 'generated-source-native-noise-replay/v1'
+                or noise_reference.get('commit') != a.expected_commit
+                or noise_reference.get('plan_sha256') != digest(a.plan)
+                or noise_reference.get('manifest_sha256') != digest(a.output / 'manifest.json')
+                or noise_reference.get('all_bitwise_equal') is not True):
+            raise ValueError('Wrong native noise replay binding')
+        reference_rows = {r['job']: r for r in noise_reference['rows']}
+        if len(noise_reference['rows']) != 24 or set(reference_rows) != {j['id'] for j in registered['jobs']}:
+            raise ValueError('Incomplete independent native noise replay')
     records = []
     for lane in range(4):
         directory = a.output / f'lane-{lane}'
@@ -129,9 +146,17 @@ def collect(a, registered):
                     or not torch.equal(payload['trajectory'][-1], payload['generated_latent'])
                     or canonical_tensor_sha256(payload['source_latent']) != record['source_latent_sha256']):
                 raise ValueError('Invalid source/generation tensor evidence')
-            expected_noise = torch.randn((1, 4, 128, 128), generator=torch.Generator().manual_seed(job['seed']), dtype=torch.float32)
-            if not torch.equal(payload['noise'], expected_noise):
-                raise ValueError('Wrong actual generation noise')
+            if reference_rows is None:
+                expected_noise = torch.randn((1, 4, 128, 128), generator=torch.Generator().manual_seed(job['seed']), dtype=torch.float32)
+                if not torch.equal(payload['noise'], expected_noise):
+                    raise ValueError('Wrong actual generation noise')
+            else:
+                reference = reference_rows[job['id']]
+                if (reference['seed'] != job['seed'] or reference['tensor_sha256'] != record['tensor_sha256']
+                        or reference['bitwise_equal'] is not True
+                        or reference['replayed_noise_sha256'] != reference['recorded_noise_sha256']
+                        or canonical_tensor_sha256(payload['noise']) != reference['replayed_noise_sha256']):
+                    raise ValueError('Recorded noise differs from the independently replayed native seed')
             actual_reads = rows[5*i:5*i+5]
             correct = 0
             for row, (prompt_id, query) in zip(actual_reads, job['queries'].items(), strict=True):

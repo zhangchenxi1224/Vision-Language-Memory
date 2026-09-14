@@ -95,3 +95,26 @@ def test_source_collector_rejects_bad_evidence(packet, mutation):
     write(directory / 'complete.json', complete)
     with pytest.raises(ValueError):
         collect(args, registered)
+
+
+def test_independent_native_noise_reference_keeps_exact_seed_and_payload_binding(packet, monkeypatch):
+    args, registered = packet
+    original = collect(args, registered)
+    write(args.output / 'manifest.json', original)
+    jobs = {job['id']: job for job in registered['jobs']}
+    rows = []
+    for record in original['records']:
+        noise = torch.load(args.output / record['tensor'], weights_only=True)['noise']
+        rows.append({'job': record['job'], 'seed': jobs[record['job']]['seed'],
+            'tensor_sha256': record['tensor_sha256'], 'bitwise_equal': True,
+            'recorded_noise_sha256': canonical_tensor_sha256(noise), 'replayed_noise_sha256': canonical_tensor_sha256(noise)})
+    reference = {'schema': 'generated-source-native-noise-replay/v1', 'commit': args.expected_commit,
+        'plan_sha256': digest(args.plan), 'manifest_sha256': digest(args.output / 'manifest.json'),
+        'all_bitwise_equal': True, 'rows': rows}
+    # A reporting environment's own RNG must not silently replace the sealed
+    # native reference or introduce an approximate comparison.
+    monkeypatch.setattr(torch, 'randn', lambda *a, **kw: (_ for _ in ()).throw(AssertionError('local RNG unavailable')))
+    assert collect(args, registered, noise_reference=reference) == original
+    rows[0]['seed'] += 1
+    with pytest.raises(ValueError, match='independently replayed'):
+        collect(args, registered, noise_reference=reference)

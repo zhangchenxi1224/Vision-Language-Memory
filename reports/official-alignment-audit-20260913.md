@@ -10,6 +10,8 @@
 
 详见[4f原注册结果](official-alignment-results-20260913/clear-retention-registered-review.md)、[4f表达回归](official-alignment-results-20260913/clear-retention-observed-wording-review.md)、[全量PNG](official-alignment-results-20260913/clear-retention-png-validation-review.md)、[实际训练损失分析](official-alignment-results-20260913/clear-retention-training-loss-review.md)、[03对照固定计划](official-03-observed-wording-baseline-plan-20260914.md)及[实际运行记录](official-alignment-continuation-20260913.md)。两套已观察表达均属于回归集。以下早期记录按实验阶段保留。
 
+16:38进展：完整24张独立生成源图及120条原始读取均通过，全部分块、张量、原生噪声重放及本地复核已齐全。source仅作条件的生成图变化训练实现已在ef163b2准备并部署，额外4832更新，新的4H200实例已创建、仍在资源排队；尚未开始新优化。见[源图完整证据](official-alignment-results-20260913/generated-source-pool-review.md)及[下一轮固定训练合同](official-generated-source-training-plan-20260914.md)。当前4f功能得分和未达可用的结论保持原样。
+
 ## 官方依据
 
 2026-09-13 读取官方仓库 HEAD，仍为锁定版本 `a6e20c8cc94027f37dd7c5a81b0b3b472aa18409`。

@@ -1,5 +1,7 @@
 # 下一轮训练的独立生成源图准备
 
+16:38完成更新：24张生成图、120raw完整通过，全部本地归档复核已结束；原生噪声独立重放逐位相同，Windows差异完整保留。见[完整结果](official-alignment-results-20260913/generated-source-pool-review.md)。以下为原始登记与实施前状态。
+
 03完整对照证明，清除错误既包括已有薄弱点，也包括继续训练后新增的退步。训练代码目前每个逻辑源状态只用一个固定源PNG；部署则把前一步实际生成PNG编码后继续写入。准备源图变化实验，检验训练条件覆盖是否不足。旧来源图交叉诊断只覆盖固定旧案例，不能排除更广的来源变化影响；这仍是待检验假设。
 
 本次先登记训练材料生成，尚不启动优化。固定4f checkpoint `7294684170578dfc617b4fafcea97e6480c08642ca4f1e5967ff8966aa103182`、原生Base28步、CFG1、FP32 Writer及bf16 Reader。每次从官方灰色128图独立开始，用原训练bank中的gray→ambient/jazz/clear三条原始训练事件，各8个预先冻结的新噪声种子，共24张PNG。种子与既有19328训练噪声、开发噪声以及两套回归计划的显式噪声分离。完整计划为 [generated-training-source-pool-preregistered.json](official-alignment-results-20260913/generated-training-source-pool-preregistered.json)。

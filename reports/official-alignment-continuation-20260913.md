@@ -1,3 +1,13 @@
+## 09-14 16:38 生成源图完整复核，下一轮源码部署完成
+
+- 03完整表达对照1721/1800证据已在0163712推送。4f相对03修复39历史、新增10链错误、40链仍错；不能把50错全归为遗忘。该对照和所有旧4f生成/训练均完成，不要重启。
+- 新90b41a2生成24张训练源PNG、120原始读数，全部通过；三状态各8个不同PNG哈希。driver78336及四worker78348–78351已正常退出。完整210809795字节归档b8b36757…已由26块全部下载重建；首次整文件SCP93853已exit1超时，部分缓存保留；分块72401已exit0，不要再下载。
+- Windows2.11/AVX2的噪声重放与Linux2.7/AVX512有少量最多2.38e-7差异。首次本地39915明确失败，保留诊断；原生环境独立24种子逐位全部相等，独立重放SHA7d919108…已下载。修正报告路径以独立SHA作精确比较，不用容差；生成/训练默认RNG检查不变。完整本地83788已exit0，24PNG/24PT/29状态/120raw齐全。便携入口scripts/reporting/verify_generated_source_pool_local.py从全部已提交分块重算，独立噪声脚本也保留源码。详见generated-source-pool-review.md。
+- 固定下一轮训练源码 **ef163b26e33f62c496ed0da8744ebb7bf1163873** 已提交推送，并通过CPU-r3部署到 **P/repos/dreamlite-generated-source-training-20260914**，干净HEAD检查通过（18976 exit0）。生成源码仍90b41a2，未修改。新完整训练登记generated-source-training-preregistered.json为186845字节，SHA **d60e941f2dfbf0e6cdee8695defaa2b96ffb0ed5ac3a7b2b4ec6a771e73f51ce**，序列化与真实driver的sort_keys/ASCII/LF一致；不要用先前未封存的d3657fc临时格式。
+- 新训练从4f package267152e0…/checkpoint72946841…开始，freshAdamW1e-5，额外4832更新，原19328 teacher/noise/sigma流、31逻辑条件、历史9表达保持。108个音乐源条件各原图+8生成PNG均衡取样，同时替换对应原生条件编码；目标FM公式保持source无关。全部canonical baseline302图/3020raw必须逐位复现4f trained后才优化。新增4项及原30项测试通过；报告端7项通过。未启动下一轮优化，尚无新终点。
+- 新 **dl-source-aug-h200x4-20260914** 于16:12:11创建，4H200/80CPU/900GiB/shm128/NGC25.02CUDA12.8，8小时自动停止。16:35仍PENDING，events报告节点CPU/GPU资源不足。原r3亦PENDING；当前dl-clear-retain保留，最后16:10实际四卡0MiB/0%、相关生成进程全部退出。需要核实新实例分配后再设置实际deadline；完整训练driver需要至少150分钟，不能缩短预算塞进旧实例余期。
+- 下一步：等待新四卡分配并核验CUDA/NCCL/CPU实际环境与共享目录，使用ef163b2的run_native_condition_comparison.py --historical-wording-augmentation --generated-source-continuation，独立输出 **R/ef163b2-generated-source-full4832**。必须先看实际PID/输出是否已存在，防止重复启动。随后为这个实际训练commit扩展完整endpoint/逐draw源图变体收集及两套完整回归、CLI与PNG验收。当前尚未有训练driver.pid或输出目录；报告侧后续commit不替换训练源码。其他对话不追加任务。原goal未完成。
+
 ## 03完整对照已本地复核
 
 09-14 15:55：固定03的完整已观察表达对照已结束并全部本地复核，1721/1800（360、440、452、469）。全1990 raw、360生成PNG与真实CLI六写三十读齐全。相对03，4f保留1711、修复39历史、新增10链错误、40链仍错；b9保留1701、修复39、新增20、40仍错。全部负对照保持。两类错误并存，不能把4f50条全归于遗忘。完整配对与独立哈希见[03对照报告](official-alignment-results-20260913/03-observed-wording-baseline-review.md)。训练目标未完成；没有新训练已启动。
