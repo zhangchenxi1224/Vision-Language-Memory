@@ -24,6 +24,6 @@
 | [历史0](5ef8aa8-raw-condition-prefix0-evidence.tgz) / [重算](5ef8aa8-raw-condition-prefix0-local-verification.json) | `eaaa134881c901c6dc329c3a370962144c9568b0fb6897118f0081f10978f401` |
 | [历史1](5ef8aa8-raw-condition-prefix1-evidence.tgz) / [重算](5ef8aa8-raw-condition-prefix1-local-verification.json) | `a40e95c510c0f18ec3aa4837d19b3d2fe518d684771c4745358e28cb0dbed7b2` |
 
-raw策略导出使用v2 schema，显式记录training_raw，旧v1加载器拒绝静默回退。实际CLI六写三十读的36条命令/结果、30个原始读取、6个写入PNG与最终持久PNG已独立本地复核，parity_pass和reference_functional_pass均true；后者仅是第一条链，完整suite仍false。[CLI归档](5ef8aa8-raw-condition-cli-evidence.tgz) SHA256为`e9b5db3031144060162195203d6ed01ddc5681dd3a7c6b230135d4e0e3083f89`，见[本地复核](5ef8aa8-raw-condition-cli-local-verification.json)。
+raw策略导出使用v2 schema，显式记录training_raw，旧v1加载器拒绝静默回退。实际CLI六写三十读的36条命令/结果、30个原始读取、6个写入PNG与最终持久PNG已独立本地复核，parity_pass和reference_functional_pass均true；后者取自原连续链验证的整体通过标志，CLI本身只重放第一条链，完整四路suite仍false。[CLI归档](5ef8aa8-raw-condition-cli-evidence.tgz) SHA256为`e9b5db3031144060162195203d6ed01ddc5681dd3a7c6b230135d4e0e3083f89`，见[本地复核](5ef8aa8-raw-condition-cli-local-verification.json)。
 
 原生条件训练03与冻结raw推理两条路径均修复音乐清除和链错误，但历史改写分别仍64/56失败。不能从不同候选里挑成功案例拼成一个版本。下一轮b9f90e9保持03原生条件、原始初始化和全部source/teacher/noise/sigma抽样，仅扩大历史训练表述覆盖；固定计划见[历史表述对照](../official-historical-wording-training-plan-20260914.md)。它目前在四卡运行，尚无终点结果。

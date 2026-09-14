@@ -77,6 +77,6 @@ if __name__=='__main__':
     parser.add_argument('--output',type=Path,required=True)
     args=parser.parse_args()
     result=compare(json.loads(args.registration.read_bytes()),args.root)
-    args.output.write_text(json.dumps(result,indent=2,sort_keys=True,ensure_ascii=False)+'\n',encoding='utf-8')
+    args.output.write_bytes((json.dumps(result,indent=2,sort_keys=True,ensure_ascii=False)+'\n').encode('utf-8'))
     print(json.dumps({name:{k:v for k,v in value.items() if k not in ('cases','after_failure_outputs')}
                       for name,value in result['matrices'].items()}))

@@ -24,6 +24,6 @@
 | [历史0](9e27050-logical-prefix0-evidence.tgz) / [复核](9e27050-logical-prefix0-local-verification.json) | `7d7588c7d18f63715803991d108d9206f7adfd0e9666dfe7640205c2f9e5a545` |
 | [历史1](9e27050-logical-prefix1-evidence.tgz) / [复核](9e27050-logical-prefix1-local-verification.json) | `4e77e7a216a4df7dd648be53db464f03502d6cf230e8b1fa0fd7d9f152d039d0` |
 
-导出包完成独立的六写三十读 CLI 推理；本地重算全部 36 条命令/结果、30 条原始读取、6 张写入 PNG 及最终持久 PNG，`parity_pass=true`、`reference_functional_pass=true`。后者仅指重放的第一条链；完整 suite 的 `functional_all_registered_correct=false`，不能据单链宣布可用。见 [CLI 完整证据](9e27050-logical-cli-evidence.tgz) 和 [本地复核](9e27050-logical-cli-local-verification.json)，archive SHA256 为 `0de0462d52c05d2582e39936d38f581d73018e33329bf1556379ec1cfb9f349f`。
+导出包完成独立的六写三十读 CLI 推理；本地重算全部 36 条命令/结果、30 条原始读取、6 张写入 PNG 及最终持久 PNG，`parity_pass=true`、`reference_functional_pass=true`。后者取自原连续链验证的整体通过标志；CLI 本身只重放第一条链。完整四路 suite 的 `functional_all_registered_correct=false`，不能据 CLI 一致或连续链通过宣布可用。见 [CLI 完整证据](9e27050-logical-cli-evidence.tgz) 和 [本地复核](9e27050-logical-cli-local-verification.json)，archive SHA256 为 `0de0462d52c05d2582e39936d38f581d73018e33329bf1556379ec1cfb9f349f`。
 
 冻结旧 bb 权重的 raw 条件开发对照同样为 1510/1510，其完整功能实验已在新四卡运行；必须单独等待全部案例和真实导出包结果，不能把两种条件或两个模型的通过案例拼接为一个可用版本。

@@ -36,5 +36,5 @@ if __name__=='__main__':
     parser.add_argument('--output',type=Path,required=True)
     args=parser.parse_args()
     result=collect(args.archive,args.sha256)
-    args.output.write_text(json.dumps(result,indent=2,sort_keys=True)+'\n',encoding='utf-8')
+    args.output.write_bytes((json.dumps(result,indent=2,sort_keys=True)+'\n').encode('utf-8'))
     print(json.dumps({key:result['parity'][key] for key in ('writes_compared','reads_compared','parity_pass','reference_functional_pass')}))

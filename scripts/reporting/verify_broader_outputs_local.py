@@ -94,7 +94,7 @@ if __name__ == '__main__':
         validation_archive=args.validation_archive, validation_digest=args.validation_sha256,
         logical_sampling_commit=args.logical_sampling_commit, expected_probe_commit=args.expected_probe_commit,
         inference_condition=args.inference_condition, validation_set=args.validation_set)
-    args.output.write_text(json.dumps(result, indent=2, sort_keys=True) + '\n')
+    args.output.write_bytes((json.dumps(result, indent=2, sort_keys=True) + '\n').encode('utf-8'))
     concise = {'endpoint': {phase: summary['correct_eos'] for phase, summary in result['endpoint_recount']['phases'].items()},
         'actual_draws_replayed': result['endpoint_recount']['exact_draws_replayed']}
     if 'validation_recount' in result:
