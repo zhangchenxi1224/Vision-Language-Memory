@@ -1,3 +1,16 @@
+## 09-14 收集故障已实际恢复；原注册全量本地1790/1800
+
+- **当前运行代码：0c4d8935429cd71669ccccc8e86942ac9baf4507**，独立目录 `P/repos/dreamlite-clear-retention-recovery-20260914`。生成数据仍是原e372/4f，原e372目录未修改。17项完整来源/评分回归测试353.24秒通过，修复commit已推送。不要重跑训练、生成或recovery launcher。
+- fresh原始四路生成全部结束，但1789366050.5606384首次collector因已观察回归标签未同步而失败，原PNG随前置失败退出。已保留原失败原字节 `R/e372f3c-fresh-wording-initial-failure.json`，SHA **d1e74b673177f973f3732d12bc03d3b0978a455cff3ef367ef089005930407e6**，本地原文件已下载校验。新collector严格检查原e372干净commit、全部scripts/src源文件hash及所有产物；没有改生成或评分。
+- recovery driver **3500970** 完成四collector和原e372源码的实际CLI；fresh suite于1789367380.1655116恢复completed，远端 **1750/1800**：360、430/480、480、480，50链错误仍在。完整raw/PNG本地复核尚未全部完成。fresh CLI archive6276456bytes SHA **fe2b3b323a57696de8383b3c9e52f3d84e162a52d880ef4fda75783d3504bf3b** 已下载，本地6写30读parity true、reference functional false；不要再次归档CLI。
+- 新 **0c4d893-png-readback** 已实际启动，driver3545176，首组包装3545188–3545191、实际GPU3545196/3545197/3545198/3545202，reading_registered。状态 `R/0c4d893-png-readback-status.json`；原e372 PNG失败状态保持原样。deadline仍17:20。恢复driver等待新的PNG完成，不能据原e372失败状态误判新进程终止。`observe-clear-retention.py`现已包含恢复目录和新PNG状态，并已通过GPU终端base64上传（此前SCP上传54345已失败，已安全替代）。
+- 原注册**全部1990 raw、360 PNG、1800格**与CLI现已本地完整复核1790/1800。完整逐格对03：保留1726、修复64历史、退步10链；对b9：保留1780、修复10、无新增退步、10仍错。两prefix都480/480，完整分块+manifest已在results，各105MB原gzip全部重建校验、verifier正常exit0。见 `clear-retention-registered-review.md` 与 `clear-retention-registered-paired-comparison.json`。原prefix0完整证据已在**5faa396**推送，prefix1及新完整报告待本次提交。
+- 旧CPU r2平台事件13:42–14:02多次重新等待ready，SCP屡次失联，所有旧下载handle均已明确终止或结束。新 **dl-align-cpu-20260914-r3** 已RUNNING并连接成功：4CPU/16GiB、cpu-nat-206、ubuntu-inspire-base:22.04、CPU资源-2、0点券/h，created14:26:23。原r2和GPU/用户原实例对象均保留。使用r3传输，现有CPU venv共享路径可直接运行，无需再安装。
+- 当前本地工作：fresh confirmation完整66MB已下载，verifier **14732**运行；fresh chains整文件SCP **91734**仍运行（timeout300）；fresh prefix0/1已在remote分成13×8MiB，manifest本地齐，下载器 **26161 / 9136**运行，均 `--notebook dl-align-cpu-20260914-r3 --workers 1 --ignore-target-cache`。勿重复启动。其余此前工具handle都已结束。
+- fresh独立观察归档/summary SHA完整在 `.cache/e372f3c-fresh-closed-artifacts.json`；函数store `clear_retention_evidence_latest`也保留最近CPU结果。fresh prefix0 manifest SHA **6e8fc8db8bb4fc8e4c23007aa233094be59ab24602559b142a07390ee6b9b0ea**，prefix1 **54d331e1b40175ff1aab92b85b0e2ec144614886d0f216f65535391c6d5bf27a**。它们同样>100MiB，须提交完整parts+manifest，不能把单大文件直接提交。原注册重建工具/README已有实际可复用例子。
+- `inspect-clear-retention-evidence.py`已通过GPU终端更新：读取新0c PNG状态/归档，原e372失败另列initial_png_status；对关闭fresh档和原失败计算独立SHA。可在r3执行。PNG完成后按新0c archive/source e372配对做全3980 raw/796PNG复核，不用旧385结果替代。
+- 新汇报任务01a09e7e-0bce-73d0-ac9b-4ea6253db52d继续整理全部实验，已收到恢复/新分数的更新；它不管理训练。本目标仍active，当前两套功能有10+50条链错误；尚未启动下一轮训练或新诊断，须依据完整证据继续修复。
+
 ## 09-14 14:05 原注册远端1790/1800，链和CLI已本地复核
 
 - e372原注册suite于1789364567.374212正常completed，真实CLI也完成。远端完整1790/1800：single360、chain470、prefix0/1各480。single/chain完整归档和raw/PNG已本地复核，CLI6写30读parity true但整体functional false。详见 [完整链证据](official-alignment-results-20260913/clear-retention-chain-review.md)。两历史分路尚在下载，勿把全1800描述为已本地复核。
