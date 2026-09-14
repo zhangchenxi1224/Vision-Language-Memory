@@ -1,3 +1,11 @@
+## 09-14 12:55 固定4832更新完成，四卡参数一致，完整trained评估已启动
+
+- 真实GPU观察time1789361706.8462641：**4832/4832**记录齐全，更新elapsed4108.952822511084秒（约68.5分钟）。四rank478724–478727仍实际运行，trained阶段各已生成2个PT，说明已进入更新后的完整302图评估；此时尚无train/result或terminal完成状态，不能称整个实验结束。
+- 运行时最终rank参数报告已下载原始JSON：`official-alignment-results-20260913/4fbc857-final-rank-parameters.json`，文件SHA256 `d4de2e9bdf15ac48d488afa013946fc17ab13c50c99f31c903cbe25d0c7d3eb0`。四rank参数SHA全部相同：`16bf39236d6828dc9bc7ed7168f7e10092ccc9ea4868647f9f7c62b0d6a73975`，不同于03初始化4a41876c…。本地只核对原运行时比较报告，完整checkpoint与全部实际draw仍待e372终点collector收集。
+- 训练driver476384/pilot477729、三e372验证驱动640212/640213/640214均活跃。训练后302图/6040总raw终点完成后，自动进入原功能矩阵、已观察表达回归、实际CLI、全量PNG。不得重复训练或提前挑选checkpoint。
+- 12:26一次JupyterTerminal观察失败已用同一命令重试恢复，平台RUNNING、四rank持续更新；未重启训练。平台当时剩余18601秒，训练deadline14:15、整体验证deadline17:20仍不变。
+- 轻量CPU证据检查helper `.cache/inspect-clear-retention-evidence.py` 已准备并上传R同名；只将suite已退出collector阶段的归档视为关闭，读取精确e372/4f身份并计算完整hash，避免SCP下载尚未写完的归档。GPU实际进程仍用 `observe-clear-retention.py --compact` 核验。Goal active，尚无本轮完整效果结论。
+
 ## 09-14 11:47 完整03-trained基线复现通过，已进入真实参数更新
 
 - GPU实际验证完整302/302新生成latent、RGB及全部29步trajectory逐位等于03 trained；全部raw记录相同，仅administrative phase标签baseline/trained不同。检查在首次优化前由四rank共同通过，未借用父模型基线文件。
