@@ -2,7 +2,11 @@
 
 分支：`codex/dreamlite-official-alignment-20260913`，起点 `f68bf06`。附件为问题线索，以下以实际源码和可追溯产物为依据。
 
-当前结论：官方FM公式、完整时间域、纯噪声初态、原生scheduler已成套实现并验证，真实实验使用官方Base原生28步推理。4832步原生条件编码对照已完成，开发 **1510/1510、302图五问法全部通过**；完整功能单写360/360、连续链480/480，但历史改写896/960，仍64条失败。冻结raw条件推理对照历史904/960，仍56条失败。两套完整原始记录、PNG、实际最终PT审计和CLI重放都已收集并本地复核，不能再把这些已完成的失败实验描述为等待结果。当前新4H200正运行仅增加历史训练表达的b9对照；原回归、新表达及完整PNG读取验收均已部署等待，尚无完整可用版本。详见[原生完整结果](official-alignment-results-20260913/native-condition-validation-review.md)、[raw完整结果](official-alignment-results-20260913/raw-condition-validation-review.md)及[续接记录](official-alignment-continuation-20260913.md)。以下早期记录按实验阶段保留。
+当前结论（09-14 11:49）：官方FM公式、完整时间域、纯噪声初态、原生scheduler已成套实现并验证，真实实验使用官方Base原生28步推理。03原生条件模型完成4832步，开发1510/1510、功能1736/1800，连续链480/480但历史改写仍失败64条。b9历史表达增强也已完成：开发1510/1510、原功能1780/1800、新表达1740/1800；完整PNG读取3520/3600，未改变原有80个错误。上述全部原始证据和PNG均已本地复核，不能再描述为等待结果。
+
+针对b9新增的连续清除退化，完整32任务/320读数的来源图与权重交叉诊断中，03权重配两种来源均80/80，b9权重配两种来源均60/80，两个对角组合逐项复现原结果。它支持在这些观察案例中排查参数更新造成的退化，不能据此推断所有来源分布都无影响。新4H200正在运行4fbc857继续训练：从03已训练参数开始，以fresh AdamW1e-5保留完整历史表达增强和4832额外更新。完整302图、轨迹和raw的03-trained初始化复现已实际通过，已进入参数更新；尚无新模型效果结论。初始化和学习率共同改变，属于修复试验，不能作单因素归因。
+
+仍未有证据支持完整可用版本。详见[原生完整结果](official-alignment-results-20260913/native-condition-validation-review.md)、[表达增强完整结果](official-alignment-results-20260913/historical-wording-validation-review.md)、[交叉诊断](official-alignment-results-20260913/clear-source-swap-review.md)、[本轮固定计划](official-clear-retention-plan-20260914.md)及[实际运行记录](official-alignment-continuation-20260913.md)。两套已观察表达在本轮均属于回归集。以下早期记录按实验阶段保留。
 
 ## 官方依据
 
@@ -42,7 +46,7 @@
 
 ### 当前实训路径逐项核对（09-14）
 
-当前b9使用显式full_unet/native_base/FP32/CFG1配置，所以上表中的LoRA和raw event是早期默认设置，不是当前训练范围与条件。核对实际调用链：
+当前4fbc857沿用03/b9的显式full_unet/native_base/FP32/CFG1配置，所以上表中的LoRA和raw event是早期默认设置，不是当前训练范围与条件。4fbc857另明确更改初始化与lr1e-5。核对实际调用链：
 
 - `flow_microbatch()`在official分支只调用`official_flow_bridge(noise, target, sigma)`。该函数没有source参数；返回`(1-sigma)*target+sigma*noise`和`noise-target`，不会经旧anchored桥。
 - `balanced_draw()`在official分支取完整`torch.rand`区间；`predict_velocity(..., integer_timestep=True)`要求1000单位并取整。source仅在宽度维拼接给U-Net，损失裁回目标半边后使用FP32均方误差。这与官方训练源码的相应操作一致。
