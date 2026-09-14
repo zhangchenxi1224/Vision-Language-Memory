@@ -2,6 +2,27 @@
 
 ## Execution update: 2026-09-14, after new allocation
 
+The fixed training endpoint completed at Unix time1789386105.8734047
+(2026-09-14 19:41:45 CST), with exactly4,832 optimizer updates. Its result SHA256
+is `28b1ae810e2e0c9de5c222b9022ed37e5e09168085f2ac60882e121ca941aa35`;
+final checkpoint SHA256 is
+`50c3135d4d2afe091115d5541c7949fcd92ad4a408572ba0be3ab0b24fea9951`.
+The complete remote endpoint collector finished and the downloaded8,074,046-byte
+`2c5189a-logical-endpoint-evidence.tgz` matches its independently observed SHA256
+`d59aa426e5a6e093d5887bd305b7d2204276a10956b27f3aab3e78d267348f67`.
+The existing full local verifier replayed all19,328 actual draws, including source
+and historical-condition bindings, and recounted both complete3,020-row phases:
+baseline1,510/1,510 and trained1,510/1,510 matched exact-token/immediate-EOS reads.
+See `2c5189a-logical-endpoint-local-verification.json` for all evidence and explicit
+local tensor omissions. Development performance remains perfect; this alone
+does not establish improvement over4f or functional acceptance.
+
+At Unix time1789386297.5705602, the original four-lane functional suite was
+actually running under supervisor83478, with lane processes2324293–2324296 and
+their child workers2326761–2326764 present. Its stage changed to
+`four_independent_validation_lanes` at1789386220.9485958. Both functional matrices,
+actual CLI parity and complete PNG readback remain pending. The goal is incomplete.
+
 At Unix time 1789383905.6168113 (19:05:05 CST), the actual driver, four
 training workers and validation waiter were all live. Optimization reached
 3,487 of the fixed 4,832 updates. The complete measured baseline gate passed:
