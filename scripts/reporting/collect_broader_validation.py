@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 import sys
 import tarfile
+import subprocess
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path[:0] = [str(ROOT), str(ROOT / 'src')]
@@ -131,7 +132,7 @@ def verify_tensors(run, rows, mode):
 
 
 def collect(run, parent, bank_path, expected_probe_commit, *, text_only=False, logical_sampling_commit=None,
-            inference_condition='native', validation_set='registered'):
+            inference_condition='native', validation_set='registered', generation_source_root=None):
     run, parent, bank_path = map(Path, (run, parent, bank_path))
     bank, _, result = parent_binding(parent, bank_path, logical_sampling_commit=logical_sampling_commit)
     parent_commit, _, plan_sha = registered_protocol(bank, logical_sampling_commit)
@@ -167,7 +168,8 @@ def collect(run, parent, bank_path, expected_probe_commit, *, text_only=False, l
     interpretation = ('observed_cases_paired_diagnostic' if logical_sampling_commit else
         ('fresh_confirmation' if development['correct_eos'] == 1510 else 'diagnostic_after_development_failure'))
     if fresh_validation:
-        interpretation = 'fresh_event_wording_seen_semantic_questions'
+        interpretation = ('observed_wording_regression_seen_semantic_questions'
+            if 'reused_validation_plan_sha256' in registered else 'fresh_event_wording_seen_semantic_questions')
     if identity['interpretation'] != interpretation or identity['development_correct_eos'] != development['correct_eos']:
         raise ValueError('Parent development outcome or validation interpretation changed')
     rows = jsonl(run / 'generations.jsonl')
@@ -206,8 +208,14 @@ def collect(run, parent, bank_path, expected_probe_commit, *, text_only=False, l
             raise ValueError('Stored chain PNG differs from the generation record')
     checked = 0
     if not text_only:
-        from scripts.train.train_latent_bank_unet import source_hashes
-        if identity['source_hashes'] != source_hashes() or identity['probe_file_sha256'] != sha(ROOT / 'scripts/probes/official_broader_confirmation.py'):
+        source_root = ROOT if generation_source_root is None else Path(generation_source_root).resolve()
+        if generation_source_root is not None:
+            if (subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=source_root, text=True).strip() != expected_probe_commit
+                    or subprocess.check_output(['git', 'status', '--porcelain'], cwd=source_root, text=True).strip()):
+                raise ValueError('Recovery requires the exact clean original generation checkout')
+        source_hashes = {p.relative_to(source_root).as_posix(): sha(p)
+            for tree in ('scripts', 'src') for p in sorted((source_root / tree).rglob('*.py'))}
+        if identity['source_hashes'] != source_hashes or identity['probe_file_sha256'] != sha(source_root / 'scripts/probes/official_broader_confirmation.py'):
             raise ValueError('Validation source differs from the inspected checkout')
         checked = verify_tensors(run, rows, identity['mode'])
     return {**summary, 'identity': identity, 'complete_sha256': sha(run / 'complete.json'), 'interpretation': interpretation,
@@ -224,9 +232,12 @@ if __name__ == '__main__':
     parser.add_argument('--logical-sampling-commit')
     parser.add_argument('--inference-condition', choices=('native', 'training_raw'), default='native')
     parser.add_argument('--validation-set', choices=('registered', 'fresh_wording_v1'), default='registered')
+    parser.add_argument('--generation-source-root', type=Path,
+        help='For independent collection after a collector fix: verify every source hash against the exact clean original generation checkout.')
     a = parser.parse_args()
     summary = collect(a.run, a.parent, a.bank, a.expected_probe_commit, text_only=a.text_only,
-        logical_sampling_commit=a.logical_sampling_commit, inference_condition=a.inference_condition, validation_set=a.validation_set)
+        logical_sampling_commit=a.logical_sampling_commit, inference_condition=a.inference_condition, validation_set=a.validation_set,
+        generation_source_root=a.generation_source_root)
     output = Path(str(a.output_prefix) + '-summary.json')
     output.write_text(json.dumps(summary, indent=2, sort_keys=True) + '\n')
     if not a.text_only:

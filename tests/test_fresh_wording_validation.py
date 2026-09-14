@@ -96,3 +96,56 @@ def test_continuation_reuses_every_observed_case_and_preserves_lineage(fixed):
     changed['optimizer']['lr'] = 5e-5
     with pytest.raises(ValueError, match='fixed training registration'):
         plan(changed, bank)
+
+
+@pytest.mark.parametrize('continuation', [False, True])
+def test_complete_collector_preserves_fresh_vs_observed_provenance(fixed, monkeypatch, tmp_path, continuation):
+    from scripts.reporting import collect_broader_validation as collector
+    from scripts.reporting.collect_broader_endpoint import CLEAR_RETENTION_COMMIT, BANK_SHA
+    from scripts.experiments.clear_retention_protocol import plan as continuation_plan
+    bank, training, _ = fixed
+    commit = CLEAR_RETENTION_COMMIT if continuation else PARENT_COMMIT
+    if continuation:
+        training = continuation_plan(bank, commit)
+    registered = plan(training, bank)
+    expected, artifacts, cases = expected_rows(registered, bank, 'single_writes', None)
+    rows = [{**meta, 'image_sha256': hashlib.sha256(meta['image_artifact'].encode()).hexdigest(),
+        'raw': meta['gold'], 'generated_token_ids': GOLD_IDS[meta['gold']] + [151645],
+        'scorer': {'gold_token_ids': GOLD_IDS[meta['gold']], 'strict_correct': True,
+            'answer_followed_immediately_by_eos': True}} for meta in expected.values()]
+    summary, _, _ = summarize_rows(rows, registered, bank, 'single_writes', None)
+    artifacts.add('validation-plan.json')
+    run, parent = tmp_path / 'run', tmp_path / 'parent'
+    label = ('observed_wording_regression_seen_semantic_questions' if continuation
+        else 'fresh_event_wording_seen_semantic_questions')
+    probe = 'e' * 40
+    identity = {'validation_set': 'fresh_wording_v1', 'validation_plan_sha256': digest(registered),
+        'probe_commit': probe, 'parent_commit': commit, 'bank_sha256': BANK_SHA,
+        'plan_file_sha256': digest(training), 'registered_plan': registered, 'optimizer_updates': 0,
+        'guidance_scale': 1., 'native_steps': 28, 'checkpoint_sha256': 'checkpoint',
+        'parent_result_sha256': 'result', 'interpretation': label, 'development_correct_eos': 1510,
+        'mode': 'single_writes', 'prefix_lane': None, 'selected_cases': cases}
+    def file_sha(path):
+        return {parent / 'train/result.json': 'result', parent / 'train/trained/generations.jsonl': 'raw',
+            run / 'validation-plan.json': digest(registered)}.get(path, 'artifact')
+    complete = {'identity': identity, 'cells': summary['cells'],
+        'all_generated_correct_eos': summary['all_generated_correct_eos'],
+        'artifact_hashes': {name: file_sha(run / name) for name in artifacts}}
+    files = {parent / 'preregistered-experiment.json': training, run / 'complete.json': complete,
+        run / 'identity.json': identity, run / 'validation-plan.json': registered,
+        parent / 'train/trained/complete.json': {'artifact_hashes': {'generations.jsonl': 'raw'}}}
+    monkeypatch.setattr(collector, 'parent_binding', lambda *args, **kwargs: (bank, None, {'checkpoint_sha256': 'checkpoint'}))
+    monkeypatch.setattr(collector, 'registered_protocol', lambda *args: (commit, training, digest(training)))
+    monkeypatch.setattr(collector, 'read', lambda path: files[path])
+    monkeypatch.setattr(collector, 'sha', file_sha)
+    monkeypatch.setattr(collector, 'jsonl', lambda path: rows if path == run / 'generations.jsonl' else [])
+    monkeypatch.setattr(collector, 'phase_summary', lambda *args: ({'correct_eos': 1510}, None))
+    actual = collector.collect(run, parent, tmp_path / 'bank.json', probe, text_only=True,
+        logical_sampling_commit=commit, validation_set='fresh_wording_v1')
+    assert actual['interpretation'] == label
+    assert (actual['raw_rows'], actual['matched_correct_eos']) == (390, 360)
+    identity['interpretation'] = ('fresh_event_wording_seen_semantic_questions' if continuation
+        else 'observed_wording_regression_seen_semantic_questions')
+    with pytest.raises(ValueError, match='validation interpretation changed'):
+        collector.collect(run, parent, tmp_path / 'bank.json', probe, text_only=True,
+            logical_sampling_commit=commit, validation_set='fresh_wording_v1')
