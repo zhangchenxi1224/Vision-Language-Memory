@@ -1,4 +1,16 @@
-## 09-14 收集故障已实际恢复；原注册全量本地1790/1800
+## 09-14 15:13 本轮全量本地证据闭合，03完整表达对照已启动
+
+- 新固定源码 **ff862dfcc5139921db3d4b8ff4b546ef1197a694** 已在独立目录部署成功，干净HEAD和计划SHA检查通过。03对照driver **3795100** 已启动；15:13实际/proc观察包装3795109–3795112、执行worker3798209–3798212均存活，stage four_independent_validation_lanes，刚开始父模型检查/加载，四路尚0 raw/0 PNG，GPU显存尚0，不能报告新分数。输出 `R/ff862df-fresh-wording-{confirmation,chains,prefix0,prefix1}`，status `R/ff862df-fresh-wording-completion-suite-status.json`，deadline17:20。新只读观察脚本 `R/observe-03-observed-baseline.py` 已上传；不要再运行launch或deploy。
+
+- 4f训练及全部e372原注册/已观察表达验证、实际CLI、0c PNG已结束。15:01在H200节点实际观察旧相关进程列表为空，四卡利用率/显存均0。没有重启旧训练或旧验证。
+- e372表达四路全部本地复核完成：1990 raw、1800 matched、360生成PNG，1750/1800；相对原56/b9逐格保留1740、修复10、仍错50、无新增退步，负对照不变。全部归档、summary、本地复核和完整配对已保留。两个>100MiB历史归档保存全部分块并实际重建；完整chain已取代明确失败的旧partial文件。详见 `clear-retention-observed-wording-review.md`。
+- 剩余表达错误是sequence0 rep0/3及sequence1 rep0/2/3的step4/5：20次jazz、30次ambient，本应no active preference。修复的是sequence0 rep2 step4/5。原注册仍10条错误。不能把两套相同case ID当作相同事件或噪声。
+- 新0c PNG远端1789368080.826371 completed，全部8档和原摘要已独立hash下载并本地逐像素/逐raw复核；3980 raw、3600 matched、796 PNG，3540正确、60仍错、0新增/0修复，全部960链一致性通过。详见 `clear-retention-png-validation-review.md`、`clear-retention-png-local-aggregate.json`。原e372 PNG失败记录保留。
+- 原注册证据commit69e4a18已推送。所有旧fresh下载/本地复核句柄（包括56534、47993、40904、4130）已经exit0，不要再次启动。当前新增代码为03 fixed endpoint支持原56全部表达/噪声；新计划 `03-observed-wording-baseline-preregistered.json` 163471字节，SHA `5bc4d57752f770f6201cfc78b96da5884850b4af4c5b41de73715ba883d4335b`。零优化步，仍完整1990 raw/1800 matched/360图+CLI。03在这套表达上尚未测过，不能把4f50错全归于训练遗忘。
+- 新增协议和collector测试10项通过；新增完整03计划/CLI测试最初未排除有意更改的validation_exposure元数据而失败，已限定只允许验证矩阵/暴露描述变化，实际训练字段仍逐项相同；该用例3044已exit0、1 passed/104.21秒，共11项通过。代码未改变历史注册字节或评分。py_compile/diff检查通过。部署31587和两个upload均exit0，启动已完成。
+- 用户明确结束另一个汇报任务，不再向该对话追加任何任务。本对话保留原训练迭代目标，未达可用，不标complete。当前尚无新03对照结果或下一轮训练。
+
+## 09-14 收集故障已实际恢复；原注册全量本地1790/1800（历史状态）
 
 - **当前运行代码：0c4d8935429cd71669ccccc8e86942ac9baf4507**，独立目录 `P/repos/dreamlite-clear-retention-recovery-20260914`。生成数据仍是原e372/4f，原e372目录未修改。17项完整来源/评分回归测试353.24秒通过，修复commit已推送。不要重跑训练、生成或recovery launcher。
 - fresh原始四路生成全部结束，但1789366050.5606384首次collector因已观察回归标签未同步而失败，原PNG随前置失败退出。已保留原失败原字节 `R/e372f3c-fresh-wording-initial-failure.json`，SHA **d1e74b673177f973f3732d12bc03d3b0978a455cff3ef367ef089005930407e6**，本地原文件已下载校验。新collector严格检查原e372干净commit、全部scripts/src源文件hash及所有产物；没有改生成或评分。

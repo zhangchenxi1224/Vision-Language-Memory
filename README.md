@@ -1,6 +1,6 @@
 # Vision Learnable Memory
 
-> 最新完整本地复核：[4f继续训练的原注册功能集](reports/official-alignment-results-20260913/clear-retention-registered-review.md)为1790/1800，全部1990raw、360PNG及真实CLI已核验，仍有10条连续清除错误。另一套已观察表达远端1750/1800，本地复核进行中；[收集故障已修复](reports/official-alignment-results-20260913/clear-retention-collection-recovery.md)，新的完整PNG正在运行。仍未达到完整可用。
+> 最新完整本地复核：[4f原注册功能集](reports/official-alignment-results-20260913/clear-retention-registered-review.md)1790/1800，[已观察表达回归](reports/official-alignment-results-20260913/clear-retention-observed-wording-review.md)1750/1800；两套全部3980 raw、720生成PNG及真实CLI均已核验。两套各修复b9的10条旧错误，均无新增退步；仍有10+50条清除及后续保持错误。[完整PNG读回](reports/official-alignment-results-20260913/clear-retention-png-validation-review.md)796张PNG、3980 raw本地复核3540/3600，无答案翻转。接下来补测[固定03完整表达基线](reports/official-03-observed-wording-baseline-plan-20260914.md)，尚未达到完整可用。
 
 > 2026-09-14 13:28：来源图/权重交叉诊断已完成。基于03参数与较低学习率的[继续训练](reports/official-alignment-results-20260913/clear-retention-development-review.md)已完成固定4832次更新；全量本地复核开发1510/1510、19328次训练抽样及302张量审计绑定。四卡正在运行完整功能回归，尚无本轮完整可用结论。下面各轮结果保留用于比较。
 

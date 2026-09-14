@@ -21,4 +21,4 @@
 
 完整分块保留每个归档字节；没有为了GitHub限制省略PNG或原始读取。大PT和checkpoint在远端实际检查，本地归档没有这些大张量，不能声称本地重读了全部PT。
 
-另一套已观察表达回归远端已完成1750/1800，其全量本地复核正在进行；两套PNG验证另由0c4d893运行，尚不能用之前56/385结果代替本轮。Goal active，当前仍须修复连续清除问题。
+另一套[已观察表达回归](clear-retention-observed-wording-review.md)已完成全部本地复核1750/1800；[本轮0c4d893完整PNG读回](clear-retention-png-validation-review.md)也完成3980 raw、796张PNG本地复核3540/3600，无答案翻转。Goal active，当前仍须修复连续清除问题。
