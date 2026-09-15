@@ -1,5 +1,22 @@
 # Generated-source continuation: complete validation registration
 
+## Final results synchronized on 2026-09-15
+
+All registered workloads finished. Full local recount of the downloaded immutable
+evidence confirms original functionality1,790/1,800, observed wording1,740/1,800,
+and complete PNG readback3,530/3,600 (3,980 raw records including controls).
+Both real CLI replays passed engineering parity, with6 writes and30 reads each;
+functional success remains false. Relative to4f, original aggregate is unchanged
+and observed wording loses10 correct reads. The usable-version goal is not met.
+
+See `2c5189a-latest-results.md` for the current results and limitations, and
+`2c5189a-complete-results-local-verification.json` for the complete local recount.
+All110 source artifacts are preserved in the95 SHA256-bound parts under
+`2c5189a-complete-results-sync.parts/`; the adjacent file manifest names every
+archive, summary, status, log and CLI artifact. All95 staged Git blobs were checked
+against the independently observed remote hashes. Earlier pending statuses below
+are historical observations, superseded by this completed evaluation.
+
 ## Execution update: 2026-09-14, after new allocation
 
 The separate complete final-tensor inspection also finished. Its portable archive
