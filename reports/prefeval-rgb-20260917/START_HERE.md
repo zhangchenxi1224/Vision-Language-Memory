@@ -1,10 +1,13 @@
 # PrefEval RGB memory: execution brief, 2026-09-17
 
-Status: preparation complete/in progress; no new training or new-model result yet.
+Status: first empirical Reader-reference gate completed and failed on strict
+formatting; no teacher or shared-Writer training has started.
 The user's goal is active. ChatGPT planning/review is required by the user.
 The user created the Project with project-only memory; connection and workspace
-identity have been verified. C2C task c2c_7e19 INIT is sent and awaiting its first
-empirical PLAN. Do not claim the experiment completed.
+identity have been verified. C2C task c2c_7e19 plan `prefeval-rgb-pilot-01` was
+received and executed through its first empirical allocation gate. See
+`pilot-plan.md`, `registered/summary.json`, and `references-v1-summary.json`.
+Do not claim the experiment completed.
 
 ## Inputs and scope
 
@@ -104,7 +107,16 @@ alphanumeric normalization only; semantic equivalence remains unproven. Do not
 report the unmodified 730/82 split as free of preference-content leakage.
 
 ChatGPT Project is bound and workspace_info returned this exact workspace name.
-INIT is sent; no PLAN has yet completed and no new model training has started.
+The first PLAN is received. The four-GPU Reader reference run completed at code
+`8d95cdd`: 2,048 read records, no trainable parameters. Text-reference strict
+MCQ is 28/96; recovery is 783/928. Of the failures, 63 MCQs have the correct
+letter in wrong tags and all 145 recovery failures are scope-prefix/quote-only
+differences. These diagnostics do not replace the original failed strict scores.
+Preserve `references-v1-evidence.tgz` and compact raw records; review the first
+failed gate before changing task formatting or allocating teacher/Writer training.
 The official PrefEval source was cloned and checked out at the registered commit
 on the shared disk at `data/PrefEval-50795054-20260917`. The independent experiment
-checkout is being prepared at `repos/dreamlite-prefeval-rgb-20260917`.
+checkout is ready at `repos/dreamlite-prefeval-rgb-20260917`. It uses sparse
+checkout for runtime code and this experiment's reports, avoiding historical
+archive materialization. The one-time incomplete checkout was repaired before
+dispatch; `git status --short` was clean at dispatch.
