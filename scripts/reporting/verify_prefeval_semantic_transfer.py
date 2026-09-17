@@ -79,7 +79,7 @@ def final(output,source):
         local=[json.loads(s) for s in (folder/'reads.jsonl').read_text(encoding='utf-8').splitlines()];assert len(local)==done['reads'];rows.extend(local)
     ix=exact_index(rows,lambda r:(r['target'],r['condition'],r['panel'],r['query']['id']),expected)
     assert len(rows)==3408
-    counts=defaultdict(lambda:[0,0]);groupcounts=defaultdict(lambda:[0,0]);complete={};read_correct={}
+    counts=defaultdict(lambda:[0,0]);groupcounts=defaultdict(lambda:[0,0]);stratified_groups=defaultdict(lambda:[0,0]);complete={};read_correct={}
     for key,r in ix.items():
         sid,condition,panel,_=key;q=expected[key];assert r['query']==q;ok=raw_score(r,q,panel=='mcq');read_correct[key]=ok
         t=e['targets'][sid];capacity=len(t['state'])
@@ -93,6 +93,8 @@ def final(output,source):
             value=t['state'][q['scope']];assert value is not None
             sourceq=next(x for x in t['mcq'] if x['scope']==q['scope']);gid=sourceq['semantic_group']
             k=f'{condition}/{panel}/{gid}';groupcounts[k][0]+=ok;groupcounts[k][1]+=1
+            k=f'{condition}/{panel}/{"K1" if capacity==1 else "multi"}/{gid}'
+            stratified_groups[k][0]+=ok;stratified_groups[k][1]+=1
     for arm in ('A','B'):
         bycapacity=defaultdict(lambda:[0,0]);aux=0;states={}
         for sid,t in e['targets'].items():
@@ -128,12 +130,36 @@ def final(output,source):
         for panel in ('mcq','application_training','application_reserved'):
             vals=[a/b for k,(a,b) in groupcounts.items() if k.startswith(f'{condition}/{panel}/')]
             if vals:macro[f'{condition}/{panel}']=sum(vals)/len(vals)
+            for stratum in ('K1','multi'):
+                vals=[a/b for k,(a,b) in stratified_groups.items() if k.startswith(f'{condition}/{panel}/{stratum}/')]
+                if vals:macro[f'{condition}/{panel}/{stratum}']=sum(vals)/len(vals)
     paired=defaultdict(Counter)
     for sid,t in e['targets'].items():
         for panel in ('recovery_training','qualification','application_training','mcq','application_reserved'):
             for q in t[panel]:
                 a=read_correct[(sid,'A',panel,q['id'])];b=read_correct[(sid,'B',panel,q['id'])]
                 paired[panel][f'{int(a)}->{int(b)}']+=1
+    parent_pairs=defaultdict(Counter);parent_counts=defaultdict(lambda:[0,0])
+    for sid,t in e['targets'].items():
+        old_path=source/sid/'result.json';assert file_sha(old_path)==t['parent']['result_sha']
+        old=load_json(old_path)
+        historical={('qualification',r['query']['query']):r for r in old['rows']}
+        mcq_path=source.parent/'endpoint-diagnostic-v1'/sid/'mcq.jsonl'
+        for r in [json.loads(s) for s in mcq_path.read_text(encoding='utf-8').splitlines()]:
+            if r['condition']=='png':historical[('mcq',r['query']['query'])]=r
+        for panel in ('qualification','mcq','application_training','application_reserved'):
+            for q in t[panel]:
+                if panel in ('qualification','mcq'):
+                    r=historical[(panel,q['query'])];assert r.get('png_sha',r.get('png_sha256'))==t['parent']['artifacts']['memory.png']
+                    for field in ('target','target_index'):
+                        if field in q:assert r['query'][field]==q[field]
+                    parent_ok=raw_score(r,r['query'],panel=='mcq')
+                else:parent_ok=read_correct[(sid,'parent',panel,q['id'])]
+                for label in ('all','K1' if len(t['state'])==1 else 'multi'):
+                    k=f'{panel}/{label}';parent_counts[k][0]+=parent_ok;parent_counts[k][1]+=1
+                for arm in ('A','B'):
+                    ok=read_correct[(sid,arm,panel,q['id'])]
+                    parent_pairs[f'{arm}/{panel}'][f'{int(parent_ok)}->{int(ok)}']+=1
     contrasts=[]
     for c in e['overwrite_contrasts']:
         for condition in ('A','B','parent','text','blank'):
@@ -151,6 +177,8 @@ def final(output,source):
         reserved_macro_gain=macro['B/application_reserved']-macro['A/application_reserved']>=.10)
     result=dict(registration_digest=digest(reg),updates=updates,slot_forwards=forwards,final_reads=len(rows),counts=dict(counts),
         complete=complete,semantic_group_counts=dict(groupcounts),macro=macro,paired={k:dict(v) for k,v in paired.items()},
+        parent_counts=dict(parent_counts),paired_parent_to_arm={k:dict(v) for k,v in parent_pairs.items()},
+        reused_parent_qualification_reads=432,reused_parent_mcq_reads=84,
         overwrite_contrasts=contrasts,progression_criteria=criteria,progression_passed=all(criteria.values()),
         optimization_seconds=dict(cost),processed_input_tokens=dict(tokens),writer_updates=0)
     (output/'final-verified.json').write_text(json.dumps(result,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
