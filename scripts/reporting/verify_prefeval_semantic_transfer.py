@@ -87,6 +87,8 @@ def final(output,source):
         elif condition=='parent':assert r['png_sha']==t['parent']['artifacts']['memory.png']
         for suffix in ('all','K1' if capacity==1 else 'multi','changed' if q['scope']==t['changed_scope'] else 'untouched'):
             k=f'{condition}/{panel}/{suffix}';counts[k][0]+=ok;counts[k][1]+=1
+            if panel=='qualification':
+                k=f'{condition}/qualification_{q["kind"]}/{suffix}';counts[k][0]+=ok;counts[k][1]+=1
         if panel in ('mcq','application_training','application_reserved'):
             value=t['state'][q['scope']];assert value is not None
             sourceq=next(x for x in t['mcq'] if x['scope']==q['scope']);gid=sourceq['semantic_group']
@@ -100,6 +102,27 @@ def final(output,source):
             k='K'+str(len(t['state']));bycapacity[k][0]+=summary['recovery_complete'];bycapacity[k][1]+=1
             states[sid]=summary;aux+=summary['all_registered_checks_pass']
         complete[arm]=dict(capacity=dict(bycapacity),states=states,all_aux_conjunction_states=aux)
+        slots=defaultdict(lambda:[0,0]);clear_states=[]
+        for sid,t in e['targets'].items():
+            all_slots={}
+            for scope,value in t['state'].items():
+                queries=[q for q in t['qualification'] if q['scope']==scope and q['kind']=='recovery']
+                assert len(queries)==2
+                ok=all(read_correct[(sid,arm,'qualification',q['id'])] for q in queries);all_slots[scope]=ok
+                for label in ('all','active' if value is not None else 'cleared','changed' if scope==t['changed_scope'] else 'untouched'):
+                    slots[label][0]+=ok;slots[label][1]+=1
+            if any(v is None for v in t['state'].values()):
+                clear_states.append(dict(target=sid,slots=all_slots,selective_clear_complete=all(all_slots.values())))
+        manifest=load_json(REPORT/'registered/manifest.json');assert digest(manifest)==reg['manifest_digest']
+        chains=[]
+        for episode in manifest['episodes']:
+            if episode['panel']!='train-k4' or not all(x['target_state_id'] in states for x in episode['transitions']):continue
+            steps=[dict(ordinal=x['ordinal'],operation=x['operation'],target=x['target_state_id'],
+                        recovery_complete=states[x['target_state_id']]['recovery_complete']) for x in episode['transitions']]
+            chains.append(dict(episode=episode['id'],steps=steps,complete=all(x['recovery_complete'] for x in steps)))
+        assert len(chains)==4
+        complete[arm].update(complete_slots=dict(slots),selective_clear_states=clear_states,
+                            offline_teacher_chains=chains,chain_note='Independent endpoint teachers, not recurrent Writer rollouts')
     macro={}
     for condition in ('A','B','parent','text','blank'):
         for panel in ('mcq','application_training','application_reserved'):

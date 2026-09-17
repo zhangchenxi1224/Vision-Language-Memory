@@ -1,5 +1,19 @@
 # PrefEval RGB memory: execution brief, 2026-09-17
 
+## Iteration 5: paired semantic supervision continuation
+
+Plan `prefeval-rgb-semantic-query-mixture-05` freezes 28 preference values,
+112 training scenarios and 56 reserved scenarios in `semantic-transfer-v1/`.
+First run exactly 672 text/blank feasibility generations; text must reach
+303/336 before optimization. If it passes, continue each of the 40 archived
+endpoints for 256 updates in each arm, with fresh optimizers: A recovery only,
+B alternating recovery and full-action application supervision. Both arms
+share the same initial endpoint per state and equal slot-forward counts.
+Reserved probes remain unread until all 80 endpoints are frozen. Final
+evaluation adds 3,408 generations. No Writer optimization or final test use.
+Registration and execution code are committed at `f3ae518`; 49 focused tests
+passed. This paragraph records the prospective trial, not an empirical pass.
+
 Status: the 124-write unchanged-4f PNG baseline is complete and independently
 verified. The fixed 40-state visual-teacher sentinel completed at `191d24a` and
 FAILED its prospective allocation gate: K1 20/20, K2 0/4, K3 1/4, K4 1/12.
