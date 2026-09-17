@@ -8,6 +8,32 @@ import re
 SEED = 20260917
 ABSENT = "no active preference"
 MAX_RECOVERY_TOKENS = 128
+OUTPUT_CONTRACT_V2 = (
+    "Return only the complete stored preference value for the requested scope. "
+    "The scope label is not part of the value. Preserve every word and any quotation "
+    "marks already present in the stored value. Do not add a label, quotation marks, "
+    "tags, or explanation. For an inactive preference, return exactly: no active preference"
+)
+TRAIN_STEMS_V2 = ("What is my current {scope} preference?",
+    "Retrieve my active preference for {scope}.",
+    "Use the memory to report my {scope} preference verbatim, including every condition.")
+HELDOUT_STEMS_V2 = ("Which complete preference statement is currently stored for {scope}?",
+    "Read back the entire active {scope} preference exactly as recorded.")
+
+
+def queries_v2(state, *, training=False):
+    stems = TRAIN_STEMS_V2 if training else HELDOUT_STEMS_V2
+    return [{"scope": scope, "form": i,
+             "query": stem.format(scope=scope_name(scope)) + "\n" + OUTPUT_CONTRACT_V2,
+             "target": value if value is not None else ABSENT, "kind": "recovery"}
+            for scope, value in sorted(state.items()) for i, stem in enumerate(stems)]
+
+
+def text_prefix_v2(state):
+    entries = [f"Scope: {scope_name(scope)}\n<stored_value>\n{value if value is not None else ABSENT}\n</stored_value>"
+               for scope, value in sorted(state.items())]
+    return ("Current memory values follow. Scope labels and <stored_value> delimiters "
+            "are serialization, not part of the stored values.\n" + "\n".join(entries) + "\n\n")
 TRAIN_FORMS = (
     "What is my current {scope} preference? Repeat the complete stored statement exactly, or say 'no active preference' if it was cleared. Return only that answer.",
     "Retrieve my active preference for {scope}. Quote the full original statement without quotation marks; if none is active, answer 'no active preference'.",

@@ -1,6 +1,8 @@
 """Frozen Reader references and PNG readback for the registered RGB experiment."""
 from __future__ import annotations
 import argparse
+import hashlib
+import inspect
 from collections import defaultdict
 import json
 from pathlib import Path
@@ -15,7 +17,7 @@ import numpy as np
 from PIL import Image
 import torch
 from vision_memory.prefeval.rgb_protocol import queries, digest, scope_name, ABSENT
-from vision_memory.reader.open_answer import generate_short_answer, score_short_answer
+from vision_memory.reader.open_answer import generate_short_answer, score_short_answer, normalize_short_answer
 from vision_memory.reader.qwen3vl import R3_QWEN_READER_RESIZE_CONTRACT
 
 
@@ -63,12 +65,40 @@ def append(path, row):
         stream.write(json.dumps(row, ensure_ascii=False) + "\n")
 
 
+def load_overlay(path, manifest):
+    overlay = json.loads(Path(path).read_text(encoding='utf-8'))
+    if overlay['parent_manifest_digest'] != digest(manifest):
+        raise ValueError('Reader overlay parent changed')
+    for key, function in [('mcq_source_sha',mcq_score),('recovery_source_sha',score_short_answer),
+                          ('normalization_source_sha',normalize_short_answer)]:
+        if overlay['scoring'][key] != digest(inspect.getsource(function)):
+            raise ValueError('Registered scorer implementation changed')
+    seal = json.loads(Path(path).with_name('reader-format-v2-seal.json').read_text())
+    if (seal['file_sha256'] != hashlib.sha256(Path(path).read_bytes()).hexdigest()
+            or seal['canonical_digest'] != digest(overlay)):
+        raise ValueError('Reader overlay seal changed')
+    return overlay
+
+
+def verify_reader_snapshot(path):
+    from scripts.inspire.model_snapshot_manifest import verify_snapshot_manifest
+    binding = verify_snapshot_manifest(manifest_path=path/'.snapshot_manifest.json', model_dir=path,
+        expected_repo_id='Qwen/Qwen3-VL-4B-Instruct',
+        expected_revision='ebb281ec70b05090aa6165b016eac8ec08e71b17')
+    if binding['manifest_sha256'] != '159a504daaae6dc412535978f087150a0eb8e50164afd70a8a17f83906f1127c':
+        raise ValueError('Reader seal changed')
+    return binding
+
+
 def run_references(args):
     manifest = json.loads(args.manifest.read_text(encoding="utf-8"))
+    overlay = load_overlay(args.overlay,manifest) if args.overlay else None
     args.output.mkdir(parents=True, exist_ok=True)
     identity = {"manifest_sha": digest(manifest), "reader": str(args.reader),
                 "stage": "references", "shard": args.shard, "shards": args.shards,
                 "max_recovery_tokens": manifest["max_recovery_tokens"]}
+    if overlay:
+        identity.update(overlay_sha=digest(overlay), reader_binding=verify_reader_snapshot(args.reader))
     idpath = args.output / "identity.json"
     if idpath.exists() and json.loads(idpath.read_text()) != identity:
         raise ValueError("Reference output belongs to a different registration")
@@ -77,6 +107,9 @@ def run_references(args):
     tokenizer = processor.tokenizer
     targets = [r["preference"] for r in manifest["records"].values()
                if r["semantic_group"] in set(manifest["pilot_train"] + manifest["pilot_dev"])]
+    if overlay:
+        targets += [q['target'] for t in overlay['teachers'].values()
+                    for key in ('training','qualification') for q in t[key]]
     lengths = [len(tokenizer.encode(target, add_special_tokens=False)) for target in targets]
     if max(lengths) + 8 >= manifest["max_recovery_tokens"]:
         raise ValueError("Registered generation budget does not fit full preference targets")
@@ -105,6 +138,8 @@ def run_references(args):
                 seen.add(key)
                 jobs.append({"id": key, "groups": ep["semantic_groups"], "split": ep["split"],
                     "state": tr["state"], **q, "kind": "derived_recovery"})
+    if overlay:
+        jobs = overlay['reference_jobs'] + overlay['supplement_jobs']
     rows_path = args.output / "reads.jsonl"
     completed = set()
     if rows_path.exists():
@@ -117,7 +152,8 @@ def run_references(args):
             key = condition + ":" + job["id"]
             if key in completed:
                 continue
-            query = (text_prefix(job["state"]) if condition == "text" else "") + job["query"]
+            prefix = job['text_prefix'] if overlay else text_prefix(job['state'])
+            query = (prefix if condition == "text" else "") + job["query"]
             result = generate_short_answer(model=reader, processor=processor, image=image,
                 query=query, device=args.device, max_new_tokens=manifest["max_recovery_tokens"],
                 reader_resize_contract=R3_QWEN_READER_RESIZE_CONTRACT)
@@ -144,6 +180,7 @@ def run_references(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--manifest", type=Path, required=True)
+    parser.add_argument("--overlay", type=Path)
     parser.add_argument("--reader", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--device", default="cuda:0")
