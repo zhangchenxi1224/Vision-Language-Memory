@@ -12,6 +12,19 @@ received and executed through its first empirical allocation gate. See
 `pilot-plan.md`, `registered/summary.json`, and `references-v1-summary.json`.
 Do not claim the experiment completed.
 
+## Iteration 4: fixed endpoint factorial diagnosis
+
+Plan `prefeval-rgb-endpoint-factorial-diagnosis-04` (review base `04a8d21`)
+allocates zero optimizer/Writer updates. `endpoint-diagnostic-v1.json` binds all
+40 existing endpoints and current-value MCQ lineage before inference. The
+four conditions cross float/archived-PNG values with CPU/CUDA preprocessing;
+the frozen Reader remains on GPU. Five existing forms per addressed slot give
+1,760 recovery generations and endpoint CE forwards. The 84 active occurrences
+also receive original MCQs in PNG, complete-text, and blank conditions (252
+generations). No query change, state filtering, historical rescoring, or final
+test use. All 176 archived-path held-out generations must replay exactly.
+64 focused tests pass. Actual diagnostic results are pending dispatch/completion.
+
 ## Iteration 3: actual visual memory evidence
 
 Plan `prefeval-rgb-visual-recovery-sentinel-03` uses full-value recovery for
