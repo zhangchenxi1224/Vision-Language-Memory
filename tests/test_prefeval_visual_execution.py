@@ -40,7 +40,7 @@ class VisualExecutionTests(unittest.TestCase):
             def write(self,event,*,seed):
                 calls.append((pixels_sha(self.image),event,seed))
                 out=self.image.copy();out.putpixel((0,0),(seed,2,3));z=torch.zeros(1,4,128,128)
-                return SimpleNamespace(image=out,source_latent=z,noise=z,trajectory=[z]*28)
+                return SimpleNamespace(image=out,source_latent=z,noise=z,trajectory=[z]*29)
         with tempfile.TemporaryDirectory() as tmp,patch('scripts.eval.prefeval_rgb_baseline.OfficialRGBMemory',Memory):
             root=Path(tmp);Image.new('RGB',(1024,1024),(128,128,128)).save(root/'a.png')
             a=write_from_png(None,root/'a.png','retain',1,root/'b.png')
@@ -48,5 +48,7 @@ class VisualExecutionTests(unittest.TestCase):
             self.assertEqual(a['output_pixels_sha'],b['source_pixels_sha'])
             self.assertEqual(len(calls),2)
             self.assertEqual(a['model_inputs'],['previous_png','event','external_noise'])
+            self.assertEqual(a['native_denoising_steps'],28)
+            self.assertEqual(a['trajectory_state_count'],29)
 
 if __name__=='__main__':unittest.main()

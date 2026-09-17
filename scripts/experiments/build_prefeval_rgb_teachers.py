@@ -17,7 +17,8 @@ import torch
 from PIL import Image
 from scripts.eval.prefeval_rgb import load_reader, read_png, append, load_overlay
 from scripts.train.latent_r11_vae_oracle import VAELatentOracle, encode_model_latent
-from vision_memory.prefeval.rgb_protocol import digest, scope_name, queries, ABSENT
+from vision_memory.prefeval.rgb_protocol import digest, recovery_summary
+from scripts.experiments.prefeval_visual_policy import load_policy
 from vision_memory.reader.open_answer import generate_short_answer, score_short_answer
 from vision_memory.reader.open_eos import assistant_termination_contract, qwen3vl_answer_eos_ce, generation_diagnostics
 from vision_memory.reader.qwen3vl import R3_QWEN_READER_RESIZE_CONTRACT
@@ -85,6 +86,7 @@ def check_completed(out, binding):
 def main(args):
     manifest = json.loads(args.manifest.read_text(encoding="utf-8"))
     overlay = load_overlay(args.overlay,manifest)
+    policy = load_policy(args.policy,manifest,overlay)
     from vision_memory.repro import configure_strict_cuda_determinism, canonical_tensor_sha256
     from scripts.experiments.refine_historical_writer_targets import snapshot_bindings, M
     determinism=configure_strict_cuda_determinism(0)
@@ -100,7 +102,7 @@ def main(args):
         "qualification":"reopened uint8 RGB PNG; two held-out recovery forms, status and content checks",
         "max_new_tokens":manifest["max_recovery_tokens"], "shards":args.shards,
         "assignment":assignment, "shard":args.shard,"overlay_sha":digest(overlay),
-        "snapshots":snapshots,"determinism":determinism}
+        "snapshots":snapshots,"determinism":determinism,'qualification_policy_digest':digest(policy)}
     idpath = args.output / f"identity-{args.shard}.json"
     if idpath.exists() and json.loads(idpath.read_text()) != identity:
         raise ValueError("Teacher identity changed")
@@ -120,6 +122,8 @@ def main(args):
             raise ValueError('Invalid gray latent')
         if subprocess.check_output(['git','rev-parse','HEAD'],cwd=args.official_source,text=True).strip()!='a6e20c8cc94027f37dd7c5a81b0b3b472aa18409':
             raise ValueError('Wrong official source')
+        if subprocess.check_output(['git','status','--porcelain','--untracked-files=no'],cwd=args.official_source,text=True).strip():
+            raise ValueError('Official source is dirty')
         sys.path.insert(0,str(args.official_source))
         from dreamlite import DreamLitePipelineLoRA
         from diffusers.image_processor import VaeImageProcessor
@@ -180,6 +184,8 @@ def main(args):
             if grad is None or not torch.isfinite(grad).all() or not torch.any(grad != 0):
                 raise RuntimeError("Teacher latent has no finite nonzero gradient")
             optimizer.step()
+            if not torch.isfinite(oracle.latent_fp32).all():
+                raise RuntimeError('Nonfinite teacher endpoint')
             append(trace, {"step":step+1,"losses":losses,"seconds":time.monotonic()-started})
             if (step+1)%32==0:
                 print(json.dumps({"target":sid,"number":number,"of":len(assignment),"step":step+1,
@@ -199,22 +205,25 @@ def main(args):
             score=score_short_answer(generated["raw"],q["target"])
             score["strict_correct"]=bool(score["strict_correct"] and generated["eos_reached"])
             diagnostic=generation_diagnostics(generated,q['target'],processor.tokenizer.encode(q['target'],add_special_tokens=False))
-            rows.append({"query":q,"generation":generated,"score":score,'token_diagnostics':diagnostic})
+            rows.append({"query":q,"generation":generated,"score":score,'token_diagnostics':diagnostic,
+                         'png_sha256':file_sha(out/'memory.png')})
         result={"id":sid,"state":target["state"],"capacity":len(target["state"]),
             "active_k":sum(v is not None for v in target["state"].values()),
-            "qualified":all(r["score"]["strict_correct"] for r in rows),
+            **recovery_summary(target['state'],overlay['teachers'][sid]['qualification'],rows,file_sha(out/'memory.png')),
+            "qualification_policy_digest":digest(policy),
             "correct":sum(r["score"]["strict_correct"] for r in rows),"total":len(rows),
             "rows":rows,"seconds":time.monotonic()-started,
             "png_sha256":hashlib.sha256((out/"memory.png").read_bytes()).hexdigest(),
             "latent_sha256":hashlib.sha256((out/"latent.pt").read_bytes()).hexdigest(),
             "predecessor":predecessor,"binding":binding,
+            "predecessor_recovery_complete":json.loads((args.output/predecessor/'result.json').read_text(encoding='utf-8'))['recovery_complete'] if predecessor else None,
             "artifacts":{name:file_sha(out/name) for name in
                 ('initial-latent.pt','latent.pt','optimizer.pt','optimization.jsonl','memory.png')}}
         for p,version in versions:
             if int(p._version)!=version or p.requires_grad or p.grad is not None:
                 raise RuntimeError("Frozen teacher components changed")
         result_path.write_text(json.dumps(result,indent=2,ensure_ascii=False))
-        print(json.dumps({k:result[k] for k in ('id','capacity','qualified','correct','total','seconds')}),flush=True)
+        print(json.dumps({k:result[k] for k in ('id','capacity','recovery_complete','correct','total','seconds')}),flush=True)
         del optimizer,oracle
     (args.output/f"complete-{args.shard}.json").write_text(json.dumps({"targets":assignment}))
 
@@ -223,6 +232,7 @@ if __name__ == "__main__":
     parser=argparse.ArgumentParser()
     parser.add_argument("--manifest",type=Path,required=True)
     parser.add_argument("--overlay",type=Path,required=True)
+    parser.add_argument("--policy",type=Path,required=True)
     parser.add_argument("--official-source",type=Path,required=True)
     parser.add_argument("--output",type=Path,required=True)
     parser.add_argument("--base",type=Path,required=True)

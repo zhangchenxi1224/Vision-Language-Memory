@@ -132,3 +132,33 @@ def balanced_state_loss(losses, changed_scope):
 
 def official_mcq_valid(original_preference, current_preference):
     return original_preference == current_preference and current_preference is not None
+
+
+def recovery_summary(state, expected_queries, rows, png_sha):
+    """Validate exact registered cells before any whole-image conjunction.
+
+    Callers reconstruct each row's correctness from raw text/tokens. This helper
+    never turns missing or repeated successful observations into coverage.
+    """
+    from collections import Counter,defaultdict
+    expected=Counter(digest(q) for q in expected_queries)
+    observed=Counter(digest(r['query']) for r in rows)
+    if expected!=observed or any(n!=1 for n in observed.values()):
+        raise ValueError('Missing, duplicate or altered registered query')
+    if not png_sha or any(r.get('png_sha256')!=png_sha for r in rows):
+        raise ValueError('Read is not bound to the same reopened PNG')
+    recovery=[r for r in rows if r['query']['kind']=='recovery']
+    cells={(r['query']['scope'],r['query']['form']) for r in recovery}
+    if cells!={(scope,form) for scope in state for form in (0,1)} or len(recovery)!=2*len(state):
+        raise ValueError('Incomplete slot/form coverage')
+    for row in recovery:
+        q=row['query'];value=state[q['scope']]
+        if q['target']!=(value if value is not None else ABSENT):
+            raise ValueError('Registered state/answer mismatch')
+    auxiliary=defaultdict(lambda:[0,0])
+    for row in rows:
+        if row['query']['kind']!='recovery':
+            pair=auxiliary[row['query']['kind']];pair[0]+=bool(row['score']['strict_correct']);pair[1]+=1
+    return dict(recovery_complete=all(r['score']['strict_correct'] for r in recovery),
+                auxiliary_family_counts=dict(auxiliary),
+                all_registered_checks_pass=all(r['score']['strict_correct'] for r in rows))

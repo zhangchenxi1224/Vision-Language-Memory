@@ -20,6 +20,7 @@ from vision_memory.reader.open_answer import generate_short_answer,score_short_a
 from vision_memory.reader.open_eos import generation_diagnostics
 from vision_memory.reader.qwen3vl import R3_QWEN_READER_RESIZE_CONTRACT
 from vision_memory.repro import canonical_tensor_sha256,configure_strict_cuda_determinism
+from scripts.experiments.prefeval_visual_policy import load_policy
 
 def sha(path):return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 def pixels_sha(image):return hashlib.sha256(np.asarray(image).tobytes()).hexdigest()
@@ -30,17 +31,19 @@ def write_from_png(pipe,previous_png,event,seed,output_png):
     memory=OfficialRGBMemory(pipe,image=boundary['image'],guidance_scale=1.,inference_condition='native')
     before=pixels_sha(source)
     written=memory.write(boundary['event'],seed=seed)
+    if len(written.trajectory)!=29:raise ValueError('Expected 29 states from 28 native steps')
     written.image.save(output_png)
     with Image.open(output_png) as im: reopened=im.copy()
     if pixels_sha(reopened)!=pixels_sha(written.image):raise ValueError('PNG roundtrip changed pixels')
     return dict(source_file_sha=sha(previous_png),source_pixels_sha=before,
         output_file_sha=sha(output_png),output_pixels_sha=pixels_sha(reopened),
         source_latent_sha=canonical_tensor_sha256(written.source_latent),
-        noise_sha=canonical_tensor_sha256(written.noise),native_steps=len(written.trajectory),
+        noise_sha=canonical_tensor_sha256(written.noise),trajectory_state_count=len(written.trajectory),native_denoising_steps=28,
         model_inputs=['previous_png','event','external_noise'],seed=seed)
 
 def main(a):
     m=json.loads(a.manifest.read_text(encoding='utf-8'));o=load_overlay(a.overlay,m)
+    policy=load_policy(a.policy,m,o)
     deterministic=configure_strict_cuda_determinism(0)
     a.output.mkdir(parents=True,exist_ok=False)
     pipe,package=load_writer_package(a.package,base_model=a.base,official_source=a.official_source,device=a.device)
@@ -48,8 +51,9 @@ def main(a):
         raise ValueError('Baseline must use exact 4f parameters')
     reader_binding=verify_reader_snapshot(a.reader)
     processor,reader=load_reader(a.reader,a.device)
+    frozen=[(p,int(p._version)) for p in reader.parameters()]
     identity=dict(overlay_sha=digest(o),manifest_sha=digest(m),package=package,reader=reader_binding,
-                  determinism=deterministic,shard=a.shard,shards=a.shards)
+                  determinism=deterministic,shard=a.shard,shards=a.shards,qualification_policy_digest=digest(policy))
     (a.output/'identity.json').write_text(json.dumps(identity,indent=2))
     started=time.monotonic();writes=0
     for index,ep in enumerate(o['baseline']['episodes']):
@@ -70,19 +74,23 @@ def main(a):
                 score=mcq_score(result['raw'],q['target_index']) if q['kind']=='official_mcq' else score_short_answer(result['raw'],q['target'])
                 score['strict_correct']=bool(score['strict_correct'] and result['eos_reached'])
                 diagnostic=None if q['kind']=='official_mcq' else generation_diagnostics(result,q['target'],processor.tokenizer.encode(q['target'],add_special_tokens=False))
-                rows.append(dict(query=q,generation=result,score=score,token_diagnostics=diagnostic))
+                rows.append(dict(query=q,generation=result,score=score,token_diagnostics=diagnostic,png_sha256=before))
             if sha(target)!=before:raise ValueError('Reads mutated persistent image')
+            if any(p.requires_grad or p.grad is not None or p._version!=v for p,v in frozen):
+                raise ValueError('Frozen Reader changed')
             append(a.output/'writes.jsonl',dict(episode=ep['id'],split=ep['split'],transition=tr,
                 audit=audit,source=str(previous.relative_to(a.output)),output=str(target.relative_to(a.output)),
                 rows=rows,seconds=time.monotonic()-started))
             writes+=1;print(json.dumps(dict(writes=writes,episode=ep['id'],ordinal=tr['ordinal'],
                  correct=sum(r['score']['strict_correct'] for r in rows),reads=len(rows))),flush=True)
             previous_output_pixels=audit['output_pixels_sha'];previous=target
-    (a.output/'complete.json').write_text(json.dumps(dict(writes=writes,seconds=time.monotonic()-started)))
+    expected=sum(len(ep['transitions']) for i,ep in enumerate(o['baseline']['episodes']) if i%a.shards==a.shard)
+    if writes!=expected:raise ValueError('Incomplete baseline shard')
+    (a.output/'complete.json').write_text(json.dumps(dict(writes=writes,expected_writes=expected,seconds=time.monotonic()-started)))
 
 if __name__=='__main__':
     p=argparse.ArgumentParser()
-    for field in ('manifest','overlay','output','package','base','reader','official-source'):
+    for field in ('manifest','overlay','policy','output','package','base','reader','official-source'):
         p.add_argument('--'+field,type=Path,required=True)
     p.add_argument('--shard',type=int,default=0);p.add_argument('--shards',type=int,default=1)
     p.add_argument('--device',default='cuda:0');main(p.parse_args())
