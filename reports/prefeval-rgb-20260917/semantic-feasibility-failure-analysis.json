@@ -1,0 +1,340 @@
+{
+  "gate": false,
+  "registered_text": [
+    94,
+    336
+  ],
+  "registered_blank": [
+    153,
+    336
+  ],
+  "diagnostic_only": true,
+  "note": "Label-prefix categories describe failures; they do not rescore or pass the gate.",
+  "categories": {
+    "text": {
+      "registered_strict_correct": 94,
+      "exact_correct_action_with_forbidden_label": 239,
+      "other_strict_failure": 3
+    },
+    "blank": {
+      "other_strict_failure": 125,
+      "exact_correct_action_with_forbidden_label": 58,
+      "registered_strict_correct": 153
+    }
+  },
+  "examples": {
+    "('text', 'registered_strict_correct')": [
+      {
+        "target": "state-0229e9099239d8e6b34d",
+        "query_id": "application:f2e52dff0ec9:0:0:lifestyle_fit",
+        "expected": "Join a fictional exercise session: the workout is a choreographed dance entirely on dry land, with no water or swimming.",
+        "raw": "Join a fictional exercise session: the workout is a choreographed dance entirely on dry land, with no water or swimming.",
+        "eos": true
+      },
+      {
+        "target": "state-0229e9099239d8e6b34d",
+        "query_id": "application:f2e52dff0ec9:3:0:lifestyle_fit",
+        "expected": "Attend a movement session: the workout is a choreographed dance entirely on dry land, with no water or swimming.",
+        "raw": "Attend a movement session: the workout is a choreographed dance entirely on dry land, with no water or swimming.",
+        "eos": true
+      },
+      {
+        "target": "state-0229e9099239d8e6b34d",
+        "query_id": "application:03e7c8bce949:0:0:lifestyle_health",
+        "expected": "Choose a daily nutrient source: all nutrients come from intact whole foods requiring meal preparation, with no supplements.",
+        "raw": "Choose a daily nutrient source: all nutrients come from intact whole foods requiring meal preparation, with no supplements.",
+        "eos": true
+      },
+      {
+        "target": "state-0229e9099239d8e6b34d",
+        "query_id": "application:03e7c8bce949:1:0:lifestyle_health",
+        "expected": "Plan a nutrient intake routine: all nutrients come from intact whole foods requiring meal preparation, with no supplements.",
+        "raw": "Plan a nutrient intake routine: all nutrients come from intact whole foods requiring meal preparation, with no supplements.",
+        "eos": true
+      },
+      {
+        "target": "state-0229e9099239d8e6b34d",
+        "query_id": "application:03e7c8bce949:3:0:lifestyle_health",
+        "expected": "Arrange a nutrient supply: all nutrients come from intact whole foods requiring meal preparation, with no supplements.",
+        "raw": "Arrange a nutrient supply: all nutrients come from intact whole foods requiring meal preparation, with no supplements.",
+        "eos": true
+      },
+      {
+        "target": "state-1fd5652d4e4cb634c291",
+        "query_id": "application:18ae8e8acd9d:3:0:shop_home",
+        "expected": "Plan a home reading-space light source: illumination comes only from daylight through windows, with no artificial lights.",
+        "raw": "Plan a home reading-space light source: illumination comes only from daylight through windows, with no artificial lights.",
+        "eos": true
+      },
+      {
+        "target": "state-2b57b813941245d59ad5",
+        "query_id": "application:759281b07143:2:0:shop_motors",
+        "expected": "Select a leased vehicle: an advanced cabin filter is certified to effectively remove pollen, dust, and all other airborne particles, with an audible fan.",
+        "raw": "Select a leased vehicle: an advanced cabin filter is certified to effectively remove pollen, dust, and all other airborne particles, with an audible fan.",
+        "eos": true
+      },
+      {
+        "target": "state-5b3e7c2e399178ba7774",
+        "query_id": "application:29d124974f54:0:0:entertain_shows",
+        "expected": "Watch a completed mystery series: the entire story has three episodes.",
+        "raw": "Watch a completed mystery series: the entire story has three episodes.",
+        "eos": true
+      }
+    ],
+    "('blank', 'other_strict_failure')": [
+      {
+        "target": "state-0229e9099239d8e6b34d",
+        "query_id": "application:f2e52dff0ec9:0:0:lifestyle_fit",
+        "expected": "Join a fictional exercise session: the workout is a choreographed dance entirely on dry land, with no water or swimming.",
+        "raw": "Join a fictional exercise session: the workout is plain swimming, with no dance or choreographed movements.",
+        "eos": true
+      },
+      {
+        "target": "state-0229e9099239d8e6b34d",
+        "query_id": "application:f2e52dff0ec9:1:0:lifestyle_fit",
+        "expected": "Book a fitness class: the workout is a choreographed dance entirely on dry land, with no water or swimming.",
+        "raw": "Book a fitness class: the workout is a choreographed dance performed in water.",
+        "eos": true
+      },
+      {
+        "target": "state-0229e9099239d8e6b34d",
+        "query_id": "application:f2e52dff0ec9:2:0:lifestyle_fit",
+        "expected": "Choose a workout workshop: the workout is a choreographed dance entirely on dry land, with no water or swimming.",
+        "raw": "Choose a workout workshop: the workout is plain swimming, with no dance or choreographed movements.",
+        "eos": true
+      },
+      {
+        "target": "state-0229e9099239d8e6b34d",
+        "query_id": "application:f2e52dff0ec9:3:0:lifestyle_fit",
+        "expected": "Attend a movement session: the workout is a choreographed dance entirely on dry land, with no water or swimming.",
+        "raw": "Attend a movement session: the workout is a choreographed dance performed in water.",
+        "eos": true
+      },
+      {
+        "target": "state-0229e9099239d8e6b34d",
+        "query_id": "application:03e7c8bce949:0:0:lifestyle_health",
+        "expected": "Choose a daily nutrient source: all nutrients come from intact whole foods requiring meal preparation, with no supplements.",
+        "raw": "D. Choose a daily nutrient source: nutrients come from whole foods plus a convenient daily supplement powder.",
+        "eos": true
+      },
+      {
+        "target": "state-0229e9099239d8e6b34d",
+        "query_id": "application:03e7c8bce949:1:0:lifestyle_health",
+        "expected": "Plan a nutrient intake routine: all nutrients come from intact whole foods requiring meal preparation, with no supplements.",
+        "raw": "Plan a nutrient intake routine: nutrients come from whole foods plus a convenient daily supplement powder.",
+        "eos": true
+      },
+      {
+        "target": "state-0229e9099239d8e6b34d",
+        "query_id": "application:03e7c8bce949:2:0:lifestyle_health",
+        "expected": "Select a nourishment package: all nutrients come from intact whole foods requiring meal preparation, with no supplements.",
+        "raw": "C. Select a nourishment package: nutrients come from whole foods plus a convenient daily supplement powder.",
+        "eos": true
+      },
+      {
+        "target": "state-0229e9099239d8e6b34d",
+        "query_id": "application:03e7c8bce949:3:0:lifestyle_health",
+        "expected": "Arrange a nutrient supply: all nutrients come from intact whole foods requiring meal preparation, with no supplements.",
+        "raw": "C. Arrange a nutrient supply: nutrients come from whole foods plus a convenient daily supplement powder.",
+        "eos": true
+      }
+    ],
+    "('text', 'exact_correct_action_with_forbidden_label')": [
+      {
+        "target": "state-0229e9099239d8e6b34d",
+        "query_id": "application:f2e52dff0ec9:1:0:lifestyle_fit",
+        "expected": "Book a fitness class: the workout is a choreographed dance entirely on dry land, with no water or swimming.",
+        "raw": "D. Book a fitness class: the workout is a choreographed dance entirely on dry land, with no water or swimming.",
+        "eos": true
+      },
+      {
+        "target": "state-0229e9099239d8e6b34d",
+        "query_id": "application:f2e52dff0ec9:2:0:lifestyle_fit",
+        "expected": "Choose a workout workshop: the workout is a choreographed dance entirely on dry land, with no water or swimming.",
+        "raw": "A. Choose a workout workshop: the workout is a choreographed dance entirely on dry land, with no water or swimming.",
+        "eos": true
+      },
+      {
+        "target": "state-0229e9099239d8e6b34d",
+        "query_id": "application:03e7c8bce949:2:0:lifestyle_health",
+        "expected": "Select a nourishment package: all nutrients come from intact whole foods requiring meal preparation, with no supplements.",
+        "raw": "A. Select a nourishment package: all nutrients come from intact whole foods requiring meal preparation, with no supplements.",
+        "eos": true
+      },
+      {
+        "target": "state-1fd5652d4e4cb634c291",
+        "query_id": "application:18ae8e8acd9d:0:0:shop_home",
+        "expected": "Choose a room lighting plan: illumination comes only from daylight through windows, with no artificial lights.",
+        "raw": "C. Choose a room lighting plan: illumination comes only from daylight through windows, with no artificial lights.",
+        "eos": true
+      },
+      {
+        "target": "state-1fd5652d4e4cb634c291",
+        "query_id": "application:18ae8e8acd9d:1:0:shop_home",
+        "expected": "Arrange lighting for a home studio: illumination comes only from daylight through windows, with no artificial lights.",
+        "raw": "D. Arrange lighting for a home studio: illumination comes only from daylight through windows, with no artificial lights.",
+        "eos": true
+      },
+      {
+        "target": "state-1fd5652d4e4cb634c291",
+        "query_id": "application:18ae8e8acd9d:2:0:shop_home",
+        "expected": "Select a living-room illumination scheme: illumination comes only from daylight through windows, with no artificial lights.",
+        "raw": "C. Select a living-room illumination scheme: illumination comes only from daylight through windows, with no artificial lights.",
+        "eos": true
+      },
+      {
+        "target": "state-2b57b813941245d59ad5",
+        "query_id": "application:7dcdfd7abff3:0:0:shop_home",
+        "expected": "Choose a cabinet finish: the surface is matte, visibly textured, and has no high-gloss coating.",
+        "raw": "A. Choose a cabinet finish: the surface is matte, visibly textured, and has no high-gloss coating.",
+        "eos": true
+      },
+      {
+        "target": "state-2b57b813941245d59ad5",
+        "query_id": "application:7dcdfd7abff3:1:0:shop_home",
+        "expected": "Select a wall-panel finish: the surface is matte, visibly textured, and has no high-gloss coating.",
+        "raw": "A. Select a wall-panel finish: the surface is matte, visibly textured, and has no high-gloss coating.",
+        "eos": true
+      }
+    ],
+    "('blank', 'exact_correct_action_with_forbidden_label')": [
+      {
+        "target": "state-1fd5652d4e4cb634c291",
+        "query_id": "application:18ae8e8acd9d:1:0:shop_home",
+        "expected": "Arrange lighting for a home studio: illumination comes only from daylight through windows, with no artificial lights.",
+        "raw": "D. Arrange lighting for a home studio: illumination comes only from daylight through windows, with no artificial lights.",
+        "eos": true
+      },
+      {
+        "target": "state-1fd5652d4e4cb634c291",
+        "query_id": "application:18ae8e8acd9d:2:0:shop_home",
+        "expected": "Select a living-room illumination scheme: illumination comes only from daylight through windows, with no artificial lights.",
+        "raw": "C. Select a living-room illumination scheme: illumination comes only from daylight through windows, with no artificial lights.",
+        "eos": true
+      },
+      {
+        "target": "state-2b57b813941245d59ad5",
+        "query_id": "application:7dcdfd7abff3:2:0:shop_home",
+        "expected": "Order a table surface: the surface is matte, visibly textured, and has no high-gloss coating.",
+        "raw": "C. Order a table surface: the surface is matte, visibly textured, and has no high-gloss coating.",
+        "eos": true
+      },
+      {
+        "target": "state-2b57b813941245d59ad5",
+        "query_id": "application:7dcdfd7abff3:3:0:shop_home",
+        "expected": "Pick a decorative shelf finish: the surface is matte, visibly textured, and has no high-gloss coating.",
+        "raw": "B. Pick a decorative shelf finish: the surface is matte, visibly textured, and has no high-gloss coating.",
+        "eos": true
+      },
+      {
+        "target": "state-2b57b813941245d59ad5",
+        "query_id": "application:759281b07143:3:0:shop_motors",
+        "expected": "Reserve a vehicle subscription: an advanced cabin filter is certified to effectively remove pollen, dust, and all other airborne particles, with an audible fan.",
+        "raw": "A. Reserve a vehicle subscription: an advanced cabin filter is certified to effectively remove pollen, dust, and all other airborne particles, with an audible fan.",
+        "eos": true
+      },
+      {
+        "target": "state-5b3e7c2e399178ba7774",
+        "query_id": "application:57aa87d17a0d:2:0:lifestyle_beauty",
+        "expected": "Choose a body powder: its complete ingredient specification is talc-free.",
+        "raw": "D. Choose a body powder: its complete ingredient specification is talc-free.",
+        "eos": true
+      },
+      {
+        "target": "state-8497a9fa1a9afc8599a0",
+        "query_id": "application:0935ccef1247:2:0:travel_hotel",
+        "expected": "Reserve a hotel stay: the hotel has no casino facilities anywhere on its property.",
+        "raw": "C. Reserve a hotel stay: the hotel has no casino facilities anywhere on its property.",
+        "eos": true
+      },
+      {
+        "target": "state-8497a9fa1a9afc8599a0",
+        "query_id": "application:0935ccef1247:3:0:travel_hotel",
+        "expected": "Select a hotel package: the hotel has no casino facilities anywhere on its property.",
+        "raw": "A. Select a hotel package: the hotel has no casino facilities anywhere on its property.",
+        "eos": true
+      }
+    ],
+    "('blank', 'registered_strict_correct')": [
+      {
+        "target": "state-2b57b813941245d59ad5",
+        "query_id": "application:7dcdfd7abff3:1:0:shop_home",
+        "expected": "Select a wall-panel finish: the surface is matte, visibly textured, and has no high-gloss coating.",
+        "raw": "Select a wall-panel finish: the surface is matte, visibly textured, and has no high-gloss coating.",
+        "eos": true
+      },
+      {
+        "target": "state-2b57b813941245d59ad5",
+        "query_id": "application:759281b07143:0:0:shop_motors",
+        "expected": "Buy a fictional vehicle: an advanced cabin filter is certified to effectively remove pollen, dust, and all other airborne particles, with an audible fan.",
+        "raw": "Buy a fictional vehicle: an advanced cabin filter is certified to effectively remove pollen, dust, and all other airborne particles, with an audible fan.",
+        "eos": true
+      },
+      {
+        "target": "state-2b57b813941245d59ad5",
+        "query_id": "application:759281b07143:1:0:shop_motors",
+        "expected": "Choose a rental vehicle: an advanced cabin filter is certified to effectively remove pollen, dust, and all other airborne particles, with an audible fan.",
+        "raw": "Choose a rental vehicle: an advanced cabin filter is certified to effectively remove pollen, dust, and all other airborne particles, with an audible fan.",
+        "eos": true
+      },
+      {
+        "target": "state-2b57b813941245d59ad5",
+        "query_id": "application:759281b07143:2:0:shop_motors",
+        "expected": "Select a leased vehicle: an advanced cabin filter is certified to effectively remove pollen, dust, and all other airborne particles, with an audible fan.",
+        "raw": "Select a leased vehicle: an advanced cabin filter is certified to effectively remove pollen, dust, and all other airborne particles, with an audible fan.",
+        "eos": true
+      },
+      {
+        "target": "state-5b3e7c2e399178ba7774",
+        "query_id": "application:29d124974f54:0:0:entertain_shows",
+        "expected": "Watch a completed mystery series: the entire story has three episodes.",
+        "raw": "Watch a completed mystery series: the entire story has three episodes.",
+        "eos": true
+      },
+      {
+        "target": "state-5b3e7c2e399178ba7774",
+        "query_id": "application:29d124974f54:1:0:entertain_shows",
+        "expected": "Start a completed family drama: the entire story has three episodes.",
+        "raw": "Start a completed family drama: the entire story has three episodes.",
+        "eos": true
+      },
+      {
+        "target": "state-5b3e7c2e399178ba7774",
+        "query_id": "application:29d124974f54:2:0:entertain_shows",
+        "expected": "Choose a completed comedy series: the entire story has three episodes.",
+        "raw": "Choose a completed comedy series: the entire story has three episodes.",
+        "eos": true
+      },
+      {
+        "target": "state-5b3e7c2e399178ba7774",
+        "query_id": "application:29d124974f54:3:0:entertain_shows",
+        "expected": "Stream a completed historical drama: the entire story has three episodes.",
+        "raw": "Stream a completed historical drama: the entire story has three episodes.",
+        "eos": true
+      }
+    ],
+    "('text', 'other_strict_failure')": [
+      {
+        "target": "state-5b3e7c2e399178ba7774",
+        "query_id": "application:664a27a79cf4:3:0:entertain_music_book",
+        "expected": "Arrange a weekend entertainment plan: listen to music explicitly classified as electronic dance music while reading an ordinary-life comic with no superhero themes.",
+        "raw": "Arrange a weekend entertainment plan: listen only to music explicitly classified as non-EDM while reading a superhero-centered comic book.",
+        "eos": true
+      },
+      {
+        "target": "state-8497a9fa1a9afc8599a0",
+        "query_id": "application:88c07ec8d057:2:0:travel_activities",
+        "expected": "Book a weekend activity: join a commercialized, heavily advertised tourist history walk with no gambling or casino involvement.",
+        "raw": "Book a weekend activity: join friends in a private card-gambling game with no casino, fees, sales, advertising, tourism business, or marketing.",
+        "eos": true
+      },
+      {
+        "target": "state-57b64b453364e36916c2",
+        "query_id": "application:88c07ec8d057:3:0:travel_activities",
+        "expected": "Select a holiday recreation event: join friends in a private card-gambling game with no casino, fees, sales, advertising, tourism business, or marketing.",
+        "raw": "A. Select a holiday recreation event: join a commercialized, heavily advertised tourist history walk with no gambling or casino involvement.",
+        "eos": true
+      }
+    ]
+  }
+}

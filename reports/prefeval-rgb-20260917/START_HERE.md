@@ -12,7 +12,11 @@ share the same initial endpoint per state and equal slot-forward counts.
 Reserved probes remain unread until all 80 endpoints are frozen. Final
 evaluation adds 3,408 generations. No Writer optimization or final test use.
 Registration and execution code are committed at `f3ae518`; 49 focused tests
-passed. This paragraph records the prospective trial, not an empirical pass.
+passed. The 672-read feasibility run completed at `9097be7` and FAILED:
+text 94/336, blank 153/336. No paired optimization or reserved-probe reads
+were run. Of 242 text failures, 239 give the exact correct full action but
+add a forbidden option label; this diagnosis does not change the failed gate.
+Read `semantic-feasibility-results.md` before planning the next intervention.
 
 Status: the 124-write unchanged-4f PNG baseline is complete and independently
 verified. The fixed 40-state visual-teacher sentinel completed at `191d24a` and
