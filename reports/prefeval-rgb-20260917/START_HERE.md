@@ -2,8 +2,9 @@
 
 Status: preparation complete/in progress; no new training or new-model result yet.
 The user's goal is active. ChatGPT planning/review is required by the user.
-Connection has been paired; waiting for the user to create/bind the ChatGPT
-Project before the first planning request. Do not claim the experiment completed.
+The user created the Project with project-only memory; connection and workspace
+identity have been verified. C2C task c2c_7e19 INIT is sent and awaiting its first
+empirical PLAN. Do not claim the experiment completed.
 
 ## Inputs and scope
 
@@ -86,8 +87,7 @@ from verified archives; `parent-chain-comparison.json` preserves every failed ce
   a local PTY (`exec_command tty=true`) to avoid implicit stdin rejection.
 - No historical instance stopped/deleted; no weights or past results overwritten.
 
-Next: finish ChatGPT Project binding and workspace_info validation, request a finite
-PLAN from these files and current code; execute on a separate remote checkout/output.
+Next: execute the finite ChatGPT PLAN on a separate remote checkout/output.
 
 ## Continuation findings
 
@@ -103,6 +103,8 @@ They must stay on the same side in the new experiment. This check covers exact
 alphanumeric normalization only; semantic equivalence remains unproven. Do not
 report the unmodified 730/82 split as free of preference-content leakage.
 
-ChatGPT session and current browser state still show no bound/new Project.
-The first-time user Project creation request remains pending; no INIT or PLAN
-has been sent, and there is no new model training process to monitor.
+ChatGPT Project is bound and workspace_info returned this exact workspace name.
+INIT is sent; no PLAN has yet completed and no new model training has started.
+The official PrefEval source was cloned and checked out at the registered commit
+on the shared disk at `data/PrefEval-50795054-20260917`. The independent experiment
+checkout is being prepared at `repos/dreamlite-prefeval-rgb-20260917`.
