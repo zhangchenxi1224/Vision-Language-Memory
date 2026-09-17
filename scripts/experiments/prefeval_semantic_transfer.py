@@ -17,6 +17,58 @@ from vision_memory.reader.qwen3vl import qwen3vl_choice_nll,qwen3vl_listwise_cho
 
 REPORT=ROOT/'reports/prefeval-rgb-20260917';DATA=REPORT/'semantic-transfer-v1'
 RANK_DATA=REPORT/'semantic-ranking-v1'
+TRIAL_DATA=REPORT/'ranking-learning-trial-v1'
+
+def trial_register():
+    previous,p=ranking_load();old=load_json(DATA/'registration.json')
+    calibration=REPORT/'semantic-ranking-v1-run/calibration-verified.json'
+    failed=load_json(calibration);assert not failed['passed'] and failed['decisions']==2688
+    metadata=load_json(DATA/'authoring-source.json')
+    values=sorted({c[k] for c in metadata['overwrite_contrasts'] for k in ('before','after')})
+    assert len(values)==8
+    rows=[]
+    for shard in range(4):
+        path=calibration.parent/'calibration'/f'shard-{shard}'/'scores.jsonl'
+        for line in path.read_text(encoding='utf-8').splitlines():
+            r=json.loads(line)
+            if r['query']['value_id'] not in values:continue
+            t=p['targets'][r['target']]
+            rows.append(dict(target=r['target'],capacity=len(t['state']),value_id=r['query']['value_id'],
+                condition=r['condition'],case_id=r['query']['case_id'],rotation=r['query']['rotation'],
+                context_identity=digest(t['state']),reader_query=r['reader_query'],input_identity=r['input_identity'],
+                candidate_ids=[digest(x) for x in r['choices']],choices=r['choices'],scores=r['score']['scores'],
+                gold_index=r['gold_index'],gold_margin=r['gold_margin'],correct=r['unique_correct']))
+    assert len(rows)==768 and len({(r['target'],r['value_id']) for r in rows})==24
+    paired=[]
+    for r in rows:
+        if r['capacity']==1:continue
+        singleton=[x for x in rows if x['capacity']==1 and all(x[k]==r[k] for k in ('value_id','condition','case_id','rotation'))]
+        assert len(singleton)==1;s=singleton[0]
+        paired.append(dict(singleton=s['target'],context=r['target'],value_id=r['value_id'],condition=r['condition'],
+            case_id=r['case_id'],rotation=r['rotation'],change=f"{int(s['correct'])}->{int(r['correct'])}"))
+    TRIAL_DATA.mkdir(exist_ok=True)
+    attribution=dict(source_verified_sha=file_sha(calibration),model_calls=0,rows=rows,
+        singleton_to_context=paired,overwrite_contrasts=failed['contrasts'])
+    write_frozen(TRIAL_DATA/'calibration-attribution.json',attribution)
+    reg=dict(plan='prefeval-rgb-ranking-learning-trial-07',allocation='exploratory learning trial; historical gates remain failed',
+        instance='dl-clear-retain-h200x4-20260914',parent_registration_digest=digest(previous),
+        calibration_verified_sha=file_sha(calibration),calibration_archive_sha=file_sha(REPORT/'semantic-ranking-calibration-v1.tgz'),
+        attribution_digest=digest(attribution),training_digest=old['training_digest'],evaluation_digest=old['evaluation_digest'],
+        manifest_digest=old['manifest_digest'],endpoints=previous['endpoints'],functions=ranking_functions(),
+        steps=128,schedule_digest=digest(p['schedule'][:128]),optimizer=p['optimizer'],contrast_values=values,
+        additional_updates=10240,logical_slot_jobs=22528,gradient_forwards={'A':11264,'B':27392,'total':38656},
+        final={'generations':3408,'ranking_decisions':2712,'max_candidate_forwards':10848},
+        progression=previous['progression'],historical_gates={'Plan05':False,'Plan06':False},
+        comparison='fixed updates; unequal compute; no efficiency claim',writer_updates=0)
+    write_frozen(TRIAL_DATA/'registration.json',reg)
+    print(json.dumps(dict(registration_digest=digest(reg),updates=10240,gradient_forwards=38656)))
+
+def trial_load():
+    reg=load_json(TRIAL_DATA/'registration.json');previous,p=ranking_load()
+    assert digest(previous)==reg['parent_registration_digest'] and ranking_functions()==reg['functions']
+    assert digest(p)==reg['training_digest'] and digest(p['schedule'][:128])==reg['schedule_digest']
+    assert reg['steps']==128 and reg['instance']=='dl-clear-retain-h200x4-20260914'
+    return reg,p
 
 def value_id(scope,value):return hashlib.sha256((scope+'\n'+value).encode()).hexdigest()[:12]
 
@@ -307,7 +359,163 @@ def evaluate(a,reg):
         frozen(versions)
     write_frozen(out/'complete.json',dict(reads=n,seconds=time.monotonic()-started))
 
+def trial_train(a,reg):
+    ranking=True;steps=reg["steps"]
+    payload=load_json(DATA/'training-payload.json');assert digest(payload)==reg['training_digest']
+    gate_path=a.source.parent.parent/'semantic-ranking-v1-run/calibration-verified.json'
+    assert file_sha(gate_path)==reg['calibration_verified_sha']
+    assert not load_json(gate_path)['passed'] and reg['allocation']=='exploratory learning trial; historical gates remain failed'
+    processor,reader,vae,versions,bindings=models(a,True);termination=assistant_termination_contract(reader,processor)
+    all_targets=sorted(payload['targets']);assignment=all_targets[a.shard::a.shards]
+    write_frozen(a.output/f'train-identity-{a.shard}.json',dict(**identity(a,bindings,reg,assignment),gate_sha=file_sha(gate_path)))
+    for sid in assignment:
+        t=payload['targets'][sid];src=a.source/sid
+        for name,h in t['initial']['artifacts'].items():assert file_sha(src/name)==h
+        init=torch.load(src/'latent.pt',map_location=a.device,weights_only=True)
+        assert tensor_sha(init)==t['initial']['latent_tensor_sha']
+        order=('A','B') if all_targets.index(sid)%2==0 else ('B','A')
+        for arm in order:
+            out=a.output/'training'/arm/sid;out.mkdir(parents=True,exist_ok=False)
+            oracle=VAELatentOracle(vae=vae,initial_latent=init,compute_dtype=torch.float32)
+            opt=torch.optim.Adam([oracle.latent_fp32],lr=.05,betas=(.9,.999),eps=1e-8,weight_decay=0.)
+            assert not opt.state and tensor_sha(oracle.latent_fp32)==t['initial']['latent_tensor_sha']
+            torch.save(init.detach().cpu(),out/'initial-latent.pt');started=time.monotonic();forwards=tokens=reader_forwards=0
+            for draw in payload['schedule'][:steps]:
+                opt.zero_grad(set_to_none=True);pixels=oracle.image();jobs=training_jobs(t,draw,arm);losses=[]
+                for j,(q,weight) in enumerate(jobs):
+                    calls_before=processor.total_calls;tokens_before=processor.total_input_tokens
+                    if ranking and q['kind']=='application':
+                        case=next(c for c in t['applications'] if c['scope']==q['scope'] and c['scenario']==q['scenario'])
+                        rq,choices,gold=ranking_candidates(case,q['rotation']);assert rq==q
+                        ce=qwen3vl_listwise_choice_ce(model=reader,processor=processor,image=pixels[0],query=q['query'],
+                            choices=choices,target_index=gold,device=a.device,require_image_grad=True,
+                            reader_resize_contract=R3_QWEN_READER_RESIZE_CONTRACT,deterministic_ce=True)
+                        details=dict(loss_family='listwise_action_ranking',candidate_scores=ce.choice_logits.detach().tolist(),
+                            candidate_token_counts=list(ce.choice_token_counts),choices=choices,gold_index=gold)
+                    else:
+                        ce=qwen3vl_answer_eos_ce(model=reader,processor=processor,image=pixels[0],query=q['query'],target=q['target'],
+                            device=a.device,termination=termination,lambda_eos=1.,require_image_grad=True,
+                            reader_resize_contract=R3_QWEN_READER_RESIZE_CONTRACT,deterministic_ce=True)
+                        details=dict(loss_family='answer_plus_eos',answer_ce=float(ce.answer_loss.detach()),
+                                     eos_ce=float(ce.eos_loss.detach()),answer_tokens=ce.answer_token_count)
+                    loss=ce.loss*weight
+                    if not torch.isfinite(loss):raise ValueError('Nonfinite training loss')
+                    loss.backward(retain_graph=j+1<len(jobs));forwards+=1
+                    prompt_tokens=len(processor.tokenizer.encode(q['query'],add_special_tokens=False))
+                    actual_calls=processor.total_calls-calls_before;actual_tokens=processor.total_input_tokens-tokens_before
+                    assert actual_calls==(4 if ranking and q['kind']=='application' else 1)
+                    reader_forwards+=actual_calls;tokens+=actual_tokens
+                    losses.append(dict(query_id=q['id'],query_digest=digest(q),scope=q['scope'],kind=q['kind'],weight=weight,
+                        slot_loss=float(ce.loss.detach()),reader_forwards=actual_calls,
+                        query_text_tokens=prompt_tokens,processed_input_tokens=actual_tokens,**details))
+                grad=oracle.latent_fp32.grad
+                assert grad is not None and torch.isfinite(grad).all() and torch.any(grad!=0)
+                opt.step();assert torch.isfinite(oracle.latent_fp32).all()
+                if (draw['step']+1)%32==0:
+                    checkpoint=dict(next_step=draw['step']+1,latent=oracle.latent_fp32.detach().cpu(),optimizer=opt.state_dict(),
+                                    rng_cpu=torch.get_rng_state(),rng_cuda=torch.cuda.get_rng_state(),registration_digest=digest(reg))
+                    torch.save(checkpoint,out/'checkpoint.tmp');(out/'checkpoint.tmp').replace(out/'checkpoint.pt')
+                append(out/'optimization.jsonl',dict(step=draw['step'],losses=losses,seconds=time.monotonic()-started))
+                if (draw['step']+1)%64==0:print(json.dumps(dict(target=sid,arm=arm,step=draw['step']+1,loss=sum(x['weight']*x['slot_loss'] for x in losses))),flush=True)
+            torch.save(oracle.latent_fp32.detach().cpu(),out/'latent.pt');torch.save(opt.state_dict(),out/'optimizer.pt')
+            with torch.no_grad():image=oracle.image().detach().cpu()[0]
+            array=image.mul(255).round().clamp(0,255).byte().permute(1,2,0).numpy();Image.fromarray(array).save(out/'memory.png')
+            png=read_png(out/'memory.png');assert torch.equal(png.mul(255).round().byte().permute(1,2,0),torch.from_numpy(array))
+            frozen(versions)
+            for name,h in t['initial']['artifacts'].items():assert file_sha(src/name)==h
+            receipt=dict(target=sid,arm=arm,additional_updates=steps,inherited_updates=256,slot_forwards=forwards,
+                reader_forwards=reader_forwards,protocol='ranking-learning-trial-v1',gate_sha=file_sha(gate_path),
+                processed_input_tokens_including_template_vision_and_target=tokens,seconds=time.monotonic()-started,
+                initial_tensor_sha=tensor_sha(init),final_tensor_sha=tensor_sha(oracle.latent_fp32),
+                artifacts={f:file_sha(out/f) for f in ('initial-latent.pt','latent.pt','optimizer.pt','optimization.jsonl','memory.png','checkpoint.pt')})
+            write_frozen(out/'complete.json',receipt);print(json.dumps(receipt),flush=True)
+            del opt,oracle
+    write_frozen(a.output/f'train-complete-{a.shard}.json',dict(targets=assignment))
+
+def trial_evaluate(a,reg):
+    ranking=True
+    # Load probes only after every endpoint in both arms has been frozen.
+    train_payload=load_json(DATA/'training-payload.json');assert digest(train_payload)==reg['training_digest']
+    endpoint_bindings={}
+    for sid in train_payload['targets']:
+        for arm in ('A','B'):
+            folder=a.output/'training'/arm/sid
+            done=load_json(folder/'complete.json');assert done['additional_updates']==reg['steps']
+            assert file_sha(folder/'memory.png')==done['artifacts']['memory.png']
+            endpoint_bindings[f'{arm}/{sid}']=file_sha(folder/'complete.json')
+    payload=load_json(DATA/'evaluation-payload.json');assert digest(payload)==reg['evaluation_digest']
+    processor,reader,_,versions,bindings=models(a);assignment=sorted(payload['targets'])[a.shard::a.shards]
+    out=a.output/'evaluation'/f'shard-{a.shard}';out.mkdir(parents=True,exist_ok=False)
+    extra=dict(prompt_frame=query_prompt(processor,'__REGISTERED_QUERY__'),chat_template_digest=digest(processor.chat_template),
+               frozen_endpoints=endpoint_bindings) if ranking else {}
+    write_frozen(out/'identity.json',dict(**identity(a,bindings,reg,assignment),**extra));started=time.monotonic();n=rank_n=rank_forwards=0
+    blank=torch.full((3,1024,1024),128/255,dtype=torch.float32)
+    if ranking:
+        Image.new('RGB',(1024,1024),(128,128,128)).save(out/'blank.png');blank=read_png(out/'blank.png')
+        scenarios={}
+        for filename in ('training-scenarios.json','reserved-scenarios.json'):
+            for cases in load_json(DATA/filename).values():
+                for c in cases:scenarios[(c['id'],c['scope'],c['value_id'])]=c
+        rank_cache={}
+    for sid in assignment:
+        t=payload['targets'][sid]
+        for condition in ('A','B','parent','text','blank'):
+            if condition in ('A','B'):
+                path=a.output/'training'/condition/sid/'memory.png';receipt=load_json(path.parent/'complete.json')
+                assert file_sha(path)==receipt['artifacts']['memory.png'];image=read_png(path)
+                panels=['recovery_training','qualification','application_training','mcq','application_reserved']
+            elif condition=='parent':
+                path=a.source/sid/'memory.png';assert file_sha(path)==t['parent']['artifacts']['memory.png'];image=read_png(path)
+                panels=['application_training','application_reserved']
+            else:image=blank;path=None;panels=['application_reserved']
+            for panel in panels:
+                for q in t[panel]:
+                    query=t['text_prefix']+q['query'] if condition=='text' else q['query']
+                    if ranking:processor.begin_capture()
+                    g=generate(reader,processor,image,query,a.device)
+                    proof={}
+                    if ranking:
+                        captured=processor.end_capture();assert len(captured)==1
+                        assert captured[0]['text']==extra['prompt_frame'].replace('__REGISTERED_QUERY__',query)
+                        assert captured[0]['input_ids_digest']==digest([g['input_token_ids']])
+                        proof=dict(reader_query=query,processor_input=captured[0])
+                    append(out/'reads.jsonl',dict(target=sid,capacity=len(t['state']),condition=condition,panel=panel,
+                        query=q,generation=g,score=score_generation(g,q,panel=='mcq'),png_sha=file_sha(path) if path else None,**proof))
+                    n+=1
+                    if ranking and panel in ('application_training','application_reserved'):
+                        case=scenarios[(q['case_id'],q['scope'],q['value_id'])];rq,choices,gold=ranking_candidates(case,q['rotation']);assert rq==q
+                        png_sha=file_sha(path if path else out/'blank.png');key=digest(dict(query=query,choices=choices,png=png_sha))
+                        reuse=key in rank_cache
+                        if not reuse:rank_cache[key]=ranking_read(reader,processor,image,query,choices,a.device);rank_forwards+=4
+                        scored=rank_cache[key];margin=scored['scores'][gold]-max(s for j,s in enumerate(scored['scores']) if j!=gold)
+                        append(out/'ranking.jsonl',dict(target=sid,condition=condition,panel=panel,query=q,reader_query=query,
+                            choices=choices,gold_index=gold,input_identity=key,reused=reuse,score=scored,png_sha=png_sha,
+                            gold_margin=margin,unique_correct=margin>0,actual_candidate_forwards=0 if reuse else 4));rank_n+=1
+            print(json.dumps(dict(target=sid,condition=condition,reads=n)),flush=True)
+        for condition in ('A','B','parent'):
+            path=(a.output/'training'/condition/sid/'memory.png' if condition in ('A','B') else a.source/sid/'memory.png')
+            image=read_png(path);png_sha=file_sha(path)
+            for q0 in t['application_training']:
+                if q0['value_id'] not in reg['contrast_values']:continue
+                case=scenarios[(q0['case_id'],q0['scope'],q0['value_id'])]
+                for rotation in (1,2,3):
+                    q,choices,gold=ranking_candidates(case,rotation);query=q['query']
+                    key=digest(dict(query=query,choices=choices,png=png_sha));reuse=key in rank_cache
+                    if not reuse:rank_cache[key]=ranking_read(reader,processor,image,query,choices,a.device);rank_forwards+=4
+                    scored=rank_cache[key];margin=scored['scores'][gold]-max(s for j,s in enumerate(scored['scores']) if j!=gold)
+                    append(out/'ranking.jsonl',dict(target=sid,condition=condition,panel='application_training_rotations',query=q,
+                        reader_query=query,choices=choices,gold_index=gold,input_identity=key,reused=reuse,score=scored,png_sha=png_sha,
+                        gold_margin=margin,unique_correct=margin>0,actual_candidate_forwards=0 if reuse else 4));rank_n+=1
+        frozen(versions)
+    write_frozen(out/'complete.json',dict(reads=n,seconds=time.monotonic()-started,
+        ranking_decisions=rank_n,ranking_candidate_forwards=rank_forwards,processed_input_tokens=processor.total_input_tokens,
+        reads_sha=file_sha(out/'reads.jsonl'),ranking_sha=file_sha(out/'ranking.jsonl'),blank_sha=file_sha(out/'blank.png')))
+
 def main(a):
+    if a.mode=='trial-register':return trial_register()
+    if a.mode in ('trial-train','trial-evaluate'):
+        reg,_=trial_load();a.output.mkdir(parents=True,exist_ok=True)
+        return {'trial-train':trial_train,'trial-evaluate':trial_evaluate}[a.mode](a,reg)
     if a.mode=='register':return register()
     if a.mode=='ranking-register':return ranking_register()
     if a.mode=='ranking-calibrate':return ranking_calibrate(a)
@@ -316,7 +524,7 @@ def main(a):
     return {'feasibility':feasibility,'train':train,'evaluate':evaluate}[a.mode](a,reg)
 
 if __name__=='__main__':
-    ap=argparse.ArgumentParser();ap.add_argument('--mode',choices=['register','feasibility','train','evaluate','ranking-register','ranking-calibrate'],required=True)
+    ap=argparse.ArgumentParser();ap.add_argument('--mode',choices=['register','feasibility','train','evaluate','ranking-register','ranking-calibrate','trial-register','trial-train','trial-evaluate'],required=True)
     ap.add_argument('--source',type=Path);ap.add_argument('--output',type=Path);ap.add_argument('--base',type=Path);ap.add_argument('--reader',type=Path)
     ap.add_argument('--shard',type=int,default=0);ap.add_argument('--shards',type=int,default=4);ap.add_argument('--device',default='cuda:0')
     main(ap.parse_args())

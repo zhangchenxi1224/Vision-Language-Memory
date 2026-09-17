@@ -1,5 +1,25 @@
 # PrefEval RGB memory: execution brief, 2026-09-17
 
+## Iteration 7: fixed ranking learning trial
+
+ChatGPT plan `prefeval-rgb-ranking-learning-trial-07` authorizes a fixed
+exploratory allocation after the unchanged FAILED Plan05/06 gates. The user's
+latest override requires **only `dl-clear-retain-h200x4-20260914`** for all new
+GPU training/evaluation. The old source-aug instance must not receive new jobs.
+`ranking-learning-trial-v1/registration.json` binds all 40 archived endpoints,
+fresh paired Adam optimizers, 128 updates per arm/state, 10,240 total updates,
+38,656 gradient forwards (A 11,264; B 27,392), and unchanged scenario payloads.
+A uses recovery; B alternates recovery with full-action listwise ranking.
+The CPU attribution file includes every calibration occurrence of the eight
+overwrite values (24 occurrences, 768 text/blank decisions); no new calls.
+Freeze all 80 endpoints before 3,408 strict generations and 2,712 ranking
+decisions (including all four rotations for the eight contrast values).
+This is unequal compute and independent latent teachers, not a Writer run or
+an efficiency claim. Adoption targets remain visible; no automatic budget
+extension, filtering, extra calibration or Writer optimization is authorized
+by this allocation. 51 focused tests passed; historical execution modes and
+failed gates remain unchanged. Execution results will be added after completion.
+
 ## Iteration 6: full-action ranking supervision
 
 ChatGPT plan `prefeval-rgb-semantic-ranking-supervision-06` keeps the complete

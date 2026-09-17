@@ -121,3 +121,37 @@ def test_ranking_budget_and_protocol_isolation():
     code=inspect.getsource(s.ranking_load)+inspect.getsource(s.ranking_calibrate)
     assert 'evaluation-payload' not in code and 'reserved-scenarios' not in code and 'generated_token' not in code
     assert 'feasibility-verified.json' in inspect.getsource(s.train)
+
+def test_trial_fixed_128_budget_and_coverage():
+    reg,p=s.trial_load();totals=Counter();logical=0
+    for t in p['targets'].values():
+        coverage={scope:Counter() for scope in t['state']}
+        for draw in p['schedule'][:reg['steps']]:
+            for arm in ('A','B'):
+                jobs=s.training_jobs(t,draw,arm);logical+=len(jobs)
+                assert abs(sum(w for _,w in jobs)-1)<1e-12
+                for q,w in jobs:
+                    totals[arm]+=4 if q['kind']=='application' else 1
+                    if arm=='B' and q['kind']=='application':coverage[q['scope']][q['scenario'],q['rotation']]+=1
+                    if t['state'][q['scope']] is None:assert q['kind']=='recovery'
+        for scope,value in t['state'].items():
+            if value is not None:assert len(coverage[scope])==16 and set(coverage[scope].values())=={4}
+    assert totals=={'A':11264,'B':27392} and logical==22528
+    assert reg['additional_updates']==40*2*128==10240
+    occurrences=sum(c['value_id'] in reg['contrast_values'] for t in p['targets'].values() for c in t['applications'])
+    assert occurrences==96 and 1848+occurrences*3*3==2712
+    assert 'evaluation-payload' not in inspect.getsource(s.trial_train)
+    assert 'reserved-scenarios' not in inspect.getsource(s.trial_load)
+    assert "gate['passed']" in inspect.getsource(s.train)
+    assert "assert not opt.state" in inspect.getsource(s.trial_train)
+    assert "training-payload.json" in inspect.getsource(s.trial_evaluate)
+
+
+def test_trial_cpu_attribution_preserves_every_contrast_occurrence():
+    reg,_=s.trial_load();a=load_json(s.TRIAL_DATA/'calibration-attribution.json')
+    assert s.digest(a)==reg['attribution_digest'] and a['model_calls']==0
+    assert len(a['rows'])==768 and len({(r['target'],r['value_id']) for r in a['rows']})==24
+    assert len(a['overwrite_contrasts'])==4
+    for r in a['rows']:
+        assert r['gold_margin']==r['scores'][r['gold_index']]-max(x for j,x in enumerate(r['scores']) if j!=r['gold_index'])
+        assert r['correct']==(r['gold_margin']>0)
