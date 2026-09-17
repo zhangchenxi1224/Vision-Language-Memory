@@ -4,7 +4,7 @@ from pathlib import Path
 from collections import defaultdict,Counter
 ROOT=Path(__file__).resolve().parents[2];sys.path[:0]=[str(ROOT/'src'),str(ROOT)]
 import torch
-from scripts.experiments.prefeval_semantic_transfer import DATA,REPORT,application_view,training_jobs
+from scripts.experiments.prefeval_semantic_transfer import DATA,REPORT,application_view,training_jobs,ranking_load,ranking_candidates
 from scripts.probes.prefeval_rgb_endpoint_diagnostic import load_json,file_sha,score_generation
 from scripts.reporting.verify_prefeval_rgb_endpoint_diagnostic import exact_index
 from vision_memory.prefeval.rgb_protocol import digest,recovery_summary
@@ -36,6 +36,89 @@ def feasibility(output):
         failures=failures,seconds=seconds,optimizer_updates=0,reads=672)
     (output/'feasibility-verified.json').write_text(json.dumps(result,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
     print(json.dumps({k:v for k,v in result.items() if k!='failures'},indent=2));return result
+
+def ranking_calibration(output):
+    reg,p=ranking_load();metadata=load_json(DATA/'authoring-source.json')
+    assert digest(metadata)==reg['source_files']['authoring-source.json']
+    groups={v['id']:v['source_groups'][0] for v in metadata['values']}
+    assert all(len(v['source_groups'])==1 for v in metadata['values'])
+    expected={}
+    for sid,t in p['targets'].items():
+        for c in t['applications']:
+            for rotation in range(4):
+                q,choices,gold=ranking_candidates(c,rotation)
+                for condition in ('text','blank'):expected[(sid,condition,q['id'])]=(q,choices,gold)
+    all_rows=[];frames={};actual=tokens=0;seconds=0;model_identities=[]
+    for i in range(4):
+        folder=output/'calibration'/f'shard-{i}';done=load_json(folder/'complete.json');ident=load_json(folder/'identity.json')
+        assert ident['registration_digest']==digest(reg)
+        assert ident['code']==(output/'ranking-calibration-code-commit.txt').read_text().strip()
+        model_identities.append(digest(dict(snapshots=ident['snapshots'],template=ident['chat_template_digest'])))
+        assert ident['assignment']==sorted(p['targets'])[i::4]
+        assert done['optimizer_updates']==done['generated_answers']==0
+        assert file_sha(folder/'scores.jsonl')==done['scores_sha'] and file_sha(folder/'blank.png')==done['blank_sha']
+        rows=[json.loads(s) for s in (folder/'scores.jsonl').read_text(encoding='utf-8').splitlines()]
+        assert len(rows)==done['decisions'];cache={};local_forwards=local_tokens=0
+        frame=ident['prompt_frame'];assert frame.count('__REGISTERED_QUERY__')==1
+        for r in rows:
+            sid=r['target'];assert sid in ident['assignment'];q,choices,gold=expected[(sid,r['condition'],r['query']['id'])]
+            query=p['targets'][sid]['text_prefix']+q['query'] if r['condition']=='text' else q['query']
+            assert r['query']==q and r['choices']==choices and r['gold_index']==gold and r['reader_query']==query
+            key=digest(dict(query=query,choices=choices,png=done['blank_sha']));assert key==r['input_identity']
+            score=r['score'];assert score['model_prompt']==frame.replace('__REGISTERED_QUERY__',query)
+            assert len(score['scores'])==len(score['candidate_token_counts'])==len(score['processor_calls'])==4
+            assert all(torch.isfinite(torch.tensor(score['scores']))) and min(score['candidate_token_counts'])>0
+            for call,choice in zip(score['processor_calls'],choices):
+                assert call['text']==score['model_prompt']+choice and call['input_tokens']>0
+            if key in cache:
+                assert r['reused'] and r['actual_candidate_forwards']==0 and score==cache[key]
+            else:
+                assert not r['reused'] and r['actual_candidate_forwards']==4;cache[key]=score;local_forwards+=4
+                local_tokens+=sum(x['input_tokens'] for x in score['processor_calls'])
+            frames[sid]=frame
+        assert local_forwards==done['candidate_forwards'] and local_tokens==done['processed_input_tokens']
+        actual+=local_forwards;tokens+=local_tokens;seconds+=done['seconds'];all_rows.extend(rows)
+    assert len(set(frames.values()))==1
+    assert len(set(model_identities))==1
+    ix=exact_index(all_rows,lambda r:(r['target'],r['condition'],r['query']['id']),expected);assert len(ix)==2688
+    counts=defaultdict(lambda:[0,0]);gc=defaultdict(lambda:[0,0]);ties=Counter();margins={};correct={}
+    for key,r in ix.items():
+        sid,condition,_=key;q=r['query'];scores=r['score']['scores'];gold=r['gold_index']
+        margin=scores[gold]-max(x for j,x in enumerate(scores) if j!=gold);ok=margin>0
+        assert margin==r['gold_margin'] and ok==r['unique_correct'];correct[key]=ok;margins[str(key)]=margin
+        ties[condition]+=margin==0
+        for suffix in ('all','K'+str(len(p['targets'][sid]['state'])),'rotation'+str(q['rotation']),'value:'+q['value_id']):
+            k=f'{condition}/{suffix}';counts[k][0]+=ok;counts[k][1]+=1
+        k=f'{condition}/{groups[q["value_id"]]}';gc[k][0]+=ok;gc[k][1]+=1
+    macro={condition:sum(a/b for k,(a,b) in gc.items() if k.startswith(condition+'/'))/len(groups) for condition in ('text','blank')}
+    contrasts=[]
+    for c in metadata['overwrite_contrasts']:
+        bycondition={};details=[]
+        before=p['targets'][c['before_state']];after=p['targets'][c['after_state']]
+        for condition in ('text','blank'):
+            successes=0
+            for ca in [x for x in before['applications'] if x['scope']==c['scope']]:
+                cb=next(x for x in after['applications'] if x['id']==ca['id'] and x['scope']==ca['scope'])
+                for rotation in range(4):
+                    qa,oa,ga=ranking_candidates(ca,rotation);qb,ob,gb=ranking_candidates(cb,rotation)
+                    assert qa['query']==qb['query'] and oa==ob and ga!=gb
+                    ka=(c['before_state'],condition,qa['id']);kb=(c['after_state'],condition,qb['id'])
+                    if condition=='blank':assert ix[ka]['score']==ix[kb]['score']
+                    both=correct[ka] and correct[kb];successes+=both
+                    details.append(dict(condition=condition,scenario=ca['scenario'],rotation=rotation,
+                                        before_correct=correct[ka],after_correct=correct[kb],both_correct=both))
+            bycondition[condition]=[successes,16]
+        contrasts.append(dict(contrast=c,counts=bycondition,pairs=details))
+    criteria=dict(text=counts['text/all'][0]>=1210,macro_gain=macro['text']-macro['blank']>=.10,
+                  contrasts=all(c['counts']['text'][0]>=12 for c in contrasts))
+    result=dict(registration_digest=digest(reg),decisions=len(ix),actual_candidate_forwards=actual,
+        max_candidate_forwards=10752,counts=dict(counts),semantic_group_counts=dict(gc),macro=macro,contrasts=contrasts,
+        criteria=criteria,passed=all(criteria.values()),ties=dict(ties),seconds=seconds,processed_input_tokens=tokens,
+        optimizer_updates=0,generated_answers=0,shard_receipts={str(i):file_sha(output/'calibration'/f'shard-{i}'/'complete.json') for i in range(4)})
+    assert actual<=10752
+    (output/'calibration-verified.json').write_text(json.dumps(result,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
+    print(json.dumps({k:v for k,v in result.items() if k not in ('contrasts','counts','semantic_group_counts')},indent=2))
+    print(json.dumps({k:v for k,v in counts.items() if k.endswith('/all')}));return result
 
 def final(output,source):
     reg=load_json(DATA/'registration.json');p=load_json(DATA/'training-payload.json');e=load_json(DATA/'evaluation-payload.json')
@@ -185,5 +268,8 @@ def final(output,source):
     print(json.dumps({k:v for k,v in result.items() if k not in ('complete','semantic_group_counts','overwrite_contrasts')},indent=2));return result
 
 if __name__=='__main__':
-    ap=argparse.ArgumentParser();ap.add_argument('--mode',choices=['feasibility','final'],required=True);ap.add_argument('--output',type=Path,required=True);ap.add_argument('--source',type=Path)
-    a=ap.parse_args();feasibility(a.output) if a.mode=='feasibility' else final(a.output,a.source)
+    ap=argparse.ArgumentParser();ap.add_argument('--mode',choices=['feasibility','final','ranking-calibration'],required=True);ap.add_argument('--output',type=Path,required=True);ap.add_argument('--source',type=Path)
+    a=ap.parse_args()
+    if a.mode=='ranking-calibration':ranking_calibration(a.output)
+    elif a.mode=='feasibility':feasibility(a.output)
+    else:final(a.output,a.source)

@@ -1,5 +1,18 @@
 # PrefEval RGB memory: execution brief, 2026-09-17
 
+## Iteration 6: full-action ranking supervision
+
+ChatGPT plan `prefeval-rgb-semantic-ranking-supervision-06` keeps the complete
+Plan05 payload and prompts unchanged. `semantic-ranking-v1/registration.json`
+binds an alternative temperature-1 listwise objective using the existing Reader
+candidate-NLL implementation. First calibrate 2,688 text/blank ranking decisions
+across all rotations, with at most 10,752 candidate forwards and no generation.
+Require text >=1,210/1,344, semantic-group macro gain over blank >=0.10, and
+each overwrite contrast both correct on >=12/16 pairs. Only a passing new
+calibration permits the planned paired 20,480-update continuation. Plan05's
+failed generation gate remains failed. 49 focused semantic, Reader-loss, EOS,
+resize and visual-policy tests pass. Actual calibration results are pending.
+
 ## Iteration 5: paired semantic supervision continuation
 
 Plan `prefeval-rgb-semantic-query-mixture-05` freezes 28 preference values,

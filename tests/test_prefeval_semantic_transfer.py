@@ -90,3 +90,34 @@ def test_counting_processor_preserves_live_autograd():
         def __call__(self,**kwargs):return {'input_ids':torch.ones(1,12,dtype=torch.long),'pixels':kwargs['image']*2}
     x=torch.ones(3,requires_grad=True);p=s.TokenCountProcessor(Fake());batch=p(image=x)
     batch['pixels'].sum().backward();assert p.last_input_tokens==12 and torch.equal(x.grad,torch.full_like(x,2))
+
+def test_ranking_candidates_follow_display_and_target_text():
+    p,_=data()
+    for t in p['targets'].values():
+        for case in t['applications']:
+            for rotation in range(4):
+                q,choices,gold=s.ranking_candidates(case,rotation)
+                assert choices[gold]==q['target']
+                for label,choice in zip('ABCD',choices):assert f'{label}. {choice}\n' in q['query']
+                assert 'gold_index' not in q['query'] and 'target_index' not in q['query']
+
+def test_cumulative_processor_counts_every_candidate():
+    class Fake:
+        def __call__(self,**kwargs):return {'input_ids':torch.ones(1,len(kwargs['text'][0]),dtype=torch.long)}
+    p=s.TokenCountProcessor(Fake());p.begin_capture()
+    for text in ('a','bb','ccc','dddd'):p(text=[text])
+    calls=p.end_capture()
+    assert p.total_calls==4 and p.total_input_tokens==10 and p.last_input_tokens==4
+    assert [x['input_tokens'] for x in calls]==[1,2,3,4]
+
+def test_ranking_budget_and_protocol_isolation():
+    p,_=data();counts={'A':0,'B':0}
+    for t in p['targets'].values():
+        for draw in p['schedule']:
+            for arm in counts:
+                counts[arm]+=sum(4 if q['kind']=='application' else 1 for q,_ in s.training_jobs(t,draw,arm))
+    assert counts=={'A':22528,'B':54784} and sum(counts.values())==77312
+    import inspect
+    code=inspect.getsource(s.ranking_load)+inspect.getsource(s.ranking_calibrate)
+    assert 'evaluation-payload' not in code and 'reserved-scenarios' not in code and 'generated_token' not in code
+    assert 'feasibility-verified.json' in inspect.getsource(s.train)

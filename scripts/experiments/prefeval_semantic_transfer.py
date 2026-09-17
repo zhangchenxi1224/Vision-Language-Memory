@@ -1,6 +1,6 @@
 """A fixed semantic-query mixture versus recovery-only teacher continuation."""
 from __future__ import annotations
-import argparse,json,hashlib,time,sys,subprocess
+import argparse,json,hashlib,time,sys,subprocess,inspect
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[2];sys.path[:0]=[str(ROOT/'src'),str(ROOT)]
 import torch
@@ -13,8 +13,10 @@ from vision_memory.prefeval.rgb_protocol import digest,text_prefix_v2,recovery_s
 from vision_memory.repro import canonical_tensor_sha256 as tensor_sha,configure_strict_cuda_determinism
 from vision_memory.reader.open_eos import assistant_termination_contract,qwen3vl_answer_eos_ce
 from vision_memory.reader.qwen3vl import R3_QWEN_READER_RESIZE_CONTRACT
+from vision_memory.reader.qwen3vl import qwen3vl_choice_nll,qwen3vl_listwise_choice_ce,_joint_prompt_target_tokenization
 
 REPORT=ROOT/'reports/prefeval-rgb-20260917';DATA=REPORT/'semantic-transfer-v1'
+RANK_DATA=REPORT/'semantic-ranking-v1'
 
 def value_id(scope,value):return hashlib.sha256((scope+'\n'+value).encode()).hexdigest()[:12]
 
@@ -84,10 +86,101 @@ def training_jobs(t,draw,arm):
     return [(q,1/(len(groups)*len(g))) for g in groups for q in g]
 
 class TokenCountProcessor:
-    def __init__(self,processor):self.processor=processor;self.last_input_tokens=0
+    def __init__(self,processor):
+        self.processor=processor;self.last_input_tokens=0;self.total_input_tokens=0;self.total_calls=0;self.capture=None
     def __getattr__(self,name):return getattr(self.processor,name)
+    def begin_capture(self):self.capture=[]
+    def end_capture(self):
+        result=self.capture;self.capture=None;return result
     def __call__(self,**kwargs):
-        batch=self.processor(**kwargs);self.last_input_tokens=int(batch['input_ids'].numel());return batch
+        batch=self.processor(**kwargs);self.last_input_tokens=int(batch['input_ids'].numel())
+        self.total_calls+=1;self.total_input_tokens+=self.last_input_tokens
+        if self.capture is not None:self.capture.append(dict(text=kwargs['text'][0],input_tokens=self.last_input_tokens,
+            input_ids_digest=digest(batch['input_ids'].tolist())))
+        return batch
+
+def ranking_candidates(case,rotation=0):
+    q=application_view(case,rotation);offset=(case['base_rotation']+rotation)%4
+    choices=case['proposals'][offset:]+case['proposals'][:offset]
+    assert len(set(choices))==4 and choices.count(q['target'])==1
+    return q,choices,choices.index(q['target'])
+
+def ranking_functions():
+    return {f.__name__:hashlib.sha256(inspect.getsource(f).encode()).hexdigest()
+            for f in (qwen3vl_choice_nll,qwen3vl_listwise_choice_ce,ranking_candidates,training_jobs)}
+
+def ranking_register():
+    old=load_json(DATA/'registration.json');p=load_json(DATA/'training-payload.json')
+    assert digest(old)=='df20224bf3c3ba231e3f90be4dea03154c5c9f39020a17a98f01ff435f15c0ac'
+    assert digest(p)==old['training_digest'];RANK_DATA.mkdir(exist_ok=True)
+    reg=dict(plan='prefeval-rgb-semantic-ranking-supervision-06',parent_registration_digest=digest(old),
+        training_digest=old['training_digest'],evaluation_digest=old['evaluation_digest'],source_files=old['files'],
+        endpoints={sid:t['initial'] for sid,t in p['targets'].items()},functions=ranking_functions(),
+        schedule_digest=digest(p['schedule']),optimizer=p['optimizer'],additional_updates=20480,
+        gradient_forwards={'A':22528,'B':54784,'total':77312},logical_slot_jobs=45056,
+        calibration=dict(decisions=2688,max_candidate_forwards=10752,text_min=1210,text_total=1344,
+            macro_gain_min=.10,each_contrast_pairs_min=12,each_contrast_pairs_total=16),
+        final=dict(generations=3408,ranking_decisions=1848,max_candidate_forwards=7392),
+        progression=dict(recovery={'K1':[18,20],'K2':[3,4],'K4':[9,12]},mcq_min=68,reserved_ranking_min=135,
+                         mcq_macro_gain=.10,reserved_ranking_macro_gain=.10,contrast_pairs_min=6,each_contrast_min=1),
+        objective='temperature1 listwise CE on negative mean full-action token NLL; no EOS on application; recovery answer+EOS unchanged',
+        historical_status='Alternative objective proposed after Plan05 generative feasibility failure; Plan05 stays failed',
+        no_new_prompts=True,no_reserved_calls_before_all_endpoints=True,comparison='fixed updates; unequal compute; no efficiency claim')
+    write_frozen(RANK_DATA/'registration.json',reg);print(json.dumps(dict(registration_digest=digest(reg))))
+
+def ranking_load():
+    reg=load_json(RANK_DATA/'registration.json');old=load_json(DATA/'registration.json')
+    assert digest(old)==reg['parent_registration_digest'] and ranking_functions()==reg['functions']
+    p=load_json(DATA/'training-payload.json');assert digest(p)==reg['training_digest']
+    return reg,p
+
+def query_prompt(processor,query):
+    return processor.apply_chat_template([{'role':'user','content':[{'type':'image'},{'type':'text','text':query}]}],
+                                         tokenize=False,add_generation_prompt=True)
+
+def ranking_read(reader,processor,image,query,choices,device):
+    prompt=query_prompt(processor,query);target_counts=[]
+    for choice in choices:
+        _,ids=_joint_prompt_target_tokenization(processor,prompt,choice);target_counts.append(int(ids.numel()))
+    processor.begin_capture()
+    result=qwen3vl_choice_nll(model=reader,processor=processor,image=image,query=query,choices=choices,
+        device=device,reader_resize_contract=R3_QWEN_READER_RESIZE_CONTRACT,deterministic_ce=True)
+    calls=processor.end_capture();assert len(calls)==4
+    for call,choice in zip(calls,choices):assert call['text']==prompt+choice
+    scores=[-x for x in result.mean_nll];assert all(torch.isfinite(torch.tensor(scores)))
+    return dict(scores=scores,candidate_token_counts=target_counts,model_prompt=prompt,processor_calls=calls)
+
+def ranking_calibrate(a):
+    reg,p=ranking_load();processor,reader,_,versions,bindings=models(a)
+    assignment=sorted(p['targets'])[a.shard::a.shards];out=a.output/'calibration'/f'shard-{a.shard}'
+    out.mkdir(parents=True,exist_ok=False)
+    frame=query_prompt(processor,'__REGISTERED_QUERY__')
+    write_frozen(out/'identity.json',dict(**identity(a,bindings,reg,assignment),prompt_frame=frame,
+        chat_template_digest=digest(processor.chat_template)))
+    Image.new('RGB',(1024,1024),(128,128,128)).save(out/'blank.png');blank=read_png(out/'blank.png')
+    started=time.monotonic();cache={};n=0;actual=0
+    for sid in assignment:
+        t=p['targets'][sid]
+        for case in t['applications']:
+            for rotation in range(4):
+                q,choices,gold=ranking_candidates(case,rotation)
+                for condition in ('text','blank'):
+                    query=t['text_prefix']+q['query'] if condition=='text' else q['query']
+                    key=digest(dict(query=query,choices=choices,png=file_sha(out/'blank.png')))
+                    reuse=key in cache
+                    if not reuse:
+                        cache[key]=ranking_read(reader,processor,blank,query,choices,a.device);actual+=4
+                    scored=cache[key];assert scored['model_prompt']==frame.replace('__REGISTERED_QUERY__',query)
+                    margin=scored['scores'][gold]-max(s for j,s in enumerate(scored['scores']) if j!=gold)
+                    append(out/'scores.jsonl',dict(target=sid,condition=condition,query=q,reader_query=query,
+                        choices=choices,gold_index=gold,input_identity=key,reused=reuse,score=scored,
+                        gold_margin=margin,unique_correct=margin>0,actual_candidate_forwards=0 if reuse else 4))
+                    n+=1
+        print(json.dumps(dict(target=sid,decisions=n,actual_candidate_forwards=actual)),flush=True)
+    frozen(versions)
+    write_frozen(out/'complete.json',dict(decisions=n,candidate_forwards=actual,seconds=time.monotonic()-started,
+        optimizer_updates=0,generated_answers=0,processed_input_tokens=processor.total_input_tokens,
+        blank_sha=file_sha(out/'blank.png'),scores_sha=file_sha(out/'scores.jsonl')))
 
 def models(a,with_vae=False):
     configure_strict_cuda_determinism(0)
@@ -216,12 +309,14 @@ def evaluate(a,reg):
 
 def main(a):
     if a.mode=='register':return register()
+    if a.mode=='ranking-register':return ranking_register()
+    if a.mode=='ranking-calibrate':return ranking_calibrate(a)
     reg=load_json(DATA/'registration.json')
     a.output.mkdir(parents=True,exist_ok=True)
     return {'feasibility':feasibility,'train':train,'evaluate':evaluate}[a.mode](a,reg)
 
 if __name__=='__main__':
-    ap=argparse.ArgumentParser();ap.add_argument('--mode',choices=['register','feasibility','train','evaluate'],required=True)
+    ap=argparse.ArgumentParser();ap.add_argument('--mode',choices=['register','feasibility','train','evaluate','ranking-register','ranking-calibrate'],required=True)
     ap.add_argument('--source',type=Path);ap.add_argument('--output',type=Path);ap.add_argument('--base',type=Path);ap.add_argument('--reader',type=Path)
     ap.add_argument('--shard',type=int,default=0);ap.add_argument('--shards',type=int,default=4);ap.add_argument('--device',default='cuda:0')
     main(ap.parse_args())
