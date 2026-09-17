@@ -108,7 +108,7 @@ def main(args):
         raise ValueError("Teacher identity changed")
     idpath.write_text(json.dumps(identity,indent=2))
     from diffusers import AutoencoderTiny
-    vae = AutoencoderTiny.from_pretrained(args.base, subfolder="vae", local_files_only=True,
+    vae = AutoencoderTiny.from_pretrained(str(args.base), subfolder="vae", local_files_only=True,
                                       torch_dtype=torch.float32).to(args.device)
     vae.eval().requires_grad_(False)
     validate_vae(vae)

@@ -11,7 +11,7 @@ cd "$task_repo"
 "$task_python" -c 'import json,sys,pathlib; p=pathlib.Path(sys.argv[1]); assert sum(json.load(open(p/f"shard-{i}"/"complete.json"))["writes"] for i in range(4))==124' "$stage/baseline"
 export PYTHONHASHSEED=0 CUBLAS_WORKSPACE_CONFIG=:4096:8 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 TOKENIZERS_PARALLELISM=false PYTHONUNBUFFERED=1
 "$task_python" scripts/experiments/prefeval_visual_policy.py --policy reports/prefeval-rgb-20260917/visual-recovery-allocation-v1.json --verification "$stage/references-v2-reconstructed.json"
-output="$stage/sentinel-native-gray"
+output="$stage/sentinel-native-gray-r2"
 mkdir "$output"
 git rev-parse HEAD > "$output/code-commit.txt"
 pids=()
