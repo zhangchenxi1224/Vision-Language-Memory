@@ -3,7 +3,7 @@ set -uo pipefail
 task_root=/inspire/ssd/project/exploration-topic/czxs26210936
 task_repo="$task_root/repos/dreamlite-prefeval-rgb-20260917"
 task_run="$task_root/runs/dreamlite-prefeval-rgb-20260917"
-stage="$task_run/visual-recovery-v1"
+stage="$task_run/visual-recovery-v1-run"
 task_python="$task_root/envs/vlm-r3-ngc2502/bin/python"
 task_models=/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory
 cd "$task_repo" || exit 1

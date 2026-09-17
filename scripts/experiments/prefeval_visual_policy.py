@@ -38,7 +38,12 @@ if __name__=='__main__':
     o=load_overlay(root/'reader-format-v2.json',m);policy=load_policy(a.policy,m,o)
     original=json.loads((root/'references-v2-verified.json').read_text(encoding='utf-8'))
     live=json.loads(a.verification.read_text(encoding='utf-8'))
-    for field in ('verified','reads','counts','mcq','recovery','supplement_families','gate_passed','files'):
+    for field in ('verified','reads','counts','mcq','recovery','supplement_families','gate_passed'):
         if original[field]!=live[field]:raise ValueError('Raw reference reconstruction changed: '+field)
+    # The same archive was reconstructed on Windows and Linux. Paths are labels;
+    # compare identical relative names and exact file-byte digests across hosts.
+    original_files={k.replace('\\','/'):v for k,v in original['files'].items()}
+    live_files={k.replace('\\','/'):v for k,v in live['files'].items()}
+    if original_files!=live_files:raise ValueError('Raw reference file bytes changed')
     print(json.dumps(dict(allocation_ready=True,historical_combined_gate_passed=False,
                          policy_digest=digest(policy),baseline_writes=124,sentinel_states=40)))
