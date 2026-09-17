@@ -126,10 +126,11 @@ def sentinel(directory,m,o,policy):
 
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('--stage',type=Path,required=True);p.add_argument('--output',type=Path,required=True)
+    p.add_argument('--sentinel-directory',default='sentinel')
     a=p.parse_args();root=ROOT/'reports/prefeval-rgb-20260917'
     MANIFEST=read(root/'registered/manifest.json');o=load_overlay(root/'reader-format-v2.json',MANIFEST)
     policy=load_policy(root/'visual-recovery-allocation-v1.json',MANIFEST,o)
     result=dict(policy_digest=digest(policy),baseline=baseline(a.stage/'baseline',o,policy),
-                sentinel=sentinel(a.stage/'sentinel',MANIFEST,o,policy))
+                sentinel=sentinel(a.stage/a.sentinel_directory,MANIFEST,o,policy))
     a.output.write_text(json.dumps(result,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
     print(json.dumps({k:{a:b for a,b in v.items() if a not in ('states','episodes')} if isinstance(v,dict) else v for k,v in result.items()},indent=2))

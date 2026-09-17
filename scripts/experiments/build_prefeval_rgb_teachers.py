@@ -98,7 +98,7 @@ def main(args):
     args.output.mkdir(parents=True, exist_ok=True)
     identity = {"manifest_sha": digest(manifest), "steps":256, "lr":.05,
         "optimizer":"Adam", "betas":[.9,.999], "eps":1e-8, "weight_decay":0.,
-        "initialization":"deterministic Tiny encoding of gray128 for roots; registered predecessor endpoint otherwise",
+        "initialization":"official PIL-preprocessed gray128 Tiny encoding, preserving native tensor layout; registered predecessor endpoint otherwise",
         "qualification":"reopened uint8 RGB PNG; two held-out recovery forms, status and content checks",
         "max_new_tokens":manifest["max_recovery_tokens"], "shards":args.shards,
         "assignment":assignment, "shard":args.shard,"overlay_sha":digest(overlay),
@@ -117,8 +117,8 @@ def main(args):
     versions = [(p, int(p._version)) for module in (vae, reader) for p in module.parameters()]
     gray = torch.full((1,3,1024,1024),128/255,device=args.device,dtype=torch.float32)
     with torch.no_grad():
-        initial = encode_model_latent(vae, gray).detach()
-        if initial.shape!=(1,4,128,128) or not torch.isfinite(initial).all():
+        helper_initial = encode_model_latent(vae, gray).detach()
+        if helper_initial.shape!=(1,4,128,128) or not torch.isfinite(helper_initial).all():
             raise ValueError('Invalid gray latent')
         if subprocess.check_output(['git','rev-parse','HEAD'],cwd=args.official_source,text=True).strip()!='a6e20c8cc94027f37dd7c5a81b0b3b472aa18409':
             raise ValueError('Wrong official source')
@@ -130,9 +130,17 @@ def main(args):
         preprocessed=VaeImageProcessor(vae_scale_factor=8).preprocess(Image.new('RGB',(1024,1024),(128,128,128)))
         official=DreamLitePipelineLoRA.prepare_image_latents(SimpleNamespace(vae=vae),preprocessed,
                     dtype=torch.float32,device=args.device)
-        if not torch.equal(initial,official):raise ValueError('Gray initializer differs from official source encoding')
+        native_pixels=preprocessed.to(device=args.device,dtype=torch.float32)
+        if not torch.equal(gray*2-1,native_pixels):raise ValueError('Gray pixel values changed')
+        direct=vae.encode(native_pixels).latents
+        if not torch.equal(direct,official):raise ValueError('Native gray coordinates differ')
+        # PIL preprocessing uses channels-last strides. Recreating the same values
+        # in contiguous NCHW selects a different deterministic convolution path.
+        # Initialize from the exact native path, not from an approximate substitute.
+        initial=official.detach()
     (args.output/f'gray-encoding-{args.shard}.json').write_text(json.dumps(dict(
         latent_shape=list(initial.shape),latent_sha=canonical_tensor_sha256(initial),official_exact=True,
+        helper_max_abs_difference=float((helper_initial-initial).abs().max()),native_pixel_stride=list(native_pixels.stride()),
         vae_class=type(vae).__name__,vae_config=dict(vae.config),vae_weight_sha=file_sha(args.base/'vae/diffusion_pytorch_model.safetensors')),
         indent=2))
     for number, sid in enumerate(assignment):
