@@ -71,7 +71,11 @@ from verified archives; `parent-chain-comparison.json` preserves every failed ce
 - Actual 4 x NVIDIA H200, each 143771 MiB; 0 MiB used / 0% utilization at inspection.
 - CPU ingress `dl-align-cpu-20260914-r3`: RUNNING in CPU资源空间.
 - Project root `/inspire/ssd/project/exploration-topic/czxs26210936`.
-- Python `envs/vlm-r3-ngc2502/bin/python` exists; compatibility still to verify.
+- GPU Python `envs/vlm-r3-ngc2502/bin/python` verified: Python 3.12.3,
+  PyTorch 2.7.0a0+ecf3bae40a.nv25.02, CUDA build 12.8/runtime 12.8.61,
+  CUDA available, four H200s. Current driver 595.58.03. CPU notebook resolves
+  the shared environment's Python symlink to Python 3.10.12, so use it for
+  transfer/download only; run model code on the GPU runtime.
 - Model root `/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory`:
   DreamLite-base-a9a0f15-20260907, DreamLite-mobile, Qwen3-VL-4B-Instruct exist.
 - 4f checkpoint `runs/dreamlite-official-alignment/4fbc857-clear-retention-full4832/train/checkpoint-final.pt`:
@@ -84,3 +88,21 @@ from verified archives; `parent-chain-comparison.json` preserves every failed ce
 
 Next: finish ChatGPT Project binding and workspace_info validation, request a finite
 PLAN from these files and current code; execute on a separate remote checkout/output.
+
+## Continuation findings
+
+The official PrefEval checkout at `50795054b5ff5f418d2b768a331d71e480f93331`
+passed the existing adapter's alignment checks. Existing split counts are
+730 train / 82 dev / 188 OOD base pairs (not yet the new experiment's final split).
+`data-inventory.json` binds all source files.
+
+`duplicate-inventory.json` identifies 988 normalized preference strings among
+1,000 base pairs, with 11 duplicate clusters. Two clusters cross train/dev:
+`lifestyle_beauty:0016` with `:0020`, and `shop_home:0026` with `:0028`.
+They must stay on the same side in the new experiment. This check covers exact
+alphanumeric normalization only; semantic equivalence remains unproven. Do not
+report the unmodified 730/82 split as free of preference-content leakage.
+
+ChatGPT session and current browser state still show no bound/new Project.
+The first-time user Project creation request remains pending; no INIT or PLAN
+has been sent, and there is no new model training process to monitor.
