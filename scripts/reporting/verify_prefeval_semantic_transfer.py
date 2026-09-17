@@ -34,7 +34,7 @@ def feasibility(output):
     assert len(rows)==672 and counts['text'][1]==counts['blank'][1]==336
     result=dict(registration_digest=digest(reg),text=counts['text'],blank=counts['blank'],passed=counts['text'][0]>=303,
         failures=failures,seconds=seconds,optimizer_updates=0,reads=672)
-    (output/'feasibility-verified.json').write_text(json.dumps(result,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
+    (output/'feasibility-verified.json').write_text(json.dumps(result,indent=2,ensure_ascii=False)+'\n',encoding='utf-8',newline='\n')
     print(json.dumps({k:v for k,v in result.items() if k!='failures'},indent=2));return result
 
 def ranking_calibration(output):
@@ -116,7 +116,7 @@ def ranking_calibration(output):
         criteria=criteria,passed=all(criteria.values()),ties=dict(ties),seconds=seconds,processed_input_tokens=tokens,
         optimizer_updates=0,generated_answers=0,shard_receipts={str(i):file_sha(output/'calibration'/f'shard-{i}'/'complete.json') for i in range(4)})
     assert actual<=10752
-    (output/'calibration-verified.json').write_text(json.dumps(result,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
+    (output/'calibration-verified.json').write_text(json.dumps(result,indent=2,ensure_ascii=False)+'\n',encoding='utf-8',newline='\n')
     print(json.dumps({k:v for k,v in result.items() if k not in ('contrasts','counts','semantic_group_counts')},indent=2))
     print(json.dumps({k:v for k,v in counts.items() if k.endswith('/all')}));return result
 
@@ -264,7 +264,7 @@ def final(output,source):
         reused_parent_qualification_reads=432,reused_parent_mcq_reads=84,
         overwrite_contrasts=contrasts,progression_criteria=criteria,progression_passed=all(criteria.values()),
         optimization_seconds=dict(cost),processed_input_tokens=dict(tokens),writer_updates=0)
-    (output/'final-verified.json').write_text(json.dumps(result,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
+    (output/'final-verified.json').write_text(json.dumps(result,indent=2,ensure_ascii=False)+'\n',encoding='utf-8',newline='\n')
     print(json.dumps({k:v for k,v in result.items() if k not in ('complete','semantic_group_counts','overwrite_contrasts')},indent=2));return result
 
 if __name__=='__main__':

@@ -11,7 +11,11 @@ Require text >=1,210/1,344, semantic-group macro gain over blank >=0.10, and
 each overwrite contrast both correct on >=12/16 pairs. Only a passing new
 calibration permits the planned paired 20,480-update continuation. Plan05's
 failed generation gate remains failed. 49 focused semantic, Reader-loss, EOS,
-resize and visual-policy tests pass. Actual calibration results are pending.
+resize and visual-policy tests pass. Calibration completed at `cd568be`:
+text 1,324/1,344, blank 881/1,344; group macros .977679 versus .642857.
+It FAILED because the commercialized-tourism/gambling overwrite contrast
+was both correct on only 5/16 pairs (other contrasts 16/16, 12/16, 16/16).
+No continuation training ran. Read `semantic-ranking-calibration-results.md`.
 
 ## Iteration 5: paired semantic supervision continuation
 
