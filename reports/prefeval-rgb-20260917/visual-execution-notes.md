@@ -40,8 +40,23 @@ The first 49 focused tests passed before dispatch. After the native-layout fix,
 13 relevant visual-policy/Base tests passed. Baseline and teacher execution
 commits are intentionally recorded separately; no baseline write was repeated.
 
-Teacher coverage and final allocation decision are pending completion of the
-whole fixed panel. Partial successful targets are not a usable model result.
+All 40 targets completed: 10,240 latent updates and 432 PNG qualification reads.
+Complete recovery states are K1 20/20, K2 0/4, K3 1/4, K4 1/12. The registered
+allocation gate failed. No shared-Writer optimization or full bank expansion
+was run. Target optimization plus qualification summed to 7033.252196 seconds
+across the four GPUs; this excludes model startup and is not billed GPU time.
+The median final-step weighted CE+EOS was 0.00145655 (maximum 0.19581547),
+which does not override failed free-generation recovery from the saved PNG.
+
+All PNG/latent/optimizer/trace artifacts were downloaded and hash matched.
+Full original-runtime visual verification passed. Local teacher verification
+also passed and exactly matched the original-runtime sentinel summary.
+Archives: K2/K3 SHA256
+`1c295360b9d9049e9b711ebd86c64c6985ba31d5d80d3e9d146bb98a853c947a`,
+K1/K4 SHA256
+`1eb880fb225ec1f3355550d9457b4b73e9b5e7e5b5614c0b6abc8c650935235c`,
+readable evidence SHA256
+`c38d6ec58ba08fa8183632a8d7ba714c38b26a97a3eebc81b19a65ea90e63286`.
 
 Both baseline archive byte hashes were independently matched after transfer:
 `7ca4ba3461262e1782cf15279c857f4b193c55805722b4beceae3ad2b6eacd4e`

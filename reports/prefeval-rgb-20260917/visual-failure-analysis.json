@@ -1,0 +1,1055 @@
+{
+  "recovery_read_counts": {
+    "2": [
+      12,
+      16
+    ],
+    "1": [
+      40,
+      40
+    ],
+    "4": [
+      50,
+      96
+    ],
+    "3": [
+      15,
+      24
+    ]
+  },
+  "failure_categories": {
+    "exact_value_of_other_active_slot": 22,
+    "incorrect_absence": 3,
+    "other_full_string_failure": 32,
+    "cleared_slot_not_absent": 2
+  },
+  "failures": [
+    {
+      "target": "state-0229e9099239d8e6b34d",
+      "capacity": 2,
+      "scope": "lifestyle_health",
+      "form": 1,
+      "expected": "I avoid all supplements and only get nutrients from whole foods.",
+      "raw": "I avoid any fitness activities that involve swimming or water due to a phobia.",
+      "category": "exact_value_of_other_active_slot",
+      "matching_other_slots": [
+        "lifestyle_fit"
+      ],
+      "eos": true
+    },
+    {
+      "target": "state-2715341b1bc7a47976d1",
+      "capacity": 4,
+      "scope": "lifestyle_fit",
+      "form": 1,
+      "expected": "no active preference",
+      "raw": "I avoid all supplements and only get nutrients from whole foods.",
+      "category": "exact_value_of_other_active_slot",
+      "matching_other_slots": [
+        "lifestyle_health"
+      ],
+      "eos": true
+    },
+    {
+      "target": "state-2b57b813941245d59ad5",
+      "capacity": 4,
+      "scope": "shop_fashion",
+      "form": 1,
+      "expected": "no active preference",
+      "raw": "I have a deep dislike for high-gloss finishes and prefer matte, textured surfaces in my home decor.",
+      "category": "exact_value_of_other_active_slot",
+      "matching_other_slots": [
+        "shop_home"
+      ],
+      "eos": true
+    },
+    {
+      "target": "state-2b57b813941245d59ad5",
+      "capacity": 4,
+      "scope": "shop_home",
+      "form": 0,
+      "expected": "I have a deep dislike for high-gloss finishes and prefer matte, textured surfaces in my home decor.",
+      "raw": "no active preference",
+      "category": "incorrect_absence",
+      "matching_other_slots": [],
+      "eos": true
+    },
+    {
+      "target": "state-2b57b813941245d59ad5",
+      "capacity": 4,
+      "scope": "shop_motors",
+      "form": 0,
+      "expected": "Due to my severe allergies, I require a vehicle with an advanced air filtration system that can effectively remove pollen, dust, and other airborne particles from the cabin.",
+      "raw": "no active preference",
+      "category": "incorrect_absence",
+      "matching_other_slots": [],
+      "eos": true
+    },
+    {
+      "target": "state-2b57b813941245d59ad5",
+      "capacity": 4,
+      "scope": "shop_motors",
+      "form": 1,
+      "expected": "Due to my severe allergies, I require a vehicle with an advanced air filtration system that can effectively remove pollen, dust, and other airborne particles from the cabin.",
+      "raw": "I have a deep dislike for high-gloss finishes and prefer matte, textured surfaces in my home decor.",
+      "category": "exact_value_of_other_active_slot",
+      "matching_other_slots": [
+        "shop_home"
+      ],
+      "eos": true
+    },
+    {
+      "target": "state-2b57b813941245d59ad5",
+      "capacity": 4,
+      "scope": "shop_technology",
+      "form": 0,
+      "expected": "I prefer not to use any cloud storage solutions due to data security concerns.",
+      "raw": "no active preference",
+      "category": "incorrect_absence",
+      "matching_other_slots": [],
+      "eos": true
+    },
+    {
+      "target": "state-2b57b813941245d59ad5",
+      "capacity": 4,
+      "scope": "shop_technology",
+      "form": 1,
+      "expected": "I prefer not to use any cloud storage solutions due to data security concerns.",
+      "raw": "I have a deep dislike for high-gloss finishes and prefer matte, textured surfaces in my home decor.",
+      "category": "exact_value_of_other_active_slot",
+      "matching_other_slots": [
+        "shop_home"
+      ],
+      "eos": true
+    },
+    {
+      "target": "state-57b64b453364e36916c2",
+      "capacity": 2,
+      "scope": "travel_hotel",
+      "form": 1,
+      "expected": "I have a strong aversion to staying in hotels with casino facilities.",
+      "raw": "I strongly prefer to avoid commercialized and heavily marketed hotels.",
+      "category": "other_full_string_failure",
+      "matching_other_slots": [],
+      "eos": true
+    },
+    {
+      "target": "state-5b3e7c2e399178ba7774",
+      "capacity": 4,
+      "scope": "lifestyle_dietary",
+      "form": 0,
+      "expected": "I only consume foods that are foraged or wild-crafted.",
+      "raw": "I avoid consuming any animal products; they feel wrong to me.",
+      "category": "other_full_string_failure",
+      "matching_other_slots": [],
+      "eos": true
+    },
+    {
+      "target": "state-5b3e7c2e399178ba7774",
+      "capacity": 4,
+      "scope": "lifestyle_dietary",
+      "form": 1,
+      "expected": "I only consume foods that are foraged or wild-crafted.",
+      "raw": "I avoid consuming any animal products; they feel wrong to me.",
+      "category": "other_full_string_failure",
+      "matching_other_slots": [],
+      "eos": true
+    },
+    {
+      "target": "state-60c8c1de9c88d82c1280",
+      "capacity": 4,
+      "scope": "travel_hotel",
+      "form": 0,
+      "expected": "I have a strong aversion to staying in hotels with casino facilities.",
+      "raw": "I strongly prefer a hotel with a swimming pool.",
+      "category": "other_full_string_failure",
+      "matching_other_slots": [],
+      "eos": true
+    },
+    {
+      "target": "state-60c8c1de9c88d82c1280",
+      "capacity": 4,
+      "scope": "travel_hotel",
+      "form": 1,
+      "expected": "I have a strong aversion to staying in hotels with casino facilities.",
+      "raw": "I strongly prefer a service-oriented, personalized experience.",
+      "category": "other_full_string_failure",
+      "matching_other_slots": [],
+      "eos": true
+    },
+    {
+      "target": "state-60c8c1de9c88d82c1280",
+      "capacity": 4,
+      "scope": "travel_restaurant",
+      "form": 0,
+      "expected": "I have a severe peanut allergy, so I avoid any dishes or restaurants that may contain traces of peanuts.",
+      "raw": "I dislike crowded places.",
+      "category": "other_full_string_failure",
+      "matching_other_slots": [],
+      "eos": true
+    },
+    {
+      "target": "state-60c8c1de9c88d82c1280",
+      "capacity": 4,
+      "scope": "travel_restaurant",
+      "form": 1,
+      "expected": "I have a severe peanut allergy, so I avoid any dishes or restaurants that may contain traces of peanuts.",
+      "raw": "I strongly favor commercialized and highly efficient travel restaurants.",
+      "category": "other_full_string_failure",
+      "matching_other_slots": [],
+      "eos": true
+    },
+    {
+      "target": "state-60c8c1de9c88d82c1280",
+      "capacity": 4,
+      "scope": "travel_transportation",
+      "form": 0,
+      "expected": "I dislike crowded public transportation.",
+      "raw": "I strongly prefer public transportation.",
+      "category": "other_full_string_failure",
+      "matching_other_slots": [],
+      "eos": true
+    },
+    {
+      "target": "state-60c8c1de9c88d82c1280",
+      "capacity": 4,
+      "scope": "travel_transportation",
+      "form": 1,
+      "expected": "I dislike crowded public transportation.",
+      "raw": "I strongly oppose any form of commercialized and privatized transportation.",
+      "category": "other_full_string_failure",
+      "matching_other_slots": [],
+      "eos": true
+    },
+    {
+      "target": "state-60ce21a26e49253d3369",
+      "capacity": 4,
+      "scope": "travel_activities",
+      "form": 0,
+      "expected": "no active preference",
+      "raw": "I dislike crowded public transportation.",
+      "category": "exact_value_of_other_active_slot",
+      "matching_other_slots": [
+        "travel_transportation"
+      ],
+      "eos": true
+    },
+    {
+      "target": "state-60ce21a26e49253d3369",
+      "capacity": 4,
+      "scope": "travel_activities",
+      "form": 1,
+      "expected": "no active preference",
+      "raw": "I have a strong aversion to cycling.",
+      "category": "cleared_slot_not_absent",
+      "matching_other_slots": [],
+      "eos": true
+    },
+    {
+      "target": "state-60ce21a26e49253d3369",
+      "capacity": 4,
+      "scope": "travel_hotel",
+      "form": 0,
+      "expected": "I have a strong aversion to staying in hotels with casino facilities.",
+      "raw": "I dislike crowded public transportation.",
+      "category": "exact_value_of_other_active_slot",
+      "matching_other_slots": [
+        "travel_transportation"
+      ],
+      "eos": true
+    },
+    {
+      "target": "state-60ce21a26e49253d3369",
+      "capacity": 4,
+      "scope": "travel_hotel",
+      "form": 1,
+      "expected": "I have a strong aversion to staying in hotels with casino facilities.",
+      "raw": "I have a strong aversion to traveling with a car.",
+      "category": "other_full_string_failure",
+      "matching_other_slots": [],
+      "eos": true
+    },
+    {
+      "target": "state-60ce21a26e49253d3369",
+      "capacity": 4,
+      "scope": "travel_restaurant",
+      "form": 0,
+      "expected": "I have a severe peanut allergy, so I avoid any dishes or restaurants that may contain traces of peanuts.",
+      "raw": "I dislike crowded public transportation.",
+      "category": "exact_value_of_other_active_slot",
+      "matching_other_slots": [
+        "travel_transportation"
+      ],
+      "eos": true
+    },
+    {
+      "target": "state-60ce21a26e49253d3369",
+      "capacity": 4,
+      "scope": "travel_transportation",
+      "form": 1,
+      "expected": "I dislike crowded public transportation.",
+      "raw": "I have a strong aversion to public transportation.",
+      "category": "other_full_string_failure",
+      "matching_other_slots": [],
+      "eos": true
+    },
+    {
+      "target": "state-66c725a67c294247eaac",
+      "capacity": 2,
+      "scope": "shop_fashion",
+      "form": 1,
+      "expected": "\"I do not wear clothes made from wool.\"",
+      "raw": "I have a deep dislike for high-gloss finishes and prefer matte, textured surfaces in my home decor.",
+      "category": "exact_value_of_other_active_slot",
+      "matching_other_slots": [
+        "shop_home"
+      ],
+      "eos": true
+    },
+    {
+      "target": "state-7aeb5009b340589b94cf",
+      "capacity": 4,
+      "scope": "shop_fashion",
+      "form": 0,
+      "expected": "\"I dislike floral patterns.\"",
+      "raw": "\"Due to my severe allergies, I require a non-chemical, non-fragrance, and non-irritating product with a hypoallergenic formula.\"",
+      "category": "other_full_string_failure",
+      "matching_other_slots": [],
+      "eos": true
+    },
+    {
+      "target": "state-7aeb5009b340589b94cf",
+      "capacity": 4,
+      "scope": "shop_fashion",
+      "form": 1,
+      "expected": "\"I dislike floral patterns.\"",
+      "raw": "I have a deep dislike for high-gloss, shiny, and reflective surfaces in my vehicle.",
+      "category": "other_full_string_failure",
+      "matching_other_slots": [],
+      "eos": true
+    },
+    {
+      "target": "state-7aeb5009b340589b94cf",
+      "capacity": 4,
+      "scope": "shop_home",
+      "form": 0,
+      "expected": "I have a deep dislike for high-gloss finishes and prefer matte, textured surfaces in my home decor.",
+      "raw": "{ \"pref\": \"1\", \"value\": \"1\" }",
+      "category": "other_full_string_failure",
+      "matching_other_slots": [],
+      "eos": true
+    },
+    {
+      "target": "state-7aeb5009b340589b94cf",
+      "capacity": 4,
+      "scope": "shop_home",
+      "form": 1,
+      "expected": "I have a deep dislike for high-gloss finishes and prefer matte, textured surfaces in my home decor.",
+      "raw": "C:\\Users\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\Store\\",
+      "category": "other_full_string_failure",
+      "matching_other_slots": [],
+      "eos": false
+    },
+    {
+      "target": "state-7aeb5009b340589b94cf",
+      "capacity": 4,
+      "scope": "shop_motors",
+      "form": 0,
+      "expected": "Due to my severe allergies, I require a vehicle with an advanced air filtration system that can effectively remove pollen, dust, and other airborne particles from the cabin.",
+      "raw": "{\"pref\": \"Due to my severe allergies, I have a strong dislike for diesel vehicles.\"}",
+      "category": "other_full_string_failure",
+      "matching_other_slots": [],
+      "eos": true
+    },
+    {
+      "target": "state-7aeb5009b340589b94cf",
+      "capacity": 4,
+      "scope": "shop_technology",
+      "form": 0,
+      "expected": "I prefer not to use any cloud storage solutions due to data security concerns.",
+      "raw": "{ \"pref\": \"use default\" }",
+      "category": "other_full_string_failure",
+      "matching_other_slots": [],
+      "eos": true
+    },
+    {
+      "target": "state-7aeb5009b340589b94cf",
+      "capacity": 4,
+      "scope": "shop_technology",
+      "form": 1,
+      "expected": "I prefer not to use any cloud storage solutions due to data security concerns.",
+      "raw": "Due to my severe allergies, I have a strong dislike for dairy products.",
+      "category": "other_full_string_failure",
+      "matching_other_slots": [],
+      "eos": true
+    },
+    {
+      "target": "state-7b4dfbcf2d97183e5719",
+      "capacity": 4,
+      "scope": "entertain_music_book",
+      "form": 0,
+      "expected": "I have a strong aversion to electronic dance music and will not listen to any songs that fall into that genre.",
+      "raw": "I dislike music with a lot of pieces; they feel overwhelming.",
+      "category": "other_full_string_failure",
+      "matching_other_slots": [],
+      "eos": true
+    },
+    {
+      "target": "state-7b4dfbcf2d97183e5719",
+      "capacity": 4,
+      "scope": "lifestyle_dietary",
+      "form": 0,
+      "expected": "I only consume foods that are foraged or wild-crafted.",
+      "raw": "I avoid using any food that contains artificial sweeteners.",
+      "category": "other_full_string_failure",
+      "matching_other_slots": [],
+      "eos": true
+    },
+    {
+      "target": "state-7b4dfbcf2d97183e5719",
+      "capacity": 4,
+      "scope": "lifestyle_dietary",
+      "form": 1,
+      "expected": "I only consume foods that are foraged or wild-crafted.",
+      "raw": "I avoid using any talc-based beauty products.",
+      "category": "exact_value_of_other_active_slot",
+      "matching_other_slots": [
+        "lifestyle_beauty"
+      ],
+      "eos": true
+    },
+    {
+      "target": "state-8497a9fa1a9afc8599a0",
+      "capacity": 4,
+      "scope": "travel_activities",
+      "form": 1,
+      "expected": "I dislike any form of gambling or casinos.",
+      "raw": "I have a severe peanut allergy, so I avoid any dishes or restaurants that may contain traces of peanuts.",
+      "category": "exact_value_of_other_active_slot",
+      "matching_other_slots": [
+        "travel_restaurant"
+      ],
+      "eos": true
+    },
+    {
+      "target": "state-8497a9fa1a9afc8599a0",
+      "capacity": 4,
+      "scope": "travel_hotel",
+      "form": 0,
+      "expected": "I have a strong aversion to staying in hotels with casino facilities.",
+      "raw": "I dislike any form of gambling or casinos.",
+      "category": "exact_value_of_other_active_slot",
+      "matching_other_slots": [
+        "travel_activities"
+      ],
+      "eos": true
+    },
+    {
+      "target": "state-8497a9fa1a9afc8599a0",
+      "capacity": 4,
+      "scope": "travel_hotel",
+      "form": 1,
+      "expected": "I have a strong aversion to staying in hotels with casino facilities.",
+      "raw": "I have a severe peanut allergy, so I avoid any dishes or restaurants that may contain traces of peanuts.",
+      "category": "exact_value_of_other_active_slot",
+      "matching_other_slots": [
+        "travel_restaurant"
+      ],
+      "eos": true
+    },
+    {
+      "target": "state-8497a9fa1a9afc8599a0",
+      "capacity": 4,
+      "scope": "travel_restaurant",
+      "form": 0,
+      "expected": "I have a severe peanut allergy, so I avoid any dishes or restaurants that may contain traces of peanuts.",
+      "raw": "I dislike any form of gambling or casinos.",
+      "category": "exact_value_of_other_active_slot",
+      "matching_other_slots": [
+        "travel_activities"
+      ],
+      "eos": true
+    },
+    {
+      "target": "state-8497a9fa1a9afc8599a0",
+      "capacity": 4,
+      "scope": "travel_transportation",
+      "form": 1,
+      "expected": "I dislike crowded public transportation.",
+      "raw": "I have a severe peanut allergy, so I avoid any dishes or restaurants that may contain traces of peanuts.",
+      "category": "exact_value_of_other_active_slot",
+      "matching_other_slots": [
+        "travel_restaurant"
+      ],
+      "eos": true
+    },
+    {
+      "target": "state-894cfb002d07b9c3323e",
+      "capacity": 3,
+      "scope": "travel_activities",
+      "form": 1,
+      "expected": "I strongly prefer to avoid commercialized and heavily marketed tourist activities.",
+      "raw": "I have a severe peanut allergy, so I avoid any dishes or foods that may contain traces of peanuts.",
+      "category": "other_full_string_failure",
+      "matching_other_slots": [],
+      "eos": true
+    },
+    {
+      "target": "state-894cfb002d07b9c3323e",
+      "capacity": 3,
+      "scope": "travel_hotel",
+      "form": 0,
+      "expected": "I have a strong aversion to staying in hotels with casino facilities.",
+      "raw": "I have a severe peanut allergy, so I avoid any dishes or restaurants that may contain traces of peanuts.",
+      "category": "exact_value_of_other_active_slot",
+      "matching_other_slots": [
+        "travel_restaurant"
+      ],
+      "eos": true
+    },
+    {
+      "target": "state-894cfb002d07b9c3323e",
+      "capacity": 3,
+      "scope": "travel_hotel",
+      "form": 1,
+      "expected": "I have a strong aversion to staying in hotels with casino facilities.",
+      "raw": "I have a severe peanut allergy, so I avoid any dishes or restaurants that may contain traces of peanuts.",
+      "category": "exact_value_of_other_active_slot",
+      "matching_other_slots": [
+        "travel_restaurant"
+      ],
+      "eos": true
+    },
+    {
+      "target": "state-9ebc2df1e905c22b690c",
+      "capacity": 4,
+      "scope": "shop_home",
+      "form": 0,
+      "expected": "I have a deep dislike for high-gloss finishes and prefer matte, textured surfaces in my home decor.",
+      "raw": "{\"pref\": \"I have a deep dislike for high-gloss finishes and prefer matte, textured surfaces in my home decor.\"}",
+      "category": "other_full_string_failure",
+      "matching_other_slots": [],
+      "eos": true
+    },
+    {
+      "target": "state-9ebc2df1e905c22b690c",
+      "capacity": 4,
+      "scope": "shop_home",
+      "form": 1,
+      "expected": "I have a deep dislike for high-gloss finishes and prefer matte, textured surfaces in my home decor.",
+      "raw": "明C\nI\nhave not\ndue\nto\nmy\nsevere\ns\nin\nyour\np\nin\nyour\np\nin\nyour\np\nin\nyour\np\nin\nyour\np\nin\nyour\np\nin\nyour\np\nin\nyour\np\nin\nyour\np\nin\nyour\np\nin\nyour\np\nin\nyour\np\nin\nyour\np\nin\nyour\np\nin\nyour\np\nin\nyour\np\nin\nyour\np\nin\nyour\np\nin",
+      "category": "other_full_string_failure",
+      "matching_other_slots": [],
+      "eos": false
+    },
+    {
+      "target": "state-9ebc2df1e905c22b690c",
+      "capacity": 4,
+      "scope": "shop_motors",
+      "form": 0,
+      "expected": "Due to my severe allergies, I require a vehicle with an advanced air filtration system that can effectively remove pollen, dust, and other airborne particles from the cabin.",
+      "raw": "\"Due to my severe allergies, I require a vehicle with an advanced air filtration system that can effectively remove pollen, dust, and other airborne particles from the cabin.\"",
+      "category": "other_full_string_failure",
+      "matching_other_slots": [],
+      "eos": true
+    },
+    {
+      "target": "state-9ebc2df1e905c22b690c",
+      "capacity": 4,
+      "scope": "shop_motors",
+      "form": 1,
+      "expected": "Due to my severe allergies, I require a vehicle with an advanced air filtration system that can effectively remove pollen, dust, and other airborne particles from the cabin.",
+      "raw": "明C\nI\nhave not\ndue\nto\nmy\nsevere\ns\nin\nyour\np\nin\nyour\np\nin\nyour\np\nin\nyour\np\nin\nyour\np\nin\nyour\np\nin\nyour\np\nin\nyour\np\nin\nyour\np\nin\nyour\np\nin\nyour\np\nin\nyour\np\nin\nyour\np\nin\nyour\np\nin\nyour\np\nin\nyour\np\nin\nyour\np\nin\nyour\np\nin",
+      "category": "other_full_string_failure",
+      "matching_other_slots": [],
+      "eos": false
+    },
+    {
+      "target": "state-9ebc2df1e905c22b690c",
+      "capacity": 4,
+      "scope": "shop_technology",
+      "form": 0,
+      "expected": "I prefer not to use any cloud storage solutions due to data security concerns.",
+      "raw": "\"Due to my severe allergies, I require a device free from odors.\"",
+      "category": "other_full_string_failure",
+      "matching_other_slots": [],
+      "eos": true
+    },
+    {
+      "target": "state-9ebc2df1e905c22b690c",
+      "capacity": 4,
+      "scope": "shop_technology",
+      "form": 1,
+      "expected": "I prefer not to use any cloud storage solutions due to data security concerns.",
+      "raw": "I have a deep dislike for high-gloss finishes and prefer matte, textured surfaces in my home decor.",
+      "category": "exact_value_of_other_active_slot",
+      "matching_other_slots": [
+        "shop_home"
+      ],
+      "eos": true
+    },
+    {
+      "target": "state-a0305470c648dc9539d8",
+      "capacity": 4,
+      "scope": "entertain_music_book",
+      "form": 1,
+      "expected": "no active preference",
+      "raw": "I avoid using any talismans; they feel like being trapped.",
+      "category": "cleared_slot_not_absent",
+      "matching_other_slots": [],
+      "eos": true
+    },
+    {
+      "target": "state-a0305470c648dc9539d8",
+      "capacity": 4,
+      "scope": "entertain_shows",
+      "form": 1,
+      "expected": "I dislike series with a lot of episodes; they feel overwhelming.",
+      "raw": "I avoid series with a lot of episodes; they feel like a waste of time.",
+      "category": "other_full_string_failure",
+      "matching_other_slots": [],
+      "eos": true
+    },
+    {
+      "target": "state-a0305470c648dc9539d8",
+      "capacity": 4,
+      "scope": "lifestyle_dietary",
+      "form": 0,
+      "expected": "I only consume foods that are foraged or wild-crafted.",
+      "raw": "I avoid using any talc-based beauty products.",
+      "category": "exact_value_of_other_active_slot",
+      "matching_other_slots": [
+        "lifestyle_beauty"
+      ],
+      "eos": true
+    },
+    {
+      "target": "state-a965e33a002c857a1f3e",
+      "capacity": 2,
+      "scope": "entertain_music_book",
+      "form": 0,
+      "expected": "I have a strong aversion to electronic dance music and will not listen to any songs that fall into that genre.",
+      "raw": "I dislike series with a lot of episodes; they feel overwhelming.",
+      "category": "exact_value_of_other_active_slot",
+      "matching_other_slots": [
+        "entertain_shows"
+      ],
+      "eos": true
+    },
+    {
+      "target": "state-ac3c3b98cdfe28b6f8f7",
+      "capacity": 3,
+      "scope": "shop_fashion",
+      "form": 1,
+      "expected": "\"I do not wear clothes made from wool.\"",
+      "raw": "Due to my severe allergies, I require a vehicle with an advanced air filtration system that can effectively remove pollen, dust, and other airborne particles from the cabin.",
+      "category": "exact_value_of_other_active_slot",
+      "matching_other_slots": [
+        "shop_motors"
+      ],
+      "eos": true
+    },
+    {
+      "target": "state-ac3c3b98cdfe28b6f8f7",
+      "capacity": 3,
+      "scope": "shop_home",
+      "form": 0,
+      "expected": "I have a deep dislike for high-gloss finishes and prefer matte, textured surfaces in my home decor.",
+      "raw": "\"Due to my severe allergies, I require a vehicle with an advanced air filtration system that can effectively remove pollen, dust, and other airborne particles from the cabin.\"",
+      "category": "other_full_string_failure",
+      "matching_other_slots": [],
+      "eos": true
+    },
+    {
+      "target": "state-ac3c3b98cdfe28b6f8f7",
+      "capacity": 3,
+      "scope": "shop_home",
+      "form": 1,
+      "expected": "I have a deep dislike for high-gloss finishes and prefer matte, textured surfaces in my home decor.",
+      "raw": "Due to my severe allergies, I require a vehicle with an advanced air filtration system that can effectively remove pollen, dust, and other airborne particles from the cabin.",
+      "category": "exact_value_of_other_active_slot",
+      "matching_other_slots": [
+        "shop_motors"
+      ],
+      "eos": true
+    },
+    {
+      "target": "state-ac3c3b98cdfe28b6f8f7",
+      "capacity": 3,
+      "scope": "shop_motors",
+      "form": 0,
+      "expected": "Due to my severe allergies, I require a vehicle with an advanced air filtration system that can effectively remove pollen, dust, and other airborne particles from the cabin.",
+      "raw": "\"Due to my severe allergies, I require a vehicle with an advanced air filtration system that can effectively remove pollen, dust, and other airborne particles from the cabin.\"",
+      "category": "other_full_string_failure",
+      "matching_other_slots": [],
+      "eos": true
+    },
+    {
+      "target": "state-cdd290b71e96c02add5a",
+      "capacity": 3,
+      "scope": "entertain_music_book",
+      "form": 0,
+      "expected": "I have a strong aversion to electronic dance music and will not listen to any songs that fall into that genre.",
+      "raw": "I avoid using any of the entertain music book.",
+      "category": "other_full_string_failure",
+      "matching_other_slots": [],
+      "eos": true
+    },
+    {
+      "target": "state-cdd290b71e96c02add5a",
+      "capacity": 3,
+      "scope": "entertain_shows",
+      "form": 0,
+      "expected": "I dislike series with a lot of episodes; they feel overwhelming.",
+      "raw": "I avoid series with a lot of episodes; they feel overwhelming.",
+      "category": "other_full_string_failure",
+      "matching_other_slots": [],
+      "eos": true
+    },
+    {
+      "target": "state-ef8a9676dc6daf884570",
+      "capacity": 4,
+      "scope": "pet_ownership",
+      "form": 1,
+      "expected": "I don't like fish or any aquatic animals as pets.",
+      "raw": "I don't like fish or any aquatic animals as a pet.",
+      "category": "other_full_string_failure",
+      "matching_other_slots": [],
+      "eos": true
+    }
+  ],
+  "final_three_update_losses": {
+    "2": [
+      {
+        "target": "state-0229e9099239d8e6b34d",
+        "last_three_update_losses": [
+          0.0010745326871983707,
+          0.001261591911315918,
+          0.0010115106997545809
+        ]
+      },
+      {
+        "target": "state-57b64b453364e36916c2",
+        "last_three_update_losses": [
+          0.0020553410868160427,
+          0.001789617061149329,
+          0.0016622019466012716
+        ]
+      },
+      {
+        "target": "state-66c725a67c294247eaac",
+        "last_three_update_losses": [
+          0.0016267867758870125,
+          0.00150647247210145,
+          0.0018692319572437555
+        ]
+      },
+      {
+        "target": "state-a965e33a002c857a1f3e",
+        "last_three_update_losses": [
+          0.005378885893151164,
+          0.004095849464647472,
+          0.005815059645101428
+        ]
+      }
+    ],
+    "1": [
+      {
+        "target": "state-0d7e779627814776f077",
+        "last_three_update_losses": [
+          0.00018535961862653494,
+          0.00017062100232578814,
+          0.0002567984920460731
+        ]
+      },
+      {
+        "target": "state-1e9710273c36b6735c3e",
+        "last_three_update_losses": [
+          0.0011731662089005113,
+          0.0009012956288643181,
+          0.0009184617665596306
+        ]
+      },
+      {
+        "target": "state-1fd5652d4e4cb634c291",
+        "last_three_update_losses": [
+          0.0004228445468470454,
+          0.00035535372444428504,
+          0.0003462571476120502
+        ]
+      },
+      {
+        "target": "state-21b981bc1a9689c113b5",
+        "last_three_update_losses": [
+          0.00012037489068461582,
+          0.00015089247608557343,
+          0.00013626946019940078
+        ]
+      },
+      {
+        "target": "state-21f0855aea383e5d16cc",
+        "last_three_update_losses": [
+          0.0010587443830445409,
+          0.0011906002182513475,
+          0.0012160592013970017
+        ]
+      },
+      {
+        "target": "state-2c538bbcd79f6cf275da",
+        "last_three_update_losses": [
+          0.00015926361083984375,
+          0.00022354126849677414,
+          0.00017623901658225805
+        ]
+      },
+      {
+        "target": "state-42f6203b38c294bb49f7",
+        "last_three_update_losses": [
+          0.0020780148915946484,
+          0.0013121729716658592,
+          0.0019188757287338376
+        ]
+      },
+      {
+        "target": "state-7a9199167a7e900ceb43",
+        "last_three_update_losses": [
+          0.0008398692007176578,
+          0.0007830726099200547,
+          0.0008769565029069781
+        ]
+      },
+      {
+        "target": "state-82c42cab9548bcd6b183",
+        "last_three_update_losses": [
+          0.0005693435668945312,
+          0.0006210327264852822,
+          0.0007852554554119706
+        ]
+      },
+      {
+        "target": "state-a3d1bf133ddf467f5ace",
+        "last_three_update_losses": [
+          0.0002875328063964844,
+          0.00030295056058093905,
+          0.0002957980032078922
+        ]
+      },
+      {
+        "target": "state-a64fe0cbdbe2b1f453e4",
+        "last_three_update_losses": [
+          0.00019709269690793008,
+          0.00018453598022460938,
+          0.00015974044799804688
+        ]
+      },
+      {
+        "target": "state-b9ed922eaf605e461236",
+        "last_three_update_losses": [
+          0.0004299163992982358,
+          0.00042285918607376516,
+          0.000320243852911517
+        ]
+      },
+      {
+        "target": "state-baf636589aa1d0156bf8",
+        "last_three_update_losses": [
+          0.0006018418935127556,
+          0.0004947369161527604,
+          0.0005623744218610227
+        ]
+      },
+      {
+        "target": "state-bc3925c6da0aaaeae6b4",
+        "last_three_update_losses": [
+          0.00024053786182776093,
+          0.00020429823780432343,
+          0.0002589755749795586
+        ]
+      },
+      {
+        "target": "state-bfa1a25a477e9b2c2eea",
+        "last_three_update_losses": [
+          0.00041410658741369843,
+          0.00034946866799145937,
+          0.00028864541673101485
+        ]
+      },
+      {
+        "target": "state-c0c65d34e9ed93172567",
+        "last_three_update_losses": [
+          0.0003898143768310547,
+          0.0002747774124145508,
+          0.00029754638671875
+        ]
+      },
+      {
+        "target": "state-c1fac5e3bcaec439eec1",
+        "last_three_update_losses": [
+          9.498596045887098e-05,
+          0.00010795593698276207,
+          0.00011596679541980848
+        ]
+      },
+      {
+        "target": "state-edc3e18fb39cd01d0a88",
+        "last_three_update_losses": [
+          0.000286102294921875,
+          0.00019060772319789976,
+          0.00023396810865961015
+        ]
+      },
+      {
+        "target": "state-ee0f29dab2f22a3effde",
+        "last_three_update_losses": [
+          0.0008253733976744115,
+          0.0006919861189089715,
+          0.000953165756072849
+        ]
+      },
+      {
+        "target": "state-f8bbdc1e8933b5cf825f",
+        "last_three_update_losses": [
+          0.0021625247318297625,
+          0.0017967225285246968,
+          0.0019461768679320812
+        ]
+      }
+    ],
+    "4": [
+      {
+        "target": "state-1b27aba7877958e84e6d",
+        "last_three_update_losses": [
+          0.002602111781015992,
+          0.002359749904523293,
+          0.002165200285768757
+        ]
+      },
+      {
+        "target": "state-2715341b1bc7a47976d1",
+        "last_three_update_losses": [
+          0.0022792022209614515,
+          0.0021207863101153634,
+          0.0020523336715996265
+        ]
+      },
+      {
+        "target": "state-2b57b813941245d59ad5",
+        "last_three_update_losses": [
+          0.008620210185995347,
+          0.0051161310596702,
+          0.005171044808472894
+        ]
+      },
+      {
+        "target": "state-5b3e7c2e399178ba7774",
+        "last_three_update_losses": [
+          0.0053963539345810805,
+          0.005006461986340582,
+          0.004367984908943375
+        ]
+      },
+      {
+        "target": "state-60c8c1de9c88d82c1280",
+        "last_three_update_losses": [
+          0.2371200422445933,
+          0.26574622591336566,
+          0.19581546634435654
+        ]
+      },
+      {
+        "target": "state-60ce21a26e49253d3369",
+        "last_three_update_losses": [
+          0.00330253644400121,
+          0.003520776441291673,
+          0.0045828972264037775
+        ]
+      },
+      {
+        "target": "state-7aeb5009b340589b94cf",
+        "last_three_update_losses": [
+          0.06250708263056973,
+          0.03480763096983234,
+          0.04150052322074771
+        ]
+      },
+      {
+        "target": "state-7b4dfbcf2d97183e5719",
+        "last_three_update_losses": [
+          0.006890505164240797,
+          0.0068270400709783035,
+          0.005314968526363373
+        ]
+      },
+      {
+        "target": "state-8497a9fa1a9afc8599a0",
+        "last_three_update_losses": [
+          0.004928664672964563,
+          0.0045751466338212286,
+          0.005129064976548155
+        ]
+      },
+      {
+        "target": "state-9ebc2df1e905c22b690c",
+        "last_three_update_losses": [
+          0.0074249931300679846,
+          0.006012700653324525,
+          0.006408249998154739
+        ]
+      },
+      {
+        "target": "state-a0305470c648dc9539d8",
+        "last_three_update_losses": [
+          0.00157916487660259,
+          0.0013714839806198142,
+          0.001250893052201718
+        ]
+      },
+      {
+        "target": "state-ef8a9676dc6daf884570",
+        "last_three_update_losses": [
+          0.003135714291905363,
+          0.004185034214363744,
+          0.0033940607293819385
+        ]
+      }
+    ],
+    "3": [
+      {
+        "target": "state-894cfb002d07b9c3323e",
+        "last_three_update_losses": [
+          0.006816942943260074,
+          0.005276985699310899,
+          0.006133325165137649
+        ]
+      },
+      {
+        "target": "state-ac3c3b98cdfe28b6f8f7",
+        "last_three_update_losses": [
+          0.005902972596231848,
+          0.005218109465204179,
+          0.005405195202911273
+        ]
+      },
+      {
+        "target": "state-cdd290b71e96c02add5a",
+        "last_three_update_losses": [
+          0.0023986268788576126,
+          0.0023643567401450127,
+          0.0024450159398838878
+        ]
+      },
+      {
+        "target": "state-dd69efdd02bb192fc891",
+        "last_three_update_losses": [
+          0.003161311207804829,
+          0.0036427975283004344,
+          0.0030386745929718018
+        ]
+      }
+    ]
+  },
+  "latent_optimizer_updates": 10240,
+  "summed_target_optimization_and_read_seconds": 7033.25219617039,
+  "cost_scope": "post-model-load per-target optimization plus qualification, excludes startup; not billed GPU time",
+  "inference": "Wrong-slot reads despite low training-view loss motivate a read-only train-vs-heldout / float-vs-PNG diagnostic; neither cause is established yet."
+}

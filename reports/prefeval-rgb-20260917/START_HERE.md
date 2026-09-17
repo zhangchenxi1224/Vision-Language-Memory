@@ -1,7 +1,8 @@
 # PrefEval RGB memory: execution brief, 2026-09-17
 
 Status: the 124-write unchanged-4f PNG baseline is complete and independently
-verified. The fixed 40-state visual-teacher sentinel is running at `191d24a`.
+verified. The fixed 40-state visual-teacher sentinel completed at `191d24a` and
+FAILED its prospective allocation gate: K1 20/20, K2 0/4, K3 1/4, K4 1/12.
 No shared-Writer optimization has started. The old v2 combined gate stays failed;
 the prospective recovery allocation is bound in `visual-recovery-allocation-v1.json`.
 The user's goal is active. ChatGPT planning/review is required by the user.
@@ -32,6 +33,31 @@ The exact native-gray teacher run is
 `visual-recovery-v1-run/sentinel-native-gray-r2`, with 256 registered latent
 updates per target. Preserve the whole 40-state panel and failed dependencies.
 Do not replace this outcome with training loss or stop once enough targets pass.
+
+All 40 targets completed exactly 256 updates (10,240 latent updates; zero Writer
+updates). Independent reconstruction of the same reopened PNG's two recovery
+forms gives 117/176 individual correct reads, but only 22/40 complete states.
+The K1, K2, K3, K4 read counts are respectively 40/40, 12/16, 15/24, 50/96.
+The registered allocation needs K1 >=18/20, K2 >=3/4, K4 >=9/12 and fails.
+Active/positive/negative diagnostics remain 16/88, 36/84, 84/84. Four full
+teacher chains all fail. Failed predecessors were retained without replacements.
+
+Read `visual-verified.json`, `visual-failure-analysis.json`, and
+`visual-results.png`. All raw generations, PNGs, initial/final latents, optimizers
+and 256-step traces are preserved in `sentinel-k2-k3-evidence.tgz` and
+`sentinel-k1-k4-evidence.tgz`; `sentinel-readable-evidence.tgz` is the compact
+text-only review bundle. All are unpacked under the run directory above.
+The full verifier passed in the original execution runtime; local teacher
+reconstruction independently matched the remote result exactly.
+
+Of 59 failed held-out recovery reads, 22 exactly match another active slot,
+3 incorrectly report absence, 2 other failures concern a cleared slot, and
+32 have other full-string errors. Low last-step training CE does not establish
+fixed-endpoint training-query generation success or isolate PNG quantization.
+The next narrow diagnostic should separate training versus held-out query
+binding from float-to-PNG loss on these existing endpoints, before more steps
+or shared-Writer scaling. Teacher PNG original-MCQ performance is unmeasured.
+No dev/test target was optimized and no usable shared Writer is claimed.
 
 ## Iteration 2: frozen interface repair and observed limitation
 
@@ -68,7 +94,7 @@ checks complete coverage, expected jobs, EOS IDs and token counts, and verifies
 the archived SHA256. `five-case-source-audit.json` binds all five original
 residual MCQs to pinned source explanations, retaining official denominators.
 
-Prepared but **unexecuted**: corrected FP32 AutoencoderTiny teacher loader,
+At the close of iteration 2, prepared but unexecuted: corrected FP32 AutoencoderTiny teacher loader,
 official gray-encoding equality check, sealed registered queries, pilot-only
 foils, initialization/optimizer/fixed-endpoint/PNG evidence; a 124-native-write
 PNG-only 4f baseline. Launcher refuses to run either if v2 gate fails.
