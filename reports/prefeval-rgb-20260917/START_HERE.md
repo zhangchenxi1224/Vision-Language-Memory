@@ -1,13 +1,37 @@
 # PrefEval RGB memory: execution brief, 2026-09-17
 
-Status: v2 primary references pass, but the prospectively added auxiliary
-yes/no gate fails. No teacher or shared-Writer optimization has started.
+Status: the 124-write unchanged-4f PNG baseline is complete and independently
+verified. The fixed 40-state visual-teacher sentinel is running at `191d24a`.
+No shared-Writer optimization has started. The old v2 combined gate stays failed;
+the prospective recovery allocation is bound in `visual-recovery-allocation-v1.json`.
 The user's goal is active. ChatGPT planning/review is required by the user.
 The user created the Project with project-only memory; connection and workspace
 identity have been verified. C2C task c2c_7e19 plan `prefeval-rgb-pilot-01` was
 received and executed through its first empirical allocation gate. See
 `pilot-plan.md`, `registered/summary.json`, and `references-v1-summary.json`.
 Do not claim the experiment completed.
+
+## Iteration 3: actual visual memory evidence
+
+Plan `prefeval-rgb-visual-recovery-sentinel-03` uses full-value recovery for
+prospective allocation while retaining all yes/no diagnostics unchanged. See
+`visual-execution-notes.md` for technical startup receipts and exact execution
+commits. The baseline used `3f3bf10` and was not repeated. Verification found
+124/124 writes, singleton recovery 0/192, MCQ 33/96, recurrent recovery 16/176,
+zero complete recurrent states and zero complete episodes. Source/output PNG
+hashes, 28 native steps, registered seeds, and full query coverage were checked.
+
+`baseline-verified.json` is the original-runtime verification. All PNGs and raw
+token-bearing reads are in `baseline-shard0-evidence.tgz` and
+`baseline-other-shards-evidence.tgz`, also unpacked under
+`visual-recovery-v1-run/baseline/` for connector review. Archived byte hashes
+match the execution environment. Windows/Torch 2.11 noise regeneration differs
+from Linux/Torch 2.7; bitwise cross-runtime RNG portability is not claimed.
+
+The exact native-gray teacher run is
+`visual-recovery-v1-run/sentinel-native-gray-r2`, with 256 registered latent
+updates per target. Preserve the whole 40-state panel and failed dependencies.
+Do not replace this outcome with training loss or stop once enough targets pass.
 
 ## Iteration 2: frozen interface repair and observed limitation
 
