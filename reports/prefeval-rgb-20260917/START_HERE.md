@@ -23,7 +23,17 @@ the frozen Reader remains on GPU. Five existing forms per addressed slot give
 also receive original MCQs in PNG, complete-text, and blank conditions (252
 generations). No query change, state filtering, historical rescoring, or final
 test use. All 176 archived-path held-out generations must replay exactly.
-64 focused tests pass. Actual diagnostic results are pending dispatch/completion.
+64 focused tests pass. All diagnostic cells completed at `517475f`, and the
+176 archived-path reads replay exactly. CPU/CUDA changes no generated tokens;
+quantization causes only a few flips. PNG training recovery is 255/264 and
+held-out recovery 117/176; whole states are 38/40 versus 22/40. Teacher PNG
+original MCQ is 30/84, blank 31/84, complete-text 84/84. Read
+`endpoint-diagnostic-results.md` and `endpoint-verified.json` before proposing
+more target optimization or Writer training. The eight bounded prefix-logit
+inspections at `d3b2f5f` reproduce all eight observed divergent tokens, with
+small teacher-forced gold margins; no new answers were generated or rescored.
+Full raw/processor evidence is archived in four `endpoint-diagnostic-v1-shard-*.tgz`
+files and a readable bundle, and unpacked under `visual-recovery-v1-run/endpoint-diagnostic-v1/`.
 
 ## Iteration 3: actual visual memory evidence
 
