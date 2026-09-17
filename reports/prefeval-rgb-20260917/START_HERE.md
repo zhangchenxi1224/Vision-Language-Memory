@@ -18,7 +18,17 @@ This is unequal compute and independent latent teachers, not a Writer run or
 an efficiency claim. Adoption targets remain visible; no automatic budget
 extension, filtering, extra calibration or Writer optimization is authorized
 by this allocation. 51 focused tests passed; historical execution modes and
-failed gates remain unchanged. Execution results will be added after completion.
+failed gates remain unchanged. Execution at `cb6a6c4` completed all fixed updates
+and evaluation calls. B reserved ranking reached 165/168 versus A 78/168 and
+parent 79/168, with all 8/8 reserved overwrite pairs correct. Original MCQ
+rose from A/parent 30/84 to B 45/84, below the 68/84 target. Recovery regressed:
+A versus B trained-form exact recovery 264/264 versus 186/264; held-out-form
+126/176 versus 83/176. Complete B states are K1 15/20, K2 0/4, K3 0/4, K4 0/12;
+neither arm completed a selective-clear state or offline teacher chain.
+The trial therefore does NOT meet adoption targets. Read
+`ranking-learning-trial-results.md` and both verified JSON reports. The next
+review must address joint recovery/application learning, without treating these
+independent teachers as an already usable shared Writer.
 
 ## Iteration 6: full-action ranking supervision
 
