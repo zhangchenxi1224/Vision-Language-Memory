@@ -1,5 +1,26 @@
 # PrefEval RGB memory: execution brief, 2026-09-17
 
+## Iteration 8: paired joint consolidation
+
+ChatGPT plan `prefeval-rgb-joint-consolidation-08`, review base `10b491a`,
+continues all 40 Plan07-B endpoints with fresh paired Adam, learning rate .01,
+64 updates per state/arm. C repairs recovery using every slot's three training
+forms at each update. J evaluates that same recovery objective plus .25 times
+the existing application-ranking objective on the same current image, before
+one optimizer step. Existing changed/untouched weights remain intact; cleared
+slots have recovery only and their application weight is not redistributed.
+The fixed budget is 5,120 updates and 55,296 gradient Reader forwards, followed
+by 2,568 generations, 1,584 ranking decisions and 528 reopened-PNG recovery CE
+forwards. All 80 new endpoints freeze before evaluation. No new reference
+inference, calibration, scenario changes, extra steps or Writer optimization.
+The previously reserved scenarios are now observed gradient-excluded transfer
+diagnostics. Report same-PNG recovery/application conjunctions, with a stricter
+original-MCQ conjunction, alongside all unchanged historical metrics.
+54 focused tests passed, including the actual accumulation loop against a toy
+joint objective, fresh paired starts and no optimizer step between components.
+Run only on `dl-clear-retain-h200x4-20260914`, with platform-observed identity
+and actual host/GPU binding. Historical Plan05–07 reports remain unchanged.
+
 ## Iteration 7: fixed ranking learning trial
 
 ChatGPT plan `prefeval-rgb-ranking-learning-trial-07` authorizes a fixed

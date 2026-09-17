@@ -8,8 +8,16 @@ task_python="$task_root/envs/vlm-r3-ngc2502/bin/python"
 task_models=/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory
 cd "$task_repo"
 [[ "$(git rev-parse HEAD)" == "${1:?Exact execution commit required}" && -z "$(git status --porcelain)" ]]
-phase="${2:?feasibility, paired, ranking-calibration or trial}"
-[[ "$phase" == feasibility || "$phase" == paired || "$phase" == ranking-calibration || "$phase" == trial ]]
+phase="${2:?feasibility, paired, ranking-calibration, trial or joint}"
+[[ "$phase" == feasibility || "$phase" == paired || "$phase" == ranking-calibration || "$phase" == trial || "$phase" == joint ]]
+driver=scripts/experiments/prefeval_semantic_transfer.py
+if [[ "$phase" == joint ]]; then
+  [[ "${3:?Explicit instance required}" == dl-clear-retain-h200x4-20260914 ]]
+  source="$task_root/runs/dreamlite-prefeval-rgb-20260917/ranking-learning-trial-v1-run"
+  output="$task_root/runs/dreamlite-prefeval-rgb-20260917/joint-consolidation-v1-run"
+  driver=scripts/experiments/prefeval_joint_consolidation.py
+  [[ ! -e "$output" ]]
+fi
 if [[ "$phase" == ranking-calibration ]]; then output="$task_root/runs/dreamlite-prefeval-rgb-20260917/semantic-ranking-v1-run"; fi
 if [[ "$phase" == trial ]]; then
   [[ "${3:?Explicit trial instance required}" == dl-clear-retain-h200x4-20260914 ]]
@@ -23,7 +31,7 @@ run_stage() {
   local mode="$1"
   local pids=()
   for shard in 0 1 2 3; do
-    CUDA_VISIBLE_DEVICES="$shard" "$task_python" scripts/experiments/prefeval_semantic_transfer.py --mode "$mode" \
+    CUDA_VISIBLE_DEVICES="$shard" "$task_python" "$driver" --mode "$mode" \
       --source "$source" --output "$output" --base "$task_models/DreamLite-base-a9a0f15-20260907" \
       --reader "$task_models/Qwen3-VL-4B-Instruct" --device cuda:0 --shards 4 --shard "$shard" > "$output/$mode-shard-$shard.log" 2>&1 &
     pids+=("$!")
@@ -33,7 +41,13 @@ run_stage() {
   printf '%s\n' "$status" > "$output/$mode-exit-status.txt"
   return "$status"
 }
-if [[ "$phase" == trial ]]; then
+if [[ "$phase" == joint ]]; then
+  hostname > "$output/hostname.txt"
+  nvidia-smi > "$output/gpu-before.txt"
+  run_stage train
+  run_stage evaluate
+  "$task_python" scripts/reporting/verify_prefeval_joint_consolidation.py --output "$output" --source "$source" > "$output/final-verification.log" 2>&1
+elif [[ "$phase" == trial ]]; then
   printf '%s\n' "$3" > "$output/instance.txt"
   hostname > "$output/hostname.txt"
   nvidia-smi > "$output/gpu-before.txt"
