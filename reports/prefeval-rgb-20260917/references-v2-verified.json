@@ -1,0 +1,1557 @@
+{
+  "verified": true,
+  "reads": 3088,
+  "counts": {
+    "blank/train/official_mcq": [
+      22,
+      64
+    ],
+    "text/train/official_mcq": [
+      61,
+      64
+    ],
+    "blank/dev/official_mcq": [
+      14,
+      32
+    ],
+    "text/dev/official_mcq": [
+      31,
+      32
+    ],
+    "blank/train/derived_recovery": [
+      64,
+      512
+    ],
+    "text/train/derived_recovery": [
+      512,
+      512
+    ],
+    "blank/dev/derived_recovery": [
+      32,
+      416
+    ],
+    "text/dev/derived_recovery": [
+      414,
+      416
+    ],
+    "blank/train/sentinel_supplement": [
+      115,
+      520
+    ],
+    "text/train/sentinel_supplement": [
+      481,
+      520
+    ]
+  },
+  "breakdown": {
+    "blank/family/official_mcq": [
+      36,
+      96
+    ],
+    "blank/capacity/1": [
+      89,
+      440
+    ],
+    "blank/status/active": [
+      135,
+      1432
+    ],
+    "text/family/official_mcq": [
+      92,
+      96
+    ],
+    "text/capacity/1": [
+      430,
+      440
+    ],
+    "text/status/active": [
+      1390,
+      1432
+    ],
+    "blank/family/derived_recovery": [
+      96,
+      928
+    ],
+    "text/family/derived_recovery": [
+      926,
+      928
+    ],
+    "blank/status/cleared": [
+      112,
+      112
+    ],
+    "text/status/cleared": [
+      109,
+      112
+    ],
+    "blank/capacity/2": [
+      42,
+      272
+    ],
+    "text/capacity/2": [
+      266,
+      272
+    ],
+    "blank/capacity/3": [
+      15,
+      168
+    ],
+    "text/capacity/3": [
+      163,
+      168
+    ],
+    "blank/capacity/4": [
+      101,
+      664
+    ],
+    "text/capacity/4": [
+      640,
+      664
+    ],
+    "blank/family/training_recovery": [
+      12,
+      264
+    ],
+    "text/family/training_recovery": [
+      263,
+      264
+    ],
+    "blank/family/negative_content": [
+      75,
+      84
+    ],
+    "text/family/negative_content": [
+      66,
+      84
+    ],
+    "blank/family/positive_content": [
+      24,
+      84
+    ],
+    "text/family/positive_content": [
+      80,
+      84
+    ],
+    "blank/family/active_status": [
+      4,
+      88
+    ],
+    "text/family/active_status": [
+      72,
+      88
+    ]
+  },
+  "mcq": [
+    92,
+    96
+  ],
+  "recovery": [
+    926,
+    928
+  ],
+  "supplement_families": {
+    "text/family/training_recovery": [
+      263,
+      264
+    ],
+    "text/family/negative_content": [
+      66,
+      84
+    ],
+    "text/family/positive_content": [
+      80,
+      84
+    ],
+    "text/family/active_status": [
+      72,
+      88
+    ]
+  },
+  "gate_passed": false,
+  "files": {
+    "shard-0\\reads.jsonl": "c6622ad481988dc2daf8bc45f04849ae3a16b841f20ca3092b9846fd2271203b",
+    "shard-1\\reads.jsonl": "1857a30342b9ae6475c9a496c373b9c36f563feff8c904f46992f189c8c1dc32",
+    "shard-2\\reads.jsonl": "82f6620e66f6f46d5da95db987e1fa461e9dc8a6a51dca00d48a18188b3c6e24",
+    "shard-3\\reads.jsonl": "24568067ee9a2ec037cbf21371bba68d745c27f16251f347e87084bd50086ea9"
+  },
+  "failures": [
+    {
+      "key": "text:3c1604051f47788d9e477e5108d8adb8024362100a998c8f93a0e1f7cadb8a3e",
+      "job": {
+        "scope": "travel_activities",
+        "form": 0,
+        "query": "Which complete preference statement is currently stored for travel activities?\nReturn only the complete stored preference value for the requested scope. The scope label is not part of the value. Preserve every word and any quotation marks already present in the stored value. Do not add a label, quotation marks, tags, or explanation. For an inactive preference, return exactly: no active preference",
+        "target": "no active preference",
+        "kind": "derived_recovery",
+        "id": "3c1604051f47788d9e477e5108d8adb8024362100a998c8f93a0e1f7cadb8a3e",
+        "groups": [
+          "semantic-1e6af48535514f5b",
+          "semantic-38fa4ead0377ca06",
+          "semantic-80457179ed5a76b5"
+        ],
+        "split": "dev",
+        "state": {
+          "travel_activities": null,
+          "travel_hotel": "I prefer hotels that are situated away from the city center to avoid noise and crowds."
+        },
+        "v1_id": "3c1604051f47788d9e477e5108d8adb8024362100a998c8f93a0e1f7cadb8a3e",
+        "query_sha": "ae126a5968e4ffa2080d4cab5acb6aaf6f14cc223222500f99c2d84523c5d797",
+        "text_prefix": "Current memory values follow. Scope labels and <stored_value> delimiters are serialization, not part of the stored values.\nScope: travel activities\n<stored_value>\nno active preference\n</stored_value>\nScope: travel hotel\n<stored_value>\nI prefer hotels that are situated away from the city center to avoid noise and crowds.\n</stored_value>\n\n",
+        "family": "derived_recovery",
+        "occurrences": [
+          {
+            "episode": "dev-k2-006",
+            "ordinal": 3,
+            "scope": "travel_activities",
+            "form": 0,
+            "capacity": 2,
+            "active_k": 1,
+            "operation": "clear"
+          },
+          {
+            "episode": "dev-k2-006",
+            "ordinal": 4,
+            "scope": "travel_activities",
+            "form": 0,
+            "capacity": 2,
+            "active_k": 1,
+            "operation": "retain"
+          }
+        ]
+      },
+      "raw": "I prefer hotels that are situated away from the city center to avoid noise and crowds.",
+      "eos": true,
+      "correct": false
+    },
+    {
+      "key": "text:supplement:84435eca2ef6cf106d952e3e22bfd013e3ebf34537e8f37d9ca14c8a9d731627",
+      "job": {
+        "scope": "lifestyle_fit",
+        "form": 2,
+        "query": "Use the memory to report my lifestyle fit preference verbatim, including every condition.\nReturn only the complete stored preference value for the requested scope. The scope label is not part of the value. Preserve every word and any quotation marks already present in the stored value. Do not add a label, quotation marks, tags, or explanation. For an inactive preference, return exactly: no active preference",
+        "target": "no active preference",
+        "kind": "sentinel_supplement",
+        "id": "supplement:84435eca2ef6cf106d952e3e22bfd013e3ebf34537e8f37d9ca14c8a9d731627",
+        "split": "train",
+        "state": {
+          "lifestyle_fit": null,
+          "lifestyle_health": "I avoid all supplements and only get nutrients from whole foods.",
+          "pet_ownership": "I don't like fish or any aquatic animals as pets.",
+          "professional_work_location_style": "I strongly prefer areas that are not prone to natural disasters."
+        },
+        "family": "training_recovery",
+        "text_prefix": "Current memory values follow. Scope labels and <stored_value> delimiters are serialization, not part of the stored values.\nScope: lifestyle fit\n<stored_value>\nno active preference\n</stored_value>\nScope: lifestyle health\n<stored_value>\nI avoid all supplements and only get nutrients from whole foods.\n</stored_value>\nScope: pet ownership\n<stored_value>\nI don't like fish or any aquatic animals as pets.\n</stored_value>\nScope: professional work location style\n<stored_value>\nI strongly prefer areas that are not prone to natural disasters.\n</stored_value>\n\n",
+        "occurrences": [
+          {
+            "target_id": "state-2715341b1bc7a47976d1",
+            "phase": "training",
+            "scope": "lifestyle_fit",
+            "form": 2
+          }
+        ]
+      },
+      "raw": "I avoid all supplements and only get nutrients from whole foods.",
+      "eos": true,
+      "correct": false
+    },
+    {
+      "key": "text:supplement:5a150b4c3c8c128c58e1a02baf1f0e743f2a41c1068c7b5444c1628db2aa644d",
+      "job": {
+        "scope": "entertain_music_book",
+        "kind": "sentinel_supplement",
+        "query": "Is this the complete current stored preference statement for entertain music book? Statement: I have a strong aversion to electronic dance music and will not listen to any songs that fall into that genre.\nAnswer yes or no only.",
+        "target": "no",
+        "foil_record": "entertain_music_book:0003",
+        "foil_group": "semantic-482887a5c15c2cb9",
+        "id": "supplement:5a150b4c3c8c128c58e1a02baf1f0e743f2a41c1068c7b5444c1628db2aa644d",
+        "split": "train",
+        "state": {
+          "entertain_music_book": "I avoid comic books centered around superhero themes.",
+          "entertain_shows": "I dislike series with a lot of episodes; they feel overwhelming.",
+          "lifestyle_beauty": "I avoid using any talc-based beauty products.",
+          "lifestyle_dietary": "I only consume foods that are foraged or wild-crafted."
+        },
+        "family": "negative_content",
+        "text_prefix": "Current memory values follow. Scope labels and <stored_value> delimiters are serialization, not part of the stored values.\nScope: entertain music book\n<stored_value>\nI avoid comic books centered around superhero themes.\n</stored_value>\nScope: entertain shows\n<stored_value>\nI dislike series with a lot of episodes; they feel overwhelming.\n</stored_value>\nScope: lifestyle beauty\n<stored_value>\nI avoid using any talc-based beauty products.\n</stored_value>\nScope: lifestyle dietary\n<stored_value>\nI only consume foods that are foraged or wild-crafted.\n</stored_value>\n\n",
+        "occurrences": [
+          {
+            "target_id": "state-5b3e7c2e399178ba7774",
+            "phase": "qualification",
+            "scope": "entertain_music_book",
+            "form": null
+          }
+        ]
+      },
+      "raw": "Yes",
+      "eos": true,
+      "correct": false
+    },
+    {
+      "key": "text:supplement:9f9ed71a55a035dfa5b6e20bafdcef7460b3fd9b881ddf944ff2776d2ad0b843",
+      "job": {
+        "scope": "travel_activities",
+        "kind": "sentinel_supplement",
+        "query": "Is this the complete current stored preference statement for travel activities? Statement: I dislike any form of gambling or casinos.\nAnswer yes or no only.",
+        "target": "no",
+        "foil_record": "travel_activities:0023",
+        "foil_group": "semantic-bc2803cd364eb9cd",
+        "id": "supplement:9f9ed71a55a035dfa5b6e20bafdcef7460b3fd9b881ddf944ff2776d2ad0b843",
+        "split": "train",
+        "state": {
+          "travel_activities": "I strongly prefer to avoid commercialized and heavily marketed tourist activities.",
+          "travel_hotel": "I have a strong aversion to staying in hotels with casino facilities.",
+          "travel_restaurant": "I have a severe peanut allergy, so I avoid any dishes or restaurants that may contain traces of peanuts.",
+          "travel_transportation": "I dislike crowded public transportation."
+        },
+        "family": "negative_content",
+        "text_prefix": "Current memory values follow. Scope labels and <stored_value> delimiters are serialization, not part of the stored values.\nScope: travel activities\n<stored_value>\nI strongly prefer to avoid commercialized and heavily marketed tourist activities.\n</stored_value>\nScope: travel hotel\n<stored_value>\nI have a strong aversion to staying in hotels with casino facilities.\n</stored_value>\nScope: travel restaurant\n<stored_value>\nI have a severe peanut allergy, so I avoid any dishes or restaurants that may contain traces of peanuts.\n</stored_value>\nScope: travel transportation\n<stored_value>\nI dislike crowded public transportation.\n</stored_value>\n\n",
+        "occurrences": [
+          {
+            "target_id": "state-60c8c1de9c88d82c1280",
+            "phase": "qualification",
+            "scope": "travel_activities",
+            "form": null
+          }
+        ]
+      },
+      "raw": "Yes",
+      "eos": true,
+      "correct": false
+    },
+    {
+      "key": "text:mcq:semantic-d3e0dd9a3f8807d0",
+      "job": {
+        "id": "mcq:semantic-d3e0dd9a3f8807d0",
+        "groups": [
+          "semantic-d3e0dd9a3f8807d0"
+        ],
+        "split": "train",
+        "state": {
+          "lifestyle_dietary": "I have a severe nut allergy and must avoid all nuts and nut byproducts."
+        },
+        "query": "Can you recommend some popular local dishes I should try during my visit to Thailand?\n    I'm trying to decide on this and here are 4 options for my query: \nA. Som tam (green papaya salad with peanuts and dried shrimp).\nB. Khao niaow ma muang (sticky rice with fresh mango and coconut sauce).\nC. Massaman curry (a rich curry with peanuts and coconut milk).\nD. Pad Thai (rice noodles with shrimp, eggs, and bean sprouts).\nNow, I'd like you to pick one of them as your top recommendation for me.\n    Important instructions for your response:\n    1. Choose only one option (A, B, C, or D) that best matches my preferences.\n    2. Your answer must be one of these options.\n    3. Don't say things like \"I can't choose\" or suggest alternatives not listed.\n    4. Answer example: <choice>B</choice>. Give me your answer in this exact format, without any additional explanation:\n       <choice>[A/B/C/D]</choice>\n    ",
+        "target_index": 3,
+        "kind": "official_mcq",
+        "v1_id": "mcq:semantic-d3e0dd9a3f8807d0",
+        "query_sha": "df20abcf155b6fd1535f29fb240c10c87ba26393c57585b29d41f36e9d74d650",
+        "text_prefix": "Current memory values follow. Scope labels and <stored_value> delimiters are serialization, not part of the stored values.\nScope: lifestyle dietary\n<stored_value>\nI have a severe nut allergy and must avoid all nuts and nut byproducts.\n</stored_value>\n\n",
+        "family": "official_mcq",
+        "occurrences": []
+      },
+      "raw": "<choice>B</choice>",
+      "eos": true,
+      "correct": false
+    },
+    {
+      "key": "text:d70224a4ff6d6695800d826b3b837ffdee6bd063045f74262465916fe900fea3",
+      "job": {
+        "scope": "travel_activities",
+        "form": 1,
+        "query": "Read back the entire active travel activities preference exactly as recorded.\nReturn only the complete stored preference value for the requested scope. The scope label is not part of the value. Preserve every word and any quotation marks already present in the stored value. Do not add a label, quotation marks, tags, or explanation. For an inactive preference, return exactly: no active preference",
+        "target": "no active preference",
+        "kind": "derived_recovery",
+        "id": "d70224a4ff6d6695800d826b3b837ffdee6bd063045f74262465916fe900fea3",
+        "groups": [
+          "semantic-1e6af48535514f5b",
+          "semantic-38fa4ead0377ca06",
+          "semantic-80457179ed5a76b5"
+        ],
+        "split": "dev",
+        "state": {
+          "travel_activities": null,
+          "travel_hotel": "I prefer hotels that are situated away from the city center to avoid noise and crowds."
+        },
+        "v1_id": "d70224a4ff6d6695800d826b3b837ffdee6bd063045f74262465916fe900fea3",
+        "query_sha": "96f99fd85bef88edfdadb7d858a8099580976d4ea9dfa7dde2cd9592aaae0510",
+        "text_prefix": "Current memory values follow. Scope labels and <stored_value> delimiters are serialization, not part of the stored values.\nScope: travel activities\n<stored_value>\nno active preference\n</stored_value>\nScope: travel hotel\n<stored_value>\nI prefer hotels that are situated away from the city center to avoid noise and crowds.\n</stored_value>\n\n",
+        "family": "derived_recovery",
+        "occurrences": [
+          {
+            "episode": "dev-k2-006",
+            "ordinal": 3,
+            "scope": "travel_activities",
+            "form": 1,
+            "capacity": 2,
+            "active_k": 1,
+            "operation": "clear"
+          },
+          {
+            "episode": "dev-k2-006",
+            "ordinal": 4,
+            "scope": "travel_activities",
+            "form": 1,
+            "capacity": 2,
+            "active_k": 1,
+            "operation": "retain"
+          }
+        ]
+      },
+      "raw": "I prefer hotels that are situated away from the city center to avoid noise and crowds.",
+      "eos": true,
+      "correct": false
+    },
+    {
+      "key": "text:supplement:5b1450719ba4d1c2eac5a3f0ded397f52adfde92d872666fc19f6e5da33a6425",
+      "job": {
+        "scope": "shop_fashion",
+        "kind": "sentinel_supplement",
+        "query": "Is any preference currently active for shop fashion? Answer yes or no only.",
+        "target": "yes",
+        "id": "supplement:5b1450719ba4d1c2eac5a3f0ded397f52adfde92d872666fc19f6e5da33a6425",
+        "split": "train",
+        "state": {
+          "shop_fashion": "\"I do not wear clothes made from wool.\""
+        },
+        "family": "active_status",
+        "text_prefix": "Current memory values follow. Scope labels and <stored_value> delimiters are serialization, not part of the stored values.\nScope: shop fashion\n<stored_value>\n\"I do not wear clothes made from wool.\"\n</stored_value>\n\n",
+        "occurrences": [
+          {
+            "target_id": "state-21b981bc1a9689c113b5",
+            "phase": "qualification",
+            "scope": "shop_fashion",
+            "form": null
+          }
+        ]
+      },
+      "raw": "no",
+      "eos": true,
+      "correct": false
+    },
+    {
+      "key": "text:supplement:c3846f99ac370457b123634ac4dd98b2c3f2211d3db89d87d86b32f3348b92c2",
+      "job": {
+        "scope": "shop_motors",
+        "kind": "sentinel_supplement",
+        "query": "Is any preference currently active for shop motors? Answer yes or no only.",
+        "target": "yes",
+        "id": "supplement:c3846f99ac370457b123634ac4dd98b2c3f2211d3db89d87d86b32f3348b92c2",
+        "split": "train",
+        "state": {
+          "shop_motors": "I strongly prefer cars with a high ground clearance."
+        },
+        "family": "active_status",
+        "text_prefix": "Current memory values follow. Scope labels and <stored_value> delimiters are serialization, not part of the stored values.\nScope: shop motors\n<stored_value>\nI strongly prefer cars with a high ground clearance.\n</stored_value>\n\n",
+        "occurrences": [
+          {
+            "target_id": "state-2c538bbcd79f6cf275da",
+            "phase": "qualification",
+            "scope": "shop_motors",
+            "form": null
+          }
+        ]
+      },
+      "raw": "no",
+      "eos": true,
+      "correct": false
+    },
+    {
+      "key": "text:supplement:236ad97cca78d1f594d218ee4d6e9aa4e43255fec58bb6c2f0e2732c70aa4b9e",
+      "job": {
+        "scope": "travel_activities",
+        "kind": "sentinel_supplement",
+        "query": "Is this the complete current stored preference statement for travel activities? Statement: I strongly prefer to avoid commercialized and heavily marketed tourist activities.\nAnswer yes or no only.",
+        "target": "yes",
+        "foil_record": null,
+        "foil_group": null,
+        "id": "supplement:236ad97cca78d1f594d218ee4d6e9aa4e43255fec58bb6c2f0e2732c70aa4b9e",
+        "split": "train",
+        "state": {
+          "travel_activities": "I strongly prefer to avoid commercialized and heavily marketed tourist activities.",
+          "travel_hotel": "I have a strong aversion to staying in hotels with casino facilities."
+        },
+        "family": "positive_content",
+        "text_prefix": "Current memory values follow. Scope labels and <stored_value> delimiters are serialization, not part of the stored values.\nScope: travel activities\n<stored_value>\nI strongly prefer to avoid commercialized and heavily marketed tourist activities.\n</stored_value>\nScope: travel hotel\n<stored_value>\nI have a strong aversion to staying in hotels with casino facilities.\n</stored_value>\n\n",
+        "occurrences": [
+          {
+            "target_id": "state-57b64b453364e36916c2",
+            "phase": "qualification",
+            "scope": "travel_activities",
+            "form": null
+          }
+        ]
+      },
+      "raw": "No",
+      "eos": true,
+      "correct": false
+    },
+    {
+      "key": "text:supplement:54f15f41fe1130806aa8c9c6a497dfc1acb44e69fb100d2f1174fb9a79619f6a",
+      "job": {
+        "scope": "travel_hotel",
+        "kind": "sentinel_supplement",
+        "query": "Is this the complete current stored preference statement for travel hotel? Statement: \"I do not enjoy casinos or gaming environments.\"\nAnswer yes or no only.",
+        "target": "no",
+        "foil_record": "travel_hotel:0013",
+        "foil_group": "semantic-b2e2dabef3734845",
+        "id": "supplement:54f15f41fe1130806aa8c9c6a497dfc1acb44e69fb100d2f1174fb9a79619f6a",
+        "split": "train",
+        "state": {
+          "travel_activities": "I strongly prefer to avoid commercialized and heavily marketed tourist activities.",
+          "travel_hotel": "I have a strong aversion to staying in hotels with casino facilities."
+        },
+        "family": "negative_content",
+        "text_prefix": "Current memory values follow. Scope labels and <stored_value> delimiters are serialization, not part of the stored values.\nScope: travel activities\n<stored_value>\nI strongly prefer to avoid commercialized and heavily marketed tourist activities.\n</stored_value>\nScope: travel hotel\n<stored_value>\nI have a strong aversion to staying in hotels with casino facilities.\n</stored_value>\n\n",
+        "occurrences": [
+          {
+            "target_id": "state-57b64b453364e36916c2",
+            "phase": "qualification",
+            "scope": "travel_hotel",
+            "form": null
+          }
+        ]
+      },
+      "raw": "Yes",
+      "eos": true,
+      "correct": false
+    },
+    {
+      "key": "text:supplement:4fd5991453f434d6cb0cc6b71179fb0fd2f19a239d6a6d4d959f9a88a4c46765",
+      "job": {
+        "scope": "travel_transportation",
+        "kind": "sentinel_supplement",
+        "query": "Is this the complete current stored preference statement for travel transportation? Statement: I have a strong dislike for overcrowded public transportation and prefer private or exclusive travel options.\nAnswer yes or no only.",
+        "target": "no",
+        "foil_record": "travel_transportation:0027",
+        "foil_group": "semantic-7aaa9d4bdbaa8834",
+        "id": "supplement:4fd5991453f434d6cb0cc6b71179fb0fd2f19a239d6a6d4d959f9a88a4c46765",
+        "split": "train",
+        "state": {
+          "travel_activities": "I strongly prefer to avoid commercialized and heavily marketed tourist activities.",
+          "travel_hotel": "I have a strong aversion to staying in hotels with casino facilities.",
+          "travel_restaurant": "I have a severe peanut allergy, so I avoid any dishes or restaurants that may contain traces of peanuts.",
+          "travel_transportation": "I dislike crowded public transportation."
+        },
+        "family": "negative_content",
+        "text_prefix": "Current memory values follow. Scope labels and <stored_value> delimiters are serialization, not part of the stored values.\nScope: travel activities\n<stored_value>\nI strongly prefer to avoid commercialized and heavily marketed tourist activities.\n</stored_value>\nScope: travel hotel\n<stored_value>\nI have a strong aversion to staying in hotels with casino facilities.\n</stored_value>\nScope: travel restaurant\n<stored_value>\nI have a severe peanut allergy, so I avoid any dishes or restaurants that may contain traces of peanuts.\n</stored_value>\nScope: travel transportation\n<stored_value>\nI dislike crowded public transportation.\n</stored_value>\n\n",
+        "occurrences": [
+          {
+            "target_id": "state-60c8c1de9c88d82c1280",
+            "phase": "qualification",
+            "scope": "travel_transportation",
+            "form": null
+          }
+        ]
+      },
+      "raw": "Yes",
+      "eos": true,
+      "correct": false
+    },
+    {
+      "key": "text:supplement:8f2f0ef5423ff9304654ca7d529821516595031b960a3c69d61d8d978e91919d",
+      "job": {
+        "scope": "travel_hotel",
+        "kind": "sentinel_supplement",
+        "query": "Is this the complete current stored preference statement for travel hotel? Statement: \"I do not enjoy casinos or gaming environments.\"\nAnswer yes or no only.",
+        "target": "no",
+        "foil_record": "travel_hotel:0013",
+        "foil_group": "semantic-b2e2dabef3734845",
+        "id": "supplement:8f2f0ef5423ff9304654ca7d529821516595031b960a3c69d61d8d978e91919d",
+        "split": "train",
+        "state": {
+          "travel_activities": null,
+          "travel_hotel": "I have a strong aversion to staying in hotels with casino facilities.",
+          "travel_restaurant": "I have a severe peanut allergy, so I avoid any dishes or restaurants that may contain traces of peanuts.",
+          "travel_transportation": "I dislike crowded public transportation."
+        },
+        "family": "negative_content",
+        "text_prefix": "Current memory values follow. Scope labels and <stored_value> delimiters are serialization, not part of the stored values.\nScope: travel activities\n<stored_value>\nno active preference\n</stored_value>\nScope: travel hotel\n<stored_value>\nI have a strong aversion to staying in hotels with casino facilities.\n</stored_value>\nScope: travel restaurant\n<stored_value>\nI have a severe peanut allergy, so I avoid any dishes or restaurants that may contain traces of peanuts.\n</stored_value>\nScope: travel transportation\n<stored_value>\nI dislike crowded public transportation.\n</stored_value>\n\n",
+        "occurrences": [
+          {
+            "target_id": "state-60ce21a26e49253d3369",
+            "phase": "qualification",
+            "scope": "travel_hotel",
+            "form": null
+          }
+        ]
+      },
+      "raw": "yes",
+      "eos": true,
+      "correct": false
+    },
+    {
+      "key": "text:supplement:ab0ff134f75629d3424071988132d8aa20d92213d65ba9d6a45352b515660d86",
+      "job": {
+        "scope": "travel_transportation",
+        "kind": "sentinel_supplement",
+        "query": "Is any preference currently active for travel transportation? Answer yes or no only.",
+        "target": "yes",
+        "id": "supplement:ab0ff134f75629d3424071988132d8aa20d92213d65ba9d6a45352b515660d86",
+        "split": "train",
+        "state": {
+          "travel_activities": null,
+          "travel_hotel": "I have a strong aversion to staying in hotels with casino facilities.",
+          "travel_restaurant": "I have a severe peanut allergy, so I avoid any dishes or restaurants that may contain traces of peanuts.",
+          "travel_transportation": "I dislike crowded public transportation."
+        },
+        "family": "active_status",
+        "text_prefix": "Current memory values follow. Scope labels and <stored_value> delimiters are serialization, not part of the stored values.\nScope: travel activities\n<stored_value>\nno active preference\n</stored_value>\nScope: travel hotel\n<stored_value>\nI have a strong aversion to staying in hotels with casino facilities.\n</stored_value>\nScope: travel restaurant\n<stored_value>\nI have a severe peanut allergy, so I avoid any dishes or restaurants that may contain traces of peanuts.\n</stored_value>\nScope: travel transportation\n<stored_value>\nI dislike crowded public transportation.\n</stored_value>\n\n",
+        "occurrences": [
+          {
+            "target_id": "state-60ce21a26e49253d3369",
+            "phase": "qualification",
+            "scope": "travel_transportation",
+            "form": null
+          }
+        ]
+      },
+      "raw": "no",
+      "eos": true,
+      "correct": false
+    },
+    {
+      "key": "text:supplement:ddb35da742fbaacaa8898a8c8bec77261131fb5bd3ec1ff5a2a9889775607802",
+      "job": {
+        "scope": "travel_activities",
+        "kind": "sentinel_supplement",
+        "query": "Is this the complete current stored preference statement for travel activities? Statement: I dislike any form of gambling or casinos.\nAnswer yes or no only.",
+        "target": "yes",
+        "foil_record": null,
+        "foil_group": null,
+        "id": "supplement:ddb35da742fbaacaa8898a8c8bec77261131fb5bd3ec1ff5a2a9889775607802",
+        "split": "train",
+        "state": {
+          "travel_activities": "I dislike any form of gambling or casinos.",
+          "travel_hotel": "I have a strong aversion to staying in hotels with casino facilities.",
+          "travel_restaurant": "I have a severe peanut allergy, so I avoid any dishes or restaurants that may contain traces of peanuts.",
+          "travel_transportation": "I dislike crowded public transportation."
+        },
+        "family": "positive_content",
+        "text_prefix": "Current memory values follow. Scope labels and <stored_value> delimiters are serialization, not part of the stored values.\nScope: travel activities\n<stored_value>\nI dislike any form of gambling or casinos.\n</stored_value>\nScope: travel hotel\n<stored_value>\nI have a strong aversion to staying in hotels with casino facilities.\n</stored_value>\nScope: travel restaurant\n<stored_value>\nI have a severe peanut allergy, so I avoid any dishes or restaurants that may contain traces of peanuts.\n</stored_value>\nScope: travel transportation\n<stored_value>\nI dislike crowded public transportation.\n</stored_value>\n\n",
+        "occurrences": [
+          {
+            "target_id": "state-8497a9fa1a9afc8599a0",
+            "phase": "qualification",
+            "scope": "travel_activities",
+            "form": null
+          }
+        ]
+      },
+      "raw": "No",
+      "eos": true,
+      "correct": false
+    },
+    {
+      "key": "text:supplement:cb630b686881a0afddc793a94c3bb017cdf0dbc49cb3b610d0e8023c1ded4eab",
+      "job": {
+        "scope": "travel_hotel",
+        "kind": "sentinel_supplement",
+        "query": "Is this the complete current stored preference statement for travel hotel? Statement: \"I do not enjoy casinos or gaming environments.\"\nAnswer yes or no only.",
+        "target": "no",
+        "foil_record": "travel_hotel:0013",
+        "foil_group": "semantic-b2e2dabef3734845",
+        "id": "supplement:cb630b686881a0afddc793a94c3bb017cdf0dbc49cb3b610d0e8023c1ded4eab",
+        "split": "train",
+        "state": {
+          "travel_activities": "I dislike any form of gambling or casinos.",
+          "travel_hotel": "I have a strong aversion to staying in hotels with casino facilities.",
+          "travel_restaurant": "I have a severe peanut allergy, so I avoid any dishes or restaurants that may contain traces of peanuts.",
+          "travel_transportation": "I dislike crowded public transportation."
+        },
+        "family": "negative_content",
+        "text_prefix": "Current memory values follow. Scope labels and <stored_value> delimiters are serialization, not part of the stored values.\nScope: travel activities\n<stored_value>\nI dislike any form of gambling or casinos.\n</stored_value>\nScope: travel hotel\n<stored_value>\nI have a strong aversion to staying in hotels with casino facilities.\n</stored_value>\nScope: travel restaurant\n<stored_value>\nI have a severe peanut allergy, so I avoid any dishes or restaurants that may contain traces of peanuts.\n</stored_value>\nScope: travel transportation\n<stored_value>\nI dislike crowded public transportation.\n</stored_value>\n\n",
+        "occurrences": [
+          {
+            "target_id": "state-8497a9fa1a9afc8599a0",
+            "phase": "qualification",
+            "scope": "travel_hotel",
+            "form": null
+          }
+        ]
+      },
+      "raw": "Yes",
+      "eos": true,
+      "correct": false
+    },
+    {
+      "key": "text:supplement:5ba8c37d26785c28a94b384257751857f82b66707f35961416e031622072619f",
+      "job": {
+        "scope": "lifestyle_dietary",
+        "kind": "sentinel_supplement",
+        "query": "Is any preference currently active for lifestyle dietary? Answer yes or no only.",
+        "target": "yes",
+        "id": "supplement:5ba8c37d26785c28a94b384257751857f82b66707f35961416e031622072619f",
+        "split": "train",
+        "state": {
+          "entertain_music_book": null,
+          "entertain_shows": "I dislike series with a lot of episodes; they feel overwhelming.",
+          "lifestyle_beauty": "I avoid using any talc-based beauty products.",
+          "lifestyle_dietary": "I only consume foods that are foraged or wild-crafted."
+        },
+        "family": "active_status",
+        "text_prefix": "Current memory values follow. Scope labels and <stored_value> delimiters are serialization, not part of the stored values.\nScope: entertain music book\n<stored_value>\nno active preference\n</stored_value>\nScope: entertain shows\n<stored_value>\nI dislike series with a lot of episodes; they feel overwhelming.\n</stored_value>\nScope: lifestyle beauty\n<stored_value>\nI avoid using any talc-based beauty products.\n</stored_value>\nScope: lifestyle dietary\n<stored_value>\nI only consume foods that are foraged or wild-crafted.\n</stored_value>\n\n",
+        "occurrences": [
+          {
+            "target_id": "state-a0305470c648dc9539d8",
+            "phase": "qualification",
+            "scope": "lifestyle_dietary",
+            "form": null
+          }
+        ]
+      },
+      "raw": "no",
+      "eos": true,
+      "correct": false
+    },
+    {
+      "key": "text:supplement:87ef39be0a2b99dba1407891db9fa1e347554c35e8d78d6f8611f7b2d7fc9870",
+      "job": {
+        "scope": "shop_fashion",
+        "kind": "sentinel_supplement",
+        "query": "Is any preference currently active for shop fashion? Answer yes or no only.",
+        "target": "yes",
+        "id": "supplement:87ef39be0a2b99dba1407891db9fa1e347554c35e8d78d6f8611f7b2d7fc9870",
+        "split": "train",
+        "state": {
+          "shop_fashion": "\"I do not wear clothes made from wool.\"",
+          "shop_home": "I have a deep dislike for high-gloss finishes and prefer matte, textured surfaces in my home decor.",
+          "shop_motors": "Due to my severe allergies, I require a vehicle with an advanced air filtration system that can effectively remove pollen, dust, and other airborne particles from the cabin."
+        },
+        "family": "active_status",
+        "text_prefix": "Current memory values follow. Scope labels and <stored_value> delimiters are serialization, not part of the stored values.\nScope: shop fashion\n<stored_value>\n\"I do not wear clothes made from wool.\"\n</stored_value>\nScope: shop home\n<stored_value>\nI have a deep dislike for high-gloss finishes and prefer matte, textured surfaces in my home decor.\n</stored_value>\nScope: shop motors\n<stored_value>\nDue to my severe allergies, I require a vehicle with an advanced air filtration system that can effectively remove pollen, dust, and other airborne particles from the cabin.\n</stored_value>\n\n",
+        "occurrences": [
+          {
+            "target_id": "state-ac3c3b98cdfe28b6f8f7",
+            "phase": "qualification",
+            "scope": "shop_fashion",
+            "form": null
+          }
+        ]
+      },
+      "raw": "no",
+      "eos": true,
+      "correct": false
+    },
+    {
+      "key": "text:supplement:a610ab13f5042b781f7b8acbdb546e15fc9979b40a0418871cf32caa8a237ead",
+      "job": {
+        "scope": "entertain_shows",
+        "kind": "sentinel_supplement",
+        "query": "Is any preference currently active for entertain shows? Answer yes or no only.",
+        "target": "yes",
+        "id": "supplement:a610ab13f5042b781f7b8acbdb546e15fc9979b40a0418871cf32caa8a237ead",
+        "split": "train",
+        "state": {
+          "entertain_shows": "I avoid anything involving space or outer space adventures."
+        },
+        "family": "active_status",
+        "text_prefix": "Current memory values follow. Scope labels and <stored_value> delimiters are serialization, not part of the stored values.\nScope: entertain shows\n<stored_value>\nI avoid anything involving space or outer space adventures.\n</stored_value>\n\n",
+        "occurrences": [
+          {
+            "target_id": "state-b9ed922eaf605e461236",
+            "phase": "qualification",
+            "scope": "entertain_shows",
+            "form": null
+          }
+        ]
+      },
+      "raw": "no",
+      "eos": true,
+      "correct": false
+    },
+    {
+      "key": "text:supplement:07daf5146e9f38241ad02baefc1af52a164f50be91160482849f0dab889d480a",
+      "job": {
+        "scope": "travel_activities",
+        "kind": "sentinel_supplement",
+        "query": "Is any preference currently active for travel activities? Answer yes or no only.",
+        "target": "yes",
+        "id": "supplement:07daf5146e9f38241ad02baefc1af52a164f50be91160482849f0dab889d480a",
+        "split": "train",
+        "state": {
+          "travel_activities": "I dislike any form of gambling or casinos."
+        },
+        "family": "active_status",
+        "text_prefix": "Current memory values follow. Scope labels and <stored_value> delimiters are serialization, not part of the stored values.\nScope: travel activities\n<stored_value>\nI dislike any form of gambling or casinos.\n</stored_value>\n\n",
+        "occurrences": [
+          {
+            "target_id": "state-bc3925c6da0aaaeae6b4",
+            "phase": "qualification",
+            "scope": "travel_activities",
+            "form": null
+          }
+        ]
+      },
+      "raw": "no",
+      "eos": true,
+      "correct": false
+    },
+    {
+      "key": "text:mcq:semantic-813ad232dcbc8014",
+      "job": {
+        "id": "mcq:semantic-813ad232dcbc8014",
+        "groups": [
+          "semantic-813ad232dcbc8014"
+        ],
+        "split": "train",
+        "state": {
+          "lifestyle_dietary": "I adhere to a strict halal diet and only consume foods that are permissible under Islamic dietary laws."
+        },
+        "query": "I'm visiting Barcelona for the first time. What local Spanish tapas would you recommend I try?\n    I'm trying to decide on this and here are 4 options for my query: \nA. Indulge in the traditional tapas like albondigas (meatballs in tomato sauce) and croquetas de jamon (ham croquettes).\nB. Don't miss out on the pulpo a la gallega (Galician-style octopus) and chipirones en su tinta (baby squid in ink sauce).\nC. Try the vegetarian tapas like patatas bravas (spicy potatoes) or espinacas con garbanzos (spinach with chickpeas).\nD. Sample the classic jamon serrano (dry-cured Spanish ham) and chorizo al vino (chorizo sausage in red wine).\nNow, I'd like you to pick one of them as your top recommendation for me.\n    Important instructions for your response:\n    1. Choose only one option (A, B, C, or D) that best matches my preferences.\n    2. Your answer must be one of these options.\n    3. Don't say things like \"I can't choose\" or suggest alternatives not listed.\n    4. Answer example: <choice>B</choice>. Give me your answer in this exact format, without any additional explanation:\n       <choice>[A/B/C/D]</choice>\n    ",
+        "target_index": 2,
+        "kind": "official_mcq",
+        "v1_id": "mcq:semantic-813ad232dcbc8014",
+        "query_sha": "00ef964e0963ba9b254f24b0f843592e332f44ceeade634bd15f2424605c33db",
+        "text_prefix": "Current memory values follow. Scope labels and <stored_value> delimiters are serialization, not part of the stored values.\nScope: lifestyle dietary\n<stored_value>\nI adhere to a strict halal diet and only consume foods that are permissible under Islamic dietary laws.\n</stored_value>\n\n",
+        "family": "official_mcq",
+        "occurrences": []
+      },
+      "raw": "<choice>A</choice>",
+      "eos": true,
+      "correct": false
+    },
+    {
+      "key": "text:mcq:semantic-d2f3e3b9451f86eb",
+      "job": {
+        "id": "mcq:semantic-d2f3e3b9451f86eb",
+        "groups": [
+          "semantic-d2f3e3b9451f86eb"
+        ],
+        "split": "train",
+        "state": {
+          "shop_motors": "I avoid vehicles with sunroofs or moonroofs as they make me uncomfortable."
+        },
+        "query": "What are some of the best mid-size cars that offer a bright and spacious feel for me?\n    I'm trying to decide on this and here are 4 options for my query: \nA. The Ford Fusion with its optional sunroof provides a well-lit cabin.\nB. The Toyota Camry with its standard sunroof offers a bright and open interior.\nC. The Honda Accord with its large panoramic sunroof provides an airy cabin.\nD. The Nissan Altima with its available panoramic moonroof gives a spacious feel.\nNow, I'd like you to pick one of them as your top recommendation for me.\n    Important instructions for your response:\n    1. Choose only one option (A, B, C, or D) that best matches my preferences.\n    2. Your answer must be one of these options.\n    3. Don't say things like \"I can't choose\" or suggest alternatives not listed.\n    4. Answer example: <choice>B</choice>. Give me your answer in this exact format, without any additional explanation:\n       <choice>[A/B/C/D]</choice>\n    ",
+        "target_index": 2,
+        "kind": "official_mcq",
+        "v1_id": "mcq:semantic-d2f3e3b9451f86eb",
+        "query_sha": "00a2942ce8afb18ef6b7764cdffc8575a1349210e9fbf153d0b4cb24bd7d478a",
+        "text_prefix": "Current memory values follow. Scope labels and <stored_value> delimiters are serialization, not part of the stored values.\nScope: shop motors\n<stored_value>\nI avoid vehicles with sunroofs or moonroofs as they make me uncomfortable.\n</stored_value>\n\n",
+        "family": "official_mcq",
+        "occurrences": []
+      },
+      "raw": "<choice>B</choice>",
+      "eos": true,
+      "correct": false
+    },
+    {
+      "key": "text:supplement:9144d0b2d869e82650e1542870198079382225d199c38050374e9d7b8041f9b9",
+      "job": {
+        "scope": "pet_ownership",
+        "kind": "sentinel_supplement",
+        "query": "Is any preference currently active for pet ownership? Answer yes or no only.",
+        "target": "yes",
+        "id": "supplement:9144d0b2d869e82650e1542870198079382225d199c38050374e9d7b8041f9b9",
+        "split": "train",
+        "state": {
+          "lifestyle_fit": null,
+          "lifestyle_health": "I avoid all supplements and only get nutrients from whole foods.",
+          "pet_ownership": "I don't like fish or any aquatic animals as pets.",
+          "professional_work_location_style": "I strongly prefer areas that are not prone to natural disasters."
+        },
+        "family": "active_status",
+        "text_prefix": "Current memory values follow. Scope labels and <stored_value> delimiters are serialization, not part of the stored values.\nScope: lifestyle fit\n<stored_value>\nno active preference\n</stored_value>\nScope: lifestyle health\n<stored_value>\nI avoid all supplements and only get nutrients from whole foods.\n</stored_value>\nScope: pet ownership\n<stored_value>\nI don't like fish or any aquatic animals as pets.\n</stored_value>\nScope: professional work location style\n<stored_value>\nI strongly prefer areas that are not prone to natural disasters.\n</stored_value>\n\n",
+        "occurrences": [
+          {
+            "target_id": "state-2715341b1bc7a47976d1",
+            "phase": "qualification",
+            "scope": "pet_ownership",
+            "form": null
+          }
+        ]
+      },
+      "raw": "no",
+      "eos": true,
+      "correct": false
+    },
+    {
+      "key": "text:supplement:92ebc02f2f1b80bd1a8a1e9d69f43a68a80d71abcd7a5a3e398c01192f5e5829",
+      "job": {
+        "scope": "shop_motors",
+        "kind": "sentinel_supplement",
+        "query": "Is this the complete current stored preference statement for shop motors? Statement: I avoid vehicles with sunroofs or moonroofs as they make me uncomfortable.\nAnswer yes or no only.",
+        "target": "no",
+        "foil_record": "shop_motors:0017",
+        "foil_group": "semantic-d2f3e3b9451f86eb",
+        "id": "supplement:92ebc02f2f1b80bd1a8a1e9d69f43a68a80d71abcd7a5a3e398c01192f5e5829",
+        "split": "train",
+        "state": {
+          "shop_fashion": null,
+          "shop_home": "I have a deep dislike for high-gloss finishes and prefer matte, textured surfaces in my home decor.",
+          "shop_motors": "Due to my severe allergies, I require a vehicle with an advanced air filtration system that can effectively remove pollen, dust, and other airborne particles from the cabin.",
+          "shop_technology": "I prefer not to use any cloud storage solutions due to data security concerns."
+        },
+        "family": "negative_content",
+        "text_prefix": "Current memory values follow. Scope labels and <stored_value> delimiters are serialization, not part of the stored values.\nScope: shop fashion\n<stored_value>\nno active preference\n</stored_value>\nScope: shop home\n<stored_value>\nI have a deep dislike for high-gloss finishes and prefer matte, textured surfaces in my home decor.\n</stored_value>\nScope: shop motors\n<stored_value>\nDue to my severe allergies, I require a vehicle with an advanced air filtration system that can effectively remove pollen, dust, and other airborne particles from the cabin.\n</stored_value>\nScope: shop technology\n<stored_value>\nI prefer not to use any cloud storage solutions due to data security concerns.\n</stored_value>\n\n",
+        "occurrences": [
+          {
+            "target_id": "state-2b57b813941245d59ad5",
+            "phase": "qualification",
+            "scope": "shop_motors",
+            "form": null
+          }
+        ]
+      },
+      "raw": "yes",
+      "eos": true,
+      "correct": false
+    },
+    {
+      "key": "text:supplement:83b6e86e85932d771587f1b533aa5a4d378dfddd6ffad504697681cf14bbfbe2",
+      "job": {
+        "scope": "travel_activities",
+        "kind": "sentinel_supplement",
+        "query": "Is this the complete current stored preference statement for travel activities? Statement: I dislike any form of gambling or casinos.\nAnswer yes or no only.",
+        "target": "no",
+        "foil_record": "travel_activities:0023",
+        "foil_group": "semantic-bc2803cd364eb9cd",
+        "id": "supplement:83b6e86e85932d771587f1b533aa5a4d378dfddd6ffad504697681cf14bbfbe2",
+        "split": "train",
+        "state": {
+          "travel_activities": "I strongly prefer to avoid commercialized and heavily marketed tourist activities.",
+          "travel_hotel": "I have a strong aversion to staying in hotels with casino facilities."
+        },
+        "family": "negative_content",
+        "text_prefix": "Current memory values follow. Scope labels and <stored_value> delimiters are serialization, not part of the stored values.\nScope: travel activities\n<stored_value>\nI strongly prefer to avoid commercialized and heavily marketed tourist activities.\n</stored_value>\nScope: travel hotel\n<stored_value>\nI have a strong aversion to staying in hotels with casino facilities.\n</stored_value>\n\n",
+        "occurrences": [
+          {
+            "target_id": "state-57b64b453364e36916c2",
+            "phase": "qualification",
+            "scope": "travel_activities",
+            "form": null
+          }
+        ]
+      },
+      "raw": "Yes",
+      "eos": true,
+      "correct": false
+    },
+    {
+      "key": "text:supplement:ec59cccdb84f0456b55e0f347548ad39eec3eccdd30ceb24789582577b5a4d1a",
+      "job": {
+        "scope": "entertain_music_book",
+        "kind": "sentinel_supplement",
+        "query": "Is any preference currently active for entertain music book? Answer yes or no only.",
+        "target": "yes",
+        "id": "supplement:ec59cccdb84f0456b55e0f347548ad39eec3eccdd30ceb24789582577b5a4d1a",
+        "split": "train",
+        "state": {
+          "entertain_music_book": "I avoid comic books centered around superhero themes.",
+          "entertain_shows": "I dislike series with a lot of episodes; they feel overwhelming.",
+          "lifestyle_beauty": "I avoid using any talc-based beauty products.",
+          "lifestyle_dietary": "I only consume foods that are foraged or wild-crafted."
+        },
+        "family": "active_status",
+        "text_prefix": "Current memory values follow. Scope labels and <stored_value> delimiters are serialization, not part of the stored values.\nScope: entertain music book\n<stored_value>\nI avoid comic books centered around superhero themes.\n</stored_value>\nScope: entertain shows\n<stored_value>\nI dislike series with a lot of episodes; they feel overwhelming.\n</stored_value>\nScope: lifestyle beauty\n<stored_value>\nI avoid using any talc-based beauty products.\n</stored_value>\nScope: lifestyle dietary\n<stored_value>\nI only consume foods that are foraged or wild-crafted.\n</stored_value>\n\n",
+        "occurrences": [
+          {
+            "target_id": "state-5b3e7c2e399178ba7774",
+            "phase": "qualification",
+            "scope": "entertain_music_book",
+            "form": null
+          }
+        ]
+      },
+      "raw": "no",
+      "eos": true,
+      "correct": false
+    },
+    {
+      "key": "text:supplement:a21f2d04391b46dcbb7f10232bedb7cbca2fdfb8169e03b398d6da4496b6ab57",
+      "job": {
+        "scope": "travel_restaurant",
+        "kind": "sentinel_supplement",
+        "query": "Is any preference currently active for travel restaurant? Answer yes or no only.",
+        "target": "yes",
+        "id": "supplement:a21f2d04391b46dcbb7f10232bedb7cbca2fdfb8169e03b398d6da4496b6ab57",
+        "split": "train",
+        "state": {
+          "travel_activities": null,
+          "travel_hotel": "I have a strong aversion to staying in hotels with casino facilities.",
+          "travel_restaurant": "I have a severe peanut allergy, so I avoid any dishes or restaurants that may contain traces of peanuts.",
+          "travel_transportation": "I dislike crowded public transportation."
+        },
+        "family": "active_status",
+        "text_prefix": "Current memory values follow. Scope labels and <stored_value> delimiters are serialization, not part of the stored values.\nScope: travel activities\n<stored_value>\nno active preference\n</stored_value>\nScope: travel hotel\n<stored_value>\nI have a strong aversion to staying in hotels with casino facilities.\n</stored_value>\nScope: travel restaurant\n<stored_value>\nI have a severe peanut allergy, so I avoid any dishes or restaurants that may contain traces of peanuts.\n</stored_value>\nScope: travel transportation\n<stored_value>\nI dislike crowded public transportation.\n</stored_value>\n\n",
+        "occurrences": [
+          {
+            "target_id": "state-60ce21a26e49253d3369",
+            "phase": "qualification",
+            "scope": "travel_restaurant",
+            "form": null
+          }
+        ]
+      },
+      "raw": "no",
+      "eos": true,
+      "correct": false
+    },
+    {
+      "key": "text:supplement:14c1d6852886db76e5e370aaa47f5767c62557ac4077910c0ae91c33560687f8",
+      "job": {
+        "scope": "travel_activities",
+        "kind": "sentinel_supplement",
+        "query": "Is this the complete current stored preference statement for travel activities? Statement: I strongly prefer to avoid commercialized and heavily marketed tourist activities.\nAnswer yes or no only.",
+        "target": "yes",
+        "foil_record": null,
+        "foil_group": null,
+        "id": "supplement:14c1d6852886db76e5e370aaa47f5767c62557ac4077910c0ae91c33560687f8",
+        "split": "train",
+        "state": {
+          "travel_activities": "I strongly prefer to avoid commercialized and heavily marketed tourist activities.",
+          "travel_hotel": "I have a strong aversion to staying in hotels with casino facilities.",
+          "travel_restaurant": "I have a severe peanut allergy, so I avoid any dishes or restaurants that may contain traces of peanuts."
+        },
+        "family": "positive_content",
+        "text_prefix": "Current memory values follow. Scope labels and <stored_value> delimiters are serialization, not part of the stored values.\nScope: travel activities\n<stored_value>\nI strongly prefer to avoid commercialized and heavily marketed tourist activities.\n</stored_value>\nScope: travel hotel\n<stored_value>\nI have a strong aversion to staying in hotels with casino facilities.\n</stored_value>\nScope: travel restaurant\n<stored_value>\nI have a severe peanut allergy, so I avoid any dishes or restaurants that may contain traces of peanuts.\n</stored_value>\n\n",
+        "occurrences": [
+          {
+            "target_id": "state-894cfb002d07b9c3323e",
+            "phase": "qualification",
+            "scope": "travel_activities",
+            "form": null
+          }
+        ]
+      },
+      "raw": "No",
+      "eos": true,
+      "correct": false
+    },
+    {
+      "key": "text:supplement:733b12b3e174b9620e8c8bfdd23738cc322af61472e19d916fb0232966fd49b3",
+      "job": {
+        "scope": "travel_hotel",
+        "kind": "sentinel_supplement",
+        "query": "Is this the complete current stored preference statement for travel hotel? Statement: \"I do not enjoy casinos or gaming environments.\"\nAnswer yes or no only.",
+        "target": "no",
+        "foil_record": "travel_hotel:0013",
+        "foil_group": "semantic-b2e2dabef3734845",
+        "id": "supplement:733b12b3e174b9620e8c8bfdd23738cc322af61472e19d916fb0232966fd49b3",
+        "split": "train",
+        "state": {
+          "travel_activities": "I strongly prefer to avoid commercialized and heavily marketed tourist activities.",
+          "travel_hotel": "I have a strong aversion to staying in hotels with casino facilities.",
+          "travel_restaurant": "I have a severe peanut allergy, so I avoid any dishes or restaurants that may contain traces of peanuts."
+        },
+        "family": "negative_content",
+        "text_prefix": "Current memory values follow. Scope labels and <stored_value> delimiters are serialization, not part of the stored values.\nScope: travel activities\n<stored_value>\nI strongly prefer to avoid commercialized and heavily marketed tourist activities.\n</stored_value>\nScope: travel hotel\n<stored_value>\nI have a strong aversion to staying in hotels with casino facilities.\n</stored_value>\nScope: travel restaurant\n<stored_value>\nI have a severe peanut allergy, so I avoid any dishes or restaurants that may contain traces of peanuts.\n</stored_value>\n\n",
+        "occurrences": [
+          {
+            "target_id": "state-894cfb002d07b9c3323e",
+            "phase": "qualification",
+            "scope": "travel_hotel",
+            "form": null
+          }
+        ]
+      },
+      "raw": "Yes",
+      "eos": true,
+      "correct": false
+    },
+    {
+      "key": "text:supplement:29f69e3248c78a7db5d16b9599f1036e3d08312399a572fd7fdfb5e3d60c09fc",
+      "job": {
+        "scope": "lifestyle_beauty",
+        "kind": "sentinel_supplement",
+        "query": "Is any preference currently active for lifestyle beauty? Answer yes or no only.",
+        "target": "yes",
+        "id": "supplement:29f69e3248c78a7db5d16b9599f1036e3d08312399a572fd7fdfb5e3d60c09fc",
+        "split": "train",
+        "state": {
+          "entertain_music_book": null,
+          "entertain_shows": "I dislike series with a lot of episodes; they feel overwhelming.",
+          "lifestyle_beauty": "I avoid using any talc-based beauty products.",
+          "lifestyle_dietary": "I only consume foods that are foraged or wild-crafted."
+        },
+        "family": "active_status",
+        "text_prefix": "Current memory values follow. Scope labels and <stored_value> delimiters are serialization, not part of the stored values.\nScope: entertain music book\n<stored_value>\nno active preference\n</stored_value>\nScope: entertain shows\n<stored_value>\nI dislike series with a lot of episodes; they feel overwhelming.\n</stored_value>\nScope: lifestyle beauty\n<stored_value>\nI avoid using any talc-based beauty products.\n</stored_value>\nScope: lifestyle dietary\n<stored_value>\nI only consume foods that are foraged or wild-crafted.\n</stored_value>\n\n",
+        "occurrences": [
+          {
+            "target_id": "state-a0305470c648dc9539d8",
+            "phase": "qualification",
+            "scope": "lifestyle_beauty",
+            "form": null
+          }
+        ]
+      },
+      "raw": "no",
+      "eos": true,
+      "correct": false
+    },
+    {
+      "key": "text:supplement:fe1c68dcc164ae5407417a8098d5455ca16f323532f799cb00bc44bf5530012c",
+      "job": {
+        "scope": "shop_home",
+        "kind": "sentinel_supplement",
+        "query": "Is this the complete current stored preference statement for shop home? Statement: I despise modern open-concept floor plans and prefer distinct, closed-off rooms.\nAnswer yes or no only.",
+        "target": "no",
+        "foil_record": "shop_home:0039",
+        "foil_group": "semantic-7009c08db60cbef3",
+        "id": "supplement:fe1c68dcc164ae5407417a8098d5455ca16f323532f799cb00bc44bf5530012c",
+        "split": "train",
+        "state": {
+          "shop_fashion": "\"I do not wear clothes made from wool.\"",
+          "shop_home": "I have a deep dislike for high-gloss finishes and prefer matte, textured surfaces in my home decor.",
+          "shop_motors": "Due to my severe allergies, I require a vehicle with an advanced air filtration system that can effectively remove pollen, dust, and other airborne particles from the cabin."
+        },
+        "family": "negative_content",
+        "text_prefix": "Current memory values follow. Scope labels and <stored_value> delimiters are serialization, not part of the stored values.\nScope: shop fashion\n<stored_value>\n\"I do not wear clothes made from wool.\"\n</stored_value>\nScope: shop home\n<stored_value>\nI have a deep dislike for high-gloss finishes and prefer matte, textured surfaces in my home decor.\n</stored_value>\nScope: shop motors\n<stored_value>\nDue to my severe allergies, I require a vehicle with an advanced air filtration system that can effectively remove pollen, dust, and other airborne particles from the cabin.\n</stored_value>\n\n",
+        "occurrences": [
+          {
+            "target_id": "state-ac3c3b98cdfe28b6f8f7",
+            "phase": "qualification",
+            "scope": "shop_home",
+            "form": null
+          }
+        ]
+      },
+      "raw": "yes",
+      "eos": true,
+      "correct": false
+    },
+    {
+      "key": "text:mcq:semantic-be6692589c8ae3d7",
+      "job": {
+        "id": "mcq:semantic-be6692589c8ae3d7",
+        "groups": [
+          "semantic-be6692589c8ae3d7"
+        ],
+        "split": "dev",
+        "state": {
+          "travel_transportation": "I prefer not to sail or use ferries due to seasickness."
+        },
+        "query": "What are some must-see islands in Greece, and how can I get there?\n    I'm trying to decide on this and here are 4 options for my query: \nA. Take a ferry from Athens to Mykonos for a scenic island experience.\nB. Book a sailing tour to visit the Cyclades islands like Naxos and Paros.\nC. Rent a car and drive to Santorini, exploring the island by land.\nD. Embark on a cruise ship that stops at various Greek islands.\nNow, I'd like you to pick one of them as your top recommendation for me.\n    Important instructions for your response:\n    1. Choose only one option (A, B, C, or D) that best matches my preferences.\n    2. Your answer must be one of these options.\n    3. Don't say things like \"I can't choose\" or suggest alternatives not listed.\n    4. Answer example: <choice>B</choice>. Give me your answer in this exact format, without any additional explanation:\n       <choice>[A/B/C/D]</choice>\n    ",
+        "target_index": 2,
+        "kind": "official_mcq",
+        "v1_id": "mcq:semantic-be6692589c8ae3d7",
+        "query_sha": "b55c009515f927eedcec6664085631e554b7ffcd7d9fab8f579727201411b664",
+        "text_prefix": "Current memory values follow. Scope labels and <stored_value> delimiters are serialization, not part of the stored values.\nScope: travel transportation\n<stored_value>\nI prefer not to sail or use ferries due to seasickness.\n</stored_value>\n\n",
+        "family": "official_mcq",
+        "occurrences": []
+      },
+      "raw": "<choice>A</choice>",
+      "eos": true,
+      "correct": false
+    },
+    {
+      "key": "text:supplement:3854d17fce8c96a4e057b0c44b9628131a46058bcda1c61e530bfeff5eca43a2",
+      "job": {
+        "scope": "shop_home",
+        "kind": "sentinel_supplement",
+        "query": "Is this the complete current stored preference statement for shop home? Statement: I despise modern open-concept floor plans and prefer distinct, closed-off rooms.\nAnswer yes or no only.",
+        "target": "no",
+        "foil_record": "shop_home:0039",
+        "foil_group": "semantic-7009c08db60cbef3",
+        "id": "supplement:3854d17fce8c96a4e057b0c44b9628131a46058bcda1c61e530bfeff5eca43a2",
+        "split": "train",
+        "state": {
+          "shop_fashion": null,
+          "shop_home": "I have a deep dislike for high-gloss finishes and prefer matte, textured surfaces in my home decor.",
+          "shop_motors": "Due to my severe allergies, I require a vehicle with an advanced air filtration system that can effectively remove pollen, dust, and other airborne particles from the cabin.",
+          "shop_technology": "I prefer not to use any cloud storage solutions due to data security concerns."
+        },
+        "family": "negative_content",
+        "text_prefix": "Current memory values follow. Scope labels and <stored_value> delimiters are serialization, not part of the stored values.\nScope: shop fashion\n<stored_value>\nno active preference\n</stored_value>\nScope: shop home\n<stored_value>\nI have a deep dislike for high-gloss finishes and prefer matte, textured surfaces in my home decor.\n</stored_value>\nScope: shop motors\n<stored_value>\nDue to my severe allergies, I require a vehicle with an advanced air filtration system that can effectively remove pollen, dust, and other airborne particles from the cabin.\n</stored_value>\nScope: shop technology\n<stored_value>\nI prefer not to use any cloud storage solutions due to data security concerns.\n</stored_value>\n\n",
+        "occurrences": [
+          {
+            "target_id": "state-2b57b813941245d59ad5",
+            "phase": "qualification",
+            "scope": "shop_home",
+            "form": null
+          }
+        ]
+      },
+      "raw": "yes",
+      "eos": true,
+      "correct": false
+    },
+    {
+      "key": "text:supplement:f056b3b4a12d5e54401b80e9713d413acb86a05bd7c3ecbf7100c7b7434174e8",
+      "job": {
+        "scope": "shop_technology",
+        "kind": "sentinel_supplement",
+        "query": "Is any preference currently active for shop technology? Answer yes or no only.",
+        "target": "yes",
+        "id": "supplement:f056b3b4a12d5e54401b80e9713d413acb86a05bd7c3ecbf7100c7b7434174e8",
+        "split": "train",
+        "state": {
+          "shop_fashion": null,
+          "shop_home": "I have a deep dislike for high-gloss finishes and prefer matte, textured surfaces in my home decor.",
+          "shop_motors": "Due to my severe allergies, I require a vehicle with an advanced air filtration system that can effectively remove pollen, dust, and other airborne particles from the cabin.",
+          "shop_technology": "I prefer not to use any cloud storage solutions due to data security concerns."
+        },
+        "family": "active_status",
+        "text_prefix": "Current memory values follow. Scope labels and <stored_value> delimiters are serialization, not part of the stored values.\nScope: shop fashion\n<stored_value>\nno active preference\n</stored_value>\nScope: shop home\n<stored_value>\nI have a deep dislike for high-gloss finishes and prefer matte, textured surfaces in my home decor.\n</stored_value>\nScope: shop motors\n<stored_value>\nDue to my severe allergies, I require a vehicle with an advanced air filtration system that can effectively remove pollen, dust, and other airborne particles from the cabin.\n</stored_value>\nScope: shop technology\n<stored_value>\nI prefer not to use any cloud storage solutions due to data security concerns.\n</stored_value>\n\n",
+        "occurrences": [
+          {
+            "target_id": "state-2b57b813941245d59ad5",
+            "phase": "qualification",
+            "scope": "shop_technology",
+            "form": null
+          }
+        ]
+      },
+      "raw": "no",
+      "eos": true,
+      "correct": false
+    },
+    {
+      "key": "text:supplement:a9e7eb1b9f525bbaf67fbdc87c313f62b613f4672e274bf8c5f2d22dd81a7965",
+      "job": {
+        "scope": "travel_activities",
+        "kind": "sentinel_supplement",
+        "query": "Is this the complete current stored preference statement for travel activities? Statement: I strongly prefer to avoid commercialized and heavily marketed tourist activities.\nAnswer yes or no only.",
+        "target": "yes",
+        "foil_record": null,
+        "foil_group": null,
+        "id": "supplement:a9e7eb1b9f525bbaf67fbdc87c313f62b613f4672e274bf8c5f2d22dd81a7965",
+        "split": "train",
+        "state": {
+          "travel_activities": "I strongly prefer to avoid commercialized and heavily marketed tourist activities.",
+          "travel_hotel": "I have a strong aversion to staying in hotels with casino facilities.",
+          "travel_restaurant": "I have a severe peanut allergy, so I avoid any dishes or restaurants that may contain traces of peanuts.",
+          "travel_transportation": "I dislike crowded public transportation."
+        },
+        "family": "positive_content",
+        "text_prefix": "Current memory values follow. Scope labels and <stored_value> delimiters are serialization, not part of the stored values.\nScope: travel activities\n<stored_value>\nI strongly prefer to avoid commercialized and heavily marketed tourist activities.\n</stored_value>\nScope: travel hotel\n<stored_value>\nI have a strong aversion to staying in hotels with casino facilities.\n</stored_value>\nScope: travel restaurant\n<stored_value>\nI have a severe peanut allergy, so I avoid any dishes or restaurants that may contain traces of peanuts.\n</stored_value>\nScope: travel transportation\n<stored_value>\nI dislike crowded public transportation.\n</stored_value>\n\n",
+        "occurrences": [
+          {
+            "target_id": "state-60c8c1de9c88d82c1280",
+            "phase": "qualification",
+            "scope": "travel_activities",
+            "form": null
+          }
+        ]
+      },
+      "raw": "No",
+      "eos": true,
+      "correct": false
+    },
+    {
+      "key": "text:supplement:1f2915fa16141f27d9f8c2ecc03506419dd963085b9520c56f285a89bd3dc6ce",
+      "job": {
+        "scope": "travel_hotel",
+        "kind": "sentinel_supplement",
+        "query": "Is this the complete current stored preference statement for travel hotel? Statement: \"I do not enjoy casinos or gaming environments.\"\nAnswer yes or no only.",
+        "target": "no",
+        "foil_record": "travel_hotel:0013",
+        "foil_group": "semantic-b2e2dabef3734845",
+        "id": "supplement:1f2915fa16141f27d9f8c2ecc03506419dd963085b9520c56f285a89bd3dc6ce",
+        "split": "train",
+        "state": {
+          "travel_activities": "I strongly prefer to avoid commercialized and heavily marketed tourist activities.",
+          "travel_hotel": "I have a strong aversion to staying in hotels with casino facilities.",
+          "travel_restaurant": "I have a severe peanut allergy, so I avoid any dishes or restaurants that may contain traces of peanuts.",
+          "travel_transportation": "I dislike crowded public transportation."
+        },
+        "family": "negative_content",
+        "text_prefix": "Current memory values follow. Scope labels and <stored_value> delimiters are serialization, not part of the stored values.\nScope: travel activities\n<stored_value>\nI strongly prefer to avoid commercialized and heavily marketed tourist activities.\n</stored_value>\nScope: travel hotel\n<stored_value>\nI have a strong aversion to staying in hotels with casino facilities.\n</stored_value>\nScope: travel restaurant\n<stored_value>\nI have a severe peanut allergy, so I avoid any dishes or restaurants that may contain traces of peanuts.\n</stored_value>\nScope: travel transportation\n<stored_value>\nI dislike crowded public transportation.\n</stored_value>\n\n",
+        "occurrences": [
+          {
+            "target_id": "state-60c8c1de9c88d82c1280",
+            "phase": "qualification",
+            "scope": "travel_hotel",
+            "form": null
+          }
+        ]
+      },
+      "raw": "Yes",
+      "eos": true,
+      "correct": false
+    },
+    {
+      "key": "text:supplement:a182fb06c31d05831699372d5f431e92381b147f3f20f8f30fa6abc92841eec5",
+      "job": {
+        "scope": "travel_hotel",
+        "kind": "sentinel_supplement",
+        "query": "Is any preference currently active for travel hotel? Answer yes or no only.",
+        "target": "yes",
+        "id": "supplement:a182fb06c31d05831699372d5f431e92381b147f3f20f8f30fa6abc92841eec5",
+        "split": "train",
+        "state": {
+          "travel_activities": null,
+          "travel_hotel": "I have a strong aversion to staying in hotels with casino facilities.",
+          "travel_restaurant": "I have a severe peanut allergy, so I avoid any dishes or restaurants that may contain traces of peanuts.",
+          "travel_transportation": "I dislike crowded public transportation."
+        },
+        "family": "active_status",
+        "text_prefix": "Current memory values follow. Scope labels and <stored_value> delimiters are serialization, not part of the stored values.\nScope: travel activities\n<stored_value>\nno active preference\n</stored_value>\nScope: travel hotel\n<stored_value>\nI have a strong aversion to staying in hotels with casino facilities.\n</stored_value>\nScope: travel restaurant\n<stored_value>\nI have a severe peanut allergy, so I avoid any dishes or restaurants that may contain traces of peanuts.\n</stored_value>\nScope: travel transportation\n<stored_value>\nI dislike crowded public transportation.\n</stored_value>\n\n",
+        "occurrences": [
+          {
+            "target_id": "state-60ce21a26e49253d3369",
+            "phase": "qualification",
+            "scope": "travel_hotel",
+            "form": null
+          }
+        ]
+      },
+      "raw": "no",
+      "eos": true,
+      "correct": false
+    },
+    {
+      "key": "text:supplement:1414eea0ff27d150a325c14576792e3d69c43ab5d82a40204184069cd5ae4dfe",
+      "job": {
+        "scope": "travel_transportation",
+        "kind": "sentinel_supplement",
+        "query": "Is this the complete current stored preference statement for travel transportation? Statement: I have a strong dislike for overcrowded public transportation and prefer private or exclusive travel options.\nAnswer yes or no only.",
+        "target": "no",
+        "foil_record": "travel_transportation:0027",
+        "foil_group": "semantic-7aaa9d4bdbaa8834",
+        "id": "supplement:1414eea0ff27d150a325c14576792e3d69c43ab5d82a40204184069cd5ae4dfe",
+        "split": "train",
+        "state": {
+          "travel_activities": null,
+          "travel_hotel": "I have a strong aversion to staying in hotels with casino facilities.",
+          "travel_restaurant": "I have a severe peanut allergy, so I avoid any dishes or restaurants that may contain traces of peanuts.",
+          "travel_transportation": "I dislike crowded public transportation."
+        },
+        "family": "negative_content",
+        "text_prefix": "Current memory values follow. Scope labels and <stored_value> delimiters are serialization, not part of the stored values.\nScope: travel activities\n<stored_value>\nno active preference\n</stored_value>\nScope: travel hotel\n<stored_value>\nI have a strong aversion to staying in hotels with casino facilities.\n</stored_value>\nScope: travel restaurant\n<stored_value>\nI have a severe peanut allergy, so I avoid any dishes or restaurants that may contain traces of peanuts.\n</stored_value>\nScope: travel transportation\n<stored_value>\nI dislike crowded public transportation.\n</stored_value>\n\n",
+        "occurrences": [
+          {
+            "target_id": "state-60ce21a26e49253d3369",
+            "phase": "qualification",
+            "scope": "travel_transportation",
+            "form": null
+          }
+        ]
+      },
+      "raw": "yes",
+      "eos": true,
+      "correct": false
+    },
+    {
+      "key": "text:supplement:ff8382cf4fbe442bba715d0c813fb54373802de52c8898ce095509d631a3c832",
+      "job": {
+        "scope": "shop_home",
+        "kind": "sentinel_supplement",
+        "query": "Is this the complete current stored preference statement for shop home? Statement: I despise modern open-concept floor plans and prefer distinct, closed-off rooms.\nAnswer yes or no only.",
+        "target": "no",
+        "foil_record": "shop_home:0039",
+        "foil_group": "semantic-7009c08db60cbef3",
+        "id": "supplement:ff8382cf4fbe442bba715d0c813fb54373802de52c8898ce095509d631a3c832",
+        "split": "train",
+        "state": {
+          "shop_fashion": "\"I do not wear clothes made from wool.\"",
+          "shop_home": "I have a deep dislike for high-gloss finishes and prefer matte, textured surfaces in my home decor."
+        },
+        "family": "negative_content",
+        "text_prefix": "Current memory values follow. Scope labels and <stored_value> delimiters are serialization, not part of the stored values.\nScope: shop fashion\n<stored_value>\n\"I do not wear clothes made from wool.\"\n</stored_value>\nScope: shop home\n<stored_value>\nI have a deep dislike for high-gloss finishes and prefer matte, textured surfaces in my home decor.\n</stored_value>\n\n",
+        "occurrences": [
+          {
+            "target_id": "state-66c725a67c294247eaac",
+            "phase": "qualification",
+            "scope": "shop_home",
+            "form": null
+          }
+        ]
+      },
+      "raw": "yes",
+      "eos": true,
+      "correct": false
+    },
+    {
+      "key": "text:supplement:936ba8c1fa6747cf7a940e2ed4860f10e010388933fd3e1dad464c613a583bf3",
+      "job": {
+        "scope": "entertain_music_book",
+        "kind": "sentinel_supplement",
+        "query": "Is any preference currently active for entertain music book? Answer yes or no only.",
+        "target": "yes",
+        "id": "supplement:936ba8c1fa6747cf7a940e2ed4860f10e010388933fd3e1dad464c613a583bf3",
+        "split": "train",
+        "state": {
+          "entertain_music_book": "I avoid comic books centered around superhero themes."
+        },
+        "family": "active_status",
+        "text_prefix": "Current memory values follow. Scope labels and <stored_value> delimiters are serialization, not part of the stored values.\nScope: entertain music book\n<stored_value>\nI avoid comic books centered around superhero themes.\n</stored_value>\n\n",
+        "occurrences": [
+          {
+            "target_id": "state-7a9199167a7e900ceb43",
+            "phase": "qualification",
+            "scope": "entertain_music_book",
+            "form": null
+          }
+        ]
+      },
+      "raw": "no",
+      "eos": true,
+      "correct": false
+    },
+    {
+      "key": "text:supplement:2d2ff671fdfee1e5ac100cd704881aa7df580d9feaa64276ce25b348c425e9d2",
+      "job": {
+        "scope": "shop_home",
+        "kind": "sentinel_supplement",
+        "query": "Is this the complete current stored preference statement for shop home? Statement: I despise modern open-concept floor plans and prefer distinct, closed-off rooms.\nAnswer yes or no only.",
+        "target": "no",
+        "foil_record": "shop_home:0039",
+        "foil_group": "semantic-7009c08db60cbef3",
+        "id": "supplement:2d2ff671fdfee1e5ac100cd704881aa7df580d9feaa64276ce25b348c425e9d2",
+        "split": "train",
+        "state": {
+          "shop_fashion": "\"I dislike floral patterns.\"",
+          "shop_home": "I have a deep dislike for high-gloss finishes and prefer matte, textured surfaces in my home decor.",
+          "shop_motors": "Due to my severe allergies, I require a vehicle with an advanced air filtration system that can effectively remove pollen, dust, and other airborne particles from the cabin.",
+          "shop_technology": "I prefer not to use any cloud storage solutions due to data security concerns."
+        },
+        "family": "negative_content",
+        "text_prefix": "Current memory values follow. Scope labels and <stored_value> delimiters are serialization, not part of the stored values.\nScope: shop fashion\n<stored_value>\n\"I dislike floral patterns.\"\n</stored_value>\nScope: shop home\n<stored_value>\nI have a deep dislike for high-gloss finishes and prefer matte, textured surfaces in my home decor.\n</stored_value>\nScope: shop motors\n<stored_value>\nDue to my severe allergies, I require a vehicle with an advanced air filtration system that can effectively remove pollen, dust, and other airborne particles from the cabin.\n</stored_value>\nScope: shop technology\n<stored_value>\nI prefer not to use any cloud storage solutions due to data security concerns.\n</stored_value>\n\n",
+        "occurrences": [
+          {
+            "target_id": "state-7aeb5009b340589b94cf",
+            "phase": "qualification",
+            "scope": "shop_home",
+            "form": null
+          }
+        ]
+      },
+      "raw": "yes",
+      "eos": true,
+      "correct": false
+    },
+    {
+      "key": "text:supplement:d42ea7c2328dfced87c0bdd98678d01d944cc024b3f29802f53903356b8f519a",
+      "job": {
+        "scope": "travel_transportation",
+        "kind": "sentinel_supplement",
+        "query": "Is this the complete current stored preference statement for travel transportation? Statement: I have a strong dislike for overcrowded public transportation and prefer private or exclusive travel options.\nAnswer yes or no only.",
+        "target": "no",
+        "foil_record": "travel_transportation:0027",
+        "foil_group": "semantic-7aaa9d4bdbaa8834",
+        "id": "supplement:d42ea7c2328dfced87c0bdd98678d01d944cc024b3f29802f53903356b8f519a",
+        "split": "train",
+        "state": {
+          "travel_activities": "I dislike any form of gambling or casinos.",
+          "travel_hotel": "I have a strong aversion to staying in hotels with casino facilities.",
+          "travel_restaurant": "I have a severe peanut allergy, so I avoid any dishes or restaurants that may contain traces of peanuts.",
+          "travel_transportation": "I dislike crowded public transportation."
+        },
+        "family": "negative_content",
+        "text_prefix": "Current memory values follow. Scope labels and <stored_value> delimiters are serialization, not part of the stored values.\nScope: travel activities\n<stored_value>\nI dislike any form of gambling or casinos.\n</stored_value>\nScope: travel hotel\n<stored_value>\nI have a strong aversion to staying in hotels with casino facilities.\n</stored_value>\nScope: travel restaurant\n<stored_value>\nI have a severe peanut allergy, so I avoid any dishes or restaurants that may contain traces of peanuts.\n</stored_value>\nScope: travel transportation\n<stored_value>\nI dislike crowded public transportation.\n</stored_value>\n\n",
+        "occurrences": [
+          {
+            "target_id": "state-8497a9fa1a9afc8599a0",
+            "phase": "qualification",
+            "scope": "travel_transportation",
+            "form": null
+          }
+        ]
+      },
+      "raw": "Yes",
+      "eos": true,
+      "correct": false
+    },
+    {
+      "key": "text:supplement:0bd61495e307b84ac14cb9ddb94b30971dc12213ce22853ba4e7f0f5f7de7673",
+      "job": {
+        "scope": "travel_activities",
+        "kind": "sentinel_supplement",
+        "query": "Is this the complete current stored preference statement for travel activities? Statement: I dislike any form of gambling or casinos.\nAnswer yes or no only.",
+        "target": "no",
+        "foil_record": "travel_activities:0023",
+        "foil_group": "semantic-bc2803cd364eb9cd",
+        "id": "supplement:0bd61495e307b84ac14cb9ddb94b30971dc12213ce22853ba4e7f0f5f7de7673",
+        "split": "train",
+        "state": {
+          "travel_activities": "I strongly prefer to avoid commercialized and heavily marketed tourist activities.",
+          "travel_hotel": "I have a strong aversion to staying in hotels with casino facilities.",
+          "travel_restaurant": "I have a severe peanut allergy, so I avoid any dishes or restaurants that may contain traces of peanuts."
+        },
+        "family": "negative_content",
+        "text_prefix": "Current memory values follow. Scope labels and <stored_value> delimiters are serialization, not part of the stored values.\nScope: travel activities\n<stored_value>\nI strongly prefer to avoid commercialized and heavily marketed tourist activities.\n</stored_value>\nScope: travel hotel\n<stored_value>\nI have a strong aversion to staying in hotels with casino facilities.\n</stored_value>\nScope: travel restaurant\n<stored_value>\nI have a severe peanut allergy, so I avoid any dishes or restaurants that may contain traces of peanuts.\n</stored_value>\n\n",
+        "occurrences": [
+          {
+            "target_id": "state-894cfb002d07b9c3323e",
+            "phase": "qualification",
+            "scope": "travel_activities",
+            "form": null
+          }
+        ]
+      },
+      "raw": "Yes",
+      "eos": true,
+      "correct": false
+    },
+    {
+      "key": "text:supplement:035114c96d68e93e4f77d40e45492f84284aac038f2e1fc54b4270b16eaf3b53",
+      "job": {
+        "scope": "shop_home",
+        "kind": "sentinel_supplement",
+        "query": "Is this the complete current stored preference statement for shop home? Statement: I despise modern open-concept floor plans and prefer distinct, closed-off rooms.\nAnswer yes or no only.",
+        "target": "no",
+        "foil_record": "shop_home:0039",
+        "foil_group": "semantic-7009c08db60cbef3",
+        "id": "supplement:035114c96d68e93e4f77d40e45492f84284aac038f2e1fc54b4270b16eaf3b53",
+        "split": "train",
+        "state": {
+          "shop_fashion": "\"I do not wear clothes made from wool.\"",
+          "shop_home": "I have a deep dislike for high-gloss finishes and prefer matte, textured surfaces in my home decor.",
+          "shop_motors": "Due to my severe allergies, I require a vehicle with an advanced air filtration system that can effectively remove pollen, dust, and other airborne particles from the cabin.",
+          "shop_technology": "I prefer not to use any cloud storage solutions due to data security concerns."
+        },
+        "family": "negative_content",
+        "text_prefix": "Current memory values follow. Scope labels and <stored_value> delimiters are serialization, not part of the stored values.\nScope: shop fashion\n<stored_value>\n\"I do not wear clothes made from wool.\"\n</stored_value>\nScope: shop home\n<stored_value>\nI have a deep dislike for high-gloss finishes and prefer matte, textured surfaces in my home decor.\n</stored_value>\nScope: shop motors\n<stored_value>\nDue to my severe allergies, I require a vehicle with an advanced air filtration system that can effectively remove pollen, dust, and other airborne particles from the cabin.\n</stored_value>\nScope: shop technology\n<stored_value>\nI prefer not to use any cloud storage solutions due to data security concerns.\n</stored_value>\n\n",
+        "occurrences": [
+          {
+            "target_id": "state-9ebc2df1e905c22b690c",
+            "phase": "qualification",
+            "scope": "shop_home",
+            "form": null
+          }
+        ]
+      },
+      "raw": "yes",
+      "eos": true,
+      "correct": false
+    },
+    {
+      "key": "text:supplement:ff259c7c8dd52e3c0227461ee88ca69aa4e8def0196b0ee7a55586af5770a2f5",
+      "job": {
+        "scope": "entertain_shows",
+        "kind": "sentinel_supplement",
+        "query": "Is any preference currently active for entertain shows? Answer yes or no only.",
+        "target": "yes",
+        "id": "supplement:ff259c7c8dd52e3c0227461ee88ca69aa4e8def0196b0ee7a55586af5770a2f5",
+        "split": "train",
+        "state": {
+          "entertain_music_book": null,
+          "entertain_shows": "I dislike series with a lot of episodes; they feel overwhelming.",
+          "lifestyle_beauty": "I avoid using any talc-based beauty products.",
+          "lifestyle_dietary": "I only consume foods that are foraged or wild-crafted."
+        },
+        "family": "active_status",
+        "text_prefix": "Current memory values follow. Scope labels and <stored_value> delimiters are serialization, not part of the stored values.\nScope: entertain music book\n<stored_value>\nno active preference\n</stored_value>\nScope: entertain shows\n<stored_value>\nI dislike series with a lot of episodes; they feel overwhelming.\n</stored_value>\nScope: lifestyle beauty\n<stored_value>\nI avoid using any talc-based beauty products.\n</stored_value>\nScope: lifestyle dietary\n<stored_value>\nI only consume foods that are foraged or wild-crafted.\n</stored_value>\n\n",
+        "occurrences": [
+          {
+            "target_id": "state-a0305470c648dc9539d8",
+            "phase": "qualification",
+            "scope": "entertain_shows",
+            "form": null
+          }
+        ]
+      },
+      "raw": "no",
+      "eos": true,
+      "correct": false
+    },
+    {
+      "key": "text:supplement:e80a4085c302c59115b782309248ed69efc0eb068f6bcfc3deedc7a7dd2ced25",
+      "job": {
+        "scope": "travel_hotel",
+        "kind": "sentinel_supplement",
+        "query": "Is any preference currently active for travel hotel? Answer yes or no only.",
+        "target": "yes",
+        "id": "supplement:e80a4085c302c59115b782309248ed69efc0eb068f6bcfc3deedc7a7dd2ced25",
+        "split": "train",
+        "state": {
+          "travel_hotel": "\"I do not enjoy casinos or gaming environments.\""
+        },
+        "family": "active_status",
+        "text_prefix": "Current memory values follow. Scope labels and <stored_value> delimiters are serialization, not part of the stored values.\nScope: travel hotel\n<stored_value>\n\"I do not enjoy casinos or gaming environments.\"\n</stored_value>\n\n",
+        "occurrences": [
+          {
+            "target_id": "state-bfa1a25a477e9b2c2eea",
+            "phase": "qualification",
+            "scope": "travel_hotel",
+            "form": null
+          }
+        ]
+      },
+      "raw": "no",
+      "eos": true,
+      "correct": false
+    }
+  ],
+  "scoring": "raw reconstruction; unchanged full-string/XML plus observed EOS",
+  "archive_sha256": "d5ad0a548fe0e8a45f5285fb299894166cee0c1e43057e4ef50c3f0ac37e66ef"
+}

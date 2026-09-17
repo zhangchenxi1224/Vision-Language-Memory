@@ -1,13 +1,57 @@
 # PrefEval RGB memory: execution brief, 2026-09-17
 
-Status: first empirical Reader-reference gate completed and failed on strict
-formatting; no teacher or shared-Writer training has started.
+Status: v2 primary references pass, but the prospectively added auxiliary
+yes/no gate fails. No teacher or shared-Writer optimization has started.
 The user's goal is active. ChatGPT planning/review is required by the user.
 The user created the Project with project-only memory; connection and workspace
 identity have been verified. C2C task c2c_7e19 plan `prefeval-rgb-pilot-01` was
 received and executed through its first empirical allocation gate. See
 `pilot-plan.md`, `registered/summary.json`, and `references-v1-summary.json`.
 Do not claim the experiment completed.
+
+## Iteration 2: frozen interface repair and observed limitation
+
+Plan `prefeval-rgb-format-and-visual-sentinel-02` stopped at its first failed gate.
+The same 2,048 blank/text reads plus 1,040 preregistered sentinel-form reads
+completed on four H200s at code `0c0a543`, exit 0. Original membership, state
+targets, options, scorers and v1 evidence are unchanged. The revised prompt
+restores the exact pinned upstream MCQ template; recovery separates scope
+labels from verbatim values and preserves literal quotation marks.
+
+Raw/token reconstruction independently confirms:
+
+| Text-reference family | Correct / total | Gate |
+|---|---:|---|
+| Original MCQ | 92/96 | pass (77 required) |
+| Derived full-state recovery | 926/928 | pass (836 required) |
+| Teacher training recovery | 263/264 | pass (90%) |
+| Positive complete-statement check | 80/84 | pass (90%) |
+| Negative complete-statement check | 66/84 | **fail** |
+| Active-status check | 72/88 | **fail** |
+
+These auxiliary failures are content judgments, not missing tags: negative
+statements sometimes elicit `no` to active-status, and near-equivalent candidate
+statements sometimes elicit `yes` despite nonidentical text. Even pilot-only
+distinct operational semantic groups can contain similar meaning. No regrouping,
+dropping or relabeling was performed. Two dev recovery failures mix a cleared
+travel-activities slot with the untouched hotel slot. All failures remain in
+`references-v2-verified.json` and all 3,088 outputs in the adjacent JSONL.
+The unpacked `references-v2/` is accessible locally for connector review;
+`references-v2-evidence.tgz` preserves every full generation/token record.
+
+`references-v1-verified.json` reconstructs v1 unchanged (28/96 and 783/928),
+checks complete coverage, expected jobs, EOS IDs and token counts, and verifies
+the archived SHA256. `five-case-source-audit.json` binds all five original
+residual MCQs to pinned source explanations, retaining official denominators.
+
+Prepared but **unexecuted**: corrected FP32 AutoencoderTiny teacher loader,
+official gray-encoding equality check, sealed registered queries, pilot-only
+foils, initialization/optimizer/fixed-endpoint/PNG evidence; a 124-native-write
+PNG-only 4f baseline. Launcher refuses to run either if v2 gate fails.
+45 focused protocol/Reader/EOS/Base/RGB tests pass. No visual capacity outcome
+or new usable model can yet be claimed. Next review should resolve whether
+unreliable auxiliary judgments belong in the allocation gate, preserving their
+failed results and prioritizing the registered visual-memory experiment.
 
 ## Inputs and scope
 
