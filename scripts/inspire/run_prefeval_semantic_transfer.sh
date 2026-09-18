@@ -8,8 +8,8 @@ task_python="$task_root/envs/vlm-r3-ngc2502/bin/python"
 task_models=/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory
 cd "$task_repo"
 [[ "$(git rev-parse HEAD)" == "${1:?Exact execution commit required}" && -z "$(git status --porcelain)" ]]
-phase="${2:?feasibility, paired, ranking-calibration, trial, joint, coverage or coverage-eval-retry}"
-[[ "$phase" == feasibility || "$phase" == paired || "$phase" == ranking-calibration || "$phase" == trial || "$phase" == joint || "$phase" == coverage || "$phase" == coverage-eval-retry ]]
+phase="${2:?feasibility, paired, ranking-calibration, trial, joint, coverage, coverage-eval-retry or attribute-generalization}"
+[[ "$phase" == feasibility || "$phase" == paired || "$phase" == ranking-calibration || "$phase" == trial || "$phase" == joint || "$phase" == coverage || "$phase" == coverage-eval-retry || "$phase" == attribute-generalization ]]
 driver=scripts/experiments/prefeval_semantic_transfer.py
 if [[ "$phase" == joint ]]; then
   [[ "${3:?Explicit instance required}" == dl-clear-retain-h200x4-20260914 ]]
@@ -32,6 +32,13 @@ if [[ "$phase" == coverage-eval-retry ]]; then
   driver=scripts/experiments/prefeval_query_family_coverage.py
   [[ "$(cat "$output/train-exit-status.txt")" == 0 && "$(cat "$output/evaluate-exit-status.txt")" == 1 ]]
   [[ -d "$output/evaluation" && ! -e "$output/evaluation-failed-c316456" && ! -e "$output/evaluate-r1-exit-status.txt" ]]
+fi
+if [[ "$phase" == attribute-generalization ]]; then
+  [[ "${3:?Explicit instance required}" == vlm-r11-trust-h200x4-20260907-r3 ]]
+  source="$task_root/runs/dreamlite-prefeval-rgb-20260917/query-family-coverage-v1-run"
+  output="$task_root/runs/dreamlite-prefeval-rgb-20260917/attribute-generalization-v1-run"
+  driver=scripts/experiments/prefeval_attribute_generalization.py
+  [[ ! -e "$output" ]]
 fi
 if [[ "$phase" == ranking-calibration ]]; then output="$task_root/runs/dreamlite-prefeval-rgb-20260917/semantic-ranking-v1-run"; fi
 if [[ "$phase" == trial ]]; then
@@ -56,7 +63,14 @@ run_stage() {
   printf '%s\n' "$status" > "$output/$mode-exit-status.txt"
   return "$status"
 }
-if [[ "$phase" == coverage-eval-retry ]]; then
+if [[ "$phase" == attribute-generalization ]]; then
+  printf '%s\n' "$3" > "$output/instance.txt"
+  hostname > "$output/hostname.txt"
+  nvidia-smi > "$output/gpu-before.txt"
+  run_stage train
+  run_stage evaluate
+  "$task_python" scripts/reporting/verify_prefeval_attribute_generalization.py --output "$output" --source "$source" > "$output/final-verification.log" 2>&1
+elif [[ "$phase" == coverage-eval-retry ]]; then
   mv "$output/evaluation" "$output/evaluation-failed-c316456"
   git rev-parse HEAD > "$output/coverage-eval-code-commit.txt"
   pids=()

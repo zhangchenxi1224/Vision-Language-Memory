@@ -295,6 +295,29 @@ Keep Full U-Net, frozen Reader/VAE/text encoder, Base native 28-step CFG1,
 native conditioning and official FM. Source is condition only, never the FM origin.
 Fresh inference starts Gaussian; episode memory begins gray. RETAIN executes Writer.
 
+## Iteration 10: attribute generalization deployment
+
+Plan `prefeval-rgb-attribute-generalization-10` compares two equal-budget latent
+continuations from every fixed Plan09-V endpoint. Arm R repeats the established
+application situations; arm D replaces half of those application updates with
+112 preregistered attribute scenarios. Each new situation has a counterfactual
+variant that moves the compatible specification to another named proposal. The
+four overwrite contrasts keep questions and proposals identical while changing
+the compatible answer with the stored preference. Recovery supervision, update
+count, optimizer and evaluation panels are shared.
+
+All new training and evaluation runs only on
+`vlm-r11-trust-h200x4-20260907-r3`. The deployment entry point is:
+
+```bash
+bash scripts/inspire/run_prefeval_semantic_transfer.sh <exact-commit> \
+  attribute-generalization vlm-r11-trust-h200x4-20260907-r3
+```
+
+The experiment produces 80 frozen RGB endpoints, evaluates the full Plan09
+panel plus the new XML and full-action attribute panel, and reports D versus R
+on semantic-group macro original-MCQ accuracy. It performs no Writer updates.
+
 ## Historical paired evidence
 
 `compare_parent_chains.py` read all 960 raw cells in the two full RGB chain matrices
