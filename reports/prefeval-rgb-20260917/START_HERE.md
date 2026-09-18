@@ -1,6 +1,6 @@
 # PrefEval RGB memory: execution brief, 2026-09-17
 
-## Iteration 9: fixed query-family coverage experiment
+## Iteration 9: completed query-family coverage, adoption FAILED
 
 ChatGPT plan `prefeval-rgb-query-family-coverage-09` continues every Plan08-J
 endpoint for 64 paired updates. U repeats the unchanged joint objective. V uses
@@ -16,6 +16,15 @@ derived XML evaluation attempt failed before completion because its generation
 scorer lacked a required target-index field. Per the user's later override, the
 preserved endpoints will be evaluated on `vlm-r11-trust-h200x4-20260907-r3`;
 the retry has a separate immutable runtime receipt and performs no optimization.
+All four retry shards completed and the independent verifier accepted 4,648
+generations, 1,584 rankings and 528 recovery-CE records. V improved the new
+recovery forms to 650/704 from U's 488/704 and XML application generation to
+336/336 from 325/336. It also raised complete same-PNG joint states from 21 to
+26 and K4 complete recovery from 0/12 to 3/12. These gains coexist with lower
+original-form recovery (251/264 versus U 262/264), lower original MCQ (47/84
+versus 48/84) and lower reserved application generation (47/168 versus 63/168).
+Neither arm passes the registered recovery and original-MCQ adoption targets;
+therefore Writer updates remain zero. Read `query-family-coverage-results.md`.
 
 ## Iteration 8: completed joint consolidation, adoption FAILED
 
