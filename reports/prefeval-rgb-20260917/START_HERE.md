@@ -1,6 +1,16 @@
 # PrefEval RGB memory: execution brief, 2026-09-17
 
-## Iteration 8: paired joint consolidation
+## Iteration 8: completed joint consolidation, adoption FAILED
+
+Execution `89ea585` finished all registered training and evaluation calls.
+Raw evidence independently reconstructed locally, byte-identical to the remote
+receipt. Read `joint-consolidation-results.md` and
+`joint-consolidation-final-verified.json`. J restores trained recovery to260/264
+from B186/264, preserves transfer ranking167/168, but K4 complete recovery0/12,
+selective clear0/4 and original MCQ48/84 remain below qualification. No Writer
+was trained. Next: independent ChatGPT review and a bounded main-line plan.
+
+### Registered experiment
 
 ChatGPT plan `prefeval-rgb-joint-consolidation-08`, review base `10b491a`,
 continues all 40 Plan07-B endpoints with fresh paired Adam, learning rate .01,
