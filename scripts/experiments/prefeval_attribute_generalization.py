@@ -10,7 +10,6 @@ from vision_memory.prefeval.rgb_protocol import digest
 
 s=q.s;j=q.j;tensor_sha=q.tensor_sha
 DATA=s.REPORT/'attribute-generalization-v1'
-OLD=s.REPORT/'query-family-coverage-v1-run'
 INSTANCE='vlm-r11-trust-h200x4-20260907-r3'
 
 def schedule(step):
@@ -50,14 +49,14 @@ def register(a):
     runtime=s.load_json(a.runtime_receipt);assert runtime['instance']==INSTANCE and len(runtime['actual']['gpus'])==4
     assert INSTANCE in runtime['platform_status'] and 'RUNNING' in runtime['platform_status']
     cases=s.load_json(DATA/'attribute-scenarios.json');assert sum(map(len,cases.values()))==112
-    endpoints={sid:s.load_json(OLD/'training/V'/sid/'complete.json') for sid in p['targets']}
+    endpoints={sid:s.load_json(a.source/'training/V'/sid/'complete.json') for sid in p['targets']}
     for sid,done in endpoints.items():
-        for name,h in done['artifacts'].items():assert s.file_sha(OLD/'training/V'/sid/name)==h
+        for name,h in done['artifacts'].items():assert s.file_sha(a.source/'training/V'/sid/name)==h
     reg=dict(plan='prefeval-rgb-attribute-generalization-10',parent_registration_digest=digest(parent),
-        parent_verified=s.file_sha(OLD/'final-verified.json'),instance=INSTANCE,runtime=runtime,
+        parent_verified=s.file_sha(a.source/'final-verified.json'),instance=INSTANCE,runtime=runtime,
         training_digest=digest(p),evaluation_digest=parent['evaluation_digest'],contrast_values=parent['contrast_values'],
         attribute_scenarios_digest=digest(cases),attribute_audit_sha=s.file_sha(DATA/'attribute-scenario-audit.json'),
-        endpoint_receipts=endpoints,endpoint_receipt_hashes={sid:s.file_sha(OLD/'training/V'/sid/'complete.json') for sid in p['targets']},
+        endpoint_receipts=endpoints,endpoint_receipt_hashes={sid:s.file_sha(a.source/'training/V'/sid/'complete.json') for sid in p['targets']},
         arms=['R','D'],steps=64,inherited_updates=[256,128,64,64],optimizer=dict(lr=.01,betas=[.9,.999],eps=1e-8,weight_decay=0.),
         schedule=[schedule(x) for x in range(64)],functions=functions(),progression=parent['progression'],
         comparative_target=dict(metric='semantic-group macro original MCQ accuracy',minimum_gain=0.10,comparison='D-R'),
