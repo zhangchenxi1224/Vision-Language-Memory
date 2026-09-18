@@ -16,7 +16,9 @@ def add(d,k,v):d[k][0]+=int(v);d[k][1]+=1
 def verify(output,source):
     reg,p=q.load();e=s.load_json(s.DATA/'evaluation-payload.json');assert digest(e)==reg['evaluation_digest']
     assert s.file_sha(source/'final-verified.json')==reg['parent_verified']
-    code=(output/'coverage-code-commit.txt').read_text().strip();forward=Counter();tokens=Counter();seconds=Counter();snap=[]
+    code=(output/'coverage-code-commit.txt').read_text().strip()
+    eval_code=(output/'coverage-eval-code-commit.txt').read_text().strip() if (output/'coverage-eval-code-commit.txt').exists() else code
+    forward=Counter();tokens=Counter();seconds=Counter();snap=[]
     for i in range(4):
         ident=s.load_json(output/f'train-identity-{i}.json');assert ident['code']==code and ident['registration_digest']==digest(reg)
         assert ident['actual_host']==reg['runtime']['actual'] and ident['assignment']==sorted(p['targets'])[i::4]
@@ -79,7 +81,7 @@ def verify(output,source):
     gens=[];ranks=[];ces=[];ecalls=etokens=0;etime=0
     for i in range(4):
         folder=output/'evaluation'/f'shard-{i}';ident=s.load_json(folder/'identity.json');done=s.load_json(folder/'complete.json')
-        assert ident['code']==code and ident['registration_digest']==digest(reg) and ident['actual_host']==reg['runtime']['actual']
+        assert ident['code']==eval_code and ident['registration_digest']==digest(reg) and ident['actual_host']==reg['runtime']['actual']
         assert ident['assignment']==sorted(p['targets'])[i::4];snap.append(digest(ident['snapshots']))
         assert ident['frozen_endpoints']=={f'{a}/{sid}':s.file_sha(output/'training'/a/sid/'complete.json') for sid in p['targets'] for a in ('U','V')}
         for name,h in done['artifacts'].items():assert s.file_sha(folder/name)==h
@@ -89,7 +91,8 @@ def verify(output,source):
             key=r['target'],r['condition'],r['panel'],r['query']['id'];item=expected_gen[key];assert r['query']==item and r['reader_query']==item['query']
             assert r['processor_input']['text']==frame.replace('__REGISTERED_QUERY__',item['query'])
             assert r['processor_input']['input_ids_digest']==digest([r['generation']['input_token_ids']])
-            local+=r['processor_input']['input_tokens'];raw_score(r,item,r['panel'] in ('mcq','application_xml'))
+            score_item={**item,'target_index':ord(item['target'][-10])-65} if r['panel']=='application_xml' else item
+            local+=r['processor_input']['input_tokens'];raw_score(r,score_item,r['panel']=='mcq' or r['panel']=='application_xml')
             assert r['png_sha']==s.load_json(output/'training'/r['condition']/r['target']/'complete.json')['artifacts']['memory.png']
         for r in rr:
             item,ch,gold=expected_rank[r['target'],r['condition'],r['panel'],r['query']['id']]
@@ -116,7 +119,9 @@ def verify(output,source):
     counts=defaultdict(lambda:[0,0]);correct={};rankok={}
     for metric,index in (('generation',{**oldg,**gi}),('ranking',{**oldr,**ri})):
         for key,r in index.items():
-            sid,arm,panel,_=key;ok=raw_score(r,r['query'],panel in ('mcq','application_xml')) if metric=='generation' else r['gold_margin']>0
+            sid,arm,panel,_=key
+            score_item={**r['query'],'target_index':ord(r['query']['target'][-10])-65} if panel=='application_xml' else r['query']
+            ok=raw_score(r,score_item,panel in ('mcq','application_xml')) if metric=='generation' else r['gold_margin']>0
             (correct if metric=='generation' else rankok)[key]=ok;add(counts,f'{arm}/{metric}/{panel}/all',ok)
     recovery={};joint={};failure_classes={}
     for arm in ('J','U','V'):

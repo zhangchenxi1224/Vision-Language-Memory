@@ -8,8 +8,8 @@ task_python="$task_root/envs/vlm-r3-ngc2502/bin/python"
 task_models=/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory
 cd "$task_repo"
 [[ "$(git rev-parse HEAD)" == "${1:?Exact execution commit required}" && -z "$(git status --porcelain)" ]]
-phase="${2:?feasibility, paired, ranking-calibration, trial, joint or coverage}"
-[[ "$phase" == feasibility || "$phase" == paired || "$phase" == ranking-calibration || "$phase" == trial || "$phase" == joint || "$phase" == coverage ]]
+phase="${2:?feasibility, paired, ranking-calibration, trial, joint, coverage or coverage-eval-retry}"
+[[ "$phase" == feasibility || "$phase" == paired || "$phase" == ranking-calibration || "$phase" == trial || "$phase" == joint || "$phase" == coverage || "$phase" == coverage-eval-retry ]]
 driver=scripts/experiments/prefeval_semantic_transfer.py
 if [[ "$phase" == joint ]]; then
   [[ "${3:?Explicit instance required}" == dl-clear-retain-h200x4-20260914 ]]
@@ -24,6 +24,14 @@ if [[ "$phase" == coverage ]]; then
   output="$task_root/runs/dreamlite-prefeval-rgb-20260917/query-family-coverage-v1-run"
   driver=scripts/experiments/prefeval_query_family_coverage.py
   [[ ! -e "$output" ]]
+fi
+if [[ "$phase" == coverage-eval-retry ]]; then
+  [[ "${3:?Explicit instance required}" == dl-clear-retain-h200x4-20260914 ]]
+  source="$task_root/runs/dreamlite-prefeval-rgb-20260917/joint-consolidation-v1-run"
+  output="$task_root/runs/dreamlite-prefeval-rgb-20260917/query-family-coverage-v1-run"
+  driver=scripts/experiments/prefeval_query_family_coverage.py
+  [[ "$(cat "$output/train-exit-status.txt")" == 0 && "$(cat "$output/evaluate-exit-status.txt")" == 1 ]]
+  [[ -d "$output/evaluation" && ! -e "$output/evaluation-failed-c316456" && ! -e "$output/evaluate-r1-exit-status.txt" ]]
 fi
 if [[ "$phase" == ranking-calibration ]]; then output="$task_root/runs/dreamlite-prefeval-rgb-20260917/semantic-ranking-v1-run"; fi
 if [[ "$phase" == trial ]]; then
@@ -48,7 +56,22 @@ run_stage() {
   printf '%s\n' "$status" > "$output/$mode-exit-status.txt"
   return "$status"
 }
-if [[ "$phase" == coverage ]]; then
+if [[ "$phase" == coverage-eval-retry ]]; then
+  mv "$output/evaluation" "$output/evaluation-failed-c316456"
+  git rev-parse HEAD > "$output/coverage-eval-code-commit.txt"
+  pids=()
+  for shard in 0 1 2 3; do
+    CUDA_VISIBLE_DEVICES="$shard" "$task_python" "$driver" --mode evaluate \
+      --source "$source" --output "$output" --base "$task_models/DreamLite-base-a9a0f15-20260907" \
+      --reader "$task_models/Qwen3-VL-4B-Instruct" --device cuda:0 --shards 4 --shard "$shard" > "$output/evaluate-r1-shard-$shard.log" 2>&1 &
+    pids+=("$!")
+  done
+  status=0
+  for pid in "${pids[@]}"; do wait "$pid" || status=1; done
+  printf '%s\n' "$status" > "$output/evaluate-r1-exit-status.txt"
+  [[ "$status" == 0 ]]
+  "$task_python" scripts/reporting/verify_prefeval_query_family_coverage.py --output "$output" --source "$source" > "$output/final-verification.log" 2>&1
+elif [[ "$phase" == coverage ]]; then
   hostname > "$output/hostname.txt"
   nvidia-smi > "$output/gpu-before.txt"
   run_stage train

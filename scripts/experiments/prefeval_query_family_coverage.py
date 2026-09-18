@@ -186,7 +186,7 @@ def evaluate(a):
                 case=cases[(q0['case_id'],q0['scope'],q0['value_id'])];q,_,_=xml_candidates(case,0)
                 processor.begin_capture();g=s.generate(reader,processor,image,q['query'],a.device);pp=processor.end_capture()
                 s.append(out/'reads.jsonl',dict(target=sid,condition=arm,panel='application_xml',query=q,png_sha=sha,generation=g,
-                    score=s.score_generation(g,q,True),reader_query=q['query'],processor_input=pp[0]));n+=1
+                    score=s.score_generation(g,{**q,'target_index':ord(q['target'][-10])-65},True),reader_query=q['query'],processor_input=pp[0]));n+=1
             for panel in ('application_training','application_reserved'):
                 for q0 in t[panel]:
                     case=cases[(q0['case_id'],q0['scope'],q0['value_id'])]

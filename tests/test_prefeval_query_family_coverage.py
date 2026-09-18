@@ -32,6 +32,7 @@ def test_xml_mapping_and_query_isolation():
         assert choices[gold]==item['target'] and item['target']==f'<choice>{chr(65+gold)}</choice>'
         assert case['target'] not in item['query'].split('here are 4 options')[0]
         assert '<choice>' not in item['query'].split('Answer example:')[0]
+        assert ord(item['target'][-10])-65==gold
     assert sorted(seen)==[0,1,2,3]
     code=inspect.getsource(q.train)
     for forbidden in ('evaluation-payload','reserved-scenarios','qualification'):
