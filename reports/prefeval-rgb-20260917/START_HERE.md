@@ -11,8 +11,11 @@ the same 5,120 total updates and 38,400 gradient Reader forwards per arm. All
 queries and schedules are frozen before inference. Existing excluded recovery,
 official MCQs and observed transfer scenarios remain gradient-excluded. The run
 adds no semantic content, scenarios, calibration, final-test access or Writer
-updates. Every new GPU operation is restricted to
-`dl-clear-retain-h200x4-20260914`.
+updates. Training completed on `dl-clear-retain-h200x4-20260914`. The first
+derived XML evaluation attempt failed before completion because its generation
+scorer lacked a required target-index field. Per the user's later override, the
+preserved endpoints will be evaluated on `vlm-r11-trust-h200x4-20260907-r3`;
+the retry has a separate immutable runtime receipt and performs no optimization.
 
 ## Iteration 8: completed joint consolidation, adoption FAILED
 

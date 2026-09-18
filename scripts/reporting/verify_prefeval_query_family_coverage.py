@@ -15,6 +15,7 @@ def add(d,k,v):d[k][0]+=int(v);d[k][1]+=1
 
 def verify(output,source):
     reg,p=q.load();e=s.load_json(s.DATA/'evaluation-payload.json');assert digest(e)==reg['evaluation_digest']
+    retry=s.load_json(q.DATA/'evaluation-retry.json');assert retry['parent_registration_digest']==digest(reg)
     assert s.file_sha(source/'final-verified.json')==reg['parent_verified']
     code=(output/'coverage-code-commit.txt').read_text().strip()
     eval_code=(output/'coverage-eval-code-commit.txt').read_text().strip() if (output/'coverage-eval-code-commit.txt').exists() else code
@@ -81,7 +82,8 @@ def verify(output,source):
     gens=[];ranks=[];ces=[];ecalls=etokens=0;etime=0
     for i in range(4):
         folder=output/'evaluation'/f'shard-{i}';ident=s.load_json(folder/'identity.json');done=s.load_json(folder/'complete.json')
-        assert ident['code']==eval_code and ident['registration_digest']==digest(reg) and ident['actual_host']==reg['runtime']['actual']
+        assert ident['code']==eval_code and ident['registration_digest']==digest(reg) and ident['actual_host']==retry['actual']
+        assert ident['evaluation_retry_digest']==digest(retry)
         assert ident['assignment']==sorted(p['targets'])[i::4];snap.append(digest(ident['snapshots']))
         assert ident['frozen_endpoints']=={f'{a}/{sid}':s.file_sha(output/'training'/a/sid/'complete.json') for sid in p['targets'] for a in ('U','V')}
         for name,h in done['artifacts'].items():assert s.file_sha(folder/name)==h
@@ -108,6 +110,9 @@ def verify(output,source):
             assert math.isclose(r['loss'],r['answer_ce']+r['eos_ce'],rel_tol=2e-5,abs_tol=2e-5);local+=r['processor_input']['input_tokens']
         assert local==done['processed_input_tokens'] and calls==done['ranking_candidate_forwards'];etokens+=local;ecalls+=calls;etime+=done['seconds'];gens+=gg;ranks+=rr;ces+=cc
     assert len(set(snap))==1 and len(gens)==4648 and len(ranks)==1584 and len(ces)==528 and ecalls<=6336
+    assert (output/'evaluate-exit-status.txt').read_text().strip()=='1'
+    assert (output/'evaluate-r1-exit-status.txt').read_text().strip()=='0' and (output/'evaluation-failed-c316456').is_dir()
+    for i in range(4):assert "KeyError: 'target_index'" in (output/f'evaluate-shard-{i}.log').read_text(encoding='utf-8')
     gi=exact_index(gens,lambda r:(r['target'],r['condition'],r['panel'],r['query']['id']),expected_gen)
     ri=exact_index(ranks,lambda r:(r['target'],r['condition'],r['panel'],r['query']['id']),expected_rank)
     oldg={};oldr={}
@@ -182,7 +187,7 @@ def verify(output,source):
     result=dict(registration_digest=digest(reg),updates=5120,gradient_forwards=dict(forward),training_tokens=dict(tokens),training_seconds=dict(seconds),
         generations=4648,rankings=1584,endpoint_ce_forwards=528,actual_candidate_forwards=ecalls,evaluation_tokens=etokens,evaluation_seconds=etime,
         counts=dict(counts),recovery=recovery,joint=joint,paired=paired,rotation=rotation,contrasts=contrasts,failure_classes=failure_classes,
-        absolute_targets=absolute,writer_updates=0,limitation=reg['limitation'])
+        absolute_targets=absolute,evaluation_retry=retry,writer_updates=0,limitation=reg['limitation'])
     (output/'final-verified.json').write_text(json.dumps(result,indent=2,ensure_ascii=False)+'\n',encoding='utf-8',newline='\n')
     print(json.dumps({k:v for k,v in result.items() if k not in ('recovery','joint','rotation','contrasts')},indent=2));return result
 

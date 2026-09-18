@@ -26,7 +26,7 @@ if [[ "$phase" == coverage ]]; then
   [[ ! -e "$output" ]]
 fi
 if [[ "$phase" == coverage-eval-retry ]]; then
-  [[ "${3:?Explicit instance required}" == dl-clear-retain-h200x4-20260914 ]]
+  [[ "${3:?Explicit instance required}" == vlm-r11-trust-h200x4-20260907-r3 ]]
   source="$task_root/runs/dreamlite-prefeval-rgb-20260917/joint-consolidation-v1-run"
   output="$task_root/runs/dreamlite-prefeval-rgb-20260917/query-family-coverage-v1-run"
   driver=scripts/experiments/prefeval_query_family_coverage.py

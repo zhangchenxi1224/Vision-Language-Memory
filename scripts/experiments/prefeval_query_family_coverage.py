@@ -11,6 +11,7 @@ from vision_memory.prefeval.rgb_protocol import digest,scope_name
 s=j.s; tensor_sha=j.tensor_sha
 DATA=s.REPORT/'query-family-coverage-v1'; OLD=s.REPORT/'joint-consolidation-v1-run'
 INSTANCE=j.INSTANCE
+EVAL_INSTANCE='vlm-r11-trust-h200x4-20260907-r3'
 QUESTION_STEMS=(
     'What preference has been recorded about {scope}?',
     'For {scope}, what preference does the memory contain?',
@@ -82,6 +83,17 @@ def register(a):
     s.write_frozen(DATA/'training-payload.json',dict(parent_training_digest=digest(p),interfaces=training))
     s.write_frozen(DATA/'registration.json',reg);print(json.dumps(dict(registration_digest=digest(reg),budget=reg['budget'])))
 
+def register_retry(a):
+    reg=s.load_json(DATA/'registration.json');lines=a.runtime_receipt.read_text(encoding='utf-8').splitlines()
+    assert len(lines)==5 and lines[0].startswith(EVAL_INSTANCE+'--') and all('NVIDIA H200' in x for x in lines[1:])
+    status=a.platform_status.read_text(encoding='utf-8');assert EVAL_INSTANCE in status and 'Status: RUNNING' in status
+    receipt=dict(plan='prefeval-rgb-query-family-coverage-09-evaluation-retry',parent_registration_digest=digest(reg),
+        training_code='c316456d34fe3b87264c26fdf90939529ee6d4d4',failed_evaluation_exit_status=1,
+        failed_evaluation_error='KeyError target_index in derived XML generation scoring after endpoint generation',
+        user_instance_override=True,instance=EVAL_INSTANCE,actual=dict(hostname=lines[0],gpus=lines[1:]),platform_status=status,
+        scope='evaluation and GPU-dependent verification only; preserve completed training endpoints; no added optimization')
+    s.write_frozen(DATA/'evaluation-retry.json',receipt);print(json.dumps(dict(retry_digest=digest(receipt),instance=EVAL_INSTANCE)))
+
 def load():
     reg=s.load_json(DATA/'registration.json');previous,p=j.load()
     assert digest(previous)==reg['parent_registration_digest'] and digest(p)==reg['training_digest']
@@ -91,6 +103,11 @@ def load():
 
 def guard(a,reg):
     assert j.actual_host()==reg['runtime']['actual'] and s.file_sha(a.source/'final-verified.json')==reg['parent_verified']
+
+def evaluation_guard(a,reg):
+    retry=s.load_json(DATA/'evaluation-retry.json');assert retry['parent_registration_digest']==digest(reg)
+    assert retry['instance']==EVAL_INSTANCE and j.actual_host()==retry['actual']
+    assert s.file_sha(a.source/'final-verified.json')==reg['parent_verified'];return retry
 
 def train(a):
     reg,p=load();guard(a,reg);processor,reader,vae,versions,bindings=s.models(a,True)
@@ -146,7 +163,7 @@ def train(a):
     s.write_frozen(a.output/f'train-complete-{a.shard}.json',dict(targets=assignment))
 
 def evaluate(a):
-    reg,p=load();guard(a,reg);endpoints={}
+    reg,p=load();retry=evaluation_guard(a,reg);endpoints={}
     for sid in p['targets']:
         for arm in ('U','V'):
             f=a.output/'training'/arm/sid;done=s.load_json(f/'complete.json');assert done['additional_updates']==64
@@ -158,7 +175,8 @@ def evaluate(a):
     processor,reader,_,versions,bindings=s.models(a);termination=s.assistant_termination_contract(reader,processor)
     assignment=sorted(p['targets'])[a.shard::a.shards];out=a.output/'evaluation'/f'shard-{a.shard}';out.mkdir(parents=True,exist_ok=False)
     frame=s.query_prompt(processor,'__REGISTERED_QUERY__');s.write_frozen(out/'identity.json',dict(**s.identity(a,bindings,reg,assignment),
-        actual_host=j.actual_host(),frozen_endpoints=endpoints,prompt_frame=frame,chat_template_digest=digest(processor.chat_template),termination=termination))
+        actual_host=j.actual_host(),evaluation_retry_digest=digest(retry),frozen_endpoints=endpoints,prompt_frame=frame,
+        chat_template_digest=digest(processor.chat_template),termination=termination))
     started=time.monotonic();n=rn=cf=cen=0;cache={}
     for sid in assignment:
         t=e['targets'][sid];train=p['targets'][sid]
@@ -202,8 +220,9 @@ def evaluate(a):
         artifacts={x:s.file_sha(out/x) for x in ('reads.jsonl','ranking.jsonl','recovery-ce.jsonl','identity.json')}))
 
 if __name__=='__main__':
-    ap=argparse.ArgumentParser();ap.add_argument('--mode',choices=['register','train','evaluate'],required=True)
-    for n in ('source','output','reader','base','runtime-receipt'):ap.add_argument('--'+n,type=Path)
+    ap=argparse.ArgumentParser();ap.add_argument('--mode',choices=['register','register-retry','train','evaluate'],required=True)
+    for n in ('source','output','reader','base','runtime-receipt','platform-status'):ap.add_argument('--'+n,type=Path)
     ap.add_argument('--shard',type=int,default=0);ap.add_argument('--shards',type=int,default=4);ap.add_argument('--device',default='cuda:0');a=ap.parse_args()
     if a.mode=='register':register(a)
+    elif a.mode=='register-retry':register_retry(a)
     else:a.output.mkdir(parents=True,exist_ok=True);{'train':train,'evaluate':evaluate}[a.mode](a)
