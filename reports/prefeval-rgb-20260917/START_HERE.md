@@ -1,5 +1,19 @@
 # PrefEval RGB memory: execution brief, 2026-09-17
 
+## Iteration 9: fixed query-family coverage experiment
+
+ChatGPT plan `prefeval-rgb-query-family-coverage-09` continues every Plan08-J
+endpoint for 64 paired updates. U repeats the unchanged joint objective. V uses
+one original recovery form, one of four new question forms, one of four new
+instruction forms, and alternates the existing full-action application format
+with a mechanically derived XML-choice format. Both arms use fresh Adam at .01,
+the same 5,120 total updates and 38,400 gradient Reader forwards per arm. All
+queries and schedules are frozen before inference. Existing excluded recovery,
+official MCQs and observed transfer scenarios remain gradient-excluded. The run
+adds no semantic content, scenarios, calibration, final-test access or Writer
+updates. Every new GPU operation is restricted to
+`dl-clear-retain-h200x4-20260914`.
+
 ## Iteration 8: completed joint consolidation, adoption FAILED
 
 Execution `89ea585` finished all registered training and evaluation calls.

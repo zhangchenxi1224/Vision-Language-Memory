@@ -1,0 +1,603 @@
+{
+  "parent_training_digest": "45de1bfcfe9d935e27b43abc2272345fb7a650219971fc18a56f0c9e630f75ce",
+  "interfaces": {
+    "question_stems": [
+      "What preference has been recorded about {scope}?",
+      "For {scope}, what preference does the memory contain?",
+      "What does the record say my preference is regarding {scope}?",
+      "What preference information for {scope} is present in memory?"
+    ],
+    "instruction_stems": [
+      "Report the preference entry associated with {scope}.",
+      "Copy my recorded preference concerning {scope}.",
+      "Give the recorded preference for {scope}, including its conditions.",
+      "Return the preference text associated with {scope} in the memory."
+    ],
+    "contract": "\nReturn only the complete stored preference value for the requested scope. The scope label is not part of the value. Preserve every word and any quotation marks already present in the stored value. Do not add a label, quotation marks, tags, or explanation. For an inactive preference, return exactly: no active preference",
+    "mcq_suffix": "\n    I'm trying to decide on this and here are 4 options for my query: \n{options}\nNow, I'd like you to pick one of them as your top recommendation for me.\n    Important instructions for your response:\n    1. Choose only one option (A, B, C, or D) that best matches my preferences.\n    2. Your answer must be one of these options.\n    3. Don't say things like \"I can't choose\" or suggest alternatives not listed.\n    4. Answer example: <choice>B</choice>. Give me your answer in this exact format, without any additional explanation:\n       <choice>[A/B/C/D]</choice>\n    ",
+    "mcq_source": {
+      "commit": "50795054b5ff5f418d2b768a331d71e480f93331",
+      "file": "utils/utils_mcq.py",
+      "file_sha256": "9b50b51c55015698d4c0dde9be7e1dc1f8bd4dfe57334d3987f2e7d289bbe8d9",
+      "template_sha256": "0784f2f5160cd31f359cc5c3428723663220924caccb6437309440f68499a330"
+    },
+    "schedule": [
+      {
+        "step": 0,
+        "original": 0,
+        "question": 0,
+        "instruction": 0,
+        "scenario": 0,
+        "rotation": 0,
+        "format": "full-action"
+      },
+      {
+        "step": 1,
+        "original": 1,
+        "question": 1,
+        "instruction": 0,
+        "scenario": 1,
+        "rotation": 0,
+        "format": "full-action"
+      },
+      {
+        "step": 2,
+        "original": 2,
+        "question": 2,
+        "instruction": 0,
+        "scenario": 2,
+        "rotation": 0,
+        "format": "full-action"
+      },
+      {
+        "step": 3,
+        "original": 0,
+        "question": 3,
+        "instruction": 0,
+        "scenario": 3,
+        "rotation": 0,
+        "format": "full-action"
+      },
+      {
+        "step": 4,
+        "original": 1,
+        "question": 0,
+        "instruction": 1,
+        "scenario": 0,
+        "rotation": 1,
+        "format": "full-action"
+      },
+      {
+        "step": 5,
+        "original": 2,
+        "question": 1,
+        "instruction": 1,
+        "scenario": 1,
+        "rotation": 1,
+        "format": "full-action"
+      },
+      {
+        "step": 6,
+        "original": 0,
+        "question": 2,
+        "instruction": 1,
+        "scenario": 2,
+        "rotation": 1,
+        "format": "full-action"
+      },
+      {
+        "step": 7,
+        "original": 1,
+        "question": 3,
+        "instruction": 1,
+        "scenario": 3,
+        "rotation": 1,
+        "format": "full-action"
+      },
+      {
+        "step": 8,
+        "original": 2,
+        "question": 0,
+        "instruction": 2,
+        "scenario": 0,
+        "rotation": 2,
+        "format": "full-action"
+      },
+      {
+        "step": 9,
+        "original": 0,
+        "question": 1,
+        "instruction": 2,
+        "scenario": 1,
+        "rotation": 2,
+        "format": "full-action"
+      },
+      {
+        "step": 10,
+        "original": 1,
+        "question": 2,
+        "instruction": 2,
+        "scenario": 2,
+        "rotation": 2,
+        "format": "full-action"
+      },
+      {
+        "step": 11,
+        "original": 2,
+        "question": 3,
+        "instruction": 2,
+        "scenario": 3,
+        "rotation": 2,
+        "format": "full-action"
+      },
+      {
+        "step": 12,
+        "original": 0,
+        "question": 0,
+        "instruction": 3,
+        "scenario": 0,
+        "rotation": 3,
+        "format": "full-action"
+      },
+      {
+        "step": 13,
+        "original": 1,
+        "question": 1,
+        "instruction": 3,
+        "scenario": 1,
+        "rotation": 3,
+        "format": "full-action"
+      },
+      {
+        "step": 14,
+        "original": 2,
+        "question": 2,
+        "instruction": 3,
+        "scenario": 2,
+        "rotation": 3,
+        "format": "full-action"
+      },
+      {
+        "step": 15,
+        "original": 0,
+        "question": 3,
+        "instruction": 3,
+        "scenario": 3,
+        "rotation": 3,
+        "format": "full-action"
+      },
+      {
+        "step": 16,
+        "original": 1,
+        "question": 0,
+        "instruction": 0,
+        "scenario": 0,
+        "rotation": 0,
+        "format": "xml"
+      },
+      {
+        "step": 17,
+        "original": 2,
+        "question": 1,
+        "instruction": 0,
+        "scenario": 1,
+        "rotation": 0,
+        "format": "xml"
+      },
+      {
+        "step": 18,
+        "original": 0,
+        "question": 2,
+        "instruction": 0,
+        "scenario": 2,
+        "rotation": 0,
+        "format": "xml"
+      },
+      {
+        "step": 19,
+        "original": 1,
+        "question": 3,
+        "instruction": 0,
+        "scenario": 3,
+        "rotation": 0,
+        "format": "xml"
+      },
+      {
+        "step": 20,
+        "original": 2,
+        "question": 0,
+        "instruction": 1,
+        "scenario": 0,
+        "rotation": 1,
+        "format": "xml"
+      },
+      {
+        "step": 21,
+        "original": 0,
+        "question": 1,
+        "instruction": 1,
+        "scenario": 1,
+        "rotation": 1,
+        "format": "xml"
+      },
+      {
+        "step": 22,
+        "original": 1,
+        "question": 2,
+        "instruction": 1,
+        "scenario": 2,
+        "rotation": 1,
+        "format": "xml"
+      },
+      {
+        "step": 23,
+        "original": 2,
+        "question": 3,
+        "instruction": 1,
+        "scenario": 3,
+        "rotation": 1,
+        "format": "xml"
+      },
+      {
+        "step": 24,
+        "original": 0,
+        "question": 0,
+        "instruction": 2,
+        "scenario": 0,
+        "rotation": 2,
+        "format": "xml"
+      },
+      {
+        "step": 25,
+        "original": 1,
+        "question": 1,
+        "instruction": 2,
+        "scenario": 1,
+        "rotation": 2,
+        "format": "xml"
+      },
+      {
+        "step": 26,
+        "original": 2,
+        "question": 2,
+        "instruction": 2,
+        "scenario": 2,
+        "rotation": 2,
+        "format": "xml"
+      },
+      {
+        "step": 27,
+        "original": 0,
+        "question": 3,
+        "instruction": 2,
+        "scenario": 3,
+        "rotation": 2,
+        "format": "xml"
+      },
+      {
+        "step": 28,
+        "original": 1,
+        "question": 0,
+        "instruction": 3,
+        "scenario": 0,
+        "rotation": 3,
+        "format": "xml"
+      },
+      {
+        "step": 29,
+        "original": 2,
+        "question": 1,
+        "instruction": 3,
+        "scenario": 1,
+        "rotation": 3,
+        "format": "xml"
+      },
+      {
+        "step": 30,
+        "original": 0,
+        "question": 2,
+        "instruction": 3,
+        "scenario": 2,
+        "rotation": 3,
+        "format": "xml"
+      },
+      {
+        "step": 31,
+        "original": 1,
+        "question": 3,
+        "instruction": 3,
+        "scenario": 3,
+        "rotation": 3,
+        "format": "xml"
+      },
+      {
+        "step": 32,
+        "original": 2,
+        "question": 0,
+        "instruction": 0,
+        "scenario": 0,
+        "rotation": 0,
+        "format": "full-action"
+      },
+      {
+        "step": 33,
+        "original": 0,
+        "question": 1,
+        "instruction": 0,
+        "scenario": 1,
+        "rotation": 0,
+        "format": "full-action"
+      },
+      {
+        "step": 34,
+        "original": 1,
+        "question": 2,
+        "instruction": 0,
+        "scenario": 2,
+        "rotation": 0,
+        "format": "full-action"
+      },
+      {
+        "step": 35,
+        "original": 2,
+        "question": 3,
+        "instruction": 0,
+        "scenario": 3,
+        "rotation": 0,
+        "format": "full-action"
+      },
+      {
+        "step": 36,
+        "original": 0,
+        "question": 0,
+        "instruction": 1,
+        "scenario": 0,
+        "rotation": 1,
+        "format": "full-action"
+      },
+      {
+        "step": 37,
+        "original": 1,
+        "question": 1,
+        "instruction": 1,
+        "scenario": 1,
+        "rotation": 1,
+        "format": "full-action"
+      },
+      {
+        "step": 38,
+        "original": 2,
+        "question": 2,
+        "instruction": 1,
+        "scenario": 2,
+        "rotation": 1,
+        "format": "full-action"
+      },
+      {
+        "step": 39,
+        "original": 0,
+        "question": 3,
+        "instruction": 1,
+        "scenario": 3,
+        "rotation": 1,
+        "format": "full-action"
+      },
+      {
+        "step": 40,
+        "original": 1,
+        "question": 0,
+        "instruction": 2,
+        "scenario": 0,
+        "rotation": 2,
+        "format": "full-action"
+      },
+      {
+        "step": 41,
+        "original": 2,
+        "question": 1,
+        "instruction": 2,
+        "scenario": 1,
+        "rotation": 2,
+        "format": "full-action"
+      },
+      {
+        "step": 42,
+        "original": 0,
+        "question": 2,
+        "instruction": 2,
+        "scenario": 2,
+        "rotation": 2,
+        "format": "full-action"
+      },
+      {
+        "step": 43,
+        "original": 1,
+        "question": 3,
+        "instruction": 2,
+        "scenario": 3,
+        "rotation": 2,
+        "format": "full-action"
+      },
+      {
+        "step": 44,
+        "original": 2,
+        "question": 0,
+        "instruction": 3,
+        "scenario": 0,
+        "rotation": 3,
+        "format": "full-action"
+      },
+      {
+        "step": 45,
+        "original": 0,
+        "question": 1,
+        "instruction": 3,
+        "scenario": 1,
+        "rotation": 3,
+        "format": "full-action"
+      },
+      {
+        "step": 46,
+        "original": 1,
+        "question": 2,
+        "instruction": 3,
+        "scenario": 2,
+        "rotation": 3,
+        "format": "full-action"
+      },
+      {
+        "step": 47,
+        "original": 2,
+        "question": 3,
+        "instruction": 3,
+        "scenario": 3,
+        "rotation": 3,
+        "format": "full-action"
+      },
+      {
+        "step": 48,
+        "original": 0,
+        "question": 0,
+        "instruction": 0,
+        "scenario": 0,
+        "rotation": 0,
+        "format": "xml"
+      },
+      {
+        "step": 49,
+        "original": 1,
+        "question": 1,
+        "instruction": 0,
+        "scenario": 1,
+        "rotation": 0,
+        "format": "xml"
+      },
+      {
+        "step": 50,
+        "original": 2,
+        "question": 2,
+        "instruction": 0,
+        "scenario": 2,
+        "rotation": 0,
+        "format": "xml"
+      },
+      {
+        "step": 51,
+        "original": 0,
+        "question": 3,
+        "instruction": 0,
+        "scenario": 3,
+        "rotation": 0,
+        "format": "xml"
+      },
+      {
+        "step": 52,
+        "original": 1,
+        "question": 0,
+        "instruction": 1,
+        "scenario": 0,
+        "rotation": 1,
+        "format": "xml"
+      },
+      {
+        "step": 53,
+        "original": 2,
+        "question": 1,
+        "instruction": 1,
+        "scenario": 1,
+        "rotation": 1,
+        "format": "xml"
+      },
+      {
+        "step": 54,
+        "original": 0,
+        "question": 2,
+        "instruction": 1,
+        "scenario": 2,
+        "rotation": 1,
+        "format": "xml"
+      },
+      {
+        "step": 55,
+        "original": 1,
+        "question": 3,
+        "instruction": 1,
+        "scenario": 3,
+        "rotation": 1,
+        "format": "xml"
+      },
+      {
+        "step": 56,
+        "original": 2,
+        "question": 0,
+        "instruction": 2,
+        "scenario": 0,
+        "rotation": 2,
+        "format": "xml"
+      },
+      {
+        "step": 57,
+        "original": 0,
+        "question": 1,
+        "instruction": 2,
+        "scenario": 1,
+        "rotation": 2,
+        "format": "xml"
+      },
+      {
+        "step": 58,
+        "original": 1,
+        "question": 2,
+        "instruction": 2,
+        "scenario": 2,
+        "rotation": 2,
+        "format": "xml"
+      },
+      {
+        "step": 59,
+        "original": 2,
+        "question": 3,
+        "instruction": 2,
+        "scenario": 3,
+        "rotation": 2,
+        "format": "xml"
+      },
+      {
+        "step": 60,
+        "original": 0,
+        "question": 0,
+        "instruction": 3,
+        "scenario": 0,
+        "rotation": 3,
+        "format": "xml"
+      },
+      {
+        "step": 61,
+        "original": 1,
+        "question": 1,
+        "instruction": 3,
+        "scenario": 1,
+        "rotation": 3,
+        "format": "xml"
+      },
+      {
+        "step": 62,
+        "original": 2,
+        "question": 2,
+        "instruction": 3,
+        "scenario": 2,
+        "rotation": 3,
+        "format": "xml"
+      },
+      {
+        "step": 63,
+        "original": 0,
+        "question": 3,
+        "instruction": 3,
+        "scenario": 3,
+        "rotation": 3,
+        "format": "xml"
+      }
+    ]
+  }
+}

@@ -8,14 +8,21 @@ task_python="$task_root/envs/vlm-r3-ngc2502/bin/python"
 task_models=/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory
 cd "$task_repo"
 [[ "$(git rev-parse HEAD)" == "${1:?Exact execution commit required}" && -z "$(git status --porcelain)" ]]
-phase="${2:?feasibility, paired, ranking-calibration, trial or joint}"
-[[ "$phase" == feasibility || "$phase" == paired || "$phase" == ranking-calibration || "$phase" == trial || "$phase" == joint ]]
+phase="${2:?feasibility, paired, ranking-calibration, trial, joint or coverage}"
+[[ "$phase" == feasibility || "$phase" == paired || "$phase" == ranking-calibration || "$phase" == trial || "$phase" == joint || "$phase" == coverage ]]
 driver=scripts/experiments/prefeval_semantic_transfer.py
 if [[ "$phase" == joint ]]; then
   [[ "${3:?Explicit instance required}" == dl-clear-retain-h200x4-20260914 ]]
   source="$task_root/runs/dreamlite-prefeval-rgb-20260917/ranking-learning-trial-v1-run"
   output="$task_root/runs/dreamlite-prefeval-rgb-20260917/joint-consolidation-v1-run"
   driver=scripts/experiments/prefeval_joint_consolidation.py
+  [[ ! -e "$output" ]]
+fi
+if [[ "$phase" == coverage ]]; then
+  [[ "${3:?Explicit instance required}" == dl-clear-retain-h200x4-20260914 ]]
+  source="$task_root/runs/dreamlite-prefeval-rgb-20260917/joint-consolidation-v1-run"
+  output="$task_root/runs/dreamlite-prefeval-rgb-20260917/query-family-coverage-v1-run"
+  driver=scripts/experiments/prefeval_query_family_coverage.py
   [[ ! -e "$output" ]]
 fi
 if [[ "$phase" == ranking-calibration ]]; then output="$task_root/runs/dreamlite-prefeval-rgb-20260917/semantic-ranking-v1-run"; fi
@@ -41,7 +48,13 @@ run_stage() {
   printf '%s\n' "$status" > "$output/$mode-exit-status.txt"
   return "$status"
 }
-if [[ "$phase" == joint ]]; then
+if [[ "$phase" == coverage ]]; then
+  hostname > "$output/hostname.txt"
+  nvidia-smi > "$output/gpu-before.txt"
+  run_stage train
+  run_stage evaluate
+  "$task_python" scripts/reporting/verify_prefeval_query_family_coverage.py --output "$output" --source "$source" > "$output/final-verification.log" 2>&1
+elif [[ "$phase" == joint ]]; then
   hostname > "$output/hostname.txt"
   nvidia-smi > "$output/gpu-before.txt"
   run_stage train
