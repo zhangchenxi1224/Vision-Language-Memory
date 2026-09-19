@@ -10,7 +10,7 @@ from vision_memory.prefeval.rgb_protocol import digest
 
 s=q.s;j=q.j;tensor_sha=q.tensor_sha
 DATA=s.REPORT/'attribute-generalization-v1'
-INSTANCE='vlm-r11-trust-h200x4-20260907-r3'
+INSTANCE='dl-clear-retain-h200x4-20260914'
 
 def schedule(step):
     return dict(step=step,case=step%4,bank=(step//4)%2,
@@ -39,10 +39,10 @@ def functions():
     return {x.__name__:hashlib.sha256(inspect.getsource(x).encode()).hexdigest() for x in (schedule,application,jobs)}
 
 def load():
-    reg=s.load_json(DATA/'registration.json');parent,_=q.load()
+    reg=s.load_json(DATA/'registration.json');parent,p=q.load()
     assert digest(parent)==reg['parent_registration_digest']=='64406da59ad3f1a885720969b80943e7f8b2a24d68e6ca236b7a6f3c66d1d0af'
     cases=s.load_json(DATA/'attribute-scenarios.json');assert digest(cases)==reg['attribute_scenarios_digest']
-    assert functions()==reg['functions'];return reg,s.load_json(q.DATA/'training-payload.json'),cases
+    assert functions()==reg['functions'];return reg,p,cases
 
 def register(a):
     parent,p=q.load();assert digest(parent)=='64406da59ad3f1a885720969b80943e7f8b2a24d68e6ca236b7a6f3c66d1d0af'
@@ -144,8 +144,8 @@ def evaluate(a):
                         item,ch,gold=s.ranking_candidates(case,rot);score=s.ranking_read(reader,processor,image,item['query'],ch,a.device);cf+=4
                         margin=score['scores'][gold]-max(x for k,x in enumerate(score['scores']) if k!=gold)
                         s.append(out/'ranking.jsonl',dict(target=sid,condition=arm,panel='application_training_rotations' if rot else panel,query=item,png_sha=sha,choices=ch,gold_index=gold,score=score,gold_margin=margin,unique_correct=margin>0));rn+=1
-            for item0 in t['application_training']:
-                for case in new_cases[item0['value_id']]:
+            for vid in sorted({item['value_id'] for item in t['application_training']}):
+                for case in new_cases[vid]:
                     item,_,_=q.xml_candidates(case,0);g=s.generate(reader,processor,image,item['query'],a.device)
                     s.append(out/'reads.jsonl',dict(target=sid,condition=arm,panel='attribute_xml',query=item,png_sha=sha,generation=g,score=s.score_generation(g,{**item,'target_index':ord(item['target'][-10])-65},True),reader_query=item['query']));n+=1
                     item,ch,gold=s.ranking_candidates(case,0);score=s.ranking_read(reader,processor,image,item['query'],ch,a.device);cf+=4

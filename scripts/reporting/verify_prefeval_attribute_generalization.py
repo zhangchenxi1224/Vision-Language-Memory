@@ -59,12 +59,12 @@ def verify(output,source):
                 slot_ok.append(rec and app)
             mcq=[]
             for item in t['mcq']:
-                ok=raw_score(g[sid,arm,'mcq',item['id']],item,True);mcq.append(ok);value_mcq[arm,item['value_id']].append(ok);counts[arm,'mcq'].append(ok)
+                ok=raw_score(g[sid,arm,'mcq',item['id']],item,True);mcq.append(ok);value_mcq[arm,item['semantic_group']].append(ok);counts[arm,'mcq'].append(ok)
             for item in t['application_reserved']:counts[arm,'reserved_ranking'].append(rank[sid,arm,'application_reserved',item['id']]['unique_correct'])
-            for item0 in t['application_training']:
-                for case in cases[item0['value_id']]:
+            for vid in sorted({item['value_id'] for item in t['application_training']}):
+                for case in cases[vid]:
                     query,_,_=x.q.xml_candidates(case,0);ok=raw_score(g[sid,arm,'attribute_xml',query['id']],{**query,'target_index':ord(query['target'][-10])-65},True)
-                    value_attribute[arm,item0['value_id']].append(ok);counts[arm,'attribute_xml'].append(ok)
+                    value_attribute[arm,vid].append(ok);counts[arm,'attribute_xml'].append(ok)
                     query,_,_=s.ranking_candidates(case,0);counts[arm,'attribute_ranking'].append(rank[sid,arm,'attribute_full_action',query['id']]['unique_correct'])
             joint_states[sid]=dict(complete=all(slot_ok),with_mcq=all(slot_ok) and all(mcq))
         recovery[arm]=dict(capacity=dict(capacity));joint[arm]=dict(complete=sum(v['complete'] for v in joint_states.values()),with_mcq=sum(v['with_mcq'] for v in joint_states.values()))
@@ -73,7 +73,7 @@ def verify(output,source):
     for arm in ('R','D'):
         per_value={vid:ratio(vals) for (a,vid),vals in value_mcq.items() if a==arm}
         by_group=defaultdict(list)
-        for vid,val in per_value.items():by_group[groups[vid]].append(val)
+        for vid,val in per_value.items():by_group[vid].append(val)
         metrics[arm]=dict(original_mcq_accuracy=ratio(counts[arm,'mcq']),semantic_group_macro=ratio([ratio(v) for v in by_group.values()]),
             reserved_ranking_accuracy=ratio(counts[arm,'reserved_ranking']),attribute_xml_accuracy=ratio(counts[arm,'attribute_xml']),
             attribute_ranking_accuracy=ratio(counts[arm,'attribute_ranking']),occurrences=len(counts[arm,'mcq']))
@@ -83,9 +83,9 @@ def verify(output,source):
     result=dict(registration_digest=digest(reg),updates=5120,gradient_forwards=dict(forwards),generations=len(gens),rankings=len(ranks),
         candidate_forwards=candidate_forwards,metrics=metrics,recovery=recovery,joint=joint,absolute_targets=absolute,
         comparative=dict(gain=gain,minimum=reg['comparative_target']['minimum_gain'],passed=gain>=reg['comparative_target']['minimum_gain']),writer_updates=0,
-        usable=absolute['D']['recovery'] and absolute['D']['original_mcq'] and absolute['D']['reserved_ranking'] and gain>=reg['comparative_target']['minimum_gain'],limitation=reg['limitation'])
+        teacher_candidate=absolute['D']['recovery'] and absolute['D']['original_mcq'] and absolute['D']['reserved_ranking'] and gain>=reg['comparative_target']['minimum_gain'],limitation=reg['limitation'])
     (output/'final-verified.json').write_text(json.dumps(result,indent=2,ensure_ascii=False)+'\n',encoding='utf-8',newline='\n')
-    (output/'results.md').write_text(f"# PrefEval attribute generalization\n\n- R semantic-group macro MCQ: {metrics['R']['semantic_group_macro']:.3f}\n- D semantic-group macro MCQ: {metrics['D']['semantic_group_macro']:.3f}\n- D-R gain: {gain:.3f}\n- D new attribute XML: {metrics['D']['attribute_xml_accuracy']:.3f}\n- D new attribute ranking: {metrics['D']['attribute_ranking_accuracy']:.3f}\n- Usable under registered gates: **{result['usable']}**\n\n{reg['limitation']}\n",encoding='utf-8',newline='\n')
+    (output/'results.md').write_text(f"# PrefEval attribute generalization\n\n- R semantic-group macro MCQ: {metrics['R']['semantic_group_macro']:.3f}\n- D semantic-group macro MCQ: {metrics['D']['semantic_group_macro']:.3f}\n- D-R gain: {gain:.3f}\n- D new attribute XML: {metrics['D']['attribute_xml_accuracy']:.3f}\n- D new attribute ranking: {metrics['D']['attribute_ranking_accuracy']:.3f}\n- Candidate for teacher recipe review (not a trained Writer): **{result['teacher_candidate']}**\n\n{reg['limitation']}\n",encoding='utf-8',newline='\n')
     print(json.dumps(result,indent=2,ensure_ascii=False));return result
 
 if __name__=='__main__':

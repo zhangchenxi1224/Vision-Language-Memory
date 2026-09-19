@@ -34,9 +34,9 @@ if [[ "$phase" == coverage-eval-retry ]]; then
   [[ -d "$output/evaluation" && ! -e "$output/evaluation-failed-c316456" && ! -e "$output/evaluate-r1-exit-status.txt" ]]
 fi
 if [[ "$phase" == attribute-generalization ]]; then
-  [[ "${3:?Explicit instance required}" == vlm-r11-trust-h200x4-20260907-r3 ]]
+  [[ "${3:?Explicit instance required}" == dl-clear-retain-h200x4-20260914 ]]
   source="$task_root/runs/dreamlite-prefeval-rgb-20260917/query-family-coverage-v1-run"
-  output="$task_root/runs/dreamlite-prefeval-rgb-20260917/attribute-generalization-v1-run"
+  output="$task_root/runs/dreamlite-prefeval-rgb-20260917/attribute-generalization-v1-r2-run"
   driver=scripts/experiments/prefeval_attribute_generalization.py
   [[ ! -e "$output" ]]
 fi
