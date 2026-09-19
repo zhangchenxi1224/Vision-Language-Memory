@@ -1,0 +1,101 @@
+{
+  "registration_digest": "865a46ee2d14b221ac912fa3805cb2747f4b0fcda3f4975f3bf00da7f777cc50",
+  "updates": 5120,
+  "gradient_forwards": {
+    "R": 38400,
+    "D": 38400
+  },
+  "generations": 5320,
+  "rankings": 2256,
+  "candidate_forwards": 9024,
+  "metrics": {
+    "R": {
+      "original_mcq_accuracy": 0.5714285714285714,
+      "semantic_group_macro": 0.48988095238095236,
+      "reserved_ranking_accuracy": 1.0,
+      "attribute_xml_accuracy": 0.9821428571428571,
+      "attribute_ranking_accuracy": 0.8630952380952381,
+      "occurrences": 84
+    },
+    "D": {
+      "original_mcq_accuracy": 0.5476190476190477,
+      "semantic_group_macro": 0.4720238095238095,
+      "reserved_ranking_accuracy": 1.0,
+      "attribute_xml_accuracy": 0.9880952380952381,
+      "attribute_ranking_accuracy": 0.9047619047619048,
+      "occurrences": 84
+    }
+  },
+  "recovery": {
+    "R": {
+      "capacity": {
+        "K2": [
+          1,
+          4
+        ],
+        "K1": [
+          20,
+          20
+        ],
+        "K4": [
+          4,
+          12
+        ],
+        "K3": [
+          2,
+          4
+        ]
+      }
+    },
+    "D": {
+      "capacity": {
+        "K2": [
+          2,
+          4
+        ],
+        "K1": [
+          20,
+          20
+        ],
+        "K4": [
+          3,
+          12
+        ],
+        "K3": [
+          1,
+          4
+        ]
+      }
+    }
+  },
+  "joint": {
+    "R": {
+      "complete": 27,
+      "with_mcq": 8
+    },
+    "D": {
+      "complete": 26,
+      "with_mcq": 8
+    }
+  },
+  "absolute_targets": {
+    "R": {
+      "recovery": false,
+      "original_mcq": false,
+      "reserved_ranking": true
+    },
+    "D": {
+      "recovery": false,
+      "original_mcq": false,
+      "reserved_ranking": true
+    }
+  },
+  "comparative": {
+    "gain": -0.01785714285714285,
+    "minimum": 0.1,
+    "passed": false
+  },
+  "writer_updates": 0,
+  "teacher_candidate": false,
+  "limitation": "Fixed 40 observed endpoints; tests attribute application generalization, not a fresh benchmark holdout"
+}

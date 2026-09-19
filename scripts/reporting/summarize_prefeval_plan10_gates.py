@@ -13,6 +13,7 @@ from scripts.reporting.verify_prefeval_semantic_transfer import raw_score
 
 def read_rows(root, name, arm):
     result = {}
+    png_hashes = {}
     for path in sorted((root / 'evaluation').glob(f'shard-*/{name}.jsonl')):
         for line in path.read_text(encoding='utf-8').splitlines():
             row = json.loads(line)
@@ -21,7 +22,9 @@ def read_rows(root, name, arm):
             key = row['target'], row['panel'], row['query']['id']
             assert key not in result, ('duplicate', arm, key)
             png = root / 'training' / arm / row['target'] / 'memory.png'
-            assert x.s.file_sha(png) == row['png_sha']
+            if png not in png_hashes:
+                png_hashes[png] = x.s.file_sha(png)
+            assert png_hashes[png] == row['png_sha']
             result[key] = row
     return result
 
@@ -96,6 +99,35 @@ def main():
     result['writer_updates'] = 0
     result['usable_writer'] = False
     result['scope'] = 'Counterfactual context/proposal augmentation using previously authored attributes; substantive attribute expansion remains untested.'
+    _, payload, cases = x.load()
+    for arm in ('R', 'D'):
+        reads = read_rows(args.output, 'reads', arm)
+        ranks = read_rows(args.output, 'ranking', arm)
+        pairs = {'xml': [], 'ranking': []}
+        for sid, target in payload['targets'].items():
+            for vid in sorted({c['value_id'] for c in target['applications']}):
+                for first, second in ((0, 1), (2, 3)):
+                    xml_ok, ranking_ok = [], []
+                    for case in (cases[vid][first], cases[vid][second]):
+                        query, _, gold = x.q.xml_candidates(case, 0)
+                        xml_ok.append(raw_score(reads[sid, 'attribute_xml', query['id']], {**query, 'target_index': gold}, True))
+                        query, choices, gold = x.s.ranking_candidates(case, 0)
+                        row = ranks[sid, 'attribute_full_action', query['id']]
+                        assert row['choices'] == choices and row['gold_index'] == gold
+                        scores = row['score']['scores']
+                        ranking_ok.append(scores[gold] > max(v for i, v in enumerate(scores) if i != gold))
+                    pairs['xml'].append(all(xml_ok))
+                    pairs['ranking'].append(all(ranking_ok))
+        result[arm]['counterfactual_pairs'] = {k: [sum(v), len(v)] for k, v in pairs.items()}
+    result['compute'] = {
+        arm: {'seconds': sum(d['seconds'] for d in rows),
+              'tokens': sum(d['processed_input_tokens'] for d in rows),
+              'gradient_forwards': sum(d['reader_forwards'] for d in rows)}
+        for arm in ('R', 'D')
+        for rows in [[json.loads(p.read_text()) for p in (args.output / 'training' / arm).glob('*/complete.json')]]
+    }
+    eval_rows = [json.loads(p.read_text()) for p in (args.output / 'evaluation').glob('shard-*/complete.json')]
+    result['compute']['evaluation'] = {k: sum(d[k] for d in eval_rows) for k in ('seconds', 'processed_input_tokens', 'recovery_ce_forwards')}
     (args.output / 'same-png-gates.json').write_text(json.dumps(result, indent=2) + '\n', encoding='utf-8')
     print(json.dumps({k: {kk: vv for kk, vv in v.items() if kk != 'states'} if isinstance(v, dict) else v for k,v in result.items()}, indent=2))
 

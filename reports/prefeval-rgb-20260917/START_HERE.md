@@ -1,5 +1,16 @@
 # PrefEval RGB memory: execution brief, 2026-09-17
 
+## Current: Plan10 R2 completed on dl-clear-retain-h200x4-20260914
+
+The paired context/proposal augmentation run completed all 5,120 updates and
+evaluation calls. It did not meet adoption thresholds: D original MCQ 46/84
+versus R 48/84, semantic-group macro gain -0.01786, and K4 complete recovery
+3/12 versus R 4/12. Writer updates remain zero. Its case authoring reused old
+attributes, so it does not establish the requested substantive semantic
+expansion. Read `attribute-generalization-r2-results.md` and `PLAN10_LIVE.md`.
+The latest explicit user override binds all new GPU work to
+`dl-clear-retain-h200x4-20260914`; older instance names below describe history.
+
 ## Iteration 9: completed query-family coverage, adoption FAILED
 
 ChatGPT plan `prefeval-rgb-query-family-coverage-09` continues every Plan08-J

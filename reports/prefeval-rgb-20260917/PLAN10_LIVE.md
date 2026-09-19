@@ -1,5 +1,15 @@
 # Plan10 live run — 2026-09-20
 
+**04:52 CST: R2 pipeline exited 0, all training and evaluation complete. Adoption
+FAILED. Read `attribute-generalization-r2-results.md`. C2C iteration 10 EXECUTED
+was sent in the original conversation; checkpoint is EXECUTED_SENT, waiting for
+GPT_REVIEW. Do not rerun R2 or resend EXECUTED.** Full evidence has downloaded,
+SHA-256 matches the remote archive, all files are unpacked under the report
+directory. Core local verification and the complete same-PNG outcome supplement
+both exited 0. Tracked compact outputs and three archive parts are ready.
+The browser binding is `chatTab`. Original connection is healthy. A second C2C
+execution record makes the complete gates and raw evidence available to review.
+
 User-designated instance: `dl-clear-retain-h200x4-20260914`.
 Runtime code: `73bbcecc7c071fbdffb16022cd96c74a9d2c671f`.
 Local implementation: `8951783` (runtime has separate recorded Git lineage).
@@ -34,3 +44,5 @@ Heartbeat 2026-09-20 02:44 CST: 1234/5120 optimizer steps recorded (24.1%); all 
 Heartbeat 2026-09-20 03:06 CST: 2368/5120 updates, 35/80 endpoints complete, four GPUs active. Recreated and paired the project's ChatGPT connection after temporary address change; local doctor green. Original project chat retained.
 
 ChatGPT workspace identity verified in the original conversation at 03:09 CST. New local post-run script scripts/reporting/summarize_prefeval_plan10_gates.py reconstructs full overwrite gates and V/R/D same-PNG metrics; historical V replay matches MCQ 47/84, transfer 168/168, joint 26/40, joint-with-MCQ 8/40. Run this locally after downloading R2 evidence; it has not changed the running GPU program.
+
+2026-09-20 04:18 CST: training exited 0; all 80 fixed endpoints available. Evaluation started on four GPUs, 1731/5320 generations recorded. No pipeline terminal yet.
