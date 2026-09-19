@@ -5,8 +5,10 @@ updates, 2996 generations and 1464 rankings complete. Full archive downloaded,
 SHA matched, locally reconstructed result matches remote. Read
 `compositional-evidence-results.md` and `compositional-evidence-paired-outcomes.json`.
 E original MCQ 54/84 vs R48/84, macro gain +.0875 (<.10); E K4 recovery2/12 vs
-R4/12, joint24/40 vs27/40. Writer updates zero. Next: C2C iteration11 EXECUTED
-and review, then follow the next main experimental plan. Do not rerun Plan11.
+R4/12, joint24/40 vs27/40. Writer updates zero. C2C iteration11 EXECUTED was
+sent in the original conversation at 06:25 CST; checkpoint is EXECUTED_SENT,
+waiting for GPT_REVIEW. Do not resend. Follow the next main experimental plan
+after review. Do not rerun Plan11.
 
 **Current work: Plan11 compositional evidence has been dispatched.** C2C checkpoint
 is iteration 11 EXECUTING. Read `PLAN11.md`. Construction and control reconstruction

@@ -1,11 +1,11 @@
 # PrefEval RGB memory: execution brief, 2026-09-17
 
-## Running: Plan11 E compositional evidence
+## Completed: Plan11 E improves application, loses retention
 
-Read `PLAN11.md` and `PLAN10_LIVE.md`. The fixed single E treatment has started
-on `dl-clear-retain-h200x4-20260914`; 138/2560 updates were observed across all
-four shards. It starts from Plan09 V and reuses the archived R2-R control.
-The launcher automatically follows training with the fixed evaluation. New
+Read `compositional-evidence-results.md` and `PLAN10_LIVE.md`. All 2560 updates
+and the fixed evaluation completed on `dl-clear-retain-h200x4-20260914`.
+E raises original MCQ to54/84 from R48/84, but K4 recovery falls to2/12 from4/12.
+The +.0875 macro gain and absolute recovery/MCQ fail the existing gates. New
 runtime commit `cf665416bab12367c6236f2ea0a179db8a18911b`; local implementation
 `289f38e`, with the same registered execution-critical source bytes. The goal
 remains unfinished and Writer updates remain zero.
