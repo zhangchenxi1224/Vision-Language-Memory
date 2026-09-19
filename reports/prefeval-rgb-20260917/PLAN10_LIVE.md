@@ -28,3 +28,9 @@ The instance initially had an eight-hour auto-stop; the installed CLI has no vis
 command for modifying this. Monitor remaining time and preserve checkpoint progress.
 ChatGPT connection needs address repair before the next review; do not send C2C until
 doctor is green. Existing project conversation is recorded in the C2C session.
+
+Heartbeat 2026-09-20 02:44 CST: 1234/5120 optimizer steps recorded (24.1%); all four GPUs active, no pipeline terminal sentinel. The observed pace currently suggests the eight-hour allocation is sufficient; no runtime settings changed.
+
+Heartbeat 2026-09-20 03:06 CST: 2368/5120 updates, 35/80 endpoints complete, four GPUs active. Recreated and paired the project's ChatGPT connection after temporary address change; local doctor green. Original project chat retained.
+
+ChatGPT workspace identity verified in the original conversation at 03:09 CST. New local post-run script scripts/reporting/summarize_prefeval_plan10_gates.py reconstructs full overwrite gates and V/R/D same-PNG metrics; historical V replay matches MCQ 47/84, transfer 168/168, joint 26/40, joint-with-MCQ 8/40. Run this locally after downloading R2 evidence; it has not changed the running GPU program.
