@@ -1,10 +1,19 @@
 # Plan10 live run — 2026-09-20
 
-**Current work: Plan11 compositional evidence.** Plan10 review is received;
-C2C checkpoint is iteration 11 PLAN_RECEIVED. Read `PLAN11.md`. Construction and
-control reconstruction passed. Next: deploy the new single-arm driver and fixed
-registration, then launch `compositional-evidence` on dl-clear-retain-h200x4-20260914.
-Do not rerun R2. New output will be `compositional-evidence-v1-run`.
+**Current work: Plan11 compositional evidence has been dispatched.** C2C checkpoint
+is iteration 11 EXECUTING. Read `PLAN11.md`. Construction and control reconstruction
+passed. Local code commit `289f38e` is pushed. Remote runtime commit is
+`cf665416bab12367c6236f2ea0a179db8a18911b` (separate Git lineage; the registration
+seals the execution-critical source bytes). Launcher PID 1313573 on
+dl-clear-retain-h200x4-20260914. Training is established: first progress check
+recorded 138/2560 updates across all four shards (25, 51, 12, 50). Runtime and
+source-byte guards passed before model loading. Do not launch it again.
+Output: `runs/dreamlite-prefeval-rgb-20260917/compositional-evidence-v1-run`.
+Dispatch log: `/inspire/ssd/project/exploration-topic/czxs26210936/plan11-dispatch.log`.
+The launcher writes `pipeline-terminal.txt` on exit and automatically runs train,
+evaluate and the final verifier. All 40 E endpoints start from Plan09 V, with
+2,560 total updates; archived R2-R is evaluated on the new cases only.
+Heartbeat automation `dreamlite` now targets this run every 15 minutes.
 
 **04:52 CST: R2 pipeline exited 0, all training and evaluation complete. Adoption
 FAILED. Read `attribute-generalization-r2-results.md`. C2C iteration 10 EXECUTED

@@ -1,5 +1,15 @@
 # PrefEval RGB memory: execution brief, 2026-09-17
 
+## Running: Plan11 E compositional evidence
+
+Read `PLAN11.md` and `PLAN10_LIVE.md`. The fixed single E treatment has started
+on `dl-clear-retain-h200x4-20260914`; 138/2560 updates were observed across all
+four shards. It starts from Plan09 V and reuses the archived R2-R control.
+The launcher automatically follows training with the fixed evaluation. New
+runtime commit `cf665416bab12367c6236f2ea0a179db8a18911b`; local implementation
+`289f38e`, with the same registered execution-critical source bytes. The goal
+remains unfinished and Writer updates remain zero.
+
 ## Current: Plan10 R2 completed on dl-clear-retain-h200x4-20260914
 
 The paired context/proposal augmentation run completed all 5,120 updates and
