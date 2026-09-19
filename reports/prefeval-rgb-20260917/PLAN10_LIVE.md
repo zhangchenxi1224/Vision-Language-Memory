@@ -1,5 +1,13 @@
 # Plan10 live run — 2026-09-20
 
+**06:25 CST: Plan11 COMPLETED; adoption FAILED.** Pipeline exit 0, all 2560
+updates, 2996 generations and 1464 rankings complete. Full archive downloaded,
+SHA matched, locally reconstructed result matches remote. Read
+`compositional-evidence-results.md` and `compositional-evidence-paired-outcomes.json`.
+E original MCQ 54/84 vs R48/84, macro gain +.0875 (<.10); E K4 recovery2/12 vs
+R4/12, joint24/40 vs27/40. Writer updates zero. Next: C2C iteration11 EXECUTED
+and review, then follow the next main experimental plan. Do not rerun Plan11.
+
 **Current work: Plan11 compositional evidence has been dispatched.** C2C checkpoint
 is iteration 11 EXECUTING. Read `PLAN11.md`. Construction and control reconstruction
 passed. Local code commit `289f38e` is pushed. Remote runtime commit is
@@ -61,3 +69,9 @@ Heartbeat 2026-09-20 03:06 CST: 2368/5120 updates, 35/80 endpoints complete, fou
 ChatGPT workspace identity verified in the original conversation at 03:09 CST. New local post-run script scripts/reporting/summarize_prefeval_plan10_gates.py reconstructs full overwrite gates and V/R/D same-PNG metrics; historical V replay matches MCQ 47/84, transfer 168/168, joint 26/40, joint-with-MCQ 8/40. Run this locally after downloading R2 evidence; it has not changed the running GPU program.
 
 2026-09-20 04:18 CST: training exited 0; all 80 fixed endpoints available. Evaluation started on four GPUs, 1731/5320 generations recorded. No pipeline terminal yet.
+
+Plan11 heartbeat 2026-09-20 05:28 CST: 1097/2560 updates (42.9%); 14 states have all 64 update records. Four shards continue, no training/terminal sentinel or traceback. No intervention needed.
+
+Plan11 heartbeat 2026-09-20 05:44 CST: 2033/2560 updates (79.4%); training still active, no terminal/error record. Evaluation remains queued automatically; no intervention needed.
+
+Plan11 2026-09-20 06:03 CST: all 2560 updates and four train-complete records present. Launcher advanced to four evaluation processes (evaluate-shard logs created). No retraining or intervention. Await 2996 generations, 1464 rankings and final verifier.
