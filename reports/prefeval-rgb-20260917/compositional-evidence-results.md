@@ -78,3 +78,11 @@ E used 38,400 gradient Reader forwards and 10,106,872 input tokens, with
 budget but 8,881,248 tokens; this is not a token-compute-matched comparison.
 Evaluation used 2,494,287 input tokens, 5,856 candidate forwards, 264 recovery CE
 forwards and 2,692.50 summed seconds. Summed times are not job wall time.
+
+The seven training-form recovery regressions are saved in
+`compositional-evidence-recovery-regressions.json`. None is truncated. Three
+return a different stored slot's value (vehicle versus home, or exercise versus
+nutrition); other cases introduce unrelated content or paraphrase away the
+complete constraint. Thus the retention decline cannot be explained solely by
+strict output-format scoring. This is an observed failure pattern, not proof
+of a particular gradient-conflict mechanism.
