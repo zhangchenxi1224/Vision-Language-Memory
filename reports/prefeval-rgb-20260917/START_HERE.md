@@ -1,5 +1,13 @@
 # PrefEval RGB memory: execution brief, 2026-09-17
 
+## Current: Plan12 mean versus worst-query consolidation
+
+Running on `dl-clear-retain-h200x4-20260914`; read `PLAN12.md` and the top of
+`PLAN10_LIVE.md`. Both arms start from frozen Plan11 E endpoints and perform
+32 matched updates with all 11 training recovery forms. The primary question
+is complete multi-slot retention while maintaining application performance.
+No final result yet; Writer updates remain zero. Do not duplicate the launch.
+
 ## Completed: Plan11 E improves application, loses retention
 
 Read `compositional-evidence-results.md` and `PLAN10_LIVE.md`. All 2560 updates

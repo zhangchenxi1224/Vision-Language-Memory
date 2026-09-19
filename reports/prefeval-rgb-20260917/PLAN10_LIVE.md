@@ -1,5 +1,22 @@
 # Plan10 live run — 2026-09-20
 
+**06:55 CST: Plan12 RUNNING on dl-clear-retain-h200x4-20260914.** Read
+`PLAN12.md`. The original ChatGPT conversation reviewed Plan11 and prescribed
+matched complete-bank mean (M) versus mean/worst-query (W) consolidation.
+C2C iteration12 is EXECUTING. Local commit `387f934` is pushed; remote runtime
+commit `b400d90bd67a50833ec143367591ac8e5ba5c338`. Launcher PID **2034440**.
+Output: `runs/dreamlite-prefeval-rgb-20260917/worst-query-consolidation-v1-run`.
+Dispatch log: `/inspire/ssd/project/exploration-topic/czxs26210936/plan12-dispatch.log`.
+Model loading passed on four shards and optimization records have begun.
+Do not launch again. Launcher automatically runs train, evaluate and verifier,
+then writes `pipeline-terminal.txt`. Fixed budget: 2560 updates, 5320 generations,
+2256 rankings, 2288 endpoint CE. Registration digest
+`cb325203bbe45020bd68b68e4a62ef7ec2037989da7f2dd4cc3d126c7e12774a`.
+Heartbeat `dreamlite` targets Plan12 every 15 minutes. CPU notebook is for
+shared-disk monitoring and transfer only. GPU auto-stop observed at roughly
+10:10 CST; check remaining time if execution slows. Writer updates remain zero.
+Older entries below are historical, including the former Plan11 review wait.
+
 **06:25 CST: Plan11 COMPLETED; adoption FAILED.** Pipeline exit 0, all 2560
 updates, 2996 generations and 1464 rankings complete. Full archive downloaded,
 SHA matched, locally reconstructed result matches remote. Read
