@@ -1,5 +1,11 @@
 # Plan10 live run — 2026-09-20
 
+**Current work: Plan11 compositional evidence.** Plan10 review is received;
+C2C checkpoint is iteration 11 PLAN_RECEIVED. Read `PLAN11.md`. Construction and
+control reconstruction passed. Next: deploy the new single-arm driver and fixed
+registration, then launch `compositional-evidence` on dl-clear-retain-h200x4-20260914.
+Do not rerun R2. New output will be `compositional-evidence-v1-run`.
+
 **04:52 CST: R2 pipeline exited 0, all training and evaluation complete. Adoption
 FAILED. Read `attribute-generalization-r2-results.md`. C2C iteration 10 EXECUTED
 was sent in the original conversation; checkpoint is EXECUTED_SENT, waiting for

@@ -79,3 +79,12 @@ time. Full evidence has 250,582,512 bytes with SHA-256
 `5b4950ae6501e875e464691d18e394268fdbce47eb7d228b624c382ef8b8f838`;
 the three-part archive receipt is `attribute-generalization-r2-archive.json`.
 Unpacked raw records and endpoint artifacts remain locally available.
+
+The control-reuse addendum independently reconstructed all 5,320 expected
+generation keys, 2,256 candidate mappings, 64-step query exposures and optimizer
+states. It recalculated ranking flags from raw scores. Selective-clear complete
+states are V 1/4, R 1/4 and D 0/4; complete offline teacher chains are V 0/4,
+R 1/4 and D 0/4. No arm has an MCQ-inclusive complete chain. These offline
+conjunctions do not represent recurrent Writer execution. R2's scalar training
+logs cannot recover unrecorded per-component recovery CE or gradient norms;
+that limitation is retained in `attribute-generalization-r2-reuse-addendum.json`.

@@ -8,8 +8,9 @@ task_python="$task_root/envs/vlm-r3-ngc2502/bin/python"
 task_models=/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory
 cd "$task_repo"
 [[ "$(git rev-parse HEAD)" == "${1:?Exact execution commit required}" && -z "$(git status --porcelain)" ]]
-phase="${2:?feasibility, paired, ranking-calibration, trial, joint, coverage, coverage-eval-retry or attribute-generalization}"
-[[ "$phase" == feasibility || "$phase" == paired || "$phase" == ranking-calibration || "$phase" == trial || "$phase" == joint || "$phase" == coverage || "$phase" == coverage-eval-retry || "$phase" == attribute-generalization ]]
+phase="${2:?Experiment phase required}"
+[[ "$phase" == feasibility || "$phase" == paired || "$phase" == ranking-calibration || "$phase" == trial || "$phase" == joint || "$phase" == coverage || "$phase" == coverage-eval-retry || "$phase" == attribute-generalization || "$phase" == compositional-evidence ]]
+extra_args=()
 driver=scripts/experiments/prefeval_semantic_transfer.py
 if [[ "$phase" == joint ]]; then
   [[ "${3:?Explicit instance required}" == dl-clear-retain-h200x4-20260914 ]]
@@ -40,6 +41,15 @@ if [[ "$phase" == attribute-generalization ]]; then
   driver=scripts/experiments/prefeval_attribute_generalization.py
   [[ ! -e "$output" ]]
 fi
+if [[ "$phase" == compositional-evidence ]]; then
+  [[ "${3:?Explicit instance required}" == dl-clear-retain-h200x4-20260914 ]]
+  source="$task_root/runs/dreamlite-prefeval-rgb-20260917/query-family-coverage-v1-run"
+  control="$task_root/runs/dreamlite-prefeval-rgb-20260917/attribute-generalization-v1-r2-run"
+  output="$task_root/runs/dreamlite-prefeval-rgb-20260917/compositional-evidence-v1-run"
+  driver=scripts/experiments/prefeval_compositional_evidence.py
+  extra_args=(--control "$control")
+  [[ ! -e "$output" ]]
+fi
 if [[ "$phase" == ranking-calibration ]]; then output="$task_root/runs/dreamlite-prefeval-rgb-20260917/semantic-ranking-v1-run"; fi
 if [[ "$phase" == trial ]]; then
   [[ "${3:?Explicit trial instance required}" == dl-clear-retain-h200x4-20260914 ]]
@@ -54,7 +64,7 @@ run_stage() {
   local pids=()
   for shard in 0 1 2 3; do
     CUDA_VISIBLE_DEVICES="$shard" "$task_python" "$driver" --mode "$mode" \
-      --source "$source" --output "$output" --base "$task_models/DreamLite-base-a9a0f15-20260907" \
+      --source "$source" --output "$output" "${extra_args[@]}" --base "$task_models/DreamLite-base-a9a0f15-20260907" \
       --reader "$task_models/Qwen3-VL-4B-Instruct" --device cuda:0 --shards 4 --shard "$shard" > "$output/$mode-shard-$shard.log" 2>&1 &
     pids+=("$!")
   done
@@ -63,7 +73,15 @@ run_stage() {
   printf '%s\n' "$status" > "$output/$mode-exit-status.txt"
   return "$status"
 }
-if [[ "$phase" == attribute-generalization ]]; then
+if [[ "$phase" == compositional-evidence ]]; then
+  trap 'status=$?; printf "%s\n" "$status" > "$output/pipeline-terminal.txt"' EXIT
+  printf '%s\n' "$3" > "$output/instance.txt"
+  hostname > "$output/hostname.txt"
+  nvidia-smi > "$output/gpu-before.txt"
+  run_stage train
+  run_stage evaluate
+  "$task_python" scripts/reporting/verify_prefeval_compositional_evidence.py --output "$output" --source "$source" --control "$control" > "$output/final-verification.log" 2>&1
+elif [[ "$phase" == attribute-generalization ]]; then
   printf '%s\n' "$3" > "$output/instance.txt"
   hostname > "$output/hostname.txt"
   nvidia-smi > "$output/gpu-before.txt"

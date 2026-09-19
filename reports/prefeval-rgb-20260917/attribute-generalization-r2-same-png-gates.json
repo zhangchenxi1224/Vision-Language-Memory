@@ -283,7 +283,91 @@
       "transfer_ranking": true,
       "overwrite_pairs": true,
       "every_overwrite": true
-    }
+    },
+    "selective_clear": {
+      "state-2715341b1bc7a47976d1": {
+        "recovery": true,
+        "joint": true,
+        "joint_with_mcq": false
+      },
+      "state-2b57b813941245d59ad5": {
+        "recovery": false,
+        "joint": false,
+        "joint_with_mcq": false
+      },
+      "state-60ce21a26e49253d3369": {
+        "recovery": false,
+        "joint": false,
+        "joint_with_mcq": false
+      },
+      "state-a0305470c648dc9539d8": {
+        "recovery": false,
+        "joint": false,
+        "joint_with_mcq": false
+      }
+    },
+    "offline_teacher_chains": [
+      {
+        "episode": "train-k4-000",
+        "states": [
+          "state-42f6203b38c294bb49f7",
+          "state-a965e33a002c857a1f3e",
+          "state-cdd290b71e96c02add5a",
+          "state-7b4dfbcf2d97183e5719",
+          "state-5b3e7c2e399178ba7774",
+          "state-a0305470c648dc9539d8",
+          "state-a0305470c648dc9539d8"
+        ],
+        "recovery": false,
+        "joint": false,
+        "joint_with_mcq": false
+      },
+      {
+        "episode": "train-k4-001",
+        "states": [
+          "state-c0c65d34e9ed93172567",
+          "state-0229e9099239d8e6b34d",
+          "state-dd69efdd02bb192fc891",
+          "state-ef8a9676dc6daf884570",
+          "state-1b27aba7877958e84e6d",
+          "state-2715341b1bc7a47976d1",
+          "state-2715341b1bc7a47976d1"
+        ],
+        "recovery": false,
+        "joint": false,
+        "joint_with_mcq": false
+      },
+      {
+        "episode": "train-k4-002",
+        "states": [
+          "state-21b981bc1a9689c113b5",
+          "state-66c725a67c294247eaac",
+          "state-ac3c3b98cdfe28b6f8f7",
+          "state-9ebc2df1e905c22b690c",
+          "state-7aeb5009b340589b94cf",
+          "state-2b57b813941245d59ad5",
+          "state-2b57b813941245d59ad5"
+        ],
+        "recovery": false,
+        "joint": false,
+        "joint_with_mcq": false
+      },
+      {
+        "episode": "train-k4-003",
+        "states": [
+          "state-baf636589aa1d0156bf8",
+          "state-57b64b453364e36916c2",
+          "state-894cfb002d07b9c3323e",
+          "state-60c8c1de9c88d82c1280",
+          "state-8497a9fa1a9afc8599a0",
+          "state-60ce21a26e49253d3369",
+          "state-60ce21a26e49253d3369"
+        ],
+        "recovery": false,
+        "joint": false,
+        "joint_with_mcq": false
+      }
+    ]
   },
   "R": {
     "mcq": [
@@ -570,6 +654,90 @@
       "overwrite_pairs": true,
       "every_overwrite": true
     },
+    "selective_clear": {
+      "state-2715341b1bc7a47976d1": {
+        "recovery": true,
+        "joint": true,
+        "joint_with_mcq": false
+      },
+      "state-2b57b813941245d59ad5": {
+        "recovery": false,
+        "joint": false,
+        "joint_with_mcq": false
+      },
+      "state-60ce21a26e49253d3369": {
+        "recovery": false,
+        "joint": false,
+        "joint_with_mcq": false
+      },
+      "state-a0305470c648dc9539d8": {
+        "recovery": false,
+        "joint": false,
+        "joint_with_mcq": false
+      }
+    },
+    "offline_teacher_chains": [
+      {
+        "episode": "train-k4-000",
+        "states": [
+          "state-42f6203b38c294bb49f7",
+          "state-a965e33a002c857a1f3e",
+          "state-cdd290b71e96c02add5a",
+          "state-7b4dfbcf2d97183e5719",
+          "state-5b3e7c2e399178ba7774",
+          "state-a0305470c648dc9539d8",
+          "state-a0305470c648dc9539d8"
+        ],
+        "recovery": false,
+        "joint": false,
+        "joint_with_mcq": false
+      },
+      {
+        "episode": "train-k4-001",
+        "states": [
+          "state-c0c65d34e9ed93172567",
+          "state-0229e9099239d8e6b34d",
+          "state-dd69efdd02bb192fc891",
+          "state-ef8a9676dc6daf884570",
+          "state-1b27aba7877958e84e6d",
+          "state-2715341b1bc7a47976d1",
+          "state-2715341b1bc7a47976d1"
+        ],
+        "recovery": true,
+        "joint": true,
+        "joint_with_mcq": false
+      },
+      {
+        "episode": "train-k4-002",
+        "states": [
+          "state-21b981bc1a9689c113b5",
+          "state-66c725a67c294247eaac",
+          "state-ac3c3b98cdfe28b6f8f7",
+          "state-9ebc2df1e905c22b690c",
+          "state-7aeb5009b340589b94cf",
+          "state-2b57b813941245d59ad5",
+          "state-2b57b813941245d59ad5"
+        ],
+        "recovery": false,
+        "joint": false,
+        "joint_with_mcq": false
+      },
+      {
+        "episode": "train-k4-003",
+        "states": [
+          "state-baf636589aa1d0156bf8",
+          "state-57b64b453364e36916c2",
+          "state-894cfb002d07b9c3323e",
+          "state-60c8c1de9c88d82c1280",
+          "state-8497a9fa1a9afc8599a0",
+          "state-60ce21a26e49253d3369",
+          "state-60ce21a26e49253d3369"
+        ],
+        "recovery": false,
+        "joint": false,
+        "joint_with_mcq": false
+      }
+    ],
     "counterfactual_pairs": {
       "xml": [
         164,
@@ -866,6 +1034,90 @@
       "overwrite_pairs": true,
       "every_overwrite": true
     },
+    "selective_clear": {
+      "state-2715341b1bc7a47976d1": {
+        "recovery": false,
+        "joint": false,
+        "joint_with_mcq": false
+      },
+      "state-2b57b813941245d59ad5": {
+        "recovery": false,
+        "joint": false,
+        "joint_with_mcq": false
+      },
+      "state-60ce21a26e49253d3369": {
+        "recovery": false,
+        "joint": false,
+        "joint_with_mcq": false
+      },
+      "state-a0305470c648dc9539d8": {
+        "recovery": false,
+        "joint": false,
+        "joint_with_mcq": false
+      }
+    },
+    "offline_teacher_chains": [
+      {
+        "episode": "train-k4-000",
+        "states": [
+          "state-42f6203b38c294bb49f7",
+          "state-a965e33a002c857a1f3e",
+          "state-cdd290b71e96c02add5a",
+          "state-7b4dfbcf2d97183e5719",
+          "state-5b3e7c2e399178ba7774",
+          "state-a0305470c648dc9539d8",
+          "state-a0305470c648dc9539d8"
+        ],
+        "recovery": false,
+        "joint": false,
+        "joint_with_mcq": false
+      },
+      {
+        "episode": "train-k4-001",
+        "states": [
+          "state-c0c65d34e9ed93172567",
+          "state-0229e9099239d8e6b34d",
+          "state-dd69efdd02bb192fc891",
+          "state-ef8a9676dc6daf884570",
+          "state-1b27aba7877958e84e6d",
+          "state-2715341b1bc7a47976d1",
+          "state-2715341b1bc7a47976d1"
+        ],
+        "recovery": false,
+        "joint": false,
+        "joint_with_mcq": false
+      },
+      {
+        "episode": "train-k4-002",
+        "states": [
+          "state-21b981bc1a9689c113b5",
+          "state-66c725a67c294247eaac",
+          "state-ac3c3b98cdfe28b6f8f7",
+          "state-9ebc2df1e905c22b690c",
+          "state-7aeb5009b340589b94cf",
+          "state-2b57b813941245d59ad5",
+          "state-2b57b813941245d59ad5"
+        ],
+        "recovery": false,
+        "joint": false,
+        "joint_with_mcq": false
+      },
+      {
+        "episode": "train-k4-003",
+        "states": [
+          "state-baf636589aa1d0156bf8",
+          "state-57b64b453364e36916c2",
+          "state-894cfb002d07b9c3323e",
+          "state-60c8c1de9c88d82c1280",
+          "state-8497a9fa1a9afc8599a0",
+          "state-60ce21a26e49253d3369",
+          "state-60ce21a26e49253d3369"
+        ],
+        "recovery": false,
+        "joint": false,
+        "joint_with_mcq": false
+      }
+    ],
     "counterfactual_pairs": {
       "xml": [
         166,

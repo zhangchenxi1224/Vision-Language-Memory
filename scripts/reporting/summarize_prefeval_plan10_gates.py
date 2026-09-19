@@ -78,10 +78,17 @@ def summarize(root, arm, evaluation, gates):
                     original_mcq=sum(mcq) >= gates['mcq_min'], transfer_ranking=sum(transfer) >= gates['reserved_ranking_min'],
                     overwrite_pairs=sum(c['correct'] for c in contrasts) >= gates['contrast_pairs_min'],
                     every_overwrite=all(c['correct'] >= gates['each_contrast_min'] for c in contrasts))
+    clears = {sid: states[sid] for sid,t in evaluation['targets'].items() if any(v is None for v in t['state'].values())}
+    chains = []
+    for episode in x.s.load_json(x.s.REPORT/'registered/manifest.json')['episodes']:
+        ids = [t['target_state_id'] for t in episode['transitions']]
+        if episode['panel']=='train-k4' and all(sid in states for sid in ids):
+            chains.append(dict(episode=episode['id'],states=ids,
+                **{key:all(states[sid][key] for sid in ids) for key in ('recovery','joint','joint_with_mcq')}))
     return dict(mcq=[sum(mcq), len(mcq)], semantic_group_macro=sum(sum(v)/len(v) for v in groups.values())/len(groups),
                 transfer=[sum(transfer), len(transfer)], capacity=dict(capacity), states=states,
                 joint=sum(v['joint'] for v in states.values()), joint_with_mcq=sum(v['joint_with_mcq'] for v in states.values()),
-                contrasts=contrasts, absolute_gates=absolute)
+                contrasts=contrasts, absolute_gates=absolute,selective_clear=clears,offline_teacher_chains=chains)
 
 
 def main():
