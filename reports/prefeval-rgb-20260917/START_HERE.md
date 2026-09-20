@@ -1,5 +1,12 @@
 # PrefEval RGB memory: execution brief, 2026-09-17
 
+## Latest: Plan12 completed, worst-query mix did not help
+
+Read `worst-query-consolidation-results.md`. M original MCQ55/84, K4 recovery2/12;
+W MCQ52/84, K4 recovery1/12. Both fail adoption gates. All fixed training and
+evaluation finished successfully. Archive and C2C review follow; no shared
+Writer training has started. Older running entries below are historical.
+
 ## Current: Plan12 mean versus worst-query consolidation
 
 Running on `dl-clear-retain-h200x4-20260914`; read `PLAN12.md` and the top of

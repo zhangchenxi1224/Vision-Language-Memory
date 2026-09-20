@@ -1,5 +1,18 @@
 # Plan10 live run — 2026-09-20
 
+**11:17 CST: Plan12 COMPLETED; both arms fail adoption gates.** Training,
+evaluation and pipeline exit 0. All 2560 updates, 5320 generations, 2256 rankings,
+2288 endpoint CE calls completed. Final remote verifier passed. Read
+`worst-query-consolidation-results.md` and
+`worst-query-consolidation-final-verified.json`. M MCQ55/84, K4 2/12, joint25/40;
+W MCQ52/84, K4 1/12, joint22/40. Writer updates zero. Do not rerun Plan12.
+Full archive packaged remotely, 260549440 bytes, SHA256
+`1503013c88d607f329f5a2283a409db64e9be8c35595ce39d9363df09c1d2880`.
+Download and local reconstruction in progress. C2C connection repair in progress
+because the temporary address changed after local restart; no EXECUTED12 sent.
+Next: finish archive, paired recovery/error analysis, C2C review, next main plan.
+The older RUNNING entries below are historical.
+
 **06:55 CST: Plan12 RUNNING on dl-clear-retain-h200x4-20260914.** Read
 `PLAN12.md`. The original ChatGPT conversation reviewed Plan11 and prescribed
 matched complete-bank mean (M) versus mean/worst-query (W) consolidation.
