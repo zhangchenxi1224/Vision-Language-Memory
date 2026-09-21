@@ -1,3 +1,31 @@
+# Plan13 live preparation — 2026-09-21
+
+**Plan13 PREPARED, GPU NOT STARTED.** Original ChatGPT reviewed Plan12 and
+prescribed the fixed C13/S13 scope-contrast comparison; read `PLAN13.md`.
+All40 M starts are retained;40-state/88-slot/248-rival manifest is frozen.
+15 local focused/regression tests pass. Training/evaluation/verifier/reporting
+code is deployed to the runtime repository at commit
+`7090456b520c163b6f14c56365386b32a9ca4a2c` (separate runtime Git lineage).
+No final registration, new endpoint, or new GPU update exists yet.
+C2C iteration13 preparation-only EXECUTED was visibly submitted14:03 CST;
+checkpoint EXECUTED_SENT waiting GPT_REVIEW. Do not resend it. Review does not
+change the fact that the fixed GPU comparison remains unexecuted.
+Read `scope-contrast-preparation.json` for exact source hashes and platform
+receipts. Latest event13:59 CST:108/108 project GPUs used, request4. Earlier
+105/108 entries below are stale. Do not stop unrelated jobs or use another
+instance. CPU notebook serves shared-disk transfers only.
+
+Next: wait for `dl-clear-retain-h200x4-20260914` RUNNING. Obtain fresh actual
+host/GPU identity plus platform status; call new driver `--mode register`
+with source `worst-query-consolidation-v1-run`; commit registration locally
+and remotely with exact bytes. Then launch phase `scope-contrast` with the
+resulting exact runtime commit and allowed instance name. Output is fresh
+`scope-contrast-v1-run`; never launch twice. Pipeline handles train, evaluate,
+verify (requires `--reader` tokenizer path), and paired analysis. Archive,
+publish and request C2C review after completion. Writer goal remains unfinished.
+
+---
+
 # Plan10 live run — 2026-09-20
 
 **2026-09-21 13:38 CST: Plan12 full archive and analysis COMPLETE.** All

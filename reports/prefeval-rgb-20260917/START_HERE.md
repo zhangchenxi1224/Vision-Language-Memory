@@ -1,5 +1,17 @@
 # PrefEval RGB memory: execution brief, 2026-09-17
 
+## Latest: Plan13 prepared; awaiting designated GPU quota
+
+Plan12 full raw archive and paired analysis are pushed to GitHub and reviewed.
+Read `PLAN13.md`, `scope-contrast-preparation.json` and `PLAN10_LIVE.md`.
+The fixed next comparison is C13 mean consolidation versus S13 scope contrast,
+starting from all40 M endpoints. Code/manifest are deployed;15 tests pass.
+No Plan13 GPU training has started. At13:59 CST on2026-09-21, platform quota
+was108/108 used with4 requested by `dl-clear-retain-h200x4-20260914`.
+C2C iteration13 EXECUTED reports preparation plus quota block and awaits
+review; do not resend it. Keep the same experiment and instance when resuming.
+Older current/running entries below are historical. Writer goal is unfinished.
+
 ## Latest: Plan12 completed, worst-query mix did not help
 
 Read `worst-query-consolidation-results.md`. M original MCQ55/84, K4 recovery2/12;

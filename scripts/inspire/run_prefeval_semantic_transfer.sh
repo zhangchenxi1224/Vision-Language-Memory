@@ -9,7 +9,7 @@ task_models=/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision
 cd "$task_repo"
 [[ "$(git rev-parse HEAD)" == "${1:?Exact execution commit required}" && -z "$(git status --porcelain)" ]]
 phase="${2:?Experiment phase required}"
-[[ "$phase" == feasibility || "$phase" == paired || "$phase" == ranking-calibration || "$phase" == trial || "$phase" == joint || "$phase" == coverage || "$phase" == coverage-eval-retry || "$phase" == attribute-generalization || "$phase" == compositional-evidence || "$phase" == worst-query ]]
+[[ "$phase" == feasibility || "$phase" == paired || "$phase" == ranking-calibration || "$phase" == trial || "$phase" == joint || "$phase" == coverage || "$phase" == coverage-eval-retry || "$phase" == attribute-generalization || "$phase" == compositional-evidence || "$phase" == worst-query || "$phase" == scope-contrast ]]
 extra_args=()
 driver=scripts/experiments/prefeval_semantic_transfer.py
 if [[ "$phase" == joint ]]; then
@@ -57,6 +57,13 @@ if [[ "$phase" == worst-query ]]; then
   driver=scripts/experiments/prefeval_worst_query_consolidation.py
   [[ ! -e "$output" ]]
 fi
+if [[ "$phase" == scope-contrast ]]; then
+  [[ "${3:?Explicit instance required}" == dl-clear-retain-h200x4-20260914 ]]
+  source="$task_root/runs/dreamlite-prefeval-rgb-20260917/worst-query-consolidation-v1-run"
+  output="$task_root/runs/dreamlite-prefeval-rgb-20260917/scope-contrast-v1-run"
+  driver=scripts/experiments/prefeval_scope_contrast.py
+  [[ ! -e "$output" ]]
+fi
 if [[ "$phase" == ranking-calibration ]]; then output="$task_root/runs/dreamlite-prefeval-rgb-20260917/semantic-ranking-v1-run"; fi
 if [[ "$phase" == trial ]]; then
   [[ "${3:?Explicit trial instance required}" == dl-clear-retain-h200x4-20260914 ]]
@@ -80,7 +87,16 @@ run_stage() {
   printf '%s\n' "$status" > "$output/$mode-exit-status.txt"
   return "$status"
 }
-if [[ "$phase" == worst-query ]]; then
+if [[ "$phase" == scope-contrast ]]; then
+  trap 'status=$?; printf "%s\n" "$status" > "$output/pipeline-terminal.txt"' EXIT
+  printf '%s\n' "$3" > "$output/instance.txt"
+  hostname > "$output/hostname.txt"
+  nvidia-smi > "$output/gpu-before.txt"
+  run_stage train
+  run_stage evaluate
+  "$task_python" scripts/reporting/verify_prefeval_scope_contrast.py --output "$output" --source "$source" --reader "$task_models/Qwen3-VL-4B-Instruct" > "$output/final-verification.log" 2>&1
+  "$task_python" scripts/reporting/summarize_prefeval_scope_pairs.py --output "$output" --source "$source" > "$output/paired-analysis.log" 2>&1
+elif [[ "$phase" == worst-query ]]; then
   trap 'status=$?; printf "%s\n" "$status" > "$output/pipeline-terminal.txt"' EXIT
   printf '%s\n' "$3" > "$output/instance.txt"
   hostname > "$output/hostname.txt"

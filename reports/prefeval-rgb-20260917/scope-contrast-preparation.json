@@ -1,0 +1,72 @@
+{
+  "checked_at": "2026-09-21T06:01:48.233093+00:00",
+  "plan": "prefeval-rgb-scope-contrast-13",
+  "preparation": "complete",
+  "execution": "not_started",
+  "blocked_stage": "fresh GPU runtime registration and all training/evaluation",
+  "instance": "dl-clear-retain-h200x4-20260914",
+  "platform_status": {
+    "success": true,
+    "data": {
+      "name": "dl-clear-retain-h200x4-20260914",
+      "status": "PENDING",
+      "project": "前沿课题探索",
+      "workspace": "分布式训练空间",
+      "compute_group": "开发区-H200-3号机房-2-cuda13.2版本",
+      "created_by": "张宸熙",
+      "image": "ngc-pytorch:25.02-cuda12.8.0-py3",
+      "resource": {
+        "gpu_count": 4,
+        "gpu_type": "H200",
+        "cpu_count": 80,
+        "memory_gib": 900
+      },
+      "priority": "4",
+      "priority_level": "NORMAL",
+      "shared_memory_gib": 128,
+      "uptime_seconds": "0",
+      "auto_stop_in_seconds": "0",
+      "created_at": "1789349756000",
+      "updated_at": "1789349756000"
+    }
+  },
+  "platform_events": {
+    "success": true,
+    "data": {
+      "items": [
+        {
+          "time": "2026-09-21 13:53:58",
+          "message": "task preempt check failed: quota check failed: rpc quota (ApplyPodQuota): Parent&sub project total quota insufficient. Current used(parent + all children)(CPU=2147.00, Memory=23813.99GB, GPU=107.00), current request(CPU=80.00, Memory=900.00GB, GPU=4.00), quota(parent total)(CPU=-1.00, Memory=-1.00GB, GPU=108.00)"
+        },
+        {
+          "time": "2026-09-21 13:59:04",
+          "message": "task preempt check failed: quota check failed: rpc quota (ApplyPodQuota): Parent&sub project total quota insufficient. Current used(parent + all children)(CPU=2167.00, Memory=24013.99GB, GPU=108.00), current request(CPU=80.00, Memory=900.00GB, GPU=4.00), quota(parent total)(CPU=-1.00, Memory=-1.00GB, GPU=108.00)"
+        }
+      ],
+      "shown": 2,
+      "total": 154,
+      "truncated": true
+    }
+  },
+  "preparation_runtime_commit": "7090456b520c163b6f14c56365386b32a9ca4a2c",
+  "runtime_repo": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/dreamlite-prefeval-rgb-20260917",
+  "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-prefeval-rgb-20260917/worst-query-consolidation-v1-run",
+  "states": 40,
+  "addressed_slots": 88,
+  "rivals": 248,
+  "rival_bank_digest": "345f8587393bab3f016835aaae0ea8d527bf83acceaaef0d6337f9318df186d3",
+  "tests": {
+    "command": "python -m pytest -q tests/test_prefeval_scope_contrast.py tests/test_prefeval_worst_query_consolidation.py",
+    "result": "15 passed in 8.17s"
+  },
+  "implementation": {
+    "scripts/experiments/prefeval_scope_contrast.py": "56be3d7dd0a81497cf6087a8737be4c775dda118e2fb95631e6d3f21dd33cfcf",
+    "scripts/reporting/verify_prefeval_scope_contrast.py": "0dad354a7574f5cff1bdce4991e7361636786b6d8b3d057a394f30e2334da83d",
+    "scripts/reporting/summarize_prefeval_scope_pairs.py": "8af5baaa2ba879e9cf79b571262915a6cb156d6ffe783accc62aa338eaa53e4b",
+    "scripts/inspire/run_prefeval_semantic_transfer.sh": "29ff33ff37f4911b978134401bfac65cbc511c2f4c2f0cd05f8775e70b314af3",
+    "tests/test_prefeval_scope_contrast.py": "2145005a745faa6977c9a233169998dd1778485b82355a30a9979469d5eee2eb"
+  },
+  "updates": 0,
+  "writer_updates": 0,
+  "next": "Wait for designated instance RUNNING; obtain fresh host/GPU receipt; register, commit registration and launch scope-contrast exactly once. Do not substitute an instance or stop unrelated work."
+}
