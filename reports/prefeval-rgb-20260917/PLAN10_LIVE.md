@@ -6,9 +6,13 @@ parts, with unpacked evidence available locally. Local full reconstruction
 equals the remote result. Read `worst-query-consolidation-results.md`,
 `worst-query-consolidation-paired-diagnostics.json` and
 `worst-query-consolidation-recovery-failures.json`. C2C iteration12 is recorded
-as EXECUTED_LOCAL; next send EXECUTED once, then set EXECUTED_SENT/GPT_REVIEW.
+as EXECUTED_SENT, waiting for GPT_REVIEW in the original conversation. The
+EXECUTED12 message is visibly submitted; do not resend it.
 User resumed work; GPU remains the specified four-H200 instance only. Its
 quota issue is recorded below. Older download entries are historical.
+GitHub archive/report push completed at commit `de94b90` on the existing
+`codex/dreamlite-prefeval-rgb-20260917` branch. Plan12 raw artifacts are now
+present there as four parts plus SHA manifest; do not report them as missing.
 
 **2026-09-21 13:24 CST: user resumed the task.** Plan12 remains completed;
 do not rerun it. The original C2C conversation successfully read workspace_info
