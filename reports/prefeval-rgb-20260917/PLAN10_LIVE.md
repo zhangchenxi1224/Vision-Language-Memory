@@ -1,5 +1,33 @@
 # Plan10 live run — 2026-09-20
 
+**2026-09-21 13:38 CST: Plan12 full archive and analysis COMPLETE.** All
+260549440 bytes are downloaded and SHA-verified; raw archive split into four
+parts, with unpacked evidence available locally. Local full reconstruction
+equals the remote result. Read `worst-query-consolidation-results.md`,
+`worst-query-consolidation-paired-diagnostics.json` and
+`worst-query-consolidation-recovery-failures.json`. C2C iteration12 is recorded
+as EXECUTED_LOCAL; next send EXECUTED once, then set EXECUTED_SENT/GPT_REVIEW.
+User resumed work; GPU remains the specified four-H200 instance only. Its
+quota issue is recorded below. Older download entries are historical.
+
+**2026-09-21 13:24 CST: user resumed the task.** Plan12 remains completed;
+do not rerun it. The original C2C conversation successfully read workspace_info
+after equivalent connection replacement. No EXECUTED12 has been sent yet.
+The specified H200 notebook is PENDING. CPU shared-disk access works. Complete
+archive download resumed using a verified 79,119,360-byte prefix and a
+181,430,080-byte tail; pending exec session32741. After it completes run
+`.cache/finish_plan12_archive.py`, locally reconstruct Plan12, run
+`scripts/reporting/summarize_prefeval_worst_query_pairs.py`, publish evidence,
+then record and send EXECUTED12 for review. Heartbeat `dreamlite` was restored.
+Remote-only postreport attempt failed because the CPU image lacks torch;
+the completed GPU pipeline is unaffected. A new untracked reporting script
+exists in the remote repo and must be included in its next commit.
+
+Platform event at 2026-09-21 13:19:08 explains the pending GPU notebook:
+parent-plus-child project usage is105 GPUs against108 quota; this instance
+requests4 GPUs. Do not stop unrelated workloads or substitute a different
+instance. CPU archive/analysis and C2C planning can continue while waiting.
+
 **11:17 CST: Plan12 COMPLETED; both arms fail adoption gates.** Training,
 evaluation and pipeline exit 0. All 2560 updates, 5320 generations, 2256 rankings,
 2288 endpoint CE calls completed. Final remote verifier passed. Read

@@ -38,4 +38,43 @@ and true recurrent RGB transition training remain unfinished.
 Source: `worst-query-consolidation-final-verified.json`, reconstructed by the
 remote verifier from the full records. Full archive has 260,549,440 bytes and
 SHA-256 `1503013c88d607f329f5a2283a409db64e9be8c35595ce39d9363df09c1d2880`.
-Local archive reconstruction and paired diagnostic review are the next steps.
+The full archive is downloaded, its SHA matches the remote archive, and local
+reconstruction exactly matches the remote result. Paired diagnostics and all
+recovery failures are saved beside this report; no inference was repeated.
+
+Read-only inspection of the two excluded recovery forms finds 34/176 failures
+for M and 46/176 for W (142/176 and 130/176 correct). One M failure was truncated;
+none of W's failures were. Several are substantive scope/value confusions:
+`shop_motors` returns the stored home-decoration preference, and hotel/restaurant
+queries exchange gambling and peanut-allergy preferences. W also has a case
+whose answer preserves the car ground-clearance preference with changed wording.
+Do not describe every strict failure as lost information or every failure as
+mere wording. All failed generations will remain available for review. The next
+scientific issue is reliable scope-to-value binding across read formulations,
+with unchanged historical scoring and no outcome-based exclusions.
+
+Across the complete eleven-form training bank, M recovers 941/968 queries
+(97.21%) and W 915/968 (94.52%). On the two excluded formulations the corresponding
+scores are 142/176 (80.68%) and 130/176 (73.86%). These are the same addressed
+slots and fixed endpoint PNGs. High training-form recovery therefore does not
+establish formulation-independent retrieval. The candidate-ranking ceiling also
+does not establish reliable free generation or recursive Writer updates. This
+is the central scientific distinction to carry into the next bounded experiment.
+
+Paired original MCQs: M rescues6 and regresses5 relative to E; W rescues4 and
+regresses6. W versus M rescues2 and regresses5. Thus the M improvement is small
+and not uniform. For the excluded forms, literal answers from another active
+scope account for14 of M's34 failures and22 of W's46; these are lower bounds
+on semantic scope confusion because paraphrased wrong-slot answers are not
+counted. E has17 such literal matches among38 failures.
+
+New compositional counterfactual pairs (both variants correct): M XML137/168,
+ranking106/168; W127/168 and93/168; E132/168 and98/168. New identical-question
+memory overwrite: M XML9/16 and ranking10/16; W10/16 and7/16; E10/16 and8/16.
+These stay separate from historical overwrite gates.
+
+W reduces the worst training-bank total recovery CE (.1363 versus M .1965),
+but increases mean answer CE (.02387 versus .01563) and the worst excluded-form
+CE (5.4585 versus4.1667). Mean EOS CE stays below.001 in both arms and both
+panels. A lower worst training-query loss therefore did not imply more robust
+retrieval here. This describes the measured tradeoff, not proof of its mechanism.
