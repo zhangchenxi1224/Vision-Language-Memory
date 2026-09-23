@@ -1,5 +1,15 @@
 # PrefEval RGB memory: execution brief, 2026-09-17
 
+## Implementation proposal, 2026-09-24
+
+Read `../prefeval-official-alignment-20260923/WRITER_IMPLEMENTATION_PLAN.md` and
+`WRITER_IMPLEMENTATION_SPLIT.json` in that directory. The proposed route trains
+the shared Writer with answer-token supervision, full 28-step within-write gradients,
+and one-write truncated recurrence over actual generated RGB. The official 820
+training-topic rows now have a proposed group-preserving 730 train / 90 internal
+dev partition; official evaluation stays 180. A 64-row pilot is selected from
+the training side. This is an implementation plan, not a completed trainer or GPU run.
+
 ## Latest user steering: official PrefEval pipeline alignment, 2026-09-23
 
 Read `../prefeval-official-alignment-20260923/ALIGNMENT.md` first. User explicitly
