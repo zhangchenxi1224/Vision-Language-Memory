@@ -50,7 +50,7 @@ def main(args):
                 continue
             uid=hashlib.sha256(line.encode()).hexdigest()
             path=args.output/f'{uid}.json'
-            record=json.loads(path.read_text()) if path.exists() else {'source_file':str(source),'input':row,
+            record=json.loads(path.read_text(encoding='utf-8')) if path.exists() else {'source_file':str(source),'input':row,
                 'judge_model':args.model,'provider':args.provider,'max_tokens':100,
                 'model_label':'official_model' if args.model in {'anthropic.claude-3-sonnet-20240229-v1:0','claude-3-sonnet-20240229'} else 'substitute_judge',
                 'evaluation_error_analysis':{},'raw_judgments':{},'status':'pending'}
