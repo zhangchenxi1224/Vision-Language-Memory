@@ -29,6 +29,20 @@ def test_position_and_form_balance():
             counts[step % 3, correct] += 1
         assert len(counts) == 12 and set(counts.values()) == {24}
 
+
+def test_full_train_forms_preserve_pilot_and_exclude_heldout():
+    rows=load_records('train')
+    by_id={r['base_pair_id']:r for r in rows}
+    assert len(by_id)==len(rows)==730
+    assert set(by_id).isdisjoint(r['base_pair_id'] for r in load_records('dev'))
+    assert set(by_id).isdisjoint(r['base_pair_id'] for r in official_eval_disclosures())
+    for row in load_records('pilot'):
+        assert by_id[row['base_pair_id']]['forms']==row['forms']
+    for row in rows:
+        assert set(row['forms'])=={'T1','T2','T3','O1','O2'}
+        assert row['forms']['T1']==row['query']['content']
+        assert len(set(row['forms'].values()))==5
+
 def test_upstream_prompt_and_parser():
     funcs = official_mcq(ROOT / 'third_party/prefeval_reference')
     assert 'A. a\nB. b\nC. c\nD. d' in funcs['get_mcq_question_format'](['a','b','c','d'])

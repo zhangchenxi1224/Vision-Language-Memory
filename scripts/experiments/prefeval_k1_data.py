@@ -83,8 +83,9 @@ def load_records(split='pilot', history_file=None):
     ids = plan[{'pilot': 'pilot_train_ids', 'train': 'train_ids', 'dev': 'internal_dev_ids'}[split]]
     records = {x['base_pair_id']: x for x in read_rows(ALIGN / 'data/sft-train-10interturn.jsonl.gz')}
     bench = {x['base_pair_id']: x for x in read_rows(ALIGN / 'data/benchmark-disclosures.jsonl.gz') if x['form'] == 'explicit'}
-    forms_path = REPORT / ('dev-question-forms.json' if split == 'dev' else 'question-forms.json')
-    forms = json.loads(forms_path.read_text()) if forms_path.exists() else {}
+    forms_path = REPORT / {'pilot':'question-forms.json', 'train':'train-question-forms.json',
+                           'dev':'dev-question-forms.json'}[split]
+    forms = json.loads(forms_path.read_text(encoding='utf-8')) if forms_path.exists() else {}
     result = []
     for pid in ids:
         row = records[pid]
@@ -99,6 +100,27 @@ def event_text(exchange):
     return '\n'.join(m['role'] + ': ' + m['content'] for m in exchange)
 
 def make_forms(split='pilot'):
+    if split=='train':
+        # Keep the already-executed pilot wording byte-for-byte; author only new rows.
+        pilot=json.loads((REPORT/'question-forms.json').read_text(encoding='utf-8'))
+        requests=json.loads((REPORT/'train-paraphrase-requests.json').read_text(encoding='utf-8'))
+        records=load_records('train')
+        assert set(requests).isdisjoint(pilot)
+        assert set(requests)|set(pilot)=={r['base_pair_id'] for r in records}
+        forms={}
+        for row in records:
+            pid=row['base_pair_id']
+            if pid in pilot:
+                forms[pid]=pilot[pid]
+                continue
+            request=requests[pid]
+            forms[pid]={'T1':row['query']['content'],
+                'T2':f'What would you recommend for me regarding {request}?',
+                'T3':f'Please advise me on {request}.',
+                'O1':f'I am looking into {request}. What would you suggest?',
+                'O2':f'If I asked you for advice on {request}, what would you suggest?'}
+        (REPORT/'train-question-forms.json').write_text(json.dumps(forms,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
+        return
     if split=='official':
         requests=json.loads((REPORT/'official-paraphrase-requests.json').read_text(encoding='utf-8'))
         records=official_eval_disclosures()
@@ -146,5 +168,5 @@ def make_forms(split='pilot'):
 if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('--split', choices=['pilot','dev','official'], default='pilot')
+    parser.add_argument('--split', choices=['pilot','train','dev','official'], default='pilot')
     make_forms(parser.parse_args().split)
