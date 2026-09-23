@@ -52,6 +52,8 @@ def main(args):
     chains=range(1 if args.kind=='teacher' else args.noise_chains)
     controls=args.controls.split(',')
     families=args.families.split(',')
+    tasks=args.tasks.split(',')
+    assert tasks and set(tasks)<=set(['free','mcq'])
     history_protocol='official SFT exchanges; not final benchmark acknowledgment'
     if args.kind=='student':
         manifest=json.loads((args.images/'manifest.json').read_text())
@@ -98,7 +100,7 @@ def main(args):
                     png_hash=sha(path) if path else None
                     for family in families:
                         question=row['forms'][family]  # Fail if requested OOD has not been authored.
-                        for task in ['free','mcq']:
+                        for task in tasks:
                             key=(pid,chain,prefix,control,family,task)
                             if key in completed:
                                 continue
@@ -143,6 +145,7 @@ if __name__=='__main__':
     p.add_argument('--history-file',type=Path)
     p.add_argument('--controls',default='memory,blank,mismatch,text')
     p.add_argument('--families',default='T1,T2,T3,O1,O2')
+    p.add_argument('--tasks',default='free,mcq')
     p.add_argument('--prefixes',default='0,5,10')
     p.add_argument('--noise-chains',type=int,default=2)
     p.add_argument('--shard',type=int,default=0)
