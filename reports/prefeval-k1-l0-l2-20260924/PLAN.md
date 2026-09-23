@@ -67,3 +67,14 @@ smoke-env-failed-61ce035；5153444 修正环境后，A/B 各 12 步及 PNG 回�
 已询问用户可用评分服务，不影响教师/FM/MCQ 推进。评分入口复用官方四份提示、
 两个 XML parser 及 analyze_errors，官方 100-token/temperature=0 配置；
 无有效 judge 结果前不得填报自由回答遵循准确率。
+
+## L1 单有效偏好覆盖探针（模型冻结后执行）
+
+使用续训后 Writer 的真实 10 干扰 PNG 作为旧状态，按不依赖成绩的固定哈希在同主题中
+配对一条不同旧偏好。输入新 user 交换为 `My earlier preference no longer applies.
+My current preference is: <new official preference>`，assistant 保留新偏好的官方 acknowledgment。
+这是一条自然语言覆盖请求，没有 oracle SET/RETAIN/CLEAR 标签；Writer 看不到未来问题/选项/答案。
+只生成一张新 PNG，再用新偏好对应的官方原题/答案读取。旧与新始终各只有一条有效偏好，
+不涉及多槽选择性编辑。报告为本项目覆盖扩展，不能冒充官方原始 benchmark。
+与同一最终 Writer 从灰图写入相同新偏好的结果配对，判断既有图像状态是否妨碍改写。
+若覆盖失败，再登记下一轮包含训练侧覆盖转移的 FM 预算；本轮不提前加入其训练样本。

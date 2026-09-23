@@ -38,6 +38,11 @@ A/B 原题格式对比需要完整分母；B 本例正确位置 D 还恰好等�
 因此补充预先固定的 T1 四位置读回诊断，检查是内容读取还是字母位置依赖。
 这个诊断不改训练预算、不使用 OOD、不挑教师，也不替代原始官方 MCQ 指标。
 
+四位置诊断已完成：同一冻结 A PNG 为 0/4，同一冻结 B PNG 为 4/4；
+B 的输出随正确位置分别为 A/B/C/D，排除了该例“只输出最后训练字母 D”的解释。
+它仍不能排除对这组特定选项内容的适配，也不能据此宣称获得可迁移的偏好表征。
+证据见 evidence/first-teacher-{A,B}-four-positions.jsonl。
+
 自然回答训练输入采用官方 benchmark 的 `Please respond within 300 words` 后缀，
 目标仍是官方发布的完整 SFT 回答；这是本实验的 Reader 任务适配，不声称逐 token 复现
 原 Mistral SFT 输入。MCQ 采用官方原提示，Qwen 生成完整 XML，预算 32 token。
