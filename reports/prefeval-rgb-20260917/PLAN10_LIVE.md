@@ -1,3 +1,14 @@
+# Latest steering — 2026-09-23: align with official PrefEval
+
+User disabled codex-with-chatgpt and requested official data/SFT alignment.
+Read `../prefeval-official-alignment-20260923/ALIGNMENT.md`. Official inputs are
+exported and CPU-validated (3,000 exact upstream SFT text matches; 7 focused tests).
+This is data preparation, not new training or a new model result. Plan13 is retained
+as prepared/unexecuted and is superseded as the automatic next launch. Do not send
+new C2C messages or follow obsolete heartbeat launch instructions below. Shared
+Writer integration and actual RGB recurrence remain unfinished; GPU instance
+restriction dl-clear-retain-h200x4-20260914 remains in force.
+
 # Plan13 live preparation — 2026-09-21
 
 **14:08 CST: C2C preparation review ACCEPTED at review base43fb47d.**

@@ -1,5 +1,20 @@
 # PrefEval RGB memory: execution brief, 2026-09-17
 
+## Latest user steering: official PrefEval pipeline alignment, 2026-09-23
+
+Read `../prefeval-official-alignment-20260923/ALIGNMENT.md` first. User explicitly
+disabled codex-with-chatgpt and requested alignment with official PrefEval data
+construction and SFT. The new data entry point reproduces the official seed42
+topic split (820/180), 0/5/10 contextual-turn SFT inputs and full implicit
+conversations. All 3,000 SFT text layouts match the upstream collator; 7 tests pass.
+Data preparation is complete, but no new GPU training/evaluation has occurred.
+Plan13 remains preserved and unexecuted; do not auto-launch it from stale heartbeat
+instructions. The next priority is official-task supervision for the RGB Writer.
+Historical latent fitting is not official SFT or a trained shared Writer. Three
+of the official evaluation topics were exposed in old sentinel optimization;
+report this history. Continue to use only dl-clear-retain-h200x4-20260914 for GPUs.
+All older C2C/launch instructions below are historical and superseded.
+
 ## Latest: Plan13 prepared; awaiting designated GPU quota
 
 Plan12 full raw archive and paired analysis are pushed to GitHub and reviewed.
