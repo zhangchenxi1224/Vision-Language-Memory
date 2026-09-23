@@ -1,6 +1,6 @@
 # 下一轮：官方任务监督对照 → 共享 FM Writer → 真实 RGB 记忆
 
-2026-09-24。**方案已确定，尚未实现新的训练入口或启动 GPU 训练。**
+2026-09-24。**本文件为训练前冻结的方案；当前执行进展以 `EXECUTION_LIVE.md` 为准。**
 用户已明确选择两组并行：A 完整回答 CE，B MCQ 标签 CE；两组均使用三种同义训练问法，
 另固定两种 OOD 问法仅作评测。本文件细化 `FM_ROUTE_CORRECTION.md`，优先于旧的
 `WRITER_IMPLEMENTATION_PLAN.md` 中直接反传 28 步的提案。不使用 codex-with-chatgpt。

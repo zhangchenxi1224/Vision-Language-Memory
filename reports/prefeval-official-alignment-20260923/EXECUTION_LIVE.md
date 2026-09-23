@@ -10,7 +10,10 @@ preferences, question paraphrases and real RGB recurrence, then K2/K4 updates.
 Teacher fit alone does not complete this objective. Preserve failures and original
 PrefEval scoring; retain DreamLite native source conditioning / official FM.
 
-Latest 2026-09-24 03:03 CST: both shared FM-write runs completed2048/2048; teacher
+Latest 2026-09-24 03:53 CST: first student RGB shard is complete (154 PNGs per arm);
+second shard is running, with A202/308 and B203/308 PNG endpoints observed at03:52.
+Common blank/full-text reference evaluation is144/308 conditions at03:53; student
+Reader scores have not started. Both shared FM-write runs completed2048/2048; teacher
 PNG evaluation completed64/64 per arm. Read `FIRST_TEACHER_AND_FM_RESULTS.md`.
 A T1 MCQ44/64; B64/64. B is64/64 on each of allfive forms; A O1/O2 joint40/64.
 These are training-content teacher results.640 natural answers await the official
@@ -24,7 +27,9 @@ this execution record. Do not falsely complete the old goal just to replace its 
 
 - Live platform query: RUNNING, 4 H200 / 80 CPU / 900 GiB, node qb-prod-gpu2468.
 - Current host: `dl-clear-retain-h200x4-20260914--a823c55e800a-facprpli2x`.
-- At initial query auto-stop was 5h45m away; recheck before assuming continued allocation.
+- At03:48 CST platform auto-stop was3h24m away (approximately07:12 CST).
+  Recheck before assuming continued allocation; do not change the fixed evaluation
+  budget to fit a session. Existing endpoint files support resumption.
 - CLI: WSL Ubuntu `/home/zhangchenxi/.local/bin/inspire` 7.1.6. GPU notebook exec
   needs a local PTY; CPU transfer uses `dl-align-cpu-20260914-r3`.
 - Root: `/inspire/ssd/project/exploration-topic/czxs26210936`.
@@ -95,7 +100,7 @@ duplicates. Each driver schedules FM-write and teacher evaluation, then common
 references and fresh write-only benchmark RGB/student evaluation. It stops at the
 fixed write-pilot endpoint for analysis before scheduling retain training.
 
-Latest child sessions/receipts at 2026-09-23 19:08 UTC:
+Latest child sessions/receipts at 2026-09-23 19:53 UTC:
 
 - A driver session `05035f9043f54f9cb09896925f5ad8b4`; FM PID1059861 GPU0
   and teacher evaluation PID1059862 GPU1 are finished. References PID1601241 GPU1
@@ -110,12 +115,24 @@ Latest child sessions/receipts at 2026-09-23 19:08 UTC:
   `eea5387129d42ed156c2439cc2161a80515bcf1920011b203c1891d02b2da849`.
 - Early planned shard0/2 RGB generation launched on freed GPU0/2 with
   `dispatch-write-rollout.json`, session `5da1a1f9763843fca009ad6fab33b710`,
-  commit69c35c5; A PID1608267, B PID1608268.34 PNG endpoints per arm observed.
+  commit69c35c5; A PID1608267, B PID1608268. Both workers finished154 PNG endpoints
+  per arm (77 records x2 seeds) and their processes exited.
   This does not change examples, inference seeds, budgets or scoring. A per-shard
   file lock prevents a later original driver from generating the same shard
   concurrently; it reuses complete PNG markers. Do not dispatch the same job again.
-- The remaining shard1 and student readings stay scheduled in the original drivers.
-  Inspect progress before opportunistically advancing more work on freed GPUs.
+- Early planned shard1/2 launched at19:47 UTC on the same freed GPU0/2,
+  `dispatch-write-rollout-1.json`, session `c8cfa81ba0bf496e97d51b1a6df499d0`,
+  commit `5f9fc13e119603e186e973ae8eff8196ef2b9718`;
+  A PID2147450 GPU0, B PID2147451 GPU2. Both processes, reference workers and
+  original drivers were confirmed alive at19:53 UTC. Do not redispatch.
+- Original drivers still schedule both rollout shards followed by student readings;
+  their rollout locks and completion markers reuse the early work. Current common
+  reference conditions are144/308; no full paired control score is claimed yet.
+- If advancing student readings on freed GPUs before references finish, first
+  coordinate with the original drivers: only rollouts currently have a per-shard
+  lock, and their model loads occur before checking complete PNG markers.
+  Do not accidentally overlap a new Reader worker with the driver's later model
+  loads or duplicate the same student shard. No early student reader is dispatched.
 
 Next: finish common references and the fresh single-write student RGB/readout matrix,
 then analyze shared-Writer performance against the complete teacher matrix.
@@ -160,6 +177,10 @@ B session1745 -> `writer-B-write-2048.pt`. Verify the above checkpoint hashes af
 completion, then upload them to the same experimental GitHub release. Do not
 claim full weight synchronization until actual upload succeeds. No optimizer
 checkpoints were included in this transfer; those remain on the shared disk.
+At19:48 UTC both transfers were still running but slow: A69,457,920 bytes and
+B78,336,000 bytes observed by WSL stat. Do not start a second transfer to these
+active paths. CPU notebook has no `gh` executable. Writer weights are not yet
+GitHub release assets; the complete teacher banks are already uploaded.
 
 `teacher-training-summary.json`: each arm64 states x288 =18,432 optimizer updates.
 A exposed4,019,040 target tokens; B129,024 (including end tokens). Recorded training
