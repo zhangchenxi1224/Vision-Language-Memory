@@ -1,24 +1,18 @@
 # PrefEval RGB memory: execution brief, 2026-09-17
 
-## Live: official-task FM complete; RGB evaluation RUNNING, 2026-09-24
+## Live: fixed write pilot failed to demonstrate memory; diagnostic running
 
-Read `../prefeval-official-alignment-20260923/EXECUTION_LIVE.md` first.
-The designated four-H200 notebook is RUNNING. Reviewed64-train/90-dev 3+2 question
-bank is frozen. A full-answer / B official MCQ teacher banks both completed64/64,
-session57459d0119c04fa0a750593b209da6dc. Shared FM-write completed2048/2048 per arm;
-teacher T1 MCQ A44/64 versus B64/64. Read FIRST_TEACHER_AND_FM_RESULTS.md in the new
-report directory. All308 student RGB endpoints per arm are complete. Pilot
-8ee9246d01204653a3d2d0b19b9f4d61 completed all308 reference conditions;
-dev T1 full text79/90 versus blank36/90 (WRITE_REFERENCE_RESULTS.md).
-After the automatic8h stop, the SAME notebook resumed the remaining student
-readouts: A435/462, B429/462 at07:18 CST. Current pilot session is
-961a79b635a746faba7b369be48d0122, new host suffix3eiz2r5ftf. All616 student
-PNGs and both complete Writer parameter files are in the verified GitHub release.
-Read FM_DIAGNOSTIC_NOTES.md before attributing benchmark errors to FM alone:
-all64 train-content initial exchanges have different acknowledgments from training.
-Both shard0 reads are complete; only remaining shard1 reads occupy GPUs1/3.
-The exact-training-input diagnostic is implemented but not dispatched. Read child receipts
-before continuing. Shared-Writer scores remain pending. No C2C; heartbeat dreamlite-a-b.
+Read `../prefeval-official-alignment-20260923/EXECUTION_LIVE.md` and
+`WRITE_PILOT_RESULTS.md` first. The complete fixed matrix gives development T1
+MCQ A69/180, B71/180 (two correlated seeds), versus blank36/90 and text79/90.
+Correct-vs-mismatched image gains are negligible. Teachers A44/64, B64/64 do not
+establish shared Writer success. All6,800 natural answers await the official judge.
+All teacher banks, Writer weights,616 benchmark PNGs and full raw evaluation are
+archived on GitHub. On the designated notebook only, exact-training-input
+session b2187482df5649ae812ffde225bec0a2 is now running:64 training states per arm,
+frozen checkpoints, original SFT exchanges, same seed0/noise and Reader tasks.
+No new FM updates, no retain/K2/K4 yet. Check receipts before any resume.
+No C2C. Heartbeat dreamlite-a-b reads the live record above.
 
 ## Latest: parallel official-answer / MCQ supervision, 2026-09-24
 

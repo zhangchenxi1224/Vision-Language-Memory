@@ -1,15 +1,15 @@
-# Running — 2026-09-24: official-task A/B student PNG readout
+# Running diagnostic — 2026-09-24: official A/B exact training input
 
 Read `../prefeval-official-alignment-20260923/EXECUTION_LIVE.md` first.
-Teacher session57459d0119c04fa0a750593b209da6dc completed64/64 states per arm.
-Both FM-write runs completed2048/2048; teacher T1 MCQ A44/64 versus B64/64.
-All308 student PNGs per arm are complete. Pilot8ee9246d01204653a3d2d0b19b9f4d61
-was interrupted by automatic8h stop; the same notebook resumed as pilot
-961a79b635a746faba7b369be48d0122 (host suffix3eiz2r5ftf), with A435/462 and B429/462
-conditions at07:18 CST. Both shard0 reads are complete; remaining reads use GPUs1/3.
-References are complete (dev T1 text79/90, blank36/90). Complete shared-Writer
-scores remain pending; the original-SFT-input diagnostic is prepared, not launched.
-Old Plan13/C2C instructions below remain superseded. Do not duplicate GPU workers.
+The fixed write pilot is complete:1,360 evaluation conditions. Development T1
+MCQ A38.33% / B39.44% versus blank40%; correct/mismatched images barely differ.
+See WRITE_PILOT_RESULTS.md for fixed denominators and paired evidence. Shared
+visual memory is not demonstrated. All raw results/images/Writer weights are
+archived.6,800 natural answers remain pending the official judge.
+Exact-training-input diagnostic session b2187482df5649ae812ffde225bec0a2 is running
+on dl-clear-retain-h200x4-20260914 only, with fixed weights and same seed0/noise.
+Inspect dispatch/child receipts and finish it before deciding the next correction.
+Old Plan13/C2C instructions below are superseded. Do not duplicate GPU workers.
 
 # Previous steering — 2026-09-24: paired supervision and 3+2 question forms
 

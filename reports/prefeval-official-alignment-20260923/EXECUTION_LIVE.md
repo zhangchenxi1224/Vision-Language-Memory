@@ -10,23 +10,33 @@ preferences, question paraphrases and real RGB recurrence, then K2/K4 updates.
 Teacher fit alone does not complete this objective. Preserve failures and original
 PrefEval scoring; retain DreamLite native source conditioning / official FM.
 
-Latest 2026-09-24 07:18 CST: after the platform's automatic8h stop, the SAME
-designated notebook was started and the original pilot resumed. Student evaluation
-has progressed to A435/462 and B429/462; both shard0 markers were already complete.
-Only remaining shard1 Reader workers run on GPUs1/3. Teachers/FM were not retrained.
-No new GPU experiment failure. Common references completed308/308 conditions.
-Both full Writer checkpoints and all616 student PNGs are now uploaded to GitHub;
-all four large assets have matching source/GitHub SHA256. See `write-assets-manifest.json`.
-T1 MCQ dev: blank36/90, full text79/90; train: blank30/64, full text59/64.
-Read `WRITE_REFERENCE_RESULTS.md` and the complete archived reference matrix.
-All student RGB endpoints are complete,308/308 per arm (154 records x2 seeds).
-The fixed student PNG matrix continues from saved condition files, without new training.
-Do not interpret these incomplete subsets as final paired scores.
-Both shared FM-write runs completed2048/2048; teacher
-PNG evaluation completed64/64 per arm. Read `FIRST_TEACHER_AND_FM_RESULTS.md`.
-A T1 MCQ44/64; B64/64. B is64/64 on each of allfive forms; A O1/O2 joint40/64.
-These are training-content teacher results.640 natural answers await the official
-judge; no method winner or shared visual-memory success has been declared.
+Latest 2026-09-24 07:56 CST: the fixed write pilot is COMPLETE, including
+both driver completion markers and all1,360 evaluation conditions. Read
+`WRITE_PILOT_RESULTS.md` and `write-evaluation-summary.json`. T1 development MCQ
+is A69/180 (38.33%) / B71/180 (39.44%) across two correlated seeds, versus
+blank36/90 (40%) and text79/90. Seed0 correct-vs-mismatch gains are A0/90, B2/90;
+training-content students are also near blank. Shared visual memory is not shown.
+Teacher T1 A44/64 and B64/64 remain teacher fitting results. All6,800 natural
+answers await the official judge. No A/B winner, retain or K2/K4 result is claimed.
+
+The prepared exact-training-input diagnostic was launched once at07:56 CST,
+session `b2187482df5649ae812ffde225bec0a2`, commit1ea44f8. It reuses fixed Writer
+weights, all64 original SFT initial exchanges per arm and benchmark seed0 noise,
+with native28-step inference and unchanged five-form Reader tasks. No training
+updates. Read `dispatch-train-input.json` before resuming; do not duplicate it.
+Only GPU notebook dl-clear-retain-h200x4-20260914, current host suffix3eiz2r5ftf.
+Workers A0 PID295617 GPU0, A1 PID295618 GPU1, B0 PID295619 GPU2, B1 PID295620 GPU3.
+Each wrapper generates32 PNGs then evaluates them. Expected128 PNGs/conditions
+in total. Output folders `rollouts/{A,B}/training-initial` and
+`evaluations/training-input-students/{A,B}/write`; completion markers
+`pipeline-train-input/{A,B}/complete-{0,1}.json`. Monitor these and log files
+`train-input-{arm}-{shard}-b2187482df5649ae812ffde225bec0a2.log`.
+
+The complete write evidence archive has1,398 raw records and7,004,601 bytes;
+SHA2565956ab0ac0c7b8800fe4d83ef6180b41f5958096b1eaedd1f8ff3360042747d9.
+Local gzip/hash/record count verified; full summary, raw evidence and manifest
+are uploaded to the existing GitHub release. Both full Writer checkpoints,
+all616 benchmark student PNGs and128 teacher endpoints are already uploaded.
 
 The app already has an unfinished historical Goal; `create_goal` rejected replacing
 it. Its old instance/skill wording is superseded by the current user instruction and
@@ -95,8 +105,8 @@ Authoring sessions: `9237470ed5ef4ba49478098ab454cd8d` then
   4f parameter export. New bank retains all finite endpoints, avoiding the older
   loader's fixed256 / successful-short-answer-only contract.
 - `scripts/eval/prefeval_official_rgb.py`: native RGB rollouts, official-format
-  Reader tasks and controls. FM and teacher reading are complete. Fresh student
-  RGB rollout has executed successfully; its full matrix/readout is still pending.
+  Reader tasks and controls. The complete fixed teacher/reference/student write
+  matrix is archived. Exact-training-input diagnostic readings are now pending.
 - Four targeted CPU checks pass: exact upstream MCQ format/parser, balanced labels/forms
   plus dev exclusion, Writer current-exchange-only inputs. No broad engineering suite.
 - Fixed mismatched-image donors in `pilot-mismatch-controls.json`: all154 are from
@@ -105,7 +115,7 @@ Authoring sessions: `9237470ed5ef4ba49478098ab454cd8d` then
   evaluation. Different groups are not necessarily contradictory; this is a
   memory-dependence control, not a guarantee every donor implies a wrong answer.
 
-**Current resumed pilot is RUNNING: only remaining shard1 readings on GPUs1/3.**
+**Completed resumed pilot: both driver and all evaluation shard markers exist.**
 Resume dispatch `961a79b635a746faba7b369be48d0122`, commit
 `b72776c391e5547982feab21bb5b24a3fb9dd2ed`, new host `...-3eiz2r5ftf`.
 `dispatch-pilot.json` contains the new host/GPU binding; the original dispatch was
@@ -114,9 +124,10 @@ preserved as `dispatch-pilot-8ee9246d01204653a3d2d0b19b9f4d61.json`.
   remaining Reader PID12555 GPU1.
 - B driver PID8086, session `37e3358541634d49b0624af673805724`;
   remaining Reader PID12553 GPU3.
-Both new Reader logs show saved results after the prior endpoint. All teacher,
+All resumed Reader and driver processes have exited successfully. All teacher,
 FM2048, references, rollout and student shard0 endpoints were reused. Do not
-launch another pilot. Inspect these current receipts/PIDs, not the historical ones below.
+launch another pilot. These PIDs and receipts are historical; monitor the
+train-input diagnostic described at the top instead.
 
 **Historical pilot on the previous host (ended by automatic stop):**
 Launch commit `c13d154b5654dda25caadcbb5857ec214122b090`, session
@@ -173,30 +184,16 @@ Latest child sessions/receipts at 2026-09-23 21:03 UTC:
   they allocate no model and will reuse the completed evaluation. Four GPU model
   processes are2605840 /2894200 /2605843 /2936584. Do not start additional readers.
 
-Next: finish the fresh single-write student RGB/readout matrix, then analyze
-shared-Writer performance against the complete teacher matrix. First read
-`FM_DIAGNOSTIC_NOTES.md`: all64 train-content benchmark exchanges use a different
-acknowledgment from FM training (disclosure itself is identical for64/64).
-Thus train-content benchmark scores are not exact training-condition fit.
-After the fixed matrix, generate a paired diagnostic for all64 original SFT
-initial exchanges with the same seed0/native inference and unchanged Reader
-tasks. Keep it separate from the official benchmark. The diagnostic is implemented
-in commit3227d58 and staged remotely; it has NOT been dispatched. Four focused
-official-format/split checks and syntax compilation pass. Launch only after both
-original pilot completion markers exist and the fixed matrix has been analyzed:
-`launch_prefeval_official_ab.py train-input --output OUTPUT`. It uses four shards
-(A0/A1/B0/B1,32 training records each), one original SFT initial exchange per state,
-the frozen write checkpoint, native28 steps and the existing seed0/noise namespace.
-No target-latent or FM update occurs. PNGs go to `rollouts/{A,B}/training-initial`;
-readouts to `evaluations/training-input-students/{A,B}/write`, with the same five
-question forms, answer limits, option order and official scoring. The full actual
-initial exchange is saved in new PNG completion metadata. Distinguish input-generalization from
-FM/free-running generation error before choosing the correction. Do not replace
-benchmark acknowledgments with SFT replies. Then real train-side source rollouts and fixed2048
-retain updates, followed by fresh benchmark RGB chains and same-PNG evaluation.
-Use two fixed inference seeds and 0/5/10 prefixes. Keep O1/O2 out of selection.
-Compare teacher / single-write student / recurrent student to locate failures.
-Only extend data/capacity after these results, not from training loss alone.
+Next: finish the exact-training-input diagnostic already running. Compare all64
+paired T1 scores with the fixed benchmark's train-content seed0 and teachers.
+All64 disclosures match training; all64 benchmark acknowledgments differ.
+If exact inputs work, focus on input generalization; if they also fail, focus on
+free-running FM reconstruction / Reader sensitivity. Keep benchmark SFT and
+Reader-generated acknowledgment protocols distinct. No OOD tuning, no new FM
+or retain launch until the completed diagnostic identifies a justified correction.
+The retained official-FM/RGB route remains the mainline; neither low FM loss nor
+teacher fitting substitutes for shared visual memory. Once single write works,
+continue the planned actual training-source retain stage and K2/K4 from evidence.
 
 The official generation judge uses Claude3 Sonnet through Bedrock. No local API
 environment variables or AWS credentials profile were found; user has been asked

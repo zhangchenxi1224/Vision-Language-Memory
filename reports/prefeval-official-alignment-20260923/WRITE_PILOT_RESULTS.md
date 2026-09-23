@@ -35,6 +35,10 @@ Its near-baseline accuracy and negligible matched-image advantage do not support
 the claim that it transfers the readable teacher information into generated RGB.
 B's perfect teacher MCQ fit establishes a feasible optimized single-state image
 for those training questions; it does not establish a successful shared Writer.
+Replacing the matched PNG with its registered donor leaves the parsed T1 label
+unchanged for A63/64 train and89/90 dev, B61/64 train and88/90 dev. This direct
+intervention is consistent with weak task-relevant image influence; it does not
+prove the images carry literally zero information.
 
 ## First-principles interpretation and fixed next step
 
@@ -62,6 +66,12 @@ If exact inputs work, investigate input generalization. If they also fail,
 investigate free-running FM reconstruction and Reader sensitivity to reconstruction
 errors. Do not proceed to retain/K2/K4 training until this single-write bottleneck
 is located. Do not use OOD scores to select the correction or change scoring.
+
+The diagnostic was dispatched at 07:56 CST on the same designated four-H200
+notebook, session `b2187482df5649ae812ffde225bec0a2`, commit `1ea44f8`.
+Four workers divide A/B into 32-state shards. The first observed progress was
+40/64 generated PNGs per arm, with no diagnostic failure. Read EXECUTION_LIVE.md
+for current receipts and progress; this is not a diagnostic result yet.
 
 ## Raw evidence
 
