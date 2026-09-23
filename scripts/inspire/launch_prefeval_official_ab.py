@@ -14,6 +14,7 @@ def main():
     p.add_argument('phase',choices=['author','train','pilot','write-rollout'])
     p.add_argument('--output',type=Path,required=True)
     p.add_argument('--questions',type=Path)
+    p.add_argument('--rollout-shard',type=int,choices=[0,1],default=0)
     p.add_argument('--resume',action='store_true')
     a=p.parse_args()
     if not socket.gethostname().startswith('dl-clear-retain-h200x4-20260914'):
@@ -21,7 +22,8 @@ def main():
     root=Path(__file__).resolve().parents[2]
     models=Path('/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory')
     a.output.mkdir(parents=True,exist_ok=True)
-    receipt=a.output/f'dispatch-{a.phase}.json'
+    suffix='-1' if a.phase=='write-rollout' and a.rollout_shard==1 else ''
+    receipt=a.output/f'dispatch-{a.phase}{suffix}.json'
     if receipt.exists():
         old=json.loads(receipt.read_text())
         if not a.resume: raise RuntimeError('Already dispatched; read existing receipt')
@@ -34,11 +36,11 @@ def main():
     assignments=[(g,'A',g,4) for g in range(4)] if a.phase=='author' else [(0,'A',0,2),(1,'A',1,2),(2,'B',0,2),(3,'B',1,2)]
     if a.phase=='pilot': assignments=[('0,1','A',0,1),('2,3','B',0,1)]
     if a.phase=='write-rollout':
-        assignments=[(0,'A',0,2),(2,'B',0,2)]
+        assignments=[(0,'A',a.rollout_shard,2),(2,'B',a.rollout_shard,2)]
         for _,arm,_,_ in assignments:
             if not (a.output/'writers'/arm/'write/complete.json').exists():
                 raise RuntimeError('Finish the fixed FM endpoint before RGB inference')
-            if (a.output/'pipeline'/arm/'job-rollout-0.json').exists():
+            if (a.output/'pipeline'/arm/f'job-rollout-{a.rollout_shard}.json').exists():
                 raise RuntimeError('The existing driver has already scheduled this rollout')
     for gpu,arm,shard,shards in assignments:
         log=a.output/f'{a.phase}-{arm}-{shard}-{value["session_id"]}.log'
