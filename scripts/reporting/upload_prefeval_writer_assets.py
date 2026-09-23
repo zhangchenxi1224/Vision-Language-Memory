@@ -6,8 +6,17 @@ import json
 from pathlib import Path
 import sys
 import time
+from urllib.error import HTTPError
+from urllib.request import Request, urlopen
 
-import requests
+
+def request_json(url, headers, stream=None):
+    request=Request(url,headers=headers,data=stream,method='POST' if stream is not None else 'GET')
+    try:
+        with urlopen(request,timeout=3600 if stream is not None else 30) as response:
+            return response.status,json.load(response)
+    except HTTPError as error:
+        raise RuntimeError(f'GitHub HTTP {error.code}') from None
 
 
 def main():
@@ -17,12 +26,13 @@ def main():
     args=parser.parse_args()
     token=sys.stdin.readline().strip()
     if not token:raise RuntimeError('Missing transient GitHub authentication')
-    headers={'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json'}
+    headers={'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json',
+             'User-Agent':'Vision-Language-Memory-artifact-upload'}
     repository='zhangchenxi1224/Vision-Language-Memory'
     release=f'https://api.github.com/repos/{repository}/releases/{args.release_id}'
-    response=requests.get(release,headers=headers,timeout=30)
-    if response.status_code!=200:raise RuntimeError(f'Release lookup HTTP {response.status_code}')
-    assets={x['name']:x for x in response.json()['assets']}
+    status,response=request_json(release,headers)
+    if status!=200:raise RuntimeError(f'Release lookup HTTP {status}')
+    assets={x['name']:x for x in response['assets']}
 
     def upload(arm):
         folder=args.run/'writers'/arm/'write'
@@ -38,11 +48,10 @@ def main():
         else:
             print(json.dumps(dict(upload_started=name,bytes=path.stat().st_size)),flush=True)
             with path.open('rb') as stream:
-                reply=requests.post(f'https://uploads.github.com/repos/{repository}/releases/{args.release_id}/assets',
-                    params={'name':name},headers={**headers,'Content-Type':'application/octet-stream',
-                    'Content-Length':str(path.stat().st_size)},data=stream,timeout=(30,3600))
-            if reply.status_code!=201:raise RuntimeError(f'Asset upload HTTP {reply.status_code} for {arm}')
-            asset=reply.json()
+                status,asset=request_json(f'https://uploads.github.com/repos/{repository}/releases/{args.release_id}/assets?name={name}',
+                    {**headers,'Content-Type':'application/octet-stream',
+                    'Content-Length':str(path.stat().st_size)},stream)
+            if status!=201:raise RuntimeError(f'Asset upload HTTP {status} for {arm}')
         if asset['state']!='uploaded' or asset['size']!=path.stat().st_size:
             raise RuntimeError(f'Inspect incomplete release asset: {name}')
         if asset.get('digest')!='sha256:'+expected:
