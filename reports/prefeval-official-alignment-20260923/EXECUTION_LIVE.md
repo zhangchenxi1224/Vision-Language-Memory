@@ -10,12 +10,13 @@ preferences, question paraphrases and real RGB recurrence, then K2/K4 updates.
 Teacher fit alone does not complete this objective. Preserve failures and original
 PrefEval scoring; retain DreamLite native source conditioning / official FM.
 
-Latest 2026-09-24 05:04 CST: common references completed308/308 conditions.
+Latest 2026-09-24 05:40 CST: student evaluation reached A180/462 and B180/462
+conditions; all four existing Reader workers and both drivers remain alive.
+No new GPU experiment failure. Common references completed308/308 conditions.
 T1 MCQ dev: blank36/90, full text79/90; train: blank30/64, full text59/64.
 Read `WRITE_REFERENCE_RESULTS.md` and the complete archived reference matrix.
 All student RGB endpoints are complete,308/308 per arm (154 records x2 seeds).
-Four GPUs now read student PNGs: A75/462 and B72/462 condition files at05:03.
-No new experiment failure.
+Four GPUs continue reading the fixed student PNG matrix, without new training.
 Do not interpret these incomplete subsets as final paired scores.
 Both shared FM-write runs completed2048/2048; teacher
 PNG evaluation completed64/64 per arm. Read `FIRST_TEACHER_AND_FM_RESULTS.md`.
@@ -31,9 +32,15 @@ this execution record. Do not falsely complete the old goal just to replace its 
 
 - Live platform query: RUNNING, 4 H200 / 80 CPU / 900 GiB, node qb-prod-gpu2468.
 - Current host: `dl-clear-retain-h200x4-20260914--a823c55e800a-facprpli2x`.
-- At05:04 CST platform auto-stop was2h7m away (approximately07:12 CST).
+- At05:40 CST platform auto-stop was1h31m away (approximately07:12 CST).
   Recheck before assuming continued allocation; do not change the fixed evaluation
   budget to fit a session. Existing endpoint files support resumption.
+  At the observed throughput, the remaining282 conditions per arm may outlast
+  this allocation. Keep the running workers. If automatic stop interrupts them,
+  confirm STOPPED before using `notebook start` on this same designated instance;
+  refresh the host/GPU binding, confirm old processes are gone, and resume the
+  original pilot with `--resume`. It reuses completed PNGs and condition files.
+  Do not create another instance, alter quota, or restart a still-running worker.
 - CLI: WSL Ubuntu `/home/zhangchenxi/.local/bin/inspire` 7.1.6. GPU notebook exec
   needs a local PTY; CPU transfer uses `dl-align-cpu-20260914-r3`.
 - Root: `/inspire/ssd/project/exploration-topic/czxs26210936`.
@@ -196,22 +203,31 @@ evidence are uploaded too. All128 teacher PNGs/latents and their optimizer endpo
 are now in the release. The old incomplete local B file is not a valid archive.
 Windows may show zero file size until WSL closes a download; WSL stat shows progress.
 
-Both final Writer checkpoints (1,560,357,922 bytes each) are being downloaded via
-CPU scp, timeout7200: A local session8324 -> `.cache/official-ab-20260924/writer-A-write-2048.pt`;
-B session1745 -> `writer-B-write-2048.pt`. Verify the above checkpoint hashes after
-completion, then upload them to the same experimental GitHub release. Do not
-claim full weight synchronization until actual upload succeeds. No optimizer
-checkpoints were included in this transfer; those remain on the shared disk.
-At20:28 UTC both transfers were still running but slow: A140,221,440 bytes and
-B178,606,080 bytes observed by WSL stat. Do not start a second transfer to these
-active paths. CPU notebook has no `gh` executable. Writer weights are not yet
-GitHub release assets; the complete teacher banks are already uploaded.
+Both original Writer downloads (1,560,357,922 bytes expected each) TIMED OUT after
+7200s. Local sessions8324 /1745 have exited. Their incomplete local files are
+`.cache/official-ab-20260924/writer-A-write-2048.pt` (238,924,800 bytes) and
+`writer-B-write-2048.pt` (264,253,440 bytes); do not load or upload these partial
+files. The complete remote checkpoints and their hashes are unchanged. No
+optimizer checkpoints were included; those remain on the shared disk.
+CPU notebook has no `gh` executable. The complete teacher banks are already uploaded.
 A direct shared-disk-to-GitHub upload attempt (local session24026, SSH stdin)
 failed with remote-command exit255. Follow-up found no upload process, no upload
 receipt and no Writer assets on GitHub. It did not affect any GPU worker or change
-the weights. No duplicate upload or replacement asset was started. The original
-two local downloads remain active; after timeout, inspect their partial files
-before choosing a resumable transfer strategy, rather than blindly restarting.
+the weights. A short non-secret stdin probe later succeeded. Committed direct
+uploader `scripts/reporting/upload_prefeval_writer_assets.py` avoids the long
+inline command. Its first run (local46525) exited before upload because the CPU
+environment has no `requests`; commit400ebf4 uses only standard-library HTTPS.
+Current direct-upload session **73524** is RUNNING as of21:50 UTC, via the existing
+CPU notebook. Both A/B uploads reported started at the exact full byte size after
+checking each source checkpoint SHA. Authentication is transient stdin-only and
+is not stored in files or logs. Do not start another upload. Poll this local
+session and inspect GitHub release394939498 plus remote
+`writer-release-upload-{A,B}.json` / `writer-release-upload.json` for completion.
+Claim synchronization only after asset sizes and GitHub SHA256 digests match.
+Current full student PNG binaries total353,760,669 bytes A /254,677,794 bytes B;
+their616 completion records are archived, but the image binaries remain on shared
+disk. A one-image local inspection transfer also timed out at90s; it is not a
+valid local student PNG and yielded no student-image visual diagnosis.
 
 `teacher-training-summary.json`: each arm64 states x288 =18,432 optimizer updates.
 A exposed4,019,040 target tokens; B129,024 (including end tokens). Recorded training
