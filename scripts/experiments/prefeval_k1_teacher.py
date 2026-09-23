@@ -48,12 +48,18 @@ def main(args):
     rows = load_training_records(args.split, args.exclude_pilot)[args.shard::args.shards]
     if args.limit:
         rows = rows[:args.limit]
+    execution_commit = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip()
+    recovery_commit = args.boundary_recovery_from
+    if recovery_commit:
+        assert args.arm == 'A' and args.split == 'train' and args.exclude_pilot and args.steps == 288
+        assert len(recovery_commit) == 40 and all(c in '0123456789abcdef' for c in recovery_commit)
+        assert (args.output / f'identity-{args.shard}.json').exists(), 'Recovery requires an existing registered identity'
     binding = {'arm': args.arm, 'steps': args.steps, 'lr': .05,
         'forms_sha256': sha(REPORT / ('train-question-forms.json' if args.split == 'train' else 'question-forms.json')),
         'split': args.split, 'exclude_pilot': args.exclude_pilot,
         'mcq_source_sha256': sha(args.prefeval / 'utils/utils_mcq.py'),
         'assignment': [r['base_pair_id'] for r in rows], 'shard': args.shard, 'shards': args.shards,
-        'commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(),
+        'commit': recovery_commit or execution_commit,
         'loss': 'mean over answer tokens including one actual assistant terminator',
         'quantization': 'uint8-equivalent RGB forward with STE backward',
         'budget_class': 'technical_smoke' if args.steps != 288 else ('registered_train730' if args.split == 'train' else 'registered_pilot')}
@@ -62,6 +68,9 @@ def main(args):
         assert json.loads(ident.read_text()) == binding, 'Resume binding differs'
     else:
         save_json(ident, binding)
+    execution = {'execution_commit': execution_commit, 'registered_binding_commit': binding['commit'],
+                 'preserve_generation_prefix_on_retokenization': bool(recovery_commit)}
+    save_json(args.output / f'execution-{args.shard}-{execution_commit[:7]}.json', execution)
     mcq = official_mcq(args.prefeval)
     vae = AutoencoderTiny.from_pretrained(args.base, subfolder='vae', local_files_only=True,
                                          torch_dtype=torch.float32).to(args.device).eval().requires_grad_(False)
@@ -101,7 +110,7 @@ def main(args):
             ce = qwen3vl_target_only_ce(model=reader, processor=processor, image=quantized[0],
                 query=question, target=target + termination['assistant_end_token_text'], device=args.device,
                 require_image_grad=True, reader_resize_contract=R3_QWEN_READER_RESIZE_CONTRACT,
-                deterministic_ce=True)
+                deterministic_ce=True, preserve_generation_prefix=bool(recovery_commit))
             assert int(ce.target_ids[0, -1]) == termination['assistant_end_token_id']
             if not torch.isfinite(ce.loss):
                 raise RuntimeError('Nonfinite CE')
@@ -120,19 +129,19 @@ def main(args):
             append(out / 'optimization.jsonl', record)
             if (step + 1) % 24 == 0 or step + 1 == args.steps:
                 atomic_save(checkpoint, {'latent': oracle.latent_fp32.detach(),
-                    'optimizer': optimizer.state_dict(), 'step': step + 1, 'binding': binding})
+                    'optimizer': optimizer.state_dict(), 'step': step + 1, 'binding': binding, 'execution': execution})
                 print(json.dumps({**record, 'item': index + 1, 'items': len(rows)}), flush=True)
         with torch.no_grad():
             _save_image(out / 'memory.png', oracle.image())
         atomic_save(out / 'latent.pt', oracle.latent_fp32.detach().cpu())
         # Confirm the actual artifact can be decoded; no OOD inference during training.
         assert tuple(read_png(out / 'memory.png').shape) == (3, 1024, 1024)
-        save_json(out / 'complete.json', {'pair_id': pid, 'binding': binding,
+        save_json(out / 'complete.json', {'pair_id': pid, 'binding': binding, 'execution': execution,
             'png_sha256': sha(out / 'memory.png'), 'latent_sha256': sha(out / 'latent.pt'),
             'step': args.steps, 'status': 'optimized_not_yet_semantically_evaluated'})
         print(json.dumps({'completed': pid, 'arm': args.arm}), flush=True)
         del oracle, optimizer, ce, pixels, quantized
-    save_json(args.output / f'finished-{args.shard}.json', {'binding': binding, 'status': 'completed'})
+    save_json(args.output / f'finished-{args.shard}.json', {'binding': binding, 'execution': execution, 'status': 'completed'})
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
@@ -146,6 +155,7 @@ if __name__ == '__main__':
     parser.add_argument('--shard', type=int, default=0)
     parser.add_argument('--shards', type=int, default=2)
     parser.add_argument('--limit', type=int, default=0)
+    parser.add_argument('--boundary-recovery-from', help='Registered full commit SHA for the diagnosed A/train prefix-boundary recovery; execution SHA is recorded separately')
     args = parser.parse_args()
     try:
         main(args)
