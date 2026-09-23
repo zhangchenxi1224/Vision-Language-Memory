@@ -1,0 +1,52 @@
+{
+  "A": {
+    "correct": 0,
+    "total": 8,
+    "per_chain": [
+      {
+        "chain": 0,
+        "predictions": [
+          "B",
+          "A",
+          "A",
+          "A"
+        ]
+      },
+      {
+        "chain": 1,
+        "predictions": [
+          "B",
+          "A",
+          "A",
+          "A"
+        ]
+      }
+    ],
+    "scope": "same fixed trained preference; all four correct-option positions on each of two frozen student images"
+  },
+  "B": {
+    "correct": 8,
+    "total": 8,
+    "per_chain": [
+      {
+        "chain": 0,
+        "predictions": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      },
+      {
+        "chain": 1,
+        "predictions": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ]
+      }
+    ],
+    "scope": "same fixed trained preference; all four correct-option positions on each of two frozen student images"
+  }
+}
