@@ -50,7 +50,6 @@ def author(a):
     for r in selected:
         path = out / (r['id'].replace(':','-') + '.json')
         if path.exists():
-            validate_forms(r['question'], json.loads(path.read_text())['forms'])
             continue
         prompt = ('Rewrite the question below in four different English forms. Preserve the exact task, '
             'entities, locations, quantities, negations, scope and answer applicability. Do not answer it, '
@@ -68,8 +67,14 @@ def author(a):
         raw = tokenizer.decode(gen[0,batch.input_ids.shape[1]:],skip_special_tokens=True)
         append(out/f'raw-{a.shard}.jsonl', dict(id=r['id'], question=r['question'], prompt=prompt, raw=raw))
         value = json.loads(raw[raw.index('{'):raw.rindex('}')+1])
-        forms = validate_forms(r['question'], dict(T1=r['question'], **value))
-        write(path, dict(id=r['id'],split=r['split'],forms=forms,source='frozen Qwen3-VL-4B text-only author; pending semantic review'))
+        forms = dict(T1=r['question'], **value)
+        issue = None
+        try: validate_forms(r['question'],forms)
+        except ValueError as error: issue=str(error)
+        # Preserve imperfect drafts for semantic correction without regenerating
+        # already authored rows or selecting examples using task outcomes.
+        write(path, dict(id=r['id'],split=r['split'],forms=forms,review_issue=issue,
+            source='frozen Qwen3-VL-4B text-only author; pending semantic review'))
         print(json.dumps(dict(authored=r['id'],shard=a.shard)),flush=True)
     write(out/f'complete-{a.shard}.json',dict(count=len(selected)))
 
@@ -117,6 +122,8 @@ def train(a):
             if ck['binding']!=binding: raise ValueError('Resume inputs changed')
             with torch.no_grad(): oracle.latent_fp32.copy_(ck['latent'])
             opt.load_state_dict(ck['optimizer']);start=ck['step']
+        attempt=str(time.time_ns())
+        write(out/f'attempt-{attempt}.json',dict(resume_step=start,binding=binding))
         for step in range(start,a.steps):
             began=time.monotonic();opt.zero_grad(set_to_none=True)
             item=training_item(r,forms,a.arm,step)
@@ -132,7 +139,7 @@ def train(a):
             if grad is None or not torch.isfinite(grad).all() or not torch.any(grad!=0):
                 raise RuntimeError('Latent has no finite nonzero gradient')
             opt.step()
-            row=dict(step=step+1,family=item['family'],loss=float(ce.loss.detach()),
+            row=dict(step=step+1,attempt=attempt,family=item['family'],loss=float(ce.loss.detach()),
                      target_tokens=ce.target_ids.numel(),order=item['order'],seconds=time.monotonic()-began)
             append(out/'optimization.jsonl',row)
             if (step+1)%24==0 or step+1==a.steps:
