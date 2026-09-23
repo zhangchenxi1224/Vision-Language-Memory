@@ -10,10 +10,12 @@ preferences, question paraphrases and real RGB recurrence, then K2/K4 updates.
 Teacher fit alone does not complete this objective. Preserve failures and original
 PrefEval scoring; retain DreamLite native source conditioning / official FM.
 
-Latest 2026-09-24 04:32 CST: all student RGB endpoints are complete,308/308 per arm
-(154 records x2 inference seeds). Student readings started on GPUs0/2 at04:26;
-each arm has4/462 condition files so far, including matched and mismatched inputs.
-Common blank/full-text references are251/308 conditions. No new experiment failure.
+Latest 2026-09-24 05:04 CST: common references completed308/308 conditions.
+T1 MCQ dev: blank36/90, full text79/90; train: blank30/64, full text59/64.
+Read `WRITE_REFERENCE_RESULTS.md` and the complete archived reference matrix.
+All student RGB endpoints are complete,308/308 per arm (154 records x2 seeds).
+Four GPUs now read student PNGs: A75/462 and B72/462 condition files at05:03.
+No new experiment failure.
 Do not interpret these incomplete subsets as final paired scores.
 Both shared FM-write runs completed2048/2048; teacher
 PNG evaluation completed64/64 per arm. Read `FIRST_TEACHER_AND_FM_RESULTS.md`.
@@ -29,7 +31,7 @@ this execution record. Do not falsely complete the old goal just to replace its 
 
 - Live platform query: RUNNING, 4 H200 / 80 CPU / 900 GiB, node qb-prod-gpu2468.
 - Current host: `dl-clear-retain-h200x4-20260914--a823c55e800a-facprpli2x`.
-- At03:48 CST platform auto-stop was3h24m away (approximately07:12 CST).
+- At05:04 CST platform auto-stop was2h7m away (approximately07:12 CST).
   Recheck before assuming continued allocation; do not change the fixed evaluation
   budget to fit a session. Existing endpoint files support resumption.
 - CLI: WSL Ubuntu `/home/zhangchenxi/.local/bin/inspire` 7.1.6. GPU notebook exec
@@ -93,7 +95,7 @@ Authoring sessions: `9237470ed5ef4ba49478098ab454cd8d` then
   evaluation. Different groups are not necessarily contradictory; this is a
   memory-dependence control, not a guarantee every donor implies a wrong answer.
 
-**Pilot continuation drivers are RUNNING: common references; early student readings run on freed GPUs.**
+**Pilot continuation drivers are RUNNING: references complete; student readings occupy all four GPUs.**
 Launch commit `c13d154b5654dda25caadcbb5857ec214122b090`, session
 `8ee9246d01204653a3d2d0b19b9f4d61`, remote `dispatch-pilot.json`.
 A driver PID810688 owns GPUs0/1 after its teacher workers finish; B PID810689 owns
@@ -102,14 +104,14 @@ duplicates. Each driver schedules FM-write and teacher evaluation, then common
 references and fresh write-only benchmark RGB/student evaluation. It stops at the
 fixed write-pilot endpoint for analysis before scheduling retain training.
 
-Latest child sessions/receipts at 2026-09-23 20:32 UTC:
+Latest child sessions/receipts at 2026-09-23 21:03 UTC:
 
 - A driver session `05035f9043f54f9cb09896925f5ad8b4`; FM PID1059861 GPU0
   and teacher evaluation PID1059862 GPU1 are finished. References PID1601241 GPU1
-  runs shard0/2 of common blank/full-text inputs.
+  finished shard0/2 of common blank/full-text inputs and exited.
 - B driver session `a86c5b7b60a74f70a1e352cc38477e48`; FM PID1071409 GPU2
   and teacher evaluation PID1071410 GPU3 are finished. References PID1604949 GPU3
-  runs shard1/2 of common inputs.
+  finished shard1/2 of common inputs and exited.
 - No new teacher/FM/evaluation failure observed. The two authoring failures remain
   in the raw evidence; no failed teacher was removed.
 - Write checkpoints are fixed at2048 updates. A SHA
@@ -127,9 +129,8 @@ Latest child sessions/receipts at 2026-09-23 20:32 UTC:
   commit `5f9fc13e119603e186e973ae8eff8196ef2b9718`;
   A PID2147450 GPU0, B PID2147451 GPU2. Both rollout workers finished; their
   processes were gone by20:24 UTC. Both arms have all308 PNG completion markers.
-- Original drivers still schedule both rollout shards followed by student readings;
-  their rollout locks and completion markers reuse the early work. Current common
-  reference conditions are251/308; no full paired control score is claimed yet.
+- Original drivers successfully reused both completed rollout shards and launched
+  their scheduled student workers. All308 common reference conditions are complete.
 - Early student shard0/2 launched at20:26 UTC, receipt `dispatch-write-students.json`,
   session `9d09cb75edfe4eb387243e4342952ff5`, commit
   `5fc44d061ebb43850798fec1e1d1b7750584e461`; A PID2605840 GPU0, B PID2605843 GPU2.
@@ -143,8 +144,13 @@ Latest child sessions/receipts at 2026-09-23 20:32 UTC:
   original drivers later join the early shard0 readers safely and launch shard1
   on GPUs1/3 after their reference workers finish. Samples, budgets and scoring
   are unchanged. Local syntax compilation passed; first GPU readout files exist.
+- Actual shard1 Readers: A PID2894200 GPU1 (driver session05035f9043f54f9cb09896925f5ad8b4),
+  B PID2936584 GPU3 (a86c5b7b60a74f70a1e352cc38477e48). Driver-spawned shard0
+  PIDs2894199 /2936583 wait on the already running early shard0 workers' locks;
+  they allocate no model and will reuse the completed evaluation. Four GPU model
+  processes are2605840 /2894200 /2605843 /2936584. Do not start additional readers.
 
-Next: finish common references and the fresh single-write student RGB/readout matrix,
+Next: finish the fresh single-write student RGB/readout matrix,
 then analyze shared-Writer performance against the complete teacher matrix.
 Then real train-side source rollouts and fixed2048
 retain updates, followed by fresh benchmark RGB chains and same-PNG evaluation.
@@ -167,6 +173,15 @@ config, never keys in Git. First T1 dev selection can be specified with
 `--glob 'students/*/write/*.json' --split dev --families T1` before the full matrix.
 
 ## Continuation metadata
+
+Complete reference summary and `reference-and-rollout-evidence.jsonl.gz` are now
+downloaded into this report directory and uploaded to the existing GitHub release.
+The gzip has1,101 parsed raw records,1,827,394 bytes, SHA256
+`4077f20bf9de1901acaa0f5d587d81d41a2a9442439bff4a49396d6599c80ab4`.
+It contains full reference answers and PNG generation metadata; actual student
+PNG binaries are still on the shared disk. Remote
+`write-evaluation-progress-20260923T2103.json` is only an interim student snapshot;
+it is not the final shared-Writer result. Do not tune from its partial subsets.
 
 Teacher raw text records and manifest are downloaded locally and published at
 https://github.com/zhangchenxi1224/Vision-Language-Memory/releases/tag/prefeval-official-ab-teachers-20260924

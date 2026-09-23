@@ -4,7 +4,8 @@ Read `../prefeval-official-alignment-20260923/EXECUTION_LIVE.md` first.
 Teacher session57459d0119c04fa0a750593b209da6dc completed64/64 states per arm.
 Both FM-write runs completed2048/2048; teacher T1 MCQ A44/64 versus B64/64.
 All308 student PNGs per arm are complete. Pilot8ee9246d01204653a3d2d0b19b9f4d61
-runs references; early student readings on GPUs0/2 are session
+runs students on all four GPUs; references are complete (dev T1 text79/90,
+blank36/90). Early student readings on GPUs0/2 are session
 9d09cb75edfe4eb387243e4342952ff5. Complete shared-Writer scores remain pending.
 Old Plan13/C2C instructions below remain superseded. Do not duplicate GPU workers.
 

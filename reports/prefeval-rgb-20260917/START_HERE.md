@@ -8,9 +8,10 @@ bank is frozen. A full-answer / B official MCQ teacher banks both completed64/64
 session57459d0119c04fa0a750593b209da6dc. Shared FM-write completed2048/2048 per arm;
 teacher T1 MCQ A44/64 versus B64/64. Read FIRST_TEACHER_AND_FM_RESULTS.md in the new
 report directory. All308 student RGB endpoints per arm are complete. Pilot
-8ee9246d01204653a3d2d0b19b9f4d61 runs references (251/308 at04:32 CST);
-early student shard0 readings run as9d09cb75edfe4eb387243e4342952ff5 on GPUs0/2.
-The first4/462 conditions per arm are saved. Read child receipts
+8ee9246d01204653a3d2d0b19b9f4d61 completed all308 reference conditions;
+dev T1 full text79/90 versus blank36/90 (WRITE_REFERENCE_RESULTS.md).
+All four GPUs now read students: A75/462, B72/462 at05:03 CST. Early shard0
+session9d09cb75edfe4eb387243e4342952ff5 remains active. Read child receipts
 before continuing. Shared-Writer scores remain pending. No C2C; heartbeat dreamlite-a-b.
 
 ## Latest: parallel official-answer / MCQ supervision, 2026-09-24
