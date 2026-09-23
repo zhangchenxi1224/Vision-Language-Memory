@@ -10,12 +10,14 @@ teacher T1 MCQ A44/64 versus B64/64. Read FIRST_TEACHER_AND_FM_RESULTS.md in the
 report directory. All308 student RGB endpoints per arm are complete. Pilot
 8ee9246d01204653a3d2d0b19b9f4d61 completed all308 reference conditions;
 dev T1 full text79/90 versus blank36/90 (WRITE_REFERENCE_RESULTS.md).
-All four GPUs now read students: A330/462, B328/462 at06:33 CST. All616 student
+After the automatic8h stop, the SAME notebook resumed the remaining student
+readouts: A435/462, B429/462 at07:18 CST. Current pilot session is
+961a79b635a746faba7b369be48d0122, new host suffix3eiz2r5ftf. All616 student
 PNGs and both complete Writer parameter files are in the verified GitHub release.
 Read FM_DIAGNOSTIC_NOTES.md before attributing benchmark errors to FM alone:
 all64 train-content initial exchanges have different acknowledgments from training.
-Early shard0
-session9d09cb75edfe4eb387243e4342952ff5 remains active. Read child receipts
+Both shard0 reads are complete; only remaining shard1 reads occupy GPUs1/3.
+The exact-training-input diagnostic is implemented but not dispatched. Read child receipts
 before continuing. Shared-Writer scores remain pending. No C2C; heartbeat dreamlite-a-b.
 
 ## Latest: parallel official-answer / MCQ supervision, 2026-09-24

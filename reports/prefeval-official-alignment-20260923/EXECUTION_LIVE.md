@@ -10,15 +10,17 @@ preferences, question paraphrases and real RGB recurrence, then K2/K4 updates.
 Teacher fit alone does not complete this objective. Preserve failures and original
 PrefEval scoring; retain DreamLite native source conditioning / official FM.
 
-Latest 2026-09-24 06:33 CST: student evaluation reached A330/462 and B328/462
-conditions; all four existing Reader workers and both drivers remain alive.
+Latest 2026-09-24 07:18 CST: after the platform's automatic8h stop, the SAME
+designated notebook was started and the original pilot resumed. Student evaluation
+has progressed to A435/462 and B429/462; both shard0 markers were already complete.
+Only remaining shard1 Reader workers run on GPUs1/3. Teachers/FM were not retrained.
 No new GPU experiment failure. Common references completed308/308 conditions.
 Both full Writer checkpoints and all616 student PNGs are now uploaded to GitHub;
 all four large assets have matching source/GitHub SHA256. See `write-assets-manifest.json`.
 T1 MCQ dev: blank36/90, full text79/90; train: blank30/64, full text59/64.
 Read `WRITE_REFERENCE_RESULTS.md` and the complete archived reference matrix.
 All student RGB endpoints are complete,308/308 per arm (154 records x2 seeds).
-Four GPUs continue reading the fixed student PNG matrix, without new training.
+The fixed student PNG matrix continues from saved condition files, without new training.
 Do not interpret these incomplete subsets as final paired scores.
 Both shared FM-write runs completed2048/2048; teacher
 PNG evaluation completed64/64 per arm. Read `FIRST_TEACHER_AND_FM_RESULTS.md`.
@@ -33,16 +35,15 @@ this execution record. Do not falsely complete the old goal just to replace its 
 ## Runtime and paths
 
 - Live platform query: RUNNING, 4 H200 / 80 CPU / 900 GiB, node qb-prod-gpu2468.
-- Current host: `dl-clear-retain-h200x4-20260914--a823c55e800a-facprpli2x`.
-- At05:40 CST platform auto-stop was1h31m away (approximately07:12 CST).
-  Recheck before assuming continued allocation; do not change the fixed evaluation
-  budget to fit a session. Existing endpoint files support resumption.
-  At the observed throughput, the remaining132/134 conditions per arm may outlast
-  this allocation. Keep the running workers. If automatic stop interrupts them,
-  confirm STOPPED before using `notebook start` on this same designated instance;
-  refresh the host/GPU binding, confirm old processes are gone, and resume the
-  original pilot with `--resume`. It reuses completed PNGs and condition files.
-  Do not create another instance, alter quota, or restart a still-running worker.
+- Current host: `dl-clear-retain-h200x4-20260914--a823c55e800a-3eiz2r5ftf`.
+- Old host `...-facprpli2x` automatically stopped after8h at about07:12 CST;
+  STOPPED was confirmed07:13:55, then `notebook start --no-wait --post-start none`
+  restarted the same notebook. It became RUNNING on the same node with four H200s
+  and a fresh8h window at about07:16. Old processes were absent before resume.
+  No instance was created, quota changed, unrelated task stopped or live worker restarted.
+- The restart retained A434/462 and B428/462 conditions and both shard0 completion
+  markers. New readers have already saved further conditions. Reuse endpoint files
+  on any future interruption; never shorten the fixed matrix to fit a session.
 - CLI: WSL Ubuntu `/home/zhangchenxi/.local/bin/inspire` 7.1.6. GPU notebook exec
   needs a local PTY; CPU transfer uses `dl-align-cpu-20260914-r3`.
 - Root: `/inspire/ssd/project/exploration-topic/czxs26210936`.
@@ -104,7 +105,20 @@ Authoring sessions: `9237470ed5ef4ba49478098ab454cd8d` then
   evaluation. Different groups are not necessarily contradictory; this is a
   memory-dependence control, not a guarantee every donor implies a wrong answer.
 
-**Pilot continuation drivers are RUNNING: references complete; student readings occupy all four GPUs.**
+**Current resumed pilot is RUNNING: only remaining shard1 readings on GPUs1/3.**
+Resume dispatch `961a79b635a746faba7b369be48d0122`, commit
+`b72776c391e5547982feab21bb5b24a3fb9dd2ed`, new host `...-3eiz2r5ftf`.
+`dispatch-pilot.json` contains the new host/GPU binding; the original dispatch was
+preserved as `dispatch-pilot-8ee9246d01204653a3d2d0b19b9f4d61.json`.
+- A driver PID8080, session `36dd762f273a4e028eb59bca72ab7149`;
+  remaining Reader PID12555 GPU1.
+- B driver PID8086, session `37e3358541634d49b0624af673805724`;
+  remaining Reader PID12553 GPU3.
+Both new Reader logs show saved results after the prior endpoint. All teacher,
+FM2048, references, rollout and student shard0 endpoints were reused. Do not
+launch another pilot. Inspect these current receipts/PIDs, not the historical ones below.
+
+**Historical pilot on the previous host (ended by automatic stop):**
 Launch commit `c13d154b5654dda25caadcbb5857ec214122b090`, session
 `8ee9246d01204653a3d2d0b19b9f4d61`, remote `dispatch-pilot.json`.
 A driver PID810688 owns GPUs0/1 after its teacher workers finish; B PID810689 owns

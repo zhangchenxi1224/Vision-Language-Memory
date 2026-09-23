@@ -4,9 +4,11 @@ Read `../prefeval-official-alignment-20260923/EXECUTION_LIVE.md` first.
 Teacher session57459d0119c04fa0a750593b209da6dc completed64/64 states per arm.
 Both FM-write runs completed2048/2048; teacher T1 MCQ A44/64 versus B64/64.
 All308 student PNGs per arm are complete. Pilot8ee9246d01204653a3d2d0b19b9f4d61
-runs students on all four GPUs; references are complete (dev T1 text79/90,
-blank36/90). Early student readings on GPUs0/2 are session
-9d09cb75edfe4eb387243e4342952ff5. Complete shared-Writer scores remain pending.
+was interrupted by automatic8h stop; the same notebook resumed as pilot
+961a79b635a746faba7b369be48d0122 (host suffix3eiz2r5ftf), with A435/462 and B429/462
+conditions at07:18 CST. Both shard0 reads are complete; remaining reads use GPUs1/3.
+References are complete (dev T1 text79/90, blank36/90). Complete shared-Writer
+scores remain pending; the original-SFT-input diagnostic is prepared, not launched.
 Old Plan13/C2C instructions below remain superseded. Do not duplicate GPU workers.
 
 # Previous steering — 2026-09-24: paired supervision and 3+2 question forms
