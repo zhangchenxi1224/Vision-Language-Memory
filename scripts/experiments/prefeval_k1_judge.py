@@ -61,6 +61,7 @@ def main(args):
         {'parse_explanation_and_answer','parse_preference_and_answer'})
     aggregate=load_functions(UPSTREAM/'generation_task/get_preference_following_accuracy_generation_task.py',{'analyze_errors'})
     args.output.mkdir(parents=True,exist_ok=True)
+    totals={'complete':0,'judge_parse_failure':0}
     for source in args.inputs:
         for line in source.read_text(encoding='utf-8').splitlines():
             row=json.loads(line)
@@ -74,6 +75,11 @@ def main(args):
                 'evaluation_error_analysis':{},'raw_judgments':{},'status':'pending'}
             assert record['judge_model']==args.model and record['provider']==args.provider
             if record['status']=='complete':
+                totals['complete']+=1
+                continue
+            if record['status']=='judge_parse_failure':
+                # A malformed fixed-budget response remains missing; do not resample it.
+                totals['judge_parse_failure']+=1
                 continue
             checks=record['evaluation_error_analysis']
             for metric,filename in [('acknow','check_acknowledge.txt'),('violate','check_violation.txt'),
@@ -94,15 +100,21 @@ def main(args):
                 if ('yes' in answer.lower())==('no' in answer.lower()):
                     record['status']='judge_parse_failure'
                     path.write_text(json.dumps(record,indent=2,ensure_ascii=False),encoding='utf-8')
-                    raise RuntimeError(f'Judge parse failure for {uid}/{metric}; raw response preserved')
+                    print(json.dumps({'id':uid,'status':'judge_parse_failure','metric':metric}),flush=True)
+                    break
                 checks[metric]={'answer':answer,'extract_pref' if metric=='acknow' else 'explanation':parsed}
                 path.write_text(json.dumps(record,indent=2,ensure_ascii=False),encoding='utf-8')
+            if record['status']=='judge_parse_failure':
+                totals['judge_parse_failure']+=1
+                continue
             stats,_=aggregate['analyze_errors']([record])
             record['official_aggregation']=stats
             record['correct']=bool(stats['preference_adherence_accuracy'])
             record['status']='complete'
             path.write_text(json.dumps(record,indent=2,ensure_ascii=False),encoding='utf-8')
+            totals['complete']+=1
             print(json.dumps({'id':uid,'correct':record['correct'],'model_label':record['model_label']}),flush=True)
+    print(json.dumps({'judge_pass_finished':True,**totals}),flush=True)
 
 if __name__=='__main__':
     p=argparse.ArgumentParser(description=__doc__)

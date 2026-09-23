@@ -1,0 +1,15 @@
+Traceback (most recent call last):
+  File "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-k1-scale730-331092d/scripts/experiments/prefeval_k1_teacher.py", line 151, in <module>
+    main(args)
+  File "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-k1-scale730-331092d/scripts/experiments/prefeval_k1_teacher.py", line 101, in main
+    ce = qwen3vl_target_only_ce(model=reader, processor=processor, image=quantized[0],
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-k1-scale730-331092d/src/vision_memory/reader/qwen3vl.py", line 315, in qwen3vl_target_only_ce
+    return _qwen3vl_target_only_ce_prepared(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-k1-scale730-331092d/src/vision_memory/reader/qwen3vl.py", line 221, in _qwen3vl_target_only_ce_prepared
+    joint_text, target_ids = _joint_prompt_target_tokenization(processor, prompt, target)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-k1-scale730-331092d/src/vision_memory/reader/qwen3vl.py", line 191, in _joint_prompt_target_tokenization
+    raise RuntimeError(
+RuntimeError: Appending the target retokenized the chat-template prefix. The generation prompt must end on a stable tokenizer boundary.

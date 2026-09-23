@@ -50,3 +50,16 @@ def test_noise_chains_share_one_preference_denominator(tmp_path):
     incomplete=summarize([('B',tmp_path)],expected_ids=[first['pair_id']],prefixes=[0],chains=2)
     row=next(r for r in incomplete['noise_chain_joint'] if r['family']=='T1' and r['task']=='mcq')
     assert row['expected']==1 and row['observed']==0 and row['accuracy'] is None
+
+
+def test_failed_judge_is_visible_and_not_scored_as_wrong(tmp_path):
+    row=next(r for r in sample_rows() if r['control']=='memory' and r['task']=='free')
+    write_rows(tmp_path,[row])
+    judge_dir=tmp_path/'judges'
+    judge_dir.mkdir()
+    (judge_dir/'failure.json').write_text(json.dumps({'input':row,'status':'judge_parse_failure',
+        'judge_model':'fixed-model','model_label':'substitute_judge'}),encoding='utf-8')
+    value=summarize([('B',tmp_path)],expected_ids=[row['pair_id']],prefixes=[0],chains=1,judge_dir=judge_dir)
+    metric=next(r for r in value['metrics'] if r['control']=='memory' and r['family']=='T1' and r['task']=='free')
+    assert metric['expected']==metric['observed']==metric['parse_failures']==1
+    assert metric['scored']==0 and metric['accuracy'] is None and metric['observed_scored_accuracy'] is None

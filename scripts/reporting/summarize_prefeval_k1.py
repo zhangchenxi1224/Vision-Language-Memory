@@ -32,12 +32,16 @@ def result(counts,expected):
 def summarize(inputs,*,expected_ids,prefixes,chains,judge_dir=None):
     mcq=official_mcq(ROOT/'third_party/prefeval_reference')
     judges={}
+    judge_failures=set()
     judge_models=set()
     if judge_dir:
         for path in Path(judge_dir).glob('*.json'):
             record=json.loads(path.read_text(encoding='utf-8'))
             if record.get('status')=='complete':
                 judges[canonical(record['input'])]=record['correct']
+            elif record.get('status')=='judge_parse_failure':
+                judge_failures.add(canonical(record['input']))
+            if record.get('status') in {'complete','judge_parse_failure'}:
                 judge_models.add((record['judge_model'],record['model_label']))
         if len(judge_models)>1:
             raise ValueError('Do not mix distinct judge models in a single accuracy')
@@ -79,6 +83,7 @@ def summarize(inputs,*,expected_ids,prefixes,chains,judge_dir=None):
                 score.update(correct=predicted==correct,parse_failure=predicted is None)
             else:
                 score['correct']=judges.get(canonical(row))
+                score['parse_failure']=canonical(row) in judge_failures
             group=(row['prefix'],row['control'],row['family'],row['task'])
             groups[group].append(score)
             scored[key]=score['correct']

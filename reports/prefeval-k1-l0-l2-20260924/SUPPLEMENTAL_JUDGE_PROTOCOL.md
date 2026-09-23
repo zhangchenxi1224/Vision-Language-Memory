@@ -27,3 +27,9 @@
 仅对 429/500/502/503/504 作至多 5 次尝试的退避重试，并保留已有完整结果。
 提示、固定模型、temperature、100-token 上限、XML 解析和聚合均不变；
 认证失败和解析失败不作为限流重试处理。
+
+首次 A 教师完整读回评分中，`education_learning_styles:0030` 的错配输入在 acknowledge
+判定时触及 100-token 上限，未生成完整 XML。保留原始响应为 `judge_parse_failure`，
+不改上限、不重试该记录、不手工补标签。执行器随后继续其他回答，重复运行也跳过已登记
+解析失败；汇总单列 judge 解析失败及未评分数量，固定分母不变。
+相关原始响应见 [首次解析失败](evidence/teacher-A-first-judge-parse-failure.json)。
