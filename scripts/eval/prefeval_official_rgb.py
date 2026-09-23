@@ -139,7 +139,7 @@ def evaluate(a):
                         g=generate_short_answer(model=reader,processor=processor,image=image,query=query,
                                                device=a.device,max_new_tokens=max_tokens)
                     predicted=official_choice(g['raw']) if task=='mcq' else None
-                    rows.append(dict(family=family,task=task,query=query,generation=g,order=order,
+                    rows.append(dict(family=family,task=task,question=question,query=query,generation=g,order=order,
                         gold=gold,predicted=predicted,correct=(predicted==gold[8]) if gold else None,
                         scoring='official_mcq_extract_choice' if gold else 'pending_official_judge'))
             write(result,dict(id=r['id'],split=r['split'],condition=condition,position=pos,seed=seed,

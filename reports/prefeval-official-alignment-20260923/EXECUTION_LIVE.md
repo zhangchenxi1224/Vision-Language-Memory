@@ -103,6 +103,13 @@ for an existing teacher API configuration location (never request pasted secrets
 Continue training, MCQ and raw generation while this is unresolved. Generation
 outputs remain `pending_official_judge`, not silently scored with string matching
 or the same small Reader. Do not claim official generation accuracy without it.
+CPU notebook also has no relevant API environment flags or AWS config/credentials.
+`scripts/eval/judge_prefeval_official_rgb.py` is ready to import the pinned upstream
+judge parsers and aggregation and read the original four prompt files. It uses
+the released Sonnet/Bedrock parameters; no API calls or formal generation scores
+have occurred. Save the user's supplied configuration location in private runtime
+config, never keys in Git. First T1 dev selection can be specified with
+`--glob 'students/*/write/*.json' --split dev --families T1` before the full matrix.
 
 ## Continuation metadata
 
