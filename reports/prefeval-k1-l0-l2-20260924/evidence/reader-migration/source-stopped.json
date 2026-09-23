@@ -1,0 +1,22 @@
+{
+  "readbacks": {
+    "A": {
+      "completed_rows": 390,
+      "raw_sha256": "68df1904a46dc5ab9ef3d0665df6ad224290947045934ba36ae6daed71905f71",
+      "retained_sha256": "68df1904a46dc5ab9ef3d0665df6ad224290947045934ba36ae6daed71905f71",
+      "dropped_incomplete_terminal_record": false
+    },
+    "B": {
+      "completed_rows": 370,
+      "raw_sha256": "fa0b470b16a528d643d671b2017f6f249e979fcfa1a47c46cd55bc463b311dbf",
+      "retained_sha256": "fa0b470b16a528d643d671b2017f6f249e979fcfa1a47c46cd55bc463b311dbf",
+      "dropped_incomplete_terminal_record": false
+    }
+  },
+  "writers": {
+    "82241": "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python scripts/experiments/prefeval_k1_writer.py train --arm B --base /inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907 --official-source /inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite --stage write --teachers /inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-k1-l0-l2-20260924/pilot/B --checkpoint /inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/4fbc857-clear-retention-full4832/train/checkpoint-final.pt --output /inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-k1-l0-l2-20260924/writer/B/write ",
+    "82267": "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python scripts/experiments/prefeval_k1_writer.py train --arm A --base /inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907 --official-source /inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite --stage write --teachers /inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-k1-l0-l2-20260924/pilot/A --checkpoint /inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/4fbc857-clear-retention-full4832/train/checkpoint-final.pt --output /inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-k1-l0-l2-20260924/writer/A/write "
+  },
+  "supervisor_superseded": 5697,
+  "source_instance": "prefeval-k1-h200x2-run-20260924"
+}
