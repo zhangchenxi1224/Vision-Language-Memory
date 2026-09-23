@@ -160,7 +160,15 @@ def main():
     import socket
     if not socket.gethostname().startswith('dl-clear-retain-h200x4-20260914'):raise RuntimeError('Wrong notebook')
     try:
-        if a.phase=='rollout':rollout(a)
+        if a.phase=='rollout':
+            # Permit scheduled shards to run while independent Reader references
+            # finish. A later pilot driver waits here before allocating a model,
+            # then reuses the same fixed-checkpoint PNG completion markers.
+            import fcntl
+            lock=a.output/f'rollout-{a.arm}-{a.stage}-{a.split}-{a.shard}-{a.shards}.lock'
+            with lock.open('a') as handle:
+                fcntl.flock(handle,fcntl.LOCK_EX)
+                rollout(a)
         else:evaluate(a)
     except BaseException:
         import traceback
