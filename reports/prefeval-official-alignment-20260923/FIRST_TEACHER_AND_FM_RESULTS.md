@@ -55,3 +55,8 @@ MCQ评分、改成答案梯度穿过28步生成，也没有启动 K2/K4 或选�
   复用这些结果。每分片文件锁防止重复同时生成；未增加样本、种子或训练步数。
 
 进一步进度和完整 session/PID 见 `EXECUTION_LIVE.md`。
+
+06:33 CST 归档更新：两组 Writer 完整参数及全部616张学生 PNG 已上传同一实验 Release，
+GitHub SHA256 与源文件一致，见 `write-assets-manifest.json`。上文未上传状态为03:03时的记录。
+当前训练内容学生评测使用的 acknowledgment 与训练不同，不能直接等同精确条件拟合；
+详见 `FM_DIAGNOSTIC_NOTES.md`。当前仍在完成固定学生矩阵，尚未开始额外训练。

@@ -10,9 +10,11 @@ preferences, question paraphrases and real RGB recurrence, then K2/K4 updates.
 Teacher fit alone does not complete this objective. Preserve failures and original
 PrefEval scoring; retain DreamLite native source conditioning / official FM.
 
-Latest 2026-09-24 05:40 CST: student evaluation reached A180/462 and B180/462
+Latest 2026-09-24 06:33 CST: student evaluation reached A330/462 and B328/462
 conditions; all four existing Reader workers and both drivers remain alive.
 No new GPU experiment failure. Common references completed308/308 conditions.
+Both full Writer checkpoints and all616 student PNGs are now uploaded to GitHub;
+all four large assets have matching source/GitHub SHA256. See `write-assets-manifest.json`.
 T1 MCQ dev: blank36/90, full text79/90; train: blank30/64, full text59/64.
 Read `WRITE_REFERENCE_RESULTS.md` and the complete archived reference matrix.
 All student RGB endpoints are complete,308/308 per arm (154 records x2 seeds).
@@ -35,7 +37,7 @@ this execution record. Do not falsely complete the old goal just to replace its 
 - At05:40 CST platform auto-stop was1h31m away (approximately07:12 CST).
   Recheck before assuming continued allocation; do not change the fixed evaluation
   budget to fit a session. Existing endpoint files support resumption.
-  At the observed throughput, the remaining282 conditions per arm may outlast
+  At the observed throughput, the remaining132/134 conditions per arm may outlast
   this allocation. Keep the running workers. If automatic stop interrupts them,
   confirm STOPPED before using `notebook start` on this same designated instance;
   refresh the host/GPU binding, confirm old processes are gone, and resume the
@@ -157,9 +159,17 @@ Latest child sessions/receipts at 2026-09-23 21:03 UTC:
   they allocate no model and will reuse the completed evaluation. Four GPU model
   processes are2605840 /2894200 /2605843 /2936584. Do not start additional readers.
 
-Next: finish the fresh single-write student RGB/readout matrix,
-then analyze shared-Writer performance against the complete teacher matrix.
-Then real train-side source rollouts and fixed2048
+Next: finish the fresh single-write student RGB/readout matrix, then analyze
+shared-Writer performance against the complete teacher matrix. First read
+`FM_DIAGNOSTIC_NOTES.md`: all64 train-content benchmark exchanges use a different
+acknowledgment from FM training (disclosure itself is identical for64/64).
+Thus train-content benchmark scores are not exact training-condition fit.
+After the fixed matrix, generate a paired diagnostic for all64 original SFT
+initial exchanges with the same seed0/native inference and unchanged Reader
+tasks. Keep it separate from the official benchmark. This diagnostic is planned,
+not yet implemented or dispatched. Distinguish input-generalization from
+FM/free-running generation error before choosing the correction. Do not replace
+benchmark acknowledgments with SFT replies. Then real train-side source rollouts and fixed2048
 retain updates, followed by fresh benchmark RGB chains and same-PNG evaluation.
 Use two fixed inference seeds and 0/5/10 prefixes. Keep O1/O2 out of selection.
 Compare teacher / single-write student / recurrent student to locate failures.
@@ -186,7 +196,7 @@ downloaded into this report directory and uploaded to the existing GitHub releas
 The gzip has1,101 parsed raw records,1,827,394 bytes, SHA256
 `4077f20bf9de1901acaa0f5d587d81d41a2a9442439bff4a49396d6599c80ab4`.
 It contains full reference answers and PNG generation metadata; actual student
-PNG binaries are still on the shared disk. Remote
+PNG binaries are now also in separate complete Release archives. Remote
 `write-evaluation-progress-20260923T2103.json` is only an interim student snapshot;
 it is not the final shared-Writer result. Do not tune from its partial subsets.
 
@@ -217,17 +227,29 @@ the weights. A short non-secret stdin probe later succeeded. Committed direct
 uploader `scripts/reporting/upload_prefeval_writer_assets.py` avoids the long
 inline command. Its first run (local46525) exited before upload because the CPU
 environment has no `requests`; commit400ebf4 uses only standard-library HTTPS.
-Current direct-upload session **73524** is RUNNING as of21:50 UTC, via the existing
-CPU notebook. Both A/B uploads reported started at the exact full byte size after
-checking each source checkpoint SHA. Authentication is transient stdin-only and
-is not stored in files or logs. Do not start another upload. Poll this local
-session and inspect GitHub release394939498 plus remote
-`writer-release-upload-{A,B}.json` / `writer-release-upload.json` for completion.
-Claim synchronization only after asset sizes and GitHub SHA256 digests match.
-Current full student PNG binaries total353,760,669 bytes A /254,677,794 bytes B;
-their616 completion records are archived, but the image binaries remain on shared
-disk. A one-image local inspection transfer also timed out at90s; it is not a
-valid local student PNG and yielded no student-image visual diagnosis.
+Direct-upload session73524 COMPLETED successfully. Both Writer files are exactly
+1,560,357,922 bytes, GitHub asset IDs584642828 /584642831; GitHub digests equal the
+training hashes above. Remote `writer-release-upload-{A,B}.json` and combined
+`writer-release-upload.json` preserve receipts. Authentication was transient stdin-only.
+Student-PNG upload session92986 also COMPLETED successfully, using
+`upload_prefeval_writer_assets.py --kind student-pngs`. It verified each original
+PNG against its rollout marker and archived all308 endpoints per arm:
+- `student-rgb-A-write.tar`:354,949,120 bytes, asset584690289, SHA256
+  `ac64e1a8ed9be6aec4e55ec2605cc32cad3a88fdc2ace180f5d303038a300f00`.
+- `student-rgb-B-write.tar`:255,866,880 bytes, asset584690279, SHA256
+  `f3e3a65b6faada53be8fabfdb48c3ec6cb9cb6269cb04b5a593731ac4a1b77d7`.
+All four assets are `uploaded` with matching GitHub SHA256; local
+`write-assets-manifest.json` records the verified API metadata. Do not duplicate
+these transfers. Full Writer optimizer states remain on shared disk.
+A one-image local inspection transfer timed out at90s; that partial file is not a
+valid local student PNG and yielded no visual diagnosis. This did not affect
+the complete archives uploaded directly from the CPU notebook.
+
+Read-only training analysis is archived in `fm-training-geometry.json` and
+`writer-input-condition-comparison.json`, with scripts and interpretation in
+`FM_DIAGNOSTIC_NOTES.md`. No development/OOD score was used in these diagnostics,
+and no new model training was launched. Target-noised training residuals decreased,
+but do not establish free-running inference or task-level memory preservation.
 
 `teacher-training-summary.json`: each arm64 states x288 =18,432 optimizer updates.
 A exposed4,019,040 target tokens; B129,024 (including end tokens). Recorded training

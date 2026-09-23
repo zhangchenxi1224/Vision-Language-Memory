@@ -36,9 +36,10 @@
 `reference-and-rollout-evidence.jsonl.gz` 共 1,101 条记录：154 条 benchmark 历史、
 308 条完整参照结果及 2 个完成标记、616 个学生 PNG 的生成完成记录、7 个调度回执、
 14 个子任务回执。包含原始回答、题目、选项及评分；PNG 完成记录包含哈希和噪声种子。
-该文件不含学生 PNG 的二进制图像，图像目前保留在实例共享盘。
+该文件不含学生 PNG 的二进制图像。更新：06:33 CST，全部616张学生PNG已另行上传
+`student-rgb-{A,B}-write.tar`，大小与 GitHub SHA256 见 `write-assets-manifest.json`。
 
 SHA256：`4077f20bf9de1901acaa0f5d587d81d41a2a9442439bff4a49396d6599c80ab4`。
 该原始记录和完整参照汇总已上传
 [实验归档](https://github.com/zhangchenxi1224/Vision-Language-Memory/releases/tag/prefeval-official-ab-teachers-20260924)。
-Writer 大体积权重尚未完成 GitHub 同步；共享盘上的原始 checkpoint 保持不变。
+更新：两组完整 Writer 参数也已完成 GitHub 同步且 SHA256 一致；优化器状态仍在共享盘。
