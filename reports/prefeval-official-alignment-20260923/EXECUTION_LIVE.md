@@ -53,7 +53,7 @@ Authoring sessions: `9237470ed5ef4ba49478098ab454cd8d` then
 - Each shard has 32 train states; 288 updates/state, 96 per T1/T2/T3. Fresh Adam .05.
 - A official full-answer mean CE; B official XML short-answer mean CE; end token
   included once in the token average. VAE/Reader frozen; real uint8 forward + STE.
-- Progress observed through step264 for first states in all four workers, with
+- At 2026-09-23 18:03 UTC, 34/64 teacher endpoints per arm were complete, with
   finite nonzero image gradients. B loss near zero is a training fit observation,
   not a memory-capacity or generalization result.
 - Files: `teachers/{A,B}/{topic-index}/optimization.jsonl`, `resume.pt`, `latent.pt`,
@@ -72,8 +72,22 @@ Authoring sessions: `9237470ed5ef4ba49478098ab454cd8d` then
 - `scripts/eval/prefeval_official_rgb.py`: native RGB rollouts, official-format
   Reader tasks and controls. New Writer/rollout integration still needs its first
   actual GPU execution; do not describe it as validated or completed yet.
-- Three targeted CPU checks pass: exact upstream MCQ format, balanced labels/forms
+- Four targeted CPU checks pass: exact upstream MCQ format/parser, balanced labels/forms
   plus dev exclusion, Writer current-exchange-only inputs. No broad engineering suite.
+- Fixed mismatched-image donors in `pilot-mismatch-controls.json`: all154 are from
+  the same split/topic but a different registered semantic group and different
+  correct-option text. The old next-row shortcut was corrected before any student
+  evaluation. Different groups are not necessarily contradictory; this is a
+  memory-dependence control, not a guarantee every donor implies a wrong answer.
+
+**Pilot continuation drivers are RUNNING, waiting for complete teacher banks.**
+Launch commit `c13d154b5654dda25caadcbb5857ec214122b090`, session
+`8ee9246d01204653a3d2d0b19b9f4d61`, remote `dispatch-pilot.json`.
+A driver PID810688 owns GPUs0/1 after its teacher workers finish; B PID810689 owns
+GPUs2/3. `pipeline/{A,B}/running.json` and `job-*.json` track children. Do not launch
+duplicates. Each driver schedules FM-write and teacher evaluation, then common
+references and fresh write-only benchmark RGB/student evaluation. It stops at the
+fixed write-pilot endpoint for analysis before scheduling retain training.
 
 Next: finish all 64 targets per arm, evaluate teacher PNGs and common text/blank
 references; start the fixed 2048-update shared-FM write pilot for each arm without
@@ -92,8 +106,9 @@ or the same small Reader. Do not claim official generation accuracy without it.
 
 ## Continuation metadata
 
-An attempt to update the existing `dreamlite` heartbeat prompt with partial fields
-was rejected because name/rrule/status are required. The existing automation's
-local TOML has not been found; do not claim its prompt was updated. Current run
-is independent of local foreground execution. Save new status here and at the top
-of START_HERE / PLAN10_LIVE when reaching an important new milestone.
+Old `dreamlite` automation could not be found in local TOML or the app automation
+database (zero automations). A new thread heartbeat `dreamlite-a-b` was successfully
+created ACTIVE, every30 minutes, with this experiment's current constraints and
+quiet-unless-meaningful-change instructions. No codex-with-chatgpt, no old Plan13.
+Remote jobs continue independently of foreground execution. Save new status here
+and at the top of START_HERE / PLAN10_LIVE at important milestones.

@@ -1,0 +1,1086 @@
+{
+  "status": "fixed_before_student_evaluation",
+  "manifest_sha256": "c1f9f4888f2d68c2419d6f046417328f7112f3b4603e85133466cd334949e349",
+  "policy": "Prefer same topic and split; exclude identical semantic groups and identical correct option text. No outcomes used.",
+  "limit": "Different groups need not be contradictory. This control tests memory dependence, not universal negative-answer correctness.",
+  "donors": {
+    "education_learning_styles:0001": {
+      "donor": "education_learning_styles:0007",
+      "semantic_group": "semantic-e7cd74b52e3ad236",
+      "donor_semantic_group": "semantic-ea568bd14cfa41b8",
+      "same_topic": true,
+      "split": "train"
+    },
+    "education_learning_styles:0007": {
+      "donor": "education_learning_styles:0009",
+      "semantic_group": "semantic-ea568bd14cfa41b8",
+      "donor_semantic_group": "semantic-898bacbbc89a5617",
+      "same_topic": true,
+      "split": "train"
+    },
+    "education_learning_styles:0009": {
+      "donor": "education_learning_styles:0030",
+      "semantic_group": "semantic-898bacbbc89a5617",
+      "donor_semantic_group": "semantic-42eedb9c5ee9c924",
+      "same_topic": true,
+      "split": "train"
+    },
+    "education_learning_styles:0010": {
+      "donor": "education_learning_styles:0020",
+      "semantic_group": "semantic-cd001680bf296f49",
+      "donor_semantic_group": "semantic-b3da88dfdc6a0106",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "education_learning_styles:0020": {
+      "donor": "education_learning_styles:0021",
+      "semantic_group": "semantic-b3da88dfdc6a0106",
+      "donor_semantic_group": "semantic-6a172ce523bb3264",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "education_learning_styles:0021": {
+      "donor": "education_learning_styles:0026",
+      "semantic_group": "semantic-6a172ce523bb3264",
+      "donor_semantic_group": "semantic-91289431fa2432d8",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "education_learning_styles:0026": {
+      "donor": "education_learning_styles:0029",
+      "semantic_group": "semantic-91289431fa2432d8",
+      "donor_semantic_group": "semantic-5b46d8b77d3c7c15",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "education_learning_styles:0029": {
+      "donor": "education_learning_styles:0010",
+      "semantic_group": "semantic-5b46d8b77d3c7c15",
+      "donor_semantic_group": "semantic-cd001680bf296f49",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "education_learning_styles:0030": {
+      "donor": "education_learning_styles:0001",
+      "semantic_group": "semantic-42eedb9c5ee9c924",
+      "donor_semantic_group": "semantic-e7cd74b52e3ad236",
+      "same_topic": true,
+      "split": "train"
+    },
+    "entertain_games:0001": {
+      "donor": "entertain_games:0007",
+      "semantic_group": "semantic-1922d7bd165e9706",
+      "donor_semantic_group": "semantic-94dd1286d5c253e0",
+      "same_topic": true,
+      "split": "train"
+    },
+    "entertain_games:0006": {
+      "donor": "entertain_games:0020",
+      "semantic_group": "semantic-804b8a0c5e1c64be",
+      "donor_semantic_group": "semantic-acb0ebeda5c8ad9a",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "entertain_games:0007": {
+      "donor": "entertain_games:0023",
+      "semantic_group": "semantic-94dd1286d5c253e0",
+      "donor_semantic_group": "semantic-f0772dd89dec1309",
+      "same_topic": true,
+      "split": "train"
+    },
+    "entertain_games:0010": {
+      "donor": "entertain_games:0020",
+      "semantic_group": "semantic-804b8a0c5e1c64be",
+      "donor_semantic_group": "semantic-acb0ebeda5c8ad9a",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "entertain_games:0020": {
+      "donor": "entertain_games:0027",
+      "semantic_group": "semantic-acb0ebeda5c8ad9a",
+      "donor_semantic_group": "semantic-5336f07e26d4f344",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "entertain_games:0023": {
+      "donor": "entertain_games:0036",
+      "semantic_group": "semantic-f0772dd89dec1309",
+      "donor_semantic_group": "semantic-36f2c741ba22354c",
+      "same_topic": true,
+      "split": "train"
+    },
+    "entertain_games:0027": {
+      "donor": "entertain_games:0030",
+      "semantic_group": "semantic-5336f07e26d4f344",
+      "donor_semantic_group": "semantic-8acee0042fb743ac",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "entertain_games:0030": {
+      "donor": "entertain_games:0042",
+      "semantic_group": "semantic-8acee0042fb743ac",
+      "donor_semantic_group": "semantic-de792b79455043e4",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "entertain_games:0036": {
+      "donor": "entertain_games:0001",
+      "semantic_group": "semantic-36f2c741ba22354c",
+      "donor_semantic_group": "semantic-1922d7bd165e9706",
+      "same_topic": true,
+      "split": "train"
+    },
+    "entertain_games:0042": {
+      "donor": "entertain_games:0006",
+      "semantic_group": "semantic-de792b79455043e4",
+      "donor_semantic_group": "semantic-804b8a0c5e1c64be",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "entertain_music_book:0002": {
+      "donor": "entertain_music_book:0006",
+      "semantic_group": "semantic-6ead3e73c4188804",
+      "donor_semantic_group": "semantic-5d1d16daad46f93e",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "entertain_music_book:0006": {
+      "donor": "entertain_music_book:0024",
+      "semantic_group": "semantic-5d1d16daad46f93e",
+      "donor_semantic_group": "semantic-080dcede70c3f847",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "entertain_music_book:0012": {
+      "donor": "entertain_music_book:0016",
+      "semantic_group": "semantic-5dd9230fd64793a9",
+      "donor_semantic_group": "semantic-ddfb72a76e8a0f82",
+      "same_topic": true,
+      "split": "train"
+    },
+    "entertain_music_book:0016": {
+      "donor": "entertain_music_book:0038",
+      "semantic_group": "semantic-ddfb72a76e8a0f82",
+      "donor_semantic_group": "semantic-ffcf89613d161c4a",
+      "same_topic": true,
+      "split": "train"
+    },
+    "entertain_music_book:0024": {
+      "donor": "entertain_music_book:0029",
+      "semantic_group": "semantic-080dcede70c3f847",
+      "donor_semantic_group": "semantic-708099f91bc21c0f",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "entertain_music_book:0029": {
+      "donor": "entertain_music_book:0043",
+      "semantic_group": "semantic-708099f91bc21c0f",
+      "donor_semantic_group": "semantic-a0bd87bdcd570085",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "entertain_music_book:0038": {
+      "donor": "entertain_music_book:0044",
+      "semantic_group": "semantic-ffcf89613d161c4a",
+      "donor_semantic_group": "semantic-9bd387679bcb1441",
+      "same_topic": true,
+      "split": "train"
+    },
+    "entertain_music_book:0043": {
+      "donor": "entertain_music_book:0002",
+      "semantic_group": "semantic-a0bd87bdcd570085",
+      "donor_semantic_group": "semantic-6ead3e73c4188804",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "entertain_music_book:0044": {
+      "donor": "entertain_music_book:0012",
+      "semantic_group": "semantic-9bd387679bcb1441",
+      "donor_semantic_group": "semantic-5dd9230fd64793a9",
+      "same_topic": true,
+      "split": "train"
+    },
+    "entertain_shows:0002": {
+      "donor": "entertain_shows:0023",
+      "semantic_group": "semantic-d3c73b65b1414c9e",
+      "donor_semantic_group": "semantic-c48473c26973d28b",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "entertain_shows:0023": {
+      "donor": "entertain_shows:0028",
+      "semantic_group": "semantic-c48473c26973d28b",
+      "donor_semantic_group": "semantic-3944f6264b296bc2",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "entertain_shows:0028": {
+      "donor": "entertain_shows:0051",
+      "semantic_group": "semantic-3944f6264b296bc2",
+      "donor_semantic_group": "semantic-2aaec193f11e5e58",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "entertain_shows:0031": {
+      "donor": "entertain_shows:0037",
+      "semantic_group": "semantic-60ccbcb347f84774",
+      "donor_semantic_group": "semantic-56fb7fb31c19e30e",
+      "same_topic": true,
+      "split": "train"
+    },
+    "entertain_shows:0037": {
+      "donor": "entertain_shows:0040",
+      "semantic_group": "semantic-56fb7fb31c19e30e",
+      "donor_semantic_group": "semantic-be43d3296b6efb35",
+      "same_topic": true,
+      "split": "train"
+    },
+    "entertain_shows:0040": {
+      "donor": "entertain_shows:0052",
+      "semantic_group": "semantic-be43d3296b6efb35",
+      "donor_semantic_group": "semantic-6e25f1e5b5dded89",
+      "same_topic": true,
+      "split": "train"
+    },
+    "entertain_shows:0051": {
+      "donor": "entertain_shows:0058",
+      "semantic_group": "semantic-2aaec193f11e5e58",
+      "donor_semantic_group": "semantic-6e763dd1a4e68da6",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "entertain_shows:0052": {
+      "donor": "entertain_shows:0031",
+      "semantic_group": "semantic-6e25f1e5b5dded89",
+      "donor_semantic_group": "semantic-60ccbcb347f84774",
+      "same_topic": true,
+      "split": "train"
+    },
+    "entertain_shows:0058": {
+      "donor": "entertain_shows:0002",
+      "semantic_group": "semantic-6e763dd1a4e68da6",
+      "donor_semantic_group": "semantic-d3c73b65b1414c9e",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "entertain_sports:0009": {
+      "donor": "entertain_sports:0015",
+      "semantic_group": "semantic-f0e50447dc704697",
+      "donor_semantic_group": "semantic-ade9fe9e43c4e55d",
+      "same_topic": true,
+      "split": "train"
+    },
+    "entertain_sports:0015": {
+      "donor": "entertain_sports:0045",
+      "semantic_group": "semantic-ade9fe9e43c4e55d",
+      "donor_semantic_group": "semantic-3e19fede4ca75c8f",
+      "same_topic": true,
+      "split": "train"
+    },
+    "entertain_sports:0018": {
+      "donor": "entertain_sports:0019",
+      "semantic_group": "semantic-9b4928b277232569",
+      "donor_semantic_group": "semantic-7c5e13b8de9a2b9b",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "entertain_sports:0019": {
+      "donor": "entertain_sports:0022",
+      "semantic_group": "semantic-7c5e13b8de9a2b9b",
+      "donor_semantic_group": "semantic-bed158b65a96392f",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "entertain_sports:0022": {
+      "donor": "entertain_sports:0023",
+      "semantic_group": "semantic-bed158b65a96392f",
+      "donor_semantic_group": "semantic-0e7b62b99d5855a1",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "entertain_sports:0023": {
+      "donor": "entertain_sports:0037",
+      "semantic_group": "semantic-0e7b62b99d5855a1",
+      "donor_semantic_group": "semantic-e4d5e44a0e6e5b9c",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "entertain_sports:0037": {
+      "donor": "entertain_sports:0018",
+      "semantic_group": "semantic-e4d5e44a0e6e5b9c",
+      "donor_semantic_group": "semantic-9b4928b277232569",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "entertain_sports:0045": {
+      "donor": "entertain_sports:0048",
+      "semantic_group": "semantic-3e19fede4ca75c8f",
+      "donor_semantic_group": "semantic-23da3cc89412619d",
+      "same_topic": true,
+      "split": "train"
+    },
+    "entertain_sports:0048": {
+      "donor": "entertain_sports:0009",
+      "semantic_group": "semantic-23da3cc89412619d",
+      "donor_semantic_group": "semantic-f0e50447dc704697",
+      "same_topic": true,
+      "split": "train"
+    },
+    "lifestyle_beauty:0001": {
+      "donor": "lifestyle_beauty:0007",
+      "semantic_group": "semantic-9d3409a7bb8c2152",
+      "donor_semantic_group": "semantic-fbfed39e9d876514",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "lifestyle_beauty:0002": {
+      "donor": "lifestyle_beauty:0012",
+      "semantic_group": "semantic-77917f5144e0834a",
+      "donor_semantic_group": "semantic-9c1eee7bf10833dd",
+      "same_topic": true,
+      "split": "train"
+    },
+    "lifestyle_beauty:0007": {
+      "donor": "lifestyle_beauty:0009",
+      "semantic_group": "semantic-fbfed39e9d876514",
+      "donor_semantic_group": "semantic-c61d6ed34aa26bbe",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "lifestyle_beauty:0009": {
+      "donor": "lifestyle_beauty:0023",
+      "semantic_group": "semantic-c61d6ed34aa26bbe",
+      "donor_semantic_group": "semantic-9d3409a7bb8c2152",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "lifestyle_beauty:0012": {
+      "donor": "lifestyle_beauty:0037",
+      "semantic_group": "semantic-9c1eee7bf10833dd",
+      "donor_semantic_group": "semantic-77ea92639a228088",
+      "same_topic": true,
+      "split": "train"
+    },
+    "lifestyle_beauty:0014": {
+      "donor": "lifestyle_beauty:0023",
+      "semantic_group": "semantic-c61d6ed34aa26bbe",
+      "donor_semantic_group": "semantic-9d3409a7bb8c2152",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "lifestyle_beauty:0015": {
+      "donor": "lifestyle_beauty:0023",
+      "semantic_group": "semantic-c61d6ed34aa26bbe",
+      "donor_semantic_group": "semantic-9d3409a7bb8c2152",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "lifestyle_beauty:0016": {
+      "donor": "lifestyle_beauty:0023",
+      "semantic_group": "semantic-c61d6ed34aa26bbe",
+      "donor_semantic_group": "semantic-9d3409a7bb8c2152",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "lifestyle_beauty:0020": {
+      "donor": "lifestyle_beauty:0023",
+      "semantic_group": "semantic-c61d6ed34aa26bbe",
+      "donor_semantic_group": "semantic-9d3409a7bb8c2152",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "lifestyle_beauty:0021": {
+      "donor": "lifestyle_beauty:0023",
+      "semantic_group": "semantic-c61d6ed34aa26bbe",
+      "donor_semantic_group": "semantic-9d3409a7bb8c2152",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "lifestyle_beauty:0023": {
+      "donor": "lifestyle_beauty:0024",
+      "semantic_group": "semantic-9d3409a7bb8c2152",
+      "donor_semantic_group": "semantic-c61d6ed34aa26bbe",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "lifestyle_beauty:0024": {
+      "donor": "lifestyle_beauty:0028",
+      "semantic_group": "semantic-c61d6ed34aa26bbe",
+      "donor_semantic_group": "semantic-82273ddde61d2f7c",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "lifestyle_beauty:0028": {
+      "donor": "lifestyle_beauty:0032",
+      "semantic_group": "semantic-82273ddde61d2f7c",
+      "donor_semantic_group": "semantic-8c34e88fbaf09855",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "lifestyle_beauty:0032": {
+      "donor": "lifestyle_beauty:0001",
+      "semantic_group": "semantic-8c34e88fbaf09855",
+      "donor_semantic_group": "semantic-9d3409a7bb8c2152",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "lifestyle_beauty:0037": {
+      "donor": "lifestyle_beauty:0038",
+      "semantic_group": "semantic-77ea92639a228088",
+      "donor_semantic_group": "semantic-d32cb8a175f47773",
+      "same_topic": true,
+      "split": "train"
+    },
+    "lifestyle_beauty:0038": {
+      "donor": "lifestyle_beauty:0002",
+      "semantic_group": "semantic-d32cb8a175f47773",
+      "donor_semantic_group": "semantic-77917f5144e0834a",
+      "same_topic": true,
+      "split": "train"
+    },
+    "lifestyle_dietary:0013": {
+      "donor": "lifestyle_dietary:0026",
+      "semantic_group": "semantic-9aae0858b9c1b23c",
+      "donor_semantic_group": "semantic-b6db4a52a9914b4e",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "lifestyle_dietary:0017": {
+      "donor": "lifestyle_dietary:0022",
+      "semantic_group": "semantic-3d980e89dcaa7181",
+      "donor_semantic_group": "semantic-7768e32454eb76fc",
+      "same_topic": true,
+      "split": "train"
+    },
+    "lifestyle_dietary:0022": {
+      "donor": "lifestyle_dietary:0042",
+      "semantic_group": "semantic-7768e32454eb76fc",
+      "donor_semantic_group": "semantic-60b5aa96fcb0ae33",
+      "same_topic": true,
+      "split": "train"
+    },
+    "lifestyle_dietary:0025": {
+      "donor": "lifestyle_dietary:0026",
+      "semantic_group": "semantic-9aae0858b9c1b23c",
+      "donor_semantic_group": "semantic-b6db4a52a9914b4e",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "lifestyle_dietary:0026": {
+      "donor": "lifestyle_dietary:0031",
+      "semantic_group": "semantic-b6db4a52a9914b4e",
+      "donor_semantic_group": "semantic-5408eb57b2a71310",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "lifestyle_dietary:0031": {
+      "donor": "lifestyle_dietary:0038",
+      "semantic_group": "semantic-5408eb57b2a71310",
+      "donor_semantic_group": "semantic-3b715cd308b25c32",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "lifestyle_dietary:0038": {
+      "donor": "lifestyle_dietary:0050",
+      "semantic_group": "semantic-3b715cd308b25c32",
+      "donor_semantic_group": "semantic-316e48623faf92ad",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "lifestyle_dietary:0042": {
+      "donor": "lifestyle_dietary:0047",
+      "semantic_group": "semantic-60b5aa96fcb0ae33",
+      "donor_semantic_group": "semantic-2c0553fcfe7e0b20",
+      "same_topic": true,
+      "split": "train"
+    },
+    "lifestyle_dietary:0047": {
+      "donor": "lifestyle_dietary:0017",
+      "semantic_group": "semantic-2c0553fcfe7e0b20",
+      "donor_semantic_group": "semantic-3d980e89dcaa7181",
+      "same_topic": true,
+      "split": "train"
+    },
+    "lifestyle_dietary:0050": {
+      "donor": "lifestyle_dietary:0013",
+      "semantic_group": "semantic-316e48623faf92ad",
+      "donor_semantic_group": "semantic-9aae0858b9c1b23c",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "lifestyle_fit:0000": {
+      "donor": "lifestyle_fit:0011",
+      "semantic_group": "semantic-7bdf9b5320b8f169",
+      "donor_semantic_group": "semantic-fc1100d1b42302a4",
+      "same_topic": true,
+      "split": "train"
+    },
+    "lifestyle_fit:0002": {
+      "donor": "lifestyle_fit:0015",
+      "semantic_group": "semantic-fdd1265d2942c0ae",
+      "donor_semantic_group": "semantic-adec8b0870aae805",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "lifestyle_fit:0011": {
+      "donor": "lifestyle_fit:0017",
+      "semantic_group": "semantic-fc1100d1b42302a4",
+      "donor_semantic_group": "semantic-0eefe933c579013a",
+      "same_topic": true,
+      "split": "train"
+    },
+    "lifestyle_fit:0015": {
+      "donor": "lifestyle_fit:0019",
+      "semantic_group": "semantic-adec8b0870aae805",
+      "donor_semantic_group": "semantic-fe3be22ff3787638",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "lifestyle_fit:0017": {
+      "donor": "lifestyle_fit:0038",
+      "semantic_group": "semantic-0eefe933c579013a",
+      "donor_semantic_group": "semantic-230103e0815ffc67",
+      "same_topic": true,
+      "split": "train"
+    },
+    "lifestyle_fit:0019": {
+      "donor": "lifestyle_fit:0021",
+      "semantic_group": "semantic-fe3be22ff3787638",
+      "donor_semantic_group": "semantic-1bf80680a9d16430",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "lifestyle_fit:0021": {
+      "donor": "lifestyle_fit:0033",
+      "semantic_group": "semantic-1bf80680a9d16430",
+      "donor_semantic_group": "semantic-4e8c72bcccd2fbd9",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "lifestyle_fit:0033": {
+      "donor": "lifestyle_fit:0002",
+      "semantic_group": "semantic-4e8c72bcccd2fbd9",
+      "donor_semantic_group": "semantic-fdd1265d2942c0ae",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "lifestyle_fit:0038": {
+      "donor": "lifestyle_fit:0000",
+      "semantic_group": "semantic-230103e0815ffc67",
+      "donor_semantic_group": "semantic-7bdf9b5320b8f169",
+      "same_topic": true,
+      "split": "train"
+    },
+    "lifestyle_health:0008": {
+      "donor": "lifestyle_health:0015",
+      "semantic_group": "semantic-45af4774010716c3",
+      "donor_semantic_group": "semantic-36bfa68f84a04d27",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "lifestyle_health:0015": {
+      "donor": "lifestyle_health:0032",
+      "semantic_group": "semantic-36bfa68f84a04d27",
+      "donor_semantic_group": "semantic-c5456eb2215048b8",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "lifestyle_health:0030": {
+      "donor": "lifestyle_health:0036",
+      "semantic_group": "semantic-68a55d7c403b82ef",
+      "donor_semantic_group": "semantic-29a352600dcd0b7e",
+      "same_topic": true,
+      "split": "train"
+    },
+    "lifestyle_health:0032": {
+      "donor": "lifestyle_health:0046",
+      "semantic_group": "semantic-c5456eb2215048b8",
+      "donor_semantic_group": "semantic-c403585034dceda4",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "lifestyle_health:0036": {
+      "donor": "lifestyle_health:0040",
+      "semantic_group": "semantic-29a352600dcd0b7e",
+      "donor_semantic_group": "semantic-69bf36b1e3995766",
+      "same_topic": true,
+      "split": "train"
+    },
+    "lifestyle_health:0040": {
+      "donor": "lifestyle_health:0042",
+      "semantic_group": "semantic-69bf36b1e3995766",
+      "donor_semantic_group": "semantic-98da2fb987ebedba",
+      "same_topic": true,
+      "split": "train"
+    },
+    "lifestyle_health:0042": {
+      "donor": "lifestyle_health:0030",
+      "semantic_group": "semantic-98da2fb987ebedba",
+      "donor_semantic_group": "semantic-68a55d7c403b82ef",
+      "same_topic": true,
+      "split": "train"
+    },
+    "lifestyle_health:0046": {
+      "donor": "lifestyle_health:0047",
+      "semantic_group": "semantic-c403585034dceda4",
+      "donor_semantic_group": "semantic-050e3907b3b5b750",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "lifestyle_health:0047": {
+      "donor": "lifestyle_health:0008",
+      "semantic_group": "semantic-050e3907b3b5b750",
+      "donor_semantic_group": "semantic-45af4774010716c3",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "pet_ownership:0015": {
+      "donor": "pet_ownership:0016",
+      "semantic_group": "semantic-c6810d3766ee83e3",
+      "donor_semantic_group": "semantic-fd74b2631f12c078",
+      "same_topic": true,
+      "split": "train"
+    },
+    "pet_ownership:0016": {
+      "donor": "pet_ownership:0031",
+      "semantic_group": "semantic-fd74b2631f12c078",
+      "donor_semantic_group": "semantic-dc61c9f390a60188",
+      "same_topic": true,
+      "split": "train"
+    },
+    "pet_ownership:0019": {
+      "donor": "pet_ownership:0020",
+      "semantic_group": "semantic-272328541a9dbe6c",
+      "donor_semantic_group": "semantic-0a9c35d81019a698",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "pet_ownership:0020": {
+      "donor": "pet_ownership:0021",
+      "semantic_group": "semantic-0a9c35d81019a698",
+      "donor_semantic_group": "semantic-637524adc454f51e",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "pet_ownership:0021": {
+      "donor": "pet_ownership:0027",
+      "semantic_group": "semantic-637524adc454f51e",
+      "donor_semantic_group": "semantic-e637225f309c7e11",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "pet_ownership:0027": {
+      "donor": "pet_ownership:0038",
+      "semantic_group": "semantic-e637225f309c7e11",
+      "donor_semantic_group": "semantic-fc466aa54356c7c0",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "pet_ownership:0031": {
+      "donor": "pet_ownership:0039",
+      "semantic_group": "semantic-dc61c9f390a60188",
+      "donor_semantic_group": "semantic-887afbf9a23e38b5",
+      "same_topic": true,
+      "split": "train"
+    },
+    "pet_ownership:0038": {
+      "donor": "pet_ownership:0019",
+      "semantic_group": "semantic-fc466aa54356c7c0",
+      "donor_semantic_group": "semantic-272328541a9dbe6c",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "pet_ownership:0039": {
+      "donor": "pet_ownership:0015",
+      "semantic_group": "semantic-887afbf9a23e38b5",
+      "donor_semantic_group": "semantic-c6810d3766ee83e3",
+      "same_topic": true,
+      "split": "train"
+    },
+    "professional_work_location_style:0000": {
+      "donor": "professional_work_location_style:0006",
+      "semantic_group": "semantic-f17f750642ab349f",
+      "donor_semantic_group": "semantic-8d506b1270b49394",
+      "same_topic": true,
+      "split": "train"
+    },
+    "professional_work_location_style:0006": {
+      "donor": "professional_work_location_style:0034",
+      "semantic_group": "semantic-8d506b1270b49394",
+      "donor_semantic_group": "semantic-56bf2c1b6d539cb5",
+      "same_topic": true,
+      "split": "train"
+    },
+    "professional_work_location_style:0009": {
+      "donor": "professional_work_location_style:0020",
+      "semantic_group": "semantic-a8744bf7f1f950cb",
+      "donor_semantic_group": "semantic-2f02d78796017420",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "professional_work_location_style:0020": {
+      "donor": "professional_work_location_style:0021",
+      "semantic_group": "semantic-2f02d78796017420",
+      "donor_semantic_group": "semantic-a99b197c15fe2512",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "professional_work_location_style:0021": {
+      "donor": "professional_work_location_style:0027",
+      "semantic_group": "semantic-a99b197c15fe2512",
+      "donor_semantic_group": "semantic-42be357b3180dae1",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "professional_work_location_style:0027": {
+      "donor": "professional_work_location_style:0029",
+      "semantic_group": "semantic-42be357b3180dae1",
+      "donor_semantic_group": "semantic-396742d0d0e17fbf",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "professional_work_location_style:0029": {
+      "donor": "professional_work_location_style:0009",
+      "semantic_group": "semantic-396742d0d0e17fbf",
+      "donor_semantic_group": "semantic-a8744bf7f1f950cb",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "professional_work_location_style:0034": {
+      "donor": "professional_work_location_style:0035",
+      "semantic_group": "semantic-56bf2c1b6d539cb5",
+      "donor_semantic_group": "semantic-a62d699158154b19",
+      "same_topic": true,
+      "split": "train"
+    },
+    "professional_work_location_style:0035": {
+      "donor": "professional_work_location_style:0000",
+      "semantic_group": "semantic-a62d699158154b19",
+      "donor_semantic_group": "semantic-f17f750642ab349f",
+      "same_topic": true,
+      "split": "train"
+    },
+    "shop_fashion:0002": {
+      "donor": "shop_fashion:0009",
+      "semantic_group": "semantic-c820b8f9e6f7c114",
+      "donor_semantic_group": "semantic-5ef91126031b0689",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "shop_fashion:0009": {
+      "donor": "shop_fashion:0025",
+      "semantic_group": "semantic-5ef91126031b0689",
+      "donor_semantic_group": "semantic-efc0ecd2beb3e54d",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "shop_fashion:0025": {
+      "donor": "shop_fashion:0032",
+      "semantic_group": "semantic-efc0ecd2beb3e54d",
+      "donor_semantic_group": "semantic-72ef43a801771c16",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "shop_fashion:0029": {
+      "donor": "shop_fashion:0040",
+      "semantic_group": "semantic-a9e3258105cc5dd0",
+      "donor_semantic_group": "semantic-099132c5aa6328f9",
+      "same_topic": true,
+      "split": "train"
+    },
+    "shop_fashion:0032": {
+      "donor": "shop_fashion:0033",
+      "semantic_group": "semantic-72ef43a801771c16",
+      "donor_semantic_group": "semantic-44ab482b66325c78",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "shop_fashion:0033": {
+      "donor": "shop_fashion:0002",
+      "semantic_group": "semantic-44ab482b66325c78",
+      "donor_semantic_group": "semantic-c820b8f9e6f7c114",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "shop_fashion:0040": {
+      "donor": "shop_fashion:0041",
+      "semantic_group": "semantic-099132c5aa6328f9",
+      "donor_semantic_group": "semantic-f237b85d1008fc9e",
+      "same_topic": true,
+      "split": "train"
+    },
+    "shop_fashion:0041": {
+      "donor": "shop_fashion:0042",
+      "semantic_group": "semantic-f237b85d1008fc9e",
+      "donor_semantic_group": "semantic-b4fed5cc0f0b1339",
+      "same_topic": true,
+      "split": "train"
+    },
+    "shop_fashion:0042": {
+      "donor": "shop_fashion:0029",
+      "semantic_group": "semantic-b4fed5cc0f0b1339",
+      "donor_semantic_group": "semantic-a9e3258105cc5dd0",
+      "same_topic": true,
+      "split": "train"
+    },
+    "shop_home:0005": {
+      "donor": "shop_home:0016",
+      "semantic_group": "semantic-6d62e1f133124582",
+      "donor_semantic_group": "semantic-9fe97b6e036055aa",
+      "same_topic": true,
+      "split": "train"
+    },
+    "shop_home:0016": {
+      "donor": "shop_home:0042",
+      "semantic_group": "semantic-9fe97b6e036055aa",
+      "donor_semantic_group": "semantic-fff58db79e5f7fc7",
+      "same_topic": true,
+      "split": "train"
+    },
+    "shop_home:0018": {
+      "donor": "shop_home:0026",
+      "semantic_group": "semantic-dcc59058722380b1",
+      "donor_semantic_group": "semantic-7d6842a251b7a8d6",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "shop_home:0026": {
+      "donor": "shop_home:0050",
+      "semantic_group": "semantic-7d6842a251b7a8d6",
+      "donor_semantic_group": "semantic-d58b321b1032d8d3",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "shop_home:0028": {
+      "donor": "shop_home:0050",
+      "semantic_group": "semantic-7d6842a251b7a8d6",
+      "donor_semantic_group": "semantic-d58b321b1032d8d3",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "shop_home:0042": {
+      "donor": "shop_home:0046",
+      "semantic_group": "semantic-fff58db79e5f7fc7",
+      "donor_semantic_group": "semantic-6fdbea86a1ade288",
+      "same_topic": true,
+      "split": "train"
+    },
+    "shop_home:0046": {
+      "donor": "shop_home:0005",
+      "semantic_group": "semantic-6fdbea86a1ade288",
+      "donor_semantic_group": "semantic-6d62e1f133124582",
+      "same_topic": true,
+      "split": "train"
+    },
+    "shop_home:0050": {
+      "donor": "shop_home:0052",
+      "semantic_group": "semantic-d58b321b1032d8d3",
+      "donor_semantic_group": "semantic-baafee6ec5d1139e",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "shop_home:0052": {
+      "donor": "shop_home:0053",
+      "semantic_group": "semantic-baafee6ec5d1139e",
+      "donor_semantic_group": "semantic-4579f6de80df2fbe",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "shop_home:0053": {
+      "donor": "shop_home:0018",
+      "semantic_group": "semantic-4579f6de80df2fbe",
+      "donor_semantic_group": "semantic-dcc59058722380b1",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "travel_activities:0004": {
+      "donor": "travel_activities:0051",
+      "semantic_group": "semantic-f4841635a2e07b8e",
+      "donor_semantic_group": "semantic-93f8d4e6445db577",
+      "same_topic": true,
+      "split": "train"
+    },
+    "travel_activities:0011": {
+      "donor": "travel_activities:0014",
+      "semantic_group": "semantic-80457179ed5a76b5",
+      "donor_semantic_group": "semantic-67ed4788ecd90451",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "travel_activities:0014": {
+      "donor": "travel_activities:0023",
+      "semantic_group": "semantic-67ed4788ecd90451",
+      "donor_semantic_group": "semantic-bc2803cd364eb9cd",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "travel_activities:0023": {
+      "donor": "travel_activities:0033",
+      "semantic_group": "semantic-bc2803cd364eb9cd",
+      "donor_semantic_group": "semantic-20228ea9ef64ef71",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "travel_activities:0033": {
+      "donor": "travel_activities:0035",
+      "semantic_group": "semantic-20228ea9ef64ef71",
+      "donor_semantic_group": "semantic-587cb1aa2d19f233",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "travel_activities:0035": {
+      "donor": "travel_activities:0011",
+      "semantic_group": "semantic-587cb1aa2d19f233",
+      "donor_semantic_group": "semantic-80457179ed5a76b5",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "travel_activities:0051": {
+      "donor": "travel_activities:0052",
+      "semantic_group": "semantic-93f8d4e6445db577",
+      "donor_semantic_group": "semantic-cb721a71edf30112",
+      "same_topic": true,
+      "split": "train"
+    },
+    "travel_activities:0052": {
+      "donor": "travel_activities:0055",
+      "semantic_group": "semantic-cb721a71edf30112",
+      "donor_semantic_group": "semantic-56d3d34fefd7cacd",
+      "same_topic": true,
+      "split": "train"
+    },
+    "travel_activities:0055": {
+      "donor": "travel_activities:0004",
+      "semantic_group": "semantic-56d3d34fefd7cacd",
+      "donor_semantic_group": "semantic-f4841635a2e07b8e",
+      "same_topic": true,
+      "split": "train"
+    },
+    "travel_hotel:0003": {
+      "donor": "travel_hotel:0039",
+      "semantic_group": "semantic-8eaa9327607657e0",
+      "donor_semantic_group": "semantic-ce4e7a79fe98cc8d",
+      "same_topic": true,
+      "split": "train"
+    },
+    "travel_hotel:0024": {
+      "donor": "travel_hotel:0027",
+      "semantic_group": "semantic-faec6e5c6f4bbc52",
+      "donor_semantic_group": "semantic-25f9ea7b53a69c96",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "travel_hotel:0027": {
+      "donor": "travel_hotel:0042",
+      "semantic_group": "semantic-25f9ea7b53a69c96",
+      "donor_semantic_group": "semantic-8cafec3388b7b331",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "travel_hotel:0039": {
+      "donor": "travel_hotel:0045",
+      "semantic_group": "semantic-ce4e7a79fe98cc8d",
+      "donor_semantic_group": "semantic-6c634ee6c9a88013",
+      "same_topic": true,
+      "split": "train"
+    },
+    "travel_hotel:0042": {
+      "donor": "travel_hotel:0044",
+      "semantic_group": "semantic-8cafec3388b7b331",
+      "donor_semantic_group": "semantic-4bf3146aca2832c5",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "travel_hotel:0044": {
+      "donor": "travel_hotel:0049",
+      "semantic_group": "semantic-4bf3146aca2832c5",
+      "donor_semantic_group": "semantic-815cc5ae5d41b9dd",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "travel_hotel:0045": {
+      "donor": "travel_hotel:0052",
+      "semantic_group": "semantic-6c634ee6c9a88013",
+      "donor_semantic_group": "semantic-aa4ef9573a474759",
+      "same_topic": true,
+      "split": "train"
+    },
+    "travel_hotel:0049": {
+      "donor": "travel_hotel:0024",
+      "semantic_group": "semantic-815cc5ae5d41b9dd",
+      "donor_semantic_group": "semantic-faec6e5c6f4bbc52",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "travel_hotel:0052": {
+      "donor": "travel_hotel:0003",
+      "semantic_group": "semantic-aa4ef9573a474759",
+      "donor_semantic_group": "semantic-8eaa9327607657e0",
+      "same_topic": true,
+      "split": "train"
+    },
+    "travel_restaurant:0008": {
+      "donor": "travel_restaurant:0017",
+      "semantic_group": "semantic-03c25171d3022dfe",
+      "donor_semantic_group": "semantic-c833ab8855a06fb6",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "travel_restaurant:0009": {
+      "donor": "travel_restaurant:0030",
+      "semantic_group": "semantic-cfe2356fe76afdde",
+      "donor_semantic_group": "semantic-f73fc982f5909d90",
+      "same_topic": true,
+      "split": "train"
+    },
+    "travel_restaurant:0017": {
+      "donor": "travel_restaurant:0044",
+      "semantic_group": "semantic-c833ab8855a06fb6",
+      "donor_semantic_group": "semantic-321f1f1d0250a38b",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "travel_restaurant:0030": {
+      "donor": "travel_restaurant:0041",
+      "semantic_group": "semantic-f73fc982f5909d90",
+      "donor_semantic_group": "semantic-aac463b3843d7204",
+      "same_topic": true,
+      "split": "train"
+    },
+    "travel_restaurant:0041": {
+      "donor": "travel_restaurant:0054",
+      "semantic_group": "semantic-aac463b3843d7204",
+      "donor_semantic_group": "semantic-60e1b4a0e3ebb2e0",
+      "same_topic": true,
+      "split": "train"
+    },
+    "travel_restaurant:0044": {
+      "donor": "travel_restaurant:0053",
+      "semantic_group": "semantic-321f1f1d0250a38b",
+      "donor_semantic_group": "semantic-f4d76065b762ab86",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "travel_restaurant:0053": {
+      "donor": "travel_restaurant:0055",
+      "semantic_group": "semantic-f4d76065b762ab86",
+      "donor_semantic_group": "semantic-d383c35ab5c4bd4c",
+      "same_topic": true,
+      "split": "dev"
+    },
+    "travel_restaurant:0054": {
+      "donor": "travel_restaurant:0009",
+      "semantic_group": "semantic-60e1b4a0e3ebb2e0",
+      "donor_semantic_group": "semantic-cfe2356fe76afdde",
+      "same_topic": true,
+      "split": "train"
+    },
+    "travel_restaurant:0055": {
+      "donor": "travel_restaurant:0008",
+      "semantic_group": "semantic-d383c35ab5c4bd4c",
+      "donor_semantic_group": "semantic-03c25171d3022dfe",
+      "same_topic": true,
+      "split": "dev"
+    }
+  }
+}

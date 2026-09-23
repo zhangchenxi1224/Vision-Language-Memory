@@ -115,10 +115,8 @@ def evaluate(a):
             root=a.output/'rollouts'/a.arm/a.stage/r['id'].replace(':','-')
             positions=(0,) if a.stage=='write' else (0,5,10)
             conditions=[('matched',pos,seed,root/f'seed-{seed}'/f'memory-{pos:02d}.png') for seed in range(2) for pos in positions]
-            all_rows=records(a.report)
-            ix=next(i for i,v in enumerate(all_rows) if v['id']==r['id'])
-            donor=all_rows[(ix+1)%len(all_rows)]
-            droot=a.output/'rollouts'/a.arm/a.stage/donor['id'].replace(':','-')
+            donor=json.loads((a.report/'pilot-mismatch-controls.json').read_text())['donors'][r['id']]['donor']
+            droot=a.output/'rollouts'/a.arm/a.stage/donor.replace(':','-')
             conditions += [('mismatched',pos,0,droot/'seed-0'/f'memory-{pos:02d}.png') for pos in positions]
         for condition,pos,seed,path in conditions:
             result=report/(r['id'].replace(':','-')+f'-{condition}-{pos}-{seed}.json')
@@ -146,6 +144,7 @@ def evaluate(a):
                         scoring='official_mcq_extract_choice' if gold else 'pending_official_judge'))
             write(result,dict(id=r['id'],split=r['split'],condition=condition,position=pos,seed=seed,
                 image_sha256=sha(path) if path else None,rows=rows,
+                donor_id=donor if condition=='mismatched' else None,
                 judge_only_preference=r['benchmark']['evaluation_only']['preference']))
             print(json.dumps(dict(evaluated=r['id'],condition=condition,position=pos,seed=seed)),flush=True)
     write(report/f'complete-{a.shard}.json',dict(count=len(selected),shards=a.shards))
