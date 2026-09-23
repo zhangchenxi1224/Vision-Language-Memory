@@ -50,6 +50,13 @@ def main(args):
     chains=range(1 if args.kind=='teacher' else args.noise_chains)
     controls=args.controls.split(',')
     families=args.families.split(',')
+    history_protocol='official SFT exchanges; not final benchmark acknowledgment'
+    if args.kind=='student':
+        manifest=json.loads((args.images/'manifest.json').read_text())
+        if manifest.get('protocol')=='single_active_preference_replacement_extension_not_official_benchmark':
+            history_protocol=manifest['protocol']
+            if 'text' in controls:
+                raise ValueError('Replacement text baseline needs its actual old history plus overwrite exchange')
     for row in selected:
         pid=row['base_pair_id']
         peers=by_topic[row['topic']]
@@ -104,7 +111,7 @@ def main(args):
                             record.update({'png_sha256':png_hash,'png_path':str(path) if path else None,
                                 'donor_pair_id':donor if control=='mismatch' else None,
                                 'question':question,'reader_query':query,'generated':generated,
-                                'max_new_tokens':tokens,'history_protocol':'official SFT exchanges; not final benchmark acknowledgment',
+                                'max_new_tokens':tokens,'history_protocol':history_protocol,
                                 'preference':row['history'][0]['content'],'split':args.split,'endpoint_kind':args.kind})
                             if task=='mcq':
                                 predicted=mcq['extract_choice'](generated['raw'])
