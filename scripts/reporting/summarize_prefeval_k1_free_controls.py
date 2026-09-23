@@ -43,7 +43,7 @@ def summarize(snapshot):
             } for control in sorted({r['control'] for r in rows})},
             'source_sha256': hashlib.sha256(payload).hexdigest(), 'pairs': pairs,
         }
-    return {'arms': result, 'scope': 'Frozen teacher T1 free outputs only; A snapshot is partial. '
+    return {'arms': result, 'scope': 'Frozen teacher T1 free outputs only; completeness is reported separately for each arm. '
             'Exact output differences measure image sensitivity, not correct preference retrieval. '
             'No judge accuracy, OOD selection, or decoding-budget change.'}
 

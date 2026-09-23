@@ -188,3 +188,12 @@ B 教师完整 T1 自然回答补评分现已完成：匹配 5/64、错配 5/64�
 最终仍为 64 偏好 × 四种输入条件的 256 条 T1 自然回答，不把复用或重复读取计入额外分母。
 此补齐不读取 OOD 分数，不改变 A/B 训练。启动参数和复用文件哈希见
 [A 原题补齐部署记录](evidence/teacher-A-T1-priority-launch.json)。
+
+A 原题补齐现已正常完成，两分片各 128 条、合计 256/256 条，进程 1648533/1648534 已退出。
+64 张实际 PNG 哈希通过；与原五问法读取流程重合的 169 条 T1 自然回答逐项一致。
+完整不可变导出见 [A 教师 T1 自然回答](evidence/teacher-A-T1-free-complete/readback-0.jsonl)
+及其 [manifest](evidence/teacher-A-T1-free-complete/manifest.json)。
+其中旧快照的 132 条输入字节完全保留，可直接复用 judge 缓存；仍有 124 条新增回答待评分。
+完整 A/B 输出对照见 [图像对照及截断统计](evidence/teacher-T1-free-controls-complete.json)：
+A 匹配截断 28/64、错配 46/64；B 分别为 63/64、64/64；共享灰图/全文均为 64/64。
+两组匹配/错配回答均无完全相同的文本，但这仍不等于正确偏好读取；A 完整自然回答评分尚未完成。
