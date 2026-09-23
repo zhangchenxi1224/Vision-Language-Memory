@@ -5,6 +5,8 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import time
+import urllib.error
 import urllib.request
 from bs4 import BeautifulSoup
 
@@ -34,8 +36,24 @@ def invoke(args,prompt):
         'max_tokens':100,'temperature':0.0}
     request=urllib.request.Request(args.base_url.rstrip('/')+'/chat/completions',data=json.dumps(body).encode(),
         headers={'Authorization':'Bearer '+key,'Content-Type':'application/json'})
-    with urllib.request.urlopen(request,timeout=90) as response:
-        raw=json.load(response)
+    for attempt in range(5):
+        # Shared account limits may be below the model's advertised quota.
+        time.sleep(2)
+        try:
+            with urllib.request.urlopen(request,timeout=90) as response:
+                raw=json.load(response)
+            break
+        except urllib.error.HTTPError as error:
+            if error.code not in {429,500,502,503,504} or attempt==4:
+                raise
+            retry_after=error.headers.get('Retry-After') if error.headers else None
+            try:
+                delay=max(5*2**attempt,float(retry_after or 0))
+            except ValueError:
+                delay=5*2**attempt
+            error.close()
+            print(json.dumps({'judge_transport_retry':error.code,'attempt':attempt+1,'wait_seconds':delay}),flush=True)
+            time.sleep(delay)
     return raw['choices'][0]['message']['content'],raw
 
 def main(args):
