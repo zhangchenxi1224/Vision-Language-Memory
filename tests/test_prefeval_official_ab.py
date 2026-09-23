@@ -31,3 +31,20 @@ def test_writer_only_sees_current_exchange():
            question='future question',answer='future target',options=['gold'])
     assert writer_event(r)=='user: current disclosure\nassistant: ack'
     assert writer_event(r,1)=='user: next event\nassistant: next ack'
+
+def test_official_mcq_parser_parity():
+    pytest.importorskip('bs4')
+    import sys
+    sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
+    from scripts.eval.prefeval_official_rgb import official_choice
+    from bs4 import BeautifulSoup
+    import re
+    source=Path('.cache/prefeval-upstream/utils/utils_mcq.py')
+    if not source.exists(): pytest.skip('local upstream checkout unavailable')
+    tree=ast.parse(source.read_text(encoding='utf-8'))
+    body=[n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=='extract_choice']
+    env=dict(BeautifulSoup=BeautifulSoup,re=re)
+    exec(compile(ast.Module(body=body,type_ignores=[]),str(source),'exec'),env)
+    for raw in ['<choice>A</choice>','A','<choice> B </choice>','Answer: <choice>C</choice>',
+                '<choice>Z</choice>','<choice>AB</choice>','<choice><b>D</b></choice>']:
+        assert official_choice(raw)==env['extract_choice'](raw)

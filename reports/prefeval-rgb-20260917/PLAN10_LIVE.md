@@ -1,4 +1,11 @@
-# Latest steering — 2026-09-24: paired supervision and 3+2 question forms
+# Running — 2026-09-24: official-task A/B target-latent training
+
+Read `../prefeval-official-alignment-20260923/EXECUTION_LIVE.md` first.
+Session57459d0119c04fa0a750593b209da6dc is running on the designated4-H200 instance.
+Question bank is reviewed and frozen; new shared-FM Writer results remain pending.
+Old Plan13/C2C instructions below remain superseded. Do not duplicate GPU workers.
+
+# Previous steering — 2026-09-24: paired supervision and 3+2 question forms
 
 Read `../prefeval-official-alignment-20260923/NEXT_EXPERIMENT_PLAN.md` first.
 User confirmed A full-answer CE / B official-MCQ completion CE in parallel, with
