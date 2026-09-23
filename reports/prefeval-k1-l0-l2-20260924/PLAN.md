@@ -29,6 +29,11 @@ B：原官方 MCQ 内容、官方提示与解析函数，完整 choice 短回答
 不宣称自由自然语言分布、全新语义用途或相对单问法的因果收益。
 原题官方格式成绩单列；同一冻结 PNG 回答全部问题。
 
+执行后、首次 OOD 推理前，修正 travel_hotel:0052、lifestyle_beauty:0038、
+lifestyle_health:0040 的 O1 冠词语法；T1/T2/T3/O2 和答案未变（逐条比较验证）。
+目标训练固定于 5153444 的原清单，评估使用修正清单并保存实际 query。
+90 条 internal-dev 的单独问法表也在推理前完成，不产生任何可优化的教师目标。
+
 目标阶段每组 64 × 288 Adam 更新，lr=.05；原生灰图 VAE 初始化、冻结 FP32 Tiny VAE
 及 BF16 Qwen3-VL-4B Reader。RGB 前向量化等价 uint8，反向 STE；最终从磁盘 PNG 评价。
 不使用旧 answer_mean_CE + EOS_CE 加权。技术 smoke 每组同样 1 样本 × 12 步，独立目录，
@@ -55,3 +60,10 @@ target/noise 桥覆盖完整 sigma，整数训练 timestep；推理原生 28 步
 GPU 0/1 为 A 两分片、GPU 2/3 为 B 两分片；后续 FM 各占一张卡也可保持有效 batch。
 代码分支 codex/prefeval-k1-l0-l2-20260924，独立共享盘运行根 runs/prefeval-k1-l0-l2-20260924。
 现有 CPU 实例只用于 Git 同步和共享盘文件准备。不覆盖既有模型、环境及其他实验目录。
+
+初次技术启动因遗漏既有确定性环境变量而在梯度前失败，日志保存在
+smoke-env-failed-61ce035；5153444 修正环境后，A/B 各 12 步及 PNG 回读通过。
+官方自由回答 judge 暂无可用入口，本机已有 AI Gateway 鉴权返回 401；
+已询问用户可用评分服务，不影响教师/FM/MCQ 推进。评分入口复用官方四份提示、
+两个 XML parser 及 analyze_errors，官方 100-token/temperature=0 配置；
+无有效 judge 结果前不得填报自由回答遵循准确率。

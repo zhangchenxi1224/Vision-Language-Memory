@@ -49,7 +49,7 @@ def load_records(split='pilot'):
     ids = plan[{'pilot': 'pilot_train_ids', 'train': 'train_ids', 'dev': 'internal_dev_ids'}[split]]
     records = {x['base_pair_id']: x for x in read_rows(ALIGN / 'data/sft-train-10interturn.jsonl.gz')}
     bench = {x['base_pair_id']: x for x in read_rows(ALIGN / 'data/benchmark-disclosures.jsonl.gz') if x['form'] == 'explicit'}
-    forms_path = REPORT / 'question-forms.json'
+    forms_path = REPORT / ('dev-question-forms.json' if split == 'dev' else 'question-forms.json')
     forms = json.loads(forms_path.read_text()) if forms_path.exists() else {}
     result = []
     for pid in ids:
@@ -64,9 +64,9 @@ def event_text(exchange):
     assert len(exchange) == 2 and [m['role'] for m in exchange] == ['user', 'assistant']
     return '\n'.join(m['role'] + ': ' + m['content'] for m in exchange)
 
-def make_forms():
-    specs = list(csv.DictReader((REPORT / 'pilot-paraphrase-specs.tsv').open(encoding='utf-8'), delimiter='\t'))
-    records = {r['base_pair_id']: r for r in load_records()}
+def make_forms(split='pilot'):
+    specs = list(csv.DictReader((REPORT / f'{split}-paraphrase-specs.tsv').open(encoding='utf-8'), delimiter='\t'))
+    records = {r['base_pair_id']: r for r in load_records(split)}
     assert set(records) == {s['base_pair_id'] for s in specs}
     forms = {}
     for s in specs:
@@ -78,7 +78,22 @@ def make_forms():
             'O1': f"{s['context']} Which {obj} would you suggest?",
             'O2': f'If I asked you to {verb} {obj}, what would you suggest?',
         }
-    (REPORT / 'question-forms.json').write_text(json.dumps(forms, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+    # Fix article/quantifier grammar before any OOD readback, without changing T1/T2/T3.
+    fixes = {
+        'travel_hotel:0052': 'I am choosing a hotel in New York. Which hotel would you suggest for me?',
+        'lifestyle_beauty:0038': 'I am considering face masks for a home spa day. Could you suggest a few good ones?',
+        'lifestyle_health:0040': 'I am interested in trying yoga for stress relief. Which style or type of class would you suggest for me?',
+        'lifestyle_beauty:0020': 'I am choosing foundation and concealer for everyday use. Could you suggest a reliable foundation and concealer?',
+        'pet_ownership:0020': 'I am considering a pet for myself. Which pet would you suggest as suitable for me?',
+    }
+    for pid, question in fixes.items():
+        if pid in forms:
+            forms[pid]['O1'] = question
+    path = REPORT / ('dev-question-forms.json' if split == 'dev' else 'question-forms.json')
+    path.write_text(json.dumps(forms, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
 
 if __name__ == '__main__':
-    make_forms()
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--split', choices=['pilot','dev'], default='pilot')
+    make_forms(parser.parse_args().split)

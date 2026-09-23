@@ -26,6 +26,11 @@ if [[ ! -f "$task_arm/write/complete.json" ]]; then
   "$task_python" "$writer" train "${common[@]}" --stage write --teachers "$task_run/pilot/$arm" \
     --checkpoint "$parent" --output "$task_arm/write" > "$task_arm/write.log" 2>&1
 fi
+for split in pilot dev; do
+  "$task_python" "$writer" rollout "${common[@]}" --split "$split" --inter-turns 0 \
+    --checkpoint "$task_arm/write/checkpoint-final.pt" --output "$task_arm/write-$split" \
+    > "$task_arm/write-$split.log" 2>&1
+done
 "$task_python" "$writer" rollout "${common[@]}" --checkpoint "$task_arm/write/checkpoint-final.pt" \
   --noise-chains 1 --output "$task_arm/training-prefixes" > "$task_arm/training-prefixes.log" 2>&1
 if [[ ! -f "$task_arm/retain/complete.json" ]]; then

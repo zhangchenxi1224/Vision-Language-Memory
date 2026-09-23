@@ -71,6 +71,12 @@ def main(args):
                     assert sha(png)==done['png_hashes'][png.name]
                     return png
                 for control in controls:
+                    # A blank image is independent of history/chain; text is independent of noise.
+                    # Reuse these baseline rows at other endpoints rather than regenerating duplicates.
+                    if control == 'blank' and (prefix != 0 or chain != 0):
+                        continue
+                    if control == 'text' and chain != 0:
+                        continue
                     path=None
                     if control in ['memory','mismatch']:
                         path=endpoint(pid if control=='memory' else donor)
