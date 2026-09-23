@@ -12,7 +12,7 @@ mkdir -p "$task_run"
 exec 9>"$task_run/launcher.lock"
 flock -n 9 || { echo 'This phase already has a live launcher'; exit 1; }
 git rev-parse HEAD > "$task_run/commit.txt"
-export CUBLAS_WORKSPACE_CONFIG=:4096:8 PYTHONUNBUFFERED=1 OMP_NUM_THREADS=8
+export CUBLAS_WORKSPACE_CONFIG=:4096:8 PYTHONUNBUFFERED=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONHASHSEED=0
 export HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 TOKENIZERS_PARALLELISM=false
 pids=()
 for gpu in 0 1 2 3; do

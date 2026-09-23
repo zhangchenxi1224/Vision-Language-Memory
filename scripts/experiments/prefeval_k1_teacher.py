@@ -43,7 +43,7 @@ def query_target(row, arm, step, mcq):
 
 def main(args):
     configure_strict_cuda_determinism(0)
-    torch.set_num_threads(8)
+    torch.set_num_threads(1)
     args.output.mkdir(parents=True, exist_ok=True)
     rows = load_records()[args.shard::args.shards]
     if args.limit:
