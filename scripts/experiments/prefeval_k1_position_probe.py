@@ -19,33 +19,47 @@ def main(args):
     mcq=official_mcq(ROOT/'third_party/prefeval_reference')
     processor,reader=load_reader(args.reader,'cuda:0')
     args.output.parent.mkdir(parents=True,exist_ok=True)
-    done=set()
+    done={}
     if args.output.exists():
-        done={(r['pair_id'],r['position']) for r in map(json.loads,args.output.read_text().splitlines())}
+        for r in map(json.loads,args.output.read_text(encoding='utf-8').splitlines()):
+            assert r.get('endpoint_kind','teacher')==args.kind
+            done[r['pair_id'],r.get('chain',0),r['position']]=r['png_sha256']
     for row in rows:
-        path=args.images/row['base_pair_id'].replace(':','_')/'memory.png'
-        endpoint=json.loads((path.parent/'complete.json').read_text())
-        assert endpoint['step']==288 and sha(path)==endpoint['png_sha256']
-        image=read_png(path)
-        for position in range(4):
-            if (row['base_pair_id'],position) in done:
-                continue
-            order,correct=option_order(row['base_pair_id'],position*3)
-            assert correct==position
-            query=row['forms']['T1']+mcq['get_mcq_question_format']([row['options'][i] for i in order])
-            generated=generate_short_answer(model=reader,processor=processor,image=image,query=query,
-                device='cuda:0',max_new_tokens=32)
-            pred=mcq['extract_choice'](generated['raw'])
-            record={'pair_id':row['base_pair_id'],'family':'T1','position':position,'order':order,
-                'png_sha256':sha(path),'generated':generated,'predicted_letter':pred,
-                'correct_letter':'ABCD'[correct],'correct':pred=='ABCD'[correct]}
-            append(args.output,record)
-            print(json.dumps({k:v for k,v in record.items() if k!='generated'}),flush=True)
+        for chain in range(1 if args.kind=='teacher' else args.noise_chains):
+            base=args.images/row['base_pair_id'].replace(':','_')
+            path=base/'memory.png' if args.kind=='teacher' else base/f'seed-{chain}'/f'prefix-{args.prefix:02d}.png'
+            endpoint=json.loads((path.parent/'complete.json').read_text())
+            digest=sha(path)
+            if args.kind=='teacher':
+                assert endpoint['step']==288 and digest==endpoint['png_sha256']
+            else:
+                assert digest==endpoint['png_hashes'][path.name]
+            image=read_png(path)
+            for position in range(4):
+                key=(row['base_pair_id'],chain,position)
+                if key in done:
+                    assert done[key]==digest,'Resume image differs'
+                    continue
+                order,correct=option_order(row['base_pair_id'],position*3)
+                assert correct==position
+                query=row['forms']['T1']+mcq['get_mcq_question_format']([row['options'][i] for i in order])
+                generated=generate_short_answer(model=reader,processor=processor,image=image,query=query,
+                    device='cuda:0',max_new_tokens=32)
+                pred=mcq['extract_choice'](generated['raw'])
+                record={'pair_id':row['base_pair_id'],'family':'T1','position':position,'order':order,
+                    'endpoint_kind':args.kind,'chain':chain,'prefix':args.prefix,
+                    'png_sha256':digest,'generated':generated,'predicted_letter':pred,
+                    'correct_letter':'ABCD'[correct],'correct':pred=='ABCD'[correct]}
+                append(args.output,record)
+                print(json.dumps({k:v for k,v in record.items() if k!='generated'}),flush=True)
 
 if __name__=='__main__':
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--reader',type=Path,required=True)
     p.add_argument('--images',type=Path,required=True)
     p.add_argument('--output',type=Path,required=True)
+    p.add_argument('--kind',choices=['teacher','student'],default='teacher')
+    p.add_argument('--noise-chains',type=int,choices=[1,2],default=2)
+    p.add_argument('--prefix',type=int,choices=[0,5,10],default=0)
     p.add_argument('--limit',type=int,default=0)
     main(p.parse_args())
