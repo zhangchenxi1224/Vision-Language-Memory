@@ -1,5 +1,16 @@
 # PrefEval RGB memory: execution brief, 2026-09-17
 
+## Latest: parallel official-answer / MCQ supervision, 2026-09-24
+
+Read `../prefeval-official-alignment-20260923/NEXT_EXPERIMENT_PLAN.md` first.
+User selected independent A/B arms: full released-answer CE versus official MCQ
+completion CE. Both rotate three semantically equivalent training questions and
+reserve two question families for evaluation only. Keep target latent -> official
+FM -> actual RGB recurrence. Start with the fixed64 pilot and shared Writer, then
+expand capacity from evidence. New question variants/trainers are not implemented
+or running yet. No codex-with-chatgpt; only dl-clear-retain-h200x4-20260914 for GPU.
+Older Plan13 automatic launches and direct28-step-gradient plans are superseded.
+
 ## Latest: retain the two-stage target-latent / FM route, 2026-09-24
 
 Read `../prefeval-official-alignment-20260923/FM_ROUTE_CORRECTION.md` first.

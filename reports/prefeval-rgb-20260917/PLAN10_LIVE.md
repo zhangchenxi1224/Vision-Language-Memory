@@ -1,4 +1,13 @@
-# Latest steering — 2026-09-23: align with official PrefEval
+# Latest steering — 2026-09-24: paired supervision and 3+2 question forms
+
+Read `../prefeval-official-alignment-20260923/NEXT_EXPERIMENT_PLAN.md` first.
+User confirmed A full-answer CE / B official-MCQ completion CE in parallel, with
+three training paraphrases and two evaluation-only OOD question forms per item.
+Preserve target-latent construction followed by shared-Writer official FM and real
+RGB recurrence. Plan only: new training/data integration and GPU launch not done.
+Do not launch old Plan13 or invoke codex-with-chatgpt. Same designated GPU instance.
+
+# Previous steering — 2026-09-23: align with official PrefEval
 
 User disabled codex-with-chatgpt and requested official data/SFT alignment.
 Read `../prefeval-official-alignment-20260923/ALIGNMENT.md`. Official inputs are
