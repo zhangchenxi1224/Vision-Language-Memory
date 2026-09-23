@@ -15,7 +15,7 @@ import torch
 from PIL import Image
 from diffusers import AutoencoderTiny
 from diffusers.image_processor import VaeImageProcessor
-from scripts.experiments.prefeval_k1_data import load_records, official_mcq, option_order, sha, REPORT
+from scripts.experiments.prefeval_k1_data import load_training_records, official_mcq, option_order, sha, REPORT
 from scripts.eval.prefeval_rgb import load_reader, read_png, append
 from scripts.train.latent_r11_vae_oracle import VAELatentOracle, _save_image
 from vision_memory.reader.qwen3vl import qwen3vl_target_only_ce, R3_QWEN_READER_RESIZE_CONTRACT
@@ -45,17 +45,18 @@ def main(args):
     configure_strict_cuda_determinism(0)
     torch.set_num_threads(1)
     args.output.mkdir(parents=True, exist_ok=True)
-    rows = load_records()[args.shard::args.shards]
+    rows = load_training_records(args.split, args.exclude_pilot)[args.shard::args.shards]
     if args.limit:
         rows = rows[:args.limit]
     binding = {'arm': args.arm, 'steps': args.steps, 'lr': .05,
-        'forms_sha256': sha(REPORT / 'question-forms.json'),
+        'forms_sha256': sha(REPORT / ('train-question-forms.json' if args.split == 'train' else 'question-forms.json')),
+        'split': args.split, 'exclude_pilot': args.exclude_pilot,
         'mcq_source_sha256': sha(args.prefeval / 'utils/utils_mcq.py'),
         'assignment': [r['base_pair_id'] for r in rows], 'shard': args.shard, 'shards': args.shards,
         'commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(),
         'loss': 'mean over answer tokens including one actual assistant terminator',
         'quantization': 'uint8-equivalent RGB forward with STE backward',
-        'budget_class': 'technical_smoke' if args.steps != 288 else 'registered_pilot'}
+        'budget_class': 'technical_smoke' if args.steps != 288 else ('registered_train730' if args.split == 'train' else 'registered_pilot')}
     ident = args.output / f'identity-{args.shard}.json'
     if ident.exists():
         assert json.loads(ident.read_text()) == binding, 'Resume binding differs'
@@ -136,6 +137,8 @@ def main(args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--arm', choices=['A', 'B'], required=True)
+    parser.add_argument('--split', choices=['pilot', 'train'], default='pilot')
+    parser.add_argument('--exclude-pilot', action='store_true')
     for name in ['base', 'reader', 'prefeval', 'output']:
         parser.add_argument('--' + name, type=Path, required=True)
     parser.add_argument('--device', default='cuda:0')

@@ -12,7 +12,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path[:0] = [str(ROOT), str(ROOT / 'src')]
 import torch
 from PIL import Image
-from scripts.experiments.prefeval_k1_data import load_records, event_text, sha
+from scripts.experiments.prefeval_k1_data import load_records, load_training_records, event_text, sha
 from scripts.experiments.prefeval_k1_teacher import save_json, atomic_save
 from scripts.eval.prefeval_rgb import append
 from scripts.train.latent_r11_vae_oracle import _save_image
@@ -51,7 +51,8 @@ def cache_condition(pipe, path, text, device):
     return {'source': source.cpu(), 'embeds': c.prompt_embeds.cpu(), 'mask': c.attention_mask.cpu()}
 
 def train(args, pipe, rows):
-    assert args.split == 'pilot', 'No optimized targets allowed for dev/eval'
+    assert args.split in {'pilot', 'train'}, 'No optimized targets allowed for dev/eval'
+    assert all(0 < step <= args.steps for step in args.snapshot_steps)
     if args.stage == 'retain':
         assert args.sources is not None
     args.output.mkdir(parents=True, exist_ok=True)
@@ -74,6 +75,7 @@ def train(args, pipe, rows):
                     event_text(row['history'][position*2:position*2+2]), args.device)
         print(json.dumps({'cached': i+1, 'total': len(rows), 'stage': args.stage}), flush=True)
     manifest = {'arm': args.arm, 'stage': args.stage, 'steps': args.steps, 'effective_batch': 4,
+        'split': args.split, 'snapshot_steps': sorted(set(args.snapshot_steps)),
         'parent_sha256': sha(args.checkpoint), 'targets': target_hashes, 'source_root': str(args.sources),
         'flow': 'official target/noise; source condition only', 'seed': 20260924,
         'official_commit': OFFICIAL_REFERENCE_COMMIT,
@@ -122,11 +124,17 @@ def train(args, pipe, rows):
         if (step+1)%128==0 or step+1==args.steps:
             save_training_checkpoint(checkpoint,trainable_module=pipe.unet,optimizer=optimizer,epoch=0,
                 episode_cursor=(step+1)*4,optimizer_step=step+1,manifest=manifest)
+        if step+1 in args.snapshot_steps:
+            save_inference_checkpoint(args.output/f'checkpoint-step-{step+1:06d}.pt', pipe, step+1, manifest)
     # A compact inference checkpoint excludes optimizer; resumes keep the separate complete checkpoint.
-    atomic_save(args.output/'checkpoint-final.pt', {'schema_version':1,
-        'trainable_state':{k:p.detach().cpu() for k,p in pipe.unet.named_parameters()},
-        'optimizer_step':args.steps,'manifest':manifest})
+    save_inference_checkpoint(args.output/'checkpoint-final.pt', pipe, args.steps, manifest)
     save_json(args.output/'complete.json',{'steps':args.steps,'checkpoint_sha256':sha(args.output/'checkpoint-final.pt')})
+
+
+def save_inference_checkpoint(path, pipe, step, manifest):
+    atomic_save(path, {'schema_version':1,
+        'trainable_state':{k:p.detach().cpu() for k,p in pipe.unet.named_parameters()},
+        'optimizer_step':step,'manifest':manifest})
 
 @torch.no_grad()
 def rollout(args, pipe, rows):
@@ -173,7 +181,7 @@ def rollout(args, pipe, rows):
 
 def main(args):
     configure_strict_cuda_determinism(0)
-    rows = load_records(args.split,history_file=args.history_file)
+    rows = load_training_records(args.split) if args.mode == 'train' else load_records(args.split,history_file=args.history_file)
     if args.limit:
         rows = rows[:args.limit]
     pipe = load_pipe(args)
@@ -187,7 +195,7 @@ if __name__ == '__main__':
     p.add_argument('mode',choices=['train','rollout'])
     p.add_argument('--arm',choices=['A','B'],required=True)
     p.add_argument('--stage',choices=['write','retain'],default='write')
-    p.add_argument('--split',choices=['pilot','dev','official'],default='pilot')
+    p.add_argument('--split',choices=['pilot','train','dev','official'],default='pilot')
     p.add_argument('--history-file',type=Path)
     for name in ['base','official-source','checkpoint','output']:
         p.add_argument('--'+name,type=Path,required=True)
@@ -195,6 +203,7 @@ if __name__ == '__main__':
     p.add_argument('--sources',type=Path)
     p.add_argument('--device',default='cuda:0')
     p.add_argument('--steps',type=int,default=2048)
+    p.add_argument('--snapshot-steps',type=int,nargs='+',default=[])
     p.add_argument('--inter-turns',type=int,default=10)
     p.add_argument('--noise-chains',type=int,default=2)
     p.add_argument('--limit',type=int,default=0)

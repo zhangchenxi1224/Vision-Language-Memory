@@ -99,6 +99,18 @@ def event_text(exchange):
     assert len(exchange) == 2 and [m['role'] for m in exchange] == ['user', 'assistant']
     return '\n'.join(m['role'] + ': ' + m['content'] for m in exchange)
 
+
+def load_training_records(split='pilot', exclude_pilot=False):
+    if split not in {'pilot', 'train'}:
+        raise ValueError('Teacher/FM training is restricted to the official training side')
+    if exclude_pilot and split != 'train':
+        raise ValueError('Exclude-pilot applies only when supplementing the full training bank')
+    rows = load_records(split)
+    if exclude_pilot:
+        pilot = {r['base_pair_id'] for r in load_records('pilot')}
+        rows = [r for r in rows if r['base_pair_id'] not in pilot]
+    return rows
+
 def make_forms(split='pilot'):
     if split=='train':
         # Keep the already-executed pilot wording byte-for-byte; author only new rows.

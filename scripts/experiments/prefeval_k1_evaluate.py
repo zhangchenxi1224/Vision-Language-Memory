@@ -141,7 +141,7 @@ if __name__=='__main__':
     p.add_argument('--images',type=Path,required=True)
     p.add_argument('--output',type=Path,required=True)
     p.add_argument('--kind',choices=['teacher','student'],required=True)
-    p.add_argument('--split',choices=['pilot','dev','official'],default='pilot')
+    p.add_argument('--split',choices=['pilot','train','dev','official'],default='pilot')
     p.add_argument('--history-file',type=Path)
     p.add_argument('--controls',default='memory,blank,mismatch,text')
     p.add_argument('--families',default='T1,T2,T3,O1,O2')

@@ -43,6 +43,21 @@ def test_full_train_forms_preserve_pilot_and_exclude_heldout():
         assert row['forms']['T1']==row['query']['content']
         assert len(set(row['forms'].values()))==5
 
+
+def test_expanded_teacher_partition_and_training_side_only():
+    import pytest
+    from scripts.experiments.prefeval_k1_data import load_training_records
+    pilot={r['base_pair_id'] for r in load_training_records()}
+    remaining={r['base_pair_id'] for r in load_training_records('train', exclude_pilot=True)}
+    full={r['base_pair_id'] for r in load_training_records('train')}
+    assert len(pilot)==64 and len(remaining)==666 and len(full)==730
+    assert pilot.isdisjoint(remaining) and pilot|remaining==full
+    for split in ['dev','official']:
+        with pytest.raises(ValueError):
+            load_training_records(split)
+    with pytest.raises(ValueError):
+        load_training_records('pilot', exclude_pilot=True)
+
 def test_upstream_prompt_and_parser():
     funcs = official_mcq(ROOT / 'third_party/prefeval_reference')
     assert 'A. a\nB. b\nC. c\nD. d' in funcs['get_mcq_question_format'](['a','b','c','d'])
