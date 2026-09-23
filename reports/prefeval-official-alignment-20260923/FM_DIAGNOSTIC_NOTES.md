@@ -51,6 +51,9 @@ seed0 和原生28步生成诊断 PNG。与现有 benchmark seed0 图配对，继
 
 ## 复查入口
 
+- 07:08 CST 实现更新：commit3227d58 已提供 `train-input` 调度及 `training-initial`
+  生成/读出路径，四项现有格式与划分检查通过。尚未启动；入口要求原 A/B pilot 全部完成。
+  它只读固定 Writer，每组64个新PNG、同一seed0，结果独立存放，不更新任何模型参数。
 - `scripts/reporting/diagnose_prefeval_fm_geometry.py`：在指定 GPU 实例中以 CPU 张量运行，
   不加载 Writer/Reader 或分配 CUDA；CPU辅助实例缺少 torch，因此未在其中安装依赖。
 - `scripts/reporting/compare_prefeval_writer_conditions.py`：从已归档历史复算输入比较，不读评分。

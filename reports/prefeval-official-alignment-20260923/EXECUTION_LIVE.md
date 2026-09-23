@@ -166,8 +166,17 @@ acknowledgment from FM training (disclosure itself is identical for64/64).
 Thus train-content benchmark scores are not exact training-condition fit.
 After the fixed matrix, generate a paired diagnostic for all64 original SFT
 initial exchanges with the same seed0/native inference and unchanged Reader
-tasks. Keep it separate from the official benchmark. This diagnostic is planned,
-not yet implemented or dispatched. Distinguish input-generalization from
+tasks. Keep it separate from the official benchmark. The diagnostic is implemented
+in commit3227d58 and staged remotely; it has NOT been dispatched. Four focused
+official-format/split checks and syntax compilation pass. Launch only after both
+original pilot completion markers exist and the fixed matrix has been analyzed:
+`launch_prefeval_official_ab.py train-input --output OUTPUT`. It uses four shards
+(A0/A1/B0/B1,32 training records each), one original SFT initial exchange per state,
+the frozen write checkpoint, native28 steps and the existing seed0/noise namespace.
+No target-latent or FM update occurs. PNGs go to `rollouts/{A,B}/training-initial`;
+readouts to `evaluations/training-input-students/{A,B}/write`, with the same five
+question forms, answer limits, option order and official scoring. The full actual
+initial exchange is saved in new PNG completion metadata. Distinguish input-generalization from
 FM/free-running generation error before choosing the correction. Do not replace
 benchmark acknowledgments with SFT replies. Then real train-side source rollouts and fixed2048
 retain updates, followed by fresh benchmark RGB chains and same-PNG evaluation.

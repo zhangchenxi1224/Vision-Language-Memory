@@ -15,6 +15,10 @@ for arm in ('A','B'):
         if lines:
             row=json.loads(lines[-1]);pending.append(dict(id=path.parent.name,step=row['step'],loss=row['loss']))
     result[arm]=dict(teacher_complete=len(completed),teacher_running=pending)
+    evaluation=root/'evaluations/students'/arm/'write'
+    result[arm]['student_write']=dict(
+        conditions=sum(not p.name.startswith('complete-') for p in evaluation.glob('*.json')),
+        expected_conditions=462,completed_shards=[p.name for p in evaluation.glob('complete-*.json')])
     for stage in ('write','retain'):
         fm=root/'writers'/arm/stage
         log=fm/'optimization.jsonl'
