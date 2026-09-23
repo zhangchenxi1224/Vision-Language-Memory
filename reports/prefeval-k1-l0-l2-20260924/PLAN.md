@@ -78,3 +78,24 @@ My current preference is: <new official preference>`，assistant 保留新偏好
 不涉及多槽选择性编辑。报告为本项目覆盖扩展，不能冒充官方原始 benchmark。
 与同一最终 Writer 从灰图写入相同新偏好的结果配对，判断既有图像状态是否妨碍改写。
 若覆盖失败，再登记下一轮包含训练侧覆盖转移的 FM 预算；本轮不提前加入其训练样本。
+
+## 最终 180 条官方主题评估的输入
+
+冻结 Writer 后使用 `benchmark_dataset/explicit_preference` 的 180 条 eval-topic 记录。
+先由同一冻结 Qwen Reader 对官方偏好生成 acknowledgment，输入只有偏好，
+使用官方 `You are a helpful assistant.` 和 300-token 上限、greedy decoding。
+两组共享这一份 acknowledgment；它不含未来问题、选项或发布的 SFT 回答。
+十轮干扰使用官方 benchmark context pool 的前十个完整交换，
+不沿用内部 pilot/dev 使用的 SFT context pool。Writer 每步仍只接收前一张 RGB 和当前交换。
+
+`official-paraphrase-requests.json` 逐题只从原问题抽取请求，保留地点、时间、用途、
+数值及原题自身明确给出的条件；`official-question-forms.json` 保存最终五问法。
+T1 为官方原文，其余为直接问句、指令、情境陈述和条件请求四种固定家族。
+这些是措辞扩展，不是新的语义任务。官方原题若已经包含部分偏好提示，保留原文，
+并用空图/错配图/全文参照判断视觉记忆是否有额外贡献。
+当前仅准备输入和脚本，尚未生成 acknowledgment、优化这些偏好的 latent 或读取评估成绩。
+
+最终读取继续使用本实验固定的 Qwen 图像+问题接口；它是视觉记忆适配，
+不声称逐 token 复现官方各文本模型的聊天模板。自由回答保留官方 300-word 提示和
+300-token 生成上限；MCQ 保留官方内容及 XML parser，但给 32 token 以容纳 Qwen 的完整 XML，
+单独披露区别于官方配置的 5-token 上限。所有截断输出仍纳入固定分母并单列截断率。

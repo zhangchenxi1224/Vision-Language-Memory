@@ -135,6 +135,9 @@ def rollout(args, pipe, rows):
     binding = {'checkpoint_sha256':sha(args.checkpoint),'split':args.split,
         'steps':28,'cfg':1,'noise_chains':args.noise_chains,'inter_turns':args.inter_turns,
         'state':'only reopened uint8 RGB PNG; fresh Gaussian each write'}
+    if args.split=='official':
+        binding['benchmark_history_sha256']=sha(args.history_file)
+        binding['history_protocol']=rows[0]['history_protocol']
     save_json(args.output/'manifest.json',binding)
     for row in rows:
         pid = row['base_pair_id']
@@ -170,7 +173,7 @@ def rollout(args, pipe, rows):
 
 def main(args):
     configure_strict_cuda_determinism(0)
-    rows = load_records(args.split)
+    rows = load_records(args.split,history_file=args.history_file)
     if args.limit:
         rows = rows[:args.limit]
     pipe = load_pipe(args)
@@ -184,7 +187,8 @@ if __name__ == '__main__':
     p.add_argument('mode',choices=['train','rollout'])
     p.add_argument('--arm',choices=['A','B'],required=True)
     p.add_argument('--stage',choices=['write','retain'],default='write')
-    p.add_argument('--split',choices=['pilot','dev'],default='pilot')
+    p.add_argument('--split',choices=['pilot','dev','official'],default='pilot')
+    p.add_argument('--history-file',type=Path)
     for name in ['base','official-source','checkpoint','output']:
         p.add_argument('--'+name,type=Path,required=True)
     p.add_argument('--teachers',type=Path)

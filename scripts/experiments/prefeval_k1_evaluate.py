@@ -29,7 +29,9 @@ def text_generate(reader, processor, messages, device, tokens):
 
 def main(args):
     configure_strict_cuda_determinism(0)
-    rows=load_records(args.split)
+    rows=load_records(args.split,history_file=args.history_file)
+    if args.split=='official':
+        assert args.kind=='student', 'Do not optimize or evaluate teacher targets for held-out official rows'
     by_topic=defaultdict(list)
     for r in rows:
         by_topic[r['topic']].append(r['base_pair_id'])
@@ -53,6 +55,9 @@ def main(args):
     history_protocol='official SFT exchanges; not final benchmark acknowledgment'
     if args.kind=='student':
         manifest=json.loads((args.images/'manifest.json').read_text())
+        if args.split=='official':
+            assert manifest['benchmark_history_sha256']==sha(args.history_file)
+            history_protocol=rows[0]['history_protocol']
         if manifest.get('protocol')=='single_active_preference_replacement_extension_not_official_benchmark':
             history_protocol=manifest['protocol']
             if 'text' in controls:
@@ -134,7 +139,8 @@ if __name__=='__main__':
     p.add_argument('--images',type=Path,required=True)
     p.add_argument('--output',type=Path,required=True)
     p.add_argument('--kind',choices=['teacher','student'],required=True)
-    p.add_argument('--split',choices=['pilot','dev'],default='pilot')
+    p.add_argument('--split',choices=['pilot','dev','official'],default='pilot')
+    p.add_argument('--history-file',type=Path)
     p.add_argument('--controls',default='memory,blank,mismatch,text')
     p.add_argument('--families',default='T1,T2,T3,O1,O2')
     p.add_argument('--prefixes',default='0,5,10')

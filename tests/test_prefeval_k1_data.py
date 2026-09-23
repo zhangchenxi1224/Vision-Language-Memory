@@ -5,7 +5,7 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from scripts.experiments.prefeval_k1_data import load_records, option_order, official_mcq, event_text
+from scripts.experiments.prefeval_k1_data import load_records, option_order, official_mcq, event_text, official_eval_disclosures, ALIGN, sha
 
 def test_pairing_and_no_query_in_writer():
     rows = load_records()
@@ -34,3 +34,22 @@ def test_upstream_prompt_and_parser():
     assert 'A. a\nB. b\nC. c\nD. d' in funcs['get_mcq_question_format'](['a','b','c','d'])
     assert funcs['extract_choice']('<choice>C</choice>') == 'C'
     assert funcs['extract_choice']('C') is None
+
+
+def test_official_history_uses_tested_reader_ack_and_benchmark_context(tmp_path):
+    disclosures=official_eval_disclosures()
+    path=tmp_path/'acknowledgments.json'
+    path.write_text(json.dumps({'binding':{'benchmark_sha256':sha(ALIGN/'data/benchmark-disclosures.jsonl.gz')},
+        'acknowledgments':{r['base_pair_id']:{'preference':r['input']['disclosure'][0]['content'],
+            'generated':{'raw':'TESTED_READER_ACK '+r['base_pair_id']}} for r in disclosures}}),encoding='utf-8')
+    rows=load_records('official',history_file=path)
+    contexts=json.loads((ALIGN/'data/context-pools.json').read_text(encoding='utf-8'))
+    assert len(rows)==180
+    assert {r['topic'] for r in rows}.isdisjoint({r['topic'] for r in load_records('train')})
+    for row,bench in zip(rows,disclosures):
+        assert row['history'][0]==bench['input']['disclosure'][0]
+        assert row['history'][1]['content']=='TESTED_READER_ACK '+row['base_pair_id']
+        assert row['history'][2:]==contexts['benchmark'][:20]
+        assert row['query']==bench['input']['query']
+        assert 'target' not in row
+        assert len(row['history'])==22

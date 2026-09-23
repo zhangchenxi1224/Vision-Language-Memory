@@ -110,14 +110,15 @@ def summarize(inputs,*,expected_ids,prefixes,chains,judge_dir=None):
 if __name__=='__main__':
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--input',action='append',required=True,help='label=directory containing readback shards')
-    p.add_argument('--split',choices=['pilot','dev'],required=True)
+    p.add_argument('--split',choices=['pilot','dev','official'],required=True)
+    p.add_argument('--history-file',type=Path)
     p.add_argument('--prefixes',default='0')
     p.add_argument('--chains',type=int,default=1)
     p.add_argument('--judge-dir',type=Path)
     p.add_argument('--output',type=Path,required=True)
     args=p.parse_args()
     from scripts.experiments.prefeval_k1_data import load_records
-    value=summarize([x.split('=',1) for x in args.input],expected_ids=[r['base_pair_id'] for r in load_records(args.split)],
+    value=summarize([x.split('=',1) for x in args.input],expected_ids=[r['base_pair_id'] for r in load_records(args.split,history_file=args.history_file)],
         prefixes=list(map(int,args.prefixes.split(','))),chains=args.chains,judge_dir=args.judge_dir)
     args.output.parent.mkdir(parents=True,exist_ok=True)
     args.output.write_text(json.dumps(value,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
