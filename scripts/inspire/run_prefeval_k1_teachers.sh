@@ -15,6 +15,8 @@ git rev-parse HEAD > "$task_run/commit.txt"
 export CUBLAS_WORKSPACE_CONFIG=:4096:8 PYTHONUNBUFFERED=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONHASHSEED=0
 export HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 TOKENIZERS_PARALLELISM=false
 pids=()
+gpu_count=${K1_GPU_COUNT:-4}
+[[ "$gpu_count" == 2 || "$gpu_count" == 4 ]]
 for gpu in 0 1 2 3; do
   if ((gpu < 2)); then arm=A; shard=$gpu; else arm=B; shard=$((gpu - 2)); fi
   extra=()
@@ -22,14 +24,16 @@ for gpu in 0 1 2 3; do
     [[ "$shard" == 0 ]] || continue
     extra=(--steps 12 --limit 1)
   fi
-  CUDA_VISIBLE_DEVICES=$gpu "$task_python" scripts/experiments/prefeval_k1_teacher.py \
+  physical_gpu=$gpu
+  if [[ "$gpu_count" == 2 ]]; then physical_gpu=$((gpu / 2)); fi
+  CUDA_VISIBLE_DEVICES=$physical_gpu "$task_python" scripts/experiments/prefeval_k1_teacher.py \
     --arm "$arm" --shard "$shard" --shards 2 \
     --base "$task_models/DreamLite-base-a9a0f15-20260907" \
     --reader "$task_models/Qwen3-VL-4B-Instruct" \
     --prefeval "$task_repo/third_party/prefeval_reference" \
     --output "$task_run/$arm" "${extra[@]}" > "$task_run/$arm-$shard.log" 2>&1 &
   pids+=("$!")
-  printf '%s %s %s %s\n' "$arm" "$shard" "$gpu" "$!" >> "$task_run/processes.txt"
+  printf '%s %s %s %s\n' "$arm" "$shard" "$physical_gpu" "$!" >> "$task_run/processes.txt"
 done
 failed=0
 for pid in "${pids[@]}"; do wait "$pid" || failed=1; done
