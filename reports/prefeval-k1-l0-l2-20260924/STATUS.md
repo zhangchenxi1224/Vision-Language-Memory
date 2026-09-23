@@ -50,6 +50,10 @@
   运行库、旧进程和新进程证据见 evidence/reader-migration；原始文件备份保留在远端。
 - 扩容所需 730 条完整五问法已准备：666 条新请求改写，加原样保留的 64 条 pilot。
   覆盖和留出隔离检查通过，相关 7 项测试通过；这是数据准备，尚未启动 730 条训练。
+- 另查到官方跨主题划分中的文本重合：完整 730 train 与 180 official 有 3 条相同偏好、
+  相同归一化原题；64 pilot 与 dev/official 均无重复，730 train 与 90 dev 无重复。
+  不改官方划分，主指标仍为完整 180；后续扩大训练后须披露三条文本暴露。
+  详见 [登记中的暴露说明](PLAN.md) 与 evidence/preference-text-overlap.json。
 
 技术验证已完成：A/B 各 12 次 latent 更新、PNG 保存/回读；各两次实际 FM 更新；
 各自原生 28 步生成、PNG 落盘后再输入第二次写入。技术输出放在 smoke / writer-smoke，
