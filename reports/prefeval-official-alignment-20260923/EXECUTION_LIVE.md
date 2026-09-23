@@ -44,7 +44,7 @@ Authoring sessions: `9237470ed5ef4ba49478098ab454cd8d` then
 `290db340dd8b440390c1497e1606820f`. Original draft archive is in the run folder as
 `questions-draft.tgz` and locally `.cache/official-ab-questions-draft.tgz`.
 
-**Paired target-latent training is RUNNING.**
+**Paired target-latent training is COMPLETE: 64/64 states per arm.**
 
 - Launch commit: `dc0b6b53c9a8811a97b445e5d5996fba44c96242`.
 - Session ID: `57459d0119c04fa0a750593b209da6dc`.
@@ -53,7 +53,7 @@ Authoring sessions: `9237470ed5ef4ba49478098ab454cd8d` then
 - Each shard has 32 train states; 288 updates/state, 96 per T1/T2/T3. Fresh Adam .05.
 - A official full-answer mean CE; B official XML short-answer mean CE; end token
   included once in the token average. VAE/Reader frozen; real uint8 forward + STE.
-- At 2026-09-23 18:03 UTC, 34/64 teacher endpoints per arm were complete, with
+- By 2026-09-23 18:17 UTC all128 endpoints were complete, with
   finite nonzero image gradients. B loss near zero is a training fit observation,
   not a memory-capacity or generalization result.
 - Files: `teachers/{A,B}/{topic-index}/optimization.jsonl`, `resume.pt`, `latent.pt`,
@@ -70,8 +70,8 @@ Authoring sessions: `9237470ed5ef4ba49478098ab454cd8d` then
   4f parameter export. New bank retains all finite endpoints, avoiding the older
   loader's fixed256 / successful-short-answer-only contract.
 - `scripts/eval/prefeval_official_rgb.py`: native RGB rollouts, official-format
-  Reader tasks and controls. New Writer/rollout integration still needs its first
-  actual GPU execution; do not describe it as validated or completed yet.
+  Reader tasks and controls. FM and teacher reading have now executed on GPU;
+  fresh student RGB rollout remains pending and must not be described as completed.
 - Four targeted CPU checks pass: exact upstream MCQ format/parser, balanced labels/forms
   plus dev exclusion, Writer current-exchange-only inputs. No broad engineering suite.
 - Fixed mismatched-image donors in `pilot-mismatch-controls.json`: all154 are from
@@ -80,7 +80,7 @@ Authoring sessions: `9237470ed5ef4ba49478098ab454cd8d` then
   evaluation. Different groups are not necessarily contradictory; this is a
   memory-dependence control, not a guarantee every donor implies a wrong answer.
 
-**Pilot continuation drivers are RUNNING, waiting for complete teacher banks.**
+**Pilot continuation drivers are RUNNING: shared FM-write and teacher-PNG evaluation.**
 Launch commit `c13d154b5654dda25caadcbb5857ec214122b090`, session
 `8ee9246d01204653a3d2d0b19b9f4d61`, remote `dispatch-pilot.json`.
 A driver PID810688 owns GPUs0/1 after its teacher workers finish; B PID810689 owns
@@ -89,9 +89,20 @@ duplicates. Each driver schedules FM-write and teacher evaluation, then common
 references and fresh write-only benchmark RGB/student evaluation. It stops at the
 fixed write-pilot endpoint for analysis before scheduling retain training.
 
-Next: finish all 64 targets per arm, evaluate teacher PNGs and common text/blank
-references; start the fixed 2048-update shared-FM write pilot for each arm without
-filtering failed teachers. Then real train-side source rollouts and fixed 2048
+Child sessions/receipts at 2026-09-23 18:18 UTC:
+
+- A driver session `05035f9043f54f9cb09896925f5ad8b4`; FM PID1059861 GPU0,
+  teacher evaluation PID1059862 GPU1. FM observed at180/2048 with finite gradient.
+- B driver session `a86c5b7b60a74f70a1e352cc38477e48`; FM PID1071409 GPU2,
+  teacher evaluation PID1071410 GPU3. FM observed at117/2048 with finite gradient.
+- No new teacher/FM/evaluation failure observed. The two authoring failures remain
+  in the raw evidence; no failed teacher was removed.
+- FM integration has now executed real updates on both arms; new student RGB
+  inference and its evaluation still await fixed endpoints.
+
+Next: finish teacher-PNG/common reference evaluation and the fixed2048-update
+shared-FM write pilot for each arm, then analyze fresh single-write RGB results.
+Then real train-side source rollouts and fixed2048
 retain updates, followed by fresh benchmark RGB chains and same-PNG evaluation.
 Use two fixed inference seeds and 0/5/10 prefixes. Keep O1/O2 out of selection.
 Compare teacher / single-write student / recurrent student to locate failures.
@@ -112,6 +123,28 @@ config, never keys in Git. First T1 dev selection can be specified with
 `--glob 'students/*/write/*.json' --split dev --families T1` before the full matrix.
 
 ## Continuation metadata
+
+Teacher raw text records and manifest are downloaded locally and published at
+https://github.com/zhangchenxi1224/Vision-Language-Memory/releases/tag/prefeval-official-ab-teachers-20260924
+and will also be tracked in this report directory. Full banks A148,888,318 bytes /
+B125,634,394 bytes are archived on the shared disk under `OUTPUT/archives`.
+Large bank downloads are still running through CPU scp: local exec session78878,
+timeout600 seconds, destination `.cache/official-ab-20260924/archives`.
+Windows may show zero file size until WSL closes the download; WSL stat shows progress.
+After completion, verify both hashes in `teacher-bank-manifest.json`, then
+`gh release upload prefeval-official-ab-teachers-20260924 <bankA> <bankB>`.
+If the transfer times out, preserve completed files and download only incomplete
+files with a longer timeout. Do not start two writers to the same destination.
+Update the release notes to remove "uploads are pending" only after verifying assets.
+
+`teacher-training-summary.json`: each arm64 states x288 =18,432 optimizer updates.
+A exposed4,019,040 target tokens; B129,024 (including end tokens). Recorded training
+step time sums are3041.68s /3058.43s; these exclude model loading, checkpointing and
+free generation and are not complete billed GPU hours. Last-cycle mean CE is
+0.311666 /0.00000758, comparing different targets and not a performance ranking.
+Unscored diagnostic original generations reached300-token truncation in23/64 A
+and63/64 B; this observation motivates checking free-answer transfer, not changing
+one arm's generation limit. Formal fixed-prompt paired evaluation is still running.
 
 Old `dreamlite` automation could not be found in local TOML or the app automation
 database (zero automations). A new thread heartbeat `dreamlite-a-b` was successfully

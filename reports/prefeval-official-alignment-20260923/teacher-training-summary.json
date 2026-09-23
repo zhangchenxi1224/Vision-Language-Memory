@@ -1,0 +1,27 @@
+{
+  "arms": {
+    "A": {
+      "states": 64,
+      "updates": 18432,
+      "per_state_steps": [
+        288
+      ],
+      "target_token_exposures": 4019040,
+      "sum_training_step_seconds": 3041.6790369013324,
+      "last_cycle_mean_ce": 0.3116657060224195,
+      "truncated_original_generations": 23
+    },
+    "B": {
+      "states": 64,
+      "updates": 18432,
+      "per_state_steps": [
+        288
+      ],
+      "target_token_exposures": 129024,
+      "sum_training_step_seconds": 3058.4262998476624,
+      "last_cycle_mean_ce": 7.579755342527565e-06,
+      "truncated_original_generations": 63
+    }
+  },
+  "limits": "Training objectives differ. CE and token counts do not rank memory quality. Diagnostic original generations differ from official-format evaluation."
+}

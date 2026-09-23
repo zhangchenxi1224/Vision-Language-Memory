@@ -1,8 +1,9 @@
-# Running — 2026-09-24: official-task A/B target-latent training
+# Running — 2026-09-24: official-task A/B shared Writer FM
 
 Read `../prefeval-official-alignment-20260923/EXECUTION_LIVE.md` first.
-Session57459d0119c04fa0a750593b209da6dc is running on the designated4-H200 instance.
-Question bank is reviewed and frozen; new shared-FM Writer results remain pending.
+Teacher session57459d0119c04fa0a750593b209da6dc completed64/64 states per arm.
+Pilot session8ee9246d01204653a3d2d0b19b9f4d61 now runs shared FM-write and teacher-PNG
+evaluation on the designated4-H200 instance. New student RGB results remain pending.
 Old Plan13/C2C instructions below remain superseded. Do not duplicate GPU workers.
 
 # Previous steering — 2026-09-24: paired supervision and 3+2 question forms

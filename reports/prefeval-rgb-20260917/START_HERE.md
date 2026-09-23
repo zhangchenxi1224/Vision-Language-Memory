@@ -1,12 +1,14 @@
 # PrefEval RGB memory: execution brief, 2026-09-17
 
-## Live: official-task paired teacher training RUNNING, 2026-09-24
+## Live: official-task paired shared Writer FM RUNNING, 2026-09-24
 
 Read `../prefeval-official-alignment-20260923/EXECUTION_LIVE.md` first.
 The designated four-H200 notebook is RUNNING. Reviewed64-train/90-dev 3+2 question
-bank is frozen. A full-answer / B official MCQ latent workers are running under
-session57459d0119c04fa0a750593b209da6dc. Do not duplicate them. Shared FM/real RGB
-evaluation code is being integrated; no new shared Writer result yet. No C2C.
+bank is frozen. A full-answer / B official MCQ teacher banks both completed64/64,
+session57459d0119c04fa0a750593b209da6dc. Shared FM-write and teacher-PNG evaluation
+are running under pilot session8ee9246d01204653a3d2d0b19b9f4d61. Read child PIDs and
+receipts before continuing; do not duplicate workers. New student RGB results are
+pending. No C2C. Current heartbeat is dreamlite-a-b; old Plan13 work is superseded.
 
 ## Latest: parallel official-answer / MCQ supervision, 2026-09-24
 
