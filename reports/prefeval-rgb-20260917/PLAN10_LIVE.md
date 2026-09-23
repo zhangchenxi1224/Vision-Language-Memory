@@ -1,10 +1,11 @@
-# Running — 2026-09-24: official-task A/B RGB generation and references
+# Running — 2026-09-24: official-task A/B student PNG readout
 
 Read `../prefeval-official-alignment-20260923/EXECUTION_LIVE.md` first.
 Teacher session57459d0119c04fa0a750593b209da6dc completed64/64 states per arm.
 Both FM-write runs completed2048/2048; teacher T1 MCQ A44/64 versus B64/64.
-Pilot8ee9246d01204653a3d2d0b19b9f4d61 runs references; early planned RGB shard0
-is session5da1a1f9763843fca009ad6fab33b710. Shared-Writer scores remain pending.
+All308 student PNGs per arm are complete. Pilot8ee9246d01204653a3d2d0b19b9f4d61
+runs references; early student readings on GPUs0/2 are session
+9d09cb75edfe4eb387243e4342952ff5. Complete shared-Writer scores remain pending.
 Old Plan13/C2C instructions below remain superseded. Do not duplicate GPU workers.
 
 # Previous steering — 2026-09-24: paired supervision and 3+2 question forms

@@ -7,9 +7,10 @@ The designated four-H200 notebook is RUNNING. Reviewed64-train/90-dev 3+2 questi
 bank is frozen. A full-answer / B official MCQ teacher banks both completed64/64,
 session57459d0119c04fa0a750593b209da6dc. Shared FM-write completed2048/2048 per arm;
 teacher T1 MCQ A44/64 versus B64/64. Read FIRST_TEACHER_AND_FM_RESULTS.md in the new
-report directory. Pilot8ee9246d01204653a3d2d0b19b9f4d61 now runs references (144/308
-at03:53 CST); early RGB shard0 completed154 PNGs per arm. Shard1 runs as
-sessionc8cfa81ba0bf496e97d51b1a6df499d0 on GPUs0/2. Read child receipts
+report directory. All308 student RGB endpoints per arm are complete. Pilot
+8ee9246d01204653a3d2d0b19b9f4d61 runs references (251/308 at04:32 CST);
+early student shard0 readings run as9d09cb75edfe4eb387243e4342952ff5 on GPUs0/2.
+The first4/462 conditions per arm are saved. Read child receipts
 before continuing. Shared-Writer scores remain pending. No C2C; heartbeat dreamlite-a-b.
 
 ## Latest: parallel official-answer / MCQ supervision, 2026-09-24
