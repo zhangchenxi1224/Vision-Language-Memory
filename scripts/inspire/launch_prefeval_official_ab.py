@@ -11,7 +11,7 @@ import uuid
 
 def main():
     p=argparse.ArgumentParser()
-    p.add_argument('phase',choices=['author','train','pilot','write-rollout'])
+    p.add_argument('phase',choices=['author','train','pilot','write-rollout','write-students'])
     p.add_argument('--output',type=Path,required=True)
     p.add_argument('--questions',type=Path)
     p.add_argument('--rollout-shard',type=int,choices=[0,1],default=0)
@@ -42,6 +42,18 @@ def main():
                 raise RuntimeError('Finish the fixed FM endpoint before RGB inference')
             if (a.output/'pipeline'/arm/f'job-rollout-{a.rollout_shard}.json').exists():
                 raise RuntimeError('The existing driver has already scheduled this rollout')
+    if a.phase=='write-students':
+        assignments=[(0,'A',0,2),(2,'B',0,2)]
+        sys.path.insert(0,str(root/'src'))
+        from vision_memory.prefeval.official_ab import records
+        selected=records(root/'reports/prefeval-official-alignment-20260923')
+        for _,arm,_,_ in assignments:
+            if (a.output/'pipeline'/arm/'job-student-eval-0.json').exists():
+                raise RuntimeError('The existing driver has already scheduled student readings')
+            for r in selected:
+                for seed in range(2):
+                    if not (a.output/'rollouts'/arm/'write'/r['id'].replace(':','-')/f'seed-{seed}'/'complete.json').exists():
+                        raise RuntimeError('Finish all PNGs, including mismatch donors, before student readings')
     for gpu,arm,shard,shards in assignments:
         log=a.output/f'{a.phase}-{arm}-{shard}-{value["session_id"]}.log'
         cmd=[sys.executable,'-u',str(root/'scripts/experiments/prefeval_official_ab.py'),a.phase,
@@ -52,8 +64,9 @@ def main():
             cmd=[sys.executable,'-u',str(root/'scripts/inspire/run_prefeval_official_pilot.py'),
                  '--output',str(a.output),'--arm',arm,'--gpus',str(gpu)]
             if a.resume:cmd+=['--resume']
-        if a.phase=='write-rollout':
-            cmd=[sys.executable,'-u',str(root/'scripts/eval/prefeval_official_rgb.py'),'rollout',
+        if a.phase in ('write-rollout','write-students'):
+            cmd=[sys.executable,'-u',str(root/'scripts/eval/prefeval_official_rgb.py'),
+                 'rollout' if a.phase=='write-rollout' else 'students',
                  '--output',str(a.output),'--arm',arm,'--stage','write','--shard',str(shard),'--shards',str(shards),
                  '--questions',str(root/'reports/prefeval-official-alignment-20260923/pilot-questions-3plus2.json')]
         env=dict(os.environ,CUDA_VISIBLE_DEVICES=str(gpu),OMP_NUM_THREADS='4',TOKENIZERS_PARALLELISM='false')

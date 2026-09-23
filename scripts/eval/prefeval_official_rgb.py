@@ -46,6 +46,25 @@ def benchmark_history(a,r,processor,reader):
     return history
 
 def rollout(a):
+    ckpath=a.output/'writers'/a.arm/a.stage/'checkpoint-final.pt'
+    checkpoint_sha=sha(ckpath)
+    selected=records(a.report)
+    if a.split=='training': selected=[r for r in selected if r['split']=='train']
+    selected=selected[a.shard::a.shards]
+    def endpoint(r,repetition):
+        if a.split=='training': return a.output/'rollouts'/a.arm/'training'/r['id'].replace(':','-')
+        return a.output/'rollouts'/a.arm/a.stage/r['id'].replace(':','-')/f'seed-{repetition}'
+    repetitions=range(1 if a.split=='training' else 2)
+    complete=True
+    for r in selected:
+        for repetition in repetitions:
+            marker=endpoint(r,repetition)/'complete.json'
+            if not marker.exists():complete=False
+            elif json.loads(marker.read_text())['checkpoint_sha256']!=checkpoint_sha:
+                raise ValueError('Rollout parent changed')
+    # A later pilot driver can reuse early completed shards without allocating
+    # a second model on the GPU now occupied by their Reader evaluation.
+    if complete:return
     import numpy as np
     import torch
     from PIL import Image
@@ -53,21 +72,16 @@ def rollout(a):
     from vision_memory.dreamlite.native_base import NativeBaseEditSampler
     from vision_memory.dreamlite.latent_codec import decode_model_latents_unit_interval
     pipe,_=load_pipe(a.device)
-    ckpath=a.output/'writers'/a.arm/a.stage/'checkpoint-final.pt'
     ck=torch.load(ckpath,map_location='cpu',weights_only=False)
     pipe.unet.load_state_dict(ck['unet']);pipe.unet.eval().requires_grad_(False)
-    checkpoint_sha=sha(ckpath);del ck
+    del ck
     processor=reader=None
     if a.split!='training':processor,reader=load_reader(M/'Qwen3-VL-4B-Instruct',a.device)
-    selected=records(a.report)
-    if a.split=='training': selected=[r for r in selected if r['split']=='train']
-    selected=selected[a.shard::a.shards]
     for r in selected:
         history=r['history'] if a.split=='training' else benchmark_history(a,r,processor,reader)
         rr=dict(r,history=history)
-        for repetition in range(1 if a.split=='training' else 2):
-            if a.split=='training': folder=a.output/'rollouts'/a.arm/'training'/r['id'].replace(':','-')
-            else: folder=a.output/'rollouts'/a.arm/a.stage/r['id'].replace(':','-')/f'seed-{repetition}'
+        for repetition in repetitions:
+            folder=endpoint(r,repetition)
             folder.mkdir(parents=True,exist_ok=True)
             if (folder/'complete.json').exists():
                 if json.loads((folder/'complete.json').read_text())['checkpoint_sha256']!=checkpoint_sha:raise ValueError('Rollout parent changed')
@@ -92,6 +106,11 @@ def rollout(a):
             print(json.dumps(dict(rollout=r['id'],arm=a.arm,stage=a.stage,seed=repetition)),flush=True)
 
 def evaluate(a):
+    report=a.output/'evaluations'/a.phase/(a.arm if a.phase!='references' else 'common')/a.stage
+    marker=report/f'complete-{a.shard}.json'
+    if marker.exists():
+        if json.loads(marker.read_text())['shards']!=a.shards:raise ValueError('Evaluation shard layout changed')
+        return
     import torch
     from scripts.eval.prefeval_rgb import load_reader, read_png
     from vision_memory.reader.open_answer import generate_short_answer
@@ -100,7 +119,6 @@ def evaluate(a):
     selected=records(a.report)
     if a.phase=='teachers':selected=[r for r in selected if r['split']=='train']
     selected=selected[a.shard::a.shards]
-    report=a.output/'evaluations'/a.phase/(a.arm if a.phase!='references' else 'common')/a.stage
     report.mkdir(parents=True,exist_ok=True)
     blank=torch.full((3,1024,1024),128/255)
     for r in selected:
@@ -160,15 +178,16 @@ def main():
     import socket
     if not socket.gethostname().startswith('dl-clear-retain-h200x4-20260914'):raise RuntimeError('Wrong notebook')
     try:
-        if a.phase=='rollout':
+        if a.phase in ('rollout','students'):
             # Permit scheduled shards to run while independent Reader references
             # finish. A later pilot driver waits here before allocating a model,
             # then reuses the same fixed-checkpoint PNG completion markers.
             import fcntl
-            lock=a.output/f'rollout-{a.arm}-{a.stage}-{a.split}-{a.shard}-{a.shards}.lock'
+            lock=a.output/f'{a.phase}-{a.arm}-{a.stage}-{a.split}-{a.shard}-{a.shards}.lock'
             with lock.open('a') as handle:
                 fcntl.flock(handle,fcntl.LOCK_EX)
-                rollout(a)
+                if a.phase=='rollout':rollout(a)
+                else:evaluate(a)
         else:evaluate(a)
     except BaseException:
         import traceback
