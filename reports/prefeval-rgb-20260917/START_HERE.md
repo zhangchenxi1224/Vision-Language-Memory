@@ -1,5 +1,16 @@
 # PrefEval RGB memory: execution brief, 2026-09-17
 
+## Latest: retain the two-stage target-latent / FM route, 2026-09-24
+
+Read `../prefeval-official-alignment-20260923/FM_ROUTE_CORRECTION.md` first.
+The user questioned replacing the already productive two-stage route. Reinspection
+supports retaining downstream teacher-state construction followed by shared-Writer
+official flow matching. Direct answer backpropagation through all 28 generation
+steps is an untested alternative, not the default next implementation. Keep the
+official PrefEval data/split and improve task supervision in teacher construction;
+then run a bounded shared FM pilot and real RGB chains. No new GPU run exists.
+The proposal below for a differentiable 28-step trainer is superseded.
+
 ## Implementation proposal, 2026-09-24
 
 Read `../prefeval-official-alignment-20260923/WRITER_IMPLEMENTATION_PLAN.md` and
