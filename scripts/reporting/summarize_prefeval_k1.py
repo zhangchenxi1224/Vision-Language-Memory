@@ -43,6 +43,7 @@ def summarize(inputs,*,expected_ids,prefixes,chains,judge_dir=None):
             raise ValueError('Do not mix distinct judge models in a single accuracy')
     metrics=[]
     joint=[]
+    chain_joint=[]
     sources=[]
     for label,directory in inputs:
         rows={}
@@ -91,6 +92,16 @@ def summarize(inputs,*,expected_ids,prefixes,chains,judge_dir=None):
             n=len(expected_ids)*(1 if control in ['blank','text'] else chains)
             metrics.append({'label':label,'prefix':prefix,'control':control,'family':family,'task':task,**result(values,n)})
         for prefix in prefixes:
+            for family in ['T1','T2','T3','O1','O2']:
+                for task in ['free','mcq']:
+                    all_chains=[]
+                    for pid in expected_ids:
+                        values=[scored.get((pid,chain,prefix,'memory',family,task)) for chain in range(chains)]
+                        if all(value is not None for value in values):
+                            all_chains.append({'correct':all(values)})
+                    chain_joint.append({'label':label,'prefix':prefix,'family':family,'task':task,
+                        'definition':'All noise chains correct for the same preference; one unit per preference',
+                        **result(all_chains,len(expected_ids))})
             for task in ['free','mcq']:
                 pairs=[]
                 for pid in expected_ids:
@@ -104,7 +115,7 @@ def summarize(inputs,*,expected_ids,prefixes,chains,judge_dir=None):
                     **result(pairs,len(expected_ids)*chains)})
     return {'expected_ids':expected_ids,'prefixes':prefixes,'noise_chains':chains,
         'judge_models':[{'model':a,'label':b} for a,b in sorted(judge_models)],
-        'metrics':metrics,'ood_joint':joint,'source_files':sources,
+        'metrics':metrics,'ood_joint':joint,'noise_chain_joint':chain_joint,'source_files':sources,
         'warning':'Observed-only scores are partial diagnostics. Missing or unjudged results are not silently dropped. Noise chains are repeated measures, not independent preference samples.'}
 
 if __name__=='__main__':

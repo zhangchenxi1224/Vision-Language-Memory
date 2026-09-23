@@ -35,3 +35,18 @@ def test_joint_ood_rejects_different_images(tmp_path):
     write_rows(tmp_path,[first,second])
     with pytest.raises(ValueError,match='same frozen PNG'):
         summarize([('B',tmp_path)],expected_ids=[base['pair_id']],prefixes=[0],chains=1)
+
+
+def test_noise_chains_share_one_preference_denominator(tmp_path):
+    first=copy.deepcopy(next(r for r in sample_rows() if r['control']=='memory' and r['task']=='mcq'))
+    second=copy.deepcopy(first)
+    second.update(chain=1,png_sha256='second_generated_image',correct=False,predicted_letter=None,parse_failure=True)
+    second['generated']['raw']='unparseable answer'
+    write_rows(tmp_path,[first,second])
+    value=summarize([('B',tmp_path)],expected_ids=[first['pair_id']],prefixes=[0],chains=2)
+    row=next(r for r in value['noise_chain_joint'] if r['family']=='T1' and r['task']=='mcq')
+    assert row['expected']==row['observed']==1 and row['accuracy']==0
+    write_rows(tmp_path,[first])
+    incomplete=summarize([('B',tmp_path)],expected_ids=[first['pair_id']],prefixes=[0],chains=2)
+    row=next(r for r in incomplete['noise_chain_joint'] if r['family']=='T1' and r['task']=='mcq')
+    assert row['expected']==1 and row['observed']==0 and row['accuracy'] is None
