@@ -49,12 +49,13 @@ def rollout(a):
     ckpath=a.output/'writers'/a.arm/a.stage/'checkpoint-final.pt'
     checkpoint_sha=sha(ckpath)
     selected=records(a.report)
-    if a.split=='training': selected=[r for r in selected if r['split']=='train']
+    if a.split!='benchmark': selected=[r for r in selected if r['split']=='train']
     selected=selected[a.shard::a.shards]
     def endpoint(r,repetition):
         if a.split=='training': return a.output/'rollouts'/a.arm/'training'/r['id'].replace(':','-')
+        if a.split=='training-initial': return a.output/'rollouts'/a.arm/'training-initial'/r['id'].replace(':','-')/f'seed-{repetition}'
         return a.output/'rollouts'/a.arm/a.stage/r['id'].replace(':','-')/f'seed-{repetition}'
-    repetitions=range(1 if a.split=='training' else 2)
+    repetitions=range(2 if a.split=='benchmark' else 1)
     complete=True
     for r in selected:
         for repetition in repetitions:
@@ -76,9 +77,9 @@ def rollout(a):
     pipe.unet.load_state_dict(ck['unet']);pipe.unet.eval().requires_grad_(False)
     del ck
     processor=reader=None
-    if a.split!='training':processor,reader=load_reader(M/'Qwen3-VL-4B-Instruct',a.device)
+    if a.split=='benchmark':processor,reader=load_reader(M/'Qwen3-VL-4B-Instruct',a.device)
     for r in selected:
-        history=r['history'] if a.split=='training' else benchmark_history(a,r,processor,reader)
+        history=r['history'] if a.split!='benchmark' else benchmark_history(a,r,processor,reader)
         rr=dict(r,history=history)
         for repetition in repetitions:
             folder=endpoint(r,repetition)
@@ -102,11 +103,13 @@ def rollout(a):
                 Image.fromarray(array).save(path)
                 image=Image.open(path).convert('RGB')
                 images.append(dict(position=position,png_sha256=sha(path),noise_seed=seed))
-            write(folder/'complete.json',dict(id=r['id'],checkpoint_sha256=checkpoint_sha,images=images))
+            write(folder/'complete.json',dict(id=r['id'],checkpoint_sha256=checkpoint_sha,images=images,
+                input_protocol=a.split,first_exchange=history[:2]))
             print(json.dumps(dict(rollout=r['id'],arm=a.arm,stage=a.stage,seed=repetition)),flush=True)
 
 def evaluate(a):
-    report=a.output/'evaluations'/a.phase/(a.arm if a.phase!='references' else 'common')/a.stage
+    phase='training-input-students' if a.split=='training-initial' else a.phase
+    report=a.output/'evaluations'/phase/(a.arm if a.phase!='references' else 'common')/a.stage
     marker=report/f'complete-{a.shard}.json'
     if marker.exists():
         if json.loads(marker.read_text())['shards']!=a.shards:raise ValueError('Evaluation shard layout changed')
@@ -117,7 +120,7 @@ def evaluate(a):
     processor,reader=load_reader(M/'Qwen3-VL-4B-Instruct',a.device)
     questions=json.loads(a.questions.read_text())['records']
     selected=records(a.report)
-    if a.phase=='teachers':selected=[r for r in selected if r['split']=='train']
+    if a.phase=='teachers' or a.split=='training-initial':selected=[r for r in selected if r['split']=='train']
     selected=selected[a.shard::a.shards]
     report.mkdir(parents=True,exist_ok=True)
     blank=torch.full((3,1024,1024),128/255)
@@ -129,6 +132,9 @@ def evaluate(a):
         elif a.phase=='references':
             positions=(0,) if a.stage=='write' else (0,5,10)
             conditions=[(kind,pos,0,None) for kind in ('blank','text') for pos in positions]
+        elif a.split=='training-initial':
+            path=a.output/'rollouts'/a.arm/'training-initial'/r['id'].replace(':','-')/'seed-0/memory-00.png'
+            conditions=[('matched',0,0,path)]
         else:
             root=a.output/'rollouts'/a.arm/a.stage/r['id'].replace(':','-')
             positions=(0,) if a.stage=='write' else (0,5,10)
@@ -161,7 +167,7 @@ def evaluate(a):
                         gold=gold,predicted=predicted,correct=(predicted==gold[8]) if gold else None,
                         scoring='official_mcq_extract_choice' if gold else 'pending_official_judge'))
             write(result,dict(id=r['id'],split=r['split'],condition=condition,position=pos,seed=seed,
-                image_sha256=sha(path) if path else None,rows=rows,
+                image_sha256=sha(path) if path else None,rows=rows,input_protocol=a.split,
                 donor_id=donor if condition=='mismatched' else None,
                 judge_only_preference=r['benchmark']['evaluation_only']['preference']))
             print(json.dumps(dict(evaluated=r['id'],condition=condition,position=pos,seed=seed)),flush=True)
@@ -172,11 +178,13 @@ def main():
     p.add_argument('--output',type=Path,required=True);p.add_argument('--questions',type=Path,required=True)
     p.add_argument('--report',type=Path,default=ROOT/'reports/prefeval-official-alignment-20260923')
     p.add_argument('--arm',choices=['A','B'],default='A');p.add_argument('--stage',choices=['write','retain'],default='write')
-    p.add_argument('--split',choices=['training','benchmark'],default='benchmark')
+    p.add_argument('--split',choices=['training','benchmark','training-initial'],default='benchmark')
     p.add_argument('--device',default='cuda:0');p.add_argument('--shard',type=int,default=0);p.add_argument('--shards',type=int,default=1)
     a=p.parse_args()
     import socket
     if not socket.gethostname().startswith('dl-clear-retain-h200x4-20260914'):raise RuntimeError('Wrong notebook')
+    if a.split=='training-initial' and (a.stage!='write' or a.phase not in ('rollout','students')):
+        raise ValueError('Training-input diagnostic is single-write rollout/readout only')
     try:
         if a.phase in ('rollout','students'):
             # Permit scheduled shards to run while independent Reader references

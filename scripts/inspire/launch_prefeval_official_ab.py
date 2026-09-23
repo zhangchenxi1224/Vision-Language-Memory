@@ -11,7 +11,7 @@ import uuid
 
 def main():
     p=argparse.ArgumentParser()
-    p.add_argument('phase',choices=['author','train','pilot','write-rollout','write-students'])
+    p.add_argument('phase',choices=['author','train','pilot','write-rollout','write-students','train-input'])
     p.add_argument('--output',type=Path,required=True)
     p.add_argument('--questions',type=Path)
     p.add_argument('--rollout-shard',type=int,choices=[0,1],default=0)
@@ -35,6 +35,10 @@ def main():
         gpu_binding=subprocess.check_output(['nvidia-smi','--query-gpu=index,uuid,name','--format=csv,noheader'],text=True))
     assignments=[(g,'A',g,4) for g in range(4)] if a.phase=='author' else [(0,'A',0,2),(1,'A',1,2),(2,'B',0,2),(3,'B',1,2)]
     if a.phase=='pilot': assignments=[('0,1','A',0,1),('2,3','B',0,1)]
+    if a.phase=='train-input':
+        for arm in ('A','B'):
+            if not (a.output/'pipeline'/arm/'complete.json').exists():
+                raise RuntimeError('Finish the fixed benchmark before the exact training-input diagnostic')
     if a.phase=='write-rollout':
         assignments=[(0,'A',a.rollout_shard,2),(2,'B',a.rollout_shard,2)]
         for _,arm,_,_ in assignments:
@@ -64,6 +68,9 @@ def main():
             cmd=[sys.executable,'-u',str(root/'scripts/inspire/run_prefeval_official_pilot.py'),
                  '--output',str(a.output),'--arm',arm,'--gpus',str(gpu)]
             if a.resume:cmd+=['--resume']
+        if a.phase=='train-input':
+            cmd=[sys.executable,'-u',str(root/'scripts/inspire/run_prefeval_train_input_diagnostic.py'),
+                 '--output',str(a.output),'--arm',arm,'--shard',str(shard),'--shards',str(shards)]
         if a.phase in ('write-rollout','write-students'):
             cmd=[sys.executable,'-u',str(root/'scripts/eval/prefeval_official_rgb.py'),
                  'rollout' if a.phase=='write-rollout' else 'students',
