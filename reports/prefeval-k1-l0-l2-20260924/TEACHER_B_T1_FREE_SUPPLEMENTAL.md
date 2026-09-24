@@ -41,7 +41,9 @@ judge 输出没有长度截断，总使用 310,541 token。失败主要被判为
 [首例评分中的局限](FIRST_FREE_SUPPLEMENTAL.md)。不能把自动解释当作权威。
 Reader 本身的大量 300-token 截断也限制了结论：本报告只描述登记的生成预算，
 未测试延长生成是否改变成绩。截断回答没有补写、剔除或重新生成。
-A 教师评分尚未完整，因此此处不作完整 A/B 自然回答优劣比较。
+后续 [A 教师完整评分](TEACHER_A_T1_FREE_SUPPLEMENTAL.md)已完成；
+[A 学生](STUDENT_A_WRITE_T1_FREE_SUPPLEMENTAL.md)与 [B 学生](STUDENT_B_WRITE_T1_FREE_SUPPLEMENTAL.md)
+分别记录教师能力是否保留到共享 Writer，不能只凭教师优劣判断 Writer。
 
 - [完整固定分母汇总](evidence/teacher-B-T1-free-fixed-denominator.json)
 - [官方分项聚合、配对计数与文件哈希](evidence/teacher-B-T1-free-supplemental.json)
