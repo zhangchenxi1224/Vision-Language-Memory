@@ -1,4 +1,14 @@
-# Latest authority — 2026-09-24: pause new iterations, finish existing run
+# Latest authority — 2026-09-24: Qwen3.8-max judge authorized
+
+New training and the Goal remain paused. Existing remote write-ackmix A/B
+pipelines are complete. The user authorized replacing the pending judge with
+qwen3.8-max; two local processes now score12,060 saved answers, with original
+PrefEval prompts/parsers/aggregation. Read the official-alignment directory's
+QWEN38_JUDGE.md, QWEN38_JUDGE_STATUS.json and EXECUTION_LIVE.md before acting.
+Do not duplicate live judges or restart completed GPU Readers. Archive/report
+the final results, then pause completion monitoring; no new iteration.
+
+# Previous authority — 2026-09-24: pause new iterations, finish existing run
 
 User explicitly requests that the currently running remote experiment finish;
 new iterations and the Goal remain paused. Current write-ackmix Readers resumed

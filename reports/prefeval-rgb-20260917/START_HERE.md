@@ -1,5 +1,17 @@
 # PrefEval RGB memory: execution brief, 2026-09-17
 
+## Latest: Qwen3.8-max judge running; training remains paused
+
+2026-09-24: user authorized `qwen3.8-max` for saved free-answer judging.
+Both remote write-ackmix pipelines are complete; no Reader restart is needed.
+Two disjoint local judge processes score the full12,060 answers using unchanged
+official prompts/parsers/aggregation and the substituted judge model.
+Read `../prefeval-official-alignment-20260923/QWEN38_JUDGE.md` and
+`QWEN38_JUDGE_STATUS.json` there for process identities and logs. At12:28 CST,
+180 answers had all four checks,735 checks were saved, and none were malformed.
+These are progress counts only. New training and the Goal remain paused.
+The completion monitor now covers judging, final result aggregation and archive.
+
 ## Latest authority: new iterations paused; existing evaluation continues
 
 2026-09-24: user requested a full results review and paused new iterations,

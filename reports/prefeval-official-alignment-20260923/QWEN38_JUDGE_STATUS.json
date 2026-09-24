@@ -1,0 +1,41 @@
+{
+  "status": "running_both_corpora",
+  "created_at_utc": "2026-09-24T04:24:38.7960812Z",
+  "model": "qwen3.8-max",
+  "provider": "dashscope",
+  "run_dir": "C:/Users/Expedition/dreamlite-official-alignment-20260913/runs/prefeval-qwen38-judge-20260924",
+  "goal_status": "paused",
+  "training_iterations": "paused",
+  "expected_total_conditions": 2412,
+  "expected_total_answers": 12060,
+  "original": {
+    "pid": 6276,
+    "started_at": "2026-09-24T04:24:38.7394348Z",
+    "glob": "*/*/write/*.json",
+    "conditions": 1488,
+    "answers": 7440,
+    "workers": 4,
+    "log": "judge-original.log",
+    "stderr": "judge-original.stderr.log"
+  },
+  "ackmix": {
+    "status": "running",
+    "pid": 27440,
+    "started_at": "2026-09-24T04:27:01.6000876Z",
+    "glob": "students/*/write-ackmix/*.json",
+    "conditions": 924,
+    "answers": 4620,
+    "workers": 4,
+    "log": "judge-ackmix.log",
+    "stderr": "judge-ackmix.stderr.log"
+  },
+  "first_condition_checks": 4,
+  "first_condition_malformed": 0,
+  "progress_snapshot": {
+    "time_utc": "2026-09-24T04:28:00.543259+00:00",
+    "checks_completed": 735,
+    "answers_with_four_checks": 180,
+    "malformed_checks": 0,
+    "scope": "partial progress only, not final performance"
+  }
+}

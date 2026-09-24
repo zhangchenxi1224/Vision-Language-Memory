@@ -2,6 +2,18 @@
 
 ## Current objective and authority
 
+**Latest judge instruction, 2026-09-24: use `qwen3.8-max` to score saved free
+answers.** No new training is authorized. Read `QWEN38_JUDGE.md` and its launch
+receipt `QWEN38_JUDGE_STATUS.json`. Existing local DashScope credentials now
+work; the first real answer's four official checks completed successfully.
+The remote write-ackmix A/B completion markers are both present; each has462
+condition files plus two shard markers. Do not restart their finished Readers.
+Their complete raw archive has942 records,4,746,006 bytes, SHA256
+4b54b4d23b868ec45968745ee3a46977d7582031276762d231bae2c43a18c785.
+Generation scores will be labeled as official PrefEval prompts/parsers/aggregation
+with a substituted Qwen judge, not the original Sonnet judge configuration.
+Older claims below that no judge key is configured are superseded.
+
 **Latest user instruction, 2026-09-24: new iterations are PAUSED. Let the
 currently running remote experiment finish.** Goal is paused. The existing
 write-ackmix drivers/readers were resumed after a brief SIGSTOP; no new run was
