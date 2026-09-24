@@ -1,5 +1,14 @@
 # Qwen3.8-max judge — 2026-09-24
 
+**Latest status,13:01 CST: both processes exited with HTTP400 `Arrearage`.**
+Saved5,168 judgments:1,288 fully judged answers and10 partially judged answers;
+no final A/B generation result exists. The last judgment was saved12:49:09 CST.
+Successful responses contain3,246,921 total tokens and no malformed XML or
+length truncations. Usage is not a verified bill. Partial raw results and error
+logs are in `judge-qwen38-interrupted-evidence.jsonl.gz`; see its manifest.
+Automation is paused. Wait for account recovery and the user's resume request;
+reuse completed checks and do not retry paid work or switch models automatically.
+
 User authorized replacing the pending generation judge with `qwen3.8-max`.
 This authorizes scoring saved answers; new training/diagnostic iterations and
 the Goal remain paused. The remote write-ackmix A/B pipelines are now complete.

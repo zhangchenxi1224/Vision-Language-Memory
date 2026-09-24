@@ -2,6 +2,21 @@
 
 ## Current objective and authority
 
+**2026-09-24 13:01 CST: Qwen judge STOPPED by API Arrearage.** Both local
+processes6276/27440 have exited; stderr records HTTP400 with codeArrearage.
+No automatic paid retry, model change or training restart was attempted.
+5,168 successful checks were saved, covering1,288 complete answers of12,060
+and10 partial answers. Zero malformed/truncated successful responses so far;
+this incomplete, nonrepresentative subset is not a final A/B score.
+Successful-response usage:3,083,739 input +163,182 output tokens; this is usage,
+not a billing statement. Latest saved judgment12:49:09 CST.
+Read `judge-qwen38-interruption-summary.json` and `QWEN38_JUDGE_STATUS.json`.
+Raw judgments, both logs and failure receipts are archived in
+`judge-qwen38-interrupted-evidence.jsonl.gz` (272 records,1,166,237 bytes,
+SHA256 efcf61f9c6cb02561c67c7b9cb8cb096f11d16ad0ea08ce0f9b0922d67c5b07b).
+Completion automation is now PAUSED, pending account recovery and user-directed
+resume. Resume must reuse saved checks. Goal/new training remain paused.
+
 **Latest judge instruction, 2026-09-24: use `qwen3.8-max` to score saved free
 answers.** No new training is authorized. Read `QWEN38_JUDGE.md` and its launch
 receipt `QWEN38_JUDGE_STATUS.json`. Existing local DashScope credentials now

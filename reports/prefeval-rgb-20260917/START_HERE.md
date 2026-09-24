@@ -1,5 +1,15 @@
 # PrefEval RGB memory: execution brief, 2026-09-17
 
+## Latest: judge interrupted by account Arrearage; waiting for user
+
+2026-09-24 13:01 CST: both Qwen3.8-max judge processes have exited with HTTP400
+Arrearage.5,168 checks and1,288 complete answers are preserved, with10 additional
+partial answers. No final score. Automation and training remain paused; no paid
+retry, replacement model or training restart. Read the official-alignment
+directory's `judge-qwen38-interruption-summary.json` and `QWEN38_JUDGE_STATUS.json`.
+The complete partial judgment/log archive is saved; resume requires account
+recovery and user direction, reusing existing checks.
+
 ## Latest: Qwen3.8-max judge running; training remains paused
 
 2026-09-24: user authorized `qwen3.8-max` for saved free-answer judging.

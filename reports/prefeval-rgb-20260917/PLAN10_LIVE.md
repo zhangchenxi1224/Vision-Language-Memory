@@ -1,4 +1,13 @@
-# Latest authority — 2026-09-24: Qwen3.8-max judge authorized
+# Latest status — 2026-09-24: judge stopped by API Arrearage
+
+Both local judges exited.5,168 saved checks cover1,288 complete and10 partial
+answers. Partial evidence and logs are archived; no final A/B score exists.
+Automation is paused pending account recovery and explicit user resume. Do not
+retry paid work, switch models, or restart any training. Goal remains paused.
+Read the official-alignment directory's EXECUTION_LIVE.md and
+QWEN38_JUDGE_STATUS.json. Older running/continuation entries below are historical.
+
+# Previous authority — 2026-09-24: Qwen3.8-max judge authorized
 
 New training and the Goal remain paused. Existing remote write-ackmix A/B
 pipelines are complete. The user authorized replacing the pending judge with
