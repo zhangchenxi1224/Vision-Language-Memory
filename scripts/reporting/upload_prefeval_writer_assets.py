@@ -25,7 +25,10 @@ def main():
     parser.add_argument('--run',type=Path,required=True)
     parser.add_argument('--release-id',type=int,required=True)
     parser.add_argument('--kind',choices=('writers','student-pngs','training-input-pngs'),default='writers')
+    parser.add_argument('--stage',choices=('write','write-ackmix'),default='write')
     args=parser.parse_args()
+    if args.kind=='training-input-pngs' and args.stage!='write':
+        raise ValueError('The exact-input diagnostic belongs to the original write checkpoint')
     token=sys.stdin.readline().strip()
     if not token:raise RuntimeError('Missing transient GitHub authentication')
     headers={'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json',
@@ -37,15 +40,16 @@ def main():
     assets={x['name']:x for x in response['assets']}
     receipt={'writers':'writer-release-upload','student-pngs':'student-png-release-upload',
              'training-input-pngs':'training-input-png-release-upload'}[args.kind]
+    if args.stage!='write':receipt+='-'+args.stage
 
     def upload(arm):
         if args.kind=='writers':
-            folder=args.run/'writers'/arm/'write'
+            folder=args.run/'writers'/arm/args.stage
             path=folder/'checkpoint-final.pt'
             expected=json.loads((folder/'complete.json').read_text())['checkpoint_sha256']
-            name=f'writer-{arm}-write-2048.pt'
+            name=f'writer-{arm}-{args.stage}-2048.pt'
         else:
-            split='training-initial' if args.kind=='training-input-pngs' else 'write'
+            split='training-initial' if args.kind=='training-input-pngs' else args.stage
             folder=args.run/'rollouts'/arm/split
             markers=sorted(folder.glob('*/seed-*/complete.json'))
             expected_count=64 if args.kind=='training-input-pngs' else 308
