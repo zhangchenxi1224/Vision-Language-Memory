@@ -35,6 +35,11 @@ The Immortal Life of Henrietta Lacks；A 图的自由生成把后两项改为 Th
 与在线 LF 文件的原始字节哈希不同；仅转换行结束符后完全匹配，JSON 字符串内容未变。
 [核验记录](evidence/teacher-A-target-source-verification.json)同时保存两种哈希。
 
+后续已将源核对扩展到固定 64 条全部记录：16 份官方固定提交文件的原始内容中，
+偏好、问题和完整 `response_to_q` 均与适配数据、诊断输入逐字符一致。
+仍同时核对 LF 原始字节与既有 CRLF 源清单，不修改文本或训练目标。
+见[全部 64 条来源核验](evidence/published-target-all64-upstream-verification.json)。
+
 ## 下一项固定诊断：直接评判发布的 64 条目标回答
 
 为判断这类监督问题覆盖多少条，预先封存全部固定 64 条 pilot 的官方 `response_to_q`，
@@ -50,3 +55,8 @@ The Immortal Life of Henrietta Lacks；A 图的自由生成把后两项改为 Th
 
 输入：[64 条发布回答](evidence/published-target-consistency-input/published-answers.jsonl)、
 [固定清单](evidence/published-target-consistency-input/manifest.json)。本次登记时尚无该诊断评分。
+
+
+该固定诊断现已完成：52/64 通过替代 judge，12/64 未通过，无解析失败。
+内容矛盾、判词的范围扩展及其与教师/学生回答的关联分别见[完整诊断报告](PUBLISHED_TARGET_CONSISTENCY.md)。
+原 64 条分母与官方训练目标均保持不变。
