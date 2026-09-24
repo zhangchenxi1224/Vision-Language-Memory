@@ -1,6 +1,7 @@
 import io
 import hashlib
 import json
+import ssl
 from types import SimpleNamespace
 import urllib.error
 from unittest.mock import patch
@@ -34,6 +35,37 @@ def test_auth_failure_is_not_retried(monkeypatch):
     denied=urllib.error.HTTPError('https://example.invalid',401,'Unauthorized',{},None)
     with patch.object(judge.urllib.request,'urlopen',side_effect=denied) as call, \
          patch.object(judge.time,'sleep'),pytest.raises(urllib.error.HTTPError):
+        judge.invoke(args(),'original prompt')
+    assert call.call_count==1
+
+
+@pytest.mark.parametrize('error',[urllib.error.URLError(ssl.SSLEOFError('EOF')),TimeoutError('timed out')])
+def test_transport_retry_preserves_request(monkeypatch,error):
+    monkeypatch.setenv('TEST_JUDGE_KEY','test-only-not-a-real-key')
+    payload={'choices':[{'message':{'content':'<answer>No</answer>'}}]}
+    with patch.object(judge.urllib.request,'urlopen',side_effect=[error,io.BytesIO(json.dumps(payload).encode())]) as call, \
+         patch.object(judge.time,'sleep') as sleep:
+        text,raw=judge.invoke(args(),'original prompt')
+    assert raw==payload and text=='<answer>No</answer>'
+    assert call.call_args_list[0].args[0] is call.call_args_list[1].args[0]
+    assert [c.args[0] for c in sleep.call_args_list]==[2,5,2]
+
+
+def test_transport_retry_is_bounded(monkeypatch):
+    monkeypatch.setenv('TEST_JUDGE_KEY','test-only-not-a-real-key')
+    error=urllib.error.URLError(ssl.SSLEOFError('EOF'))
+    with patch.object(judge.urllib.request,'urlopen',side_effect=error) as call, \
+         patch.object(judge.time,'sleep') as sleep,pytest.raises(urllib.error.URLError):
+        judge.invoke(args(),'original prompt')
+    assert call.call_count==5
+    assert [c.args[0] for c in sleep.call_args_list]==[2,5,2,10,2,20,2,40,2]
+
+
+def test_certificate_error_is_not_retried(monkeypatch):
+    monkeypatch.setenv('TEST_JUDGE_KEY','test-only-not-a-real-key')
+    error=urllib.error.URLError(ssl.SSLCertVerificationError('verification failed'))
+    with patch.object(judge.urllib.request,'urlopen',side_effect=error) as call, \
+         patch.object(judge.time,'sleep'),pytest.raises(urllib.error.URLError):
         judge.invoke(args(),'original prompt')
     assert call.call_count==1
 

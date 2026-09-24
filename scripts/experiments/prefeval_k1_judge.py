@@ -5,6 +5,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import ssl
 import time
 import urllib.error
 import urllib.request
@@ -53,6 +54,13 @@ def invoke(args,prompt):
                 delay=5*2**attempt
             error.close()
             print(json.dumps({'judge_transport_retry':error.code,'attempt':attempt+1,'wait_seconds':delay}),flush=True)
+            time.sleep(delay)
+        except (urllib.error.URLError, TimeoutError, ConnectionError, ssl.SSLEOFError) as error:
+            reason=getattr(error,'reason',error)
+            if isinstance(reason,ssl.SSLCertVerificationError) or attempt==4:
+                raise
+            delay=5*2**attempt
+            print(json.dumps({'judge_transport_retry':type(reason).__name__,'attempt':attempt+1,'wait_seconds':delay}),flush=True)
             time.sleep(delay)
     return raw['choices'][0]['message']['content'],raw
 
