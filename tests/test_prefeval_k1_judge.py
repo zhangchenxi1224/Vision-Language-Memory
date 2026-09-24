@@ -39,6 +39,20 @@ def test_auth_failure_is_not_retried(monkeypatch):
     assert call.call_count==1
 
 
+def test_explicit_non_thinking_keeps_official_judge_budget(monkeypatch):
+    monkeypatch.setenv('TEST_JUDGE_KEY','test-only-not-a-real-key')
+    options=args()
+    options.disable_thinking=True
+    payload={'choices':[{'message':{'content':'<answer>No</answer>'}}]}
+    with patch.object(judge.urllib.request,'urlopen',return_value=io.BytesIO(json.dumps(payload).encode())) as call, \
+         patch.object(judge.time,'sleep'):
+        judge.invoke(options,'unchanged official prompt')
+    body=json.loads(call.call_args.args[0].data)
+    assert body['enable_thinking'] is False
+    assert body['max_tokens']==100 and body['temperature']==0.0
+    assert body['messages'][-1]['content']=='unchanged official prompt'
+
+
 @pytest.mark.parametrize('error',[urllib.error.URLError(ssl.SSLEOFError('EOF')),TimeoutError('timed out')])
 def test_transport_retry_preserves_request(monkeypatch,error):
     monkeypatch.setenv('TEST_JUDGE_KEY','test-only-not-a-real-key')

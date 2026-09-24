@@ -35,6 +35,8 @@ def invoke(args,prompt):
     key=os.environ[args.key_env]
     body={'model':args.model,'messages':[{'role':'system','content':SYSTEM},{'role':'user','content':prompt}],
         'max_tokens':100,'temperature':0.0}
+    if getattr(args,'disable_thinking',False):
+        body['enable_thinking']=False
     request=urllib.request.Request(args.base_url.rstrip('/')+'/chat/completions',data=json.dumps(body).encode(),
         headers={'Authorization':'Bearer '+key,'Content-Type':'application/json'})
     for attempt in range(5):
@@ -80,8 +82,10 @@ def main(args):
             record=json.loads(path.read_text(encoding='utf-8')) if path.exists() else {'source_file':str(source),'input':row,
                 'judge_model':args.model,'provider':args.provider,'max_tokens':100,
                 'model_label':'official_model' if args.model in {'anthropic.claude-3-sonnet-20240229-v1:0','claude-3-sonnet-20240229'} else 'substitute_judge',
+                'enable_thinking':False if getattr(args,'disable_thinking',False) else None,
                 'evaluation_error_analysis':{},'raw_judgments':{},'status':'pending'}
             assert record['judge_model']==args.model and record['provider']==args.provider
+            assert record.get('enable_thinking')==(False if getattr(args,'disable_thinking',False) else None)
             if record['status']=='complete':
                 totals['complete']+=1
                 continue
@@ -132,4 +136,5 @@ if __name__=='__main__':
     p.add_argument('--model',default='anthropic.claude-3-sonnet-20240229-v1:0')
     p.add_argument('--base-url')
     p.add_argument('--key-env',default='PREFEVAL_JUDGE_API_KEY')
+    p.add_argument('--disable-thinking',action='store_true',help='Explicit non-thinking mode for compatible judge models.')
     main(p.parse_args())
