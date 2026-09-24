@@ -10,6 +10,30 @@ preferences, question paraphrases and real RGB recurrence, then K2/K4 updates.
 Teacher fit alone does not complete this objective. Preserve failures and original
 PrefEval scoring; retain DreamLite native source conditioning / official FM.
 
+Latest execution check 2026-09-24 09:12 CST: BOTH write-ackmix FM runs completed
+2048/2048 updates with final checkpoint markers. Drivers are now generating the
+fixed benchmark PNGs; A87/308 and B86/308 were complete at that snapshot. Four
+rollout children run normally: A0 PID993124 GPU0, A1 PID993125 GPU1,
+B0 PID993742 GPU2, B1 PID993743 GPU3. Parent drivers722505/722506 remain alive.
+No new failure receipt. Student readouts have not started at that snapshot;
+wait for the original drivers, never redispatch rollout/Reader shards.
+
+Both arms have8192 draws over64 training states,128 conditions, exactly64 draws
+per acknowledgment version per state. No dev state or retain position entered
+training. `ackmix-training-summary.json` and `ackmix-training-evidence.jsonl.gz`
+are locally verified and uploaded to the release. The gzip has15 records including
+all4096 optimization rows;919,045 bytes; SHA256
+32dce16b3244a0dd609d54b41d71de17e8b572a285b6152a10996f288dc3f806.
+Parameter files are1,560,539,490 bytes each. A SHA256
+bfe2393ac7ad48bd492c32bccf0709777fd3469a70b6357ff577ffbb05cbe03e;
+B229f714cf94278be495fab6bd5648e32973bb202c57818dfd4288572fd64eb2e.
+Direct shared-disk upload session16674 is in progress; poll it and inspect
+`writer-release-upload-write-ackmix-{A,B}.json` / the combined receipt before
+retrying. Uploader now accepts `--stage write-ackmix`, keeping corrected files
+distinct from original weights/PNGs. Do not upload incomplete RGB archives; wait
+for all308 endpoints per arm. Full optimizer states remain on shared disk. No corrected performance
+claim is available until the full paired readout completes.
+
 Latest 2026-09-24 08:30 CST: exact-training-input diagnostic is COMPLETE,
 all128 PNGs/readouts and four pipeline markers. All former workers exited.
 Read `TRAIN_INPUT_RESULTS_AND_ACKMIX_PLAN.md` and the archived diagnostic summary.
@@ -22,7 +46,7 @@ natural answers pending the official judge; no A/B method winner is declared.
 
 The complete first write pilot remains A69/180 / B71/180 on dev T1 over two
 correlated seeds, vs blank36/90 and text79/90. See WRITE_PILOT_RESULTS.md.
-New correction `write-ackmix` is prepared: each arm starts from its own fixed
+Correction `write-ackmix` used each arm's own fixed
 write endpoint, unchanged64 targets, fresh AdamW and2048 additional official FM
 updates. Each training disclosure alternates its released SFT acknowledgment
 and cached Reader acknowledgment,64 draws per version. Dev data is excluded.
@@ -34,8 +58,9 @@ Five targeted checks and syntax compilation pass. Correction launched once at
 A driver PID722505, session6e0d5023532c49f39dfc36e3b02c3e42, owns GPUs0/1;
 FM child PID722509 runs on GPU0. B driver PID722506,
 session59cf1f27561142ecbc0574ec41560e9d, owns GPUs2/3; FM child PID722510 GPU2.
-Both logged27/2048 completed optimizer steps in the first progress check,
-with finite losses and no failure receipt. Do not duplicate dispatch.
+Both logged27/2048 steps in the first progress check and have since completed
+2048/2048. Former FM children exited; current rollout PIDs are at the top.
+Do not duplicate dispatch.
 Drivers under `pipeline-ackmix/{A,B}` schedule FM2048, then the fixed benchmark
 RGB/readout shards, and stop for analysis. Check their `job-*.json`, logs and
 completion markers. New artifacts use stage `write-ackmix`; original `write`

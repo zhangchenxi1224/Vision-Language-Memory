@@ -5,8 +5,9 @@ Completed exact-input diagnostic: T1 A38/64, B62/64 vs same-seed benchmark-input
 A29/64, B30/64. Acknowledgment sensitivity is a major failure mechanism.
 Read TRAIN_INPUT_RESULTS_AND_ACKMIX_PLAN.md. New write-ackmix session
  de87783932384e7b813c5c7cd76d945e runs on dl-clear-retain-h200x4-20260914 only,
-2048 additional official-FM updates per arm, unchanged teachers, two train-only
-acknowledgment versions. All original results remain archived. Dev90 preferences
+both2048 additional official-FM updates per arm completed, unchanged teachers,
+two train-only acknowledgment versions. Four original workers now generate
+benchmark PNGs; the corrected fixed readout is pending. All original results remain archived. Dev90 preferences
 remain outside optimization;7,440 natural answers await the official judge.
 Finish the fixed correction/readout before retain/K2/K4 or further changes.
 Old Plan13/C2C instructions below are superseded. Do not duplicate workers.

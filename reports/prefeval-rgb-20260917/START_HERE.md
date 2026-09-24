@@ -10,8 +10,9 @@ evidence, not unseen-preference success. All diagnostic data and128 PNGs are on
 GitHub.7,440 natural answers remain unjudged. The new `write-ackmix` stage mixes
 released SFT / Reader acknowledgments only on64 training states, same targets,
 official FM,2048 additional updates per arm. Session de87783932384e7b813c5c7cd76d945e
-is running on the designated notebook; both arms reached27 updates initially.
-Drivers will run the full frozen154-state readout, then stop for analysis.
+completed both2048-update FM endpoints on the designated notebook. Original
+drivers now generate the full frozen154-state benchmark PNGs, then read them
+and stop for analysis. No corrected score is available yet.
 No retain/K2/K4 queued. Inspect current receipts before resuming. No C2C.
 
 ## Latest: parallel official-answer / MCQ supervision, 2026-09-24
