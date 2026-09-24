@@ -69,8 +69,8 @@ is located. Do not use OOD scores to select the correction or change scoring.
 
 The diagnostic was dispatched at 07:56 CST on the same designated four-H200
 notebook, session `b2187482df5649ae812ffde225bec0a2`, commit `1ea44f8`.
-Four workers divide A/B into 32-state shards. The first observed progress was
-40/64 generated PNGs per arm, with no diagnostic failure. Read EXECUTION_LIVE.md
+Four workers divide A/B into 32-state shards. All128 diagnostic PNGs are now
+complete and four Reader workers have started, with no diagnostic failure. Read EXECUTION_LIVE.md
 for current receipts and progress; this is not a diagnostic result yet.
 
 ## Raw evidence

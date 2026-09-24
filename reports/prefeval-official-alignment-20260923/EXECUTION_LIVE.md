@@ -26,8 +26,10 @@ with native28-step inference and unchanged five-form Reader tasks. No training
 updates. Read `dispatch-train-input.json` before resuming; do not duplicate it.
 Only GPU notebook dl-clear-retain-h200x4-20260914, current host suffix3eiz2r5ftf.
 Workers A0 PID295617 GPU0, A1 PID295618 GPU1, B0 PID295619 GPU2, B1 PID295620 GPU3.
-Each wrapper generates32 PNGs then evaluates them. Expected128 PNGs/conditions
-in total. Output folders `rollouts/{A,B}/training-initial` and
+All128 diagnostic PNGs are now complete (64 per arm). Reader children are
+A0 PID338917 GPU0, A1 PID338925 GPU1, B0 PID338916 GPU2, B1 PID338920 GPU3;
+all four allocated about9.4 GiB and started evaluation. At the first Reader
+check no full condition file was saved yet. Expected128 condition files in total. Output folders `rollouts/{A,B}/training-initial` and
 `evaluations/training-input-students/{A,B}/write`; completion markers
 `pipeline-train-input/{A,B}/complete-{0,1}.json`. Monitor these and log files
 `train-input-{arm}-{shard}-b2187482df5649ae812ffde225bec0a2.log`.
