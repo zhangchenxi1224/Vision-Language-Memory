@@ -20,6 +20,8 @@
 更不能代替整体 L2 指标。
 
 下一项[训练源图单步定位](RETAIN_TRAINING_SOURCE_PROBE.md)固定这一差异，不再新增训练。
+该定位现已完成：[训练时见过的可读 PNG 在两种噪声下一步后也失败](RETAIN_TRAINING_SOURCE_RESULTS.md)，
+因此新旧初写图的分布变化不是足够解释。
 
 - [完整读回与递归核验](evidence/initial-source-first-B/initial-source-first-B-verification.json)
 - [16 条原始记录](evidence/initial-source-first-B/B/first-case-T1/readback-0.jsonl)

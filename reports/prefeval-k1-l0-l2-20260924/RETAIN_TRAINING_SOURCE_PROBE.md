@@ -26,4 +26,5 @@
 
 10:07 实际启动：冻结提交 `912335d`、GPU1、PID 248079，已确认存活；
 启动后该卡约 63.3 GB / 143.8 GB，未发生资源不足。
-[完整启动参数](evidence/training-source-probe-launch.json)。结果待完成。
+[完整启动参数](evidence/training-source-probe-launch.json)。10:13 已完整完成，
+[训练源图仍在第一次更新失败](RETAIN_TRAINING_SOURCE_RESULTS.md)。
