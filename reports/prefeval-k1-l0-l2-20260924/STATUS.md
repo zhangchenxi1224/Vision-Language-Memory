@@ -2,13 +2,15 @@
 
 2026-09-24，实验仍在运行，不是最终性能报告。
 
-## 最新状态（北京时间 08:52）
+## 最新状态（北京时间 08:55）
 
 - 原两组保持训练均已完整完成，最终 pilot/dev RGB 链继续生成，最终完整 L2 成绩待读回。
 - [VAE 往返定位](CODEC_PROBE_RESULTS.md)已完成：固定首例 B 的 5 张图往返前后均正确；
   A 的 5 张图前后均错误；原图重读与此前输出 token 全部一致。下一轮固定
   [仅用初写 PNG 的保持输入](INITIAL_SOURCE_RETAIN_PROTOCOL.md)已在现有 Reader 两卡启动，
   训练 PID 3371031/3371033，冻结提交 `8cd5785`；原主实验继续。
+  最新观察 A/B 45/135 步，双方前 32 步损失及梯度与原保持组完全相等；
+  见[对照核验](evidence/initial-source-retain-first32-verification.json)。
 - A 未训练 dev90 两链 T1 自然回答的 360 条已完整封存，180 张图片哈希核对通过；
   与主读取已存在的 285 条重复记录逐项一致，没有向运行中的文件追加。
   [导出清单](evidence/student-A-dev-T1-free-complete/manifest.json)。自然回答评分仍待完成。
