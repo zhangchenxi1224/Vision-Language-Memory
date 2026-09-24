@@ -12,7 +12,7 @@ released SFT / Reader acknowledgments only on64 training states, same targets,
 official FM,2048 additional updates per arm. Session de87783932384e7b813c5c7cd76d945e
 completed both2048-update FM endpoints on the designated notebook. Original
 drivers completed all616 benchmark PNGs and now read them on four GPUs
-(A94/462,B96/462 conditions at09:56 CST), then stop for analysis. Both corrected
+(A191/462,B194/462 conditions at10:30 CST), then stop for analysis. Both corrected
 Writer checkpoints are fully uploaded and verified. No final corrected score yet.
 No retain/K2/K4 queued. Inspect current receipts before resuming. No C2C.
 

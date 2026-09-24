@@ -10,9 +10,9 @@ preferences, question paraphrases and real RGB recurrence, then K2/K4 updates.
 Teacher fit alone does not complete this objective. Preserve failures and original
 PrefEval scoring; retain DreamLite native source conditioning / official FM.
 
-Latest execution check 2026-09-24 09:56 CST: BOTH write-ackmix FM endpoints and
+Latest execution check 2026-09-24 10:30 CST: BOTH write-ackmix FM endpoints and
 all616 benchmark PNGs are COMPLETE (308 per arm). Four Reader workers are now
-running the fixed matrix: A94/462 and B96/462 condition files at that snapshot,
+running the fixed matrix: A191/462 and B194/462 condition files at that snapshot,
 no completed Reader shard yet. A0 PID1184536 GPU0, A1 PID1184538 GPU1,
 B0 PID1184456 GPU2, B1 PID1184457 GPU3; all four hold about9.4 GiB GPU memory.
 Parent drivers722505/722506 remain alive. Former rollout children have exited.
@@ -32,13 +32,18 @@ Direct shared-disk Writer upload session16674 COMPLETED. A asset584909618 and
 B584909646 each have1,560,539,490 bytes and GitHub SHA256 matching the source
 checkpoint hashes above. Remote `writer-release-upload-write-ackmix-{A,B}.json`
 and combined receipt exist. Do not repeat completed uploads.
-All616 new PNGs are being uploaded by session4097, after checking each PNG
-against its completion marker. Archive sizes: A384,788,480 bytes,
-B278,763,520 bytes. Names `student-rgb-{A,B}-write-ackmix.tar`; remote receipts
-`student-png-release-upload-write-ackmix-{A,B}.json`. Inspect the session/receipts
-before retrying. Uploader uses `--stage write-ackmix`, retaining distinct original
-weights/PNGs. Full optimizer states remain on shared disk. No corrected
-performance claim is available until the full paired readout completes.
+All616 new PNGs are now fully uploaded; session4097 COMPLETED successfully.
+Archive A `student-rgb-A-write-ackmix.tar`:384,788,480 bytes, asset584959962,
+SHA2568bb7c2ecaf1b58dad07024fe8c71f1e9fc21ac3923f20949e58788fd00b599df.
+Archive B `student-rgb-B-write-ackmix.tar`:278,763,520 bytes, asset584959960,
+SHA2561bd77fa79ff9a1d38b29b928b54383dd3a4b47409470dd19217e0d0e4b9dec38.
+All source PNG hashes were checked before packing; both GitHub tar digests match.
+Remote receipts `student-png-release-upload-write-ackmix-{A,B}.json` and combined
+receipt exist. `ackmix-assets-manifest.json` records completed Writer/PNG assets
+and training evidence. Do not repeat any of these transfers. Full optimizer
+states remain on shared disk. No corrected performance claim is available until
+the full paired readout completes. No new training/evaluation process was launched
+by this check; all four original Readers and both drivers remain alive.
 
 Latest 2026-09-24 08:30 CST: exact-training-input diagnostic is COMPLETE,
 all128 PNGs/readouts and four pipeline markers. All former workers exited.
