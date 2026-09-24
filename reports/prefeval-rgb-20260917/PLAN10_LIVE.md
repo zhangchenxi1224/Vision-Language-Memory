@@ -1,4 +1,16 @@
-# Running correction — 2026-09-24: paired acknowledgment FM augmentation
+# Latest authority — 2026-09-24: pause new iterations, finish existing run
+
+User explicitly requests that the currently running remote experiment finish;
+new iterations and the Goal remain paused. Current write-ackmix Readers resumed
+after a brief SIGSTOP; no new run was launched. At11:31 CST A354/462 and
+B357/462 conditions were complete. Monitor/archive/report this fixed run only,
+then pause the completion-monitor automation. No new diagnostic, training,
+retain/K2/K4, instance restart or recovery jobs without further user direction.
+Read `../prefeval-official-alignment-20260923/EXECUTION_LIVE.md` and
+`../prefeval-official-alignment-20260923/COMPLETED_EXPERIMENTS_REVIEW_20260924.md`.
+All older continuation instructions below are superseded by this pause.
+
+# Previous running correction — 2026-09-24: paired acknowledgment FM augmentation
 
 Read `../prefeval-official-alignment-20260923/EXECUTION_LIVE.md` first.
 Completed exact-input diagnostic: T1 A38/64, B62/64 vs same-seed benchmark-input

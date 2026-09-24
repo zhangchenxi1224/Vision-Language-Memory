@@ -1,5 +1,17 @@
 # PrefEval RGB memory: execution brief, 2026-09-17
 
+## Latest authority: new iterations paused; existing evaluation continues
+
+2026-09-24: user requested a full results review and paused new iterations,
+then explicitly instructed that the already-running remote experiment finish.
+Goal is paused. Existing write-ackmix Readers resumed; do not duplicate them.
+At11:31 CST A354/462 and B357/462 conditions were complete. Only monitor,
+archive and report this fixed run, then pause the completion-monitor automation.
+No new diagnostic/training/retain/K2/K4, instance restart or recovery dispatch.
+This supersedes every older continuation instruction below.
+Read [the comprehensive completed-experiment report](../prefeval-official-alignment-20260923/COMPLETED_EXPERIMENTS_REVIEW_20260924.md)
+and [current execution state](../prefeval-official-alignment-20260923/EXECUTION_LIVE.md).
+
 ## Live: acknowledgment sensitivity located; paired FM correction running
 
 Read `../prefeval-official-alignment-20260923/EXECUTION_LIVE.md` and

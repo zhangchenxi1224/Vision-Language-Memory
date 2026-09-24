@@ -2,6 +2,20 @@
 
 ## Current objective and authority
 
+**Latest user instruction, 2026-09-24: new iterations are PAUSED. Let the
+currently running remote experiment finish.** Goal is paused. The existing
+write-ackmix drivers/readers were resumed after a brief SIGSTOP; no new run was
+started. Receipt `EXISTING_RUN_CONTINUES_20260924.json` supersedes
+`PAUSED_BY_USER_20260924.json`. At11:31 CST the fixed matrix had A354/462 and
+B357/462 completed conditions, with the four original Readers active.
+Do not start new training, diagnostic, retain, K2/K4 or recovery jobs. Monitor
+only the existing dispatch, archive and report its complete results, then pause
+the completion-monitor automation. If interrupted, preserve/report the state
+and wait for user direction; do not restart the instance or training.
+Read `COMPLETED_EXPERIMENTS_REVIEW_20260924.md` for the full completed-experiment
+review. All older next-iteration instructions below are historical and do not
+override this pause. Incomplete readout subsets are not final performance.
+
 User authorized implementation and evidence-driven iteration on 2026-09-24 using
 the inspire skill. Only GPU notebook `dl-clear-retain-h200x4-20260914` is allowed.
 No codex-with-chatgpt. Read `NEXT_EXPERIMENT_PLAN.md`; old Plan13 / direct28-gradient
