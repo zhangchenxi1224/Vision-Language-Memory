@@ -11,8 +11,9 @@ GitHub.7,440 natural answers remain unjudged. The new `write-ackmix` stage mixes
 released SFT / Reader acknowledgments only on64 training states, same targets,
 official FM,2048 additional updates per arm. Session de87783932384e7b813c5c7cd76d945e
 completed both2048-update FM endpoints on the designated notebook. Original
-drivers now generate the full frozen154-state benchmark PNGs, then read them
-and stop for analysis. No corrected score is available yet.
+drivers completed all616 benchmark PNGs and now read them on four GPUs
+(A94/462,B96/462 conditions at09:56 CST), then stop for analysis. Both corrected
+Writer checkpoints are fully uploaded and verified. No final corrected score yet.
 No retain/K2/K4 queued. Inspect current receipts before resuming. No C2C.
 
 ## Latest: parallel official-answer / MCQ supervision, 2026-09-24

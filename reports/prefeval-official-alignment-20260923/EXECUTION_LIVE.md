@@ -10,13 +10,14 @@ preferences, question paraphrases and real RGB recurrence, then K2/K4 updates.
 Teacher fit alone does not complete this objective. Preserve failures and original
 PrefEval scoring; retain DreamLite native source conditioning / official FM.
 
-Latest execution check 2026-09-24 09:12 CST: BOTH write-ackmix FM runs completed
-2048/2048 updates with final checkpoint markers. Drivers are now generating the
-fixed benchmark PNGs; A87/308 and B86/308 were complete at that snapshot. Four
-rollout children run normally: A0 PID993124 GPU0, A1 PID993125 GPU1,
-B0 PID993742 GPU2, B1 PID993743 GPU3. Parent drivers722505/722506 remain alive.
-No new failure receipt. Student readouts have not started at that snapshot;
-wait for the original drivers, never redispatch rollout/Reader shards.
+Latest execution check 2026-09-24 09:56 CST: BOTH write-ackmix FM endpoints and
+all616 benchmark PNGs are COMPLETE (308 per arm). Four Reader workers are now
+running the fixed matrix: A94/462 and B96/462 condition files at that snapshot,
+no completed Reader shard yet. A0 PID1184536 GPU0, A1 PID1184538 GPU1,
+B0 PID1184456 GPU2, B1 PID1184457 GPU3; all four hold about9.4 GiB GPU memory.
+Parent drivers722505/722506 remain alive. Former rollout children have exited.
+No new failure receipt. Do not interpret incomplete readout subsets as final
+paired scores. Wait for the original drivers; do not redispatch any live reader.
 
 Both arms have8192 draws over64 training states,128 conditions, exactly64 draws
 per acknowledgment version per state. No dev state or retain position entered
@@ -27,12 +28,17 @@ all4096 optimization rows;919,045 bytes; SHA256
 Parameter files are1,560,539,490 bytes each. A SHA256
 bfe2393ac7ad48bd492c32bccf0709777fd3469a70b6357ff577ffbb05cbe03e;
 B229f714cf94278be495fab6bd5648e32973bb202c57818dfd4288572fd64eb2e.
-Direct shared-disk upload session16674 is in progress; poll it and inspect
-`writer-release-upload-write-ackmix-{A,B}.json` / the combined receipt before
-retrying. Uploader now accepts `--stage write-ackmix`, keeping corrected files
-distinct from original weights/PNGs. Do not upload incomplete RGB archives; wait
-for all308 endpoints per arm. Full optimizer states remain on shared disk. No corrected performance
-claim is available until the full paired readout completes.
+Direct shared-disk Writer upload session16674 COMPLETED. A asset584909618 and
+B584909646 each have1,560,539,490 bytes and GitHub SHA256 matching the source
+checkpoint hashes above. Remote `writer-release-upload-write-ackmix-{A,B}.json`
+and combined receipt exist. Do not repeat completed uploads.
+All616 new PNGs are being uploaded by session4097, after checking each PNG
+against its completion marker. Archive sizes: A384,788,480 bytes,
+B278,763,520 bytes. Names `student-rgb-{A,B}-write-ackmix.tar`; remote receipts
+`student-png-release-upload-write-ackmix-{A,B}.json`. Inspect the session/receipts
+before retrying. Uploader uses `--stage write-ackmix`, retaining distinct original
+weights/PNGs. Full optimizer states remain on shared disk. No corrected
+performance claim is available until the full paired readout completes.
 
 Latest 2026-09-24 08:30 CST: exact-training-input diagnostic is COMPLETE,
 all128 PNGs/readouts and four pipeline markers. All former workers exited.
