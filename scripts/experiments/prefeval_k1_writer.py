@@ -70,7 +70,8 @@ def train(args, pipe, rows):
         if args.stage == 'retain':
             for position in range(1,11):
                 # prefix-00 contains initial write; prefix-(p-1) is input to distractor p.
-                path = args.sources / pid.replace(':','_') / 'seed-0' / f'prefix-{position-1:02d}.png'
+                source_position = 0 if args.retain_source_mode == 'initial' else position-1
+                path = args.sources / pid.replace(':','_') / 'seed-0' / f'prefix-{source_position:02d}.png'
                 cache[pid,position] = cache_condition(pipe, path,
                     event_text(row['history'][position*2:position*2+2]), args.device)
         print(json.dumps({'cached': i+1, 'total': len(rows), 'stage': args.stage}), flush=True)
@@ -80,6 +81,8 @@ def train(args, pipe, rows):
         'flow': 'official target/noise; source condition only', 'seed': 20260924,
         'official_commit': OFFICIAL_REFERENCE_COMMIT,
         'implementation_sha256': sha(Path(__file__))}
+    if args.retain_source_mode == 'initial':
+        manifest['retain_source_mode'] = 'initial_student_png_for_all_distractor_positions'
     save_json(args.output / 'manifest.json', manifest)
     predictor = DifferentiableDreamLiteMobileSampler.from_pipeline(pipe, checkpoint_unet=False)
     optimizer = torch.optim.AdamW(pipe.unet.parameters(), lr=5e-5, betas=(.9,.999), eps=1e-8, weight_decay=1e-4)
@@ -181,6 +184,8 @@ def rollout(args, pipe, rows):
 
 def main(args):
     configure_strict_cuda_determinism(0)
+    if args.retain_source_mode != 'recursive':
+        assert args.mode == 'train' and args.stage == 'retain'
     rows = load_training_records(args.split) if args.mode == 'train' else load_records(args.split,history_file=args.history_file)
     if args.limit:
         rows = rows[:args.limit]
@@ -201,6 +206,7 @@ if __name__ == '__main__':
         p.add_argument('--'+name,type=Path,required=True)
     p.add_argument('--teachers',type=Path)
     p.add_argument('--sources',type=Path)
+    p.add_argument('--retain-source-mode', choices=['recursive','initial'], default='recursive')
     p.add_argument('--device',default='cuda:0')
     p.add_argument('--steps',type=int,default=2048)
     p.add_argument('--snapshot-steps',type=int,nargs='+',default=[])
