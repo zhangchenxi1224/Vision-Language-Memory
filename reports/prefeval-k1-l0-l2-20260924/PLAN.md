@@ -104,6 +104,10 @@ T1 为官方原文，其余为直接问句、指令、情境陈述和条件请�
 并用空图/错配图/全文参照判断视觉记忆是否有额外贡献。
 当前仅准备输入和脚本，尚未生成 acknowledgment、优化这些偏好的 latent 或读取评估成绩。
 
+2026-09-24 10:24 调度补充：按[输入准备登记](OFFICIAL180_INPUT_PREPARATION.md)，
+固定 Reader acknowledgment 提前生成并封存，以减少最终评估等待；该步骤不依赖 Writer，
+不用于模型选择。正式留出集视觉评测仍在 Writer 方案冻结后执行。
+
 在最终官方推理前核对偏好文本暴露：64 pilot 与 90 dev 无重复；730 train 与 90 dev 无重复；
 64 pilot 与 180 official 也无重复。730 train 与 180 official 则有 3 条偏好原文完全相同，
 原题在 Unicode/大小写/空白归一化后也相同，尽管 topic 和 ID 不同：
