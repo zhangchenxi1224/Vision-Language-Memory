@@ -78,6 +78,18 @@ def writer_event(record, index=0):
     history = record['history']
     return '\n'.join(f'{m["role"]}: {m["content"]}' for m in history[2*index:2*index+2])
 
+def initial_ack_event(record, reader_history, variant):
+    """Two train-only initial exchanges, sharing the unchanged user disclosure."""
+    if record['split'] != 'train' or variant not in (0, 1):
+        raise ValueError('Acknowledgment augmentation is restricted to training states')
+    original = record['history'][:2]
+    candidate = reader_history[:2]
+    if (len(original) != 2 or len(candidate) != 2 or
+            [x['role'] for x in candidate] != ['user', 'assistant'] or
+            candidate[0] != original[0]):
+        raise ValueError('Require identical disclosure and one complete acknowledgment')
+    return writer_event(dict(history=original if variant == 0 else candidate))
+
 def validate_forms(question, forms):
     if set(forms) != set(EVAL_FORMS) or forms['T1'] != question:
         raise ValueError('Require unchanged T1 and exactly four declared paraphrases')

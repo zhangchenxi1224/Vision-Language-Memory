@@ -11,7 +11,7 @@ import uuid
 
 def main():
     p=argparse.ArgumentParser()
-    p.add_argument('phase',choices=['author','train','pilot','write-rollout','write-students','train-input'])
+    p.add_argument('phase',choices=['author','train','pilot','write-rollout','write-students','train-input','ackmix'])
     p.add_argument('--output',type=Path,required=True)
     p.add_argument('--questions',type=Path)
     p.add_argument('--rollout-shard',type=int,choices=[0,1],default=0)
@@ -34,7 +34,12 @@ def main():
         commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip(),
         gpu_binding=subprocess.check_output(['nvidia-smi','--query-gpu=index,uuid,name','--format=csv,noheader'],text=True))
     assignments=[(g,'A',g,4) for g in range(4)] if a.phase=='author' else [(0,'A',0,2),(1,'A',1,2),(2,'B',0,2),(3,'B',1,2)]
-    if a.phase=='pilot': assignments=[('0,1','A',0,1),('2,3','B',0,1)]
+    if a.phase in ('pilot','ackmix'): assignments=[('0,1','A',0,1),('2,3','B',0,1)]
+    if a.phase=='ackmix':
+        for arm in ('A','B'):
+            for shard in range(2):
+                if not (a.output/'pipeline-train-input'/arm/f'complete-{shard}.json').exists():
+                    raise RuntimeError('Finish the exact-input diagnostic before acknowledgment correction')
     if a.phase=='train-input':
         for arm in ('A','B'):
             if not (a.output/'pipeline'/arm/'complete.json').exists():
@@ -64,9 +69,10 @@ def main():
             '--reader',str(models/'Qwen3-VL-4B-Instruct'),'--base',str(models/'DreamLite-base-a9a0f15-20260907'),
             '--output',str(a.output),'--arm',arm,'--shard',str(shard),'--shards',str(shards)]
         if a.questions: cmd+=['--questions',str(a.questions)]
-        if a.phase=='pilot':
+        if a.phase in ('pilot','ackmix'):
             cmd=[sys.executable,'-u',str(root/'scripts/inspire/run_prefeval_official_pilot.py'),
                  '--output',str(a.output),'--arm',arm,'--gpus',str(gpu)]
+            if a.phase=='ackmix':cmd+=['--stage','write-ackmix']
             if a.resume:cmd+=['--resume']
         if a.phase=='train-input':
             cmd=[sys.executable,'-u',str(root/'scripts/inspire/run_prefeval_train_input_diagnostic.py'),

@@ -24,7 +24,7 @@ def main():
     parser=argparse.ArgumentParser()
     parser.add_argument('--run',type=Path,required=True)
     parser.add_argument('--release-id',type=int,required=True)
-    parser.add_argument('--kind',choices=('writers','student-pngs'),default='writers')
+    parser.add_argument('--kind',choices=('writers','student-pngs','training-input-pngs'),default='writers')
     args=parser.parse_args()
     token=sys.stdin.readline().strip()
     if not token:raise RuntimeError('Missing transient GitHub authentication')
@@ -35,7 +35,8 @@ def main():
     status,response=request_json(release,headers)
     if status!=200:raise RuntimeError(f'Release lookup HTTP {status}')
     assets={x['name']:x for x in response['assets']}
-    receipt='writer-release-upload' if args.kind=='writers' else 'student-png-release-upload'
+    receipt={'writers':'writer-release-upload','student-pngs':'student-png-release-upload',
+             'training-input-pngs':'training-input-png-release-upload'}[args.kind]
 
     def upload(arm):
         if args.kind=='writers':
@@ -44,10 +45,12 @@ def main():
             expected=json.loads((folder/'complete.json').read_text())['checkpoint_sha256']
             name=f'writer-{arm}-write-2048.pt'
         else:
-            folder=args.run/'rollouts'/arm/'write'
+            split='training-initial' if args.kind=='training-input-pngs' else 'write'
+            folder=args.run/'rollouts'/arm/split
             markers=sorted(folder.glob('*/seed-*/complete.json'))
-            if len(markers)!=308:raise RuntimeError('Require all 154 x2 write PNG endpoints')
-            name=f'student-rgb-{arm}-write.tar'
+            expected_count=64 if args.kind=='training-input-pngs' else 308
+            if len(markers)!=expected_count:raise RuntimeError('Require the complete declared PNG endpoints')
+            name=f'student-rgb-{arm}-{split}.tar'
             path=args.run/'archives'/name
             path.parent.mkdir(exist_ok=True)
             if not path.exists():

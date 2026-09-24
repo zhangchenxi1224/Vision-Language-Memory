@@ -2,7 +2,7 @@ import ast
 from collections import Counter
 from pathlib import Path
 import pytest
-from vision_memory.prefeval.official_ab import MCQ_TEMPLATE, training_item, writer_event
+from vision_memory.prefeval.official_ab import MCQ_TEMPLATE, training_item, writer_event, initial_ack_event
 
 def test_official_mcq_template():
     source=Path('.cache/prefeval-upstream/utils/utils_mcq.py')
@@ -31,6 +31,17 @@ def test_writer_only_sees_current_exchange():
            question='future question',answer='future target',options=['gold'])
     assert writer_event(r)=='user: current disclosure\nassistant: ack'
     assert writer_event(r,1)=='user: next event\nassistant: next ack'
+
+def test_ack_augmentation_keeps_disclosure_and_train_boundary():
+    r=dict(split='train',history=[dict(role='user',content='I avoid spicy food.'),
+        dict(role='assistant',content='SFT acknowledgment'),dict(role='user',content='future question')],
+        answer='future target',options=['gold'])
+    h=[r['history'][0],dict(role='assistant',content='Reader acknowledgment'),
+       dict(role='user',content='future cached question')]
+    assert initial_ack_event(r,h,0)=='user: I avoid spicy food.\nassistant: SFT acknowledgment'
+    assert initial_ack_event(r,h,1)=='user: I avoid spicy food.\nassistant: Reader acknowledgment'
+    with pytest.raises(ValueError):initial_ack_event(dict(r,split='dev'),h,1)
+    with pytest.raises(ValueError):initial_ack_event(r,[dict(role='user',content='changed preference'),h[1]],1)
 
 def test_official_mcq_parser_parity():
     pytest.importorskip('bs4')

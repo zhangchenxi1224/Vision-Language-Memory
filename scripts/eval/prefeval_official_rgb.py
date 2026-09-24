@@ -130,14 +130,14 @@ def evaluate(a):
             path=a.output/'teachers'/a.arm/r['id'].replace(':','-')/'memory.png'
             conditions=[('teacher',0,0,path)]
         elif a.phase=='references':
-            positions=(0,) if a.stage=='write' else (0,5,10)
+            positions=(0,5,10) if a.stage=='retain' else (0,)
             conditions=[(kind,pos,0,None) for kind in ('blank','text') for pos in positions]
         elif a.split=='training-initial':
             path=a.output/'rollouts'/a.arm/'training-initial'/r['id'].replace(':','-')/'seed-0/memory-00.png'
             conditions=[('matched',0,0,path)]
         else:
             root=a.output/'rollouts'/a.arm/a.stage/r['id'].replace(':','-')
-            positions=(0,) if a.stage=='write' else (0,5,10)
+            positions=(0,5,10) if a.stage=='retain' else (0,)
             conditions=[('matched',pos,seed,root/f'seed-{seed}'/f'memory-{pos:02d}.png') for seed in range(2) for pos in positions]
             donor=json.loads((a.report/'pilot-mismatch-controls.json').read_text())['donors'][r['id']]['donor']
             droot=a.output/'rollouts'/a.arm/a.stage/donor.replace(':','-')
@@ -177,7 +177,7 @@ def main():
     p=argparse.ArgumentParser();p.add_argument('phase',choices=['rollout','teachers','students','references'])
     p.add_argument('--output',type=Path,required=True);p.add_argument('--questions',type=Path,required=True)
     p.add_argument('--report',type=Path,default=ROOT/'reports/prefeval-official-alignment-20260923')
-    p.add_argument('--arm',choices=['A','B'],default='A');p.add_argument('--stage',choices=['write','retain'],default='write')
+    p.add_argument('--arm',choices=['A','B'],default='A');p.add_argument('--stage',choices=['write','write-ackmix','retain'],default='write')
     p.add_argument('--split',choices=['training','benchmark','training-initial'],default='benchmark')
     p.add_argument('--device',default='cuda:0');p.add_argument('--shard',type=int,default=0);p.add_argument('--shards',type=int,default=1)
     a=p.parse_args()

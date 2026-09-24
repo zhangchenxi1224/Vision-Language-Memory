@@ -10,29 +10,38 @@ preferences, question paraphrases and real RGB recurrence, then K2/K4 updates.
 Teacher fit alone does not complete this objective. Preserve failures and original
 PrefEval scoring; retain DreamLite native source conditioning / official FM.
 
-Latest 2026-09-24 07:56 CST: the fixed write pilot is COMPLETE, including
-both driver completion markers and all1,360 evaluation conditions. Read
-`WRITE_PILOT_RESULTS.md` and `write-evaluation-summary.json`. T1 development MCQ
-is A69/180 (38.33%) / B71/180 (39.44%) across two correlated seeds, versus
-blank36/90 (40%) and text79/90. Seed0 correct-vs-mismatch gains are A0/90, B2/90;
-training-content students are also near blank. Shared visual memory is not shown.
-Teacher T1 A44/64 and B64/64 remain teacher fitting results. All6,800 natural
-answers await the official judge. No A/B winner, retain or K2/K4 result is claimed.
+Latest 2026-09-24 08:30 CST: exact-training-input diagnostic is COMPLETE,
+all128 PNGs/readouts and four pipeline markers. All former workers exited.
+Read `TRAIN_INPUT_RESULTS_AND_ACKMIX_PLAN.md` and the archived diagnostic summary.
+T1 exact SFT input: A38/64, B62/64; same-seed benchmark input A29/64, B30/64;
+teachers A44/64, B64/64; blank30/64. B gains32 correct /0 lost merely by restoring
+the SFT acknowledgment, with unchanged weights/disclosures/noise. This locates a
+major input-expression generalization failure, rather than universal FM failure.
+It proves neither unseen-preference memory nor recurrence/K4. There are now7,440
+natural answers pending the official judge; no A/B method winner is declared.
 
-The prepared exact-training-input diagnostic was launched once at07:56 CST,
-session `b2187482df5649ae812ffde225bec0a2`, commit1ea44f8. It reuses fixed Writer
-weights, all64 original SFT initial exchanges per arm and benchmark seed0 noise,
-with native28-step inference and unchanged five-form Reader tasks. No training
-updates. Read `dispatch-train-input.json` before resuming; do not duplicate it.
-Only GPU notebook dl-clear-retain-h200x4-20260914, current host suffix3eiz2r5ftf.
-Workers A0 PID295617 GPU0, A1 PID295618 GPU1, B0 PID295619 GPU2, B1 PID295620 GPU3.
-All128 diagnostic PNGs are now complete (64 per arm). Reader children are
-A0 PID338917 GPU0, A1 PID338925 GPU1, B0 PID338916 GPU2, B1 PID338920 GPU3;
-all four allocated about9.4 GiB and started evaluation. At the first Reader
-check no full condition file was saved yet. Expected128 condition files in total. Output folders `rollouts/{A,B}/training-initial` and
-`evaluations/training-input-students/{A,B}/write`; completion markers
-`pipeline-train-input/{A,B}/complete-{0,1}.json`. Monitor these and log files
-`train-input-{arm}-{shard}-b2187482df5649ae812ffde225bec0a2.log`.
+The complete first write pilot remains A69/180 / B71/180 on dev T1 over two
+correlated seeds, vs blank36/90 and text79/90. See WRITE_PILOT_RESULTS.md.
+New correction `write-ackmix` is prepared: each arm starts from its own fixed
+write endpoint, unchanged64 targets, fresh AdamW and2048 additional official FM
+updates. Each training disclosure alternates its released SFT acknowledgment
+and cached Reader acknowledgment,64 draws per version. Dev data is excluded.
+The64 Reader acknowledgments become training conditions; their later scores are
+training fit. The90 dev preferences still test transfer. No OOD tuning.
+Five targeted checks and syntax compilation pass. This is currently PREPARED,
+not launched. After dispatch record `dispatch-ackmix.json` and driver/PID details
+here. Use `launch_prefeval_official_ab.py ackmix --output RUN` once; two drivers
+use GPUs0/1 and2/3, FM2048 then fixed benchmark RGB/readouts. No retain/K2/K4 is
+queued. The correction adds both input diversity and optimizer steps; do not
+attribute any improvement solely to augmentation without a matched budget control.
+
+Historical exact-input dispatch b2187482df5649ae812ffde225bec0a2 (commit1ea44f8)
+finished successfully on the current host suffix3eiz2r5ftf. Completed outputs:
+`rollouts/{A,B}/training-initial`, `evaluations/training-input-students/{A,B}/write`
+and `pipeline-train-input/{A,B}/complete-{0,1}.json`. Do not relaunch it.
+`training-input-evidence.jsonl.gz` has273 records,800,238 bytes and SHA256
+2a7f6031b4b1e184d2aaea0982c998f0418d51b3d4cbb597004ace17c485c8eb;
+local hash/records verified. All64 training states per arm remain in the evidence.
 
 The complete write evidence archive has1,398 raw records and7,004,601 bytes;
 SHA2565956ab0ac0c7b8800fe4d83ef6180b41f5958096b1eaedd1f8ff3360042747d9.
@@ -186,16 +195,14 @@ Latest child sessions/receipts at 2026-09-23 21:03 UTC:
   they allocate no model and will reuse the completed evaluation. Four GPU model
   processes are2605840 /2894200 /2605843 /2936584. Do not start additional readers.
 
-Next: finish the exact-training-input diagnostic already running. Compare all64
-paired T1 scores with the fixed benchmark's train-content seed0 and teachers.
-All64 disclosures match training; all64 benchmark acknowledgments differ.
-If exact inputs work, focus on input generalization; if they also fail, focus on
-free-running FM reconstruction / Reader sensitivity. Keep benchmark SFT and
-Reader-generated acknowledgment protocols distinct. No OOD tuning, no new FM
-or retain launch until the completed diagnostic identifies a justified correction.
-The retained official-FM/RGB route remains the mainline; neither low FM loss nor
-teacher fitting substitutes for shared visual memory. Once single write works,
-continue the planned actual training-source retain stage and K2/K4 from evidence.
+Next: deploy the fixed acknowledgment correction documented at the top, then
+finish its full154-state benchmark matrix and paired T1 analysis. The original
+exact-input diagnostic is complete and must not be relaunched. Preserve the
+original write results; all new weights/PNGs/readouts use `write-ackmix` paths.
+Both original acknowledgments and Reader acknowledgments constrain the same
+training target. Confirm held-out90-dev gains beyond blank/mismatch before
+moving to actual training-source retain or K2/K4. Neither lower FM loss nor
+better64-train fit is evidence of new-preference generalization.
 
 The official generation judge uses Claude3 Sonnet through Bedrock. No local API
 environment variables or AWS credentials profile were found; user has been asked

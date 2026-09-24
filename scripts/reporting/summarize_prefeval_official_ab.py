@@ -44,8 +44,9 @@ def summarize(root):
         phase,arm,stage,rid,condition,position,seed,family=key
         if phase!='students' or condition!='matched' or seed!=0:continue
         for control in ('blank','text','mismatched'):
+            reference_stage='write' if stage=='write-ackmix' else stage
             other=('students',arm,stage,rid,control,position,0,family) if control=='mismatched' else (
-                'references','common',stage,rid,control,position,0,family)
+                'references','common',reference_stage,rid,control,position,0,family)
             if other in paired:
                 comparisons[(arm,stage,split_by_id[rid],position,family,control)].append((value,paired[other]))
     deltas=[]

@@ -20,11 +20,13 @@ def alive(pid):
 def main():
     p=argparse.ArgumentParser();p.add_argument('--output',type=Path,required=True)
     p.add_argument('--arm',choices=['A','B'],required=True);p.add_argument('--gpus',required=True)
+    p.add_argument('--stage',choices=['write','write-ackmix'],default='write')
     p.add_argument('--resume',action='store_true');a=p.parse_args()
     if not socket.gethostname().startswith('dl-clear-retain-h200x4-20260914'):raise RuntimeError('Wrong notebook')
     gpus=a.gpus.split(',')
     if len(gpus)!=2:raise ValueError('Exactly two allocated GPUs per arm')
-    work=a.output/'pipeline'/a.arm;work.mkdir(parents=True,exist_ok=True)
+    work=a.output/('pipeline-ackmix' if a.stage=='write-ackmix' else 'pipeline')/a.arm
+    work.mkdir(parents=True,exist_ok=True)
     if (work/'complete.json').exists():return
     if (work/'running.json').exists():
         old=json.loads((work/'running.json').read_text())
@@ -55,6 +57,11 @@ def main():
     q=ROOT/'reports/prefeval-official-alignment-20260923/pilot-questions-3plus2.json'
     evaluation=['--questions',str(q),*common]
     try:
+        if a.stage=='write-ackmix':
+            for arm in ('A','B'):
+                for shard in range(2):
+                    if not (a.output/'pipeline-train-input'/arm/f'complete-{shard}.json').exists():
+                        raise RuntimeError('Finish the exact-input diagnostic before acknowledgment correction')
         # No extra optimizer steps or success-based filtering: wait for the two
         # previously launched workers' full 64-state endpoint bank.
         dispatch=json.loads((a.output/'dispatch-train.json').read_text())
@@ -64,19 +71,21 @@ def main():
             if any(not (a.output/'teachers'/a.arm/f'complete-{w["shard"]}.json').exists() and not alive(w['pid']) for w in workers):
                 raise RuntimeError('A teacher worker stopped before completing its shard')
             time.sleep(15)
-        fm=spawn('fm-write',gpus[0],'scripts/train/train_prefeval_official_fm.py',common+['--stage','write'])
-        teacher=spawn('teacher-eval',gpus[1],'scripts/eval/prefeval_official_rgb.py',['teachers',*evaluation])
-        wait(teacher)
-        references=spawn('references',gpus[1],'scripts/eval/prefeval_official_rgb.py',
-            ['references',*evaluation,'--shard','0' if a.arm=='A' else '1','--shards','2'])
-        wait(references);wait(fm)
+        fm=spawn('fm-'+a.stage,gpus[0],'scripts/train/train_prefeval_official_fm.py',common+['--stage',a.stage])
+        if a.stage=='write':
+            teacher=spawn('teacher-eval',gpus[1],'scripts/eval/prefeval_official_rgb.py',['teachers',*evaluation])
+            wait(teacher)
+            references=spawn('references',gpus[1],'scripts/eval/prefeval_official_rgb.py',
+                ['references',*evaluation,'--shard','0' if a.arm=='A' else '1','--shards','2'])
+            wait(references)
+        wait(fm)
         rollouts=[spawn(f'rollout-{i}',gpu,'scripts/eval/prefeval_official_rgb.py',
-            ['rollout',*evaluation,'--stage','write','--shard',str(i),'--shards','2']) for i,gpu in enumerate(gpus)]
+            ['rollout',*evaluation,'--stage',a.stage,'--shard',str(i),'--shards','2']) for i,gpu in enumerate(gpus)]
         for child in rollouts:wait(child)
         reads=[spawn(f'student-eval-{i}',gpu,'scripts/eval/prefeval_official_rgb.py',
-            ['students',*evaluation,'--stage','write','--shard',str(i),'--shards','2']) for i,gpu in enumerate(gpus)]
+            ['students',*evaluation,'--stage',a.stage,'--shard',str(i),'--shards','2']) for i,gpu in enumerate(gpus)]
         for child in reads:wait(child)
-        write(work/'complete.json',dict(session_id=session,status='fixed_write_pilot_complete',
+        write(work/'complete.json',dict(session_id=session,status=f'fixed_{a.stage}_pilot_complete',
             next='Summarize teachers/students/controls; official natural-answer judge pending; then decide retain stage from evidence'))
     except BaseException:
         import traceback

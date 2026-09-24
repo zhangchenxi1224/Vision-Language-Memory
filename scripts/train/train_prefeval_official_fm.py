@@ -10,7 +10,7 @@ import time
 
 ROOT=Path(__file__).resolve().parents[2]
 sys.path[:0]=[str(ROOT/'src'),str(ROOT)]
-from vision_memory.prefeval.official_ab import records, seed_for, writer_event, sha
+from vision_memory.prefeval.official_ab import records, seed_for, writer_event, sha, initial_ack_event
 from scripts.experiments.prefeval_official_ab import write, append, atomic_tensor
 
 P=Path('/inspire/ssd/project/exploration-topic/czxs26210936')
@@ -55,10 +55,21 @@ def run(a):
             raise RuntimeError('Require all fixed teacher endpoints, including imperfect ones')
         targets[r['id']]=torch.load(folder/'latent.pt',map_location=a.device,weights_only=True)
         target_hashes[r['id']]=done['latent_sha256']
+    ack_events={};ack_sources={}
+    if a.stage=='write-ackmix':
+        for r in selected:
+            path=a.output/'benchmark-history'/r['id'].replace(':','-')
+            path=path.with_suffix('.json')
+            history=json.loads(path.read_text())['history']
+            ack_events[r['id']]=[initial_ack_event(r,history,i) for i in range(2)]
+            ack_sources[r['id']]=dict(reader_history_sha256=sha(path),events=ack_events[r['id']])
     pipe,parent=load_pipe(a.device)
-    if a.stage=='retain':
+    initial_sha=None
+    if a.stage in ('retain','write-ackmix'):
         initial=torch.load(a.output/'writers'/a.arm/'write/checkpoint-final.pt',map_location='cpu',weights_only=False)
         pipe.unet.load_state_dict(initial['unet'])
+        initial_sha=sha(a.output/'writers'/a.arm/'write/checkpoint-final.pt')
+        del initial
     pipe.unet.requires_grad_(True).eval()
     sampler=DifferentiableDreamLiteMobileSampler.from_pipeline(pipe,checkpoint_unet=False)
     optimizer=torch.optim.AdamW(pipe.unet.parameters(),lr=5e-5,betas=(.9,.999),eps=1e-8,weight_decay=1e-4)
@@ -66,6 +77,10 @@ def run(a):
         parent_checkpoint=parent['parent_checkpoint_sha256'],source='previous real RGB only',
         flow='official_flow_bridge/predict_velocity; native Base condition; full UNet',
         inference=dict(steps=28,cfg=1,initial='pure Gaussian'))
+    if a.stage=='write-ackmix':
+        binding.update(initial_write_sha256=initial_sha,acknowledgments=ack_sources,
+            input_protocol='50% released SFT ack / 50% frozen Reader ack; same64 training disclosures',
+            fresh_optimizer=True)
     start=0
     if (out/'checkpoint-latest.pt').exists():
         ck=torch.load(out/'checkpoint-latest.pt',map_location='cpu',weights_only=False)
@@ -77,8 +92,8 @@ def run(a):
     write(out/'identity.json',dict(binding=binding,host=socket.gethostname(),
         commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()))
     gray=Image.new('RGB',(1024,1024),(128,128,128));contexts={}
-    def context(record,position):
-        key=(record['id'],position)
+    def context(record,position,variant=0):
+        key=(record['id'],position,variant)
         if key not in contexts:
             image=gray
             if position:
@@ -86,7 +101,8 @@ def run(a):
                 image=Image.open(path).convert('RGB')
             with torch.no_grad():
                 source=pipe.prepare_image_latents(pipe.image_processor.preprocess(image),dtype=torch.float32,device=a.device)
-                cond=encode_native_base_edit_condition(pipe,image,writer_event(record,position),device=a.device,dtype=torch.float32)
+                event=ack_events[record['id']][variant] if a.stage=='write-ackmix' else writer_event(record,position)
+                cond=encode_native_base_edit_condition(pipe,image,event,device=a.device,dtype=torch.float32)
             # Many retain contexts can be large: keep detached conditioning on CPU.
             contexts[key]=(source.cpu(),cond.prompt_embeds.cpu(),cond.attention_mask.cpu())
         return tuple(x.to(a.device) for x in contexts[key])
@@ -98,8 +114,9 @@ def run(a):
             order=list(range(len(selected)));random.Random(seed_for('fm-order',epoch)).shuffle(order)
             r=selected[order[offset]]
             # Half initial writes / half generated-source retains; balanced per visit.
-            pos=0 if a.stage=='write' or epoch%2==0 else 1+(epoch//2)%10
-            source,embeds,mask=context(r,pos)
+            pos=0 if a.stage!='retain' or epoch%2==0 else 1+(epoch//2)%10
+            variant=epoch%2 if a.stage=='write-ackmix' else 0
+            source,embeds,mask=context(r,pos,variant)
             seed=seed_for('fm-noise',a.stage,draw)
             noise=torch.randn(source.shape,generator=torch.Generator().manual_seed(seed),dtype=torch.float32).to(a.device)
             sigma=random.Random(seed_for('fm-sigma',a.stage,draw)).random()
@@ -108,7 +125,9 @@ def run(a):
             loss=(prediction.float()-target_velocity).square().mean()
             if not torch.isfinite(loss): raise RuntimeError('Nonfinite FM loss')
             (loss/4).backward()
-            losses.append(dict(id=r['id'],position=pos,sigma=sigma,noise_seed=seed,mse=float(loss.detach())))
+            draw_record=dict(id=r['id'],position=pos,sigma=sigma,noise_seed=seed,mse=float(loss.detach()))
+            if a.stage=='write-ackmix':draw_record['ack_variant']=variant
+            losses.append(draw_record)
         norm=torch.nn.utils.clip_grad_norm_(pipe.unet.parameters(),1.)
         if not torch.isfinite(norm): raise RuntimeError('Nonfinite U-Net gradient')
         optimizer.step()
@@ -125,7 +144,7 @@ def run(a):
 def main():
     p=argparse.ArgumentParser();p.add_argument('--output',type=Path,required=True)
     p.add_argument('--report',type=Path,default=ROOT/'reports/prefeval-official-alignment-20260923')
-    p.add_argument('--arm',choices=['A','B'],required=True);p.add_argument('--stage',choices=['write','retain'],default='write')
+    p.add_argument('--arm',choices=['A','B'],required=True);p.add_argument('--stage',choices=['write','write-ackmix','retain'],default='write')
     p.add_argument('--device',default='cuda:0');p.add_argument('--steps',type=int,default=2048)
     a=p.parse_args()
     try:run(a)
