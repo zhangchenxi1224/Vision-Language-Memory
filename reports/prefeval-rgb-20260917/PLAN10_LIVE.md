@@ -1,15 +1,15 @@
-# Running diagnostic — 2026-09-24: official A/B exact training input
+# Running correction — 2026-09-24: paired acknowledgment FM augmentation
 
 Read `../prefeval-official-alignment-20260923/EXECUTION_LIVE.md` first.
-The fixed write pilot is complete:1,360 evaluation conditions. Development T1
-MCQ A38.33% / B39.44% versus blank40%; correct/mismatched images barely differ.
-See WRITE_PILOT_RESULTS.md for fixed denominators and paired evidence. Shared
-visual memory is not demonstrated. All raw results/images/Writer weights are
-archived.6,800 natural answers remain pending the official judge.
-Exact-training-input diagnostic session b2187482df5649ae812ffde225bec0a2 is running
-on dl-clear-retain-h200x4-20260914 only, with fixed weights and same seed0/noise.
-Inspect dispatch/child receipts and finish it before deciding the next correction.
-Old Plan13/C2C instructions below are superseded. Do not duplicate GPU workers.
+Completed exact-input diagnostic: T1 A38/64, B62/64 vs same-seed benchmark-input
+A29/64, B30/64. Acknowledgment sensitivity is a major failure mechanism.
+Read TRAIN_INPUT_RESULTS_AND_ACKMIX_PLAN.md. New write-ackmix session
+ de87783932384e7b813c5c7cd76d945e runs on dl-clear-retain-h200x4-20260914 only,
+2048 additional official-FM updates per arm, unchanged teachers, two train-only
+acknowledgment versions. All original results remain archived. Dev90 preferences
+remain outside optimization;7,440 natural answers await the official judge.
+Finish the fixed correction/readout before retain/K2/K4 or further changes.
+Old Plan13/C2C instructions below are superseded. Do not duplicate workers.
 
 # Previous steering — 2026-09-24: paired supervision and 3+2 question forms
 

@@ -1,18 +1,18 @@
 # PrefEval RGB memory: execution brief, 2026-09-17
 
-## Live: fixed write pilot failed to demonstrate memory; diagnostic running
+## Live: acknowledgment sensitivity located; paired FM correction running
 
 Read `../prefeval-official-alignment-20260923/EXECUTION_LIVE.md` and
-`WRITE_PILOT_RESULTS.md` first. The complete fixed matrix gives development T1
-MCQ A69/180, B71/180 (two correlated seeds), versus blank36/90 and text79/90.
-Correct-vs-mismatched image gains are negligible. Teachers A44/64, B64/64 do not
-establish shared Writer success. All6,800 natural answers await the official judge.
-All teacher banks, Writer weights,616 benchmark PNGs and full raw evaluation are
-archived on GitHub. On the designated notebook only, exact-training-input
-session b2187482df5649ae812ffde225bec0a2 is now running:64 training states per arm,
-frozen checkpoints, original SFT exchanges, same seed0/noise and Reader tasks.
-No new FM updates, no retain/K2/K4 yet. Check receipts before any resume.
-No C2C. Heartbeat dreamlite-a-b reads the live record above.
+`TRAIN_INPUT_RESULTS_AND_ACKMIX_PLAN.md` first. Exact training input raises
+T1 student MCQ from A29/64 to38/64 and B30/64 to62/64 with frozen weights/noise.
+The fixed benchmark dev scores remain near blank, so this is input-generalization
+evidence, not unseen-preference success. All diagnostic data and128 PNGs are on
+GitHub.7,440 natural answers remain unjudged. The new `write-ackmix` stage mixes
+released SFT / Reader acknowledgments only on64 training states, same targets,
+official FM,2048 additional updates per arm. Session de87783932384e7b813c5c7cd76d945e
+is running on the designated notebook; both arms reached27 updates initially.
+Drivers will run the full frozen154-state readout, then stop for analysis.
+No retain/K2/K4 queued. Inspect current receipts before resuming. No C2C.
 
 ## Latest: parallel official-answer / MCQ supervision, 2026-09-24
 

@@ -28,12 +28,20 @@ updates. Each training disclosure alternates its released SFT acknowledgment
 and cached Reader acknowledgment,64 draws per version. Dev data is excluded.
 The64 Reader acknowledgments become training conditions; their later scores are
 training fit. The90 dev preferences still test transfer. No OOD tuning.
-Five targeted checks and syntax compilation pass. This is currently PREPARED,
-not launched. After dispatch record `dispatch-ackmix.json` and driver/PID details
-here. Use `launch_prefeval_official_ab.py ackmix --output RUN` once; two drivers
-use GPUs0/1 and2/3, FM2048 then fixed benchmark RGB/readouts. No retain/K2/K4 is
-queued. The correction adds both input diversity and optimizer steps; do not
-attribute any improvement solely to augmentation without a matched budget control.
+Five targeted checks and syntax compilation pass. Correction launched once at
+08:39 CST, session `de87783932384e7b813c5c7cd76d945e`, commit e6f379f0fce1ae8dc6ebf9c298ac66295ddec3f0.
+`dispatch-ackmix.json` records current host suffix3eiz2r5ftf and GPU binding.
+A driver PID722505, session6e0d5023532c49f39dfc36e3b02c3e42, owns GPUs0/1;
+FM child PID722509 runs on GPU0. B driver PID722506,
+session59cf1f27561142ecbc0574ec41560e9d, owns GPUs2/3; FM child PID722510 GPU2.
+Both logged27/2048 completed optimizer steps in the first progress check,
+with finite losses and no failure receipt. Do not duplicate dispatch.
+Drivers under `pipeline-ackmix/{A,B}` schedule FM2048, then the fixed benchmark
+RGB/readout shards, and stop for analysis. Check their `job-*.json`, logs and
+completion markers. New artifacts use stage `write-ackmix`; original `write`
+endpoints and references stay frozen. No retain/K2/K4 is queued. The correction
+adds both input diversity and optimizer steps; do not attribute any improvement
+solely to augmentation without a matched budget control.
 
 Historical exact-input dispatch b2187482df5649ae812ffde225bec0a2 (commit1ea44f8)
 finished successfully on the current host suffix3eiz2r5ftf. Completed outputs:
@@ -42,6 +50,12 @@ and `pipeline-train-input/{A,B}/complete-{0,1}.json`. Do not relaunch it.
 `training-input-evidence.jsonl.gz` has273 records,800,238 bytes and SHA256
 2a7f6031b4b1e184d2aaea0982c998f0418d51b3d4cbb597004ace17c485c8eb;
 local hash/records verified. All64 training states per arm remain in the evidence.
+Full diagnostic raw answers/summary and all128 PNGs are now uploaded to the same
+GitHub release. A training-initial tar85,514,240 bytes SHA256
+c9f3f9346e310fd9bfaf7ac823f8121acc1447d98b73677661dede0418a2f663;
+B63,621,120 bytes SHA2563af015fbf7e947163e6e78df962be310630039ee75de9e799c1c4aca49c4843a.
+GitHub digests match source archives; upload session65658 completed.
+Remote receipts `training-input-png-release-upload-{A,B}.json`.
 
 The complete write evidence archive has1,398 raw records and7,004,601 bytes;
 SHA2565956ab0ac0c7b8800fe4d83ef6180b41f5958096b1eaedd1f8ff3360042747d9.
@@ -195,7 +209,7 @@ Latest child sessions/receipts at 2026-09-23 21:03 UTC:
   they allocate no model and will reuse the completed evaluation. Four GPU model
   processes are2605840 /2894200 /2605843 /2936584. Do not start additional readers.
 
-Next: deploy the fixed acknowledgment correction documented at the top, then
+Next: monitor the running acknowledgment correction documented at the top, then
 finish its full154-state benchmark matrix and paired T1 analysis. The original
 exact-input diagnostic is complete and must not be relaunched. Preserve the
 original write results; all new weights/PNGs/readouts use `write-ackmix` paths.
