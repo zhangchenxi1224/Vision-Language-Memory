@@ -32,6 +32,10 @@ def main(args):
                  'scripts/inspire/run_prefeval_k1_b_readback_queue.py']
     elif args.lane.startswith('snapshot-'):
         command=['bash','scripts/inspire/run_prefeval_k1_snapshot_early.sh',args.lane.removeprefix('snapshot-')]
+    elif args.lane.startswith('sourcebank-'):
+        command=['bash','scripts/inspire/run_prefeval_k1_sourcebank730.sh',args.lane[-1]]
+    elif args.lane.startswith('retain730-'):
+        command=['bash','scripts/inspire/run_prefeval_k1_retain730.sh',args.lane[-1]]
     else:
         command=['bash','scripts/inspire/run_prefeval_k1_robust730.sh']
     environment=dict(os.environ,CUDA_VISIBLE_DEVICES=str(args.gpu),K1_CODE_ROOT=str(ROOT))
@@ -50,6 +54,7 @@ def main(args):
 
 if __name__=='__main__':
     p=argparse.ArgumentParser(description=__doc__)
-    p.add_argument('--lane',choices=['identity64','canonical64','ack-0','ack-1','robust730','readback','snapshot-dev','snapshot-pilot'],required=True)
+    p.add_argument('--lane',choices=['identity64','canonical64','ack-0','ack-1','robust730','readback',
+        'snapshot-dev','snapshot-pilot','sourcebank-0','sourcebank-1','retain730-C','retain730-I'],required=True)
     p.add_argument('--gpu',type=int,required=True)
     main(p.parse_args())

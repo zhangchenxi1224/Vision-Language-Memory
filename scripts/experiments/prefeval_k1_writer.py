@@ -1,6 +1,7 @@
 """K1 shared Writer: reuse official FM helpers and unchanged native RGB inference."""
 import argparse
 import gc
+import hashlib
 import json
 import os
 import shutil
@@ -16,6 +17,8 @@ from PIL import Image
 from scripts.experiments.prefeval_k1_data import load_records, load_training_records, event_text, sha
 from scripts.experiments.prefeval_k1_teacher import save_json, atomic_save
 from scripts.experiments.prefeval_k1_variants import load_variants,apply_variant,training_variant,select_fm_target
+from scripts.experiments.prefeval_k1_source_bank import load_bank,retention_draw,noise_namespace
+from scripts.experiments.prefeval_k1_condition_store import DiskConditions
 from scripts.eval.prefeval_rgb import append
 from scripts.train.latent_r11_vae_oracle import _save_image
 from vision_memory.dreamlite import DifferentiableDreamLiteMobileSampler
@@ -61,6 +64,23 @@ def train(args, pipe, rows):
     targets, cache = {}, {}
     target_hashes = {}
     variants=load_variants(args.initial_variants,rows) if args.initial_variants else None
+    bank = None
+    if args.retain_source_mode == 'four-bank':
+        assert args.split == 'train' and args.steps == 23360 and len(rows) == 730 and variants
+        bank = load_bank(args.sources, rows, sha(args.checkpoint), sha(args.initial_variants))
+        cache = DiskConditions(args.sources/'fm-conditions', {
+            'bank_sha256': sha(args.sources/'bank.json'), 'writer_sha256': sha(Path(__file__)),
+            'conditioning_sha256': sha(ROOT/'src/vision_memory/dreamlite/conditioning.py'),
+            'training_history_sha256': hashlib.sha256(json.dumps(
+                [(r['base_pair_id'],r['history']) for r in rows],sort_keys=True).encode()).hexdigest(),
+            'variants_sha256': sha(args.initial_variants), 'base': str(args.base),
+            'dtype': 'float32', 'official_commit': OFFICIAL_REFERENCE_COMMIT})
+
+    def add_condition(key, path, text):
+        if bank is not None:
+            cache.ensure(key, lambda: cache_condition(pipe, path, text, args.device))
+        else:
+            cache[key] = cache_condition(pipe, path, text, args.device)
     for i, row in enumerate(rows):
         pid = row['base_pair_id']
         parent = args.teachers / pid.replace(':','_')
@@ -69,11 +89,16 @@ def train(args, pipe, rows):
         assert done['latent_sha256'] == sha(parent / 'latent.pt')
         targets[pid] = torch.load(parent / 'latent.pt', map_location='cpu', weights_only=True)
         target_hashes[pid] = done['latent_sha256']
-        cache[pid,0] = cache_condition(pipe, None, event_text(row['history'][:2]), args.device)
+        add_condition((pid,0), None, event_text(row['history'][:2]))
         if variants:
-            cache[pid,'V1']=cache_condition(pipe,None,event_text(apply_variant(row,variants,1)['history'][:2]),args.device)
+            add_condition((pid,'V1'),None,event_text(apply_variant(row,variants,1)['history'][:2]))
         if args.stage == 'retain':
             for position in range(1,11):
+                if bank is not None:
+                    for source_index, path in enumerate(bank[pid]):
+                        add_condition((pid,position,source_index), path,
+                                      event_text(row['history'][position*2:position*2+2]))
+                    continue
                 # prefix-00 contains initial write; prefix-(p-1) is input to distractor p.
                 source_position = 0 if args.retain_source_mode == 'initial' else position-1
                 path = args.sources / pid.replace(':','_') / 'seed-0' / f'prefix-{source_position:02d}.png'
@@ -88,9 +113,16 @@ def train(args, pipe, rows):
         'implementation_sha256': sha(Path(__file__))}
     if args.retain_source_mode == 'initial':
         manifest['retain_source_mode'] = 'initial_student_png_for_all_distractor_positions'
+    if bank is not None:
+        manifest['retain_source_mode'] = 'four-bank'
+        manifest['source_bank_sha256'] = sha(args.sources/'bank.json')
+        manifest['source_bank_schedule'] = 'source=cycle%4; position=1+(cycle//4+[0,2,5,7][source])%10'
+        manifest['source_bank_code_sha256'] = sha(ROOT/'scripts/experiments/prefeval_k1_source_bank.py')
+        manifest['condition_cache'] = str(cache.root)
     if args.retain_target_mode == 'source':
         manifest['retain_target_mode'] = 'official_vae_encode_of_actual_source_png'
-        manifest['source_png_hashes'] = {row['base_pair_id']:sha(args.sources/row['base_pair_id'].replace(':','_')/'seed-0'/'prefix-00.png') for row in rows}
+        if bank is None:
+            manifest['source_png_hashes'] = {row['base_pair_id']:sha(args.sources/row['base_pair_id'].replace(':','_')/'seed-0'/'prefix-00.png') for row in rows}
     if variants:
         manifest['initial_variants_sha256']=sha(args.initial_variants)
         manifest['training_variant_indices']=[0,1]
@@ -117,7 +149,12 @@ def train(args, pipe, rows):
             pid = row['base_pair_id']
             position = 1 + cycle % 10 if args.stage == 'retain' and draw % 2 else 0
             variant=training_variant(cycle,variants is not None)
-            c = cache[pid,'V1' if position==0 and variant==1 else position]
+            source_index = None
+            if bank is not None and position > 0:
+                source_index, position = retention_draw(cycle)
+                c = cache[pid,position,source_index]
+            else:
+                c = cache[pid,'V1' if position==0 and variant==1 else position]
             source = c['source'].to(args.device)
             target = select_fm_target(targets[pid].to(args.device),source.detach(),position,args.retain_target_mode=='source')
             rng = torch.Generator().manual_seed(stable_seed(20260924,'sigma',draw))
@@ -133,6 +170,8 @@ def train(args, pipe, rows):
             values.append({'pair_id':pid,'position':position,'sigma':sigma,'mse':float(loss.detach())})
             if variants:
                 values[-1]['initial_variant']=variant if position==0 else None
+            if bank is not None:
+                values[-1]['source_index']=source_index
         norm = torch.nn.utils.clip_grad_norm_(pipe.unet.parameters(),1.,error_if_nonfinite=True)
         optimizer.step()
         append(args.output/'optimization.jsonl', {'step':step+1,'draws':values,'grad_norm':float(norm),'seconds':time.monotonic()-started})
@@ -163,6 +202,8 @@ def rollout(args, pipe, rows):
     if args.probe_initial_sources:
         binding['probe_initial_sources'] = str(args.probe_initial_sources)
         binding['scope'] = 'fixed_training_source_one_step_probe_not_new_initial_write'
+    if args.noise_domain != 'eval':
+        binding['noise_domain'] = args.noise_domain
     if args.initial_variants:
         binding['initial_variants_sha256']=sha(args.initial_variants)
         binding['initial_variant']=args.initial_variant
@@ -198,7 +239,7 @@ def rollout(args, pipe, rows):
                 source_image = Image.open(previous).convert('RGB') if previous else Image.new('RGB',(1024,1024),(128,128,128))
                 source = encode_source(pipe,source_image,args.device)
                 text = event_text(row['history'][position*2:position*2+2])
-                seed = stable_seed(20260924,f'rollout:{pid}:{chain}',position)
+                seed = stable_seed(20260924,noise_namespace(pid,chain,args.noise_domain),position)
                 generator = torch.Generator(device=args.device).manual_seed(seed)
                 noise = torch.randn(source.shape,generator=generator,device=args.device,dtype=source.dtype)
                 sampler = NativeBaseEditSampler(pipe,source_image=source_image,event_text=text,guidance_scale=1.)
@@ -218,7 +259,11 @@ def main(args):
     if args.retain_source_mode != 'recursive':
         assert args.mode == 'train' and args.stage == 'retain'
     if args.retain_target_mode == 'source':
-        assert args.mode == 'train' and args.stage == 'retain' and args.retain_source_mode == 'initial'
+        assert args.mode == 'train' and args.stage == 'retain' and args.retain_source_mode in {'initial','four-bank'}
+    if args.noise_domain != 'eval':
+        assert args.mode == 'rollout' and args.split == 'train' and args.inter_turns == 0
+        assert args.initial_variants and args.initial_variant in {0,1} and args.noise_chains == 2
+        assert not args.probe_initial_sources
     if args.probe_initial_sources:
         assert args.mode == 'rollout' and args.inter_turns == 1 and args.split == 'pilot'
     rows = load_training_records(args.split) if args.mode == 'train' else load_records(args.split,history_file=args.history_file)
@@ -241,7 +286,7 @@ if __name__ == '__main__':
         p.add_argument('--'+name,type=Path,required=True)
     p.add_argument('--teachers',type=Path)
     p.add_argument('--sources',type=Path)
-    p.add_argument('--retain-source-mode', choices=['recursive','initial'], default='recursive')
+    p.add_argument('--retain-source-mode', choices=['recursive','initial','four-bank'], default='recursive')
     p.add_argument('--retain-target-mode', choices=['teacher','source'], default='teacher')
     p.add_argument('--probe-initial-sources',type=Path,help='Offline one-step probe from fixed training PNGs; not a fresh rollout.')
     p.add_argument('--initial-variants',type=Path)
@@ -251,5 +296,6 @@ if __name__ == '__main__':
     p.add_argument('--snapshot-steps',type=int,nargs='+',default=[])
     p.add_argument('--inter-turns',type=int,default=10)
     p.add_argument('--noise-chains',type=int,default=2)
+    p.add_argument('--noise-domain',choices=['eval','source-bank'],default='eval')
     p.add_argument('--limit',type=int,default=0)
     main(p.parse_args())
