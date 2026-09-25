@@ -1,0 +1,177 @@
+{
+  "time_utc": "2026-09-25T09:06:24.176008+00:00",
+  "instance": "prefeval-k1-l012-h200x4-20260924",
+  "lanes": {
+    "identity64": {
+      "lane": "identity64",
+      "pid": 467452,
+      "gpu": 0,
+      "command": [
+        "bash",
+        "scripts/inspire/run_prefeval_k1_identity64.sh"
+      ],
+      "code_root": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-deploy-dc8731c",
+      "commit": "dc8731c5ec8c6b20fbb9c708730f5f613819234a",
+      "time_utc": "20260925T084833Z",
+      "log": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/launch-identity64-20260925T084833Z.log",
+      "exit_status": null,
+      "optimizer_progress": {
+        "step": 495,
+        "draws": [
+          {
+            "pair_id": "lifestyle_dietary:0022",
+            "position": 0,
+            "sigma": 0.5115402936935425,
+            "mse": 0.03699697554111481
+          },
+          {
+            "pair_id": "lifestyle_dietary:0022",
+            "position": 6,
+            "sigma": 0.9793830513954163,
+            "mse": 0.006399338133633137
+          },
+          {
+            "pair_id": "professional_work_location_style:0034",
+            "position": 0,
+            "sigma": 0.02126753330230713,
+            "mse": 0.9484826326370239
+          },
+          {
+            "pair_id": "professional_work_location_style:0034",
+            "position": 6,
+            "sigma": 0.5624848008155823,
+            "mse": 0.008391935378313065
+          }
+        ],
+        "grad_norm": 0.4111831784248352,
+        "seconds": 777.9822787940502
+      },
+      "last_train_log": {
+        "step": 480,
+        "mse": 0.15084123343694955,
+        "seconds": 754.8439764343202
+      },
+      "live": true
+    },
+    "canonical64": {
+      "lane": "canonical64",
+      "pid": 467553,
+      "gpu": 1,
+      "command": [
+        "bash",
+        "scripts/inspire/run_prefeval_k1_canonical64_readback.sh"
+      ],
+      "code_root": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-deploy-dc8731c",
+      "commit": "dc8731c5ec8c6b20fbb9c708730f5f613819234a",
+      "time_utc": "20260925T084833Z",
+      "log": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/launch-canonical64-20260925T084833Z.log",
+      "exit_status": null,
+      "optimizer_progress": null,
+      "last_train_log": null,
+      "live": true,
+      "seen_source_complete_chains": 99
+    },
+    "robust730": {
+      "lane": "robust730",
+      "pid": 562167,
+      "gpu": 2,
+      "command": [
+        "bash",
+        "scripts/inspire/run_prefeval_k1_robust730.sh"
+      ],
+      "code_root": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-deploy-5d1045f",
+      "commit": "5d1045f4d4c4a7b81ae648a91f8a3ec0935a0621",
+      "time_utc": "20260925T085809Z",
+      "log": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/launch-robust730-20260925T085809Z.log",
+      "exit_status": null,
+      "optimizer_progress": {
+        "step": 28,
+        "draws": [
+          {
+            "pair_id": "lifestyle_dietary:0048",
+            "position": 0,
+            "sigma": 0.04068398475646973,
+            "mse": 1.436280608177185,
+            "initial_variant": 0
+          },
+          {
+            "pair_id": "lifestyle_dietary:0020",
+            "position": 0,
+            "sigma": 0.9331023693084717,
+            "mse": 0.16382156312465668,
+            "initial_variant": 0
+          },
+          {
+            "pair_id": "travel_hotel:0019",
+            "position": 0,
+            "sigma": 0.46684402227401733,
+            "mse": 0.5987554788589478,
+            "initial_variant": 0
+          },
+          {
+            "pair_id": "travel_hotel:0002",
+            "position": 0,
+            "sigma": 0.25517523288726807,
+            "mse": 1.1755316257476807,
+            "initial_variant": 0
+          }
+        ],
+        "grad_norm": 0.8403949737548828,
+        "seconds": 43.39723961055279
+      },
+      "last_train_log": {
+        "cached": 730,
+        "total": 730,
+        "stage": "write"
+      },
+      "live": true
+    },
+    "readback": {
+      "lane": "readback",
+      "pid": 562179,
+      "gpu": 3,
+      "command": [
+        "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+        "scripts/inspire/run_prefeval_k1_b_readback_queue.py"
+      ],
+      "code_root": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-deploy-5d1045f",
+      "commit": "5d1045f4d4c4a7b81ae648a91f8a3ec0935a0621",
+      "time_utc": "20260925T085809Z",
+      "log": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/launch-readback-20260925T085809Z.log",
+      "exit_status": null,
+      "optimizer_progress": null,
+      "last_train_log": null,
+      "live": true,
+      "active": {
+        "name": "teacher-train",
+        "command": [
+          "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-deploy-5d1045f/scripts/experiments/prefeval_k1_evaluate.py",
+          "--kind",
+          "teacher",
+          "--split",
+          "train",
+          "--reader",
+          "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+          "--images",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-k1-scale730-20260924/teachers/B",
+          "--output",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/readback-queue/teacher-train",
+          "--families",
+          "T1",
+          "--controls",
+          "memory,mismatch,blank,text",
+          "--tasks",
+          "mcq"
+        ],
+        "started_unix": 1790326690.0411737
+      }
+    }
+  },
+  "gpus": [
+    "0, 39537 MiB, 96 %",
+    "1, 14129 MiB, 100 %",
+    "2, 38773 MiB, 96 %",
+    "3, 9765 MiB, 26 %"
+  ]
+}

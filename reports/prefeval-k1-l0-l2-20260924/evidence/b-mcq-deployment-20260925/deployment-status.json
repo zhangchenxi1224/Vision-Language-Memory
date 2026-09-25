@@ -1,0 +1,143 @@
+{
+  "time_utc": "2026-09-25T09:00:30.041853+00:00",
+  "instance": "prefeval-k1-l012-h200x4-20260924",
+  "lanes": {
+    "identity64": {
+      "lane": "identity64",
+      "pid": 467452,
+      "gpu": 0,
+      "command": [
+        "bash",
+        "scripts/inspire/run_prefeval_k1_identity64.sh"
+      ],
+      "code_root": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-deploy-dc8731c",
+      "commit": "dc8731c5ec8c6b20fbb9c708730f5f613819234a",
+      "time_utc": "20260925T084833Z",
+      "log": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/launch-identity64-20260925T084833Z.log",
+      "exit_status": null,
+      "optimizer_progress": {
+        "step": 268,
+        "draws": [
+          {
+            "pair_id": "lifestyle_fit:0000",
+            "position": 0,
+            "sigma": 0.1587604284286499,
+            "mse": 0.29038143157958984
+          },
+          {
+            "pair_id": "lifestyle_fit:0000",
+            "position": 9,
+            "sigma": 0.415976345539093,
+            "mse": 0.027640650048851967
+          },
+          {
+            "pair_id": "lifestyle_fit:0017",
+            "position": 0,
+            "sigma": 0.7420787215232849,
+            "mse": 0.01526107918471098
+          },
+          {
+            "pair_id": "lifestyle_fit:0017",
+            "position": 9,
+            "sigma": 0.7294237017631531,
+            "mse": 0.012272021733224392
+          }
+        ],
+        "grad_norm": 0.49966663122177124,
+        "seconds": 423.2983702775091
+      },
+      "last_train_log": {
+        "step": 256,
+        "mse": 0.29100801004096866,
+        "seconds": 400.25904834643006
+      },
+      "live": true
+    },
+    "canonical64": {
+      "lane": "canonical64",
+      "pid": 467553,
+      "gpu": 1,
+      "command": [
+        "bash",
+        "scripts/inspire/run_prefeval_k1_canonical64_readback.sh"
+      ],
+      "code_root": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-deploy-dc8731c",
+      "commit": "dc8731c5ec8c6b20fbb9c708730f5f613819234a",
+      "time_utc": "20260925T084833Z",
+      "log": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/launch-canonical64-20260925T084833Z.log",
+      "exit_status": null,
+      "optimizer_progress": null,
+      "last_train_log": null,
+      "live": true,
+      "seen_source_complete_chains": 65
+    },
+    "robust730": {
+      "lane": "robust730",
+      "pid": 562167,
+      "gpu": 2,
+      "command": [
+        "bash",
+        "scripts/inspire/run_prefeval_k1_robust730.sh"
+      ],
+      "code_root": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-deploy-5d1045f",
+      "commit": "5d1045f4d4c4a7b81ae648a91f8a3ec0935a0621",
+      "time_utc": "20260925T085809Z",
+      "log": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/launch-robust730-20260925T085809Z.log",
+      "exit_status": null,
+      "optimizer_progress": null,
+      "last_train_log": {
+        "cached": 201,
+        "total": 730,
+        "stage": "write"
+      },
+      "live": true
+    },
+    "readback": {
+      "lane": "readback",
+      "pid": 562179,
+      "gpu": 3,
+      "command": [
+        "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+        "scripts/inspire/run_prefeval_k1_b_readback_queue.py"
+      ],
+      "code_root": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-deploy-5d1045f",
+      "commit": "5d1045f4d4c4a7b81ae648a91f8a3ec0935a0621",
+      "time_utc": "20260925T085809Z",
+      "log": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/launch-readback-20260925T085809Z.log",
+      "exit_status": null,
+      "optimizer_progress": null,
+      "last_train_log": null,
+      "live": true,
+      "active": {
+        "name": "teacher-train",
+        "command": [
+          "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-deploy-5d1045f/scripts/experiments/prefeval_k1_evaluate.py",
+          "--kind",
+          "teacher",
+          "--split",
+          "train",
+          "--reader",
+          "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+          "--images",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-k1-scale730-20260924/teachers/B",
+          "--output",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/readback-queue/teacher-train",
+          "--families",
+          "T1",
+          "--controls",
+          "memory,mismatch,blank,text",
+          "--tasks",
+          "mcq"
+        ],
+        "started_unix": 1790326690.0411737
+      }
+    }
+  },
+  "gpus": [
+    "0, 39537 MiB, 100 %",
+    "1, 14129 MiB, 100 %",
+    "2, 14121 MiB, 93 %",
+    "3, 9517 MiB, 26 %"
+  ]
+}
