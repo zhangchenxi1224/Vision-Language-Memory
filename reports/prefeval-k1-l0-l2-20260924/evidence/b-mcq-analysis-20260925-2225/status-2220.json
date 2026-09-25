@@ -1,0 +1,49 @@
+{
+  "time_utc": "2026-09-25T14:19:55.719226+00:00",
+  "B730_last_log": "e\": 0.3101057782769203, \"seconds\": 12492.031637548003}\n{\"step\": 10912, \"mse\": 0.3090108260512352, \"seconds\": 12544.581857950892}\n{\"step\": 10944, \"mse\": 0.29482447914779186, \"seconds\": 12592.338540435769}\n{\"step\": 10976, \"mse\": 0.3243720205500722, \"seconds\": 12641.197497313842}\n{\"step\": 11008, \"mse\": 0.4042431004345417, \"seconds\": 12690.335137655959}\n{\"step\": 11040, \"mse\": 0.7022413164377213, \"seconds\": 12744.109079974703}\n{\"step\": 11072, \"mse\": 0.3036113865673542, \"seconds\": 12793.492390229832}\n",
+  "snapshot_outputs": {
+    "pilot": {
+      "images": 128,
+      "exit": "0\n",
+      "files": [
+        "robust730/readback-step-002048-pilot-V1/readback-0.jsonl",
+        "robust730/readback-step-002048-pilot-V1/finished-0.json"
+      ]
+    },
+    "dev": {
+      "images": 180,
+      "exit": "0\n",
+      "files": [
+        "robust730/readback-step-002048-dev-V1/readback-0.jsonl",
+        "robust730/readback-step-002048-dev-V1/finished-0.json"
+      ]
+    }
+  },
+  "I_pilot": 114,
+  "I_dev_shards": [
+    10,
+    10,
+    10
+  ],
+  "C_dev": 69,
+  "reader_queue": {
+    "waiting_for": [
+      [
+        "canonical64",
+        "dev",
+        90
+      ],
+      [
+        "identity64",
+        "pilot",
+        64
+      ],
+      [
+        "identity64",
+        "dev",
+        90
+      ]
+    ],
+    "time_unix": 1790345983.897576
+  }
+}
