@@ -1,0 +1,142 @@
+{
+  "captured_utc": "2026-09-25T14:00:36.117745+00:00",
+  "host": "prefeval-k1-h200x4-high-20260924--506d5fcf84c1-ck5fp533ke",
+  "gpu": "0, 100 %, 14129 MiB\n1, 100 %, 14129 MiB\n2, 100 %, 14129 MiB\n3, 100 %, 14129 MiB\n",
+  "launches": [
+    {
+      "shard": 0,
+      "gpu": 0,
+      "pid": 435293,
+      "command": [
+        "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-parallel-08b1b30/scripts/inspire/prefeval_i64_dev_parallel.py",
+        "shard",
+        "--shard",
+        "0"
+      ],
+      "host": "prefeval-k1-h200x4-high-20260924--506d5fcf84c1-ck5fp533ke",
+      "code_commit": "08b1b30b2fb0e906b88f0daf6f6682f1188afaaf",
+      "frozen_writer_commit": "dc8731c5ec8c6b20fbb9c708730f5f613819234a",
+      "time_utc": "2026-09-25T13:58:12.639240+00:00",
+      "log": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/identity64/dev-parallel/shard-0.log"
+    },
+    {
+      "shard": 1,
+      "gpu": 1,
+      "pid": 435296,
+      "command": [
+        "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-parallel-08b1b30/scripts/inspire/prefeval_i64_dev_parallel.py",
+        "shard",
+        "--shard",
+        "1"
+      ],
+      "host": "prefeval-k1-h200x4-high-20260924--506d5fcf84c1-ck5fp533ke",
+      "code_commit": "08b1b30b2fb0e906b88f0daf6f6682f1188afaaf",
+      "frozen_writer_commit": "dc8731c5ec8c6b20fbb9c708730f5f613819234a",
+      "time_utc": "2026-09-25T13:58:12.639269+00:00",
+      "log": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/identity64/dev-parallel/shard-1.log"
+    },
+    {
+      "shard": 2,
+      "gpu": 2,
+      "pid": 435297,
+      "command": [
+        "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-parallel-08b1b30/scripts/inspire/prefeval_i64_dev_parallel.py",
+        "shard",
+        "--shard",
+        "2"
+      ],
+      "host": "prefeval-k1-h200x4-high-20260924--506d5fcf84c1-ck5fp533ke",
+      "code_commit": "08b1b30b2fb0e906b88f0daf6f6682f1188afaaf",
+      "frozen_writer_commit": "dc8731c5ec8c6b20fbb9c708730f5f613819234a",
+      "time_utc": "2026-09-25T13:58:12.639284+00:00",
+      "log": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/identity64/dev-parallel/shard-2.log"
+    }
+  ],
+  "gate": {
+    "pid": 1843603,
+    "command": [
+      "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+      "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-parallel-08b1b30/scripts/inspire/prefeval_i64_dev_parallel.py",
+      "gate",
+      "--parent",
+      "59880",
+      "--child",
+      "72800"
+    ],
+    "host": "prefeval-k1-h200x2-20260924--f1a8505aaf2e-z33pme3icj",
+    "code_commit": "08b1b30b2fb0e906b88f0daf6f6682f1188afaaf",
+    "time_utc": "2026-09-25T13:57:32.678208+00:00",
+    "log": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/identity64/dev-parallel/gate.log"
+  },
+  "gate_state": {
+    "parent_pid": 59880,
+    "active_pilot_pid": 72800,
+    "host": "prefeval-k1-h200x2-20260924--f1a8505aaf2e-z33pme3icj",
+    "time_utc": "2026-09-25T13:57:32.726965+00:00",
+    "state": "hold next dev stage; active pilot inference continues"
+  },
+  "snapshot_pilot": {
+    "lane": "snapshot-pilot",
+    "pid": 395819,
+    "gpu": 3,
+    "command": [
+      "bash",
+      "scripts/inspire/run_prefeval_k1_snapshot_early.sh",
+      "pilot"
+    ],
+    "code_root": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-deploy-0874d12",
+    "commit": "0874d128173a79d4408565b4332239fbb1baef63",
+    "time_utc": "20260925T135230Z",
+    "log": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/launch-snapshot-pilot-20260925T135230Z.log",
+    "host": "prefeval-k1-h200x4-high-20260924--506d5fcf84c1-ck5fp533ke"
+  },
+  "progress": [
+    {
+      "shard": 0,
+      "full_chains": 1,
+      "pngs": 11,
+      "manifest": {
+        "checkpoint_sha256": "436d1033e3a21a420126b13176a4b007f5e7b80b60ca47202bb6bbb1fd944e4d",
+        "split": "dev",
+        "steps": 28,
+        "cfg": 1,
+        "noise_chains": 2,
+        "inter_turns": 10,
+        "state": "only reopened uint8 RGB PNG; fresh Gaussian each write"
+      }
+    },
+    {
+      "shard": 1,
+      "full_chains": 1,
+      "pngs": 11,
+      "manifest": {
+        "checkpoint_sha256": "436d1033e3a21a420126b13176a4b007f5e7b80b60ca47202bb6bbb1fd944e4d",
+        "split": "dev",
+        "steps": 28,
+        "cfg": 1,
+        "noise_chains": 2,
+        "inter_turns": 10,
+        "state": "only reopened uint8 RGB PNG; fresh Gaussian each write"
+      }
+    },
+    {
+      "shard": 2,
+      "full_chains": 1,
+      "pngs": 11,
+      "manifest": {
+        "checkpoint_sha256": "436d1033e3a21a420126b13176a4b007f5e7b80b60ca47202bb6bbb1fd944e4d",
+        "split": "dev",
+        "steps": 28,
+        "cfg": 1,
+        "noise_chains": 2,
+        "inter_turns": 10,
+        "state": "only reopened uint8 RGB PNG; fresh Gaussian each write"
+      }
+    }
+  ],
+  "snapshot_pilot_completed": 44,
+  "I_pilot_completed": 104
+}
