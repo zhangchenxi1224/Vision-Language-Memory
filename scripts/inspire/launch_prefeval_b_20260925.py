@@ -27,6 +27,9 @@ def main(args):
         command=['bash','scripts/inspire/run_prefeval_k1_canonical64_readback.sh']
     elif args.lane.startswith('ack-'):
         command=['bash','scripts/inspire/run_prefeval_k1_neutral_ack.sh',args.lane[-1]]
+    elif args.lane=='readback':
+        command=['/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python',
+                 'scripts/inspire/run_prefeval_k1_b_readback_queue.py']
     else:
         command=['bash','scripts/inspire/run_prefeval_k1_robust730.sh']
     environment=dict(os.environ,CUDA_VISIBLE_DEVICES=str(args.gpu),K1_CODE_ROOT=str(ROOT))
@@ -45,6 +48,6 @@ def main(args):
 
 if __name__=='__main__':
     p=argparse.ArgumentParser(description=__doc__)
-    p.add_argument('--lane',choices=['identity64','canonical64','ack-0','ack-1','robust730'],required=True)
+    p.add_argument('--lane',choices=['identity64','canonical64','ack-0','ack-1','robust730','readback'],required=True)
     p.add_argument('--gpu',type=int,required=True)
     main(p.parse_args())

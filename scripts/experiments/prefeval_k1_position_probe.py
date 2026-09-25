@@ -13,7 +13,7 @@ from vision_memory.repro import configure_strict_cuda_determinism
 
 def main(args):
     configure_strict_cuda_determinism(0)
-    rows=load_records()
+    rows=load_records(args.split)
     if args.limit:
         rows=rows[:args.limit]
     mcq=official_mcq(ROOT/'third_party/prefeval_reference')
@@ -23,6 +23,9 @@ def main(args):
     if args.output.exists():
         for r in map(json.loads,args.output.read_text(encoding='utf-8').splitlines()):
             assert r.get('endpoint_kind','teacher')==args.kind
+            assert r.get('split','pilot')==args.split
+            assert r.get('prefix',0)==args.prefix
+            assert r.get('order_mode','legacy-shuffle')==args.order_mode
             done[r['pair_id'],r.get('chain',0),r['position']]=r['png_sha256']
     for row in rows:
         for chain in range(1 if args.kind=='teacher' else args.noise_chains):
@@ -35,18 +38,25 @@ def main(args):
             else:
                 assert digest==endpoint['png_hashes'][path.name]
             image=read_png(path)
-            for position in range(4):
+            positions=['official',0,1,2,3] if args.order_mode=='official-cyclic' else range(4)
+            for position in positions:
                 key=(row['base_pair_id'],chain,position)
                 if key in done:
                     assert done[key]==digest,'Resume image differs'
                     continue
-                order,correct=option_order(row['base_pair_id'],position*3)
-                assert correct==position
+                if args.order_mode=='official-cyclic':
+                    shift=0 if position=='official' else position
+                    order=list(range(4))[-shift:]+list(range(4))[:-shift] if shift else list(range(4))
+                    correct=order.index(0)
+                else:
+                    order,correct=option_order(row['base_pair_id'],position*3)
+                assert correct==(0 if position=='official' else position)
                 query=row['forms']['T1']+mcq['get_mcq_question_format']([row['options'][i] for i in order])
                 generated=generate_short_answer(model=reader,processor=processor,image=image,query=query,
                     device='cuda:0',max_new_tokens=32)
                 pred=mcq['extract_choice'](generated['raw'])
                 record={'pair_id':row['base_pair_id'],'family':'T1','position':position,'order':order,
+                    'split':args.split,'order_mode':args.order_mode,
                     'endpoint_kind':args.kind,'chain':chain,'prefix':args.prefix,
                     'png_sha256':digest,'generated':generated,'predicted_letter':pred,
                     'correct_letter':'ABCD'[correct],'correct':pred=='ABCD'[correct]}
@@ -59,6 +69,8 @@ if __name__=='__main__':
     p.add_argument('--images',type=Path,required=True)
     p.add_argument('--output',type=Path,required=True)
     p.add_argument('--kind',choices=['teacher','student'],default='teacher')
+    p.add_argument('--split',choices=['pilot','dev'],default='pilot')
+    p.add_argument('--order-mode',choices=['legacy-shuffle','official-cyclic'],default='legacy-shuffle')
     p.add_argument('--noise-chains',type=int,choices=[1,2],default=2)
     p.add_argument('--prefix',type=int,choices=[0,5,10],default=0)
     p.add_argument('--limit',type=int,default=0)
