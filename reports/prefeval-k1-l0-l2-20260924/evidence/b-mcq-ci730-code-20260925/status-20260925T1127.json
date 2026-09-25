@@ -1,0 +1,54 @@
+{
+  "utc": "2026-09-25T11:27:44Z",
+  "gpu": "index, memory.used [MiB], utilization.gpu [%]\n0, 40159 MiB, 97 %\n1, 14129 MiB, 100 %\n",
+  "processes": [
+    {
+      "pid": "59899",
+      "cmdline": "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python scripts/experiments/prefeval_k1_writer.py train --arm B --base /inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907 --official-source /inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite --split train --stage write --steps 23360 --snapshot-steps 2048 --initial-variants /inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/variants-train.json --teachers /inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-k1-scale730-20260924/teachers/B --checkpoint /inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/4fbc857-clear-retention-full4832/train/checkpoint-final.pt --output /inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/robust730/train ",
+      "cwd": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-deploy-5d1045f"
+    },
+    {
+      "pid": "72800",
+      "cmdline": "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python scripts/experiments/prefeval_k1_writer.py rollout --arm B --base /inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907 --official-source /inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite --split pilot --inter-turns 10 --noise-chains 2 --checkpoint /inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/identity64/train/checkpoint-final.pt --output /inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/identity64/pilot ",
+      "cwd": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-deploy-dc8731c"
+    }
+  ],
+  "B_step": {
+    "step": 4414,
+    "draws": [
+      {
+        "pair_id": "professional_work_location_style:0031",
+        "position": 0,
+        "sigma": 0.8676778674125671,
+        "mse": 0.3779304623603821,
+        "initial_variant": 0
+      },
+      {
+        "pair_id": "travel_restaurant:0025",
+        "position": 0,
+        "sigma": 0.9229223728179932,
+        "mse": 0.13822734355926514,
+        "initial_variant": 0
+      },
+      {
+        "pair_id": "lifestyle_beauty:0045",
+        "position": 0,
+        "sigma": 0.13840609788894653,
+        "mse": 0.9388522505760193,
+        "initial_variant": 0
+      },
+      {
+        "pair_id": "entertain_shows:0037",
+        "position": 0,
+        "sigma": 0.07337206602096558,
+        "mse": 1.019443392753601,
+        "initial_variant": 0
+      }
+    ],
+    "grad_norm": 0.13340432941913605,
+    "seconds": 2472.9889164939523
+  },
+  "I_pilot_completed": 26,
+  "I_dev_completed": 0,
+  "exits": {}
+}
