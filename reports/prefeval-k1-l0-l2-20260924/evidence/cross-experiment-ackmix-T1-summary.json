@@ -1,0 +1,164 @@
+{
+  "source_experiment": "codex/dreamlite-prefeval-rgb-20260917 @ b41021a",
+  "scope": "T1 MCQ only; existing archived outputs; no new inference or OOD analysis",
+  "stages": {
+    "write": {
+      "archive": "write-complete-evidence.jsonl.gz",
+      "sha256": "5956ab0ac0c7b8800fe4d83ef6180b41f5958096b1eaedd1f8ff3360042747d9",
+      "conditions": 924,
+      "scores": {
+        "A/train/matched": {
+          "expected": 128,
+          "correct": 57,
+          "per_seed": {
+            "0": 29,
+            "1": 28
+          }
+        },
+        "A/train/mismatched": {
+          "expected": 64,
+          "correct": 29,
+          "per_seed": {
+            "0": 29
+          }
+        },
+        "A/dev/matched": {
+          "expected": 180,
+          "correct": 69,
+          "per_seed": {
+            "0": 35,
+            "1": 34
+          }
+        },
+        "A/dev/mismatched": {
+          "expected": 90,
+          "correct": 35,
+          "per_seed": {
+            "0": 35
+          }
+        },
+        "B/train/matched": {
+          "expected": 128,
+          "correct": 57,
+          "per_seed": {
+            "0": 30,
+            "1": 27
+          }
+        },
+        "B/train/mismatched": {
+          "expected": 64,
+          "correct": 29,
+          "per_seed": {
+            "0": 29
+          }
+        },
+        "B/dev/matched": {
+          "expected": 180,
+          "correct": 71,
+          "per_seed": {
+            "0": 36,
+            "1": 35
+          }
+        },
+        "B/dev/mismatched": {
+          "expected": 90,
+          "correct": 34,
+          "per_seed": {
+            "0": 34
+          }
+        }
+      }
+    },
+    "write-ackmix": {
+      "archive": "ackmix-complete-evidence.jsonl.gz",
+      "sha256": "4b54b4d23b868ec45968745ee3a46977d7582031276762d231bae2c43a18c785",
+      "conditions": 924,
+      "scores": {
+        "A/train/matched": {
+          "expected": 128,
+          "correct": 81,
+          "per_seed": {
+            "0": 41,
+            "1": 40
+          }
+        },
+        "A/train/mismatched": {
+          "expected": 64,
+          "correct": 33,
+          "per_seed": {
+            "0": 33
+          }
+        },
+        "A/dev/matched": {
+          "expected": 180,
+          "correct": 69,
+          "per_seed": {
+            "0": 35,
+            "1": 34
+          }
+        },
+        "A/dev/mismatched": {
+          "expected": 90,
+          "correct": 35,
+          "per_seed": {
+            "0": 35
+          }
+        },
+        "B/train/matched": {
+          "expected": 128,
+          "correct": 119,
+          "per_seed": {
+            "0": 58,
+            "1": 61
+          }
+        },
+        "B/train/mismatched": {
+          "expected": 64,
+          "correct": 29,
+          "per_seed": {
+            "0": 29
+          }
+        },
+        "B/dev/matched": {
+          "expected": 180,
+          "correct": 68,
+          "per_seed": {
+            "0": 34,
+            "1": 34
+          }
+        },
+        "B/dev/mismatched": {
+          "expected": 90,
+          "correct": 34,
+          "per_seed": {
+            "0": 34
+          }
+        }
+      }
+    }
+  },
+  "paired_matched_changes": {
+    "A/train": {
+      "both_correct": 54,
+      "both_wrong": 44,
+      "gained": 27,
+      "lost": 3
+    },
+    "A/dev": {
+      "both_wrong": 110,
+      "both_correct": 68,
+      "lost": 1,
+      "gained": 1
+    },
+    "B/train": {
+      "both_correct": 57,
+      "gained": 62,
+      "both_wrong": 9
+    },
+    "B/dev": {
+      "both_wrong": 109,
+      "both_correct": 68,
+      "lost": 3
+    }
+  }
+}
