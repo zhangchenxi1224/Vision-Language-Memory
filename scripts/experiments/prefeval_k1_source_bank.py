@@ -20,9 +20,9 @@ def retention_draw(cycle):
 
 
 def noise_namespace(pair_id, chain, domain='eval'):
-    assert domain in {'eval', 'source-bank'}
+    assert domain in {'eval', 'source-bank', 'refresh-0', 'refresh-1', 'refresh-2', 'refresh-3'}
     original = f'rollout:{pair_id}:{chain}'
-    return original if domain == 'eval' else 'source-bank:' + original
+    return original if domain == 'eval' else domain + ':' + original
 
 
 def freeze_bank(root, rows, checkpoint, variants):
