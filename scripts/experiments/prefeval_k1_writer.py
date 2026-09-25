@@ -3,6 +3,7 @@ import argparse
 import gc
 import json
 import os
+import shutil
 from pathlib import Path
 import subprocess
 import sys
@@ -83,6 +84,9 @@ def train(args, pipe, rows):
         'implementation_sha256': sha(Path(__file__))}
     if args.retain_source_mode == 'initial':
         manifest['retain_source_mode'] = 'initial_student_png_for_all_distractor_positions'
+    if args.retain_target_mode == 'source':
+        manifest['retain_target_mode'] = 'official_vae_encode_of_actual_source_png'
+        manifest['source_png_hashes'] = {row['base_pair_id']:sha(args.sources/row['base_pair_id'].replace(':','_')/'seed-0'/'prefix-00.png') for row in rows}
     save_json(args.output / 'manifest.json', manifest)
     predictor = DifferentiableDreamLiteMobileSampler.from_pipeline(pipe, checkpoint_unet=False)
     optimizer = torch.optim.AdamW(pipe.unet.parameters(), lr=5e-5, betas=(.9,.999), eps=1e-8, weight_decay=1e-4)
@@ -107,7 +111,8 @@ def train(args, pipe, rows):
             position = 1 + cycle % 10 if args.stage == 'retain' and draw % 2 else 0
             c = cache[pid,position]
             source = c['source'].to(args.device)
-            target = targets[pid].to(args.device)
+            target = (source.detach() if args.retain_target_mode == 'source' and position > 0
+                      else targets[pid].to(args.device))
             rng = torch.Generator().manual_seed(stable_seed(20260924,'sigma',draw))
             sigma = float(torch.rand((),generator=rng))
             generator = torch.Generator(device=args.device).manual_seed(stable_seed(20260924,'noise',draw))
@@ -146,6 +151,9 @@ def rollout(args, pipe, rows):
     binding = {'checkpoint_sha256':sha(args.checkpoint),'split':args.split,
         'steps':28,'cfg':1,'noise_chains':args.noise_chains,'inter_turns':args.inter_turns,
         'state':'only reopened uint8 RGB PNG; fresh Gaussian each write'}
+    if args.probe_initial_sources:
+        binding['probe_initial_sources'] = str(args.probe_initial_sources)
+        binding['scope'] = 'fixed_training_source_one_step_probe_not_new_initial_write'
     if args.split=='official':
         binding['benchmark_history_sha256']=sha(args.history_file)
         binding['history_protocol']=rows[0]['history_protocol']
@@ -163,6 +171,15 @@ def rollout(args, pipe, rows):
             previous = None
             hashes = {}
             for position in range(args.inter_turns+1):
+                if position == 0 and args.probe_initial_sources:
+                    original=args.probe_initial_sources/pid.replace(':','_')/'seed-0'/'prefix-00.png'
+                    done=json.loads((original.parent/'complete.json').read_text())
+                    assert sha(original)==done['png_hashes'][original.name]
+                    current=out/'prefix-00.png'
+                    shutil.copyfile(original,current)
+                    hashes[current.name]=sha(current)
+                    previous=current
+                    continue
                 # Only the PNG is carried to the next update, never output.latents.
                 source_image = Image.open(previous).convert('RGB') if previous else Image.new('RGB',(1024,1024),(128,128,128))
                 source = encode_source(pipe,source_image,args.device)
@@ -186,6 +203,10 @@ def main(args):
     configure_strict_cuda_determinism(0)
     if args.retain_source_mode != 'recursive':
         assert args.mode == 'train' and args.stage == 'retain'
+    if args.retain_target_mode == 'source':
+        assert args.mode == 'train' and args.stage == 'retain' and args.retain_source_mode == 'initial'
+    if args.probe_initial_sources:
+        assert args.mode == 'rollout' and args.inter_turns == 1 and args.split == 'pilot'
     rows = load_training_records(args.split) if args.mode == 'train' else load_records(args.split,history_file=args.history_file)
     if args.limit:
         rows = rows[:args.limit]
@@ -207,6 +228,8 @@ if __name__ == '__main__':
     p.add_argument('--teachers',type=Path)
     p.add_argument('--sources',type=Path)
     p.add_argument('--retain-source-mode', choices=['recursive','initial'], default='recursive')
+    p.add_argument('--retain-target-mode', choices=['teacher','source'], default='teacher')
+    p.add_argument('--probe-initial-sources',type=Path,help='Offline one-step probe from fixed training PNGs; not a fresh rollout.')
     p.add_argument('--device',default='cuda:0')
     p.add_argument('--steps',type=int,default=2048)
     p.add_argument('--snapshot-steps',type=int,nargs='+',default=[])
