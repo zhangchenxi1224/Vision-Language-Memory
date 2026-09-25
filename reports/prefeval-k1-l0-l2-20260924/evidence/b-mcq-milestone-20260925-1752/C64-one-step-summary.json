@@ -1,0 +1,267 @@
+{
+  "split": "pilot",
+  "preferences": 64,
+  "chains": 2,
+  "prefixes": [
+    0,
+    1
+  ],
+  "families": [
+    "T1"
+  ],
+  "observations": 512,
+  "matrix_complete": true,
+  "metrics": [
+    {
+      "control": "memory",
+      "family": "T1",
+      "prefix": 0,
+      "correct": 122,
+      "total": 128,
+      "parse_failures": 0,
+      "truncations": 0
+    },
+    {
+      "control": "memory",
+      "family": "T1",
+      "prefix": 1,
+      "correct": 109,
+      "total": 128,
+      "parse_failures": 0,
+      "truncations": 0
+    },
+    {
+      "control": "mismatch",
+      "family": "T1",
+      "prefix": 0,
+      "correct": 60,
+      "total": 128,
+      "parse_failures": 0,
+      "truncations": 0
+    },
+    {
+      "control": "mismatch",
+      "family": "T1",
+      "prefix": 1,
+      "correct": 60,
+      "total": 128,
+      "parse_failures": 0,
+      "truncations": 0
+    }
+  ],
+  "matched_mismatched_pairs": [
+    {
+      "family": "T1",
+      "prefix": 0,
+      "total": 128,
+      "repair": 62,
+      "regression": 0,
+      "both_correct": 60,
+      "both_wrong": 6
+    },
+    {
+      "family": "T1",
+      "prefix": 1,
+      "total": 128,
+      "repair": 49,
+      "regression": 0,
+      "both_correct": 60,
+      "both_wrong": 19
+    }
+  ],
+  "noise_joint": [
+    {
+      "family": "T1",
+      "prefix": 0,
+      "definition": "all_noise_chains_correct_per_preference",
+      "correct": 61,
+      "total": 64
+    },
+    {
+      "family": "T1",
+      "prefix": 1,
+      "definition": "all_noise_chains_correct_per_preference",
+      "correct": 53,
+      "total": 64
+    }
+  ],
+  "ood_joint": [],
+  "conditional_retention": [
+    {
+      "family": "T1",
+      "prefix": 1,
+      "definition": "conditional_on_initial_correct_same_seed",
+      "correct": 109,
+      "total": 122
+    }
+  ],
+  "trajectory_joint": [
+    {
+      "family": "T1",
+      "prefixes": [
+        0,
+        1
+      ],
+      "definition": "all_requested_prefixes_and_all_noise_chains_correct_per_preference",
+      "correct": 53,
+      "total": 64
+    }
+  ],
+  "memory_failures": [
+    {
+      "pair_id": "entertain_games:0001",
+      "chain": 0,
+      "prefix": 1,
+      "family": "T1"
+    },
+    {
+      "pair_id": "entertain_games:0001",
+      "chain": 1,
+      "prefix": 1,
+      "family": "T1"
+    },
+    {
+      "pair_id": "entertain_shows:0031",
+      "chain": 0,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "entertain_shows:0031",
+      "chain": 0,
+      "prefix": 1,
+      "family": "T1"
+    },
+    {
+      "pair_id": "entertain_shows:0031",
+      "chain": 1,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "entertain_shows:0031",
+      "chain": 1,
+      "prefix": 1,
+      "family": "T1"
+    },
+    {
+      "pair_id": "travel_activities:0004",
+      "chain": 0,
+      "prefix": 1,
+      "family": "T1"
+    },
+    {
+      "pair_id": "travel_activities:0004",
+      "chain": 1,
+      "prefix": 1,
+      "family": "T1"
+    },
+    {
+      "pair_id": "travel_activities:0055",
+      "chain": 0,
+      "prefix": 1,
+      "family": "T1"
+    },
+    {
+      "pair_id": "travel_activities:0055",
+      "chain": 1,
+      "prefix": 1,
+      "family": "T1"
+    },
+    {
+      "pair_id": "lifestyle_beauty:0012",
+      "chain": 1,
+      "prefix": 1,
+      "family": "T1"
+    },
+    {
+      "pair_id": "entertain_sports:0048",
+      "chain": 0,
+      "prefix": 1,
+      "family": "T1"
+    },
+    {
+      "pair_id": "entertain_sports:0048",
+      "chain": 1,
+      "prefix": 1,
+      "family": "T1"
+    },
+    {
+      "pair_id": "entertain_sports:0045",
+      "chain": 0,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "entertain_sports:0045",
+      "chain": 0,
+      "prefix": 1,
+      "family": "T1"
+    },
+    {
+      "pair_id": "entertain_sports:0045",
+      "chain": 1,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "entertain_sports:0045",
+      "chain": 1,
+      "prefix": 1,
+      "family": "T1"
+    },
+    {
+      "pair_id": "education_learning_styles:0009",
+      "chain": 0,
+      "prefix": 1,
+      "family": "T1"
+    },
+    {
+      "pair_id": "education_learning_styles:0009",
+      "chain": 1,
+      "prefix": 1,
+      "family": "T1"
+    },
+    {
+      "pair_id": "lifestyle_fit:0011",
+      "chain": 0,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "lifestyle_fit:0011",
+      "chain": 0,
+      "prefix": 1,
+      "family": "T1"
+    },
+    {
+      "pair_id": "lifestyle_fit:0011",
+      "chain": 1,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "lifestyle_fit:0011",
+      "chain": 1,
+      "prefix": 1,
+      "family": "T1"
+    },
+    {
+      "pair_id": "lifestyle_health:0036",
+      "chain": 1,
+      "prefix": 1,
+      "family": "T1"
+    },
+    {
+      "pair_id": "lifestyle_health:0030",
+      "chain": 0,
+      "prefix": 1,
+      "family": "T1"
+    }
+  ],
+  "source_files": {
+    "runs\\b-mcq-milestone-20260925-1752\\C64-one-step\\readback-0.jsonl": "c127f2d7a45d656655b484c57b8862ee2bbfe1138844dd698d60a0091bce5df3"
+  },
+  "official_parser_sha256": "b3088007724a5c4e21af80ed0220fa796e9f7473007ce9a7df4612eb7cd8f8ac",
+  "note": "Seeds and question forms are repeated measurements. Conditional retention does not replace the full denominator. No free-answer judge is involved."
+}

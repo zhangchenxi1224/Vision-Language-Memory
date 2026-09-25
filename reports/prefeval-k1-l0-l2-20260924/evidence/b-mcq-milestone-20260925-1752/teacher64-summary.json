@@ -1,0 +1,358 @@
+{
+  "split": "pilot",
+  "preferences": 64,
+  "chains": 1,
+  "prefixes": [
+    0
+  ],
+  "families": [
+    "T1",
+    "T2",
+    "T3",
+    "O1",
+    "O2"
+  ],
+  "observations": 1280,
+  "matrix_complete": true,
+  "metrics": [
+    {
+      "control": "blank",
+      "family": "O1",
+      "prefix": 0,
+      "correct": 29,
+      "total": 64,
+      "parse_failures": 0,
+      "truncations": 0
+    },
+    {
+      "control": "blank",
+      "family": "O2",
+      "prefix": 0,
+      "correct": 28,
+      "total": 64,
+      "parse_failures": 0,
+      "truncations": 0
+    },
+    {
+      "control": "blank",
+      "family": "T1",
+      "prefix": 0,
+      "correct": 27,
+      "total": 64,
+      "parse_failures": 0,
+      "truncations": 0
+    },
+    {
+      "control": "blank",
+      "family": "T2",
+      "prefix": 0,
+      "correct": 24,
+      "total": 64,
+      "parse_failures": 0,
+      "truncations": 0
+    },
+    {
+      "control": "blank",
+      "family": "T3",
+      "prefix": 0,
+      "correct": 31,
+      "total": 64,
+      "parse_failures": 0,
+      "truncations": 0
+    },
+    {
+      "control": "memory",
+      "family": "O1",
+      "prefix": 0,
+      "correct": 63,
+      "total": 64,
+      "parse_failures": 0,
+      "truncations": 0
+    },
+    {
+      "control": "memory",
+      "family": "O2",
+      "prefix": 0,
+      "correct": 64,
+      "total": 64,
+      "parse_failures": 0,
+      "truncations": 0
+    },
+    {
+      "control": "memory",
+      "family": "T1",
+      "prefix": 0,
+      "correct": 64,
+      "total": 64,
+      "parse_failures": 0,
+      "truncations": 0
+    },
+    {
+      "control": "memory",
+      "family": "T2",
+      "prefix": 0,
+      "correct": 64,
+      "total": 64,
+      "parse_failures": 0,
+      "truncations": 0
+    },
+    {
+      "control": "memory",
+      "family": "T3",
+      "prefix": 0,
+      "correct": 64,
+      "total": 64,
+      "parse_failures": 0,
+      "truncations": 0
+    },
+    {
+      "control": "mismatch",
+      "family": "O1",
+      "prefix": 0,
+      "correct": 32,
+      "total": 64,
+      "parse_failures": 0,
+      "truncations": 0
+    },
+    {
+      "control": "mismatch",
+      "family": "O2",
+      "prefix": 0,
+      "correct": 29,
+      "total": 64,
+      "parse_failures": 0,
+      "truncations": 0
+    },
+    {
+      "control": "mismatch",
+      "family": "T1",
+      "prefix": 0,
+      "correct": 32,
+      "total": 64,
+      "parse_failures": 0,
+      "truncations": 0
+    },
+    {
+      "control": "mismatch",
+      "family": "T2",
+      "prefix": 0,
+      "correct": 28,
+      "total": 64,
+      "parse_failures": 0,
+      "truncations": 0
+    },
+    {
+      "control": "mismatch",
+      "family": "T3",
+      "prefix": 0,
+      "correct": 36,
+      "total": 64,
+      "parse_failures": 0,
+      "truncations": 0
+    },
+    {
+      "control": "text",
+      "family": "O1",
+      "prefix": 0,
+      "correct": 58,
+      "total": 64,
+      "parse_failures": 0,
+      "truncations": 0
+    },
+    {
+      "control": "text",
+      "family": "O2",
+      "prefix": 0,
+      "correct": 61,
+      "total": 64,
+      "parse_failures": 0,
+      "truncations": 0
+    },
+    {
+      "control": "text",
+      "family": "T1",
+      "prefix": 0,
+      "correct": 57,
+      "total": 64,
+      "parse_failures": 0,
+      "truncations": 0
+    },
+    {
+      "control": "text",
+      "family": "T2",
+      "prefix": 0,
+      "correct": 59,
+      "total": 64,
+      "parse_failures": 0,
+      "truncations": 0
+    },
+    {
+      "control": "text",
+      "family": "T3",
+      "prefix": 0,
+      "correct": 59,
+      "total": 64,
+      "parse_failures": 0,
+      "truncations": 0
+    }
+  ],
+  "matched_mismatched_pairs": [
+    {
+      "family": "T1",
+      "prefix": 0,
+      "total": 64,
+      "repair": 32,
+      "regression": 0,
+      "both_correct": 32,
+      "both_wrong": 0
+    },
+    {
+      "family": "T2",
+      "prefix": 0,
+      "total": 64,
+      "repair": 36,
+      "regression": 0,
+      "both_correct": 28,
+      "both_wrong": 0
+    },
+    {
+      "family": "T3",
+      "prefix": 0,
+      "total": 64,
+      "repair": 28,
+      "regression": 0,
+      "both_correct": 36,
+      "both_wrong": 0
+    },
+    {
+      "family": "O1",
+      "prefix": 0,
+      "total": 64,
+      "repair": 31,
+      "regression": 0,
+      "both_correct": 32,
+      "both_wrong": 1
+    },
+    {
+      "family": "O2",
+      "prefix": 0,
+      "total": 64,
+      "repair": 35,
+      "regression": 0,
+      "both_correct": 29,
+      "both_wrong": 0
+    }
+  ],
+  "noise_joint": [
+    {
+      "family": "T1",
+      "prefix": 0,
+      "definition": "all_noise_chains_correct_per_preference",
+      "correct": 64,
+      "total": 64
+    },
+    {
+      "family": "T2",
+      "prefix": 0,
+      "definition": "all_noise_chains_correct_per_preference",
+      "correct": 64,
+      "total": 64
+    },
+    {
+      "family": "T3",
+      "prefix": 0,
+      "definition": "all_noise_chains_correct_per_preference",
+      "correct": 64,
+      "total": 64
+    },
+    {
+      "family": "O1",
+      "prefix": 0,
+      "definition": "all_noise_chains_correct_per_preference",
+      "correct": 63,
+      "total": 64
+    },
+    {
+      "family": "O2",
+      "prefix": 0,
+      "definition": "all_noise_chains_correct_per_preference",
+      "correct": 64,
+      "total": 64
+    }
+  ],
+  "ood_joint": [
+    {
+      "prefix": 0,
+      "definition": "O1_and_O2_on_same_image_per_chain",
+      "correct": 63,
+      "total": 64
+    },
+    {
+      "prefix": 0,
+      "definition": "O1_and_O2_all_noise_chains_per_preference",
+      "correct": 63,
+      "total": 64
+    }
+  ],
+  "conditional_retention": [],
+  "trajectory_joint": [
+    {
+      "family": "T1",
+      "prefixes": [
+        0
+      ],
+      "definition": "all_requested_prefixes_and_all_noise_chains_correct_per_preference",
+      "correct": 64,
+      "total": 64
+    },
+    {
+      "family": "T2",
+      "prefixes": [
+        0
+      ],
+      "definition": "all_requested_prefixes_and_all_noise_chains_correct_per_preference",
+      "correct": 64,
+      "total": 64
+    },
+    {
+      "family": "T3",
+      "prefixes": [
+        0
+      ],
+      "definition": "all_requested_prefixes_and_all_noise_chains_correct_per_preference",
+      "correct": 64,
+      "total": 64
+    },
+    {
+      "family": "O1",
+      "prefixes": [
+        0
+      ],
+      "definition": "all_requested_prefixes_and_all_noise_chains_correct_per_preference",
+      "correct": 63,
+      "total": 64
+    },
+    {
+      "family": "O2",
+      "prefixes": [
+        0
+      ],
+      "definition": "all_requested_prefixes_and_all_noise_chains_correct_per_preference",
+      "correct": 64,
+      "total": 64
+    }
+  ],
+  "memory_failures": [
+    {
+      "pair_id": "lifestyle_health:0036",
+      "chain": 0,
+      "prefix": 0,
+      "family": "O1"
+    }
+  ],
+  "source_files": {
+    "runs\\b-mcq-milestone-20260925-1752\\teacher64\\readback-0.jsonl": "985783a9b0b79d4326f64633628fe4d914c991bc34e388dc5f90bbb2d8b6d1be"
+  },
+  "official_parser_sha256": "b3088007724a5c4e21af80ed0220fa796e9f7473007ce9a7df4612eb7cd8f8ac",
+  "note": "Seeds and question forms are repeated measurements. Conditional retention does not replace the full denominator. No free-answer judge is involved."
+}
