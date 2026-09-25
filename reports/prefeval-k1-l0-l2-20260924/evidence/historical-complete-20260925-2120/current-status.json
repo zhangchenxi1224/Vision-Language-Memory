@@ -1,0 +1,20 @@
+{
+  "utc": "2026-09-25T13:21:49Z",
+  "B730_step": 8831,
+  "B730_seconds_since_resume": 9317.462393024005,
+  "B730_budget": 23360,
+  "I64_pilot_complete": 84,
+  "I64_dev_complete": 0,
+  "gpu_processes": [
+    {
+      "pid": "59899",
+      "cmdline": "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python scripts/experiments/prefeval_k1_writer.py train --arm B --base /inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907 --official-source /inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite --split train --stage write --steps 23360 --snapshot-steps 2048 --initial-variants /inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/variants-train.json --teachers /inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-k1-scale730-20260924/teachers/B --checkpoint /inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/4fbc857-clear-retention-full4832/train/checkpoint-final.pt --output /inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/robust730/train ",
+      "cwd": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-deploy-5d1045f"
+    },
+    {
+      "pid": "72800",
+      "cmdline": "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python scripts/experiments/prefeval_k1_writer.py rollout --arm B --base /inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907 --official-source /inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite --split pilot --inter-turns 10 --noise-chains 2 --checkpoint /inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/identity64/train/checkpoint-final.pt --output /inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/identity64/pilot ",
+      "cwd": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-deploy-dc8731c"
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "split": "pilot",
+  "preferences": 64,
+  "chains": 2,
+  "prefixes": [
+    0
+  ],
+  "families": [
+    "T1"
+  ],
+  "observations": 256,
+  "matrix_complete": true,
+  "metrics": [
+    {
+      "control": "memory",
+      "family": "T1",
+      "prefix": 0,
+      "correct": 128,
+      "total": 128,
+      "parse_failures": 0,
+      "truncations": 0
+    },
+    {
+      "control": "mismatch",
+      "family": "T1",
+      "prefix": 0,
+      "correct": 64,
+      "total": 128,
+      "parse_failures": 0,
+      "truncations": 0
+    }
+  ],
+  "matched_mismatched_pairs": [
+    {
+      "family": "T1",
+      "prefix": 0,
+      "total": 128,
+      "repair": 64,
+      "regression": 0,
+      "both_correct": 64,
+      "both_wrong": 0
+    }
+  ],
+  "noise_joint": [
+    {
+      "family": "T1",
+      "prefix": 0,
+      "definition": "all_noise_chains_correct_per_preference",
+      "correct": 64,
+      "total": 64
+    }
+  ],
+  "ood_joint": [],
+  "conditional_retention": [],
+  "trajectory_joint": [
+    {
+      "family": "T1",
+      "prefixes": [
+        0
+      ],
+      "definition": "all_requested_prefixes_and_all_noise_chains_correct_per_preference",
+      "correct": 64,
+      "total": 64
+    }
+  ],
+  "memory_failures": [],
+  "source_files": {
+    "runs\\historical-complete-20260925-2120\\fm8192\\B\\pilot\\readback-0.jsonl": "13dea3568a115764cc62ca348b2c9d1b31918265a8fe3324ac51cb4d8477e817"
+  },
+  "official_parser_sha256": "b3088007724a5c4e21af80ed0220fa796e9f7473007ce9a7df4612eb7cd8f8ac",
+  "note": "Seeds and question forms are repeated measurements. Conditional retention does not replace the full denominator. No free-answer judge is involved."
+}
