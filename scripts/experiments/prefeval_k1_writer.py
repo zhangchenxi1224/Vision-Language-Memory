@@ -15,6 +15,7 @@ import torch
 from PIL import Image
 from scripts.experiments.prefeval_k1_data import load_records, load_training_records, event_text, sha
 from scripts.experiments.prefeval_k1_teacher import save_json, atomic_save
+from scripts.experiments.prefeval_k1_variants import load_variants,apply_variant,training_variant,select_fm_target
 from scripts.eval.prefeval_rgb import append
 from scripts.train.latent_r11_vae_oracle import _save_image
 from vision_memory.dreamlite import DifferentiableDreamLiteMobileSampler
@@ -59,6 +60,7 @@ def train(args, pipe, rows):
     args.output.mkdir(parents=True, exist_ok=True)
     targets, cache = {}, {}
     target_hashes = {}
+    variants=load_variants(args.initial_variants,rows) if args.initial_variants else None
     for i, row in enumerate(rows):
         pid = row['base_pair_id']
         parent = args.teachers / pid.replace(':','_')
@@ -68,6 +70,8 @@ def train(args, pipe, rows):
         targets[pid] = torch.load(parent / 'latent.pt', map_location='cpu', weights_only=True)
         target_hashes[pid] = done['latent_sha256']
         cache[pid,0] = cache_condition(pipe, None, event_text(row['history'][:2]), args.device)
+        if variants:
+            cache[pid,'V1']=cache_condition(pipe,None,event_text(apply_variant(row,variants,1)['history'][:2]),args.device)
         if args.stage == 'retain':
             for position in range(1,11):
                 # prefix-00 contains initial write; prefix-(p-1) is input to distractor p.
@@ -87,6 +91,9 @@ def train(args, pipe, rows):
     if args.retain_target_mode == 'source':
         manifest['retain_target_mode'] = 'official_vae_encode_of_actual_source_png'
         manifest['source_png_hashes'] = {row['base_pair_id']:sha(args.sources/row['base_pair_id'].replace(':','_')/'seed-0'/'prefix-00.png') for row in rows}
+    if variants:
+        manifest['initial_variants_sha256']=sha(args.initial_variants)
+        manifest['training_variant_indices']=[0,1]
     save_json(args.output / 'manifest.json', manifest)
     predictor = DifferentiableDreamLiteMobileSampler.from_pipeline(pipe, checkpoint_unet=False)
     optimizer = torch.optim.AdamW(pipe.unet.parameters(), lr=5e-5, betas=(.9,.999), eps=1e-8, weight_decay=1e-4)
@@ -109,10 +116,10 @@ def train(args, pipe, rows):
             row = rows[order[offset]]
             pid = row['base_pair_id']
             position = 1 + cycle % 10 if args.stage == 'retain' and draw % 2 else 0
-            c = cache[pid,position]
+            variant=training_variant(cycle,variants is not None)
+            c = cache[pid,'V1' if position==0 and variant==1 else position]
             source = c['source'].to(args.device)
-            target = (source.detach() if args.retain_target_mode == 'source' and position > 0
-                      else targets[pid].to(args.device))
+            target = select_fm_target(targets[pid].to(args.device),source.detach(),position,args.retain_target_mode=='source')
             rng = torch.Generator().manual_seed(stable_seed(20260924,'sigma',draw))
             sigma = float(torch.rand((),generator=rng))
             generator = torch.Generator(device=args.device).manual_seed(stable_seed(20260924,'noise',draw))
@@ -124,6 +131,8 @@ def train(args, pipe, rows):
                 raise RuntimeError('Nonfinite FM loss')
             (loss/4).backward()
             values.append({'pair_id':pid,'position':position,'sigma':sigma,'mse':float(loss.detach())})
+            if variants:
+                values[-1]['initial_variant']=variant if position==0 else None
         norm = torch.nn.utils.clip_grad_norm_(pipe.unet.parameters(),1.,error_if_nonfinite=True)
         optimizer.step()
         append(args.output/'optimization.jsonl', {'step':step+1,'draws':values,'grad_norm':float(norm),'seconds':time.monotonic()-started})
@@ -154,6 +163,11 @@ def rollout(args, pipe, rows):
     if args.probe_initial_sources:
         binding['probe_initial_sources'] = str(args.probe_initial_sources)
         binding['scope'] = 'fixed_training_source_one_step_probe_not_new_initial_write'
+    if args.initial_variants:
+        binding['initial_variants_sha256']=sha(args.initial_variants)
+        binding['initial_variant']=args.initial_variant
+        variants=load_variants(args.initial_variants,rows)
+        rows=[apply_variant(row,variants,args.initial_variant) for row in rows]
     if args.split=='official':
         binding['benchmark_history_sha256']=sha(args.history_file)
         binding['history_protocol']=rows[0]['history_protocol']
@@ -230,6 +244,8 @@ if __name__ == '__main__':
     p.add_argument('--retain-source-mode', choices=['recursive','initial'], default='recursive')
     p.add_argument('--retain-target-mode', choices=['teacher','source'], default='teacher')
     p.add_argument('--probe-initial-sources',type=Path,help='Offline one-step probe from fixed training PNGs; not a fresh rollout.')
+    p.add_argument('--initial-variants',type=Path)
+    p.add_argument('--initial-variant',type=int,choices=[0,1,2],default=0)
     p.add_argument('--device',default='cuda:0')
     p.add_argument('--steps',type=int,default=2048)
     p.add_argument('--snapshot-steps',type=int,nargs='+',default=[])

@@ -11,6 +11,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path[:0] = [str(ROOT), str(ROOT / 'src')]
 from scripts.experiments.prefeval_k1_data import load_records, official_mcq, option_order, sha
 from scripts.experiments.prefeval_k1_teacher import save_json
+from scripts.experiments.prefeval_k1_variants import load_variants,apply_variant
 from scripts.eval.prefeval_rgb import load_reader, read_png, append
 from vision_memory.reader.open_answer import generate_short_answer
 from vision_memory.repro import configure_strict_cuda_determinism
@@ -30,6 +31,9 @@ def text_generate(reader, processor, messages, device, tokens):
 def main(args):
     configure_strict_cuda_determinism(0)
     rows=load_records(args.split,history_file=args.history_file)
+    if args.initial_variants:
+        variants=load_variants(args.initial_variants,rows)
+        rows=[apply_variant(row,variants,args.initial_variant) for row in rows]
     if args.split=='official':
         assert args.kind=='student', 'Do not optimize or evaluate teacher targets for held-out official rows'
     by_topic=defaultdict(list)
@@ -57,6 +61,12 @@ def main(args):
     history_protocol='official SFT exchanges; not final benchmark acknowledgment'
     if args.kind=='student':
         manifest=json.loads((args.images/'manifest.json').read_text())
+        if args.initial_variants:
+            assert manifest['initial_variants_sha256']==sha(args.initial_variants)
+            assert manifest['initial_variant']==args.initial_variant
+            history_protocol='reviewed acknowledgment augmentation; original preference; official SFT distractors'
+        else:
+            assert 'initial_variants_sha256' not in manifest, 'Use the matching exchange variant for text references'
         if args.split=='official':
             assert manifest['benchmark_history_sha256']==sha(args.history_file)
             history_protocol=rows[0]['history_protocol']
@@ -143,6 +153,8 @@ if __name__=='__main__':
     p.add_argument('--kind',choices=['teacher','student'],required=True)
     p.add_argument('--split',choices=['pilot','train','dev','official'],default='pilot')
     p.add_argument('--history-file',type=Path)
+    p.add_argument('--initial-variants',type=Path)
+    p.add_argument('--initial-variant',type=int,choices=[0,1,2],default=0)
     p.add_argument('--controls',default='memory,blank,mismatch,text')
     p.add_argument('--families',default='T1,T2,T3,O1,O2')
     p.add_argument('--tasks',default='free,mcq')
