@@ -24,6 +24,7 @@ from scripts.experiments.prefeval_k1_refresh_bank import (
     validate_resume, archive_uncommitted_tail,
 )
 from scripts.eval.prefeval_rgb import append
+from scripts.experiments.prefeval_multitarget_bank import select_rows, target_index
 from scripts.train.latent_r11_vae_oracle import _save_image
 from vision_memory.dreamlite import DifferentiableDreamLiteMobileSampler
 from vision_memory.dreamlite.conditioning import encode_native_base_edit_condition
@@ -67,6 +68,10 @@ def train(args, pipe, rows):
     args.output.mkdir(parents=True, exist_ok=True)
     targets, cache = {}, {}
     target_hashes = {}
+    multi = json.loads(args.target_bank.read_text()) if args.target_bank else None
+    if multi:
+        assert multi['ready'] and multi['scope'] == 'official_training_side_only'
+        assert set(multi['targets']) == {r['base_pair_id'] for r in rows}
     variants=load_variants(args.initial_variants,rows) if args.initial_variants else None
     bank = None
     refreshed = args.retain_source_mode == 'refresh-bank'
@@ -103,12 +108,18 @@ def train(args, pipe, rows):
             cache[key] = cache_condition(pipe, path, text, args.device)
     for i, row in enumerate(rows):
         pid = row['base_pair_id']
-        parent = args.teachers / pid.replace(':','_')
-        done = json.loads((parent / 'complete.json').read_text())
-        assert done['step'] == 288 and done['binding']['arm'] == args.arm
-        assert done['latent_sha256'] == sha(parent / 'latent.pt')
-        targets[pid] = torch.load(parent / 'latent.pt', map_location='cpu', weights_only=True)
-        target_hashes[pid] = done['latent_sha256']
+        if multi:
+            entries = multi['targets'][pid]
+            assert all(sha(Path(x['latent'])) == x['latent_sha256'] for x in entries)
+            targets[pid] = [torch.load(x['latent'], map_location='cpu', weights_only=True) for x in entries]
+            target_hashes[pid] = [x['latent_sha256'] for x in entries]
+        else:
+            parent = args.teachers / pid.replace(':','_')
+            done = json.loads((parent / 'complete.json').read_text())
+            assert done['step'] == 288 and done['binding']['arm'] == args.arm
+            assert done['latent_sha256'] == sha(parent / 'latent.pt')
+            targets[pid] = torch.load(parent / 'latent.pt', map_location='cpu', weights_only=True)
+            target_hashes[pid] = done['latent_sha256']
         add_condition((pid,0), None, event_text(row['history'][:2]))
         if variants:
             add_condition((pid,'V1'),None,event_text(apply_variant(row,variants,1)['history'][:2]))
@@ -160,6 +171,9 @@ def train(args, pipe, rows):
     if variants:
         manifest['initial_variants_sha256']=sha(args.initial_variants)
         manifest['training_variant_indices']=[0,1]
+    if multi:
+        manifest.update(target_bank_sha256=sha(args.target_bank), target_distribution_arm=multi['arm'],
+                        target_sampling='independent SHA256 target draw; original sigma/noise schedule unchanged')
     save_json(args.output / 'manifest.json', manifest)
     predictor = DifferentiableDreamLiteMobileSampler.from_pipeline(pipe, checkpoint_unet=False)
     optimizer = torch.optim.AdamW(pipe.unet.parameters(), lr=5e-5, betas=(.9,.999), eps=1e-8, weight_decay=1e-4)
@@ -197,7 +211,9 @@ def train(args, pipe, rows):
             else:
                 c = cache[pid,'V1' if position==0 and variant==1 else position]
             source = c['source'].to(args.device)
-            target = select_fm_target(targets[pid].to(args.device),source.detach(),position,args.retain_target_mode=='source')
+            k = target_index(pid, draw, len(targets[pid])) if multi else None
+            endpoint = targets[pid][k] if multi else targets[pid]
+            target = select_fm_target(endpoint.to(args.device),source.detach(),position,args.retain_target_mode=='source')
             rng = torch.Generator().manual_seed(stable_seed(20260924,'sigma',draw))
             sigma = float(torch.rand((),generator=rng))
             generator = torch.Generator(device=args.device).manual_seed(stable_seed(20260924,'noise',draw))
@@ -209,6 +225,8 @@ def train(args, pipe, rows):
                 raise RuntimeError('Nonfinite FM loss')
             (loss/4).backward()
             values.append({'pair_id':pid,'position':position,'sigma':sigma,'mse':float(loss.detach())})
+            if multi:
+                values[-1]['target_index'] = k
             if variants:
                 values[-1]['initial_variant']=variant if position==0 else None
             if bank is not None:
@@ -266,7 +284,8 @@ def rollout(args, pipe, rows):
     if args.split=='official':
         binding['benchmark_history_sha256']=sha(args.history_file)
         binding['history_protocol']=rows[0]['history_protocol']
-    save_json(args.output/'manifest.json',binding)
+    manifest_name='manifest.json' if args.shard_count==1 else f'manifest-shard-{args.shard_index}.json'
+    save_json(args.output/manifest_name,binding)
     for row in rows:
         pid = row['base_pair_id']
         for chain in range(args.noise_chains):
@@ -300,6 +319,8 @@ def rollout(args, pipe, rows):
                 generated = sampler(source_latents=source,noise_latents=noise,num_steps=28,return_trajectory=False)
                 current = out / f'prefix-{position:02d}.png'
                 _save_image(current,decode_model_latents_unit_interval(pipe.vae,generated.latents,clamp=True))
+                if args.noise_domain == 'mt8-teacher' and position == 0:
+                    atomic_save(out/'student-latent.pt',generated.latents.detach().cpu())
                 hashes[current.name] = sha(current)
                 append(out/'writes.jsonl', {'position':position,'source_png_sha256':sha(previous) if previous else None,
                     'output_png_sha256':hashes[current.name],'noise_seed':seed,'event':text})
@@ -325,10 +346,12 @@ def main(args):
     if args.probe_initial_sources:
         assert args.mode == 'rollout' and args.inter_turns == 1 and args.split == 'pilot'
     rows = load_training_records(args.split) if args.mode == 'train' else load_records(args.split,history_file=args.history_file)
+    if args.ids_file:
+        rows = select_rows(rows, args.ids_file)
     if args.limit:
         rows = rows[:args.limit]
     if args.shard_count != 1:
-        assert args.noise_domain.startswith('refresh-') and args.shard_count == 2
+        assert (args.noise_domain.startswith('refresh-') and args.shard_count == 2) or args.noise_domain.startswith('mt8-')
         assert args.shard_index in range(args.shard_count)
         rows = rows[args.shard_index::args.shard_count]
     pipe = load_pipe(args)
@@ -347,6 +370,8 @@ if __name__ == '__main__':
     for name in ['base','official-source','checkpoint','output']:
         p.add_argument('--'+name,type=Path,required=True)
     p.add_argument('--teachers',type=Path)
+    p.add_argument('--target-bank',type=Path)
+    p.add_argument('--ids-file',type=Path)
     p.add_argument('--sources',type=Path)
     p.add_argument('--retain-source-mode', choices=['recursive','initial','four-bank','refresh-bank'], default='recursive')
     p.add_argument('--refresh-round',type=int,choices=range(4),default=0)
@@ -361,6 +386,6 @@ if __name__ == '__main__':
     p.add_argument('--snapshot-steps',type=int,nargs='+',default=[])
     p.add_argument('--inter-turns',type=int,default=10)
     p.add_argument('--noise-chains',type=int,default=2)
-    p.add_argument('--noise-domain',choices=['eval','source-bank','refresh-0','refresh-1','refresh-2','refresh-3'],default='eval')
+    p.add_argument('--noise-domain',choices=['eval','source-bank','refresh-0','refresh-1','refresh-2','refresh-3','mt8-teacher','mt8-eval'],default='eval')
     p.add_argument('--limit',type=int,default=0)
     main(p.parse_args())

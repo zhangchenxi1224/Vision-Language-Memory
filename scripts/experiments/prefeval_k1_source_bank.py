@@ -20,7 +20,7 @@ def retention_draw(cycle):
 
 
 def noise_namespace(pair_id, chain, domain='eval'):
-    assert domain in {'eval', 'source-bank', 'refresh-0', 'refresh-1', 'refresh-2', 'refresh-3'}
+    assert domain in {'eval', 'source-bank', 'refresh-0', 'refresh-1', 'refresh-2', 'refresh-3', 'mt8-teacher', 'mt8-eval'}
     original = f'rollout:{pair_id}:{chain}'
     return original if domain == 'eval' else domain + ':' + original
 
