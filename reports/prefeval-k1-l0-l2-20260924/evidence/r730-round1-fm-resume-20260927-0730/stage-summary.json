@@ -1,0 +1,179 @@
+{
+  "utc": "2026-09-26T23:22:17.950783+00:00",
+  "host": "prefeval-b-cr-h200x4-20260926--c1325f0297e5-p7vxlaarul",
+  "optimization_log_steps": 6850,
+  "contiguous_unique": true,
+  "first_round1_step": {
+    "step": 5841,
+    "draws": [
+      {
+        "pair_id": "travel_activities:0052",
+        "position": 0,
+        "sigma": 0.4129580855369568,
+        "mse": 0.21683287620544434,
+        "initial_variant": 0,
+        "source_index": null,
+        "source_round": null
+      },
+      {
+        "pair_id": "travel_activities:0052",
+        "position": 7,
+        "sigma": 0.15676218271255493,
+        "mse": 0.9936599731445312,
+        "initial_variant": null,
+        "source_index": 6,
+        "source_round": 1
+      },
+      {
+        "pair_id": "travel_restaurant:0047",
+        "position": 0,
+        "sigma": 0.5571784973144531,
+        "mse": 0.09620064496994019,
+        "initial_variant": 0,
+        "source_index": null,
+        "source_round": null
+      },
+      {
+        "pair_id": "travel_restaurant:0047",
+        "position": 7,
+        "sigma": 0.548240602016449,
+        "mse": 0.6462919116020203,
+        "initial_variant": null,
+        "source_index": 6,
+        "source_round": 1
+      }
+    ],
+    "grad_norm": 0.5463953018188477,
+    "seconds": 1.775671062991023
+  },
+  "write_retain_ratio": "1:1",
+  "source_round_transition_verified": true,
+  "resume": {
+    "optimizer_step": 6784,
+    "episode_cursor": 27136,
+    "trainer_state": {
+      "refresh_round": 1,
+      "source_bank_sha256": "1fe8cf804b8bf12afcf2240f1d4eb65eb61c0cadd19dc542b3fb511cf66c74f8"
+    },
+    "optimizer_parameter_states": 1075,
+    "optimizer_steps": [
+      6784
+    ],
+    "rng_keys": [
+      "python",
+      "numpy",
+      "torch_cpu",
+      "torch_cuda"
+    ],
+    "sha256": "fc6a58ef8e0885e0afa10c42e6bcf6e3fee564b5271839898b48c54e65740a81"
+  },
+  "c_eval_complete_chains": 137,
+  "c_eval_png_including_inflight": 1517,
+  "processes": [
+    {
+      "pid": 5041,
+      "cmd": [
+        "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681/scripts/inspire/run_prefeval_k1_refresh730.py",
+        "--arm",
+        "C",
+        "--gpus",
+        "1"
+      ],
+      "cwd": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681",
+      "gpu": ""
+    },
+    {
+      "pid": 5042,
+      "cmd": [
+        "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681/scripts/inspire/run_prefeval_k1_refresh730.py",
+        "--arm",
+        "R",
+        "--gpus",
+        "2",
+        "3"
+      ],
+      "cwd": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681",
+      "gpu": ""
+    },
+    {
+      "pid": 5048,
+      "cmd": [
+        "bash",
+        "scripts/inspire/run_prefeval_k1_retain730.sh",
+        "C"
+      ],
+      "cwd": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-deploy-52d98d8",
+      "gpu": "1"
+    },
+    {
+      "pid": 1428378,
+      "cmd": [
+        "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681/scripts/experiments/prefeval_k1_writer.py",
+        "train",
+        "--arm",
+        "B",
+        "--base",
+        "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+        "--official-source",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite",
+        "--split",
+        "train",
+        "--stage",
+        "retain",
+        "--steps",
+        "23360",
+        "--retain-source-mode",
+        "refresh-bank",
+        "--refresh-round",
+        "1",
+        "--initial-variants",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/variants-train.json",
+        "--sources",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-R/sources",
+        "--teachers",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-k1-scale730-20260924/teachers/B",
+        "--checkpoint",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/robust730/train/checkpoint-final.pt",
+        "--output",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-R/train"
+      ],
+      "cwd": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681",
+      "gpu": "2"
+    },
+    {
+      "pid": 3363967,
+      "cmd": [
+        "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+        "scripts/experiments/prefeval_k1_writer.py",
+        "rollout",
+        "--arm",
+        "B",
+        "--base",
+        "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+        "--official-source",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite",
+        "--split",
+        "dev",
+        "--checkpoint",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-C/train/checkpoint-final.pt",
+        "--initial-variants",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/variants-dev.json",
+        "--initial-variant",
+        "1",
+        "--inter-turns",
+        "10",
+        "--noise-chains",
+        "2",
+        "--output",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-C/final-dev-V1"
+      ],
+      "cwd": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-deploy-52d98d8",
+      "gpu": "1"
+    }
+  ],
+  "gpus": "0, 0 %, 1 MiB\n1, 100 %, 14128 MiB\n2, 97 %, 40168 MiB\n3, 0 %, 1 MiB\n",
+  "is_memory_score": false
+}
