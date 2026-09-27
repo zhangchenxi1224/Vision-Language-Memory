@@ -1,0 +1,8 @@
+2026-09-27 19:17-19:23 CST
+Target: vlm-r11-trust-h200x4-20260907-r4, workspace: distributed training
+1. Read-only Python preflight via inspire notebook exec: JupyterTerminal did not establish or complete the remote command.
+2. hostname with --ignore-target-cache --timeout 30: requests.exceptions.ReadTimeout, HTTPSConnectionPool(host=ai-notebook-inspire.sii.edu.cn, port=443). Stack points to _jupyter_terminal -> http.post(base + api/terminals).
+3. inspire --debug notebook exec ... --timeout 30 hostname: same HTTPS read timeout.
+No experiment launcher executed. Actual GPU process/host/lock inspection not obtained.
+Shared CPU access succeeded: launch-trust.py prepared and py_compile passed; trust and normal launch.json both absent.
+Browser fallback initialization failed locally: failed to write kernel assets; system cannot find path (os error 3).
