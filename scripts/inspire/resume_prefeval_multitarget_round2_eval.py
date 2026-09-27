@@ -12,7 +12,7 @@ from collections import defaultdict
 PROJECT = Path('/inspire/ssd/project/exploration-topic/czxs26210936')
 TASK = PROJECT/'runs/prefeval-multitarget-20260927'
 OLD = TASK/'round2/pilot64'
-OUT = TASK/'round2/recovery-20260927-2135'
+OUT = TASK/'round2/recovery-20260928-0045'
 CODE = PROJECT/'repos/prefeval-multitarget-round2'
 COMMIT = '224cc77d790cf3967b5a56ce2e77c364959435a2'
 PYTHON = PROJECT/'envs/vlm-r3-ngc2502/bin/python'
@@ -74,27 +74,31 @@ def main():
 
     def jobs(label, commands):
         status(label)
-        for gpu, _ in commands:
+        for gpu in range(2):
             assert not subprocess.check_output(['nvidia-smi', '-i', str(gpu),
                 '--query-compute-apps=pid', '--format=csv,noheader'], text=True).strip(), f'GPU {gpu} busy'
-        children = []
-        for gpu, command in commands:
-            env = dict(os.environ, CUDA_VISIBLE_DEVICES=str(gpu), CUBLAS_WORKSPACE_CONFIG=':4096:8',
-                PYTHONUNBUFFERED='1', OMP_NUM_THREADS='1', MKL_NUM_THREADS='1', PYTHONHASHSEED='0',
-                HF_HUB_OFFLINE='1', TRANSFORMERS_OFFLINE='1', TOKENIZERS_PARALLELISM='false')
-            stream = (OUT/f'{label}-gpu{gpu}.log').open('a')
-            command = list(map(str, command))
-            child = subprocess.Popen(command, cwd=CODE, env=env, stdin=subprocess.DEVNULL,
-                stdout=stream, stderr=subprocess.STDOUT, pass_fds=tuple(x.fileno() for x in locks))
-            children.append((child, stream))
-            save(OUT/f'{label}-gpu{gpu}-process.json', dict(state, gpu=gpu, pid=child.pid, command=command))
-        codes = []
-        for child, stream in children:
-            codes.append(child.wait())
-            stream.close()
-        if any(codes):
-            status('failed', failed_stage=label, exit_codes=codes)
-            raise RuntimeError(f'{label}: {codes}')
+        # Keep all four logical shards; only their execution concurrency changes.
+        for offset in range(0, len(commands), 2):
+            children = []
+            for shard, command in commands[offset:offset+2]:
+                gpu = shard % 2
+                env = dict(os.environ, CUDA_VISIBLE_DEVICES=str(gpu), CUBLAS_WORKSPACE_CONFIG=':4096:8',
+                    PYTHONUNBUFFERED='1', OMP_NUM_THREADS='1', MKL_NUM_THREADS='1', PYTHONHASHSEED='0',
+                    HF_HUB_OFFLINE='1', TRANSFORMERS_OFFLINE='1', TOKENIZERS_PARALLELISM='false')
+                stream = (OUT/f'{label}-shard{shard}.log').open('a')
+                command = list(map(str, command))
+                child = subprocess.Popen(command, cwd=CODE, env=env, stdin=subprocess.DEVNULL,
+                    stdout=stream, stderr=subprocess.STDOUT, pass_fds=tuple(x.fileno() for x in locks))
+                children.append((child, stream))
+                save(OUT/f'{label}-shard{shard}-process.json',
+                     dict(state, gpu=gpu, shard=shard, pid=child.pid, command=command))
+            codes = []
+            for child, stream in children:
+                codes.append(child.wait())
+                stream.close()
+            if any(codes):
+                status('failed', failed_stage=label, shard_offset=offset, exit_codes=codes)
+                raise RuntimeError(f'{label}: {codes}')
 
     ids = json.loads((OLD/'ids.json').read_text())['ids']
     assert len(ids) == 64 and len(set(ids)) == 64
@@ -108,7 +112,8 @@ def main():
         checkpoint_sha256=EXPECTED, original_protocol_sha256=sha(OLD/'protocol.json'),
         bank_sha256={arm: sha(OLD/f'{arm}-bank.json') for arm in banks},
         recovery_script_sha256=state['recovery_script_sha256'],
-        recovery='evaluation only; same 64 IDs, paired mt8-eval seeds, evaluator, parser, all four shards'))
+        recovery='evaluation only; same 64 IDs, paired mt8-eval seeds, evaluator, parser, all four shards',
+        physical_gpus=2, logical_shards=4))
     if (OUT/'complete.json').exists():
         assert json.loads((OUT/'complete.json').read_text())['results_sha256'] == sha(OUT/'results.json')
         return
