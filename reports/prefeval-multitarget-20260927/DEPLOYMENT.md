@@ -1,5 +1,13 @@
 # 多目标主线部署记录
 
+最新状态（2026-09-28 04:15 CST）：第二轮于03:59:20完整完成，结果见[ROUND2_RESULTS.json](ROUND2_RESULTS.json)。确认旧controller与子进程均退出、两卡0MiB且根/旧/恢复控制器三层锁FREE后，04:15:53在同一NORMAL两H200资源启动第三轮，先smoke再pilot64，未重新申请算力。第三轮入口为scripts/inspire/launch_prefeval_multitarget_round3.sh，启动器PID1689886（仅启动快照），日志为任务根round3-pipeline.log，输出只在round3/smoke和round3/pilot64。
+
+第三轮控制器独立checkout repos/prefeval-multitarget-round3，冻结5134d407a2710cef025654b8ab4207a5c269e6a0；控制器文件SHA256 e8572bb7d7d3fb36145252b3e9f8c0f3ef03eb98b9a3a3a7592052ace6ed50e7。真实Writer/教师/evaluator继续调用repos/prefeval-multitarget-round2的224cc77冻结代码。新学生快照为C8最终权重；C8R对照完整旧目标回放，U16合并完整旧池与八个新学生起点的局部修正候选。两组均额外2048步FM。方法、门槛与成本见[PLAN.md](PLAN.md)，根pipeline.lock及本阶段controller.lock均传给子进程。
+
+04:16:45核验smoke controller1689907的两名实际子进程完整命令与回执一致，根和smoke控制器锁HELD。04:18:44核验V0/V1各两份实际学生latent均齐备，已进入teachers-new；两GPU各约13.9GB显存，首对教师优化到196/199步，有真实梯度更新记录，尚无资格完成回执。此为执行核验，不是烟测通过或方法改善结论。运行快照保留于round3/runtime-initial.json与runtime-teacher.json。自动跟进暂保留10分钟以确认烟测，正式pilot64健康推进后恢复45分钟。
+
+第二轮原始输出及身份归档round2-final-evidence.tar.gz已下载并校验；原用户四卡实例继续停止并保留，B730/C/R任务未干预。下方第二轮正在运行或排队描述均为历史状态。
+
 最新状态（2026-09-28 00:45 CST）：利用刚释放的2卡配额，评测已在新NORMAL资源prefeval-mt-eval-h200x2-20260928的qb-prod-gpu2226启动。原4卡实例停止排队但保留。当前唯一入口为round2/recovery-20260928-0045/resume_eval.py（ca908b6），控制器PID8515；旧四卡恢复目录从未启动。四个逻辑分片分两批在两卡执行，模型/参数/种子/评分不变。详情见[ROUND2_RECOVERY_20260928.md](ROUND2_RECOVERY_20260928.md)，下方旧PENDING说明仅为历史记录。
 
 当前状态更新（2026-09-27 21:39 CST）：第二轮两组训练完成，但21:22:09实例被平台利用率规则自动停止；原实例重新start后PENDING。后续评测将只在round2/recovery-20260927-2135独立目录恢复，已完成权重及S1/V0图像只读复用。恢复入口resume_eval.py（本分支bb2d298），实际模型/采样/评测代码仍固定224cc77，不再执行旧全流程启动器。详见[ROUND2_RECOVERY_20260927.md](ROUND2_RECOVERY_20260927.md)。在新主机/进程/锁核验并真正启动前，不将此状态报告为恢复成功。
