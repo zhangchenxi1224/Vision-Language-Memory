@@ -1,6 +1,7 @@
 """Training-only empirical target distributions; no Reader/model imports."""
 import hashlib
 import json
+import copy
 from pathlib import Path
 
 
@@ -17,6 +18,19 @@ def select_rows(rows, ids_file):
     if len(ids) != len(set(ids)) or not set(ids) <= set(by_id):
         raise ValueError('Duplicate IDs or IDs outside requested split')
     return [by_id[pid] for pid in ids]
+
+
+def fixed_single_bank(bank, arm):
+    """Predeclared per-preference subset, with original candidate coverage retained."""
+    if not bank['ready'] or bank['missing_preferences'] or any(not v for v in bank['targets'].values()):
+        raise ValueError('Cannot select from an incomplete qualified bank')
+    result = copy.deepcopy(bank)
+    result['arm'] = arm
+    result['source_arm'] = bank['arm']
+    result['targets'] = {pid: [values[target_index(pid, -1, len(values))]]
+                         for pid, values in bank['targets'].items()}
+    result['sampling'] = 'uniform preference; predeclared fixed hash-selected qualified target'
+    return result
 
 
 def freeze_bank(root, ids, arm):

@@ -1,0 +1,2185 @@
+{
+  "scope": "train64 V0+V1, eight seeds each, single-generation rates; no unseen-preference generalization",
+  "controller": {
+    "host": "prefeval-k1-h200x4-high-20260924--506d5fcf84c1-heqpkyzp2a",
+    "pid": 113976,
+    "commit": "13d286d464a613164840850f5d364ff6b41ad7eb",
+    "code": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-multitarget-runtime",
+    "stage": "pilot_complete_iteration_review_required",
+    "time_utc": "2026-09-27T07:51:31.980927+00:00",
+    "results": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-multitarget-20260927/pilot64/results.json"
+  },
+  "protocol": {
+    "commit": "13d286d464a613164840850f5d364ff6b41ad7eb",
+    "parent": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/robust730/train/checkpoint-final.pt",
+    "parent_sha256": "6c8eb92f629ccdf6932407124190d651e8231058ef6f232a0a59380370d44c8d",
+    "ids": [
+      "entertain_games:0001",
+      "entertain_games:0007",
+      "entertain_games:0036",
+      "entertain_games:0023",
+      "entertain_shows:0040",
+      "entertain_shows:0031",
+      "entertain_shows:0052",
+      "entertain_shows:0037",
+      "travel_activities:0052",
+      "travel_activities:0004",
+      "travel_activities:0051",
+      "travel_activities:0055",
+      "travel_restaurant:0054",
+      "travel_restaurant:0030",
+      "travel_restaurant:0041",
+      "travel_restaurant:0009",
+      "travel_hotel:0003",
+      "travel_hotel:0039",
+      "travel_hotel:0052",
+      "travel_hotel:0045",
+      "lifestyle_dietary:0022",
+      "lifestyle_dietary:0017",
+      "lifestyle_dietary:0042",
+      "lifestyle_dietary:0047",
+      "entertain_music_book:0012",
+      "entertain_music_book:0038",
+      "entertain_music_book:0044",
+      "entertain_music_book:0016",
+      "lifestyle_beauty:0012",
+      "lifestyle_beauty:0038",
+      "lifestyle_beauty:0037",
+      "lifestyle_beauty:0002",
+      "shop_home:0016",
+      "shop_home:0042",
+      "shop_home:0005",
+      "shop_home:0046",
+      "entertain_sports:0015",
+      "entertain_sports:0048",
+      "entertain_sports:0045",
+      "entertain_sports:0009",
+      "shop_fashion:0041",
+      "shop_fashion:0029",
+      "shop_fashion:0042",
+      "shop_fashion:0040",
+      "education_learning_styles:0009",
+      "education_learning_styles:0007",
+      "education_learning_styles:0001",
+      "education_learning_styles:0030",
+      "lifestyle_fit:0038",
+      "lifestyle_fit:0017",
+      "lifestyle_fit:0000",
+      "lifestyle_fit:0011",
+      "lifestyle_health:0036",
+      "lifestyle_health:0030",
+      "lifestyle_health:0042",
+      "lifestyle_health:0040",
+      "professional_work_location_style:0000",
+      "professional_work_location_style:0006",
+      "professional_work_location_style:0034",
+      "professional_work_location_style:0035",
+      "pet_ownership:0031",
+      "pet_ownership:0015",
+      "pet_ownership:0016",
+      "pet_ownership:0039"
+    ],
+    "targets": 8,
+    "teacher_steps": 288,
+    "fm_steps": 2048,
+    "cfg": 1,
+    "generation_steps": 28,
+    "target_entry": "direct optimized model-space latent, matching prior B",
+    "teacher_forms": [
+      "T1",
+      "T2",
+      "T3"
+    ],
+    "selection_forms": [
+      "T1",
+      "T2",
+      "T3"
+    ],
+    "excluded_from_selection": [
+      "dev90",
+      "O1",
+      "O2",
+      "official180",
+      "V2"
+    ],
+    "arms": [
+      "F1",
+      "F8",
+      "S8"
+    ],
+    "proximal_lambda": 0.1,
+    "trust_rms": 1.0,
+    "qualification": "every T1/T2/T3 x four correct-option positions must parse and be correct",
+    "single_sample_primary": true,
+    "no_test_time_target_selection": true,
+    "smoke": false
+  },
+  "arms": {
+    "F1": {
+      "combined": {
+        "memory/T1": [
+          998,
+          1024
+        ],
+        "memory/T2": [
+          985,
+          1024
+        ],
+        "memory/T3": [
+          1012,
+          1024
+        ],
+        "mismatch/T1": [
+          403,
+          1024
+        ],
+        "mismatch/T2": [
+          388,
+          1024
+        ],
+        "mismatch/T3": [
+          519,
+          1024
+        ],
+        "blank/T1": [
+          54,
+          128
+        ],
+        "blank/T2": [
+          48,
+          128
+        ],
+        "blank/T3": [
+          62,
+          128
+        ],
+        "text/T1": [
+          116,
+          128
+        ],
+        "text/T2": [
+          120,
+          128
+        ],
+        "text/T3": [
+          119,
+          128
+        ]
+      },
+      "by_variant": {
+        "V0/memory/T1": [
+          500,
+          512
+        ],
+        "V0/memory/T2": [
+          493,
+          512
+        ],
+        "V0/memory/T3": [
+          507,
+          512
+        ],
+        "V0/mismatch/T1": [
+          201,
+          512
+        ],
+        "V0/mismatch/T2": [
+          196,
+          512
+        ],
+        "V0/mismatch/T3": [
+          256,
+          512
+        ],
+        "V0/blank/T1": [
+          27,
+          64
+        ],
+        "V0/blank/T2": [
+          24,
+          64
+        ],
+        "V0/blank/T3": [
+          31,
+          64
+        ],
+        "V0/text/T1": [
+          57,
+          64
+        ],
+        "V0/text/T2": [
+          59,
+          64
+        ],
+        "V0/text/T3": [
+          59,
+          64
+        ],
+        "V1/memory/T1": [
+          498,
+          512
+        ],
+        "V1/memory/T2": [
+          492,
+          512
+        ],
+        "V1/memory/T3": [
+          505,
+          512
+        ],
+        "V1/mismatch/T1": [
+          202,
+          512
+        ],
+        "V1/mismatch/T2": [
+          192,
+          512
+        ],
+        "V1/mismatch/T3": [
+          263,
+          512
+        ],
+        "V1/blank/T1": [
+          27,
+          64
+        ],
+        "V1/blank/T2": [
+          24,
+          64
+        ],
+        "V1/blank/T3": [
+          31,
+          64
+        ],
+        "V1/text/T1": [
+          59,
+          64
+        ],
+        "V1/text/T2": [
+          61,
+          64
+        ],
+        "V1/text/T3": [
+          60,
+          64
+        ]
+      },
+      "all3": [
+        976,
+        1024
+      ],
+      "parse_failures": 0,
+      "per_preference": {
+        "education_learning_styles:0001": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 1
+        },
+        "education_learning_styles:0007": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "education_learning_styles:0009": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 1
+        },
+        "education_learning_styles:0030": {
+          "T1": 1,
+          "all3": 0.5,
+          "gain": 1
+        },
+        "entertain_games:0001": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 1
+        },
+        "entertain_games:0007": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 1
+        },
+        "entertain_games:0023": {
+          "T1": 1,
+          "all3": 0.875,
+          "gain": 1
+        },
+        "entertain_games:0036": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "entertain_music_book:0012": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "entertain_music_book:0016": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "entertain_music_book:0038": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 1
+        },
+        "entertain_music_book:0044": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "entertain_shows:0031": {
+          "T1": 1,
+          "all3": 0.75,
+          "gain": 1
+        },
+        "entertain_shows:0037": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "entertain_shows:0040": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 1
+        },
+        "entertain_shows:0052": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "entertain_sports:0009": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "entertain_sports:0015": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 1
+        },
+        "entertain_sports:0045": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 1
+        },
+        "entertain_sports:0048": {
+          "T1": 0.5,
+          "all3": 0.4375,
+          "gain": 0.5
+        },
+        "lifestyle_beauty:0002": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 1
+        },
+        "lifestyle_beauty:0012": {
+          "T1": 0.1875,
+          "all3": 0.1875,
+          "gain": 0.1875
+        },
+        "lifestyle_beauty:0037": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "lifestyle_beauty:0038": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "lifestyle_dietary:0017": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "lifestyle_dietary:0022": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 1
+        },
+        "lifestyle_dietary:0042": {
+          "T1": 1,
+          "all3": 0.875,
+          "gain": 1
+        },
+        "lifestyle_dietary:0047": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "lifestyle_fit:0000": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 1
+        },
+        "lifestyle_fit:0011": {
+          "T1": 0.6875,
+          "all3": 0.375,
+          "gain": -0.3125
+        },
+        "lifestyle_fit:0017": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 1
+        },
+        "lifestyle_fit:0038": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 1
+        },
+        "lifestyle_health:0030": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 1
+        },
+        "lifestyle_health:0036": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0.9375
+        },
+        "lifestyle_health:0040": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 1
+        },
+        "lifestyle_health:0042": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 1
+        },
+        "pet_ownership:0015": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "pet_ownership:0016": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "pet_ownership:0031": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "pet_ownership:0039": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 1
+        },
+        "professional_work_location_style:0000": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "professional_work_location_style:0006": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "professional_work_location_style:0034": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 1
+        },
+        "professional_work_location_style:0035": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "shop_fashion:0029": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 1
+        },
+        "shop_fashion:0040": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 1
+        },
+        "shop_fashion:0041": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "shop_fashion:0042": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 1
+        },
+        "shop_home:0005": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 1
+        },
+        "shop_home:0016": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "shop_home:0042": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 1
+        },
+        "shop_home:0046": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 1
+        },
+        "travel_activities:0004": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 1
+        },
+        "travel_activities:0051": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 1
+        },
+        "travel_activities:0052": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "travel_activities:0055": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 1
+        },
+        "travel_hotel:0003": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0.8125
+        },
+        "travel_hotel:0039": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "travel_hotel:0045": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 1
+        },
+        "travel_hotel:0052": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 1
+        },
+        "travel_restaurant:0009": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "travel_restaurant:0030": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 1
+        },
+        "travel_restaurant:0041": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 1
+        },
+        "travel_restaurant:0054": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0.0625
+        }
+      },
+      "readback_sha256": {
+        "V0": "3292e0c623aa82903feae8841b37420397ffc3f41dc9139f717960ba1d44b8c0",
+        "V1": "6f1bbee4b2c30575ae9474b0fd1bff31610471af5f8b22cc2fc489edd364c46f"
+      }
+    },
+    "F8": {
+      "combined": {
+        "memory/T1": [
+          425,
+          1024
+        ],
+        "memory/T2": [
+          393,
+          1024
+        ],
+        "memory/T3": [
+          501,
+          1024
+        ],
+        "mismatch/T1": [
+          411,
+          1024
+        ],
+        "mismatch/T2": [
+          391,
+          1024
+        ],
+        "mismatch/T3": [
+          493,
+          1024
+        ],
+        "blank/T1": [
+          54,
+          128
+        ],
+        "blank/T2": [
+          48,
+          128
+        ],
+        "blank/T3": [
+          62,
+          128
+        ],
+        "text/T1": [
+          116,
+          128
+        ],
+        "text/T2": [
+          120,
+          128
+        ],
+        "text/T3": [
+          119,
+          128
+        ]
+      },
+      "by_variant": {
+        "V0/memory/T1": [
+          211,
+          512
+        ],
+        "V0/memory/T2": [
+          196,
+          512
+        ],
+        "V0/memory/T3": [
+          251,
+          512
+        ],
+        "V0/mismatch/T1": [
+          204,
+          512
+        ],
+        "V0/mismatch/T2": [
+          196,
+          512
+        ],
+        "V0/mismatch/T3": [
+          247,
+          512
+        ],
+        "V0/blank/T1": [
+          27,
+          64
+        ],
+        "V0/blank/T2": [
+          24,
+          64
+        ],
+        "V0/blank/T3": [
+          31,
+          64
+        ],
+        "V0/text/T1": [
+          57,
+          64
+        ],
+        "V0/text/T2": [
+          59,
+          64
+        ],
+        "V0/text/T3": [
+          59,
+          64
+        ],
+        "V1/memory/T1": [
+          214,
+          512
+        ],
+        "V1/memory/T2": [
+          197,
+          512
+        ],
+        "V1/memory/T3": [
+          250,
+          512
+        ],
+        "V1/mismatch/T1": [
+          207,
+          512
+        ],
+        "V1/mismatch/T2": [
+          195,
+          512
+        ],
+        "V1/mismatch/T3": [
+          246,
+          512
+        ],
+        "V1/blank/T1": [
+          27,
+          64
+        ],
+        "V1/blank/T2": [
+          24,
+          64
+        ],
+        "V1/blank/T3": [
+          31,
+          64
+        ],
+        "V1/text/T1": [
+          59,
+          64
+        ],
+        "V1/text/T2": [
+          61,
+          64
+        ],
+        "V1/text/T3": [
+          60,
+          64
+        ]
+      },
+      "all3": [
+        306,
+        1024
+      ],
+      "parse_failures": 0,
+      "per_preference": {
+        "education_learning_styles:0001": {
+          "T1": 1,
+          "all3": 0,
+          "gain": 0.25
+        },
+        "education_learning_styles:0007": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "education_learning_styles:0009": {
+          "T1": 0,
+          "all3": 0,
+          "gain": 0
+        },
+        "education_learning_styles:0030": {
+          "T1": 0,
+          "all3": 0,
+          "gain": 0
+        },
+        "entertain_games:0001": {
+          "T1": 0,
+          "all3": 0,
+          "gain": 0
+        },
+        "entertain_games:0007": {
+          "T1": 0,
+          "all3": 0,
+          "gain": 0
+        },
+        "entertain_games:0023": {
+          "T1": 0,
+          "all3": 0,
+          "gain": 0
+        },
+        "entertain_games:0036": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "entertain_music_book:0012": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "entertain_music_book:0016": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "entertain_music_book:0038": {
+          "T1": 0.6875,
+          "all3": 0.6875,
+          "gain": 0.4375
+        },
+        "entertain_music_book:0044": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "entertain_shows:0031": {
+          "T1": 0,
+          "all3": 0,
+          "gain": 0
+        },
+        "entertain_shows:0037": {
+          "T1": 1,
+          "all3": 0,
+          "gain": 0
+        },
+        "entertain_shows:0040": {
+          "T1": 0,
+          "all3": 0,
+          "gain": 0
+        },
+        "entertain_shows:0052": {
+          "T1": 1,
+          "all3": 0.5,
+          "gain": 0
+        },
+        "entertain_sports:0009": {
+          "T1": 1,
+          "all3": 0,
+          "gain": 0
+        },
+        "entertain_sports:0015": {
+          "T1": 0,
+          "all3": 0,
+          "gain": 0
+        },
+        "entertain_sports:0045": {
+          "T1": 0,
+          "all3": 0,
+          "gain": 0
+        },
+        "entertain_sports:0048": {
+          "T1": 0,
+          "all3": 0,
+          "gain": 0
+        },
+        "lifestyle_beauty:0002": {
+          "T1": 0,
+          "all3": 0,
+          "gain": 0
+        },
+        "lifestyle_beauty:0012": {
+          "T1": 0,
+          "all3": 0,
+          "gain": 0
+        },
+        "lifestyle_beauty:0037": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "lifestyle_beauty:0038": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "lifestyle_dietary:0017": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "lifestyle_dietary:0022": {
+          "T1": 0,
+          "all3": 0,
+          "gain": 0
+        },
+        "lifestyle_dietary:0042": {
+          "T1": 0,
+          "all3": 0,
+          "gain": 0
+        },
+        "lifestyle_dietary:0047": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "lifestyle_fit:0000": {
+          "T1": 1,
+          "all3": 0,
+          "gain": 0
+        },
+        "lifestyle_fit:0011": {
+          "T1": 0,
+          "all3": 0,
+          "gain": 0
+        },
+        "lifestyle_fit:0017": {
+          "T1": 0,
+          "all3": 0,
+          "gain": 0
+        },
+        "lifestyle_fit:0038": {
+          "T1": 0,
+          "all3": 0,
+          "gain": 0
+        },
+        "lifestyle_health:0030": {
+          "T1": 0,
+          "all3": 0,
+          "gain": 0
+        },
+        "lifestyle_health:0036": {
+          "T1": 0,
+          "all3": 0,
+          "gain": 0
+        },
+        "lifestyle_health:0040": {
+          "T1": 0,
+          "all3": 0,
+          "gain": 0
+        },
+        "lifestyle_health:0042": {
+          "T1": 0,
+          "all3": 0,
+          "gain": 0
+        },
+        "pet_ownership:0015": {
+          "T1": 0.875,
+          "all3": 0.875,
+          "gain": 0.0625
+        },
+        "pet_ownership:0016": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "pet_ownership:0031": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "pet_ownership:0039": {
+          "T1": 0,
+          "all3": 0,
+          "gain": 0
+        },
+        "professional_work_location_style:0000": {
+          "T1": 0.375,
+          "all3": 0,
+          "gain": -0.0625
+        },
+        "professional_work_location_style:0006": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "professional_work_location_style:0034": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "professional_work_location_style:0035": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "shop_fashion:0029": {
+          "T1": 0,
+          "all3": 0,
+          "gain": 0
+        },
+        "shop_fashion:0040": {
+          "T1": 0,
+          "all3": 0,
+          "gain": 0
+        },
+        "shop_fashion:0041": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "shop_fashion:0042": {
+          "T1": 0,
+          "all3": 0,
+          "gain": 0
+        },
+        "shop_home:0005": {
+          "T1": 0,
+          "all3": 0,
+          "gain": 0
+        },
+        "shop_home:0016": {
+          "T1": 0.125,
+          "all3": 0.125,
+          "gain": 0.125
+        },
+        "shop_home:0042": {
+          "T1": 0,
+          "all3": 0,
+          "gain": 0
+        },
+        "shop_home:0046": {
+          "T1": 0.5,
+          "all3": 0,
+          "gain": 0.0625
+        },
+        "travel_activities:0004": {
+          "T1": 0,
+          "all3": 0,
+          "gain": 0
+        },
+        "travel_activities:0051": {
+          "T1": 0,
+          "all3": 0,
+          "gain": 0
+        },
+        "travel_activities:0052": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "travel_activities:0055": {
+          "T1": 0,
+          "all3": 0,
+          "gain": 0
+        },
+        "travel_hotel:0003": {
+          "T1": 1,
+          "all3": 0,
+          "gain": 0
+        },
+        "travel_hotel:0039": {
+          "T1": 1,
+          "all3": 0.8125,
+          "gain": 0
+        },
+        "travel_hotel:0045": {
+          "T1": 0,
+          "all3": 0,
+          "gain": 0
+        },
+        "travel_hotel:0052": {
+          "T1": 0,
+          "all3": 0,
+          "gain": 0
+        },
+        "travel_restaurant:0009": {
+          "T1": 1,
+          "all3": 0.125,
+          "gain": 0
+        },
+        "travel_restaurant:0030": {
+          "T1": 0,
+          "all3": 0,
+          "gain": 0
+        },
+        "travel_restaurant:0041": {
+          "T1": 0,
+          "all3": 0,
+          "gain": 0
+        },
+        "travel_restaurant:0054": {
+          "T1": 0,
+          "all3": 0,
+          "gain": 0
+        }
+      },
+      "readback_sha256": {
+        "V0": "e4be33dba1fc31b145a744b65ef29598941eb52d63b15e166a60101490c3ccad",
+        "V1": "81bc34c9ebd120cc066a0196eefa85f951e37cec8af68b6378ab8e42521882f9"
+      }
+    },
+    "S8": {
+      "combined": {
+        "memory/T1": [
+          858,
+          1024
+        ],
+        "memory/T2": [
+          852,
+          1024
+        ],
+        "memory/T3": [
+          928,
+          1024
+        ],
+        "mismatch/T1": [
+          487,
+          1024
+        ],
+        "mismatch/T2": [
+          422,
+          1024
+        ],
+        "mismatch/T3": [
+          551,
+          1024
+        ],
+        "blank/T1": [
+          54,
+          128
+        ],
+        "blank/T2": [
+          48,
+          128
+        ],
+        "blank/T3": [
+          62,
+          128
+        ],
+        "text/T1": [
+          116,
+          128
+        ],
+        "text/T2": [
+          120,
+          128
+        ],
+        "text/T3": [
+          119,
+          128
+        ]
+      },
+      "by_variant": {
+        "V0/memory/T1": [
+          425,
+          512
+        ],
+        "V0/memory/T2": [
+          425,
+          512
+        ],
+        "V0/memory/T3": [
+          465,
+          512
+        ],
+        "V0/mismatch/T1": [
+          244,
+          512
+        ],
+        "V0/mismatch/T2": [
+          211,
+          512
+        ],
+        "V0/mismatch/T3": [
+          275,
+          512
+        ],
+        "V0/blank/T1": [
+          27,
+          64
+        ],
+        "V0/blank/T2": [
+          24,
+          64
+        ],
+        "V0/blank/T3": [
+          31,
+          64
+        ],
+        "V0/text/T1": [
+          57,
+          64
+        ],
+        "V0/text/T2": [
+          59,
+          64
+        ],
+        "V0/text/T3": [
+          59,
+          64
+        ],
+        "V1/memory/T1": [
+          433,
+          512
+        ],
+        "V1/memory/T2": [
+          427,
+          512
+        ],
+        "V1/memory/T3": [
+          463,
+          512
+        ],
+        "V1/mismatch/T1": [
+          243,
+          512
+        ],
+        "V1/mismatch/T2": [
+          211,
+          512
+        ],
+        "V1/mismatch/T3": [
+          276,
+          512
+        ],
+        "V1/blank/T1": [
+          27,
+          64
+        ],
+        "V1/blank/T2": [
+          24,
+          64
+        ],
+        "V1/blank/T3": [
+          31,
+          64
+        ],
+        "V1/text/T1": [
+          59,
+          64
+        ],
+        "V1/text/T2": [
+          61,
+          64
+        ],
+        "V1/text/T3": [
+          60,
+          64
+        ]
+      },
+      "all3": [
+        770,
+        1024
+      ],
+      "parse_failures": 0,
+      "per_preference": {
+        "education_learning_styles:0001": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "education_learning_styles:0007": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "education_learning_styles:0009": {
+          "T1": 1,
+          "all3": 0.625,
+          "gain": 1
+        },
+        "education_learning_styles:0030": {
+          "T1": 0.9375,
+          "all3": 0.8125,
+          "gain": 0.9375
+        },
+        "entertain_games:0001": {
+          "T1": 0,
+          "all3": 0,
+          "gain": 0
+        },
+        "entertain_games:0007": {
+          "T1": 1,
+          "all3": 0.25,
+          "gain": 1
+        },
+        "entertain_games:0023": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 1
+        },
+        "entertain_games:0036": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "entertain_music_book:0012": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "entertain_music_book:0016": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "entertain_music_book:0038": {
+          "T1": 0.6875,
+          "all3": 0.6875,
+          "gain": 0.5625
+        },
+        "entertain_music_book:0044": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0.3125
+        },
+        "entertain_shows:0031": {
+          "T1": 0.375,
+          "all3": 0.25,
+          "gain": 0.375
+        },
+        "entertain_shows:0037": {
+          "T1": 1,
+          "all3": 0.875,
+          "gain": 0
+        },
+        "entertain_shows:0040": {
+          "T1": 0.625,
+          "all3": 0.625,
+          "gain": 0.625
+        },
+        "entertain_shows:0052": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "entertain_sports:0009": {
+          "T1": 1,
+          "all3": 0,
+          "gain": 0
+        },
+        "entertain_sports:0015": {
+          "T1": 0.5,
+          "all3": 0,
+          "gain": 0.5
+        },
+        "entertain_sports:0045": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 1
+        },
+        "entertain_sports:0048": {
+          "T1": 0,
+          "all3": 0,
+          "gain": 0
+        },
+        "lifestyle_beauty:0002": {
+          "T1": 0.125,
+          "all3": 0.125,
+          "gain": -0.8125
+        },
+        "lifestyle_beauty:0012": {
+          "T1": 0.75,
+          "all3": 0.75,
+          "gain": 0.75
+        },
+        "lifestyle_beauty:0037": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "lifestyle_beauty:0038": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "lifestyle_dietary:0017": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "lifestyle_dietary:0022": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 1
+        },
+        "lifestyle_dietary:0042": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 1
+        },
+        "lifestyle_dietary:0047": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "lifestyle_fit:0000": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0.6875
+        },
+        "lifestyle_fit:0011": {
+          "T1": 0,
+          "all3": 0,
+          "gain": 0
+        },
+        "lifestyle_fit:0017": {
+          "T1": 1,
+          "all3": 0.25,
+          "gain": 1
+        },
+        "lifestyle_fit:0038": {
+          "T1": 1,
+          "all3": 0,
+          "gain": 1
+        },
+        "lifestyle_health:0030": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 1
+        },
+        "lifestyle_health:0036": {
+          "T1": 0.875,
+          "all3": 0.875,
+          "gain": 0.875
+        },
+        "lifestyle_health:0040": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 1
+        },
+        "lifestyle_health:0042": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0.5
+        },
+        "pet_ownership:0015": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0.125
+        },
+        "pet_ownership:0016": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "pet_ownership:0031": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "pet_ownership:0039": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 1
+        },
+        "professional_work_location_style:0000": {
+          "T1": 1,
+          "all3": 0.75,
+          "gain": 0
+        },
+        "professional_work_location_style:0006": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "professional_work_location_style:0034": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "professional_work_location_style:0035": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "shop_fashion:0029": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 1
+        },
+        "shop_fashion:0040": {
+          "T1": 0.25,
+          "all3": 0.1875,
+          "gain": 0.25
+        },
+        "shop_fashion:0041": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "shop_fashion:0042": {
+          "T1": 0.125,
+          "all3": 0.125,
+          "gain": 0.0
+        },
+        "shop_home:0005": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 1
+        },
+        "shop_home:0016": {
+          "T1": 0.9375,
+          "all3": 0.9375,
+          "gain": -0.0625
+        },
+        "shop_home:0042": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 1
+        },
+        "shop_home:0046": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "travel_activities:0004": {
+          "T1": 0,
+          "all3": 0,
+          "gain": 0
+        },
+        "travel_activities:0051": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 1
+        },
+        "travel_activities:0052": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "travel_activities:0055": {
+          "T1": 0.8125,
+          "all3": 0.8125,
+          "gain": 0.8125
+        },
+        "travel_hotel:0003": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "travel_hotel:0039": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "travel_hotel:0045": {
+          "T1": 0.5,
+          "all3": 0.5,
+          "gain": 0.5
+        },
+        "travel_hotel:0052": {
+          "T1": 0.125,
+          "all3": 0.125,
+          "gain": 0.125
+        },
+        "travel_restaurant:0009": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "travel_restaurant:0030": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0.125
+        },
+        "travel_restaurant:0041": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 1
+        },
+        "travel_restaurant:0054": {
+          "T1": 1,
+          "all3": 0.5625,
+          "gain": 0
+        }
+      },
+      "readback_sha256": {
+        "V0": "3c8a0ff5c6fc3264e90a083d7a78c579d58b1853ed2c0572b594a0b6aa7d31ae",
+        "V1": "e965da44d0c5d2334774381f0eaed54dfc4451c7ce321c7514f346520b6dcb78"
+      }
+    },
+    "B0": {
+      "combined": {
+        "memory/T1": [
+          676,
+          1024
+        ],
+        "memory/T2": [
+          693,
+          1024
+        ],
+        "memory/T3": [
+          775,
+          1024
+        ],
+        "mismatch/T1": [
+          454,
+          1024
+        ],
+        "mismatch/T2": [
+          392,
+          1024
+        ],
+        "mismatch/T3": [
+          530,
+          1024
+        ],
+        "blank/T1": [
+          54,
+          128
+        ],
+        "blank/T2": [
+          48,
+          128
+        ],
+        "blank/T3": [
+          62,
+          128
+        ],
+        "text/T1": [
+          116,
+          128
+        ],
+        "text/T2": [
+          120,
+          128
+        ],
+        "text/T3": [
+          119,
+          128
+        ]
+      },
+      "by_variant": {
+        "V0/memory/T1": [
+          335,
+          512
+        ],
+        "V0/memory/T2": [
+          343,
+          512
+        ],
+        "V0/memory/T3": [
+          386,
+          512
+        ],
+        "V0/mismatch/T1": [
+          228,
+          512
+        ],
+        "V0/mismatch/T2": [
+          196,
+          512
+        ],
+        "V0/mismatch/T3": [
+          265,
+          512
+        ],
+        "V0/blank/T1": [
+          27,
+          64
+        ],
+        "V0/blank/T2": [
+          24,
+          64
+        ],
+        "V0/blank/T3": [
+          31,
+          64
+        ],
+        "V0/text/T1": [
+          57,
+          64
+        ],
+        "V0/text/T2": [
+          59,
+          64
+        ],
+        "V0/text/T3": [
+          59,
+          64
+        ],
+        "V1/memory/T1": [
+          341,
+          512
+        ],
+        "V1/memory/T2": [
+          350,
+          512
+        ],
+        "V1/memory/T3": [
+          389,
+          512
+        ],
+        "V1/mismatch/T1": [
+          226,
+          512
+        ],
+        "V1/mismatch/T2": [
+          196,
+          512
+        ],
+        "V1/mismatch/T3": [
+          265,
+          512
+        ],
+        "V1/blank/T1": [
+          27,
+          64
+        ],
+        "V1/blank/T2": [
+          24,
+          64
+        ],
+        "V1/blank/T3": [
+          31,
+          64
+        ],
+        "V1/text/T1": [
+          59,
+          64
+        ],
+        "V1/text/T2": [
+          61,
+          64
+        ],
+        "V1/text/T3": [
+          60,
+          64
+        ]
+      },
+      "all3": [
+        567,
+        1024
+      ],
+      "parse_failures": 0,
+      "per_preference": {
+        "education_learning_styles:0001": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0.1875
+        },
+        "education_learning_styles:0007": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "education_learning_styles:0009": {
+          "T1": 0,
+          "all3": 0,
+          "gain": 0
+        },
+        "education_learning_styles:0030": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 1
+        },
+        "entertain_games:0001": {
+          "T1": 0,
+          "all3": 0,
+          "gain": 0
+        },
+        "entertain_games:0007": {
+          "T1": 0.125,
+          "all3": 0,
+          "gain": 0.125
+        },
+        "entertain_games:0023": {
+          "T1": 0.6875,
+          "all3": 0,
+          "gain": 0.6875
+        },
+        "entertain_games:0036": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "entertain_music_book:0012": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "entertain_music_book:0016": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "entertain_music_book:0038": {
+          "T1": 0.375,
+          "all3": 0.375,
+          "gain": 0.25
+        },
+        "entertain_music_book:0044": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "entertain_shows:0031": {
+          "T1": 0,
+          "all3": 0,
+          "gain": 0
+        },
+        "entertain_shows:0037": {
+          "T1": 1,
+          "all3": 0.625,
+          "gain": 0
+        },
+        "entertain_shows:0040": {
+          "T1": 0,
+          "all3": 0,
+          "gain": 0
+        },
+        "entertain_shows:0052": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "entertain_sports:0009": {
+          "T1": 1,
+          "all3": 0.875,
+          "gain": 0
+        },
+        "entertain_sports:0015": {
+          "T1": 0.125,
+          "all3": 0,
+          "gain": 0.125
+        },
+        "entertain_sports:0045": {
+          "T1": 0.375,
+          "all3": 0.375,
+          "gain": 0.375
+        },
+        "entertain_sports:0048": {
+          "T1": 0,
+          "all3": 0,
+          "gain": 0
+        },
+        "lifestyle_beauty:0002": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 1
+        },
+        "lifestyle_beauty:0012": {
+          "T1": 0,
+          "all3": 0,
+          "gain": 0
+        },
+        "lifestyle_beauty:0037": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "lifestyle_beauty:0038": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "lifestyle_dietary:0017": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "lifestyle_dietary:0022": {
+          "T1": 1,
+          "all3": 0.875,
+          "gain": 1
+        },
+        "lifestyle_dietary:0042": {
+          "T1": 1,
+          "all3": 0.9375,
+          "gain": 1
+        },
+        "lifestyle_dietary:0047": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "lifestyle_fit:0000": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "lifestyle_fit:0011": {
+          "T1": 0,
+          "all3": 0,
+          "gain": 0
+        },
+        "lifestyle_fit:0017": {
+          "T1": 0.0625,
+          "all3": 0,
+          "gain": 0.0625
+        },
+        "lifestyle_fit:0038": {
+          "T1": 0,
+          "all3": 0,
+          "gain": 0
+        },
+        "lifestyle_health:0030": {
+          "T1": 0,
+          "all3": 0,
+          "gain": 0
+        },
+        "lifestyle_health:0036": {
+          "T1": 0,
+          "all3": 0,
+          "gain": 0
+        },
+        "lifestyle_health:0040": {
+          "T1": 0.3125,
+          "all3": 0.3125,
+          "gain": 0.3125
+        },
+        "lifestyle_health:0042": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 1
+        },
+        "pet_ownership:0015": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0.375
+        },
+        "pet_ownership:0016": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "pet_ownership:0031": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "pet_ownership:0039": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 1
+        },
+        "professional_work_location_style:0000": {
+          "T1": 1,
+          "all3": 0,
+          "gain": 0.3125
+        },
+        "professional_work_location_style:0006": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "professional_work_location_style:0034": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "professional_work_location_style:0035": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "shop_fashion:0029": {
+          "T1": 0.75,
+          "all3": 0,
+          "gain": 0.75
+        },
+        "shop_fashion:0040": {
+          "T1": 0.5625,
+          "all3": 0.1875,
+          "gain": 0.5625
+        },
+        "shop_fashion:0041": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "shop_fashion:0042": {
+          "T1": 0,
+          "all3": 0,
+          "gain": -0.4375
+        },
+        "shop_home:0005": {
+          "T1": 0.5625,
+          "all3": 0.5,
+          "gain": 0.5625
+        },
+        "shop_home:0016": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "shop_home:0042": {
+          "T1": 1,
+          "all3": 0,
+          "gain": 1
+        },
+        "shop_home:0046": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "travel_activities:0004": {
+          "T1": 0,
+          "all3": 0,
+          "gain": 0
+        },
+        "travel_activities:0051": {
+          "T1": 0.1875,
+          "all3": 0.125,
+          "gain": 0.1875
+        },
+        "travel_activities:0052": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "travel_activities:0055": {
+          "T1": 0.125,
+          "all3": 0.125,
+          "gain": 0.125
+        },
+        "travel_hotel:0003": {
+          "T1": 1,
+          "all3": 0.125,
+          "gain": 1
+        },
+        "travel_hotel:0039": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        },
+        "travel_hotel:0045": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 1
+        },
+        "travel_hotel:0052": {
+          "T1": 0,
+          "all3": 0,
+          "gain": 0
+        },
+        "travel_restaurant:0009": {
+          "T1": 1,
+          "all3": 0.4375,
+          "gain": 0
+        },
+        "travel_restaurant:0030": {
+          "T1": 1,
+          "all3": 0.5625,
+          "gain": 0.3125
+        },
+        "travel_restaurant:0041": {
+          "T1": 0,
+          "all3": 0,
+          "gain": 0
+        },
+        "travel_restaurant:0054": {
+          "T1": 1,
+          "all3": 1,
+          "gain": 0
+        }
+      },
+      "readback_sha256": {
+        "V0": "fa6875f5929acb720808d625614866dcea2b02feda15cab8e21d905867db3355",
+        "V1": "7a86d4060d33d8368a6e9419a7e218d431783d3fd31619e7288680a54a7f9627"
+      }
+    }
+  },
+  "paired_bootstrap": {
+    "F1-B0/T1": {
+      "difference": 0.314453125,
+      "percentile_95": [
+        0.2158203125,
+        0.4169921875
+      ],
+      "unit": "preference",
+      "resamples": 10000,
+      "seed": 20260927
+    },
+    "F1-B0/all3": {
+      "difference": 0.3994140625,
+      "percentile_95": [
+        0.291015625,
+        0.509765625
+      ],
+      "unit": "preference",
+      "resamples": 10000,
+      "seed": 20260927
+    },
+    "F8-F1/T1": {
+      "difference": -0.5595703125,
+      "percentile_95": [
+        -0.673828125,
+        -0.4443359375
+      ],
+      "unit": "preference",
+      "resamples": 10000,
+      "seed": 20260927
+    },
+    "F8-F1/all3": {
+      "difference": -0.654296875,
+      "percentile_95": [
+        -0.7607421875,
+        -0.5478515625
+      ],
+      "unit": "preference",
+      "resamples": 10000,
+      "seed": 20260927
+    },
+    "S8-F8/T1": {
+      "difference": 0.4228515625,
+      "percentile_95": [
+        0.31640625,
+        0.5322265625
+      ],
+      "unit": "preference",
+      "resamples": 10000,
+      "seed": 20260927
+    },
+    "S8-F8/all3": {
+      "difference": 0.453125,
+      "percentile_95": [
+        0.34765625,
+        0.560546875
+      ],
+      "unit": "preference",
+      "resamples": 10000,
+      "seed": 20260927
+    },
+    "S8-F1/T1": {
+      "difference": -0.13671875,
+      "percentile_95": [
+        -0.21484375,
+        -0.06640625
+      ],
+      "unit": "preference",
+      "resamples": 10000,
+      "seed": 20260927
+    },
+    "S8-F1/all3": {
+      "difference": -0.201171875,
+      "percentile_95": [
+        -0.29296875,
+        -0.1142578125
+      ],
+      "unit": "preference",
+      "resamples": 10000,
+      "seed": 20260927
+    },
+    "S8-B0/T1": {
+      "difference": 0.177734375,
+      "percentile_95": [
+        0.0888671875,
+        0.271484375
+      ],
+      "unit": "preference",
+      "resamples": 10000,
+      "seed": 20260927
+    },
+    "S8-B0/all3": {
+      "difference": 0.1982421875,
+      "percentile_95": [
+        0.0966796875,
+        0.302734375
+      ],
+      "unit": "preference",
+      "resamples": 10000,
+      "seed": 20260927
+    },
+    "F1-None/gain": {
+      "difference": 0.5810546875,
+      "percentile_95": [
+        0.4609375,
+        0.701171875
+      ],
+      "unit": "preference",
+      "resamples": 10000,
+      "seed": 20260927
+    },
+    "F8-None/gain": {
+      "difference": 0.013671875,
+      "percentile_95": [
+        0.0009765625,
+        0.03125
+      ],
+      "unit": "preference",
+      "resamples": 10000,
+      "seed": 20260927
+    },
+    "S8-None/gain": {
+      "difference": 0.3623046875,
+      "percentile_95": [
+        0.2509765625,
+        0.474609375
+      ],
+      "unit": "preference",
+      "resamples": 10000,
+      "seed": 20260927
+    },
+    "B0-None/gain": {
+      "difference": 0.216796875,
+      "percentile_95": [
+        0.1318359375,
+        0.310546875
+      ],
+      "unit": "preference",
+      "resamples": 10000,
+      "seed": 20260927
+    }
+  }
+}

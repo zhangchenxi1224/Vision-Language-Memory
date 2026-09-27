@@ -3,6 +3,7 @@ import argparse
 import json
 import math
 import os
+import shutil
 from pathlib import Path
 import sys
 import time
@@ -47,8 +48,12 @@ def main(a):
     configure_strict_cuda_determinism(0)
     torch.set_num_threads(1)
     rows = select_rows(load_training_records('train'), a.ids_file)
-    all_tasks = [(arm, row, k) for row in rows for k in range(a.targets) for arm in ['F8', 'S8']]
+    all_tasks = [(arm, row, k) for row in rows for k in range(a.targets) for arm in a.arms]
     tasks = all_tasks[a.shard::a.shards]
+    anchor_bank = json.loads(a.anchor_bank.read_text()) if a.anchor_bank else None
+    if 'C8' in a.arms:
+        assert anchor_bank and anchor_bank['ready'] and anchor_bank['arm'] == 'F1'
+        assert all(len(anchor_bank['targets'][r['base_pair_id']]) == 1 for r in rows)
     mcq = official_mcq(a.prefeval)
     vae = AutoencoderTiny.from_pretrained(a.base, subfolder='vae', local_files_only=True,
         torch_dtype=torch.float32).to(a.device).eval().requires_grad_(False)
@@ -65,6 +70,10 @@ def main(a):
         'reader': str(a.reader), 'base': str(a.base),
         'mcq_source_sha256': sha(a.prefeval/'utils/utils_mcq.py'),
         'implementation_sha256': sha(Path(__file__))}
+    if 'C8' in a.arms:
+        binding.update(anchor_bank_sha256=sha(a.anchor_bank),
+            anchor_init_rms=a.anchor_init_rms, anchor_trust_rms=a.anchor_trust_rms,
+            construction='C8: exact F1 target replay at k=0; seven locally perturbed and corrected targets')
     a.output.mkdir(parents=True, exist_ok=True)
     started = time.monotonic()
     for index, (arm, row, k) in enumerate(tasks):
@@ -76,7 +85,18 @@ def main(a):
             assert done['binding']==binding and done['png_sha256']==sha(out/'memory.png')
             assert done['latent_sha256']==sha(out/'latent.pt')
             continue
-        if arm == 'S8':
+        anchor = anchor_entry = None
+        if arm == 'C8':
+            anchor_entry = anchor_bank['targets'][pid][0]
+            assert sha(Path(anchor_entry['latent'])) == anchor_entry['latent_sha256']
+            assert sha(Path(anchor_entry['png'])) == anchor_entry['png_sha256']
+            anchor = torch.load(anchor_entry['latent'], map_location=a.device, weights_only=True)
+            gen = torch.Generator(device=a.device).manual_seed(stable_seed(20260927, f'C8-init:{pid}', k))
+            perturbation = torch.randn(anchor.shape, device=a.device, generator=gen)
+            perturbation *= a.anchor_init_rms / perturbation.square().mean().sqrt()
+            initial = anchor.clone() if k == 0 else anchor + perturbation
+            source_hash = anchor_entry['latent_sha256']
+        elif arm == 'S8':
             # Four distinct seeds under each allowed acknowledgment, eight total.
             source=a.starts/f'V{k%2}'/pid.replace(':','_')/f'seed-{k//2}'
             receipt=json.loads((source/'complete.json').read_text())
@@ -89,6 +109,8 @@ def main(a):
             source_hash=None
         oracle=VAELatentOracle(vae=vae,initial_latent=initial,compute_dtype=torch.float32)
         optimizer=torch.optim.Adam([oracle.latent_fp32],lr=.05,betas=(.9,.999),eps=1e-8)
+        task_steps = 0 if arm == 'C8' and k == 0 else a.steps
+        ce=pixels=quantized=loss=grad=None
         first=0
         if (out/'resume.pt').exists():
             ck=torch.load(out/'resume.pt',map_location=a.device,weights_only=False)
@@ -101,7 +123,7 @@ def main(a):
             if log.exists():
                 lines=[line for line in log.read_text().splitlines() if json.loads(line)['step']<=first]
                 log.write_text(''.join(line+'\n' for line in lines))
-        for step in range(first,a.steps):
+        for step in range(first,task_steps):
             optimizer.zero_grad(set_to_none=True)
             pixels=oracle.image()
             quantized=pixels+(pixels.mul(255).round().div(255)-pixels).detach()
@@ -111,7 +133,7 @@ def main(a):
                 require_image_grad=True,reader_resize_contract=R3_QWEN_READER_RESIZE_CONTRACT,
                 deterministic_ce=True)
             distance=(oracle.latent_fp32-initial).square().mean()
-            loss=ce.loss+(a.proximal_lambda*distance if arm=='S8' else 0.)
+            loss=ce.loss+(a.proximal_lambda*distance if arm in ('S8','C8') else 0.)
             if not torch.isfinite(loss): raise RuntimeError('Nonfinite teacher loss')
             loss.backward()
             grad=oracle.latent_fp32.grad
@@ -119,10 +141,12 @@ def main(a):
                 raise RuntimeError('Missing/nonfinite/zero teacher gradient')
             optimizer.step()
             with torch.no_grad():
-                if arm=='S8':
-                    delta=oracle.latent_fp32-initial
+                if arm in ('S8','C8'):
+                    center = anchor if arm == 'C8' else initial
+                    radius = a.anchor_trust_rms if arm == 'C8' else a.trust_rms
+                    delta=oracle.latent_fp32-center
                     rms=delta.square().mean().sqrt()
-                    oracle.latent_fp32.copy_(initial+delta*min(1.,a.trust_rms/max(float(rms),1e-12)))
+                    oracle.latent_fp32.copy_(center+delta*min(1.,radius/max(float(rms),1e-12)))
             record={'arm':arm,'pair_id':pid,'target_index':k,'step':step+1,'ce':float(ce.loss.detach()),
                 'distance_rms':float((oracle.latent_fp32-initial).square().mean().sqrt().detach()),
                 'family':f'T{step%3+1}','option_order':order,'elapsed_seconds':time.monotonic()-started}
@@ -131,13 +155,22 @@ def main(a):
                 atomic_save(out/'resume.pt',{'latent':oracle.latent_fp32.detach(),
                     'optimizer':optimizer.state_dict(),'step':step+1,'binding':binding,'source_hash':source_hash})
                 print(json.dumps(record),flush=True)
-        with torch.no_grad(): _save_image(out/'memory.png',oracle.image())
-        atomic_save(out/'latent.pt',oracle.latent_fp32.detach().cpu())
+        if arm == 'C8' and k == 0:
+            shutil.copyfile(anchor_entry['png'], out/'memory.png')
+            shutil.copyfile(anchor_entry['latent'], out/'latent.pt')
+        else:
+            with torch.no_grad(): _save_image(out/'memory.png',oracle.image())
+            atomic_save(out/'latent.pt',oracle.latent_fp32.detach().cpu())
         checks=qualify(out/'memory.png',row,reader,processor,mcq,a.device)
         result={'pair_id':pid,'arm':arm,'target_index':k,'binding':binding,'source_hash':source_hash,
             'qualified':all(x['correct'] for x in checks),'checks':checks,
             'png_sha256':sha(out/'memory.png'),'latent_sha256':sha(out/'latent.pt'),
             'distance_rms':float((oracle.latent_fp32-initial).square().mean().sqrt().detach())}
+        if arm == 'C8':
+            result.update(optimizer_steps=task_steps,
+                anchor_distance_rms=float((oracle.latent_fp32-anchor).square().mean().sqrt().detach()),
+                replayed_anchor=(k == 0))
+            assert result['anchor_distance_rms'] <= a.anchor_trust_rms + 1e-6
         save_json(out/'complete.json',result)
         print(json.dumps({'completed':index+1,'total':len(tasks),'arm':arm,'pair_id':pid,
             'target_index':k,'passed':sum(x['correct'] for x in checks),'of':12}),flush=True)
@@ -150,6 +183,10 @@ if __name__=='__main__':
     for name in ['base','reader','prefeval','starts','ids-file','output']:
         p.add_argument('--'+name,type=Path,required=True)
     p.add_argument('--targets',type=int,default=8)
+    p.add_argument('--arms',nargs='+',choices=['F8','S8','C8'],default=['F8','S8'])
+    p.add_argument('--anchor-bank',type=Path)
+    p.add_argument('--anchor-init-rms',type=float,default=.03)
+    p.add_argument('--anchor-trust-rms',type=float,default=.1)
     p.add_argument('--steps',type=int,default=288)
     p.add_argument('--proximal-lambda',type=float,default=.1)
     p.add_argument('--trust-rms',type=float,default=1.)
@@ -158,4 +195,5 @@ if __name__=='__main__':
     p.add_argument('--device',default='cuda:0')
     args=p.parse_args()
     assert args.targets in (1,2,4,8) and args.steps>0 and args.trust_rms>0 and args.proximal_lambda>=0
+    assert 0 < args.anchor_init_rms <= args.anchor_trust_rms
     main(args)
