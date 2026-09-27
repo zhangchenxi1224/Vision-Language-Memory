@@ -2,6 +2,19 @@
 
 首轮已于2026-09-27北京时间15:51:31完整结束，下一轮采用独立代码及输出目录。首轮结果见 [PILOT64_RESULTS.json](PILOT64_RESULTS.json) 和 [RESULTS.md](RESULTS.md)；第二轮S1/C8冻结设计见 [PLAN.md](PLAN.md)。以下首轮时间线保留作为审计记录，不能将其“正在运行”描述作为当前状态。
 
+## 当前第二轮：S1/C8
+
+- 运行代码冻结在 `224cc77d790cf3967b5a56ce2e77c364959435a2`，独立checkout `/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-multitarget-round2`。本地后续文档提交不改变此冻结代码，也不修改首轮runtime。
+- 仍使用本任务原四H200实例、相同主机及环境。部署前确认首轮全部退出、四卡0 MiB，无持锁子进程。没有新申请、停止或删除任何用户实例。
+- 本地与实际H200环境均通过14项相关测试，Python编译、shell语法和控制器导入检查通过；没有安装新依赖。
+- 启动入口 `scripts/inspire/launch_prefeval_multitarget_round2.sh`，由nohup启动，日志为任务根的 `round2-pipeline.log`。复用根pipeline.lock，阶段控制器锁传给子进程。
+- 16:11:32开始 `round2/smoke`；16:13:48结束，两偏好各回放锚点与一个新修正目标，共四图全部通过48项PNG读回。两锚点PNG/latent哈希与原F1逐一一致；新目标各288步，相对锚点RMS分别.037756/.097871，均≤.1。摘要及原始逐项输出见 [ROUND2_SMOKE_RESULTS.json](ROUND2_SMOKE_RESULTS.json)；原始回执/日志归档为任务根 `round2-smoke-evidence.tar.gz`，本地有副本。烟测不代表Writer性能。
+- 16:13:50自动进入 `round2/pilot64` 的C8正式教师阶段；初始控制器PID1867019，启动器1843279，四个教师PID1867216/1867219/1867222/1867225。16:14四张GPU均有约13.9GB显存及计算活动；逐一将实际/proc命令与进程回执的完整命令匹配。两层锁实测均被持有，不能重复启动。PID仅为此次快照。
+- 后续自动执行C8资格冻结→S1/C8各2048步FM→V0/V1八种子四分片生成及MCQ读回。当前只有教师阶段进展，第二轮Writer结果尚未产生。评测时必须读取四个readback分片。
+- `prefeval-writer`已更新为当前冻结代码、目录及决策约束，保留45分钟间隔与无变化静默设置。下一次从最新报告和实时进程判定阶段；首轮完整结果不得被初步V0记录覆盖。
+
+## 首轮部署历史
+
 2026-09-27 已部署至用户原排队资源。首次控制器进入执行时间为北京时间03:13:18。
 
 - 实例：`prefeval-k1-h200x4-high-20260924`；分布式训练空间；开发区-H200-3号机房-2-cuda13.2版本；正常优先级4×H200。
