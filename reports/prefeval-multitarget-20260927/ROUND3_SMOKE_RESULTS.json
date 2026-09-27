@@ -1,0 +1,936 @@
+{
+  "verified_at_utc": "2026-09-27T20:35:56.045567+00:00",
+  "scope": "round3 teacher smoke only; not Writer performance or generalization",
+  "controller": {
+    "host": "prefeval-mt-eval-h200x2-20260928--9be487d35048-tphujecw4c",
+    "pid": 1689907,
+    "commit": "5134d407a2710cef025654b8ab4207a5c269e6a0",
+    "code": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-multitarget-round3",
+    "stage": "smoke_teacher_complete",
+    "time_utc": "2026-09-27T20:21:02.185324+00:00",
+    "qualified_counts": {
+      "entertain_games:0001": {
+        "attempted": 2,
+        "qualified": 2
+      },
+      "entertain_games:0007": {
+        "attempted": 2,
+        "qualified": 2
+      }
+    }
+  },
+  "qualified": 4,
+  "attempted": 4,
+  "correct_png_checks": 48,
+  "total_png_checks": 48,
+  "student_checkpoint_sha256": "efd7b4a22a40508e9ae5a9d7ca72305f5a1c8b3130b3e22c5e2b72aa7bb36978",
+  "worker_commit": "224cc77d790cf3967b5a56ce2e77c364959435a2",
+  "rows": [
+    {
+      "pair_id": "entertain_games:0001",
+      "arm": "S8",
+      "target_index": 0,
+      "binding": {
+        "steps": 288,
+        "lr": 0.05,
+        "targets": 2,
+        "ids_sha256": "369d723383049c52214b9dd5f7673e7830a0b63c55c80bd588fa09f09f69105a",
+        "proximal_lambda": 0.1,
+        "trust_rms": 0.1,
+        "independent_init_noise_rms": 0.1,
+        "target_entry": "direct optimized model latent; same as prior B teacher/FM",
+        "reader": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+        "base": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+        "mcq_source_sha256": "b3088007724a5c4e21af80ed0220fa796e9f7473007ce9a7df4612eb7cd8f8ac",
+        "implementation_sha256": "fb762ed38ff3b89c5293a634ca3d3b09cb6af342c1dd60ff0dd35b568ddb9e25"
+      },
+      "source_hash": "634b72204789af8f6a4ba65529b978226fdbb6c0adaf09f67b6b0044219f5c38",
+      "qualified": true,
+      "png_sha256": "be5b865864377519aaa86f1609c5eef7977408c3fbc8781ac4d7a76b3a2c7269",
+      "latent_sha256": "7a9d29b64e2b866b63d71a4a194c7f6be8eddba2e890190029e188de1a5860dc",
+      "distance_rms": 0.09031897783279419,
+      "receipt_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-multitarget-20260927/round3/smoke/teachers/S8/entertain_games_0001/target-0/complete.json",
+      "receipt_sha256": "29e8b4e4119338ffdc7cd27d2329d4b532f34c77e5741f4ee2c95b6eb167e7f6",
+      "optimization_records": 288,
+      "optimization_last": {
+        "arm": "S8",
+        "pair_id": "entertain_games:0001",
+        "target_index": 0,
+        "step": 288,
+        "ce": 3.814697265625e-06,
+        "distance_rms": 0.09031897783279419,
+        "family": "T3",
+        "option_order": [
+          1,
+          2,
+          3,
+          0
+        ],
+        "elapsed_seconds": 97.61644425801933
+      },
+      "checks": [
+        {
+          "family": "T1",
+          "correct_letter": "A",
+          "option_order": [
+            0,
+            2,
+            3,
+            1
+          ],
+          "predicted_letter": "A",
+          "correct": true,
+          "raw": "<choice>A</choice>",
+          "truncated": false,
+          "finish_reason": "eos"
+        },
+        {
+          "family": "T2",
+          "correct_letter": "A",
+          "option_order": [
+            0,
+            2,
+            3,
+            1
+          ],
+          "predicted_letter": "A",
+          "correct": true,
+          "raw": "<choice>A</choice>",
+          "truncated": false,
+          "finish_reason": "eos"
+        },
+        {
+          "family": "T3",
+          "correct_letter": "A",
+          "option_order": [
+            0,
+            3,
+            1,
+            2
+          ],
+          "predicted_letter": "A",
+          "correct": true,
+          "raw": "<choice>A</choice>",
+          "truncated": false,
+          "finish_reason": "eos"
+        },
+        {
+          "family": "T1",
+          "correct_letter": "B",
+          "option_order": [
+            1,
+            0,
+            3,
+            2
+          ],
+          "predicted_letter": "B",
+          "correct": true,
+          "raw": "<choice>B</choice>",
+          "truncated": false,
+          "finish_reason": "eos"
+        },
+        {
+          "family": "T2",
+          "correct_letter": "B",
+          "option_order": [
+            2,
+            0,
+            3,
+            1
+          ],
+          "predicted_letter": "B",
+          "correct": true,
+          "raw": "<choice>B</choice>",
+          "truncated": false,
+          "finish_reason": "eos"
+        },
+        {
+          "family": "T3",
+          "correct_letter": "B",
+          "option_order": [
+            2,
+            0,
+            3,
+            1
+          ],
+          "predicted_letter": "B",
+          "correct": true,
+          "raw": "<choice>B</choice>",
+          "truncated": false,
+          "finish_reason": "eos"
+        },
+        {
+          "family": "T1",
+          "correct_letter": "C",
+          "option_order": [
+            2,
+            1,
+            0,
+            3
+          ],
+          "predicted_letter": "C",
+          "correct": true,
+          "raw": "<choice>C</choice>",
+          "truncated": false,
+          "finish_reason": "eos"
+        },
+        {
+          "family": "T2",
+          "correct_letter": "C",
+          "option_order": [
+            2,
+            3,
+            0,
+            1
+          ],
+          "predicted_letter": "C",
+          "correct": true,
+          "raw": "<choice>C</choice>",
+          "truncated": false,
+          "finish_reason": "eos"
+        },
+        {
+          "family": "T3",
+          "correct_letter": "C",
+          "option_order": [
+            3,
+            2,
+            0,
+            1
+          ],
+          "predicted_letter": "C",
+          "correct": true,
+          "raw": "<choice>C</choice>",
+          "truncated": false,
+          "finish_reason": "eos"
+        },
+        {
+          "family": "T1",
+          "correct_letter": "D",
+          "option_order": [
+            1,
+            3,
+            2,
+            0
+          ],
+          "predicted_letter": "D",
+          "correct": true,
+          "raw": "<choice>D</choice>",
+          "truncated": false,
+          "finish_reason": "eos"
+        },
+        {
+          "family": "T2",
+          "correct_letter": "D",
+          "option_order": [
+            2,
+            1,
+            3,
+            0
+          ],
+          "predicted_letter": "D",
+          "correct": true,
+          "raw": "<choice>D</choice>",
+          "truncated": false,
+          "finish_reason": "eos"
+        },
+        {
+          "family": "T3",
+          "correct_letter": "D",
+          "option_order": [
+            1,
+            3,
+            2,
+            0
+          ],
+          "predicted_letter": "D",
+          "correct": true,
+          "raw": "<choice>D</choice>",
+          "truncated": false,
+          "finish_reason": "eos"
+        }
+      ]
+    },
+    {
+      "pair_id": "entertain_games:0001",
+      "arm": "S8",
+      "target_index": 1,
+      "binding": {
+        "steps": 288,
+        "lr": 0.05,
+        "targets": 2,
+        "ids_sha256": "369d723383049c52214b9dd5f7673e7830a0b63c55c80bd588fa09f09f69105a",
+        "proximal_lambda": 0.1,
+        "trust_rms": 0.1,
+        "independent_init_noise_rms": 0.1,
+        "target_entry": "direct optimized model latent; same as prior B teacher/FM",
+        "reader": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+        "base": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+        "mcq_source_sha256": "b3088007724a5c4e21af80ed0220fa796e9f7473007ce9a7df4612eb7cd8f8ac",
+        "implementation_sha256": "fb762ed38ff3b89c5293a634ca3d3b09cb6af342c1dd60ff0dd35b568ddb9e25"
+      },
+      "source_hash": "aa94bfd0de2466af44d1db32d0e8cafc6a401bcca362638c0e1cd110f3e56bc4",
+      "qualified": true,
+      "png_sha256": "b595c0ef59388b0fd94917fa5a36e2fab4978b66b79a88939cd4ebac1f8753b2",
+      "latent_sha256": "417563360bb17df70c64b3db78e609aff1654e4b3a3f4a501dd389332d0a9fcb",
+      "distance_rms": 0.05028112605214119,
+      "receipt_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-multitarget-20260927/round3/smoke/teachers/S8/entertain_games_0001/target-1/complete.json",
+      "receipt_sha256": "93b38e35a16e0a67e55224c08ac8e5f1410ddf8a145f559c54f6073fa896c80f",
+      "optimization_records": 288,
+      "optimization_last": {
+        "arm": "S8",
+        "pair_id": "entertain_games:0001",
+        "target_index": 1,
+        "step": 288,
+        "ce": 2.4523055799363647e-06,
+        "distance_rms": 0.05028112605214119,
+        "family": "T3",
+        "option_order": [
+          1,
+          2,
+          3,
+          0
+        ],
+        "elapsed_seconds": 96.8429493601434
+      },
+      "checks": [
+        {
+          "family": "T1",
+          "correct_letter": "A",
+          "option_order": [
+            0,
+            2,
+            3,
+            1
+          ],
+          "predicted_letter": "A",
+          "correct": true,
+          "raw": "<choice>A</choice>",
+          "truncated": false,
+          "finish_reason": "eos"
+        },
+        {
+          "family": "T2",
+          "correct_letter": "A",
+          "option_order": [
+            0,
+            2,
+            3,
+            1
+          ],
+          "predicted_letter": "A",
+          "correct": true,
+          "raw": "<choice>A</choice>",
+          "truncated": false,
+          "finish_reason": "eos"
+        },
+        {
+          "family": "T3",
+          "correct_letter": "A",
+          "option_order": [
+            0,
+            3,
+            1,
+            2
+          ],
+          "predicted_letter": "A",
+          "correct": true,
+          "raw": "<choice>A</choice>",
+          "truncated": false,
+          "finish_reason": "eos"
+        },
+        {
+          "family": "T1",
+          "correct_letter": "B",
+          "option_order": [
+            1,
+            0,
+            3,
+            2
+          ],
+          "predicted_letter": "B",
+          "correct": true,
+          "raw": "<choice>B</choice>",
+          "truncated": false,
+          "finish_reason": "eos"
+        },
+        {
+          "family": "T2",
+          "correct_letter": "B",
+          "option_order": [
+            2,
+            0,
+            3,
+            1
+          ],
+          "predicted_letter": "B",
+          "correct": true,
+          "raw": "<choice>B</choice>",
+          "truncated": false,
+          "finish_reason": "eos"
+        },
+        {
+          "family": "T3",
+          "correct_letter": "B",
+          "option_order": [
+            2,
+            0,
+            3,
+            1
+          ],
+          "predicted_letter": "B",
+          "correct": true,
+          "raw": "<choice>B</choice>",
+          "truncated": false,
+          "finish_reason": "eos"
+        },
+        {
+          "family": "T1",
+          "correct_letter": "C",
+          "option_order": [
+            2,
+            1,
+            0,
+            3
+          ],
+          "predicted_letter": "C",
+          "correct": true,
+          "raw": "<choice>C</choice>",
+          "truncated": false,
+          "finish_reason": "eos"
+        },
+        {
+          "family": "T2",
+          "correct_letter": "C",
+          "option_order": [
+            2,
+            3,
+            0,
+            1
+          ],
+          "predicted_letter": "C",
+          "correct": true,
+          "raw": "<choice>C</choice>",
+          "truncated": false,
+          "finish_reason": "eos"
+        },
+        {
+          "family": "T3",
+          "correct_letter": "C",
+          "option_order": [
+            3,
+            2,
+            0,
+            1
+          ],
+          "predicted_letter": "C",
+          "correct": true,
+          "raw": "<choice>C</choice>",
+          "truncated": false,
+          "finish_reason": "eos"
+        },
+        {
+          "family": "T1",
+          "correct_letter": "D",
+          "option_order": [
+            1,
+            3,
+            2,
+            0
+          ],
+          "predicted_letter": "D",
+          "correct": true,
+          "raw": "<choice>D</choice>",
+          "truncated": false,
+          "finish_reason": "eos"
+        },
+        {
+          "family": "T2",
+          "correct_letter": "D",
+          "option_order": [
+            2,
+            1,
+            3,
+            0
+          ],
+          "predicted_letter": "D",
+          "correct": true,
+          "raw": "<choice>D</choice>",
+          "truncated": false,
+          "finish_reason": "eos"
+        },
+        {
+          "family": "T3",
+          "correct_letter": "D",
+          "option_order": [
+            1,
+            3,
+            2,
+            0
+          ],
+          "predicted_letter": "D",
+          "correct": true,
+          "raw": "<choice>D</choice>",
+          "truncated": false,
+          "finish_reason": "eos"
+        }
+      ]
+    },
+    {
+      "pair_id": "entertain_games:0007",
+      "arm": "S8",
+      "target_index": 0,
+      "binding": {
+        "steps": 288,
+        "lr": 0.05,
+        "targets": 2,
+        "ids_sha256": "369d723383049c52214b9dd5f7673e7830a0b63c55c80bd588fa09f09f69105a",
+        "proximal_lambda": 0.1,
+        "trust_rms": 0.1,
+        "independent_init_noise_rms": 0.1,
+        "target_entry": "direct optimized model latent; same as prior B teacher/FM",
+        "reader": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+        "base": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+        "mcq_source_sha256": "b3088007724a5c4e21af80ed0220fa796e9f7473007ce9a7df4612eb7cd8f8ac",
+        "implementation_sha256": "fb762ed38ff3b89c5293a634ca3d3b09cb6af342c1dd60ff0dd35b568ddb9e25"
+      },
+      "source_hash": "31cec0a5a24e17d9fad43e2850ae660d95c443229df2c6a0c501f30aed211962",
+      "qualified": true,
+      "png_sha256": "b40069eca8431f3d44b0de1e2edfadc17d1a9ad4f6f2bf927c34b1754204c0b5",
+      "latent_sha256": "7bf854d4faeb2abcf50267fba932a0166060711dda13b3124197a5e0efd9cf54",
+      "distance_rms": 0.0903727188706398,
+      "receipt_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-multitarget-20260927/round3/smoke/teachers/S8/entertain_games_0007/target-0/complete.json",
+      "receipt_sha256": "4c7baad40c3bdab991bd209774bb5ab07bb81c05e6a03b98a740064912d18e36",
+      "optimization_records": 288,
+      "optimization_last": {
+        "arm": "S8",
+        "pair_id": "entertain_games:0007",
+        "target_index": 0,
+        "step": 288,
+        "ce": 3.542219019436743e-06,
+        "distance_rms": 0.0903727188706398,
+        "family": "T3",
+        "option_order": [
+          3,
+          1,
+          2,
+          0
+        ],
+        "elapsed_seconds": 197.45226208213717
+      },
+      "checks": [
+        {
+          "family": "T1",
+          "correct_letter": "A",
+          "option_order": [
+            0,
+            3,
+            1,
+            2
+          ],
+          "predicted_letter": "A",
+          "correct": true,
+          "raw": "<choice>A</choice>",
+          "truncated": false,
+          "finish_reason": "eos"
+        },
+        {
+          "family": "T2",
+          "correct_letter": "A",
+          "option_order": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "predicted_letter": "A",
+          "correct": true,
+          "raw": "<choice>A</choice>",
+          "truncated": false,
+          "finish_reason": "eos"
+        },
+        {
+          "family": "T3",
+          "correct_letter": "A",
+          "option_order": [
+            0,
+            1,
+            3,
+            2
+          ],
+          "predicted_letter": "A",
+          "correct": true,
+          "raw": "<choice>A</choice>",
+          "truncated": false,
+          "finish_reason": "eos"
+        },
+        {
+          "family": "T1",
+          "correct_letter": "B",
+          "option_order": [
+            3,
+            0,
+            1,
+            2
+          ],
+          "predicted_letter": "B",
+          "correct": true,
+          "raw": "<choice>B</choice>",
+          "truncated": false,
+          "finish_reason": "eos"
+        },
+        {
+          "family": "T2",
+          "correct_letter": "B",
+          "option_order": [
+            3,
+            0,
+            2,
+            1
+          ],
+          "predicted_letter": "B",
+          "correct": true,
+          "raw": "<choice>B</choice>",
+          "truncated": false,
+          "finish_reason": "eos"
+        },
+        {
+          "family": "T3",
+          "correct_letter": "B",
+          "option_order": [
+            1,
+            0,
+            3,
+            2
+          ],
+          "predicted_letter": "B",
+          "correct": true,
+          "raw": "<choice>B</choice>",
+          "truncated": false,
+          "finish_reason": "eos"
+        },
+        {
+          "family": "T1",
+          "correct_letter": "C",
+          "option_order": [
+            3,
+            1,
+            0,
+            2
+          ],
+          "predicted_letter": "C",
+          "correct": true,
+          "raw": "<choice>C</choice>",
+          "truncated": false,
+          "finish_reason": "eos"
+        },
+        {
+          "family": "T2",
+          "correct_letter": "C",
+          "option_order": [
+            2,
+            3,
+            0,
+            1
+          ],
+          "predicted_letter": "C",
+          "correct": true,
+          "raw": "<choice>C</choice>",
+          "truncated": false,
+          "finish_reason": "eos"
+        },
+        {
+          "family": "T3",
+          "correct_letter": "C",
+          "option_order": [
+            2,
+            3,
+            0,
+            1
+          ],
+          "predicted_letter": "C",
+          "correct": true,
+          "raw": "<choice>C</choice>",
+          "truncated": false,
+          "finish_reason": "eos"
+        },
+        {
+          "family": "T1",
+          "correct_letter": "D",
+          "option_order": [
+            1,
+            2,
+            3,
+            0
+          ],
+          "predicted_letter": "D",
+          "correct": true,
+          "raw": "<choice>D</choice>",
+          "truncated": false,
+          "finish_reason": "eos"
+        },
+        {
+          "family": "T2",
+          "correct_letter": "D",
+          "option_order": [
+            3,
+            1,
+            2,
+            0
+          ],
+          "predicted_letter": "D",
+          "correct": true,
+          "raw": "<choice>D</choice>",
+          "truncated": false,
+          "finish_reason": "eos"
+        },
+        {
+          "family": "T3",
+          "correct_letter": "D",
+          "option_order": [
+            1,
+            2,
+            3,
+            0
+          ],
+          "predicted_letter": "D",
+          "correct": true,
+          "raw": "<choice>D</choice>",
+          "truncated": false,
+          "finish_reason": "eos"
+        }
+      ]
+    },
+    {
+      "pair_id": "entertain_games:0007",
+      "arm": "S8",
+      "target_index": 1,
+      "binding": {
+        "steps": 288,
+        "lr": 0.05,
+        "targets": 2,
+        "ids_sha256": "369d723383049c52214b9dd5f7673e7830a0b63c55c80bd588fa09f09f69105a",
+        "proximal_lambda": 0.1,
+        "trust_rms": 0.1,
+        "independent_init_noise_rms": 0.1,
+        "target_entry": "direct optimized model latent; same as prior B teacher/FM",
+        "reader": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+        "base": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+        "mcq_source_sha256": "b3088007724a5c4e21af80ed0220fa796e9f7473007ce9a7df4612eb7cd8f8ac",
+        "implementation_sha256": "fb762ed38ff3b89c5293a634ca3d3b09cb6af342c1dd60ff0dd35b568ddb9e25"
+      },
+      "source_hash": "a870f23dd482f39741ddb4b753dddf9453459869bf9aeb551741589f46848010",
+      "qualified": true,
+      "png_sha256": "41d0ce42fe93bc95c1dd31f98a86c664e2b24df90dc906188dc4ce10a268fdc7",
+      "latent_sha256": "b7371452a16f13738ede98c165d0d3fa22a433781e355a2b02ae113c74846966",
+      "distance_rms": 0.09205804020166397,
+      "receipt_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-multitarget-20260927/round3/smoke/teachers/S8/entertain_games_0007/target-1/complete.json",
+      "receipt_sha256": "467f904f92591053697fac38e65789b33afc9a05ef5f07ad3ce431af6d078e1b",
+      "optimization_records": 288,
+      "optimization_last": {
+        "arm": "S8",
+        "pair_id": "entertain_games:0007",
+        "target_index": 1,
+        "step": 288,
+        "ce": 3.542219019436743e-06,
+        "distance_rms": 0.09205804020166397,
+        "family": "T3",
+        "option_order": [
+          3,
+          1,
+          2,
+          0
+        ],
+        "elapsed_seconds": 196.4628276671283
+      },
+      "checks": [
+        {
+          "family": "T1",
+          "correct_letter": "A",
+          "option_order": [
+            0,
+            3,
+            1,
+            2
+          ],
+          "predicted_letter": "A",
+          "correct": true,
+          "raw": "<choice>A</choice>",
+          "truncated": false,
+          "finish_reason": "eos"
+        },
+        {
+          "family": "T2",
+          "correct_letter": "A",
+          "option_order": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "predicted_letter": "A",
+          "correct": true,
+          "raw": "<choice>A</choice>",
+          "truncated": false,
+          "finish_reason": "eos"
+        },
+        {
+          "family": "T3",
+          "correct_letter": "A",
+          "option_order": [
+            0,
+            1,
+            3,
+            2
+          ],
+          "predicted_letter": "A",
+          "correct": true,
+          "raw": "<choice>A</choice>",
+          "truncated": false,
+          "finish_reason": "eos"
+        },
+        {
+          "family": "T1",
+          "correct_letter": "B",
+          "option_order": [
+            3,
+            0,
+            1,
+            2
+          ],
+          "predicted_letter": "B",
+          "correct": true,
+          "raw": "<choice>B</choice>",
+          "truncated": false,
+          "finish_reason": "eos"
+        },
+        {
+          "family": "T2",
+          "correct_letter": "B",
+          "option_order": [
+            3,
+            0,
+            2,
+            1
+          ],
+          "predicted_letter": "B",
+          "correct": true,
+          "raw": "<choice>B</choice>",
+          "truncated": false,
+          "finish_reason": "eos"
+        },
+        {
+          "family": "T3",
+          "correct_letter": "B",
+          "option_order": [
+            1,
+            0,
+            3,
+            2
+          ],
+          "predicted_letter": "B",
+          "correct": true,
+          "raw": "<choice>B</choice>",
+          "truncated": false,
+          "finish_reason": "eos"
+        },
+        {
+          "family": "T1",
+          "correct_letter": "C",
+          "option_order": [
+            3,
+            1,
+            0,
+            2
+          ],
+          "predicted_letter": "C",
+          "correct": true,
+          "raw": "<choice>C</choice>",
+          "truncated": false,
+          "finish_reason": "eos"
+        },
+        {
+          "family": "T2",
+          "correct_letter": "C",
+          "option_order": [
+            2,
+            3,
+            0,
+            1
+          ],
+          "predicted_letter": "C",
+          "correct": true,
+          "raw": "<choice>C</choice>",
+          "truncated": false,
+          "finish_reason": "eos"
+        },
+        {
+          "family": "T3",
+          "correct_letter": "C",
+          "option_order": [
+            2,
+            3,
+            0,
+            1
+          ],
+          "predicted_letter": "C",
+          "correct": true,
+          "raw": "<choice>C</choice>",
+          "truncated": false,
+          "finish_reason": "eos"
+        },
+        {
+          "family": "T1",
+          "correct_letter": "D",
+          "option_order": [
+            1,
+            2,
+            3,
+            0
+          ],
+          "predicted_letter": "D",
+          "correct": true,
+          "raw": "<choice>D</choice>",
+          "truncated": false,
+          "finish_reason": "eos"
+        },
+        {
+          "family": "T2",
+          "correct_letter": "D",
+          "option_order": [
+            3,
+            1,
+            2,
+            0
+          ],
+          "predicted_letter": "D",
+          "correct": true,
+          "raw": "<choice>D</choice>",
+          "truncated": false,
+          "finish_reason": "eos"
+        },
+        {
+          "family": "T3",
+          "correct_letter": "D",
+          "option_order": [
+            1,
+            2,
+            3,
+            0
+          ],
+          "predicted_letter": "D",
+          "correct": true,
+          "raw": "<choice>D</choice>",
+          "truncated": false,
+          "finish_reason": "eos"
+        }
+      ]
+    }
+  ],
+  "archive": {
+    "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-multitarget-20260927/round3-smoke-evidence.tar.gz",
+    "sha256": "bfc88b8567cd0eed994fb5a0d061988f2e129143d0d3afdcc54870fda1cdbf35",
+    "files": 63,
+    "bytes": 12724868
+  }
+}

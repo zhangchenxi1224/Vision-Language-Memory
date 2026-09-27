@@ -1,5 +1,9 @@
 # 多目标主线部署记录
 
+最新核验（2026-09-28 04:30:57 CST）：第三轮烟测于04:21:02完成，四个新目标均完成288步并通过48/48项保存重载PNG检查；04:21:03自动进入正式pilot64。正式controller PID1734131、两名Writer子进程1734141/1734142为此次快照，实际完整命令与回执一致，根及pilot64锁HELD，smoke和旧阶段锁FREE，无failure。两张H200均100%利用率，V0实际学生latent已105/256，V1尚未开始；没有重复启动或修改运行代码。
+
+烟测原始输出（含PNG、latent、优化日志及资格回执）归档round3-smoke-evidence.tar.gz，共63个文件，SHA256 bfc88b8567cd0eed994fb5a0d061988f2e129143d0d3afdcc54870fda1cdbf35，本地保留副本。逐项目标哈希及检查见[ROUND3_SMOKE_RESULTS.json](ROUND3_SMOKE_RESULTS.json)。自动跟进恢复45分钟；正式目标覆盖、C8R/U16训练与完整评测继续按冻结协议推进。以下04:15—04:18记录为启动历史。
+
 最新状态（2026-09-28 04:15 CST）：第二轮于03:59:20完整完成，结果见[ROUND2_RESULTS.json](ROUND2_RESULTS.json)。确认旧controller与子进程均退出、两卡0MiB且根/旧/恢复控制器三层锁FREE后，04:15:53在同一NORMAL两H200资源启动第三轮，先smoke再pilot64，未重新申请算力。第三轮入口为scripts/inspire/launch_prefeval_multitarget_round3.sh，启动器PID1689886（仅启动快照），日志为任务根round3-pipeline.log，输出只在round3/smoke和round3/pilot64。
 
 第三轮控制器独立checkout repos/prefeval-multitarget-round3，冻结5134d407a2710cef025654b8ab4207a5c269e6a0；控制器文件SHA256 e8572bb7d7d3fb36145252b3e9f8c0f3ef03eb98b9a3a3a7592052ace6ed50e7。真实Writer/教师/evaluator继续调用repos/prefeval-multitarget-round2的224cc77冻结代码。新学生快照为C8最终权重；C8R对照完整旧目标回放，U16合并完整旧池与八个新学生起点的局部修正候选。两组均额外2048步FM。方法、门槛与成本见[PLAN.md](PLAN.md)，根pipeline.lock及本阶段controller.lock均传给子进程。
