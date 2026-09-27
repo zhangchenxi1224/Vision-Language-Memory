@@ -1,0 +1,513 @@
+{
+  "utc": "2026-09-27T07:18:13.353013+00:00",
+  "host": "b-cr4-low-0927--35735fae3214-vlpgftkp5f",
+  "gpu": "0, GPU-db6989d4-0e75-f86b-3c65-d234c4569c86, 0 %, 1 MiB\n1, GPU-7c5de92e-95b2-82c5-9afc-792024dd2c1f, 20 %, 19992 MiB\n2, GPU-265a0af3-2f18-975b-fc52-3d886662fe1c, 100 %, 39828 MiB\n3, GPU-ab3e4b70-7f87-ef68-a999-03b6064da96f, 0 %, 1 MiB\n",
+  "processes": [
+    {
+      "pid": 775763,
+      "cmd": [
+        "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681/scripts/inspire/run_prefeval_k1_refresh730.py",
+        "--arm",
+        "C",
+        "--gpus",
+        "1"
+      ],
+      "cwd": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681",
+      "cuda": [
+        "CUDA_VISIBLE_DEVICES="
+      ],
+      "locks": [
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-C/refresh-driver.lock"
+      ]
+    },
+    {
+      "pid": 775764,
+      "cmd": [
+        "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681/scripts/inspire/run_prefeval_k1_refresh730.py",
+        "--arm",
+        "R",
+        "--gpus",
+        "2",
+        "3"
+      ],
+      "cwd": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681",
+      "cuda": [
+        "CUDA_VISIBLE_DEVICES="
+      ],
+      "locks": [
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-R/refresh-driver.lock"
+      ]
+    },
+    {
+      "pid": 775770,
+      "cmd": [
+        "bash",
+        "scripts/inspire/run_prefeval_k1_retain730.sh",
+        "C"
+      ],
+      "cwd": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-deploy-52d98d8",
+      "cuda": [
+        "CUDA_VISIBLE_DEVICES=1"
+      ],
+      "locks": [
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-C/refresh-driver.lock",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-C/launcher.lock"
+      ]
+    },
+    {
+      "pid": 775793,
+      "cmd": [
+        "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681/scripts/experiments/prefeval_k1_writer.py",
+        "train",
+        "--arm",
+        "B",
+        "--base",
+        "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+        "--official-source",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite",
+        "--split",
+        "train",
+        "--stage",
+        "retain",
+        "--steps",
+        "23360",
+        "--retain-source-mode",
+        "refresh-bank",
+        "--refresh-round",
+        "1",
+        "--initial-variants",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/variants-train.json",
+        "--sources",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-R/sources",
+        "--teachers",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-k1-scale730-20260924/teachers/B",
+        "--checkpoint",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/robust730/train/checkpoint-final.pt",
+        "--output",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-R/train"
+      ],
+      "cwd": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681",
+      "cuda": [
+        "CUDA_VISIBLE_DEVICES=2"
+      ],
+      "locks": [
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-R/refresh-driver.lock"
+      ]
+    },
+    {
+      "pid": 779435,
+      "cmd": [
+        "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+        "scripts/experiments/prefeval_k1_evaluate.py",
+        "--kind",
+        "student",
+        "--split",
+        "dev",
+        "--reader",
+        "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+        "--images",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-C/final-dev-V1",
+        "--initial-variants",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/variants-dev.json",
+        "--initial-variant",
+        "1",
+        "--output",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-C/readback-final-dev-V1",
+        "--families",
+        "T1,T2,T3,O1,O2",
+        "--prefixes",
+        "0,1,5,10",
+        "--noise-chains",
+        "2",
+        "--controls",
+        "memory,mismatch,blank,text",
+        "--tasks",
+        "mcq"
+      ],
+      "cwd": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-deploy-52d98d8",
+      "cuda": [
+        "CUDA_VISIBLE_DEVICES=1"
+      ],
+      "locks": [
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-C/refresh-driver.lock",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-C/launcher.lock"
+      ]
+    }
+  ],
+  "arms": {
+    "C": {
+      "driver-state.json": {
+        "arm": "C",
+        "host": "b-cr4-low-0927--35735fae3214-vlpgftkp5f",
+        "pid": 775763,
+        "gpus": [
+          1
+        ],
+        "code_root": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681",
+        "commit": "55596810cee2062022b894ef93feb1ab4cd6b07b",
+        "stage": "control-train-and-evaluate",
+        "time_utc": "2026-09-27T07:15:32.472707+00:00",
+        "children": [
+          {
+            "pid": 775770,
+            "gpu": 1,
+            "command": [
+              "bash",
+              "scripts/inspire/run_prefeval_k1_retain730.sh",
+              "C"
+            ],
+            "log": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-C/control-train-and-evaluate-0.log",
+            "code_root": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-deploy-52d98d8"
+          }
+        ]
+      },
+      "driver-launch.json": {
+        "arm": "C",
+        "pid": 775763,
+        "host": "b-cr4-low-0927--35735fae3214-vlpgftkp5f",
+        "command": [
+          "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681/scripts/inspire/run_prefeval_k1_refresh730.py",
+          "--arm",
+          "C",
+          "--gpus",
+          "1"
+        ],
+        "gpus": [
+          1
+        ],
+        "code_root": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681",
+        "commit": "55596810cee2062022b894ef93feb1ab4cd6b07b",
+        "log": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-C/driver-recovery-20260927-1030.log",
+        "utc": "2026-09-27T07:15:31.037112+00:00",
+        "reason": "resume after platform auto-recycle; preserve C completed training/readback and resume R remaining fixed global budget"
+      },
+      "train_files": [
+        "checkpoint-final.pt",
+        "optimization.jsonl",
+        "complete.json",
+        "resume.pt",
+        "manifest.json"
+      ],
+      "logs": {
+        "final-dev-V1-rollout.log": "\nLoading pipeline components...:   0%|                    | 0/6 [00:00<?, ?it/s]\nLoading pipeline components...:  17%|\u2588\u2588          | 1/6 [00:00<00:01,  2.53it/s]\nLoading pipeline components...:  67%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588    | 4/6 [00:10<00:05,  2.90s/it]\nLoading pipeline components...:  83%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588  | 5/6 [00:12<00:02,  2.51s/it]\nLoading pipeline components...: 100%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588| 6/6 [00:13<00:00,  2.03s/it]\nLoading pipeline components...: 100%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588| 6/6 [00:13<00:00,  2.19s/it]\n/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/lib/python3.12/site-packages/diffusers/loaders/lora_pipeline.py:6850: FutureWarning: `LoraLoaderMixin` is deprecated and will be removed in version 1.0.0. LoraLoaderMixin is deprecated and this will be removed in a future version. Please use `StableDiffusionLoraLoaderMixin`, instead.\n  deprecate(\"LoraLoaderMixin\", \"1.0.0\", deprecation_message)\n",
+        "driver-recovery-20260927-1030.log": "{\"arm\": \"C\", \"host\": \"b-cr4-low-0927--35735fae3214-vlpgftkp5f\", \"pid\": 775763, \"gpus\": [1], \"code_root\": \"/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681\", \"commit\": \"55596810cee2062022b894ef93feb1ab4cd6b07b\", \"stage\": \"waiting_for_B730_fixed_23360_endpoint\", \"time_utc\": \"2026-09-27T07:15:31.096413+00:00\"}\n{\"arm\": \"C\", \"host\": \"b-cr4-low-0927--35735fae3214-vlpgftkp5f\", \"pid\": 775763, \"gpus\": [1], \"code_root\": \"/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681\", \"commit\": \"55596810cee2062022b894ef93feb1ab4cd6b07b\", \"stage\": \"control-train-and-evaluate\", \"time_utc\": \"2026-09-27T07:15:32.472707+00:00\", \"children\": [{\"pid\": 775770, \"gpu\": 1, \"command\": [\"bash\", \"scripts/inspire/run_prefeval_k1_retain730.sh\", \"C\"], \"log\": \"/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-C/control-train-and-evaluate-0.log\", \"code_root\": \"/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-deploy-52d98d8\"}]}\n",
+        "train.log": "299}\n{\"step\": 22432, \"mse\": 0.5079303458333015, \"seconds\": 36068.254849706005}\n{\"step\": 22464, \"mse\": 0.2123590987175703, \"seconds\": 36118.15238420501}\n{\"step\": 22496, \"mse\": 0.2644084319472313, \"seconds\": 36168.252528005}\n{\"step\": 22528, \"mse\": 0.21127399988472462, \"seconds\": 36218.237493570996}\n{\"step\": 22560, \"mse\": 0.40470193047076464, \"seconds\": 36273.019893189994}\n{\"step\": 22592, \"mse\": 0.259398621506989, \"seconds\": 36322.84869362101}\n{\"step\": 22624, \"mse\": 0.5472062584012747, \"seconds\": 36372.975144532}\n{\"step\": 22656, \"mse\": 0.11672562453895807, \"seconds\": 36423.029463003986}\n{\"step\": 22688, \"mse\": 0.38265065662562847, \"seconds\": 36478.26403710501}\n{\"step\": 22720, \"mse\": 0.2709895111620426, \"seconds\": 36528.430509477985}\n{\"step\": 22752, \"mse\": 0.41430768836289644, \"seconds\": 36578.566115268}\n{\"step\": 22784, \"mse\": 0.2567206360399723, \"seconds\": 36628.796489218}\n{\"step\": 22816, \"mse\": 0.5843430049717426, \"seconds\": 36684.26407420599}\n{\"step\": 22848, \"mse\": 0.3185603627935052, \"seconds\": 36734.42457234701}\n{\"step\": 22880, \"mse\": 0.10861960705369711, \"seconds\": 36784.65808609601}\n{\"step\": 22912, \"mse\": 0.3738016225397587, \"seconds\": 36834.791065652986}\n{\"step\": 22944, \"mse\": 0.07870168378576636, \"seconds\": 36890.01084404999}\n{\"step\": 22976, \"mse\": 0.3253825232386589, \"seconds\": 36940.424646849}\n{\"step\": 23008, \"mse\": 0.6051769629120827, \"seconds\": 36990.604829901}\n{\"step\": 23040, \"mse\": 0.18270982056856155, \"seconds\": 37040.762635757}\n{\"step\": 23072, \"mse\": 0.5251681599766016, \"seconds\": 37095.70236833599}\n{\"step\": 23104, \"mse\": 0.4289837097749114, \"seconds\": 37145.955615344996}\n{\"step\": 23136, \"mse\": 0.15246848296374083, \"seconds\": 37196.39404911599}\n{\"step\": 23168, \"mse\": 0.5898414477705956, \"seconds\": 37246.581691465006}\n{\"step\": 23200, \"mse\": 0.14224133361130953, \"seconds\": 37301.785209484995}\n{\"step\": 23232, \"mse\": 0.14935694355517626, \"seconds\": 37352.178731243985}\n{\"step\": 23264, \"mse\": 0.32144817896187305, \"seconds\": 37402.384253137}\n{\"step\": 23296, \"mse\": 0.4266726467758417, \"seconds\": 37452.90705045698}\n{\"step\": 23328, \"mse\": 0.22046106401830912, \"seconds\": 37507.97117595699}\n{\"step\": 23360, \"mse\": 0.43347414769232273, \"seconds\": 37558.191325276}\n",
+        "driver-recovery-20260926-1515.log": "{\"arm\": \"C\", \"host\": \"prefeval-b-cr-h200x4-20260926--c1325f0297e5-p7vxlaarul\", \"pid\": 5041, \"gpus\": [1], \"code_root\": \"/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681\", \"commit\": \"55596810cee2062022b894ef93feb1ab4cd6b07b\", \"stage\": \"waiting_for_B730_fixed_23360_endpoint\", \"time_utc\": \"2026-09-26T07:23:54.380298+00:00\"}\n{\"arm\": \"C\", \"host\": \"prefeval-b-cr-h200x4-20260926--c1325f0297e5-p7vxlaarul\", \"pid\": 5041, \"gpus\": [1], \"code_root\": \"/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681\", \"commit\": \"55596810cee2062022b894ef93feb1ab4cd6b07b\", \"stage\": \"control-train-and-evaluate\", \"time_utc\": \"2026-09-26T07:23:55.862845+00:00\", \"children\": [{\"pid\": 5048, \"gpu\": 1, \"command\": [\"bash\", \"scripts/inspire/run_prefeval_k1_retain730.sh\", \"C\"], \"log\": \"/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-C/control-train-and-evaluate-0.log\", \"code_root\": \"/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-deploy-52d98d8\"}]}\n",
+        "control-source-V1-0.log": "",
+        "final-dev-V1-readback.log": "op_home:0050\", \"prefix\": 10, \"chain\": 0, \"shard\": 0}\n{\"evaluated\": \"shop_home:0050\", \"prefix\": 0, \"chain\": 1, \"shard\": 0}\n{\"evaluated\": \"shop_home:0050\", \"prefix\": 1, \"chain\": 1, \"shard\": 0}\n{\"evaluated\": \"shop_home:0050\", \"prefix\": 5, \"chain\": 1, \"shard\": 0}\n{\"evaluated\": \"shop_home:0050\", \"prefix\": 10, \"chain\": 1, \"shard\": 0}\n{\"evaluated\": \"shop_home:0052\", \"prefix\": 0, \"chain\": 0, \"shard\": 0}\n{\"evaluated\": \"shop_home:0052\", \"prefix\": 1, \"chain\": 0, \"shard\": 0}\n{\"evaluated\": \"shop_home:0052\", \"prefix\": 5, \"chain\": 0, \"shard\": 0}\n{\"evaluated\": \"shop_home:0052\", \"prefix\": 10, \"chain\": 0, \"shard\": 0}\n{\"evaluated\": \"shop_home:0052\", \"prefix\": 0, \"chain\": 1, \"shard\": 0}\n{\"evaluated\": \"shop_home:0052\", \"prefix\": 1, \"chain\": 1, \"shard\": 0}\n{\"evaluated\": \"shop_home:0052\", \"prefix\": 5, \"chain\": 1, \"shard\": 0}\n{\"evaluated\": \"shop_home:0052\", \"prefix\": 10, \"chain\": 1, \"shard\": 0}\n{\"evaluated\": \"shop_home:0053\", \"prefix\": 0, \"chain\": 0, \"shard\": 0}\n{\"evaluated\": \"shop_home:0053\", \"prefix\": 1, \"chain\": 0, \"shard\": 0}\nThe following generation flags are not valid and may be ignored: ['temperature', 'top_p', 'top_k']. Set `TRANSFORMERS_VERBOSITY=info` for more details.\n{\"evaluated\": \"shop_home:0053\", \"prefix\": 5, \"chain\": 0, \"shard\": 0}\n{\"evaluated\": \"shop_home:0053\", \"prefix\": 10, \"chain\": 0, \"shard\": 0}\n{\"evaluated\": \"shop_home:0053\", \"prefix\": 0, \"chain\": 1, \"shard\": 0}\n{\"evaluated\": \"shop_home:0053\", \"prefix\": 1, \"chain\": 1, \"shard\": 0}\n{\"evaluated\": \"shop_home:0053\", \"prefix\": 5, \"chain\": 1, \"shard\": 0}\n{\"evaluated\": \"shop_home:0053\", \"prefix\": 10, \"chain\": 1, \"shard\": 0}\n{\"evaluated\": \"entertain_sports:0018\", \"prefix\": 0, \"chain\": 0, \"shard\": 0}\n{\"evaluated\": \"entertain_sports:0018\", \"prefix\": 1, \"chain\": 0, \"shard\": 0}\n{\"evaluated\": \"entertain_sports:0018\", \"prefix\": 5, \"chain\": 0, \"shard\": 0}\n{\"evaluated\": \"entertain_sports:0018\", \"prefix\": 10, \"chain\": 0, \"shard\": 0}\n{\"evaluated\": \"entertain_sports:0018\", \"prefix\": 0, \"chain\": 1, \"shard\": 0}\n{\"evaluated\": \"entertain_sports:0018\", \"prefix\": 1, \"chain\": 1, \"shard\": 0}\n{\"evaluated\": \"entertain_sports:0018\", \"prefix\": 5, \"chain\": 1, \"shard\": 0}\n{\"evaluated\": \"entertain_sports:0018\", \"prefix\": 10, \"chain\": 1, \"shard\": 0}\n",
+        "driver-launch-20260926.log": "\": [{\"pid\": 3459260, \"gpu\": 1, \"command\": [\"bash\", \"scripts/inspire/run_prefeval_k1_sourcebank730.sh\", \"0\"], \"log\": \"/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-C/control-source-V0-0.log\", \"code_root\": \"/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-deploy-52d98d8\"}]}\n{\"arm\": \"C\", \"host\": \"prefeval-k1-h200x4-high-20260924--506d5fcf84c1-ck5fp533ke\", \"pid\": 2478528, \"gpus\": [1], \"code_root\": \"/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681\", \"commit\": \"55596810cee2062022b894ef93feb1ab4cd6b07b\", \"stage\": \"control-source-V1\", \"time_utc\": \"2026-09-26T00:22:07.169051+00:00\", \"children\": [{\"pid\": 2939704, \"gpu\": 1, \"command\": [\"bash\", \"scripts/inspire/run_prefeval_k1_sourcebank730.sh\", \"1\"], \"log\": \"/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-C/control-source-V1-0.log\", \"code_root\": \"/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-deploy-52d98d8\"}]}\n{\"arm\": \"C\", \"host\": \"prefeval-k1-h200x4-high-20260924--506d5fcf84c1-ck5fp533ke\", \"pid\": 2478528, \"gpus\": [1], \"code_root\": \"/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681\", \"commit\": \"55596810cee2062022b894ef93feb1ab4cd6b07b\", \"stage\": \"freezing_control_bank\", \"time_utc\": \"2026-09-26T04:27:56.645579+00:00\"}\n{\"preferences\": 730, \"pngs\": 2920, \"bank_sha256\": \"fc0b8c6d79949c765867ffeccfc328422be4bfd46ea994df63aecb9d5fe2ddd4\"}\n{\"arm\": \"C\", \"host\": \"prefeval-k1-h200x4-high-20260924--506d5fcf84c1-ck5fp533ke\", \"pid\": 2478528, \"gpus\": [1], \"code_root\": \"/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681\", \"commit\": \"55596810cee2062022b894ef93feb1ab4cd6b07b\", \"stage\": \"control-train-and-evaluate\", \"time_utc\": \"2026-09-26T04:28:13.955985+00:00\", \"children\": [{\"pid\": 2239324, \"gpu\": 1, \"command\": [\"bash\", \"scripts/inspire/run_prefeval_k1_retain730.sh\", \"C\"], \"log\": \"/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-C/control-train-and-evaluate-0.log\", \"code_root\": \"/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-deploy-52d98d8\"}]}\n",
+        "control-train-and-evaluate-0.log": "",
+        "control-source-V0-0.log": ""
+      },
+      "jsonl_counts": {
+        "readback-final-dev-V1/readback-0.jsonl": 5892,
+        "train/optimization.jsonl": 23360,
+        "final-dev-V1/lifestyle_beauty_0014/seed-1/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_beauty_0014/seed-0/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_beauty_0021/seed-1/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_beauty_0021/seed-0/writes.jsonl": 11,
+        "final-dev-V1/entertain_music_book_0006/seed-1/writes.jsonl": 11,
+        "final-dev-V1/entertain_music_book_0006/seed-0/writes.jsonl": 11,
+        "final-dev-V1/pet_ownership_0021/seed-1/writes.jsonl": 11,
+        "final-dev-V1/pet_ownership_0021/seed-0/writes.jsonl": 11,
+        "final-dev-V1/entertain_shows_0058/seed-1/writes.jsonl": 11,
+        "final-dev-V1/entertain_shows_0058/seed-0/writes.jsonl": 11,
+        "final-dev-V1/entertain_sports_0037/seed-1/writes.jsonl": 11,
+        "final-dev-V1/entertain_sports_0037/seed-0/writes.jsonl": 11,
+        "final-dev-V1/travel_hotel_0024/seed-1/writes.jsonl": 11,
+        "final-dev-V1/travel_hotel_0024/seed-0/writes.jsonl": 11,
+        "final-dev-V1/travel_activities_0023/seed-1/writes.jsonl": 11,
+        "final-dev-V1/travel_activities_0023/seed-0/writes.jsonl": 11,
+        "final-dev-V1/professional_work_location_style_0020/seed-1/writes.jsonl": 11,
+        "final-dev-V1/professional_work_location_style_0020/seed-0/writes.jsonl": 11,
+        "final-dev-V1/travel_activities_0033/seed-1/writes.jsonl": 11,
+        "final-dev-V1/travel_activities_0033/seed-0/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_beauty_0001/seed-1/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_beauty_0001/seed-0/writes.jsonl": 11,
+        "final-dev-V1/travel_hotel_0044/seed-1/writes.jsonl": 11,
+        "final-dev-V1/travel_hotel_0044/seed-0/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_dietary_0013/seed-1/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_dietary_0013/seed-0/writes.jsonl": 11,
+        "final-dev-V1/entertain_sports_0023/seed-1/writes.jsonl": 11,
+        "final-dev-V1/entertain_sports_0023/seed-0/writes.jsonl": 11,
+        "final-dev-V1/pet_ownership_0038/seed-1/writes.jsonl": 11,
+        "final-dev-V1/pet_ownership_0038/seed-0/writes.jsonl": 11,
+        "final-dev-V1/shop_fashion_0032/seed-1/writes.jsonl": 11,
+        "final-dev-V1/shop_fashion_0032/seed-0/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_beauty_0016/seed-1/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_beauty_0016/seed-0/writes.jsonl": 11,
+        "final-dev-V1/entertain_sports_0018/seed-1/writes.jsonl": 11,
+        "final-dev-V1/entertain_sports_0018/seed-0/writes.jsonl": 11,
+        "final-dev-V1/professional_work_location_style_0029/seed-1/writes.jsonl": 11,
+        "final-dev-V1/professional_work_location_style_0029/seed-0/writes.jsonl": 11,
+        "final-dev-V1/shop_home_0052/seed-1/writes.jsonl": 11,
+        "final-dev-V1/shop_home_0052/seed-0/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_fit_0002/seed-1/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_fit_0002/seed-0/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_fit_0033/seed-1/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_fit_0033/seed-0/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_fit_0021/seed-1/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_fit_0021/seed-0/writes.jsonl": 11,
+        "final-dev-V1/pet_ownership_0019/seed-1/writes.jsonl": 11,
+        "final-dev-V1/pet_ownership_0019/seed-0/writes.jsonl": 11,
+        "final-dev-V1/shop_fashion_0025/seed-1/writes.jsonl": 11,
+        "final-dev-V1/shop_fashion_0025/seed-0/writes.jsonl": 11,
+        "final-dev-V1/travel_restaurant_0017/seed-1/writes.jsonl": 11,
+        "final-dev-V1/travel_restaurant_0017/seed-0/writes.jsonl": 11,
+        "final-dev-V1/entertain_games_0020/seed-1/writes.jsonl": 11,
+        "final-dev-V1/entertain_games_0020/seed-0/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_beauty_0023/seed-1/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_beauty_0023/seed-0/writes.jsonl": 11,
+        "final-dev-V1/entertain_shows_0023/seed-1/writes.jsonl": 11,
+        "final-dev-V1/entertain_shows_0023/seed-0/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_health_0046/seed-1/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_health_0046/seed-0/writes.jsonl": 11,
+        "final-dev-V1/entertain_games_0042/seed-1/writes.jsonl": 11,
+        "final-dev-V1/entertain_games_0042/seed-0/writes.jsonl": 11,
+        "final-dev-V1/shop_fashion_0009/seed-1/writes.jsonl": 11,
+        "final-dev-V1/shop_fashion_0009/seed-0/writes.jsonl": 11,
+        "final-dev-V1/travel_restaurant_0008/seed-1/writes.jsonl": 11,
+        "final-dev-V1/travel_restaurant_0008/seed-0/writes.jsonl": 11,
+        "final-dev-V1/travel_activities_0014/seed-1/writes.jsonl": 11,
+        "final-dev-V1/travel_activities_0014/seed-0/writes.jsonl": 11,
+        "final-dev-V1/shop_home_0050/seed-1/writes.jsonl": 11,
+        "final-dev-V1/shop_home_0050/seed-0/writes.jsonl": 11,
+        "final-dev-V1/pet_ownership_0020/seed-1/writes.jsonl": 11,
+        "final-dev-V1/pet_ownership_0020/seed-0/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_beauty_0007/seed-1/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_beauty_0007/seed-0/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_beauty_0028/seed-1/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_beauty_0028/seed-0/writes.jsonl": 11,
+        "final-dev-V1/entertain_games_0010/seed-1/writes.jsonl": 11,
+        "final-dev-V1/entertain_games_0010/seed-0/writes.jsonl": 11,
+        "final-dev-V1/shop_fashion_0002/seed-1/writes.jsonl": 11,
+        "final-dev-V1/shop_fashion_0002/seed-0/writes.jsonl": 11,
+        "final-dev-V1/shop_home_0026/seed-1/writes.jsonl": 11,
+        "final-dev-V1/shop_home_0026/seed-0/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_beauty_0024/seed-1/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_beauty_0024/seed-0/writes.jsonl": 11,
+        "final-dev-V1/entertain_sports_0019/seed-1/writes.jsonl": 11,
+        "final-dev-V1/entertain_sports_0019/seed-0/writes.jsonl": 11,
+        "final-dev-V1/entertain_games_0027/seed-1/writes.jsonl": 11,
+        "final-dev-V1/entertain_games_0027/seed-0/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_dietary_0038/seed-1/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_dietary_0038/seed-0/writes.jsonl": 11,
+        "final-dev-V1/entertain_music_book_0029/seed-1/writes.jsonl": 11,
+        "final-dev-V1/entertain_music_book_0029/seed-0/writes.jsonl": 11,
+        "final-dev-V1/education_learning_styles_0010/seed-1/writes.jsonl": 11,
+        "final-dev-V1/education_learning_styles_0010/seed-0/writes.jsonl": 11,
+        "final-dev-V1/travel_hotel_0042/seed-1/writes.jsonl": 11,
+        "final-dev-V1/travel_hotel_0042/seed-0/writes.jsonl": 11,
+        "final-dev-V1/entertain_shows_0051/seed-1/writes.jsonl": 11,
+        "final-dev-V1/entertain_shows_0051/seed-0/writes.jsonl": 11,
+        "final-dev-V1/entertain_games_0006/seed-1/writes.jsonl": 11,
+        "final-dev-V1/entertain_games_0006/seed-0/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_beauty_0015/seed-1/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_beauty_0015/seed-0/writes.jsonl": 11,
+        "final-dev-V1/entertain_music_book_0043/seed-1/writes.jsonl": 11,
+        "final-dev-V1/entertain_music_book_0043/seed-0/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_dietary_0026/seed-1/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_dietary_0026/seed-0/writes.jsonl": 11,
+        "final-dev-V1/entertain_music_book_0024/seed-1/writes.jsonl": 11,
+        "final-dev-V1/entertain_music_book_0024/seed-0/writes.jsonl": 11,
+        "final-dev-V1/professional_work_location_style_0021/seed-1/writes.jsonl": 11,
+        "final-dev-V1/professional_work_location_style_0021/seed-0/writes.jsonl": 11,
+        "final-dev-V1/travel_restaurant_0044/seed-1/writes.jsonl": 11,
+        "final-dev-V1/travel_restaurant_0044/seed-0/writes.jsonl": 11,
+        "final-dev-V1/travel_activities_0035/seed-1/writes.jsonl": 11,
+        "final-dev-V1/travel_activities_0035/seed-0/writes.jsonl": 11,
+        "final-dev-V1/travel_restaurant_0053/seed-1/writes.jsonl": 11,
+        "final-dev-V1/travel_restaurant_0053/seed-0/writes.jsonl": 11,
+        "final-dev-V1/professional_work_location_style_0027/seed-1/writes.jsonl": 11,
+        "final-dev-V1/professional_work_location_style_0027/seed-0/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_dietary_0050/seed-1/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_dietary_0050/seed-0/writes.jsonl": 11,
+        "final-dev-V1/shop_fashion_0033/seed-1/writes.jsonl": 11,
+        "final-dev-V1/shop_fashion_0033/seed-0/writes.jsonl": 11,
+        "final-dev-V1/shop_home_0018/seed-1/writes.jsonl": 11,
+        "final-dev-V1/shop_home_0018/seed-0/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_health_0032/seed-1/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_health_0032/seed-0/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_health_0015/seed-1/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_health_0015/seed-0/writes.jsonl": 11,
+        "final-dev-V1/education_learning_styles_0020/seed-1/writes.jsonl": 11,
+        "final-dev-V1/education_learning_styles_0020/seed-0/writes.jsonl": 11,
+        "final-dev-V1/education_learning_styles_0026/seed-1/writes.jsonl": 11,
+        "final-dev-V1/education_learning_styles_0026/seed-0/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_dietary_0031/seed-1/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_dietary_0031/seed-0/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_dietary_0025/seed-1/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_dietary_0025/seed-0/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_beauty_0009/seed-1/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_beauty_0009/seed-0/writes.jsonl": 11,
+        "final-dev-V1/entertain_music_book_0002/seed-1/writes.jsonl": 11,
+        "final-dev-V1/entertain_music_book_0002/seed-0/writes.jsonl": 11,
+        "final-dev-V1/travel_restaurant_0055/seed-1/writes.jsonl": 11,
+        "final-dev-V1/travel_restaurant_0055/seed-0/writes.jsonl": 11,
+        "final-dev-V1/entertain_shows_0028/seed-1/writes.jsonl": 11,
+        "final-dev-V1/entertain_shows_0028/seed-0/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_health_0008/seed-1/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_health_0008/seed-0/writes.jsonl": 11,
+        "final-dev-V1/shop_home_0028/seed-1/writes.jsonl": 11,
+        "final-dev-V1/shop_home_0028/seed-0/writes.jsonl": 11,
+        "final-dev-V1/travel_hotel_0049/seed-1/writes.jsonl": 11,
+        "final-dev-V1/travel_hotel_0049/seed-0/writes.jsonl": 11,
+        "final-dev-V1/entertain_shows_0002/seed-1/writes.jsonl": 11,
+        "final-dev-V1/entertain_shows_0002/seed-0/writes.jsonl": 11,
+        "final-dev-V1/shop_home_0053/seed-1/writes.jsonl": 11,
+        "final-dev-V1/shop_home_0053/seed-0/writes.jsonl": 11,
+        "final-dev-V1/professional_work_location_style_0009/seed-1/writes.jsonl": 11,
+        "final-dev-V1/professional_work_location_style_0009/seed-0/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_fit_0015/seed-1/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_fit_0015/seed-0/writes.jsonl": 11,
+        "final-dev-V1/education_learning_styles_0021/seed-1/writes.jsonl": 11,
+        "final-dev-V1/education_learning_styles_0021/seed-0/writes.jsonl": 11,
+        "final-dev-V1/travel_activities_0011/seed-1/writes.jsonl": 11,
+        "final-dev-V1/travel_activities_0011/seed-0/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_health_0047/seed-1/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_health_0047/seed-0/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_beauty_0032/seed-1/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_beauty_0032/seed-0/writes.jsonl": 11,
+        "final-dev-V1/travel_hotel_0027/seed-1/writes.jsonl": 11,
+        "final-dev-V1/travel_hotel_0027/seed-0/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_beauty_0020/seed-1/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_beauty_0020/seed-0/writes.jsonl": 11,
+        "final-dev-V1/education_learning_styles_0029/seed-1/writes.jsonl": 11,
+        "final-dev-V1/education_learning_styles_0029/seed-0/writes.jsonl": 11,
+        "final-dev-V1/pet_ownership_0027/seed-1/writes.jsonl": 11,
+        "final-dev-V1/pet_ownership_0027/seed-0/writes.jsonl": 11,
+        "final-dev-V1/entertain_games_0030/seed-1/writes.jsonl": 11,
+        "final-dev-V1/entertain_games_0030/seed-0/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_fit_0019/seed-1/writes.jsonl": 11,
+        "final-dev-V1/lifestyle_fit_0019/seed-0/writes.jsonl": 11,
+        "final-dev-V1/entertain_sports_0022/seed-1/writes.jsonl": 11,
+        "final-dev-V1/entertain_sports_0022/seed-0/writes.jsonl": 11
+      }
+    },
+    "R": {
+      "driver-state.json": {
+        "arm": "R",
+        "host": "b-cr4-low-0927--35735fae3214-vlpgftkp5f",
+        "pid": 775764,
+        "gpus": [
+          2,
+          3
+        ],
+        "code_root": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681",
+        "commit": "55596810cee2062022b894ef93feb1ab4cd6b07b",
+        "stage": "round-1-fm-5840-11680",
+        "time_utc": "2026-09-27T07:15:35.196753+00:00",
+        "children": [
+          {
+            "pid": 775793,
+            "gpu": 2,
+            "command": [
+              "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+              "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681/scripts/experiments/prefeval_k1_writer.py",
+              "train",
+              "--arm",
+              "B",
+              "--base",
+              "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+              "--official-source",
+              "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite",
+              "--split",
+              "train",
+              "--stage",
+              "retain",
+              "--steps",
+              "23360",
+              "--retain-source-mode",
+              "refresh-bank",
+              "--refresh-round",
+              "1",
+              "--initial-variants",
+              "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/variants-train.json",
+              "--sources",
+              "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-R/sources",
+              "--teachers",
+              "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-k1-scale730-20260924/teachers/B",
+              "--checkpoint",
+              "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/robust730/train/checkpoint-final.pt",
+              "--output",
+              "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-R/train"
+            ],
+            "log": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-R/round-1-fm-5840-11680-0.log",
+            "code_root": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681"
+          }
+        ]
+      },
+      "driver-launch.json": {
+        "arm": "R",
+        "pid": 775764,
+        "host": "b-cr4-low-0927--35735fae3214-vlpgftkp5f",
+        "command": [
+          "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681/scripts/inspire/run_prefeval_k1_refresh730.py",
+          "--arm",
+          "R",
+          "--gpus",
+          "2",
+          "3"
+        ],
+        "gpus": [
+          2,
+          3
+        ],
+        "code_root": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681",
+        "commit": "55596810cee2062022b894ef93feb1ab4cd6b07b",
+        "log": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-R/driver-recovery-20260927-1030.log",
+        "utc": "2026-09-27T07:15:31.041211+00:00",
+        "reason": "resume after platform auto-recycle; preserve C completed training/readback and resume R remaining fixed global budget"
+      },
+      "train_files": [
+        "checkpoint-step-005840.pt",
+        "round-1.json",
+        "optimization.jsonl",
+        "round-0-complete.json",
+        "round-0.json",
+        "resume.pt",
+        "manifest.json",
+        "optimization-uncommitted-1790493380520522866.jsonl"
+      ],
+      "logs": {
+        "round-1-current-student-rollout-1.log": "turns\": 9}\n{\"completed\": \"professional_work_location_style:0011\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"professional_work_location_style:0013\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"professional_work_location_style:0015\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"professional_work_location_style:0017\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"professional_work_location_style:0019\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"professional_work_location_style:0023\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"professional_work_location_style:0025\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"professional_work_location_style:0028\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"professional_work_location_style:0031\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"professional_work_location_style:0033\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"professional_work_location_style:0035\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0001\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0003\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0005\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0007\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0009\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0011\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0013\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0015\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0017\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0022\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0024\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0026\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0029\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0031\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0033\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0035\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0037\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0040\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0042\", \"chain\": 0, \"inter_turns\": 9}\n",
+        "driver-recovery-20260927-1030.log": "{\"arm\": \"R\", \"host\": \"b-cr4-low-0927--35735fae3214-vlpgftkp5f\", \"pid\": 775764, \"gpus\": [2, 3], \"code_root\": \"/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681\", \"commit\": \"55596810cee2062022b894ef93feb1ab4cd6b07b\", \"stage\": \"waiting_for_B730_fixed_23360_endpoint\", \"time_utc\": \"2026-09-27T07:15:31.096471+00:00\"}\n{\"arm\": \"R\", \"host\": \"b-cr4-low-0927--35735fae3214-vlpgftkp5f\", \"pid\": 775764, \"gpus\": [2, 3], \"code_root\": \"/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681\", \"commit\": \"55596810cee2062022b894ef93feb1ab4cd6b07b\", \"stage\": \"round-1-fm-5840-11680\", \"time_utc\": \"2026-09-27T07:15:35.196753+00:00\", \"children\": [{\"pid\": 775793, \"gpu\": 2, \"command\": [\"/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python\", \"/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681/scripts/experiments/prefeval_k1_writer.py\", \"train\", \"--arm\", \"B\", \"--base\", \"/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907\", \"--official-source\", \"/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite\", \"--split\", \"train\", \"--stage\", \"retain\", \"--steps\", \"23360\", \"--retain-source-mode\", \"refresh-bank\", \"--refresh-round\", \"1\", \"--initial-variants\", \"/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/variants-train.json\", \"--sources\", \"/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-R/sources\", \"--teachers\", \"/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-k1-scale730-20260924/teachers/B\", \"--checkpoint\", \"/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/robust730/train/checkpoint-final.pt\", \"--output\", \"/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-R/train\"], \"log\": \"/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-R/round-1-fm-5840-11680-0.log\", \"code_root\": \"/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681\"}]}\n",
+        "round-1-fm-5840-11680-0.log": "hed\": 689, \"total\": 730, \"stage\": \"retain\"}\n{\"cached\": 690, \"total\": 730, \"stage\": \"retain\"}\n{\"cached\": 691, \"total\": 730, \"stage\": \"retain\"}\n{\"cached\": 692, \"total\": 730, \"stage\": \"retain\"}\n{\"cached\": 693, \"total\": 730, \"stage\": \"retain\"}\n{\"cached\": 694, \"total\": 730, \"stage\": \"retain\"}\n{\"cached\": 695, \"total\": 730, \"stage\": \"retain\"}\n{\"cached\": 696, \"total\": 730, \"stage\": \"retain\"}\n{\"cached\": 697, \"total\": 730, \"stage\": \"retain\"}\n{\"cached\": 698, \"total\": 730, \"stage\": \"retain\"}\n{\"cached\": 699, \"total\": 730, \"stage\": \"retain\"}\n{\"cached\": 700, \"total\": 730, \"stage\": \"retain\"}\n{\"cached\": 701, \"total\": 730, \"stage\": \"retain\"}\n{\"cached\": 702, \"total\": 730, \"stage\": \"retain\"}\n{\"cached\": 703, \"total\": 730, \"stage\": \"retain\"}\n{\"cached\": 704, \"total\": 730, \"stage\": \"retain\"}\n{\"cached\": 705, \"total\": 730, \"stage\": \"retain\"}\n{\"cached\": 706, \"total\": 730, \"stage\": \"retain\"}\n{\"cached\": 707, \"total\": 730, \"stage\": \"retain\"}\n{\"cached\": 708, \"total\": 730, \"stage\": \"retain\"}\n{\"cached\": 709, \"total\": 730, \"stage\": \"retain\"}\n{\"cached\": 710, \"total\": 730, \"stage\": \"retain\"}\n{\"cached\": 711, \"total\": 730, \"stage\": \"retain\"}\n{\"cached\": 712, \"total\": 730, \"stage\": \"retain\"}\n{\"cached\": 713, \"total\": 730, \"stage\": \"retain\"}\n{\"cached\": 714, \"total\": 730, \"stage\": \"retain\"}\n{\"cached\": 715, \"total\": 730, \"stage\": \"retain\"}\n{\"cached\": 716, \"total\": 730, \"stage\": \"retain\"}\n{\"cached\": 717, \"total\": 730, \"stage\": \"retain\"}\n{\"cached\": 718, \"total\": 730, \"stage\": \"retain\"}\n{\"cached\": 719, \"total\": 730, \"stage\": \"retain\"}\n{\"cached\": 720, \"total\": 730, \"stage\": \"retain\"}\n{\"cached\": 721, \"total\": 730, \"stage\": \"retain\"}\n{\"cached\": 722, \"total\": 730, \"stage\": \"retain\"}\n{\"cached\": 723, \"total\": 730, \"stage\": \"retain\"}\n{\"cached\": 724, \"total\": 730, \"stage\": \"retain\"}\n{\"cached\": 725, \"total\": 730, \"stage\": \"retain\"}\n{\"cached\": 726, \"total\": 730, \"stage\": \"retain\"}\n{\"cached\": 727, \"total\": 730, \"stage\": \"retain\"}\n{\"cached\": 728, \"total\": 730, \"stage\": \"retain\"}\n{\"cached\": 729, \"total\": 730, \"stage\": \"retain\"}\n{\"cached\": 730, \"total\": 730, \"stage\": \"retain\"}\n{\"step\": 11424, \"mse\": 0.5217787697911263, \"seconds\": 49.78165524601354}\n{\"step\": 11456, \"mse\": 0.32784526608884335, \"seconds\": 99.02420926702325}\n",
+        "round-0-fm-0-5840-0.log": "560234, \"seconds\": 7859.972633166995}\n{\"step\": 4896, \"mse\": 0.5160909090191126, \"seconds\": 7915.297252153003}\n{\"step\": 4928, \"mse\": 0.41557920165359974, \"seconds\": 7965.965425824994}\n{\"step\": 4960, \"mse\": 0.732740081846714, \"seconds\": 8016.654947686999}\n{\"step\": 4992, \"mse\": 0.3595963791012764, \"seconds\": 8067.934431240996}\n{\"step\": 5024, \"mse\": 0.6317461133003235, \"seconds\": 8123.169361541994}\n{\"step\": 5056, \"mse\": 0.6301670502871275, \"seconds\": 8173.725958071998}\n{\"step\": 5088, \"mse\": 0.4437063354998827, \"seconds\": 8223.679646603996}\n{\"step\": 5120, \"mse\": 0.28215814381837845, \"seconds\": 8273.642808816992}\n{\"step\": 5152, \"mse\": 0.33071179687976837, \"seconds\": 8328.550667855001}\n{\"step\": 5184, \"mse\": 0.35389646142721176, \"seconds\": 8378.711117083003}\n{\"step\": 5216, \"mse\": 0.4297485649585724, \"seconds\": 8429.013156183006}\n{\"step\": 5248, \"mse\": 0.6454908102750778, \"seconds\": 8479.566394883994}\n{\"step\": 5280, \"mse\": 0.3258710294030607, \"seconds\": 8534.498375615993}\n{\"step\": 5312, \"mse\": 0.5617972332984209, \"seconds\": 8584.955911961006}\n{\"step\": 5344, \"mse\": 0.6486516147851944, \"seconds\": 8635.246314909993}\n{\"step\": 5376, \"mse\": 0.29064944945275784, \"seconds\": 8685.535591580003}\n{\"step\": 5408, \"mse\": 0.8451581448316574, \"seconds\": 8740.495873741005}\n{\"step\": 5440, \"mse\": 0.3171789422631264, \"seconds\": 8790.872472591}\n{\"step\": 5472, \"mse\": 0.5313183292746544, \"seconds\": 8841.405546990994}\n{\"step\": 5504, \"mse\": 0.2996317073702812, \"seconds\": 8891.028124700999}\n{\"step\": 5536, \"mse\": 0.5434643253684044, \"seconds\": 8945.247726439004}\n{\"step\": 5568, \"mse\": 0.37635843455791473, \"seconds\": 8994.808409674006}\n{\"step\": 5600, \"mse\": 0.5074861533939838, \"seconds\": 9044.534214279003}\n{\"step\": 5632, \"mse\": 0.18801122345030308, \"seconds\": 9094.311857088003}\n{\"step\": 5664, \"mse\": 0.20198509190231562, \"seconds\": 9148.484530835005}\n{\"step\": 5696, \"mse\": 0.4117587823420763, \"seconds\": 9198.060727830001}\n{\"step\": 5728, \"mse\": 0.28290439769625664, \"seconds\": 9247.871350093992}\n{\"step\": 5760, \"mse\": 0.3245348874479532, \"seconds\": 9297.875824068993}\n{\"step\": 5792, \"mse\": 0.2408124916255474, \"seconds\": 9352.765721660995}\n{\"step\": 5824, \"mse\": 0.42225799709558487, \"seconds\": 9402.81644676}\n",
+        "driver-recovery-20260926-1515.log": " \"host\": \"prefeval-b-cr-h200x4-20260926--c1325f0297e5-p7vxlaarul\", \"pid\": 5042, \"gpus\": [2, 3], \"code_root\": \"/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681\", \"commit\": \"55596810cee2062022b894ef93feb1ab4cd6b07b\", \"stage\": \"round-1-freezing-training-sources\", \"time_utc\": \"2026-09-26T22:05:46.880108+00:00\"}\n{\"arm\": \"R\", \"host\": \"prefeval-b-cr-h200x4-20260926--c1325f0297e5-p7vxlaarul\", \"pid\": 5042, \"gpus\": [2, 3], \"code_root\": \"/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681\", \"commit\": \"55596810cee2062022b894ef93feb1ab4cd6b07b\", \"stage\": \"round-1-fm-5840-11680\", \"time_utc\": \"2026-09-26T22:06:00.197228+00:00\", \"children\": [{\"pid\": 1428378, \"gpu\": 2, \"command\": [\"/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python\", \"/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681/scripts/experiments/prefeval_k1_writer.py\", \"train\", \"--arm\", \"B\", \"--base\", \"/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907\", \"--official-source\", \"/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite\", \"--split\", \"train\", \"--stage\", \"retain\", \"--steps\", \"23360\", \"--retain-source-mode\", \"refresh-bank\", \"--refresh-round\", \"1\", \"--initial-variants\", \"/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/variants-train.json\", \"--sources\", \"/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-R/sources\", \"--teachers\", \"/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-k1-scale730-20260924/teachers/B\", \"--checkpoint\", \"/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/robust730/train/checkpoint-final.pt\", \"--output\", \"/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-R/train\"], \"log\": \"/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-R/round-1-fm-5840-11680-0.log\", \"code_root\": \"/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681\"}]}\n",
+        "driver-launch-20260926.log": "czxs26210936/Vision-Language-Memory/third_party/DreamLite\", \"--split\", \"train\", \"--checkpoint\", \"/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/robust730/train/checkpoint-final.pt\", \"--initial-variants\", \"/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/variants-train.json\", \"--initial-variant\", \"0\", \"--inter-turns\", \"9\", \"--noise-chains\", \"1\", \"--noise-domain\", \"refresh-0\", \"--shard-count\", \"2\", \"--shard-index\", \"0\", \"--output\", \"/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-R/sources/round-0/shard-0\"], \"log\": \"/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-R/round-0-current-student-rollout-0.log\", \"code_root\": \"/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681\"}, {\"pid\": 3459285, \"gpu\": 3, \"command\": [\"/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python\", \"/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681/scripts/experiments/prefeval_k1_writer.py\", \"rollout\", \"--arm\", \"B\", \"--base\", \"/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907\", \"--official-source\", \"/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite\", \"--split\", \"train\", \"--checkpoint\", \"/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/robust730/train/checkpoint-final.pt\", \"--initial-variants\", \"/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/variants-train.json\", \"--initial-variant\", \"0\", \"--inter-turns\", \"9\", \"--noise-chains\", \"1\", \"--noise-domain\", \"refresh-0\", \"--shard-count\", \"2\", \"--shard-index\", \"1\", \"--output\", \"/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-R/sources/round-0/shard-1\"], \"log\": \"/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-R/round-0-current-student-rollout-1.log\", \"code_root\": \"/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681\"}]}\n",
+        "round-1-current-student-rollout-0.log": "turns\": 9}\n{\"completed\": \"professional_work_location_style:0010\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"professional_work_location_style:0012\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"professional_work_location_style:0014\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"professional_work_location_style:0016\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"professional_work_location_style:0018\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"professional_work_location_style:0022\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"professional_work_location_style:0024\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"professional_work_location_style:0026\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"professional_work_location_style:0030\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"professional_work_location_style:0032\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"professional_work_location_style:0034\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0000\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0002\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0004\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0006\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0008\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0010\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0012\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0014\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0016\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0018\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0023\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0025\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0028\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0030\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0032\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0034\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0036\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0039\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0041\", \"chain\": 0, \"inter_turns\": 9}\n",
+        "round-0-current-student-rollout-0.log": "ion_style:0034\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0000\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0002\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0004\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0006\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0008\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0010\", \"chain\": 0, \"inter_turns\": 9}\n\nLoading pipeline components...:   0%|                    | 0/6 [00:00<?, ?it/s]\nLoading pipeline components...:  17%|\u2588\u2588          | 1/6 [00:00<00:01,  2.51it/s]\nLoading pipeline components...:  67%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588    | 4/6 [00:17<00:09,  4.67s/it]\nLoading pipeline components...:  83%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588  | 5/6 [00:20<00:04,  4.22s/it]\nLoading pipeline components...: 100%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588| 6/6 [00:21<00:00,  3.26s/it]\nLoading pipeline components...: 100%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588| 6/6 [00:21<00:00,  3.55s/it]\n/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/lib/python3.12/site-packages/diffusers/loaders/lora_pipeline.py:6850: FutureWarning: `LoraLoaderMixin` is deprecated and will be removed in version 1.0.0. LoraLoaderMixin is deprecated and this will be removed in a future version. Please use `StableDiffusionLoraLoaderMixin`, instead.\n  deprecate(\"LoraLoaderMixin\", \"1.0.0\", deprecation_message)\n{\"completed\": \"pet_ownership:0012\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0014\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0016\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0018\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0023\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0025\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0028\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0030\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0032\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0034\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0036\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0039\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0041\", \"chain\": 0, \"inter_turns\": 9}\n",
+        "round-0-current-student-rollout-1.log": "ion_style:0035\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0001\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0003\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0005\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0007\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0009\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0011\", \"chain\": 0, \"inter_turns\": 9}\n\nLoading pipeline components...:   0%|                    | 0/6 [00:00<?, ?it/s]\nLoading pipeline components...:  17%|\u2588\u2588          | 1/6 [00:00<00:02,  2.49it/s]\nLoading pipeline components...:  67%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588    | 4/6 [00:17<00:09,  4.67s/it]\nLoading pipeline components...:  83%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588  | 5/6 [00:20<00:04,  4.22s/it]\nLoading pipeline components...: 100%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588| 6/6 [00:21<00:00,  3.26s/it]\nLoading pipeline components...: 100%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588| 6/6 [00:21<00:00,  3.55s/it]\n/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/lib/python3.12/site-packages/diffusers/loaders/lora_pipeline.py:6850: FutureWarning: `LoraLoaderMixin` is deprecated and will be removed in version 1.0.0. LoraLoaderMixin is deprecated and this will be removed in a future version. Please use `StableDiffusionLoraLoaderMixin`, instead.\n  deprecate(\"LoraLoaderMixin\", \"1.0.0\", deprecation_message)\n{\"completed\": \"pet_ownership:0013\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0015\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0017\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0022\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0024\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0026\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0029\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0031\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0033\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0035\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0037\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0040\", \"chain\": 0, \"inter_turns\": 9}\n{\"completed\": \"pet_ownership:0042\", \"chain\": 0, \"inter_turns\": 9}\n"
+      },
+      "jsonl_counts": {
+        "train/optimization.jsonl": 11465,
+        "train/optimization-uncommitted-1790493380520522866.jsonl": 98
+      }
+    }
+  },
+  "resume_before": {
+    "step": 11392,
+    "cursor": 45568,
+    "optimizer_steps": [
+      11392
+    ],
+    "optimizer_parameters": 1075,
+    "rng_keys": [
+      "python",
+      "numpy",
+      "torch_cpu",
+      "torch_cuda"
+    ],
+    "trainer_state": {
+      "refresh_round": 1,
+      "source_bank_sha256": "1fe8cf804b8bf12afcf2240f1d4eb65eb61c0cadd19dc542b3fb511cf66c74f8"
+    },
+    "sha256": "cc2f31cf9b1ff91db759e51707d1f7944c8eb12a036fcd2b6ef1efc3749e936e"
+  }
+}
