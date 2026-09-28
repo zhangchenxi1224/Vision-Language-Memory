@@ -1,0 +1,80 @@
+{
+  "utc": "2026-09-28T05:33:46.215579+00:00",
+  "platform_observed": "trust STOPPED; both NORMAL candidates PENDING",
+  "reason": "not established by platform status alone",
+  "locks": {
+    "C/refresh-driver.lock": "FREE",
+    "C/launcher.lock": "FREE",
+    "R/refresh-driver.lock": "FREE"
+  },
+  "arms": {
+    "C": {
+      "complete": 391,
+      "png": 4307,
+      "partial": [
+        [
+          {
+            "path": "retain730-C/final-train-V1/travel_restaurant_0042/seed-1/prefix-03.png",
+            "sha256": "4d583c10fa85d4e7c499ccebb74a45187f761c54f8ca937423151e376de92321"
+          },
+          {
+            "path": "retain730-C/final-train-V1/travel_restaurant_0042/seed-1/prefix-01.png",
+            "sha256": "ad8410631951d6048155501450a961cc64489a5e3b4b73137d95b99baf1ad843"
+          },
+          {
+            "path": "retain730-C/final-train-V1/travel_restaurant_0042/seed-1/prefix-04.png",
+            "sha256": "cafcf34991935a63e26c36c32a86ebe11a1f12f5a84ce31bf48222f4a20b5afb"
+          },
+          {
+            "path": "retain730-C/final-train-V1/travel_restaurant_0042/seed-1/prefix-02.png",
+            "sha256": "238493c920b151822d3d3d4002754176fcbb5355fe6d87916d1d79c9417960b7"
+          },
+          {
+            "path": "retain730-C/final-train-V1/travel_restaurant_0042/seed-1/prefix-05.png",
+            "sha256": "0ced6e3051fda7c843e4262d401fe27d27166beb6b89af698a6f654cfc570022"
+          },
+          {
+            "path": "retain730-C/final-train-V1/travel_restaurant_0042/seed-1/prefix-00.png",
+            "sha256": "5d789bbc880f06abbba346ce376039975f90607b6400eb46365e2558c5da0f9c"
+          }
+        ]
+      ]
+    },
+    "R": {
+      "complete": 278,
+      "png": 2783,
+      "partial": [
+        [
+          {
+            "path": "retain730-R/sources/round-3/shard-0/lifestyle_dietary_0024/seed-0/prefix-00.png",
+            "sha256": "db0b2a22434a1ab26e4fc74731e06642bbbe799048c64bdeeba94d89dc425ebc"
+          }
+        ],
+        [
+          {
+            "path": "retain730-R/sources/round-3/shard-1/lifestyle_dietary_0027/seed-0/prefix-01.png",
+            "sha256": "d0af8f60ec99f72f854bcbe6060f549ee4557b14e5eaf152c687908a2f802c6a"
+          },
+          {
+            "path": "retain730-R/sources/round-3/shard-1/lifestyle_dietary_0027/seed-0/prefix-00.png",
+            "sha256": "5ac2664f103537cc166df2251b22d325ac4821677101a2bab2802d0a4fbf14d2"
+          }
+        ]
+      ]
+    }
+  },
+  "files": {
+    "resume.pt": {
+      "sha256": "86f4536f99b6f008b6cc2c81e3b3e349314c30f8aa9d6d4d10d97e8a6e7ce9bb",
+      "bytes": 4680992656
+    },
+    "checkpoint-step-017520.pt": {
+      "sha256": "3da185795c65c8a3425086040f83cab18d5c334ef68055b2e4e8603025e52998",
+      "bytes": 1560329525
+    }
+  },
+  "optimization_rows": 17520,
+  "round3_bank_exists": false,
+  "resume_verification": "actual file SHA unchanged from full 09:20 step17520/cursor70080/optimizer/RNG audit; not deserialized on CPU",
+  "frozen_commit": "55596810cee2062022b894ef93feb1ab4cd6b07b"
+}
