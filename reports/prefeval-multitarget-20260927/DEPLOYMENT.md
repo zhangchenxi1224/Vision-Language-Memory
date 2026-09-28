@@ -1,5 +1,17 @@
 # 多目标主线部署记录
 
+## 2026-09-28 23:13 CST：长程按定时停止，完整链恢复已备妥、四卡重新排队
+
+平台实际记录22:27:16触发user timedShutdown，22:28:16完成停止及镜像保存。23:09新鲜status确认为STOPPED；这次是原定时停止，不是利用率回收。23:10已对原用户实例dl-clear-retain-h200x4-20260914执行一次start，原实例保留；23:13仍为NORMAL四H200的PENDING，不重复start。事件显示项目总GPU配额108、已用106、请求4，配额不足；尚未分配新的实际运行主机。原cwprkl2mqx和旧GPU732不再作为当前运行证据。平台现场见[C8_LONG10_REQUEUE_20260928.json](C8_LONG10_REQUEUE_20260928.json)。
+
+CPU已完成停止后恢复准备：独立目录 `long10/recovery-20260928-2310`，重新hash两权重和冻结协议/代码，逐项核验并逐字节复制800条完整轨迹，即8800PNG与1600份complete/writes，共10400文件。四条未完成轨迹shop_home:0002至0005的seed0未复制，将在新目录按原参数重建；原目录共8835PNG，保留不动。新目录正式协议SHA256仍为b43fd72a86e8a50547b359ac1ad7b0bf97bcdcbc90cb542f884206980caaae33。报告[C8_LONG10_RECOVERY_20260928.json](C8_LONG10_RECOVERY_20260928.json)，不是GPU启动回执。
+
+下一次资源RUNNING后，必须先核验实际新主机、全部四GPU、完整任务命令和long10/旧新controller/allocation锁，确认无活任务或持锁子进程，才后台运行新目录 `launch-recovery.sh`，SHA256 `548c532edcbd78ef744a511a8fa594dee57e2dc24ce9b934694a6774ad0502d1`。仍调用原6563d163控制器和224cc77 Writer/evaluator，只运行正式阶段，不重跑烟测。stdout/stderr写新目录recovery.log，保存launch.json，然后验证子进程继承三把锁、完整argv和新PNG增长。不要重跑已经成功的准备脚本，也不要启动旧fixed目录或readiness目录；PENDING时不进行GPU启动。最终统计从恢复目录读取，分母包含复用的800条轨迹。
+
+完整中断元数据/控制器日志/部分链writes和停机事件另存long10-interruption-20260928-2227.tar.gz，1624文件，SHA256 `ceb7d826106019181787e8636f9ab6e4293980d9d000d3373807418c6c107dd7`。本地已下载并核验归档hash及1600份完整链元数据；大PNG的实际hash绑定在恢复报告。已完成链元数据子归档1606文件，SHA256 `f44b7dc7ae923242c40a1a6ddb9801fa682eba9b3dfa668c900ba6bcf62686b3`。
+
+单写730不受影响：23:10:25实际alucvbi43a主机两GPU均100%、各14129MiB，C8/V0为3332张完整PNG，controller85531及当前Writer1842880/1842881命令和两锁正确；这是原控制器进入后两个逻辑分片，不是重启训练。仍无正式读回或最终成绩。自动跟进配置实际保存为60分钟，之前文字中的10分钟不能当作实际调度频率；排队和恢复状态以每次实时核验为准。
+
 ## 2026-09-28 21:38 CST：长程定时停止前的独立恢复准备
 
 21:33:46实际核验：单写730在alucvbi43a主机持续生成C8/V0，2240张完整PNG，两GPU100%、各14129MiB，原恢复controller85531及两Writer完整命令匹配，根和恢复锁持有；长程在cwprkl2mqx主机已有7634PNG、692条完整11PNG轨迹，四Writer命令与三层锁正常。两分支没有failure/results/complete，也没有正式读回。平台没有新回收事件；长程auto_stop_in_seconds=3196，仍预计22:26停止。瞬时一张卡利用率为0但显存及实际进程存在，不能据单个采样断言任务停止。

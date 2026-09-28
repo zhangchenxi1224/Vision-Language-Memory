@@ -1,0 +1,70 @@
+{
+  "checked_utc": "2026-09-28 15:13:41 UTC",
+  "status": {
+    "success": true,
+    "data": {
+      "name": "dl-clear-retain-h200x4-20260914",
+      "status": "PENDING",
+      "project": "前沿课题探索",
+      "workspace": "分布式训练空间",
+      "compute_group": "开发区-H200-3号机房-2-cuda13.2版本",
+      "created_by": "张宸熙",
+      "image": "ngc-pytorch:25.02-cuda12.8.0-py3",
+      "resource": {
+        "gpu_count": 4,
+        "gpu_type": "H200",
+        "cpu_count": 80,
+        "memory_gib": 900
+      },
+      "priority": "4",
+      "priority_level": "NORMAL",
+      "shared_memory_gib": 128,
+      "uptime_seconds": "0",
+      "auto_stop_in_seconds": "0",
+      "created_at": "1789349756000",
+      "updated_at": "1789349756000"
+    }
+  },
+  "events": {
+    "success": true,
+    "data": {
+      "items": [
+        {
+          "time": "2026-09-28 23:10:32",
+          "message": "task preempt check failed: quota check failed: rpc quota (ApplyPodQuota): Parent&sub project total quota insufficient. Current used(parent + all children)(CPU=2129.00, Memory=23417.99GB, GPU=106.00), current request(CPU=80.00, Memory=900.00GB, GPU=4.00), quota(parent total)(CPU=-1.00, Memory=-1.00GB, GPU=108.00)"
+        },
+        {
+          "time": "2026-09-28 23:10:34",
+          "message": "Pod frontiers-research/dl-clear-retain-h200x4-20260914--a823c55e800a-h4u5wfrnig can possibly be assigned to qb-prod-gpu2291, once resource is released and minAvailable is satisfied"
+        },
+        {
+          "time": "2026-09-28 23:10:47",
+          "message": "Pod frontiers-research/dl-clear-retain-h200x4-20260914--a823c55e800a-h4u5wfrnig can possibly be assigned to qb-prod-gpu1045, once resource is released and minAvailable is satisfied"
+        },
+        {
+          "time": "2026-09-28 23:11:00",
+          "message": "Pod frontiers-research/dl-clear-retain-h200x4-20260914--a823c55e800a-h4u5wfrnig can possibly be assigned to qb-prod-gpu2117, once resource is released and minAvailable is satisfied"
+        },
+        {
+          "time": "2026-09-28 23:11:11",
+          "message": "Pod frontiers-research/dl-clear-retain-h200x4-20260914--a823c55e800a-h4u5wfrnig can possibly be assigned to qb-prod-gpu2291, once resource is released and minAvailable is satisfied"
+        },
+        {
+          "time": "2026-09-28 23:11:23",
+          "message": "Pod frontiers-research/dl-clear-retain-h200x4-20260914--a823c55e800a-h4u5wfrnig can possibly be assigned to qb-prod-gpu963, once resource is released and minAvailable is satisfied"
+        },
+        {
+          "time": "2026-09-28 23:11:47",
+          "message": "Pod frontiers-research/dl-clear-retain-h200x4-20260914--a823c55e800a-h4u5wfrnig can possibly be assigned to qb-prod-gpu732, once resource is released and minAvailable is satisfied"
+        },
+        {
+          "time": "2026-09-28 23:12:34",
+          "message": "Pod frontiers-research/dl-clear-retain-h200x4-20260914--a823c55e800a-h4u5wfrnig can possibly be assigned to qb-prod-gpu934, once resource is released and minAvailable is satisfied"
+        }
+      ],
+      "shown": 8,
+      "total": 262,
+      "truncated": true
+    }
+  }
+}
