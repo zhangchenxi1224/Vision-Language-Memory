@@ -1,5 +1,9 @@
 # 多目标主线部署记录
 
+最新核验（2026-09-28 14:05 CST）：第三轮C8R/U16各2048步训练完成，实际两份最终权重与complete的SHA256一致；13:42:19自动进入C8R/V0生成，14:04为246/512 PNG。14:05同一NORMAL两H200均100%计算，controller1734131与生成子进程2501979/2501980正常，完整命令与分片回执一致，根及pilot64锁HELD且传给子进程，smoke及旧锁FREE；无failure/最终results/complete。快照为round3/runtime-eval-20260928-1405.json，PID仅此次记录，不重启。
+
+训练曝光及新旧目标几何已完整CPU审计，见[ROUND3_TRAINING_GEOMETRY_20260928.json](ROUND3_TRAINING_GEOMETRY_20260928.json)和[RESULTS.md](RESULTS.md)。C8R全部511目标被抽到；U16池1022目标中1021实际被抽到，旧/新呈现4095/4097，保留零曝光记录而不改变预算。证据归档round3-training-geometry-evidence.tar.gz SHA256 `525e6241df0638c3d8a79d4bd84b4f7faa68d9dd4796567e804aa534d60e2144`，本地已核验并重算曝光。继续45分钟跟进，完整配对Writer成绩后再决定730扩展方案，正常运行静默。
+
 最新核验（2026-09-28 13:23 CST）：第三轮512个新教师全部完成，511合格，64条偏好全覆盖；12:47:42自动进入C8R/U16两组FM。13:23实际优化日志为1320/1330步（各2048预算），两名训练子进程2003468/2003469的完整命令与fm-shard回执逐项一致，均继承根及pilot64控制器锁；主机未变，两H200约38.9GB显存且96%/97%利用率，无failure，尚无最终评测结果。独立运行核验见远端round3/runtime-fm.json，当前无需重启或修改代码。
 
 完整教师资格、目标池组成、父权重及训练manifest校验见[ROUND3_TEACHER_RESULTS.json](ROUND3_TEACHER_RESULTS.json)。教师原始回执、全部优化记录、冻结bank及manifest归档round3-teacher-evidence.tar.gz，共1042文件、SHA256 9c5cf8bfcb5ad59f6a3956d55b81f0eca4d303cd7b7e4a247ece71cce680caec，本地保留校验副本；PNG/latent继续保留于原共享输出，1024个实际文件哈希已核验。两组按原流程自动继续完整V0/V1四逻辑分片评测，45分钟跟进保持静默规则。
