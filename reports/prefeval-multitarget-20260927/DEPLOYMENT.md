@@ -1,5 +1,17 @@
 # 多目标主线部署记录
 
+## 2026-09-28 17:52 CST：第三轮归档后接续固定C8/B0全730单写评测
+
+17:54:37启动后实测：两卡均100%、各14129MiB，C8/V0已由0增长至10张实际PNG及10份完成回执。两Writer实际argv与回执逐项一致，均继承两层锁，根及eval730锁HELD，旧round3锁FREE，无failure/最终results/complete；协议实际哈希与预检冻结值一致。现场完整证据见[C8_EVAL730_LAUNCH.json](C8_EVAL730_LAUNCH.json)。确认健康启动后，将prefeval-writer从收尾临时10分钟恢复45分钟；正常运行保持静默。启动并不表示全730成绩已完成。
+
+第三轮17:41:45完整结束，全部16读回分片各864行。独立最终审计及本地归档核验通过，结论见RESULTS.md与ROUND3_RESULTS.json；已完成的round3/pilot64保持只读。17:50:58及17:52:59两次现场核验：原NORMAL两H200主机 `prefeval-mt-eval-h200x2-20260928--9be487d35048-tphujecw4c` 的两GPU均0MiB、无实验任务进程，根pipeline及所有本机旧controller锁FREE。
+
+17:52:59在同一实例后台启动正式入口 `repos/prefeval-c8-eval730-20260928/scripts/inspire/launch_prefeval_c8_eval730.sh`，冻结commit `efe0f7606ed7582a0d4171525b9bc285f1c1d140`，控制器SHA256 `ab4d702b41115bcfd888d5ef7cb561577eaf8af88b035830395ebbe45be2a8cf`，launcher SHA256 `748e2d29d0e1610f628f8311986f9dcbe3a07f955868abaa0c98dad9c7c34f99`。实际launch记录 `eval730/launch.json`、日志 `eval730/pipeline.log`，输出仅 `eval730/fixed-c8-b0-20260928`。未使用ready备用checkout，也未重启第三轮或教师/训练。
+
+17:53:02进入generate-C8-V0；17:53:30核验controller486352与Writer486747/486748完整命令匹配回执，两个子进程均继承根与eval730控制器锁，尚处模型加载。launcher486332及上述PID仅为启动现场快照，后续必须重新核对实际主机/命令/锁，不据PID判断运行状态。冻结C8/B0与协议身份在C8_EVAL730_PREFLIGHT.json；没有新增教师或FM更新。
+
+长程10轮在另一四卡主机继续独立运行；17:41:41实测C8/V0已有2427PNG、220完整轨迹，四Writer与三层锁正常。两卡本机显示长程锁FREE不代表远端停止，必须在长程实际主机核验。该用户原四卡仍预计22:26自动停止，须21:30前安排续跑或独立恢复准备，不删除原实例、不触碰C/R或B730资源。
+
 ## 2026-09-28 15:49 CST：长程10轮在空闲四H200独立启动
 
 最新核验15:54：烟测15:52:58完整结束，22PNG/60唯一读回，两条完整10轮PNG传递及当前交换哈希全部通过。15:53:02自动进入正式730的C8/V0；正式controller389148、四Writer389545–389548，15:54:07四卡100%、各14129MiB，完整argv与回执一致、均继承三把锁，smoke锁FREE，正式及allocation/pipeline锁HELD；正式PNG已从3增长至12，无failure。正式输出尚无results/complete。详见[C8_LONG10_SMOKE_RESULTS.json](C8_LONG10_SMOKE_RESULTS.json)及[C8_LONG10_PREFLIGHT.json](C8_LONG10_PREFLIGHT.json)。
