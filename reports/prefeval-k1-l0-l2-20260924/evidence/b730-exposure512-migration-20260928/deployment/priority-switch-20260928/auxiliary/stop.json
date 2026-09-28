@@ -1,0 +1,16 @@
+{
+  "time_utc": "2026-09-28T12:13:52Z",
+  "host": "prefeval-b-cr-h200x4-20260926--c1325f0297e5-ahequpaewo",
+  "reason": "User prioritizes four-GPU primary and two-GPU reader",
+  "stopped_pids": [
+    40179,
+    40235
+  ],
+  "launcher_exit": 143,
+  "locks_released": [
+    "auxiliary-launcher.lock",
+    "auxiliary-controller.lock"
+  ],
+  "compute_apps_empty": true,
+  "notes": "Initial immediate lock probe raced launcher exit; subsequent read-only verification confirms complete release"
+}

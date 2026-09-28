@@ -1,0 +1,48 @@
+{
+  "time_utc": "2026-09-28T12:15:32Z",
+  "host": "prefeval-b-read-h200x2-20260925--dd8912853710-ivytbz3gqk",
+  "node": "qb-prod-gpu2260",
+  "gpu": "index, name, memory.used [MiB], utilization.gpu [%], driver_version\n0, NVIDIA H200, 1 MiB, 0 %, 570.124.06\n1, NVIDIA H200, 1 MiB, 0 %, 570.124.06\n",
+  "compute_apps_empty": true,
+  "processes": [
+    {
+      "pid": 1,
+      "command": "/bin/bash /etc/inspire/launch_jupyterlab.sh "
+    },
+    {
+      "pid": 120,
+      "command": "/bin/bash /etc/inspire/launch_jupyterlab.sh "
+    },
+    {
+      "pid": 122,
+      "command": "/etc/inspire/bin/python /etc/inspire/bin/jupyter-lab --no-browser --ip=0.0.0.0 --port=8088 --allow-root --LabApp.base_url=/ws-9dcc0e1f-80a4-4af2-bc2f-0e352e7b17e6/project-f277dd4c-fa6b-4908-b75c-4416a0407a3d/user-78847ee3-92d5-471f-a847-07d12aceaa97/jupyter/b26faf01-e596-49cc-b208-dd8912853710/bc12f8ba-45b5-4b57-902c-81061a90eedd --NotebookApp.base_url=/ws-9dcc0e1f-80a4-4af2-bc2f-0e352e7b17e6/project-f277dd4c-fa6b-4908-b75c-4416a0407a3d/user-78847ee3-92d5-471f-a847-07d12aceaa97/jupyter/b26faf01-e596-49cc-b208-dd8912853710/bc12f8ba-45b5-4b57-902c-81061a90eedd --ServerApp.base_url=/ws-9dcc0e1f-80a4-4af2-bc2f-0e352e7b17e6/project-f277dd4c-fa6b-4908-b75c-4416a0407a3d/user-78847ee3-92d5-471f-a847-07d12aceaa97/jupyter/b26faf01-e596-49cc-b208-dd8912853710/bc12f8ba-45b5-4b57-902c-81061a90eedd --notebook-dir=/inspire/hdd/project/exploration-topic/czxs26210936 --NotebookApp.token=bc12f8ba-45b5-4b57-902c-81061a90eedd --ServerApp.terminado_settings={\"shell_command\": [\"/bin/bash\" , \"-c\",\"cd /inspire/hdd/project/exploration-topic/czxs26210936 && bash\"]} "
+    },
+    {
+      "pid": 123,
+      "command": "/bin/bash /etc/inspire/launch_jupyterlab.sh "
+    },
+    {
+      "pid": 125,
+      "command": "/etc/inspire/code-server/lib/node /etc/inspire/code-server --bind-addr 0.0.0.0:8082 --auth none --disable-telemetry --user-data-dir /root/.local/share/code-server/ --extensions-dir /root/.local/share/code-server/extensions /inspire/hdd/project/exploration-topic/czxs26210936 "
+    },
+    {
+      "pid": 143,
+      "command": "/etc/inspire/code-server/lib/node /etc/inspire/code-server/out/node/entry "
+    },
+    {
+      "pid": 179592,
+      "command": "sleep 5 "
+    },
+    {
+      "pid": 179593,
+      "command": "bash "
+    },
+    {
+      "pid": 179635,
+      "command": "bash "
+    }
+  ],
+  "scope": "Final step93440 pilot/dev V1 only",
+  "scheduler_commit": "2bd72308158ca733a38423e125f820b43d3c2a8b",
+  "frozen_commit": "656fdf029c4a7c05e53bccb75483a03cf62d5f54"
+}
