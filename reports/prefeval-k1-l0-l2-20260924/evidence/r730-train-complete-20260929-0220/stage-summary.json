@@ -1,0 +1,72 @@
+{
+  "utc": "2026-09-28T18:11:19.520483+00:00",
+  "host": "prefeval-k1-h200x4-high-20260924--506d5fcf84c1-rnoaxyojmb",
+  "final_checkpoint_sha256": "789a49fc488dfa372917b3646625b6cd62946cb48185763eade82d22e7dbc845",
+  "step23360_checkpoint_sha256": "542319f5a71574d59d5c8ddea876bd662b04dd3a9c3dfc14ed614b6e45beede8",
+  "endpoint_tensors_equal": 1075,
+  "optimizer_exit_codes": [
+    0
+  ],
+  "completion_mtime_utc": "2026-09-28T17:47:21.752812+00:00",
+  "optimization_first": 1,
+  "optimization_last": 23360,
+  "draw_count": 93440,
+  "segments": [
+    {
+      "round": 0,
+      "preferences": 730,
+      "write_per_preference": 16,
+      "retain_per_preference": 16,
+      "steps": 5840,
+      "bank_sha256": "430e83c2eddd571b311b000a14d2e958f4a3d24b7666414535c0cf006bb7d07e"
+    },
+    {
+      "round": 1,
+      "preferences": 730,
+      "write_per_preference": 16,
+      "retain_per_preference": 16,
+      "steps": 5840,
+      "bank_sha256": "1fe8cf804b8bf12afcf2240f1d4eb65eb61c0cadd19dc542b3fb511cf66c74f8"
+    },
+    {
+      "round": 2,
+      "preferences": 730,
+      "write_per_preference": 16,
+      "retain_per_preference": 16,
+      "steps": 5840,
+      "bank_sha256": "4ca3bc2fc0d11394a1f6e22119a539e7656039a6b438f7ba2a71058b2b44c234"
+    },
+    {
+      "round": 3,
+      "preferences": 730,
+      "write_per_preference": 16,
+      "retain_per_preference": 16,
+      "steps": 5840,
+      "bank_sha256": "723350c272dd2bea64b0103b3573ae7185d1203e9002abab274f7a1c2d14b704"
+    }
+  ],
+  "resume": {
+    "step": 23360,
+    "cursor": 93440,
+    "optimizer_steps": [
+      23360
+    ],
+    "optimizer_parameters": 1075,
+    "rng_keys": [
+      "python",
+      "numpy",
+      "torch_cpu",
+      "torch_cuda"
+    ],
+    "trainer_state": {
+      "refresh_round": 3,
+      "source_bank_sha256": "723350c272dd2bea64b0103b3573ae7185d1203e9002abab274f7a1c2d14b704"
+    },
+    "sha256": "b480a8cb81e751251fd8dcfb158a028ecb6c84a0e21ae18dcb6af49e3484b4a4",
+    "method": "single file descriptor hash then seek/load CPU"
+  },
+  "eval_dev_verified_complete": 12,
+  "eval_dev_png_at_snapshot": 133,
+  "C_train_complete": 713,
+  "claims": "Training endpoint and workflow completion only; endpoint evaluation still in progress, no partial performance"
+}
