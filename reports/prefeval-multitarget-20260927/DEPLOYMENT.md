@@ -1,5 +1,21 @@
 # 多目标主线部署记录
 
+## 2026-09-29 00:11 CST：按用户指定迁至prefeval-b-read两H200继续长程
+
+用户明确指定长程任务使用prefeval-b-read-h200x2-20260925。00:04现场核验该实例RUNNING、NORMAL两H200、节点qb-prod-gpu2260，实际主机 `prefeval-b-read-h200x2-20260925--dd8912853710-ivytbz3gqk`；两GPU各1MiB、无CUDA计算进程、无实验任务，long10及旧控制器/本机allocation锁空闲。原dl-clear-retain四卡仍排队，迁移后已取消排队并确认STOPPED；原用户实例保留不删除、不再start。
+
+新输出仅 `long10/recovery-20260929-0005-2gpu`，从未启动GPU的恢复准备目录recovery-20260928-2310再次逐项hash校验并复制800条完整轨迹，即8800PNG、10400个轨迹文件。原固定目录、2310准备目录和readiness目录都保持只读，四条未完成轨迹在新目录按原种子重建。准备证据见[C8_LONG10_TWO_GPU_PREPARATION_20260929.json](C8_LONG10_TWO_GPU_PREPARATION_20260929.json)。
+
+新调度脚本 `scripts/inspire/resume_prefeval_c8_long10_two_gpu.py` 冻结源befc4477361d266790bc99f5e2789b20e0d13158，实际SHA256 `392638990e1327d67283a8b07da53a849777d176ae1446fbccdceeb62567c6d1`，共享入口long10/resume-two-gpu-20260929.py。仅把四逻辑分片0/1/2/3按两批映射到物理GPU0/1；32条Writer/Reader命令与原控制器逐项比对完全一致，CPU调度检查最大并发2、映射0/1/0/1及三把锁继承通过。该检查是技术验证，不是实验成绩，见[C8_LONG10_TWO_GPU_VALIDATION_20260929.json](C8_LONG10_TWO_GPU_VALIDATION_20260929.json)。Writer/evaluator仍为冻结224cc77，准备、PNG链检查和最终汇总直接复用冻结6563d163函数，种子、输入、模型、预算、全部四逻辑片和评分不变。
+
+原protocol.json逐字节保留，SHA256仍b43fd72a86e8a50547b359ac1ad7b0bf97bcdcbc90cb542f884206980caaae33。其中physical_gpus=4是原部署元数据，本次实际两卡及映射以execution-topology.json为准，不能在报告中声称本次四卡执行。每组仍须全部四片生成完成后才读回，最终汇总不能只用当前两片或只计新增。
+
+00:11:24再次核验目标主机、GPU、实际进程、旧/新long10锁及恢复回执后，后台运行新目录launch-two-gpu.sh，SHA256 `9afaf5e0333af53f88c1f4f2cbe94f0279c40e6891730a12a4107bd0a7f60cca`，stdout/stderr为新目录recovery.log，launch.json记录完整身份。00:12:15实测controller1465983、Writer1466390/1466391命令与回执一致，两个子进程各继承long10/pipeline、当前controller及实际主机allocation三把锁；两GPU均100%、各14124MiB、无failure。启动后PNG已从8800增长至8808，说明实际继续生成。PID仅现场快照，后续仍须实时查主机及进程。平台auto_stop_in_seconds=0。启动记录见[C8_LONG10_TWO_GPU_LAUNCH_20260929.json](C8_LONG10_TWO_GPU_LAUNCH_20260929.json)，实际拓扑见[C8_LONG10_TWO_GPU_TOPOLOGY_20260929.json](C8_LONG10_TWO_GPU_TOPOLOGY_20260929.json)。
+
+00:14:12再次核验两卡均100%、各14128MiB，PNG已到8822、完整轨迹到802，无failure；两实际子进程及三层锁继续正确。迁移代码、准备清单、协议、启动记录、实际拓扑、CPU命令/调度验证及现场共14文件归档long10-two-gpu-migration-20260929.tar.gz，SHA256 `c3fd6f526bb0adabe023a2f0066ba31e5edfe26acf25cb7b0b2e1ee9c6320d75`，本地已逐项核验。
+
+另一实例prefeval-mt-eval-h200x2-20260928的单写730继续原任务，不受迁移影响。未来长程只监控并使用上述新实例、新恢复目录和新入口；旧四卡不再排队，原四卡launcher、烟测和2310四卡恢复入口都不得启动。
+
 ## 2026-09-28 23:13 CST：长程按定时停止，完整链恢复已备妥、四卡重新排队
 
 平台实际记录22:27:16触发user timedShutdown，22:28:16完成停止及镜像保存。23:09新鲜status确认为STOPPED；这次是原定时停止，不是利用率回收。23:10已对原用户实例dl-clear-retain-h200x4-20260914执行一次start，原实例保留；23:13仍为NORMAL四H200的PENDING，不重复start。事件显示项目总GPU配额108、已用106、请求4，配额不足；尚未分配新的实际运行主机。原cwprkl2mqx和旧GPU732不再作为当前运行证据。平台现场见[C8_LONG10_REQUEUE_20260928.json](C8_LONG10_REQUEUE_20260928.json)。
