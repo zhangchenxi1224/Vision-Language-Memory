@@ -1,0 +1,384 @@
+{
+  "time_utc": "2026-09-28T18:57:27Z",
+  "host": "prefeval-b-cr-h200x4-20260926--c1325f0297e5-ahequpaewo",
+  "role": "primary",
+  "frozen_commit": "656fdf029c4a7c05e53bccb75483a03cf62d5f54",
+  "fixed_final_step": 93440,
+  "registered_summaries": 19,
+  "all_expected_summary_names_match": true,
+  "all_readback_file_hashes_match": true,
+  "no_live_task_processes": true,
+  "all_local_task_locks_free": true,
+  "training_os_exit_code": null,
+  "gpu_compute_processes_empty": true,
+  "launcher_exit_code": 0,
+  "complete": {
+    "status": "training_and_registered_evaluation_complete",
+    "finished": 1790621756.2038627
+  },
+  "training_complete": {
+    "steps": 93440,
+    "checkpoint_sha256": "088c003d24cb2982571d763dd218c57f72ce80853615a09a97d8b760ae880c5b"
+  },
+  "root_results_sha256": "56ebb662f1ad61a21092d7da6897719d9fb80bed3ad3c683c6be1afc45573607",
+  "root_complete_sha256": "a799cb7c5197c07290198579149ba4cf70a4cee04228995120c927d6389a9f66",
+  "summaries": {
+    "readback/step-023360-train-V0/summary.json": {
+      "sha256": "14b7af14dc27e1ffea76cfa9f0141b66a02c943a1c476034d07f91c118b727fa",
+      "record_count": 4380
+    },
+    "readback/step-046720-dev-V0/summary.json": {
+      "sha256": "6e69bcf87e71e2c0b770f5453cf7bd5c655b15541057762facb58556a3da9d21",
+      "record_count": 2700
+    },
+    "readback/step-046720-dev-V1/summary.json": {
+      "sha256": "60ac79d1afc0adfa725080af42bbd134459fd5cb663fd5ebd74b06d4cadc1736",
+      "record_count": 2700
+    },
+    "readback/step-046720-pilot-V0/summary.json": {
+      "sha256": "85dc78545517ebe556bb6a55ea05d0a86e0b3f0078a507c26c6a0f7ce8a78a7e",
+      "record_count": 1920
+    },
+    "readback/step-046720-pilot-V1/summary.json": {
+      "sha256": "f87bdf24c2858026872acf79a3a7c03d79134cd9f8982e6f17924b4a01551236",
+      "record_count": 1920
+    },
+    "readback/step-046720-train-V0/summary.json": {
+      "sha256": "18701ce995b9b9ffebfffe7f3c6aaf4e9c4455652b019b1f4a2a1f3e9a155284",
+      "record_count": 4380
+    },
+    "readback/step-046720-train-V1/summary.json": {
+      "sha256": "d30051e7ee736ad7317fdf7b92185fee77c30ecca285f8be1938d3ab493f431d",
+      "record_count": 4380
+    },
+    "readback/step-070080-dev-V0/summary.json": {
+      "sha256": "7ee49e10998428173c5ef05eed59097e72c1c21bfd43a5755c6107266d8298f5",
+      "record_count": 2700
+    },
+    "readback/step-070080-dev-V1/summary.json": {
+      "sha256": "bf373171d21e792d8ac56626186a22221b879dab011c65f61aa1f10320b2f51a",
+      "record_count": 2700
+    },
+    "readback/step-070080-pilot-V0/summary.json": {
+      "sha256": "48296a05402c697ddcc53f5c04126e1693ab9db9bc67b4b79e15bd8716e7b907",
+      "record_count": 1920
+    },
+    "readback/step-070080-pilot-V1/summary.json": {
+      "sha256": "da1812578dc54e66662dd6583218926b4157a3cb975bcd42465288c7c8193437",
+      "record_count": 1920
+    },
+    "readback/step-070080-train-V0/summary.json": {
+      "sha256": "f2ac3d94a3adeda66eb1cbf5682b1bb8c2bccaf0809b9db1288429bbe1835729",
+      "record_count": 4380
+    },
+    "readback/step-070080-train-V1/summary.json": {
+      "sha256": "0364415537f1bb60e4d81f9b64ffb5339e9ee028ce6e78e4c3dfebe3d50101bb",
+      "record_count": 4380
+    },
+    "readback/step-093440-dev-V0/summary.json": {
+      "sha256": "0e1b859e21a3723df1798ae85a782f6ef02067a44e8aaaeec0f5c06568bb2157",
+      "record_count": 2700
+    },
+    "readback/step-093440-dev-V1/summary.json": {
+      "sha256": "6542741d9bd52a94c64a69f2f95aea739f0ab41a6a325c0d84ccca04b1c1ea02",
+      "record_count": 2700
+    },
+    "readback/step-093440-pilot-V0/summary.json": {
+      "sha256": "514ed1cfe85fcbf27ee8c476f701c7c4e45ee0fb4d202efe4f5efa934b546098",
+      "record_count": 1920
+    },
+    "readback/step-093440-pilot-V1/summary.json": {
+      "sha256": "98855102f525eb81fbcd15d921830b74e4e35ac4b74efc0f82eb083663dc059a",
+      "record_count": 1920
+    },
+    "readback/step-093440-train-V0/summary.json": {
+      "sha256": "adc1dcca6b173cf2efb4570b365f77e15aa521364f4a84226e11a223ae5f1ee6",
+      "record_count": 4380
+    },
+    "readback/step-093440-train-V1/summary.json": {
+      "sha256": "5101d27e26e9213dddd92bd22a7ebc6a80c0c8828beca143dacbec01a8905778",
+      "record_count": 4380
+    }
+  },
+  "process_receipts": [
+    {
+      "label": "step-023360-train-V0-readback",
+      "host": "prefeval-k1-l012-h200x4-20260924--dacf2dea6e9f-6rkv3yumj5",
+      "gpu": 2,
+      "pid": 1803010,
+      "exit_code": 0
+    },
+    {
+      "label": "step-023360-train-V0-rollout",
+      "host": "prefeval-k1-l012-h200x4-20260924--dacf2dea6e9f-6rkv3yumj5",
+      "gpu": 2,
+      "pid": 47592,
+      "exit_code": 0
+    },
+    {
+      "label": "step-046720-dev-V0-readback",
+      "host": "prefeval-k1-l012-h200x4-20260924--dacf2dea6e9f-6rkv3yumj5",
+      "gpu": 3,
+      "pid": 2426276,
+      "exit_code": 0
+    },
+    {
+      "label": "step-046720-dev-V0-rollout",
+      "host": "prefeval-k1-l012-h200x4-20260924--dacf2dea6e9f-6rkv3yumj5",
+      "gpu": 3,
+      "pid": 1998393,
+      "exit_code": 0
+    },
+    {
+      "label": "step-046720-dev-V1-readback",
+      "host": "prefeval-k1-l012-h200x4-20260924--dacf2dea6e9f-6rkv3yumj5",
+      "gpu": 3,
+      "pid": 1722103,
+      "exit_code": 0
+    },
+    {
+      "label": "step-046720-dev-V1-rollout",
+      "host": "prefeval-k1-l012-h200x4-20260924--dacf2dea6e9f-6rkv3yumj5",
+      "gpu": 3,
+      "pid": 1313380,
+      "exit_code": 0
+    },
+    {
+      "label": "step-046720-pilot-V0-readback",
+      "host": "prefeval-k1-l012-h200x4-20260924--dacf2dea6e9f-6rkv3yumj5",
+      "gpu": 3,
+      "pid": 1110998,
+      "exit_code": 0
+    },
+    {
+      "label": "step-046720-pilot-V0-rollout",
+      "host": "prefeval-k1-l012-h200x4-20260924--dacf2dea6e9f-6rkv3yumj5",
+      "gpu": 3,
+      "pid": 803361,
+      "exit_code": 0
+    },
+    {
+      "label": "step-046720-pilot-V1-readback",
+      "host": "prefeval-k1-l012-h200x4-20260924--dacf2dea6e9f-6rkv3yumj5",
+      "gpu": 3,
+      "pid": 606657,
+      "exit_code": 0
+    },
+    {
+      "label": "step-046720-pilot-V1-rollout",
+      "host": "prefeval-k1-l012-h200x4-20260924--dacf2dea6e9f-6rkv3yumj5",
+      "gpu": 3,
+      "pid": 314013,
+      "exit_code": 0
+    },
+    {
+      "label": "step-046720-train-V0-readback",
+      "host": "prefeval-k1-l012-h200x4-20260924--dacf2dea6e9f-6rkv3yumj5",
+      "gpu": 2,
+      "pid": 3595906,
+      "exit_code": 0
+    },
+    {
+      "label": "step-046720-train-V0-rollout",
+      "host": "prefeval-k1-l012-h200x4-20260924--dacf2dea6e9f-6rkv3yumj5",
+      "gpu": 2,
+      "pid": 315690,
+      "exit_code": 0
+    },
+    {
+      "label": "step-046720-train-V1-readback",
+      "host": "prefeval-k1-l012-h200x4-20260924--dacf2dea6e9f-6rkv3yumj5",
+      "gpu": 1,
+      "pid": 3454678,
+      "exit_code": 0
+    },
+    {
+      "label": "step-046720-train-V1-rollout",
+      "host": "prefeval-k1-l012-h200x4-20260924--dacf2dea6e9f-6rkv3yumj5",
+      "gpu": 1,
+      "pid": 314012,
+      "exit_code": 0
+    },
+    {
+      "label": "step-070080-dev-V0-readback",
+      "host": "prefeval-k1-l012-h200x4-20260924--dacf2dea6e9f-6rkv3yumj5",
+      "gpu": 3,
+      "pid": 45224,
+      "exit_code": 0
+    },
+    {
+      "label": "step-070080-dev-V0-rollout",
+      "host": "prefeval-k1-l012-h200x4-20260924--dacf2dea6e9f-6rkv3yumj5",
+      "gpu": 3,
+      "pid": 37497,
+      "exit_code": 0
+    },
+    {
+      "label": "step-070080-dev-V1-readback",
+      "host": "prefeval-k1-l012-h200x4-20260924--dacf2dea6e9f-6rkv3yumj5",
+      "gpu": 3,
+      "pid": 109368,
+      "exit_code": 0
+    },
+    {
+      "label": "step-070080-dev-V1-rollout",
+      "host": "prefeval-k1-l012-h200x4-20260924--dacf2dea6e9f-6rkv3yumj5",
+      "gpu": 3,
+      "pid": 101807,
+      "exit_code": 0
+    },
+    {
+      "label": "step-070080-pilot-V0-readback",
+      "host": "prefeval-k1-l012-h200x4-20260924--dacf2dea6e9f-6rkv3yumj5",
+      "gpu": 3,
+      "pid": 3246775,
+      "exit_code": 0
+    },
+    {
+      "label": "step-070080-pilot-V0-rollout",
+      "host": "prefeval-k1-l012-h200x4-20260924--dacf2dea6e9f-6rkv3yumj5",
+      "gpu": 3,
+      "pid": 2943791,
+      "exit_code": 0
+    },
+    {
+      "label": "step-070080-pilot-V1-readback",
+      "host": "prefeval-k1-l012-h200x4-20260924--dacf2dea6e9f-6rkv3yumj5",
+      "gpu": 3,
+      "pid": 2747519,
+      "exit_code": 0
+    },
+    {
+      "label": "step-070080-pilot-V1-rollout",
+      "host": "prefeval-k1-l012-h200x4-20260924--dacf2dea6e9f-6rkv3yumj5",
+      "gpu": 3,
+      "pid": 2460853,
+      "exit_code": 0
+    },
+    {
+      "label": "step-070080-train-V0-readback",
+      "host": "prefeval-k1-l012-h200x4-20260924--dacf2dea6e9f-6rkv3yumj5",
+      "gpu": 2,
+      "pid": 356162,
+      "exit_code": 0
+    },
+    {
+      "label": "step-070080-train-V0-rollout",
+      "host": "prefeval-k1-l012-h200x4-20260924--dacf2dea6e9f-6rkv3yumj5",
+      "gpu": 2,
+      "pid": 261363,
+      "exit_code": 0
+    },
+    {
+      "label": "step-070080-train-V1-readback",
+      "host": "prefeval-k1-l012-h200x4-20260924--dacf2dea6e9f-6rkv3yumj5",
+      "gpu": 1,
+      "pid": 266762,
+      "exit_code": 0
+    },
+    {
+      "label": "step-070080-train-V1-rollout",
+      "host": "prefeval-k1-l012-h200x4-20260924--dacf2dea6e9f-6rkv3yumj5",
+      "gpu": 1,
+      "pid": 261362,
+      "exit_code": 0
+    },
+    {
+      "label": "step-093440-dev-V0-readback",
+      "host": "prefeval-b-cr-h200x4-20260926--c1325f0297e5-ahequpaewo",
+      "gpu": 3,
+      "pid": 548072,
+      "exit_code": 0
+    },
+    {
+      "label": "step-093440-dev-V0-rollout",
+      "host": "prefeval-b-cr-h200x4-20260926--c1325f0297e5-ahequpaewo",
+      "gpu": 3,
+      "pid": 409631,
+      "exit_code": 0
+    },
+    {
+      "label": "step-093440-dev-V1-readback",
+      "host": "prefeval-b-read-h200x2-20260925--dd8912853710-ivytbz3gqk",
+      "gpu": 1,
+      "pid": 976060,
+      "exit_code": 0
+    },
+    {
+      "label": "step-093440-dev-V1-rollout",
+      "host": "prefeval-b-read-h200x2-20260925--dd8912853710-ivytbz3gqk",
+      "gpu": 1,
+      "pid": 705687,
+      "exit_code": 0
+    },
+    {
+      "label": "step-093440-pilot-V0-readback",
+      "host": "prefeval-b-cr-h200x4-20260926--c1325f0297e5-ahequpaewo",
+      "gpu": 0,
+      "pid": 508194,
+      "exit_code": 0
+    },
+    {
+      "label": "step-093440-pilot-V0-rollout",
+      "host": "prefeval-b-cr-h200x4-20260926--c1325f0297e5-ahequpaewo",
+      "gpu": 0,
+      "pid": 408996,
+      "exit_code": 0
+    },
+    {
+      "label": "step-093440-pilot-V1-readback",
+      "host": "prefeval-b-read-h200x2-20260925--dd8912853710-ivytbz3gqk",
+      "gpu": 0,
+      "pid": 899541,
+      "exit_code": 0
+    },
+    {
+      "label": "step-093440-pilot-V1-rollout",
+      "host": "prefeval-b-read-h200x2-20260925--dd8912853710-ivytbz3gqk",
+      "gpu": 0,
+      "pid": 705688,
+      "exit_code": 0
+    },
+    {
+      "label": "step-093440-train-V0-readback",
+      "host": "prefeval-b-cr-h200x4-20260926--c1325f0297e5-ahequpaewo",
+      "gpu": 1,
+      "pid": 1405528,
+      "exit_code": 0
+    },
+    {
+      "label": "step-093440-train-V0-rollout",
+      "host": "prefeval-b-cr-h200x4-20260926--c1325f0297e5-ahequpaewo",
+      "gpu": 1,
+      "pid": 409632,
+      "exit_code": 0
+    },
+    {
+      "label": "step-093440-train-V1-readback",
+      "host": "prefeval-b-cr-h200x4-20260926--c1325f0297e5-ahequpaewo",
+      "gpu": 2,
+      "pid": 1358758,
+      "exit_code": 0
+    },
+    {
+      "label": "step-093440-train-V1-rollout",
+      "host": "prefeval-b-cr-h200x4-20260926--c1325f0297e5-ahequpaewo",
+      "gpu": 2,
+      "pid": 409628,
+      "exit_code": 0
+    },
+    {
+      "label": "train",
+      "host": "prefeval-b-cr-h200x4-20260926--c1325f0297e5-ahequpaewo",
+      "gpu": 0,
+      "pid": 65159,
+      "exit_code": null
+    }
+  ],
+  "gpu": "index, name, memory.used [MiB], utilization.gpu [%]\n0, NVIDIA H200, 1 MiB, 0 %\n1, NVIDIA H200, 1 MiB, 0 %\n2, NVIDIA H200, 1 MiB, 0 %\n3, NVIDIA H200, 1 MiB, 0 %\n",
+  "audit_scope": "primary host only; reader completion is historical shared-storage evidence",
+  "authorized_instance_to_stop": "prefeval-b-cr-h200x4-20260926",
+  "excluded_instance": "prefeval-b-read-h200x2-20260925",
+  "reader_host_inspected": false,
+  "resource_scope_instruction_date": "2026-09-29"
+}
