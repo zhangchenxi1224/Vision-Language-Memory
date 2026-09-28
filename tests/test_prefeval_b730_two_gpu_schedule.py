@@ -13,6 +13,23 @@ spec.loader.exec_module(scheduler)
 
 
 class ScheduleTests(unittest.TestCase):
+    @unittest.skipIf(sys.platform == 'win32', 'Production orchestration requires POSIX')
+    def test_four_plus_two_covers_same_registration_with_one_training_lane(self):
+        sys.path.insert(0, str(Path(__file__).parents[1] / 'scripts/inspire'))
+        import run_prefeval_b730_exposure512_distributed as distributed
+        calls, training = [], []
+        class Core:
+            def train(self):
+                training.append('train')
+            def evaluate(self, *args):
+                calls.append(args)
+        for role, count in [('primary', 4), ('reader', 2)]:
+            for gpu in range(count):
+                distributed.lane(Core(), role, gpu)
+        self.assertEqual(training, ['train'])
+        self.assertEqual(len(calls), 19)
+        self.assertEqual({c[:3] for c in calls}, set(scheduler.registered_evaluations()))
+
     @unittest.skipIf(sys.platform == 'win32', 'Shared POSIX lock is exercised on Linux')
     def test_shared_endpoint_lock_prevents_duplicate_work(self):
         with tempfile.TemporaryDirectory() as directory:
