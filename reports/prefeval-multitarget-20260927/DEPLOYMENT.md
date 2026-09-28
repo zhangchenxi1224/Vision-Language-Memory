@@ -1,5 +1,17 @@
 # 多目标主线部署记录
 
+## 2026-09-28 21:38 CST：长程定时停止前的独立恢复准备
+
+21:33:46实际核验：单写730在alucvbi43a主机持续生成C8/V0，2240张完整PNG，两GPU100%、各14129MiB，原恢复controller85531及两Writer完整命令匹配，根和恢复锁持有；长程在cwprkl2mqx主机已有7634PNG、692条完整11PNG轨迹，四Writer命令与三层锁正常。两分支没有failure/results/complete，也没有正式读回。平台没有新回收事件；长程auto_stop_in_seconds=3196，仍预计22:26停止。瞬时一张卡利用率为0但显存及实际进程存在，不能据单个采样断言任务停止。
+
+恢复准备21:38完成，晚于原定21:30，仍早于定时停止；原GPU任务持续运行，未抢停或伪造负载。新脚本 `scripts/inspire/prepare_prefeval_c8_long10_recovery.py` 冻结提交 `c41ec03a2eebe76ba0d2c279f2837baec32f6075`，实际SHA256 `76bb631064b256343b48c8c837227514e8a105d5ce802937ef370fb846e8bc9b`，共享盘副本 `long10/prepare-recovery-20260928-2135.py`。在CPU入口执行只读审计，重新核验原6563d163控制器、224cc77工作代码、两权重及全部协议数据；生成协议哈希仍为 `b43fd72a86e8a50547b359ac1ad7b0bf97bcdcbc90cb542f884206980caaae33`。
+
+快照中的700条完整轨迹、7700张实际PNG及所有complete/writes逐项校验通过：每条恰好11PNG/11次写入、每步原噪声种子、当前交换、前一张PNG链接及输出哈希均一致。错误seed、错误前图链接、错误交换三个负例均被拒绝。四条当时未完成的轨迹没有复制；本次全部copied_files=0、GPU launch=false，属于恢复准备而非恢复已启动。报告 [C8_LONG10_RECOVERY_READINESS_20260928.json](C8_LONG10_RECOVERY_READINESS_20260928.json)；原始完整链元数据归档1406文件，SHA256 `3d1e69010e877f19f7cdd7f2ca36cc6593ce5f284519cb764712b8a494f767c9`，已下载并核验其中1400个complete/writes文件哈希。原始PNG保持原目录不动。
+
+后续在平台确认该原实例STOPPED后，将新鲜status JSON存到共享盘，调用上述脚本（不带--audit-only，带--stopped-status，指定全新 `long10/recovery-20260928-2230` 或按实际恢复时间命名）。它拒绝非STOPPED/超过5分钟的证据或已出现Reader输出的情况，重新扫描并核验停止时的全部完整链后逐字节复制；部分链完全不复制，在新目录按冻结种子重建。脚本生成只运行正式阶段的launch-recovery.sh，不重跑烟测。运行中的原目录和readiness目录都不能作为新GPU入口。
+
+资源默认在原实例实际STOPPED后start一次，PENDING时不重复start，原用户实例保留不删除；若原资源无法获得，可另申请NORMAL四H200。RUNNING后核验新的实际主机、四GPU、全部任务进程和分支/controller/allocation锁，确认无活进程或持锁子进程，再后台运行新恢复入口，记录launch.json和recovery.log并核验实际PNG增长。跨主机FREE锁不构成旧任务结束证据。停止前不重复启动，也不修改原运行checkout。本次自动跟进临时改为10分钟，覆盖约22:26停止及后续恢复，确认健康后恢复45分钟。
+
 ## 2026-09-28 19:23 CST：平台自动回收后，在新容器独立恢复730
 
 用户指出两卡节点没有资源占用。19:18实时复查确认属实：两卡0MiB/0%、无任务进程、根及旧controller锁FREE。平台事件明确记录19:00:54因CPU/GPU/MEM利用率自动回收规则执行stop-and-save，19:02:02停止；19:03:28重建容器，19:03:55ready，但原评测进程未恢复。18:55:54旧容器仍实测两GPU100%，因此旧现场不能作为19:18的运行状态。具体策略阈值及重启发起者未从事件中确定，不能推断。节点仍qb-prod-gpu2226，主机已从tphujecw4c变为 `prefeval-mt-eval-h200x2-20260928--9be487d35048-alucvbi43a`。事件见[EVAL730_PLATFORM_EVENTS_20260928_1900.json](EVAL730_PLATFORM_EVENTS_20260928_1900.json)。
