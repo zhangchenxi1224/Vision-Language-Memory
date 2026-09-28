@@ -1,5 +1,15 @@
 # 多目标主线部署记录
 
+## 2026-09-28 14:40 CST：C8/B0全730直接评测已准备，尚未启动
+
+按用户最新指定的C8/730优先级，冻结独立控制器checkout `repos/prefeval-c8-eval730-20260928`，提交 `efe0f7606ed7582a0d4171525b9bc285f1c1d140`，入口 `scripts/inspire/launch_prefeval_c8_eval730.sh`。其Writer/evaluator仍调用原224cc77；不重做教师、不训练权重、不更改运行中的round3。输出仅 `runs/prefeval-multitarget-20260927/eval730/fixed-c8-b0-20260928`。
+
+CPU预检已实际通过：两份固定checkpoint哈希、730条唯一ID、全部T1/T2/T3、V0/V1原偏好保持、完整同主题donor映射、冻结工作代码及原第二轮完成回执。分层汇总用构造数据核验已知正确率/同图全对/偏好bootstrap，并验证重复行、缺行、错误donor均被拒绝；这些是验证数据，非730实验成绩。脚本SHA256 `ab4d702b41115bcfd888d5ef7cb561577eaf8af88b035830395ebbe45be2a8cf`，协议SHA256 `c670e3db2d7d54bf449999cf693d7544fb54bbc7040420b641c31484e6f641dc`。
+
+证据见[C8_EVAL730_PREFLIGHT.json](C8_EVAL730_PREFLIGHT.json)，原始预检归档 `c8-eval730-preflight.tar.gz`（9244字节，SHA256 `be1e7dd015d55a41492b38a52aa0f0f7f06a54d35ee629ab5cf786723987e419`），本地已独立核验归档和协议。源码已推送同分支；公网clone曾超时，准备的Git bundle及备用ready checkout不是运行入口，后续只用上述正式checkout。
+
+当前GPU仍在round3评测，两H200100%，controller及子进程、根与round3锁正常，未启动730评测。等round3完整结束、归档后，先核验实时GPU/全部进程/各锁/完成回执，再后台运行新入口，stdout/stderr写 `eval730/pipeline.log`，记录launch.json并确认实际生成增长。不得抢占当前实验，不能将prepared/preflight当成launched/complete。新入口同样非阻塞获取本任务根pipeline锁，子进程继承根和自己的controller锁。
+
 最新核验（2026-09-28 14:05 CST）：第三轮C8R/U16各2048步训练完成，实际两份最终权重与complete的SHA256一致；13:42:19自动进入C8R/V0生成，14:04为246/512 PNG。14:05同一NORMAL两H200均100%计算，controller1734131与生成子进程2501979/2501980正常，完整命令与分片回执一致，根及pilot64锁HELD且传给子进程，smoke及旧锁FREE；无failure/最终results/complete。快照为round3/runtime-eval-20260928-1405.json，PID仅此次记录，不重启。
 
 训练曝光及新旧目标几何已完整CPU审计，见[ROUND3_TRAINING_GEOMETRY_20260928.json](ROUND3_TRAINING_GEOMETRY_20260928.json)和[RESULTS.md](RESULTS.md)。C8R全部511目标被抽到；U16池1022目标中1021实际被抽到，旧/新呈现4095/4097，保留零曝光记录而不改变预算。证据归档round3-training-geometry-evidence.tar.gz SHA256 `525e6241df0638c3d8a79d4bd84b4f7faa68d9dd4796567e804aa534d60e2144`，本地已核验并重算曝光。继续45分钟跟进，完整配对Writer成绩后再决定730扩展方案，正常运行静默。
