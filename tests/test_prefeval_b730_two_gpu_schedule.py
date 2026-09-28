@@ -13,6 +13,48 @@ spec.loader.exec_module(scheduler)
 
 
 class ScheduleTests(unittest.TestCase):
+    @unittest.skipIf(sys.platform == 'win32', 'Adoption identity uses Linux /proc')
+    def test_adopts_live_process_without_claiming_unobserved_exit_code(self):
+        import json
+        import socket
+        import subprocess
+        from unittest.mock import patch
+        sys.path.insert(0,str(Path(__file__).parents[1]/'scripts/inspire'))
+        import run_prefeval_b730_exposure512_distributed as distributed
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory)
+            frozen=root/'code'
+            frozen.mkdir()
+            (root/'processes').mkdir()
+            (root/'train').mkdir()
+            command=[sys.executable,'-c','import time; time.sleep(0.3)',str(frozen/'scripts/experiments/prefeval_k1_write_extension.py'),
+                     '--steps','93440','--snapshot-steps','46720','70080']
+            process=subprocess.Popen(command,cwd=frozen)
+            receipt=dict(pid=process.pid,host=socket.gethostname(),status='running',gpu=0,command=command)
+            (root/'processes/train.json').write_text(json.dumps(receipt))
+            class Stop:
+                def wait(self,seconds):
+                    time.sleep(0.05)
+                    return False
+            class Core:
+                STOP=Stop()
+                @staticmethod
+                def save(path,value): path.write_text(json.dumps(value))
+                def train(self): raise AssertionError('Must not spawn a second training process')
+            try:
+                with patch.object(distributed,'RUN',root),patch.object(distributed,'FROZEN',frozen):
+                    core=Core()
+                    distributed.adopt_existing_train(core,process.pid)
+                    (root/'train/complete.json').write_text('{"steps":93440}')
+                    (root/'train/checkpoint-final.pt').touch()
+                    core.train()
+                after=json.loads((root/'processes/train.json').read_text())
+                self.assertEqual(after['pid'],process.pid)
+                self.assertEqual(after['status'],'complete')
+                self.assertIsNone(after['exit_code'])
+            finally:
+                process.wait(timeout=5)
+
     @unittest.skipIf(sys.platform == 'win32', 'Production orchestration requires POSIX')
     def test_primary_waits_for_reader_without_executing_its_work(self):
         sys.path.insert(0, str(Path(__file__).parents[1] / 'scripts/inspire'))

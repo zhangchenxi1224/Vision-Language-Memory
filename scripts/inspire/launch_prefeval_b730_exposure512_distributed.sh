@@ -23,7 +23,7 @@ cd "$task_run/code"
 export CUDA_VISIBLE_DEVICES=0 CUBLAS_WORKSPACE_CONFIG=:4096:8 PYTHONUNBUFFERED=1
 export OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 PYTHONHASHSEED=0
 export HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 TOKENIZERS_PARALLELISM=false
-if [[ $task_role == primary ]]; then
+if [[ $task_role == primary && -z ${B730_ADOPT_TRAIN_PID:-} ]]; then
   "$task_python" -m pytest tests/test_prefeval_k1_budget_extension.py -q
   "$task_python" scripts/inspire/preflight_prefeval_b730_exposure512.py
 fi
