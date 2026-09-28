@@ -1,0 +1,29 @@
+{
+  "time_utc": "2026-09-28T10:57:38Z",
+  "platform_status_observed": "PENDING",
+  "inspection_host": "CPU shared-storage read; original GPU /proc unavailable",
+  "locks": {
+    "launcher.lock": "FREE",
+    "controller.lock": "FREE"
+  },
+  "resume_step_bound_by_verified_hash": 89728,
+  "resume_sha256": "37c3d87457242d75a4f4989ab175c4cec8c8fa0cbccd13c73e194ed541eb2ea0",
+  "resume_bytes": 4680992144,
+  "last_optimization_step": 89797,
+  "uncommitted_updates": 69,
+  "prior_64_updates_replayed_exact": true,
+  "new_full_checkpoint": false,
+  "completed_summaries": 13,
+  "verification_log": "",
+  "recovery_verified": false,
+  "archive_ready": false,
+  "training_complete": false,
+  "root_complete": false,
+  "train_log_tail": [
+    "{\"cached\": 729, \"total\": 730, \"stage\": \"write\"}",
+    "{\"cached\": 730, \"total\": 730, \"stage\": \"write\"}",
+    "{\"resumed_at\": 89728, \"next_step\": 89729, \"final_step\": 93440, \"optimizer_states\": 1075}",
+    "{\"step\": 89760, \"mse\": 0.23426078574266285, \"seconds\": 47.945327032357454}",
+    "{\"step\": 89792, \"mse\": 0.21856085304170847, \"seconds\": 95.69836330600083}"
+  ]
+}
