@@ -1,0 +1,318 @@
+{
+  "utc": "2026-09-28T07:44:07.279545+00:00",
+  "host": "prefeval-k1-h200x4-high-20260924--506d5fcf84c1-rnoaxyojmb",
+  "processes": [
+    {
+      "pid": 320836,
+      "cmd": [
+        "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681/scripts/inspire/run_prefeval_k1_refresh730.py",
+        "--arm",
+        "C",
+        "--gpus",
+        "1",
+        ""
+      ],
+      "cwd": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681",
+      "cuda": [
+        "CUDA_VISIBLE_DEVICES="
+      ],
+      "locks": [
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-C/refresh-driver.lock"
+      ]
+    },
+    {
+      "pid": 320847,
+      "cmd": [
+        "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681/scripts/inspire/run_prefeval_k1_refresh730.py",
+        "--arm",
+        "R",
+        "--gpus",
+        "2",
+        "3",
+        ""
+      ],
+      "cwd": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681",
+      "cuda": [
+        "CUDA_VISIBLE_DEVICES="
+      ],
+      "locks": [
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-R/refresh-driver.lock"
+      ]
+    },
+    {
+      "pid": 321051,
+      "cmd": [
+        "bash",
+        "scripts/inspire/run_prefeval_k1_retain730.sh",
+        "C",
+        ""
+      ],
+      "cwd": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-deploy-52d98d8",
+      "cuda": [
+        "CUDA_VISIBLE_DEVICES=1"
+      ],
+      "locks": [
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-C/refresh-driver.lock",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-C/launcher.lock"
+      ]
+    },
+    {
+      "pid": 321839,
+      "cmd": [
+        "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681/scripts/experiments/prefeval_k1_writer.py",
+        "rollout",
+        "--arm",
+        "B",
+        "--base",
+        "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+        "--official-source",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite",
+        "--split",
+        "train",
+        "--checkpoint",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-R/train/checkpoint-step-017520.pt",
+        "--initial-variants",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/variants-train.json",
+        "--initial-variant",
+        "1",
+        "--inter-turns",
+        "9",
+        "--noise-chains",
+        "1",
+        "--noise-domain",
+        "refresh-3",
+        "--shard-count",
+        "2",
+        "--shard-index",
+        "0",
+        "--output",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-R/sources/round-3/shard-0",
+        ""
+      ],
+      "cwd": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681",
+      "cuda": [
+        "CUDA_VISIBLE_DEVICES=2"
+      ],
+      "locks": [
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-R/refresh-driver.lock"
+      ]
+    },
+    {
+      "pid": 321842,
+      "cmd": [
+        "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681/scripts/experiments/prefeval_k1_writer.py",
+        "rollout",
+        "--arm",
+        "B",
+        "--base",
+        "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+        "--official-source",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite",
+        "--split",
+        "train",
+        "--checkpoint",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-R/train/checkpoint-step-017520.pt",
+        "--initial-variants",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/variants-train.json",
+        "--initial-variant",
+        "1",
+        "--inter-turns",
+        "9",
+        "--noise-chains",
+        "1",
+        "--noise-domain",
+        "refresh-3",
+        "--shard-count",
+        "2",
+        "--shard-index",
+        "1",
+        "--output",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-R/sources/round-3/shard-1",
+        ""
+      ],
+      "cwd": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681",
+      "cuda": [
+        "CUDA_VISIBLE_DEVICES=3"
+      ],
+      "locks": [
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-R/refresh-driver.lock"
+      ]
+    },
+    {
+      "pid": 348579,
+      "cmd": [
+        "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+        "scripts/experiments/prefeval_k1_position_probe.py",
+        "--kind",
+        "student",
+        "--split",
+        "dev",
+        "--reader",
+        "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+        "--images",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-C/final-dev-V1",
+        "--prefix",
+        "10",
+        "--order-mode",
+        "official-cyclic",
+        "--output",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-C/positions-final-dev-V1-10.jsonl",
+        ""
+      ],
+      "cwd": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-deploy-52d98d8",
+      "cuda": [
+        "CUDA_VISIBLE_DEVICES=1"
+      ],
+      "locks": [
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-C/refresh-driver.lock",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-C/launcher.lock"
+      ]
+    }
+  ],
+  "states": {
+    "C": {
+      "state": {
+        "arm": "C",
+        "host": "prefeval-k1-h200x4-high-20260924--506d5fcf84c1-rnoaxyojmb",
+        "pid": 320836,
+        "gpus": [
+          1
+        ],
+        "code_root": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681",
+        "commit": "55596810cee2062022b894ef93feb1ab4cd6b07b",
+        "stage": "control-train-and-evaluate",
+        "time_utc": "2026-09-28T07:41:26.323077+00:00",
+        "children": [
+          {
+            "pid": 321051,
+            "gpu": 1,
+            "command": [
+              "bash",
+              "scripts/inspire/run_prefeval_k1_retain730.sh",
+              "C"
+            ],
+            "log": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-C/control-train-and-evaluate-0.log",
+            "code_root": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-deploy-52d98d8"
+          }
+        ]
+      },
+      "log": "{\"arm\": \"C\", \"host\": \"prefeval-k1-h200x4-high-20260924--506d5fcf84c1-rnoaxyojmb\", \"pid\": 320836, \"gpus\": [1], \"code_root\": \"/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681\", \"commit\": \"55596810cee2062022b894ef93feb1ab4cd6b07b\", \"stage\": \"waiting_for_B730_fixed_23360_endpoint\", \"time_utc\": \"2026-09-28T07:41:24.767411+00:00\"}\n{\"arm\": \"C\", \"host\": \"prefeval-k1-h200x4-high-20260924--506d5fcf84c1-rnoaxyojmb\", \"pid\": 320836, \"gpus\": [1], \"code_root\": \"/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681\", \"commit\": \"55596810cee2062022b894ef93feb1ab4cd6b07b\", \"stage\": \"control-train-and-evaluate\", \"time_utc\": \"2026-09-28T07:41:26.323077+00:00\", \"children\": [{\"pid\": 321051, \"gpu\": 1, \"command\": [\"bash\", \"scripts/inspire/run_prefeval_k1_retain730.sh\", \"C\"], \"log\": \"/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-C/control-train-and-evaluate-0.log\", \"code_root\": \"/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-deploy-52d98d8\"}]}\n"
+    },
+    "R": {
+      "state": {
+        "arm": "R",
+        "host": "prefeval-k1-h200x4-high-20260924--506d5fcf84c1-rnoaxyojmb",
+        "pid": 320847,
+        "gpus": [
+          2,
+          3
+        ],
+        "code_root": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681",
+        "commit": "55596810cee2062022b894ef93feb1ab4cd6b07b",
+        "stage": "round-3-current-student-rollout",
+        "time_utc": "2026-09-28T07:41:33.045208+00:00",
+        "children": [
+          {
+            "pid": 321839,
+            "gpu": 2,
+            "command": [
+              "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+              "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681/scripts/experiments/prefeval_k1_writer.py",
+              "rollout",
+              "--arm",
+              "B",
+              "--base",
+              "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+              "--official-source",
+              "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite",
+              "--split",
+              "train",
+              "--checkpoint",
+              "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-R/train/checkpoint-step-017520.pt",
+              "--initial-variants",
+              "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/variants-train.json",
+              "--initial-variant",
+              "1",
+              "--inter-turns",
+              "9",
+              "--noise-chains",
+              "1",
+              "--noise-domain",
+              "refresh-3",
+              "--shard-count",
+              "2",
+              "--shard-index",
+              "0",
+              "--output",
+              "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-R/sources/round-3/shard-0"
+            ],
+            "log": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-R/round-3-current-student-rollout-0.log",
+            "code_root": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681"
+          },
+          {
+            "pid": 321842,
+            "gpu": 3,
+            "command": [
+              "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+              "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681/scripts/experiments/prefeval_k1_writer.py",
+              "rollout",
+              "--arm",
+              "B",
+              "--base",
+              "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+              "--official-source",
+              "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite",
+              "--split",
+              "train",
+              "--checkpoint",
+              "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-R/train/checkpoint-step-017520.pt",
+              "--initial-variants",
+              "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/variants-train.json",
+              "--initial-variant",
+              "1",
+              "--inter-turns",
+              "9",
+              "--noise-chains",
+              "1",
+              "--noise-domain",
+              "refresh-3",
+              "--shard-count",
+              "2",
+              "--shard-index",
+              "1",
+              "--output",
+              "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-R/sources/round-3/shard-1"
+            ],
+            "log": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-R/round-3-current-student-rollout-1.log",
+            "code_root": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681"
+          }
+        ]
+      },
+      "log": "6d5fcf84c1-rnoaxyojmb\", \"pid\": 320847, \"gpus\": [2, 3], \"code_root\": \"/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681\", \"commit\": \"55596810cee2062022b894ef93feb1ab4cd6b07b\", \"stage\": \"round-3-current-student-rollout\", \"time_utc\": \"2026-09-28T07:41:33.045208+00:00\", \"children\": [{\"pid\": 321839, \"gpu\": 2, \"command\": [\"/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python\", \"/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681/scripts/experiments/prefeval_k1_writer.py\", \"rollout\", \"--arm\", \"B\", \"--base\", \"/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907\", \"--official-source\", \"/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite\", \"--split\", \"train\", \"--checkpoint\", \"/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-R/train/checkpoint-step-017520.pt\", \"--initial-variants\", \"/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/variants-train.json\", \"--initial-variant\", \"1\", \"--inter-turns\", \"9\", \"--noise-chains\", \"1\", \"--noise-domain\", \"refresh-3\", \"--shard-count\", \"2\", \"--shard-index\", \"0\", \"--output\", \"/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-R/sources/round-3/shard-0\"], \"log\": \"/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-R/round-3-current-student-rollout-0.log\", \"code_root\": \"/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681\"}, {\"pid\": 321842, \"gpu\": 3, \"command\": [\"/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python\", \"/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681/scripts/experiments/prefeval_k1_writer.py\", \"rollout\", \"--arm\", \"B\", \"--base\", \"/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907\", \"--official-source\", \"/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite\", \"--split\", \"train\", \"--checkpoint\", \"/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-R/train/checkpoint-step-017520.pt\", \"--initial-variants\", \"/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/variants-train.json\", \"--initial-variant\", \"1\", \"--inter-turns\", \"9\", \"--noise-chains\", \"1\", \"--noise-domain\", \"refresh-3\", \"--shard-count\", \"2\", \"--shard-index\", \"1\", \"--output\", \"/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-R/sources/round-3/shard-1\"], \"log\": \"/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-R/round-3-current-student-rollout-1.log\", \"code_root\": \"/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681\"}]}\n"
+    }
+  },
+  "counts": {
+    "C": {
+      "complete": 391,
+      "png": 4307
+    },
+    "R0": {
+      "complete": 140,
+      "png": 1401
+    },
+    "R1": {
+      "complete": 140,
+      "png": 1401
+    }
+  },
+  "locks": {
+    "retain730-C/refresh-driver.lock": "HELD",
+    "retain730-C/launcher.lock": "HELD",
+    "retain730-R/refresh-driver.lock": "HELD"
+  },
+  "gpus": "0, 0 MiB, 0 %\n1, 4 MiB, 0 %\n2, 14129 MiB, 100 %\n3, 14129 MiB, 100 %\n"
+}
