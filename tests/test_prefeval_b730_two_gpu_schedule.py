@@ -2,6 +2,9 @@
 import importlib.util
 from pathlib import Path
 import threading
+import tempfile
+import sys
+import time
 import unittest
 
 spec = importlib.util.spec_from_file_location('scheduler', Path(__file__).parents[1] / 'scripts/inspire/run_prefeval_b730_exposure512_two_gpu.py')
@@ -10,6 +13,29 @@ spec.loader.exec_module(scheduler)
 
 
 class ScheduleTests(unittest.TestCase):
+    @unittest.skipIf(sys.platform == 'win32', 'Shared POSIX lock is exercised on Linux')
+    def test_shared_endpoint_lock_prevents_duplicate_work(self):
+        with tempfile.TemporaryDirectory() as directory:
+            writes = []
+            class Core:
+                RUN = Path(directory)
+                STOP = threading.Event()
+                def evaluate(self, *args):
+                    marker = self.RUN / 'summary.json'
+                    if marker.exists():
+                        return
+                    time.sleep(0.1)
+                    writes.append(args)
+                    marker.write_text('{}')
+            first, second = Core(), Core()
+            scheduler.lock_evaluations(first)
+            scheduler.lock_evaluations(second)
+            with scheduler.concurrent.futures.ThreadPoolExecutor(max_workers=2) as pool:
+                jobs = [pool.submit(c.evaluate, 93440, 'pilot', 0, gpu) for gpu, c in enumerate((first, second))]
+                for job in jobs:
+                    job.result()
+            self.assertEqual(len(writes), 1)
+
     def test_each_registered_evaluation_once_and_gpu_zero_reused_after_training(self):
         trained = threading.Event()
         calls = []

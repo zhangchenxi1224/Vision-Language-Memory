@@ -21,6 +21,38 @@ def registered_evaluations():
         for split in ('train', 'pilot', 'dev') for variant in (0, 1)]
 
 
+def lock_evaluations(core):
+    """Serialize each whole frozen evaluate call across notebooks."""
+    import fcntl
+    original = core.evaluate
+    directory = core.RUN / 'evaluation-locks'
+    directory.mkdir(exist_ok=True)
+    def evaluate(step, split, variant, gpu):
+        label = f'step-{step:06d}-{split}-V{variant}'
+        with (directory / (label + '.lock')).open('a') as lock:
+            while True:
+                try:
+                    fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                    break
+                except BlockingIOError:
+                    if core.STOP.wait(1):
+                        raise RuntimeError('Controller stopped while waiting for evaluation lock')
+            return original(step, split, variant, gpu)
+    core.evaluate = evaluate
+
+
+def load_core():
+    core_path = FROZEN / 'scripts/inspire/run_prefeval_b730_exposure512.py'
+    assert subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=FROZEN, text=True).strip() == FROZEN_COMMIT
+    assert not subprocess.check_output(['git', 'status', '--porcelain', '--untracked-files=no'], cwd=FROZEN, text=True).strip()
+    spec = importlib.util.spec_from_file_location('b730_frozen_core', core_path)
+    core = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(core)
+    assert core.REPO == FROZEN and tuple(core.ENDPOINTS) == ENDPOINTS
+    lock_evaluations(core)
+    return core
+
+
 def lane(core, gpu):
     if gpu == 0:
         core.train()
@@ -48,13 +80,7 @@ def execute(core):
 
 def main():
     import fcntl
-    core_path = FROZEN / 'scripts/inspire/run_prefeval_b730_exposure512.py'
-    assert subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=FROZEN, text=True).strip() == FROZEN_COMMIT
-    assert not subprocess.check_output(['git', 'status', '--porcelain', '--untracked-files=no'], cwd=FROZEN, text=True).strip()
-    spec = importlib.util.spec_from_file_location('b730_frozen_core', core_path)
-    core = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(core)
-    assert core.REPO == FROZEN and tuple(core.ENDPOINTS) == ENDPOINTS
+    core = load_core()
     for name in ('logs', 'processes'):
         (RUN / name).mkdir(parents=True, exist_ok=True)
     with (RUN / 'controller.lock').open('a') as lock:
