@@ -1,5 +1,21 @@
 # 多目标主线部署记录
 
+## 2026-09-28 15:49 CST：长程10轮在空闲四H200独立启动
+
+最新核验15:54：烟测15:52:58完整结束，22PNG/60唯一读回，两条完整10轮PNG传递及当前交换哈希全部通过。15:53:02自动进入正式730的C8/V0；正式controller389148、四Writer389545–389548，15:54:07四卡100%、各14129MiB，完整argv与回执一致、均继承三把锁，smoke锁FREE，正式及allocation/pipeline锁HELD；正式PNG已从3增长至12，无failure。正式输出尚无results/complete。详见[C8_LONG10_SMOKE_RESULTS.json](C8_LONG10_SMOKE_RESULTS.json)及[C8_LONG10_PREFLIGHT.json](C8_LONG10_PREFLIGHT.json)。
+
+烟测含原始PNG、全部读回、writes、manifest、完成回执、协议和启动现场的归档 `c8-long10-smoke-evidence.tar.gz`，54文件、20699684字节，SHA256 `e4fbff6f8e08ed89501771e06c6994b84a86b569d8b9a9259a2f714a39fabcab`。该阶段按完整性放行；两条样本T1为0轮2/2、5轮0/2、10轮0/2，不能外推全730结果，也不根据它调模型或缩短预算。
+
+用户追加真实PNG长程10turns并行评测。原high四卡在启动前复查时已被C/R接手，未在其上启动长程进程。改用已经RUNNING的 `dl-clear-retain-h200x4-20260914`，NORMAL四H200、qb-prod-gpu732，实际主机 `dl-clear-retain-h200x4-20260914--a823c55e800a-cwprkl2mqx`。15:48:53确认全部GPU零占用、无实验进程及本分支持锁者，15:49:29后台启动；没有start、停止或删除用户原实例。
+
+独立冻结checkout `repos/prefeval-c8-long10-20260928`，提交 `6563d16322c792d6ad0007c17cd6be9c6ca279e3`；入口 `scripts/inspire/launch_prefeval_c8_long10.sh`，控制器SHA256 `c5a9051c1d8426f45e017b69c960188c0eacf2c2dc507a782fc264a63783e4ce`。实际Writer/evaluator仍为224cc77，不修改旧checkout。日志 `long10/pipeline.log`、身份回执 `long10/launch.json`；先 `long10/smoke`，完整性通过后自动进入 `long10/fixed-c8-b0-730-20260928`。
+
+CPU预检实际核对730条22消息结构、固定C8/B0权重和原始数据哈希、每轮当前交换哈希；合成数据验证0/5/10计数、初始正确条件保持率、按偏好配对bootstrap及重复/缺行/错donor拒绝。预检不是模型成绩。正式协议SHA256 `b43fd72a86e8a50547b359ac1ad7b0bf97bcdcbc90cb542f884206980caaae33`，烟测协议 `57ecc7aaec91b4bf32209cc2c0d4cc7f2e38bcbff8069b1d9fe5c6f4e2799c63`。正式每模型2920条轨迹、32120张PNG、70080条读取；同730、V0/V1各两预设种子，冻结C8对B0，零教师/FM更新，见PLAN。
+
+15:50:06核验启动器358284、烟测controller358305、实际Writer358331/358332，完整命令与进程回执一致，继承 `long10/pipeline.lock`、smoke/controller.lock及以实际主机命名的allocation锁，三把锁HELD。这些PID仅当次快照。两卡烟测完成后正式阶段使用四卡；另一两卡实例上的round3正常推进，单写730仍接在round3完整归档之后。
+
+资源限制：该用户实例原有定时停止，15:48平台剩余23890秒，截止约2026-09-28 22:26 CST；当前CLI的notebook/start命令无运行时长修改入口，未声称取消成功。现有跟进须在21:30前检查/安排后续资源或独立恢复，并持续记录实际平台截止；不伪造负载、不删除用户实例。若停止，完整链按complete及11张PNG/写入记录哈希只读复用；部分链在独立恢复目录按同权重/种子重建，不能向旧writes.jsonl重复追加后冒充完整链。
+
 ## 2026-09-28 14:40 CST：C8/B0全730直接评测已准备，尚未启动
 
 按用户最新指定的C8/730优先级，冻结独立控制器checkout `repos/prefeval-c8-eval730-20260928`，提交 `efe0f7606ed7582a0d4171525b9bc285f1c1d140`，入口 `scripts/inspire/launch_prefeval_c8_eval730.sh`。其Writer/evaluator仍调用原224cc77；不重做教师、不训练权重、不更改运行中的round3。输出仅 `runs/prefeval-multitarget-20260927/eval730/fixed-c8-b0-20260928`。
