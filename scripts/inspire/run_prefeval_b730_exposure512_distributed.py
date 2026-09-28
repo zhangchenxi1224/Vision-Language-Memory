@@ -14,6 +14,56 @@ from run_prefeval_b730_exposure512_two_gpu import (
     ENDPOINTS, FROZEN, FROZEN_COMMIT, RUN, load_core, registered_evaluations)
 
 
+def adopt_existing_train(core, pid):
+    """Preserve the already-running scientific process when replacing its coordinator."""
+    receipt_path = RUN/'processes/train.json'
+    receipt = json.loads(receipt_path.read_text())
+    assert receipt['pid'] == pid and receipt['host'] == socket.gethostname()
+    assert receipt['status'] == 'running' and receipt['gpu'] == 0
+    expected = ' '.join(receipt['command'])
+    assert str(FROZEN/'scripts/experiments/prefeval_k1_write_extension.py') in expected
+    assert '--steps 93440 --snapshot-steps 46720 70080' in expected
+    proc = Path('/proc')/str(pid)
+    assert (proc/'cmdline').read_bytes().replace(b'\0',b' ').decode().strip() == expected
+    assert (proc/'cwd').resolve() == FROZEN
+    started_ticks = (proc/'stat').read_text().rsplit(')',1)[1].split()[19]
+    adoption = dict(pid=pid,host=socket.gethostname(),command=receipt['command'],
+                    process_start_ticks=started_ticks,adopted_at=time.time())
+    core.save(RUN/'train-adoption.json',adoption)
+    def wait_for_existing_train():
+        while proc.exists():
+            try:
+                stat = (proc/'stat').read_text().rsplit(')',1)[1].split()
+                if stat[0] == 'Z':
+                    break
+                assert stat[19] == started_ticks, 'Adopted PID was reused'
+                assert (proc/'cmdline').read_bytes().replace(b'\0',b' ').decode().strip() == expected
+            except FileNotFoundError:
+                break
+            if core.STOP.wait(5):
+                # The controller does not own this subprocess. Preserve it for
+                # explicit recovery instead of killing healthy training.
+                raise RuntimeError('Coordinator stopped; adopted training must be inspected separately')
+        done = json.loads((RUN/'train/complete.json').read_text())
+        assert done['steps'] == 93440 and (RUN/'train/checkpoint-final.pt').exists()
+        receipt.update(status='complete',finished=time.time(),exit_code=None,
+            completion_evidence='adopted process exited and frozen writer published train/complete.json steps93440',
+            adopted_by=os.getpid(),process_start_ticks=started_ticks)
+        core.save(receipt_path,receipt)
+    core.train = wait_for_existing_train
+
+
+def wait_for_reader(core):
+    """Read completion only: never execute the other host's assigned matrices."""
+    expected = [RUN/f'readback/step-{step:06d}-{split}-V1/summary.json'
+                for step in ENDPOINTS for split in ('pilot','dev')]
+    while not all(path.exists() for path in expected) or not (RUN/'reader-complete.json').exists():
+        if (RUN/'reader-failure.json').exists():
+            raise RuntimeError('Reader failed; recover its assigned work on the reader host')
+        if core.STOP.wait(30):
+            raise RuntimeError('Stopped while waiting for reader summaries')
+
+
 def lane(core, role, gpu):
     if role == 'primary':
         if gpu == 0:
@@ -47,6 +97,10 @@ def main(role):
     core = load_core()
     with (RUN / (prefix + 'controller.lock')).open('a') as lock:
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        adopted_pid = os.environ.get('B730_ADOPT_TRAIN_PID')
+        if adopted_pid:
+            assert role == 'primary'
+            adopt_existing_train(core,int(adopted_pid))
         scheduler = Path(__file__).resolve()
         core.save(RUN / (prefix + 'controller.json'), dict(
             pid=os.getpid(), host=socket.gethostname(), repo=str(FROZEN), commit=FROZEN_COMMIT,
@@ -61,11 +115,7 @@ def main(role):
             if role == 'reader':
                 core.save(RUN / 'reader-complete.json', dict(status='registered_V1_pilot_dev_complete', finished=time.time()))
             else:
-                # Normally these are already complete on the reader. Shared locks
-                # also allow safe completion here if that host has failed.
-                for step in ENDPOINTS:
-                    for split in ('pilot', 'dev'):
-                        core.evaluate(step, split, 1, 0)
+                wait_for_reader(core)
                 summaries = {str(p.relative_to(RUN)):json.loads(p.read_text()) for p in (RUN/'readback').glob('*/summary.json')}
                 expected = {f'readback/step-{s:06d}-{split}-V{v}/summary.json' for s,split,v in registered_evaluations()}
                 assert set(summaries) == expected

@@ -14,6 +14,29 @@ spec.loader.exec_module(scheduler)
 
 class ScheduleTests(unittest.TestCase):
     @unittest.skipIf(sys.platform == 'win32', 'Production orchestration requires POSIX')
+    def test_primary_waits_for_reader_without_executing_its_work(self):
+        sys.path.insert(0, str(Path(__file__).parents[1] / 'scripts/inspire'))
+        import run_prefeval_b730_exposure512_distributed as distributed
+        from unittest.mock import patch
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory)
+            class Stop:
+                def wait(self, seconds):
+                    for step in distributed.ENDPOINTS:
+                        for split in ('pilot','dev'):
+                            path=root/f'readback/step-{step:06d}-{split}-V1/summary.json'
+                            path.parent.mkdir(parents=True,exist_ok=True)
+                            path.write_text('{}')
+                    (root/'reader-complete.json').write_text('{}')
+                    return False
+            class Core:
+                STOP=Stop()
+                def evaluate(self,*args):
+                    raise AssertionError('Primary tried to run reader work')
+            with patch.object(distributed,'RUN',root):
+                distributed.wait_for_reader(Core())
+
+    @unittest.skipIf(sys.platform == 'win32', 'Production orchestration requires POSIX')
     def test_four_plus_two_covers_same_registration_with_one_training_lane(self):
         sys.path.insert(0, str(Path(__file__).parents[1] / 'scripts/inspire'))
         import run_prefeval_b730_exposure512_distributed as distributed

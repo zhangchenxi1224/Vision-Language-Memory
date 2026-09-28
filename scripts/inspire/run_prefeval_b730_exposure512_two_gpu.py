@@ -22,7 +22,7 @@ def registered_evaluations():
 
 
 def lock_evaluations(core):
-    """Serialize each whole frozen evaluate call across notebooks."""
+    """Serialize local evaluate calls; cross-host ownership is assigned separately."""
     import fcntl
     original = core.evaluate
     directory = core.RUN / 'evaluation-locks'
