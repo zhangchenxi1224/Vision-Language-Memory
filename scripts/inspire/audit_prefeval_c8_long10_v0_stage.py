@@ -38,6 +38,12 @@ def main():
     for path, expected_hash in protocol['data_sha256'].items():
         assert sha(path) == expected_hash
     sys.path.insert(0, str(TASK/'long10/audit-deps-20260929'))
+    import bs4
+    dependency_manifest = TASK/'long10/audit-deps-20260929/dependency-manifest.json'
+    dependencies = json.loads(dependency_manifest.read_text())
+    assert bs4.__version__ == dependencies['bs4_version']
+    for path, expected_hash in dependencies['copied_sha256'].items():
+        assert sha(dependency_manifest.parent/path) == expected_hash
     sys.path[:0] = [str(FROZEN), str(FROZEN/'src')]
     from scripts.experiments.prefeval_k1_data import load_records, event_text, official_mcq, option_order
     from scripts.experiments.prefeval_k1_variants import load_variants, apply_variant
@@ -129,7 +135,7 @@ def main():
     OUTPUT.mkdir()
     result = OUTPUT/'C8_LONG10_V0_STAGE_RESULTS.json'
     result.write_text(json.dumps(report, ensure_ascii=False, indent=2)+'\n')
-    evidence += [result, Path(__file__)]
+    evidence += [result, Path(__file__), dependency_manifest]
     manifest = OUTPUT/'evidence-manifest.json'
     manifest.write_text(json.dumps({str(p.relative_to(TASK)): sha(p) for p in evidence}, indent=2)+'\n')
     archive = TASK/'c8-long10-v0-stage-evidence-20260929.tar.gz'
