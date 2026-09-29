@@ -35,6 +35,9 @@ def main():
     assert module.base.git_head(FROZEN) == '224cc77d790cf3967b5a56ce2e77c364959435a2'
     checkpoint = module.base.CHECKPOINTS['C8']
     assert sha(checkpoint[0]) == checkpoint[1]
+    for path, expected_hash in protocol['data_sha256'].items():
+        assert sha(path) == expected_hash
+    sys.path.insert(0, str(TASK/'long10/audit-deps-20260929'))
     sys.path[:0] = [str(FROZEN), str(FROZEN/'src')]
     from scripts.experiments.prefeval_k1_data import load_records, event_text, official_mcq, option_order
     from scripts.experiments.prefeval_k1_variants import load_variants, apply_variant
