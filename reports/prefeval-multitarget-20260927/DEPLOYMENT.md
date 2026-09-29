@@ -1,5 +1,13 @@
 # 多目标主线部署记录
 
+## 2026-09-29 17:28：C8单写完整阶段归档，B0自动接续
+
+17:22实际核验两实例status/events均无新增回收、auto_stop为0。单写仍在prefeval-mt-eval-h200x2-20260928、qb-prod-gpu2187、g2xx4gn63g主机，当前输出eval730/recovery-20260929-1325。C8全部V0/V1各5840PNG及各四片39420读回已完成，16:27:34自动进入B0/V0生成，17:22有615张完整PNG；controller21763与Writer1642034/1642035完整argv匹配、两锁继承正确，两H200均100%/14129MiB。无failure或全量最终results/complete。
+
+长程仍在用户指定prefeval-b-read-h200x2-20260925、qb-prod-gpu2294、iwj3wpwcbs主机，当前输出long10/recovery-20260929-1425-2gpu。C8/V1从16:22的1508PNG/136完整链增至17:22的2185PNG/198完整链；controller20310和Writer69871/69872完整argv及三层锁正常，两H200均100%/14128MiB，无failure/最终results/complete。现场分别保存eval730/runtime-monitor-20260929-1722.json和long10/runtime-monitor-20260929-1722.json。PID均仅本次快照，后续继续查实际主机与增长。
+
+CPU独立脚本scripts/inspire/audit_prefeval_c8_full_stage_20260929.py（源0663f8a）只读核验C8完成阶段；未改运行checkout、输出或协议。独立输出eval730/analysis-c8-full-20260929-1725，11680实际PNG、78840唯一读回完整，官方答案解析与donor校验通过，恢复的V0旧路径来源可追溯。原始归档c8-full-stage-evidence-20260929.tar.gz共23394文件、SHA256 8bc6ab37e195f49c99f18b2e3c6bfb1dc9ed646f3fde8edd3e6e8685cc4d7f81，已下载并逐项核验，独立重算全部原始读回一致。完整阶段数值及边界见RESULTS最新段。B0尚未完成，不能当作最终比较；按原预算继续，保持60分钟跟进。
+
 ## 2026-09-29 14:19：长程实例遭平台回收，保留V0完整读回恢复
 
 14:34:34已确认真实生成恢复：14:32:34进入C8/V1，PNG从复制时286张增至290张、再至302张；26条完整轨迹仍保留，正在重建两条部分链。两H200均100%、各14128MiB；controller20310与Writer69871/69872完整argv匹配，两个子进程均继承long10 pipeline、当前controller与实际主机allocation三锁。无failure/最终results/complete，平台无新回收事件、auto_stop为0。现场long10/runtime-recovery-20260929-1435.json，已下载为C8_LONG10_RECOVERY_RUNTIME_20260929_1435.json；新拓扑见C8_LONG10_RECOVERY_TOPOLOGY_20260929_1425.json。V0四片35040条原始读回SHA256与旧已审计来源完全相同，四份finished回执的new_mcq_counts均为空；恢复未重复推理完成键，见C8_LONG10_RECOVERY_READBACK_VERIFICATION_20260929_1433.json。以上PID仅本次快照。
