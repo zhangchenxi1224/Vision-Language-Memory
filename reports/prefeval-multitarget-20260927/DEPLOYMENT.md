@@ -1,5 +1,11 @@
 # 多目标主线部署记录
 
+## 2026-09-29 12:25：阶段结果只读审计，两GPU任务继续原协议
+
+12:20实际现场：单写仍在prefeval-mt-eval-h200x2-20260928/alucvbi43a，C8/V0全部5840PNG及四片39420读回已完成，C8/V1生成4966PNG；原controller85531及当前Writer3577810/3577811的完整argv、两锁继承正常。长程在用户指定prefeval-b-read-h200x2-20260925/ivytbz3gqk，C8/V0共16060PNG/1460完整轨迹，前两片各8784条读回完成，后两片1029/1031条；controller1465983及Reader3575952/3575953完整argv和三锁继承正常。两平台无新停止事件、auto_stop为0，均无failure/最终results/complete。PID仅此次快照，现场各自保存runtime-monitor-20260929-1220.json。
+
+用户询问阶段结果后，CPU运行独立脚本scripts/inspire/audit_prefeval_c8_v0_stage.py，读取完整预定C8/V0全部四片及实际5840PNG，未触碰运行checkout、预算或输入。输出仅eval730/analysis-c8-v0-20260929-1225，并归档到任务根c8-v0-stage-evidence-20260929.tar.gz。结果仅是V0切片，无B0或V1，详细分母、真实性核验、界限见RESULTS.md最新段及C8_V0_STAGE_RESULTS_20260929.json；不能作为完整730比较结果或改变模型选择。全量流水线与长程原样继续。
+
 ## 2026-09-29 00:11 CST：按用户指定迁至prefeval-b-read两H200继续长程
 
 用户明确指定长程任务使用prefeval-b-read-h200x2-20260925。00:04现场核验该实例RUNNING、NORMAL两H200、节点qb-prod-gpu2260，实际主机 `prefeval-b-read-h200x2-20260925--dd8912853710-ivytbz3gqk`；两GPU各1MiB、无CUDA计算进程、无实验任务，long10及旧控制器/本机allocation锁空闲。原dl-clear-retain四卡仍排队，迁移后已取消排队并确认STOPPED；原用户实例保留不删除、不再start。
