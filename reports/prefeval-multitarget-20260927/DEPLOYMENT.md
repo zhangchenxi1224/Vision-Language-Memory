@@ -1,5 +1,17 @@
 # 多目标主线部署记录
 
+## 2026-09-29 13:27：单写730再次遭平台回收，独立目录接续
+
+13:36:18再次核验已进入C8/V1实际生成，完整PNG从5598增至5616，两H200均100%、各14129MiB。controller21763及Writer82209/82210完整命令匹配且两锁继承正常；旧C8/V0的39420条原始readback哈希未变，已完成键未新增推理。现场eval730/runtime-recovery-20260929-1337.json。无failure或最终results/complete，后续仍按完整四分片及复用分母汇总。长程13:32 C8/V1为142PNG、12完整轨迹，两个Writer4163633/4163634与三锁均正确。
+
+13:19实际status为STOPPED，远程执行失败；events记录13:13:53因CPU/GPU/MEM利用率规则stop-and-save，13:14:32停止。具体阈值未知，不由此推断Writer故障，也不伪造负载。13:20执行一次start，随后平台重新分配NORMAL两H200到qb-prod-gpu2187，实际主机prefeval-mt-eval-h200x2-20260928--9be487d35048-g2xx4gn63g；旧alucvbi43a已终止。平台证据见EVAL730_PLATFORM_STOPPED_20260929.json和EVAL730_PLATFORM_EVENTS_20260929.json。
+
+CPU独立恢复脚本scripts/inspire/recover_prefeval_c8_eval730_20260929.py，源8a77887，实际SHA256 a15fd146ee60c41889a8ad6fa8afe72991a60d1d1b0a2ca6a393d485d4a9d8dd。重新核验两份权重、冻结代码/协议/数据、原种子及当前交换，逐图重算并逐字节复制11438条完整单写：C8/V0为5840、C8/V1为5598。两个未完成目录professional_work_location_style:0005/seed7和:0006/seed7不复制，在新目录按原种子重建。C8/V0四份原始readback和finished回执与12:25已审计版本哈希完全一致，共39420条；全部逐字节复制，保留原始PNG路径，且对应新目录PNG的实际哈希相同。后续完整审计必须允许这一有证据的原路径来源，不得擅改原始读回或只统计新增。
+
+当前唯一单写GPU输出为eval730/recovery-20260929-1325，旧recovery-20260928-1920和fixed目录均只读。入口新目录launch-recovery.sh，SHA256 76ca3fa1f83954e9e0bbbe0bcc9d1d2886d8e34145414c79c5e85f151ebf1085，仍调用未修改的efe0f760控制器及224cc77 Writer/evaluator。13:26:56再次检查新主机GPU无计算进程、全部实验命令为空、根和旧/新锁空闲后后台启动，日志recovery.log，launch.json记录完整身份。原冻结Worker按完成键跳过已完成PNG及读回，因此先校验C8/V0再补V1；这不是重新推理或新增训练。恢复报告C8_EVAL730_RECOVERY_20260929.json、C8_EVAL730_RECOVERY_LAUNCH_20260929.json。13:32实测controller21763及Reader56424/56425命令匹配，各继承根及新controller两锁，无failure/最终results/complete；PID仅此次快照，仍需确认后续新增PNG。
+
+中断原始回执/日志/读回/全部完整和部分链元数据归档eval730-interruption-20260929-1313.tar.gz，共22927文件，SHA256 b2231aacfc0a964de91e6b09ca8a0d24df944a8c13ca7be3536a37e65562b0eb。本地已核验归档哈希及清单内每个文件。长程在用户指定prefeval-b-read实例原样继续，13:19完整结束C8/V0全部四片35040条读回并自动进入C8/V1，不受本次回收影响。
+
 ## 2026-09-29 12:25：阶段结果只读审计，两GPU任务继续原协议
 
 12:20实际现场：单写仍在prefeval-mt-eval-h200x2-20260928/alucvbi43a，C8/V0全部5840PNG及四片39420读回已完成，C8/V1生成4966PNG；原controller85531及当前Writer3577810/3577811的完整argv、两锁继承正常。长程在用户指定prefeval-b-read-h200x2-20260925/ivytbz3gqk，C8/V0共16060PNG/1460完整轨迹，前两片各8784条读回完成，后两片1029/1031条；controller1465983及Reader3575952/3575953完整argv和三锁继承正常。两平台无新停止事件、auto_stop为0，均无failure/最终results/complete。PID仅此次快照，现场各自保存runtime-monitor-20260929-1220.json。
