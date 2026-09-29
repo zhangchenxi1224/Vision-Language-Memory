@@ -1,0 +1,46 @@
+[
+  {
+    "arm": "C",
+    "pid": 20221,
+    "host": "prefeval-k1-h200x4-high-20260924--506d5fcf84c1-c7a2kxozom",
+    "command": [
+      "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+      "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681/scripts/inspire/run_prefeval_k1_refresh730.py",
+      "--arm",
+      "C",
+      "--gpus",
+      "1"
+    ],
+    "gpus": [
+      1
+    ],
+    "code_root": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681",
+    "commit": "55596810cee2062022b894ef93feb1ab4cd6b07b",
+    "log": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-C/driver-high-eval-recovery-20260929.log",
+    "utc": "2026-09-29T01:17:04.646945+00:00",
+    "reason": "Resume existing fixed endpoint evaluations after platform auto-recycle. All GPUs idle and all old task locks free. R training is complete at 23360; frozen completion checks skip all four training rounds, rollout/readback/position resume by completed keys."
+  },
+  {
+    "arm": "R",
+    "pid": 20222,
+    "host": "prefeval-k1-h200x4-high-20260924--506d5fcf84c1-c7a2kxozom",
+    "command": [
+      "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+      "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681/scripts/inspire/run_prefeval_k1_refresh730.py",
+      "--arm",
+      "R",
+      "--gpus",
+      "2",
+      "3"
+    ],
+    "gpus": [
+      2,
+      3
+    ],
+    "code_root": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681",
+    "commit": "55596810cee2062022b894ef93feb1ab4cd6b07b",
+    "log": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-R/driver-high-eval-recovery-20260929.log",
+    "utc": "2026-09-29T01:17:04.651765+00:00",
+    "reason": "Resume existing fixed endpoint evaluations after platform auto-recycle. All GPUs idle and all old task locks free. R training is complete at 23360; frozen completion checks skip all four training rounds, rollout/readback/position resume by completed keys."
+  }
+]
