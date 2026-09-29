@@ -1,0 +1,90 @@
+{
+  "success": true,
+  "data": {
+    "items": [
+      {
+        "time": "2026-09-28 19:03:28",
+        "message": "The service is starting up..."
+      },
+      {
+        "time": "2026-09-28 19:03:40",
+        "message": "Waiting for the Notebook to become ready..."
+      },
+      {
+        "time": "2026-09-28 19:03:55",
+        "message": "Notebook is ready prefeval-mt-eval-h200x2-20260928--9be487d35048"
+      },
+      {
+        "time": "2026-09-29 13:13:53",
+        "message": "stop and save Notebook <redacted> and as image ngc-pytorch:stopsave-prefeval-mt-eval-h200x2-20260928-dcede-20260929131353, due to because its CPU/GPU/MEM usage has not met the auto-recycle rules set by the manager.. awaiting probing..."
+      },
+      {
+        "time": "2026-09-29 13:13:53",
+        "message": "Paused notebook <redacted> and will save it as image ngc-pytorch:stopsave-prefeval-mt-eval-h200x2-20260928-dcede-20260929131353, during which favicon.icon readiness probe failure should be ignored. Significant file modifications within the container may result in extended save durations or potential failures. awaiting commit..."
+      },
+      {
+        "time": "2026-09-29 13:14:05",
+        "message": "Waiting for the Notebook to become ready..."
+      },
+      {
+        "time": "2026-09-29 13:14:31",
+        "message": "Committed notebook <redacted> as image ngc-pytorch:stopsave-prefeval-mt-eval-h200x2-20260928-dcede-20260929131353 (size: 11.24 GB), awaiting push..."
+      },
+      {
+        "time": "2026-09-29 13:14:32",
+        "message": "Notebook stopped because its CPU/GPU/MEM usage has not met the auto-recycle rules set by the manager."
+      },
+      {
+        "time": "2026-09-29 13:14:32",
+        "message": "Pushed notebook <redacted> image ngc-pytorch:stopsave-prefeval-mt-eval-h200x2-20260928-dcede-20260929131353 to registry (size: 11.24 GB), image ready for use"
+      },
+      {
+        "time": "2026-09-29 13:20:47",
+        "message": "This pod will preempt pod video-generation/<redacted>-worker-0 to release resource in session <redacted>"
+      },
+      {
+        "time": "2026-09-29 13:20:47",
+        "message": "This pod will preempt pod video-generation/<redacted>-worker-0 to release resource in session <redacted>"
+      },
+      {
+        "time": "2026-09-29 13:20:49",
+        "message": "Pod frontiers-research/prefeval-mt-eval-h200x2-20260928--9be487d35048-g2xx4gn63g can possibly be assigned to qb-prod-gpu2187, once resource is released and minAvailable is satisfied"
+      },
+      {
+        "time": "2026-09-29 13:20:59",
+        "message": "0/1492 nodes are unavailable: 1041 Insufficient cpu, 127 node(s) didn't match Pod's node affinity/selector, 157 Insufficient memory, 164 Insufficient nvidia.com/gpu, 3 node(s) were unschedulable."
+      },
+      {
+        "time": "2026-09-29 13:21:44",
+        "message": "Successfully assigned frontiers-research/prefeval-mt-eval-h200x2-20260928--9be487d35048-g2xx4gn63g to qb-prod-gpu2187"
+      },
+      {
+        "time": "2026-09-29 13:21:47",
+        "message": "Pulling image \"docker.sii.shaipower.online/inspire-studio/ngc-pytorch:stopsave-prefeval-mt-eval-h200x2-20260928-dcede-20260929131353\""
+      },
+      {
+        "time": "2026-09-29 13:21:52",
+        "message": "Successfully pulled image \"docker.sii.shaipower.online/inspire-studio/ngc-pytorch:stopsave-prefeval-mt-eval-h200x2-20260928-dcede-20260929131353\" in 4.949200474s (4.949214802s including waiting)"
+      },
+      {
+        "time": "2026-09-29 13:21:52",
+        "message": "Created container prefeval-mt-eval-h200x2-20260928--9be487d35048"
+      },
+      {
+        "time": "2026-09-29 13:21:52",
+        "message": "Started container prefeval-mt-eval-h200x2-20260928--9be487d35048"
+      },
+      {
+        "time": "2026-09-29 13:21:52",
+        "message": "The service is starting up..."
+      },
+      {
+        "time": "2026-09-29 13:22:14",
+        "message": "Notebook is ready prefeval-mt-eval-h200x2-20260928--9be487d35048"
+      }
+    ],
+    "shown": 20,
+    "total": 39,
+    "truncated": true
+  }
+}
