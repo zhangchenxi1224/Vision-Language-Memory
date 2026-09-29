@@ -1,5 +1,21 @@
 # 多目标主线部署记录
 
+## 2026-09-29 14:19：长程实例遭平台回收，保留V0完整读回恢复
+
+14:34:34已确认真实生成恢复：14:32:34进入C8/V1，PNG从复制时286张增至290张、再至302张；26条完整轨迹仍保留，正在重建两条部分链。两H200均100%、各14128MiB；controller20310与Writer69871/69872完整argv匹配，两个子进程均继承long10 pipeline、当前controller与实际主机allocation三锁。无failure/最终results/complete，平台无新回收事件、auto_stop为0。现场long10/runtime-recovery-20260929-1435.json，已下载为C8_LONG10_RECOVERY_RUNTIME_20260929_1435.json；新拓扑见C8_LONG10_RECOVERY_TOPOLOGY_20260929_1425.json。V0四片35040条原始读回SHA256与旧已审计来源完全相同，四份finished回执的new_mcq_counts均为空；恢复未重复推理完成键，见C8_LONG10_RECOVERY_READBACK_VERIFICATION_20260929_1433.json。以上PID仅本次快照。
+
+单写14:34:34仍健康读回C8/V1：前两片已从3045/2957增至4924/4788行，后两片尚未开始；全部11680张C8 PNG已生成，B0尚未开始。两个Reader完整命令及根/当前controller两锁继承正常，GPU利用率29%/24%、9439/9419MiB，无failure/最终results/complete。现场C8_EVAL730_RUNTIME_20260929_1435.json。保持现有60分钟跟进，下一次实时检查两实例status/events、实际命令、锁与增长；不重复启动活任务。
+
+14:26:24再次核验实际新主机、无CUDA或实验进程、long10/旧新controller/本机allocation锁后，后台运行新目录launch-two-gpu.sh，SHA256 5b46a1175dcaa84450c10aeffaae45f690f475177b82737fa3b0336b9af60200；日志recovery.log，launch.json记录完整身份。原调度器按完成键先核验跳过V0，再继续V1；不重新运行烟测、不改变权重或预算。14:27 controller20310和两个Writer20722/20723完整argv匹配，各继承三锁，无failure/最终results/complete，处于已完成V0的恢复检查阶段，尚不能仅凭启动称新增PNG已恢复。新execution-topology由实际主机与controller重新生成；迁移准备文件是未改调度器需要的入口标记，内容明确是同实例回收恢复。
+
+恢复核验并逐字节复制1486条完整轨迹、16346张PNG；两条未完整链entertain_games:0028/seed1和:0029/seed1保留在旧目录、在新目录重建。全部35040条已审计C8/V0 readback及finished回执逐字节保留，具体复制哈希见C8_LONG10_RECOVERY_20260929_1425.json。中断原始元数据、日志、读回、平台事件和脚本归档long10-interruption-20260929-1346.tar.gz，共3022文件，SHA256 322a5b58f25f523d44a04b786b5c23d2e35e8dfb52eeeee108be13e2c92d89a1；本地下载并逐项核验全部清单哈希。原始PNG留在共享盘，已在恢复复制时全部重算哈希。启动记录C8_LONG10_RECOVERY_LAUNCH_20260929_1425.json。
+
+14:19实际status为STOPPED，events记录prefeval-b-read-h200x2-20260925在13:46:41因CPU/GPU/MEM利用率规则stop-and-save，13:47:24完成停止。具体阈值未知；这不是原定时停止，也没有模型failure回执。仍遵循用户指定使用该实例，14:20只执行一次start，随后平台分配NORMAL两H200到qb-prod-gpu2294，新主机prefeval-b-read-h200x2-20260925--dd8912853710-iwj3wpwcbs。14:23实际两GPU各1MiB、无计算或实验进程，long10及旧controller锁释放；旧ivytbz3gqk已终止，旧controller/PID不再代表实时状态。平台证据LONG10_PLATFORM_STOPPED_20260929_1419.json和LONG10_PLATFORM_EVENTS_20260929_1346.json。
+
+停止时C8/V0保留1460条完整11PNG轨迹及全部四片35040读回；C8/V1保留26条完整轨迹、两条部分轨迹。原目录long10/recovery-20260929-0005-2gpu只读。新独立恢复准备脚本scripts/inspire/recover_prefeval_long10_with_reads_20260929.py，源367fe3b、SHA256 b48b94728c2accda563e22dcfccc1481dafcee70bf30f496c76e7be93f29c1cb；使用原冻结链核验函数、6563d163 prepare及未修改的39263899两卡调度器，实际Writer/evaluator仍224cc77。两份权重、所有数据、每步原种子/交换/前图PNG及完整链全部重新校验。新输出仅long10/recovery-20260929-1425-2gpu，保留协议b43fd72a和四逻辑片两物理GPU执行拓扑；旧主机/PID绑定的topology及进程、sentinel文件不复制。V0读回须与已审计长程阶段原始哈希一致，并保留原png_path；新目录PNG按哈希对应，最终汇总包含全部复用轨迹，不改写原始读回。
+
+单写730不受影响：14:19在g2xx4gn63g主机C8/V0和V1各5840PNG，C8/V1于13:55进入Reader，前两片3045/2957行；controller21763及Reader268715/268716命令和两锁继承正常，无failure/最终results/complete。现场eval730/runtime-monitor-20260929-1420.json。此前单写和长程V0阶段结果均已报告，此次回收不新增模型结论。
+
 ## 2026-09-29 13:27：单写730再次遭平台回收，独立目录接续
 
 13:36:18再次核验已进入C8/V1实际生成，完整PNG从5598增至5616，两H200均100%、各14129MiB。controller21763及Writer82209/82210完整命令匹配且两锁继承正常；旧C8/V0的39420条原始readback哈希未变，已完成键未新增推理。现场eval730/runtime-recovery-20260929-1337.json。无failure或最终results/complete，后续仍按完整四分片及复用分母汇总。长程13:32 C8/V1为142PNG、12完整轨迹，两个Writer4163633/4163634与三锁均正确。

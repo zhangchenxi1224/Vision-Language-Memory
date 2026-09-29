@@ -1,0 +1,28 @@
+{
+  "host": "prefeval-b-read-h200x2-20260925--dd8912853710-iwj3wpwcbs",
+  "pid": 20310,
+  "code": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-multitarget-20260927/long10/resume-two-gpu-20260929.py",
+  "code_sha256": "392638990e1327d67283a8b07da53a849777d176ae1446fbccdceeb62567c6d1",
+  "frozen_controller_commit": "6563d16322c792d6ad0007c17cd6be9c6ca279e3",
+  "worker_commit": "224cc77d790cf3967b5a56ce2e77c364959435a2",
+  "physical_gpus": 2,
+  "logical_shards": 4,
+  "batches": [
+    [
+      0,
+      1
+    ],
+    [
+      2,
+      3
+    ]
+  ],
+  "mapping": {
+    "0": 0,
+    "1": 1,
+    "2": 0,
+    "3": 1
+  },
+  "protocol_sha256": "b43fd72a86e8a50547b359ac1ad7b0bf97bcdcbc90cb542f884206980caaae33",
+  "note": "Original protocol physical_gpus=4 is historical. Actual hardware is two GPUs; all four logical shards, seeds and scores are unchanged."
+}
