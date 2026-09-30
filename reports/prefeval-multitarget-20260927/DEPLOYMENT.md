@@ -1,5 +1,19 @@
 # 多目标主线部署记录
 
+## 2026-09-30 12:18：两实例再次回收，独立恢复准备完成，等待GPU
+
+平台事件确认单写实例prefeval-mt-eval-h200x2-20260928于07:32:27触发CPU/GPU/MEM利用率规则stop-and-save、07:33:11停止；用户指定长程实例prefeval-b-read-h200x2-20260925于08:26:24触发同类规则、08:27:05停止，具体阈值未知。12:06已分别仅start一次，12:19:40仍均PENDING，尚未取得实际运行主机、未启动GPU任务。两实例均出现项目总GPU配额108/108不足事件，随后等待资源释放。候选节点和Pod名称不能当作实际主机。不要再次start排队实例，不动任何受保护任务或旧四卡dl-clear-retain。完整快照见RECOVERY_QUEUE_20260930_1220.json。
+
+当前唯一待启动单写目录为eval730/recovery-20260930-1210，入口launch-recovery.sh，SHA256 e3456facec8e62f38378ed3c7005c4a92f66640437332d559510df893c8f24fc；仍用冻结efe0f760控制器和224cc77 Worker，协议c670e3db不变。CPU重新核验权重、数据、代码、实际PNG、complete/writes、原seed和交换，逐字节复制20372完整图像：C8/V0、C8/V1、B0/V0各5840，B0/V1为2852。原B0/V1的pet_ownership:0023/seed3与:0024/seed1两条部分链未复制，待新目录按原种子重建。三组共118260唯一读回的全部12片通过官方解析、完整键集合、同主题donor及PNG来源核验，无解析失败，原始读回逐字节保留。C8/V0的png_path仍指旧1920目录；C8/V1和B0/V0仍指旧1325目录，对应新目录图像哈希均相同。不得改写原始路径或只算新增。
+
+当前唯一待启动长程目录为long10/recovery-20260930-1210-2gpu，入口launch-two-gpu.sh，SHA256 40d714580cf6374a364ef955df373d6a5b09dcb94760a19c9b25fb2bdd84a3c8；仍用39263899两卡调度器、6563d163控制器、224cc77 Worker。逐项核验并复制2580完整11PNG轨迹/28380PNG：C8/V0为1460链，C8/V1为1120链。两条部分链lifestyle_beauty:0045和:0046/seed0未复制，待原种子重建。V0全部35040唯一读回四片逐字节保留，旧0005原始png_path与新图像哈希对应证据再次通过。未复制旧主机/PID绑定的拓扑、进程或完成哨兵；新execution-topology.json必须由实际GPU启动时生成。
+
+恢复脚本为scripts/inspire/recover_prefeval_c8_eval730_20260930.py和recover_prefeval_long10_with_reads_20260930.py，源b7300155f6ee3c1a11611265ebe7066bf195add6；SHA256分别f5a388657213b41423492a61ab5a3b5381d83d62891df5a0443f79280443ba01、2f85c598e6a054eb270259574a22d79ae4f5f2a5f268dcb604233b7d5e4dfbb4。远端分别为eval730/recover-with-reads-20260930-1210.py和long10/recover-with-reads-20260930-1210.py。两个准备脚本已完成，不得重跑。单写CLI等候曾达到300秒，但只读复查确认服务端已完成归档和recovery-preparation.json、准备进程已退出，没有重复执行。
+
+中断原始证据已下载并本地逐项核验：单写eval730-interruption-20260930-0732.tar.gz，40848文件，SHA256 3d9174b10c4c524c77f6db9d54c89ae4b85a09033de917f0deaeb86e4fa211d2；长程long10-interruption-20260930-0826.tar.gz，5217文件，SHA256 f2fe96cbd56eb9dad87bb1515459301ecf051cb6f16a9741025f2fa9b04c3ec5。报告C8_EVAL730_RECOVERY_20260930_1210.json、C8_LONG10_RECOVERY_20260930_1210.json及各自LOCAL_VERIFICATION。归档含原始元数据与读回，实际PNG仍保存在共享盘；实际PNG已远端逐张校验与复制。
+
+下一次先查status/events。仍PENDING时静默等待，不重复start或申请替代旧四卡；RUNNING后必须先核验新实际主机、全部GPU、任务完整argv、根/旧新controller/allocation锁、launch/failure/complete。无活任务及持锁子进程时才从上述新目录后台启动一次，日志写recovery.log，保存launch.json并核验真实增长和锁继承。不得仅凭平台RUNNING或旧PID推断恢复。所有旧1325/1425及更旧目录、完成分析目录只读，不再启动旧入口。B0/V1和长程仍未完成，本次没有新增模型结论；保持原C8/B0、四逻辑片、预算和60分钟跟进。
+
 ## 2026-09-29 17:28：C8单写完整阶段归档，B0自动接续
 
 17:22实际核验两实例status/events均无新增回收、auto_stop为0。单写仍在prefeval-mt-eval-h200x2-20260928、qb-prod-gpu2187、g2xx4gn63g主机，当前输出eval730/recovery-20260929-1325。C8全部V0/V1各5840PNG及各四片39420读回已完成，16:27:34自动进入B0/V0生成，17:22有615张完整PNG；controller21763与Writer1642034/1642035完整argv匹配、两锁继承正确，两H200均100%/14129MiB。无failure或全量最终results/complete。
