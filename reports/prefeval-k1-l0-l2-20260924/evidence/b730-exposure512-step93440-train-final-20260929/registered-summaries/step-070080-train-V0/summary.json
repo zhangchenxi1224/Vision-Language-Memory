@@ -1,0 +1,46 @@
+{
+  "split": "train",
+  "record_count": 4380,
+  "families": {
+    "T1": {
+      "controls": {
+        "memory": {
+          "correct": 1307,
+          "total": 1460,
+          "parse_failure": 0,
+          "truncated": 0
+        },
+        "mismatch": {
+          "correct": 604,
+          "total": 1460,
+          "parse_failure": 0,
+          "truncated": 0
+        },
+        "blank": {
+          "correct": 301,
+          "total": 730,
+          "parse_failure": 0,
+          "truncated": 0
+        },
+        "text": {
+          "correct": 648,
+          "total": 730,
+          "parse_failure": 0,
+          "truncated": 0
+        }
+      },
+      "match_minus_mismatch": 703,
+      "repaired": 703,
+      "regressed": 0,
+      "both_noise_correct": 641,
+      "independent_preferences": 730,
+      "versus_step23360": {
+        "fixed": 409,
+        "lost": 2
+      }
+    }
+  },
+  "files": {
+    "readback-0.jsonl": "8bf9adfcc31584879c5c7d014f4035c69a93097480e5cc26398b0fcb60542e12"
+  }
+}
