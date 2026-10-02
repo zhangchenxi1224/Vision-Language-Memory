@@ -1,0 +1,28 @@
+# Broader shared-Writer input from the completed historical readback
+
+The actual readback has now qualified both FP32-decoded and RGB forms of every original question:64/64 in each form. It also exposed rewrite failures:312/320 matched records in each form, with57/64 endpoints passing allfive queries in both forms. These results are retained in full. They do not establish shared Writer performance.
+
+The new bank builder preserves all16 historical semantic questions and allfour step256 EOS endpoints for each. It does not select the57 fully passing endpoints or replace the otherseven. Every original-question positive control must still pass in both image forms; missing or failed original controls abort assembly. All64 original checkpoint hashes and latent values, the completed readback artifacts, full tensor qualification, and the exact VAE/Reader identities are checked before sealing the new bank. Copied latent payloads remain rawFP32 model-space tensors.
+
+The historical question strings use three exact instruction suffixes, while the existing bank loader accepts only the canonical two-line suffix. An explicit `historical-r11-five-prompts/v1` contract now accepts the already measured original strings with fixed prompt-specific suffixes. It leaves the default protocol unchanged and rejects unknown contracts, extra question lines and changed suffixes. No question or answer is supplied to the Writer: its input remains the gray source image and the original ordered event-only prefix. Reader query strings remain byte-for-byte identical to the actual readback panel.
+
+Each target has one condition consisting of its complete one/two-event historical prefix, including mixed-record update/clear text with attached questions removed. This prepares a broader seen-question shared-Writer experiment, not a live per-event editing evaluation. It does not prove simultaneous facts, unseen entities or multi-event memory reliability. Those remain separate functional requirements; the active single-entity transition run and independent RGB-chain validation continue unchanged.
+
+Negative donors use a fixed metadata rule:choose the lowest-index different-answer target in the same topic when one exists, otherwise the lowest-index different-answer target, always seed0. The donor owner's answer is recorded; its answer to the current question is measured rather than assumed. No Reader result is used to select a convenient donor.
+
+Local tests use the actual16-question panel and complete720-record readback to verify original string preservation, rejection without an explicit contract, retention of all64 endpoints and rewrite failures, fail-closed behavior for a failed original control, and the fixed donor rule. With existing bank, initialization and full-U-Net checks,28 tests passed. Real shared-storage assembly and later GPU runtime checks remain necessary. No broader training job has been launched by this preparation.
+
+## Actual shared-storage assembly completed
+
+Builder **7ee3a927d0abc7ead642fdc3e9795498efa20171** was deployed in the isolated `repos/dreamlite-historical-writer-bank-20260913` checkout and actually executed with CUDA hidden. It verified the fixed readback/qualification/reference identities, all existing readback artifacts and64 historical checkpoint/tensor pairs, and wrote64 rawFP32 latent copies plus the16-group manifest under `runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank`. `load_teacher_bank()` accepted the complete bank; CUDA was not initialized and no optimizer update occurred.
+
+The manifest SHA256 is **d54895adb15b91c3befd52c57f6248c76cf2abadb44916af830726a0736e688c**. Its exact bytes and completion seal were downloaded. The local verifier actually rechecked all16 original event/query strings,64 teacher/source-checkpoint memberships,128 original positive-control bindings, the full720-record readback including failures, and the fixed donor rule. The64 latent payload copies remain on shared storage; the local verification explicitly does not claim to have loaded them. No broader Writer optimization or inference result exists yet. The current four-GPU transition run remains unchanged.
+
+## Fixed single-target diagnostic
+
+The existing `member_split` hash order was actually applied to all16 groups, without changing the rule after seeing outcomes. Its16 selected targets have154/160 correct raw records across both image forms;14/16 pass allfive questions in both forms. The other two are:
+
+- Target3, amber mug001242, seed0:paraphrase4 returns `Cannot determine drink preference.` instead of `juice` in both forms. This is a retrieval failure.
+- Target14, linen room000250, seed0:paraphrase3/4 return `no preference` instead of `no active preference` in both forms. This fails the fixed lexical/EOS contract; it is not evidence of retaining an old material state.
+
+The complete selected hashes, raw answers and original queries are in `historical-fixed-target-readback.json`, produced by an actual run of `audit_historical_fixed_targets.py`. Exact imitation of these selected latents would inherit their known strict-readback failures, although this is not an accuracy bound for a stochastic Writer. A broader fit should first address target quality. The next proposed step is the previously validated FP32 oracle recipe on the fixed selection for all16 questions:256 additional latent updates, Adam0.05, round-robin original/paraphrase1/paraphrase2, followed by allfive-query FP32 and RGB qualification. Preserve all original targets and do not replace only failed ones. No such refinement has run yet, and the historical diagnostic queries must not be relabelled as untouched holdouts.

@@ -224,6 +224,9 @@ class DifferentiableDreamLiteMobileSampler(nn.Module):
         sigma_values = list(sigmas) if sigmas is not None else torch.linspace(1.0, 1.0 / num_steps, num_steps).tolist()
         if len(sigma_values) != num_steps:
             raise ValueError(f"Expected {num_steps} sigma values, got {len(sigma_values)}")
+        if (any(not math.isfinite(float(v)) or not 0 < float(v) <= 1 for v in sigma_values)
+                or any(a <= b for a, b in zip(sigma_values, sigma_values[1:]))):
+            raise ValueError("Sigma schedule must strictly decrease within (0, 1]")
 
         image_seq_len = latents.shape[2] * latents.shape[3] // 4
         config = self.scheduler.config
@@ -313,14 +316,12 @@ class DifferentiableDreamLiteMobileSampler(nn.Module):
             resolved_sigmas,
             sigmas_are_effective=resolved_start_sigma != 1.0,
         )
-        # DreamLite is flow-matching trained with
-        # x_sigma=(1-sigma)*x_0 + sigma*epsilon.  R5's sigma=1 path therefore
-        # starts every event from pure noise.  A smaller start sigma is a
-        # pretrained-manifold-consistent image-to-image update: it anchors the
-        # ODE trajectory in the previous persistent state instead of redrawing
-        # the complete state from scratch.  The scheduler contract above makes
-        # this sigma the *effective post-shift* sigma, not merely its raw input.
+        # Official Mobile starts from pure Gaussian noise. A smaller start
+        # sigma enables the historical source-anchored experiment only; its
+        # distribution is not the official pretrained editing protocol.
         effective_start_sigma = effective_sigmas[0]
+        if resolved_start_sigma == 1.0 and not math.isclose(effective_start_sigma, 1.0, abs_tol=2e-6):
+            raise ValueError("Pure-noise inference requires an effective start sigma of 1")
         if resolved_start_sigma != 1.0 and not math.isclose(
             effective_start_sigma,
             resolved_start_sigma,

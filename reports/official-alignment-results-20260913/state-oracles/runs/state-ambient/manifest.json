@@ -1,0 +1,123 @@
+{
+  "fresh_optimization": false,
+  "reused_teacher": {
+    "answer": "ambient",
+    "endpoint_step": 256,
+    "evaluation_generation": {
+      "do_sample": false,
+      "max_new_tokens": 32
+    },
+    "gold_eos_appended": true,
+    "latent_file_sha256": "f321f83401e260259b4b36af93550363422ddfda1ead4812a959f6c70bc97ac9",
+    "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/f5c9c9e-direct-multiprompt-dl-base-seed20260908/bank/latents/r5-f1-392d41fd097d069c42218e0a-e910e9b89ed3861e.pt",
+    "latent_sha256": "e910e9b89ed3861ef7c36176c762bccde7d9d809e2510618b5318202313777f6",
+    "primary_success": true,
+    "qa": {
+      "answer_prefix_correct": true,
+      "blank_correct": 0,
+      "controls_denominator": 5,
+      "donor_correct": 0,
+      "heldout_qa_pass": true,
+      "image_sha256": {
+        "blank": "d58c3e2fe353592063b77a3e8ecab70cc7f9924011538e96262c34a8c3575441",
+        "fixed_donor": "cb93cfc97a0a2d05e56a9c4ab7e63f0508cdcca6dc7a8d02be3f883cf1cca1a8",
+        "matched": "2ba9c9fdb2b50018b89d256215f2c770f5735881625987fde5bafbbc1891b3de"
+      },
+      "overgeneration": false,
+      "prompt_correct": {
+        "original_open": true,
+        "paraphrase_1": true,
+        "paraphrase_2": true,
+        "paraphrase_3": true,
+        "paraphrase_4": true
+      },
+      "qa_pass": true,
+      "robust_qa_pass": true,
+      "train_qa_pass": true
+    },
+    "question_id": "r5-f1-392d41fd097d069c42218e0a",
+    "question_variants": {
+      "original_open": "R3 Train Standard Templates 03: At this later check, what is the current music preference for the indigo desk train 001123?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+      "paraphrase_1": "R3 Train Standard Templates 03: At this later check, which music does the indigo desk train 001123 currently prefer?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+      "paraphrase_2": "R3 Train Standard Templates 03: What music does the indigo desk train 001123 prefer now, at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+      "paraphrase_3": "R3 Train Standard Templates 03: For the indigo desk train 001123, what is the music preference currently in effect at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+      "paraphrase_4": "R3 Train Standard Templates 03: Based on the stored memory, name the current preferred music for the indigo desk train 001123 at this later check.\nUse the memory image to answer.\nAnswer with a short phrase only."
+    },
+    "robust_qa_pass": true,
+    "shape": [
+      1,
+      4,
+      128,
+      128
+    ],
+    "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/direct-multiprompt-eos/46cd36b-20260909-r01/lane-1/runs/direct-gaussian-s07-a0.5",
+    "source_runs": [
+      {
+        "artifact_bindings": {
+          "checkpoint_index_sha256": "b99cf41127655b2ad27dfba65434b230287ada69d24443c987df922e56f57ed2",
+          "endpoint_file_sha256": "a58c978cf78dc2955705a8d370f7d60bf9e1805343a6e563d108be9f455e6cdd",
+          "endpoint_tensor_sha256": "e910e9b89ed3861ef7c36176c762bccde7d9d809e2510618b5318202313777f6",
+          "generation_file_sha256": "370208ea2227705b9d46b55f646bcc5c2ebfd18b3721931c05e24c31b7e4612e",
+          "latent_index_sha256": "2ee4b8c90d254649bb2b68324b20e03cc492963acad5a4c238190aa2e5b48d8e",
+          "manifest_sha256": "d331859338726a6c90cbca1448f74c47840a264b27603a0d60a5af2792bb201e",
+          "metrics_sha256": "6b5bda97e2e414affc248cfa4fc4b017aaf9f30f84fcb958ab31db1063ce490d",
+          "prompt_protocol": {
+            "heldout_prompts": [
+              "paraphrase_3",
+              "paraphrase_4"
+            ],
+            "prompt_schedule": "round_robin_zero_based",
+            "training_prompts": [
+              "original_open",
+              "paraphrase_1",
+              "paraphrase_2"
+            ]
+          },
+          "terminal_sha256": "9f6a9c5a877ad0ed1a3f5baa761d5de7712aa4b5a9a34333bd385dbc20b0fa43"
+        },
+        "qa": {
+          "answer_prefix_correct": true,
+          "blank_correct": 0,
+          "controls_denominator": 5,
+          "donor_correct": 0,
+          "heldout_qa_pass": true,
+          "image_sha256": {
+            "blank": "d58c3e2fe353592063b77a3e8ecab70cc7f9924011538e96262c34a8c3575441",
+            "fixed_donor": "cb93cfc97a0a2d05e56a9c4ab7e63f0508cdcca6dc7a8d02be3f883cf1cca1a8",
+            "matched": "2ba9c9fdb2b50018b89d256215f2c770f5735881625987fde5bafbbc1891b3de"
+          },
+          "overgeneration": false,
+          "prompt_correct": {
+            "original_open": true,
+            "paraphrase_1": true,
+            "paraphrase_2": true,
+            "paraphrase_3": true,
+            "paraphrase_4": true
+          },
+          "qa_pass": true,
+          "robust_qa_pass": true,
+          "train_qa_pass": true
+        },
+        "run_id": "direct-gaussian-s07-a0.5",
+        "run_spec": {
+          "arm": "open_gold_eos",
+          "distribution": "gaussian",
+          "included_in_random_start_statistics": true,
+          "init_id": "gaussian-7-0.5",
+          "init_seed": 7,
+          "run_id": "direct-gaussian-s07-a0.5",
+          "scale": 0.5,
+          "seed": 7,
+          "study": "scale"
+        },
+        "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/direct-multiprompt-eos/46cd36b-20260909-r01/lane-1/runs/direct-gaussian-s07-a0.5"
+      }
+    ],
+    "target": {
+      "answer": "ambient",
+      "prompt_id": "original_open",
+      "strict_correct": true
+    },
+    "teacher_id": "r5-f1-392d41fd097d069c42218e0a-e910e9b89ed3861e"
+  }
+}

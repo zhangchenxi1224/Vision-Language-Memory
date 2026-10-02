@@ -1,0 +1,474 @@
+{
+  "expected": 64,
+  "verified": 64,
+  "source_files": 16,
+  "files": [
+    {
+      "url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/education_learning_styles/mistral8x7b_education_learning_styles_2turn.json",
+      "upstream_raw_sha256": "5561b30e94e43fc3a821907578b1ba6e915468fbd1e59d705980fa3814c1e7e1",
+      "existing_CRLF_checkout_sha256": "bc447a1decee71efd585ec2d185883ff12465d250414c3153d5c0fb8433183a5"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/entertain_games/mistral8x7b_entertain_games_2turn.json",
+      "upstream_raw_sha256": "5344cdc5a810afc431e901e61ee67b5064858387a6b8c71b2b0fb280b0dcdf03",
+      "existing_CRLF_checkout_sha256": "9df0cb41759ab0c53f69200f00ccc4cc35f69ded00d676bc0c8f151a6967b3b8"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/entertain_music_book/mistral8x7b_entertain_music_book_2turn.json",
+      "upstream_raw_sha256": "5685161b1dd7f55329ccfa4d44b174f0b1a8562b1ea45ed1047ed1efcdda9253",
+      "existing_CRLF_checkout_sha256": "48e86058d1155a6295ec2e5d92885ddc2f4754cb3fc690bc21e76250fb1d6bc7"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/entertain_shows/mistral8x7b_entertain_shows_2turn.json",
+      "upstream_raw_sha256": "26db52ec0155a4b2f75294f79fc23b8744c79b117cac53ba48cf5e71ee20d342",
+      "existing_CRLF_checkout_sha256": "16719a8e2cca80024038ce3cdbee23323d294114b82c7e24f5fc8d03238916f4"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/entertain_sports/mistral8x7b_entertain_sports_2turn.json",
+      "upstream_raw_sha256": "94d586ce9009d8f21d1b17a0b820dd211d5948036386250ef20bcda85f0f243e",
+      "existing_CRLF_checkout_sha256": "addce4f7b6ee479b12b7712fac8fc0d9f7be1178d05fefe22bb4e02c357b0919"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/lifestyle_beauty/mistral8x7b_lifestyle_beauty_2turn.json",
+      "upstream_raw_sha256": "843a43d4bb516c1b674e7f1d5a278632ca4968a7e19005e799b590e75404852a",
+      "existing_CRLF_checkout_sha256": "fc642a8e41b56998c723321bef373ead3097c4f2d1a111a3d7fd2059abfe5251"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/lifestyle_dietary/mistral8x7b_lifestyle_dietary_2turn.json",
+      "upstream_raw_sha256": "131f906af8b7880b9bdc67d079f0cf4b549e56391da5c13ab4e9aeb62b6a705a",
+      "existing_CRLF_checkout_sha256": "addae54ecc50d0564db684229768ad7e06c548d63f1803b0a1215a8b6eddc97d"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/lifestyle_fit/mistral8x7b_lifestyle_fit_2turn.json",
+      "upstream_raw_sha256": "dc315c0ac132979c7730f3437c3c56c60c12bbf18ccb4739b9f80e228f2f2f23",
+      "existing_CRLF_checkout_sha256": "188027340f02957eba8be305d9d0ebe890acc8487a56af4eff932fde0a8eec44"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/lifestyle_health/mistral8x7b_lifestyle_health_2turn.json",
+      "upstream_raw_sha256": "5a720df76ac6d616e2f3dc15b47a58fcef8d135a436d3520d549c9ecdbf24f07",
+      "existing_CRLF_checkout_sha256": "a94d4cc765dcd6a4a98bb04c136321f447118c84ec630d73e2ea199680f2db2b"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/pet_ownership/mistral8x7b_pet_ownership_2turn.json",
+      "upstream_raw_sha256": "ec3ca00a7d4624a4683797f7dc7ac15dfab8ff0c4fa07ed74c7eea232278ca4a",
+      "existing_CRLF_checkout_sha256": "aff037abcdf9e31c495effd048f9e150e977d3c086aa7f06a7617ca19029c663"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/professional_work_location_style/mistral8x7b_professional_work_location_style_2turn.json",
+      "upstream_raw_sha256": "ea12f3b387e7bab63d3d7e77aee570ffb143680bab596843c037b2ef38514d48",
+      "existing_CRLF_checkout_sha256": "51111c5200572e8290d0aec97ad742dee1677aec3fc7caa04a849f705e91e755"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/shop_fashion/mistral8x7b_shop_fashion_2turn.json",
+      "upstream_raw_sha256": "fa273e53961e7da0edc37009491219d273752aad58f5a3d11ce0f4c6927aeadb",
+      "existing_CRLF_checkout_sha256": "12c01a513fa6675fdd30de75cdf3bd8f3fa5a311c1876077cbf1db80bb6a0bc0"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/shop_home/mistral8x7b_shop_home_2turn.json",
+      "upstream_raw_sha256": "7aedc4ce08510b2bcd2ab01af8d137489bf19a6b8d082688325e61813045c6e7",
+      "existing_CRLF_checkout_sha256": "9f1a018ba5f7af2830210e3895efd6b2634efbad81ef7a0d400a8791d871112b"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/travel_activities/mistral8x7b_travel_activities_2turn.json",
+      "upstream_raw_sha256": "6894e33fbd1a679aad9fecdda58e9e701fffd5c03674296709ebffb19efddc7a",
+      "existing_CRLF_checkout_sha256": "9b98b99bc3a51653ea41914f23b0372ef05872176f24a060660db136c57027d5"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/travel_hotel/mistral8x7b_travel_hotel_2turn.json",
+      "upstream_raw_sha256": "eaa5490e2ba605a2e190b335e79c2c88e778b97cac63a4c8450323fc03aa2ce4",
+      "existing_CRLF_checkout_sha256": "df5b712944d79f674cae01e55646b136ce669be1e6404d2bb49d7719c3dd187b"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/travel_restaurant/mistral8x7b_travel_restaurant_2turn.json",
+      "upstream_raw_sha256": "b3b25eae124f0064a46197b56889981cf2cfe471e6747df9f4b57932b2f07a6e",
+      "existing_CRLF_checkout_sha256": "8fe2dc8c5fa80aa8668ee75c973949b9ca28b9fb27cc257e38c5b762dc61a3fa"
+    }
+  ],
+  "records": [
+    {
+      "pair_id": "entertain_games:0001",
+      "row_index": 1,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/entertain_games/mistral8x7b_entertain_games_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "entertain_games:0007",
+      "row_index": 7,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/entertain_games/mistral8x7b_entertain_games_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "entertain_games:0036",
+      "row_index": 36,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/entertain_games/mistral8x7b_entertain_games_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "entertain_games:0023",
+      "row_index": 23,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/entertain_games/mistral8x7b_entertain_games_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "entertain_shows:0040",
+      "row_index": 40,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/entertain_shows/mistral8x7b_entertain_shows_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "entertain_shows:0031",
+      "row_index": 31,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/entertain_shows/mistral8x7b_entertain_shows_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "entertain_shows:0052",
+      "row_index": 52,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/entertain_shows/mistral8x7b_entertain_shows_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "entertain_shows:0037",
+      "row_index": 37,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/entertain_shows/mistral8x7b_entertain_shows_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "travel_activities:0052",
+      "row_index": 52,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/travel_activities/mistral8x7b_travel_activities_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "travel_activities:0004",
+      "row_index": 4,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/travel_activities/mistral8x7b_travel_activities_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "travel_activities:0051",
+      "row_index": 51,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/travel_activities/mistral8x7b_travel_activities_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "travel_activities:0055",
+      "row_index": 55,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/travel_activities/mistral8x7b_travel_activities_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "travel_restaurant:0054",
+      "row_index": 54,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/travel_restaurant/mistral8x7b_travel_restaurant_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "travel_restaurant:0030",
+      "row_index": 30,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/travel_restaurant/mistral8x7b_travel_restaurant_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "travel_restaurant:0041",
+      "row_index": 41,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/travel_restaurant/mistral8x7b_travel_restaurant_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "travel_restaurant:0009",
+      "row_index": 9,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/travel_restaurant/mistral8x7b_travel_restaurant_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "travel_hotel:0003",
+      "row_index": 3,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/travel_hotel/mistral8x7b_travel_hotel_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "travel_hotel:0039",
+      "row_index": 39,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/travel_hotel/mistral8x7b_travel_hotel_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "travel_hotel:0052",
+      "row_index": 52,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/travel_hotel/mistral8x7b_travel_hotel_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "travel_hotel:0045",
+      "row_index": 45,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/travel_hotel/mistral8x7b_travel_hotel_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "lifestyle_dietary:0022",
+      "row_index": 22,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/lifestyle_dietary/mistral8x7b_lifestyle_dietary_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "lifestyle_dietary:0017",
+      "row_index": 17,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/lifestyle_dietary/mistral8x7b_lifestyle_dietary_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "lifestyle_dietary:0042",
+      "row_index": 42,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/lifestyle_dietary/mistral8x7b_lifestyle_dietary_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "lifestyle_dietary:0047",
+      "row_index": 47,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/lifestyle_dietary/mistral8x7b_lifestyle_dietary_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "entertain_music_book:0012",
+      "row_index": 12,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/entertain_music_book/mistral8x7b_entertain_music_book_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "entertain_music_book:0038",
+      "row_index": 38,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/entertain_music_book/mistral8x7b_entertain_music_book_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "entertain_music_book:0044",
+      "row_index": 44,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/entertain_music_book/mistral8x7b_entertain_music_book_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "entertain_music_book:0016",
+      "row_index": 16,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/entertain_music_book/mistral8x7b_entertain_music_book_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "lifestyle_beauty:0012",
+      "row_index": 12,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/lifestyle_beauty/mistral8x7b_lifestyle_beauty_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "lifestyle_beauty:0038",
+      "row_index": 38,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/lifestyle_beauty/mistral8x7b_lifestyle_beauty_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "lifestyle_beauty:0037",
+      "row_index": 37,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/lifestyle_beauty/mistral8x7b_lifestyle_beauty_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "lifestyle_beauty:0002",
+      "row_index": 2,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/lifestyle_beauty/mistral8x7b_lifestyle_beauty_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "shop_home:0016",
+      "row_index": 16,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/shop_home/mistral8x7b_shop_home_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "shop_home:0042",
+      "row_index": 42,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/shop_home/mistral8x7b_shop_home_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "shop_home:0005",
+      "row_index": 5,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/shop_home/mistral8x7b_shop_home_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "shop_home:0046",
+      "row_index": 46,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/shop_home/mistral8x7b_shop_home_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "entertain_sports:0015",
+      "row_index": 15,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/entertain_sports/mistral8x7b_entertain_sports_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "entertain_sports:0048",
+      "row_index": 48,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/entertain_sports/mistral8x7b_entertain_sports_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "entertain_sports:0045",
+      "row_index": 45,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/entertain_sports/mistral8x7b_entertain_sports_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "entertain_sports:0009",
+      "row_index": 9,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/entertain_sports/mistral8x7b_entertain_sports_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "shop_fashion:0041",
+      "row_index": 41,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/shop_fashion/mistral8x7b_shop_fashion_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "shop_fashion:0029",
+      "row_index": 29,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/shop_fashion/mistral8x7b_shop_fashion_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "shop_fashion:0042",
+      "row_index": 42,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/shop_fashion/mistral8x7b_shop_fashion_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "shop_fashion:0040",
+      "row_index": 40,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/shop_fashion/mistral8x7b_shop_fashion_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "education_learning_styles:0009",
+      "row_index": 9,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/education_learning_styles/mistral8x7b_education_learning_styles_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "education_learning_styles:0007",
+      "row_index": 7,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/education_learning_styles/mistral8x7b_education_learning_styles_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "education_learning_styles:0001",
+      "row_index": 1,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/education_learning_styles/mistral8x7b_education_learning_styles_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "education_learning_styles:0030",
+      "row_index": 30,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/education_learning_styles/mistral8x7b_education_learning_styles_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "lifestyle_fit:0038",
+      "row_index": 38,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/lifestyle_fit/mistral8x7b_lifestyle_fit_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "lifestyle_fit:0017",
+      "row_index": 17,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/lifestyle_fit/mistral8x7b_lifestyle_fit_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "lifestyle_fit:0000",
+      "row_index": 0,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/lifestyle_fit/mistral8x7b_lifestyle_fit_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "lifestyle_fit:0011",
+      "row_index": 11,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/lifestyle_fit/mistral8x7b_lifestyle_fit_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "lifestyle_health:0036",
+      "row_index": 36,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/lifestyle_health/mistral8x7b_lifestyle_health_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "lifestyle_health:0030",
+      "row_index": 30,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/lifestyle_health/mistral8x7b_lifestyle_health_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "lifestyle_health:0042",
+      "row_index": 42,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/lifestyle_health/mistral8x7b_lifestyle_health_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "lifestyle_health:0040",
+      "row_index": 40,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/lifestyle_health/mistral8x7b_lifestyle_health_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "professional_work_location_style:0000",
+      "row_index": 0,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/professional_work_location_style/mistral8x7b_professional_work_location_style_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "professional_work_location_style:0006",
+      "row_index": 6,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/professional_work_location_style/mistral8x7b_professional_work_location_style_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "professional_work_location_style:0034",
+      "row_index": 34,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/professional_work_location_style/mistral8x7b_professional_work_location_style_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "professional_work_location_style:0035",
+      "row_index": 35,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/professional_work_location_style/mistral8x7b_professional_work_location_style_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "pet_ownership:0031",
+      "row_index": 31,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/pet_ownership/mistral8x7b_pet_ownership_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "pet_ownership:0015",
+      "row_index": 15,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/pet_ownership/mistral8x7b_pet_ownership_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "pet_ownership:0016",
+      "row_index": 16,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/pet_ownership/mistral8x7b_pet_ownership_2turn.json",
+      "preference_question_target_exact": true
+    },
+    {
+      "pair_id": "pet_ownership:0039",
+      "row_index": 39,
+      "source_url": "https://raw.githubusercontent.com/amazon-science/PrefEval/50795054b5ff5f418d2b768a331d71e480f93331/SFT/single_pref_remind/pet_ownership/mistral8x7b_pet_ownership_2turn.json",
+      "preference_question_target_exact": true
+    }
+  ],
+  "no_training_or_judge_inputs_modified": true
+}

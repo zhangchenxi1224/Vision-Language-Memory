@@ -1,0 +1,344 @@
+{
+  "time_utc": "2026-09-25T09:53:06.539620+00:00",
+  "lanes": {
+    "identity64": {
+      "pid": 467452,
+      "live": true,
+      "command": "bash scripts/inspire/run_prefeval_k1_identity64.sh ",
+      "exit": null,
+      "step": 2048,
+      "train_seconds": 3252.4852992165834,
+      "train_complete": {
+        "steps": 2048,
+        "checkpoint_sha256": "436d1033e3a21a420126b13176a4b007f5e7b80b60ca47202bb6bbb1fd944e4d"
+      }
+    },
+    "canonical64": {
+      "pid": 467553,
+      "live": true,
+      "command": "bash scripts/inspire/run_prefeval_k1_canonical64_readback.sh ",
+      "exit": null
+    },
+    "robust730": {
+      "pid": 562167,
+      "live": true,
+      "command": "bash scripts/inspire/run_prefeval_k1_robust730.sh ",
+      "exit": null,
+      "step": 1807,
+      "train_seconds": 2846.1318753995
+    },
+    "readback": {
+      "pid": 562179,
+      "live": true,
+      "command": "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python scripts/inspire/run_prefeval_k1_b_readback_queue.py ",
+      "exit": null
+    }
+  },
+  "readbacks": {
+    "readback-queue/teacher-train/readback-0.jsonl": {
+      "rows": 2920,
+      "complete": true,
+      "groups": {
+        "memory/T1/p0/c0": [
+          726,
+          730,
+          0
+        ],
+        "mismatch/T1/p0/c0": [
+          312,
+          730,
+          0
+        ],
+        "blank/T1/p0/c0": [
+          301,
+          730,
+          0
+        ],
+        "text/T1/p0/c0": [
+          648,
+          730,
+          0
+        ]
+      }
+    },
+    "readback-queue/teacher-pilot/readback-0.jsonl": {
+      "rows": 1280,
+      "complete": true,
+      "groups": {
+        "memory/T1/p0/c0": [
+          64,
+          64,
+          0
+        ],
+        "memory/T2/p0/c0": [
+          64,
+          64,
+          0
+        ],
+        "memory/T3/p0/c0": [
+          64,
+          64,
+          0
+        ],
+        "memory/O1/p0/c0": [
+          63,
+          64,
+          0
+        ],
+        "memory/O2/p0/c0": [
+          64,
+          64,
+          0
+        ],
+        "mismatch/T1/p0/c0": [
+          32,
+          64,
+          0
+        ],
+        "mismatch/T2/p0/c0": [
+          28,
+          64,
+          0
+        ],
+        "mismatch/T3/p0/c0": [
+          36,
+          64,
+          0
+        ],
+        "mismatch/O1/p0/c0": [
+          32,
+          64,
+          0
+        ],
+        "mismatch/O2/p0/c0": [
+          29,
+          64,
+          0
+        ],
+        "blank/T1/p0/c0": [
+          27,
+          64,
+          0
+        ],
+        "blank/T2/p0/c0": [
+          24,
+          64,
+          0
+        ],
+        "blank/T3/p0/c0": [
+          31,
+          64,
+          0
+        ],
+        "blank/O1/p0/c0": [
+          29,
+          64,
+          0
+        ],
+        "blank/O2/p0/c0": [
+          28,
+          64,
+          0
+        ],
+        "text/T1/p0/c0": [
+          57,
+          64,
+          0
+        ],
+        "text/T2/p0/c0": [
+          59,
+          64,
+          0
+        ],
+        "text/T3/p0/c0": [
+          59,
+          64,
+          0
+        ],
+        "text/O1/p0/c0": [
+          58,
+          64,
+          0
+        ],
+        "text/O2/p0/c0": [
+          61,
+          64,
+          0
+        ]
+      }
+    },
+    "readback-queue/canonical64-pilot/readback-0.jsonl": {
+      "rows": 2770,
+      "complete": false
+    },
+    "canonical64/readback-pilot-T1/readback-0.jsonl": {
+      "rows": 1344,
+      "complete": true,
+      "groups": {
+        "memory/T1/p0/c0": [
+          62,
+          64,
+          0
+        ],
+        "mismatch/T1/p0/c0": [
+          31,
+          64,
+          0
+        ],
+        "blank/T1/p0/c0": [
+          27,
+          64,
+          0
+        ],
+        "text/T1/p0/c0": [
+          57,
+          64,
+          0
+        ],
+        "memory/T1/p1/c0": [
+          51,
+          64,
+          0
+        ],
+        "mismatch/T1/p1/c0": [
+          28,
+          64,
+          0
+        ],
+        "text/T1/p1/c0": [
+          52,
+          64,
+          0
+        ],
+        "memory/T1/p5/c0": [
+          28,
+          64,
+          0
+        ],
+        "mismatch/T1/p5/c0": [
+          25,
+          64,
+          0
+        ],
+        "text/T1/p5/c0": [
+          52,
+          64,
+          0
+        ],
+        "memory/T1/p10/c0": [
+          27,
+          64,
+          0
+        ],
+        "mismatch/T1/p10/c0": [
+          25,
+          64,
+          0
+        ],
+        "text/T1/p10/c0": [
+          52,
+          64,
+          0
+        ],
+        "memory/T1/p0/c1": [
+          60,
+          64,
+          0
+        ],
+        "mismatch/T1/p0/c1": [
+          29,
+          64,
+          0
+        ],
+        "memory/T1/p1/c1": [
+          52,
+          64,
+          0
+        ],
+        "mismatch/T1/p1/c1": [
+          29,
+          64,
+          0
+        ],
+        "memory/T1/p5/c1": [
+          28,
+          64,
+          0
+        ],
+        "mismatch/T1/p5/c1": [
+          25,
+          64,
+          0
+        ],
+        "memory/T1/p10/c1": [
+          28,
+          64,
+          0
+        ],
+        "mismatch/T1/p10/c1": [
+          26,
+          64,
+          0
+        ]
+      }
+    },
+    "canonical64/seen-source-T1/readback-0.jsonl": {
+      "rows": 512,
+      "complete": true,
+      "groups": {
+        "memory/T1/p0/c0": [
+          61,
+          64,
+          0
+        ],
+        "mismatch/T1/p0/c0": [
+          30,
+          64,
+          0
+        ],
+        "memory/T1/p1/c0": [
+          55,
+          64,
+          0
+        ],
+        "mismatch/T1/p1/c0": [
+          30,
+          64,
+          0
+        ],
+        "memory/T1/p0/c1": [
+          61,
+          64,
+          0
+        ],
+        "mismatch/T1/p0/c1": [
+          30,
+          64,
+          0
+        ],
+        "memory/T1/p1/c1": [
+          54,
+          64,
+          0
+        ],
+        "mismatch/T1/p1/c1": [
+          30,
+          64,
+          0
+        ]
+      }
+    }
+  },
+  "rollouts": {
+    "C": 128,
+    "I": 27,
+    "C-dev": 33,
+    "I-pilot": 0
+  },
+  "gpus": [
+    "0, 14129 MiB, 100 %",
+    "1, 14129 MiB, 100 %",
+    "2, 38913 MiB, 100 %",
+    "3, 27355 MiB, 25 %"
+  ]
+}

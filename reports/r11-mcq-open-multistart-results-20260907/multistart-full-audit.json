@@ -1,0 +1,615 @@
+{
+  "actual_counts": {
+    "checkpoints_hashed": 90,
+    "fixed_probes": 450,
+    "generations": 108,
+    "latents_hashed": 4626,
+    "mcq": 72,
+    "metrics": 4608,
+    "runs": 18
+  },
+  "audit_script_sha256": "edd04ff6da96e18452d1cfa9bc1592048e9aba32b5295425eacec497d07e400f",
+  "created_at_utc": "2026-09-07T07:28:18.588157+00:00",
+  "elapsed_seconds": 50.06273113563657,
+  "fixed_control_repeats": {
+    "blank": {
+      "original_open": {
+        "count": 18,
+        "distinct_value_counts": {
+          "chat_prompt": 1,
+          "finish_reason": 1,
+          "generated_token_ids": 1,
+          "image_sha256": 1,
+          "input_token_ids": 1,
+          "query": 1,
+          "raw": 1,
+          "raw_with_special_tokens": 1,
+          "truncated": 1
+        },
+        "passed": true,
+        "raw": "No music preference recorded."
+      },
+      "paraphrase_open": {
+        "count": 18,
+        "distinct_value_counts": {
+          "chat_prompt": 1,
+          "finish_reason": 1,
+          "generated_token_ids": 1,
+          "image_sha256": 1,
+          "input_token_ids": 1,
+          "query": 1,
+          "raw": 1,
+          "raw_with_special_tokens": 1,
+          "truncated": 1
+        },
+        "passed": true,
+        "raw": "None"
+      }
+    },
+    "fixed_donor": {
+      "original_open": {
+        "count": 18,
+        "distinct_value_counts": {
+          "chat_prompt": 1,
+          "finish_reason": 1,
+          "generated_token_ids": 1,
+          "image_sha256": 1,
+          "input_token_ids": 1,
+          "query": 1,
+          "raw": 1,
+          "raw_with_special_tokens": 1,
+          "truncated": 1
+        },
+        "passed": true,
+        "raw": "Yellow, not indigo."
+      },
+      "paraphrase_open": {
+        "count": 18,
+        "distinct_value_counts": {
+          "chat_prompt": 1,
+          "finish_reason": 1,
+          "generated_token_ids": 1,
+          "image_sha256": 1,
+          "input_token_ids": 1,
+          "query": 1,
+          "raw": 1,
+          "raw_with_special_tokens": 1,
+          "truncated": 1
+        },
+        "passed": true,
+        "raw": "Yellow, not indigo."
+      }
+    }
+  },
+  "formal_success": false,
+  "historical_blank_mcq_comparison": {
+    "adds_independent_samples": false,
+    "available_and_valid": true,
+    "blank_mcq_endpoint_exactly_equal": true,
+    "descriptive_only": true,
+    "endpoint_image_exactly_equal": true,
+    "endpoint_rmse": 0.0,
+    "loss_steps_compared": 256,
+    "loss_steps_exact": 256,
+    "max_absolute_loss_difference": 0.0,
+    "old_endpoint_file_sha256": "d359291de63bb5232325b2e7a9294ff3d861287c06e63da2ab6ebe42eab036b9"
+  },
+  "independent_behavior_rebuild": {
+    "mcq": {
+      "mcq_all4": 1.0,
+      "open_original": 0.0,
+      "open_robust": 0.0
+    },
+    "open": {
+      "mcq_all4": 0.0,
+      "open_original": 0.375,
+      "open_robust": 0.25
+    }
+  },
+  "limitations": [
+    "No GPU/model rerun; snapshot verification records are cross-checked, remote weights are not rehashed.",
+    "Recorded gradients are checked for reproducibility and consistency; gradient tensors are not retained for every update.",
+    "Fixed blank/donor repeats are technical repeats, not additional independent starts."
+  ],
+  "passed": true,
+  "provenance": {
+    "config_recorded_sha256": "f64f45f21f3b8122a7cff222976a03a31508827e48858c81fb5c6555f1154c72",
+    "configuration_semantically_matches": true,
+    "manifest_sha256": "5a18653586b8f74d9f0ea1f4371ae395d677a030088114e9f8b10aa61d66275a",
+    "training_git_commit": "5d06b7622a4f7081d02e42c656a97cffafe66207"
+  },
+  "recorded_model_and_determinism_audit": {
+    "frozen_parameters": {
+      "reader": {
+        "parameter_gradient_tensors": 0,
+        "trainable_parameters": 0,
+        "training": false
+      },
+      "vae": {
+        "parameter_gradient_tensors": 0,
+        "trainable_parameters": 0,
+        "training": false
+      }
+    },
+    "passed": true,
+    "snapshot_bindings": {
+      "dreamlite_mobile": {
+        "file_count": 27,
+        "manifest_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-mobile/.snapshot_manifest.json",
+        "manifest_sha256": "1bcf41b170c4b4a806bac6701cbdf4fabd5c3c53fa67415d065ab95ce2703159",
+        "model_dir": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-mobile",
+        "passed": true,
+        "repo_id": "carlofkl/DreamLite-mobile",
+        "revision": "6695c3f4be230f0493fa5dbf78be3bc4d3bb2ab4",
+        "snapshot_payload_sha256": "3fb839f465793b01ecafc4df433031a063dd7b395a050960cde57c2807031337",
+        "total_bytes": 5071894300
+      },
+      "qwen_reader": {
+        "file_count": 14,
+        "manifest_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct/.snapshot_manifest.json",
+        "manifest_sha256": "159a504daaae6dc412535978f087150a0eb8e50164afd70a8a17f83906f1127c",
+        "model_dir": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+        "passed": true,
+        "repo_id": "Qwen/Qwen3-VL-4B-Instruct",
+        "revision": "ebb281ec70b05090aa6165b016eac8ec08e71b17",
+        "snapshot_payload_sha256": "45be3ffb00017b02bffa79f4f8e6f301760ac50c0bb78b2c4e5a7fe8aa3d52c6",
+        "total_bytes": 8887292732
+      }
+    }
+  },
+  "run_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open/multistart-5d06b76-20260907-round02",
+  "runs": [
+    {
+      "checkpoint_files_hashed": 5,
+      "endpoint_image_sha256": "f0f82320b81b4d8c7c00a2a3783c39da4f9c181b5a1ec66a69f903c8b5bcb0a5",
+      "endpoint_latent_sha256": "6857afeffd37124bb196ab7c6607580c57c950d72d760ca6b49f8cc00bdef3f1",
+      "generations": 6,
+      "initial_complete_rng_sha256": "286320084fa91d1f626e599ac935f663cf0d576cf71b256bdaaaba6dc8e063f8",
+      "initial_latent_sha256": "719e92867b60546b21b281cfc633ab782c8ce2274bfb41c6b3cee6d673e74eaa",
+      "latent_files_hashed": 257,
+      "mcq": 4,
+      "metrics": 256,
+      "passed": true,
+      "probes": 25,
+      "repeated_gradient": {
+        "gradient_exactly_equal": true,
+        "gradient_max_abs_difference": 0.0,
+        "gradient_sha256": [
+          "77f8ae199ad670e45922fcce91a5b4d49f3a8170ba34979f606e3aed9ef095bc",
+          "77f8ae199ad670e45922fcce91a5b4d49f3a8170ba34979f606e3aed9ef095bc"
+        ],
+        "loss_exactly_equal": true,
+        "loss_max_abs_difference": 0.0
+      },
+      "run_id": "blank-mcq",
+      "zero_gradient_steps": []
+    },
+    {
+      "checkpoint_files_hashed": 5,
+      "endpoint_image_sha256": "37c765121ab62e4435c3fb1da7165af355606ad5e25104296fcc79c614546c16",
+      "endpoint_latent_sha256": "cb0016ced6775113db0fc45e20686292abf0c98ecaf94cc4d1161bf4bdc310d3",
+      "generations": 6,
+      "initial_complete_rng_sha256": "286320084fa91d1f626e599ac935f663cf0d576cf71b256bdaaaba6dc8e063f8",
+      "initial_latent_sha256": "719e92867b60546b21b281cfc633ab782c8ce2274bfb41c6b3cee6d673e74eaa",
+      "latent_files_hashed": 257,
+      "mcq": 4,
+      "metrics": 256,
+      "passed": true,
+      "probes": 25,
+      "repeated_gradient": {
+        "gradient_exactly_equal": true,
+        "gradient_max_abs_difference": 0.0,
+        "gradient_sha256": [
+          "42f1a0f4936d46bf5f7f52223a26f9fedccde8f9157171b7af2ca62b76d5c9d1",
+          "42f1a0f4936d46bf5f7f52223a26f9fedccde8f9157171b7af2ca62b76d5c9d1"
+        ],
+        "loss_exactly_equal": true,
+        "loss_max_abs_difference": 0.0
+      },
+      "run_id": "blank-open",
+      "zero_gradient_steps": []
+    },
+    {
+      "checkpoint_files_hashed": 5,
+      "endpoint_image_sha256": "8ed12daeb5e959b13b7c35140a2ccb8c6d5c6e9f9c771125a43c674615d895eb",
+      "endpoint_latent_sha256": "982dcff3428df32d04c943716750a8e475a73bb741a9045f0de3617f52b506f0",
+      "generations": 6,
+      "initial_complete_rng_sha256": "286320084fa91d1f626e599ac935f663cf0d576cf71b256bdaaaba6dc8e063f8",
+      "initial_latent_sha256": "59f13c1731e23f38e4c1099b58346173c784f8eb0fa877db387e76e5d582ac73",
+      "latent_files_hashed": 257,
+      "mcq": 4,
+      "metrics": 256,
+      "passed": true,
+      "probes": 25,
+      "repeated_gradient": {
+        "gradient_exactly_equal": true,
+        "gradient_max_abs_difference": 0.0,
+        "gradient_sha256": [
+          "3d9e4da8e45e560e134763b3a3b0016376291edc27778da246d90d86267d77a0",
+          "3d9e4da8e45e560e134763b3a3b0016376291edc27778da246d90d86267d77a0"
+        ],
+        "loss_exactly_equal": true,
+        "loss_max_abs_difference": 0.0
+      },
+      "run_id": "noise-seed-00-open",
+      "zero_gradient_steps": []
+    },
+    {
+      "checkpoint_files_hashed": 5,
+      "endpoint_image_sha256": "bbbc7021230de759f4164d4133d7b1c47d9d80f3b28f3213f2e0999f139fe3a4",
+      "endpoint_latent_sha256": "8e836cf3f74b41160f835c3fdfd741af7a058bba97c6351e24ef7346e49aaa1d",
+      "generations": 6,
+      "initial_complete_rng_sha256": "286320084fa91d1f626e599ac935f663cf0d576cf71b256bdaaaba6dc8e063f8",
+      "initial_latent_sha256": "59f13c1731e23f38e4c1099b58346173c784f8eb0fa877db387e76e5d582ac73",
+      "latent_files_hashed": 257,
+      "mcq": 4,
+      "metrics": 256,
+      "passed": true,
+      "probes": 25,
+      "repeated_gradient": {
+        "gradient_exactly_equal": true,
+        "gradient_max_abs_difference": 0.0,
+        "gradient_sha256": [
+          "89f9a7027cecf7b71ba33e7ddb60fc69e095e4bb5156ad6b14d2e4b66c1feb14",
+          "89f9a7027cecf7b71ba33e7ddb60fc69e095e4bb5156ad6b14d2e4b66c1feb14"
+        ],
+        "loss_exactly_equal": true,
+        "loss_max_abs_difference": 0.0
+      },
+      "run_id": "noise-seed-00-mcq",
+      "zero_gradient_steps": []
+    },
+    {
+      "checkpoint_files_hashed": 5,
+      "endpoint_image_sha256": "cf0bdc4447fc925e1ad152886c20be575f09361819bc6b4652e5969b6afeaa2b",
+      "endpoint_latent_sha256": "4f6e415f155260e4e8f4ef848deb7df59aa7ecadc2fcb41197c7c876a58f0dc1",
+      "generations": 6,
+      "initial_complete_rng_sha256": "286320084fa91d1f626e599ac935f663cf0d576cf71b256bdaaaba6dc8e063f8",
+      "initial_latent_sha256": "ed04dcf0f552074190e2880a0300b2f2925733c1995ffd7c300f21dd743faf2b",
+      "latent_files_hashed": 257,
+      "mcq": 4,
+      "metrics": 256,
+      "passed": true,
+      "probes": 25,
+      "repeated_gradient": {
+        "gradient_exactly_equal": true,
+        "gradient_max_abs_difference": 0.0,
+        "gradient_sha256": [
+          "cf3d6a4bcd2f135bf0c8c7cad53e970e00f0dbdee963828699373dfa7becfb45",
+          "cf3d6a4bcd2f135bf0c8c7cad53e970e00f0dbdee963828699373dfa7becfb45"
+        ],
+        "loss_exactly_equal": true,
+        "loss_max_abs_difference": 0.0
+      },
+      "run_id": "noise-seed-01-mcq",
+      "zero_gradient_steps": []
+    },
+    {
+      "checkpoint_files_hashed": 5,
+      "endpoint_image_sha256": "d2ec5d0e3c54d33476b19974920cb8419c2bfaa3a64dac48975860630c53e675",
+      "endpoint_latent_sha256": "2782e5e5edaeea3cabbe4ce9843d08dc0923547fb3a08eb051514f9160efc04d",
+      "generations": 6,
+      "initial_complete_rng_sha256": "286320084fa91d1f626e599ac935f663cf0d576cf71b256bdaaaba6dc8e063f8",
+      "initial_latent_sha256": "ed04dcf0f552074190e2880a0300b2f2925733c1995ffd7c300f21dd743faf2b",
+      "latent_files_hashed": 257,
+      "mcq": 4,
+      "metrics": 256,
+      "passed": true,
+      "probes": 25,
+      "repeated_gradient": {
+        "gradient_exactly_equal": true,
+        "gradient_max_abs_difference": 0.0,
+        "gradient_sha256": [
+          "27b24f3373c3d8c1697897ba6409822be91652352d7bae037ae4e63f9329f660",
+          "27b24f3373c3d8c1697897ba6409822be91652352d7bae037ae4e63f9329f660"
+        ],
+        "loss_exactly_equal": true,
+        "loss_max_abs_difference": 0.0
+      },
+      "run_id": "noise-seed-01-open",
+      "zero_gradient_steps": []
+    },
+    {
+      "checkpoint_files_hashed": 5,
+      "endpoint_image_sha256": "1bf519ca7ce20d9405e32af3e4cbcc35b8f4bbb6e3e66f5c443bf86299a382f3",
+      "endpoint_latent_sha256": "73efae72750c029a5086ca1646000a840ef7fe504374dec9c76ae91cdce79ea9",
+      "generations": 6,
+      "initial_complete_rng_sha256": "286320084fa91d1f626e599ac935f663cf0d576cf71b256bdaaaba6dc8e063f8",
+      "initial_latent_sha256": "9aaa7d0d8a64dbbda1747648248ad68b64835f13c0fb53dcc5f61d1b8916a5d2",
+      "latent_files_hashed": 257,
+      "mcq": 4,
+      "metrics": 256,
+      "passed": true,
+      "probes": 25,
+      "repeated_gradient": {
+        "gradient_exactly_equal": true,
+        "gradient_max_abs_difference": 0.0,
+        "gradient_sha256": [
+          "8a3933486d3a856c2a75514033ab573ef351312db6de0d5bc39b134b331df98a",
+          "8a3933486d3a856c2a75514033ab573ef351312db6de0d5bc39b134b331df98a"
+        ],
+        "loss_exactly_equal": true,
+        "loss_max_abs_difference": 0.0
+      },
+      "run_id": "noise-seed-02-open",
+      "zero_gradient_steps": []
+    },
+    {
+      "checkpoint_files_hashed": 5,
+      "endpoint_image_sha256": "c914866b4677625a245e89465b9389ed85264256cf2d77cd0fedac90554a5d39",
+      "endpoint_latent_sha256": "459a88a53cc8556f923a324c43cfef368eac991f82e88c263f01c52cdecd7459",
+      "generations": 6,
+      "initial_complete_rng_sha256": "286320084fa91d1f626e599ac935f663cf0d576cf71b256bdaaaba6dc8e063f8",
+      "initial_latent_sha256": "9aaa7d0d8a64dbbda1747648248ad68b64835f13c0fb53dcc5f61d1b8916a5d2",
+      "latent_files_hashed": 257,
+      "mcq": 4,
+      "metrics": 256,
+      "passed": true,
+      "probes": 25,
+      "repeated_gradient": {
+        "gradient_exactly_equal": true,
+        "gradient_max_abs_difference": 0.0,
+        "gradient_sha256": [
+          "552250284136c699574d75ee7637268c3bf07706951890fbf091bbb936b3dab9",
+          "552250284136c699574d75ee7637268c3bf07706951890fbf091bbb936b3dab9"
+        ],
+        "loss_exactly_equal": true,
+        "loss_max_abs_difference": 0.0
+      },
+      "run_id": "noise-seed-02-mcq",
+      "zero_gradient_steps": []
+    },
+    {
+      "checkpoint_files_hashed": 5,
+      "endpoint_image_sha256": "1107231dd6d649e26be0c618c1c5fb269e00c1fc7926a3806f469a6d330ca8c4",
+      "endpoint_latent_sha256": "c769058bac8c4c86034e2c7c72e49dd76add5a4fd223de7dd3651e32772f3acb",
+      "generations": 6,
+      "initial_complete_rng_sha256": "286320084fa91d1f626e599ac935f663cf0d576cf71b256bdaaaba6dc8e063f8",
+      "initial_latent_sha256": "76955c23e8f3f91d73f2116917550703f96588a4df76e0d076bbd43029a83c01",
+      "latent_files_hashed": 257,
+      "mcq": 4,
+      "metrics": 256,
+      "passed": true,
+      "probes": 25,
+      "repeated_gradient": {
+        "gradient_exactly_equal": true,
+        "gradient_max_abs_difference": 0.0,
+        "gradient_sha256": [
+          "3956d2bf8997fb08422fef4b8d3643405976f9bd07fc1a744961dbc2ac271906",
+          "3956d2bf8997fb08422fef4b8d3643405976f9bd07fc1a744961dbc2ac271906"
+        ],
+        "loss_exactly_equal": true,
+        "loss_max_abs_difference": 0.0
+      },
+      "run_id": "noise-seed-03-mcq",
+      "zero_gradient_steps": []
+    },
+    {
+      "checkpoint_files_hashed": 5,
+      "endpoint_image_sha256": "617833a8c3f0c4bb6d2d6349eabcf00349b1d7b5d7b197a9a58cf1d05f5477e7",
+      "endpoint_latent_sha256": "49510a670791f8c25065e7b3cc96fbad428b4a8411978fdbc6ec0b77e8ed9609",
+      "generations": 6,
+      "initial_complete_rng_sha256": "286320084fa91d1f626e599ac935f663cf0d576cf71b256bdaaaba6dc8e063f8",
+      "initial_latent_sha256": "76955c23e8f3f91d73f2116917550703f96588a4df76e0d076bbd43029a83c01",
+      "latent_files_hashed": 257,
+      "mcq": 4,
+      "metrics": 256,
+      "passed": true,
+      "probes": 25,
+      "repeated_gradient": {
+        "gradient_exactly_equal": true,
+        "gradient_max_abs_difference": 0.0,
+        "gradient_sha256": [
+          "35039616c3d92331164beca0456d431db2cc625705d6b79e6e1ca240a2be9438",
+          "35039616c3d92331164beca0456d431db2cc625705d6b79e6e1ca240a2be9438"
+        ],
+        "loss_exactly_equal": true,
+        "loss_max_abs_difference": 0.0
+      },
+      "run_id": "noise-seed-03-open",
+      "zero_gradient_steps": []
+    },
+    {
+      "checkpoint_files_hashed": 5,
+      "endpoint_image_sha256": "1a1b8edbfb714c1002e04ab830d27442c98e099986f5a91e0b7a822a8b89cddd",
+      "endpoint_latent_sha256": "2ffbcb7c4b47c7d31dc17d6829deab66c3e4c0ab01fd0cc8727bbec4c830a2eb",
+      "generations": 6,
+      "initial_complete_rng_sha256": "286320084fa91d1f626e599ac935f663cf0d576cf71b256bdaaaba6dc8e063f8",
+      "initial_latent_sha256": "702cc0e8cf7875de222f6168d17a00a19ebb6393dc7205b86335f8ccc3fb6d33",
+      "latent_files_hashed": 257,
+      "mcq": 4,
+      "metrics": 256,
+      "passed": true,
+      "probes": 25,
+      "repeated_gradient": {
+        "gradient_exactly_equal": true,
+        "gradient_max_abs_difference": 0.0,
+        "gradient_sha256": [
+          "c49de9765cd9ddb3050f0174545ff9c4f066b6b4fcef357d166d899ad8e1cb02",
+          "c49de9765cd9ddb3050f0174545ff9c4f066b6b4fcef357d166d899ad8e1cb02"
+        ],
+        "loss_exactly_equal": true,
+        "loss_max_abs_difference": 0.0
+      },
+      "run_id": "noise-seed-04-open",
+      "zero_gradient_steps": []
+    },
+    {
+      "checkpoint_files_hashed": 5,
+      "endpoint_image_sha256": "4a4a54ba2e9677dd9d4233b60bec13191030f51e6fe61e38277c488e29e86499",
+      "endpoint_latent_sha256": "529960222ed021ce827c5692b75694f7bec43a495cb3cbd249080b79609ff85d",
+      "generations": 6,
+      "initial_complete_rng_sha256": "286320084fa91d1f626e599ac935f663cf0d576cf71b256bdaaaba6dc8e063f8",
+      "initial_latent_sha256": "702cc0e8cf7875de222f6168d17a00a19ebb6393dc7205b86335f8ccc3fb6d33",
+      "latent_files_hashed": 257,
+      "mcq": 4,
+      "metrics": 256,
+      "passed": true,
+      "probes": 25,
+      "repeated_gradient": {
+        "gradient_exactly_equal": true,
+        "gradient_max_abs_difference": 0.0,
+        "gradient_sha256": [
+          "41e1ab9b15837f5823f51084586b51da7da57043cad933e9e7d07dbb2d27bfc2",
+          "41e1ab9b15837f5823f51084586b51da7da57043cad933e9e7d07dbb2d27bfc2"
+        ],
+        "loss_exactly_equal": true,
+        "loss_max_abs_difference": 0.0
+      },
+      "run_id": "noise-seed-04-mcq",
+      "zero_gradient_steps": []
+    },
+    {
+      "checkpoint_files_hashed": 5,
+      "endpoint_image_sha256": "02dd1a02991424f7b631499e2131f04c2fbfb214683498425174104d4689387c",
+      "endpoint_latent_sha256": "5ca6a46d483bfa6643f5491c430b24f6a72d834c76642cad382d90c0864edeab",
+      "generations": 6,
+      "initial_complete_rng_sha256": "286320084fa91d1f626e599ac935f663cf0d576cf71b256bdaaaba6dc8e063f8",
+      "initial_latent_sha256": "9a51069f7a538c1484b6b68fe82886e799b4b97b0fd2799b937c2d3614ca7e63",
+      "latent_files_hashed": 257,
+      "mcq": 4,
+      "metrics": 256,
+      "passed": true,
+      "probes": 25,
+      "repeated_gradient": {
+        "gradient_exactly_equal": true,
+        "gradient_max_abs_difference": 0.0,
+        "gradient_sha256": [
+          "b0191bec946d26f3b01d3a27e4ca7ba7622d450ae5597a682b0bb1e47a6aed89",
+          "b0191bec946d26f3b01d3a27e4ca7ba7622d450ae5597a682b0bb1e47a6aed89"
+        ],
+        "loss_exactly_equal": true,
+        "loss_max_abs_difference": 0.0
+      },
+      "run_id": "noise-seed-05-mcq",
+      "zero_gradient_steps": []
+    },
+    {
+      "checkpoint_files_hashed": 5,
+      "endpoint_image_sha256": "63b1b497aba3f9ac8b9ad51bb680012a46fae6d55e17d940c2d72a5d6c117c91",
+      "endpoint_latent_sha256": "2f157e7ae7ee567fed710058c8e773994752fac9b652f27326dab1814ce885aa",
+      "generations": 6,
+      "initial_complete_rng_sha256": "286320084fa91d1f626e599ac935f663cf0d576cf71b256bdaaaba6dc8e063f8",
+      "initial_latent_sha256": "9a51069f7a538c1484b6b68fe82886e799b4b97b0fd2799b937c2d3614ca7e63",
+      "latent_files_hashed": 257,
+      "mcq": 4,
+      "metrics": 256,
+      "passed": true,
+      "probes": 25,
+      "repeated_gradient": {
+        "gradient_exactly_equal": true,
+        "gradient_max_abs_difference": 0.0,
+        "gradient_sha256": [
+          "bca6b30212d1305b74395eba9c27daf4396d2201553f6efc31c8d350d18c446e",
+          "bca6b30212d1305b74395eba9c27daf4396d2201553f6efc31c8d350d18c446e"
+        ],
+        "loss_exactly_equal": true,
+        "loss_max_abs_difference": 0.0
+      },
+      "run_id": "noise-seed-05-open",
+      "zero_gradient_steps": []
+    },
+    {
+      "checkpoint_files_hashed": 5,
+      "endpoint_image_sha256": "f39d2618eb58ff4e1ee4bc8ddae1d53d7bd380eb584bac3016818c0460bec5e8",
+      "endpoint_latent_sha256": "eb1c0fcfffacbb19eaec07014c1acc9d8605b4553623c837089f2acd2a5717ee",
+      "generations": 6,
+      "initial_complete_rng_sha256": "286320084fa91d1f626e599ac935f663cf0d576cf71b256bdaaaba6dc8e063f8",
+      "initial_latent_sha256": "634f43588d80e9271514c0ca1d06c8e3f7aff7f42f2f3c2b8a9f15e02519e155",
+      "latent_files_hashed": 257,
+      "mcq": 4,
+      "metrics": 256,
+      "passed": true,
+      "probes": 25,
+      "repeated_gradient": {
+        "gradient_exactly_equal": true,
+        "gradient_max_abs_difference": 0.0,
+        "gradient_sha256": [
+          "d8635d549af3de04eccd569472badd5a223fb638a3fe61fd50dabb302a9edf2c",
+          "d8635d549af3de04eccd569472badd5a223fb638a3fe61fd50dabb302a9edf2c"
+        ],
+        "loss_exactly_equal": true,
+        "loss_max_abs_difference": 0.0
+      },
+      "run_id": "noise-seed-06-open",
+      "zero_gradient_steps": []
+    },
+    {
+      "checkpoint_files_hashed": 5,
+      "endpoint_image_sha256": "6d2516e4b1c4778c3a4f3626e4ca2e6fef0107d026a7ac6837b9c1a6409a82f7",
+      "endpoint_latent_sha256": "aa87b203ed6d5e1130ee1aec52e3d341c25c74d2661f84fdfc24d1b5e91051ad",
+      "generations": 6,
+      "initial_complete_rng_sha256": "286320084fa91d1f626e599ac935f663cf0d576cf71b256bdaaaba6dc8e063f8",
+      "initial_latent_sha256": "634f43588d80e9271514c0ca1d06c8e3f7aff7f42f2f3c2b8a9f15e02519e155",
+      "latent_files_hashed": 257,
+      "mcq": 4,
+      "metrics": 256,
+      "passed": true,
+      "probes": 25,
+      "repeated_gradient": {
+        "gradient_exactly_equal": true,
+        "gradient_max_abs_difference": 0.0,
+        "gradient_sha256": [
+          "9f3ccf5c0d1b9b0e46f9a3d2c2e1720f390260929afbf9c24dc6da6573dcfdde",
+          "9f3ccf5c0d1b9b0e46f9a3d2c2e1720f390260929afbf9c24dc6da6573dcfdde"
+        ],
+        "loss_exactly_equal": true,
+        "loss_max_abs_difference": 0.0
+      },
+      "run_id": "noise-seed-06-mcq",
+      "zero_gradient_steps": []
+    },
+    {
+      "checkpoint_files_hashed": 5,
+      "endpoint_image_sha256": "9478e1b1050a214a9c8e8612c82e09ded153b446c4570f2dd16793b6f6eb15bf",
+      "endpoint_latent_sha256": "5aed4863e25532a08008ba3d0496931f6de6359d2b2c7124d3ea6f0ac78d4805",
+      "generations": 6,
+      "initial_complete_rng_sha256": "286320084fa91d1f626e599ac935f663cf0d576cf71b256bdaaaba6dc8e063f8",
+      "initial_latent_sha256": "0a906f5791922ef1be3adf71d16247fad36d467d60c14428e459479d140c13f6",
+      "latent_files_hashed": 257,
+      "mcq": 4,
+      "metrics": 256,
+      "passed": true,
+      "probes": 25,
+      "repeated_gradient": {
+        "gradient_exactly_equal": true,
+        "gradient_max_abs_difference": 0.0,
+        "gradient_sha256": [
+          "783cb8249e1735449b0f8845e286883185fa9849db4b04fc792dbe405df638a4",
+          "783cb8249e1735449b0f8845e286883185fa9849db4b04fc792dbe405df638a4"
+        ],
+        "loss_exactly_equal": true,
+        "loss_max_abs_difference": 0.0
+      },
+      "run_id": "noise-seed-07-mcq",
+      "zero_gradient_steps": []
+    },
+    {
+      "checkpoint_files_hashed": 5,
+      "endpoint_image_sha256": "77aa2b0bf4f36e27eb39d52fbb9b4fc2aebc7af70608871fd3be4118aab8464d",
+      "endpoint_latent_sha256": "822c4948213f61cf87d4a9b93e5c2db64db9668b847a5665df3626cfcb700bfc",
+      "generations": 6,
+      "initial_complete_rng_sha256": "286320084fa91d1f626e599ac935f663cf0d576cf71b256bdaaaba6dc8e063f8",
+      "initial_latent_sha256": "0a906f5791922ef1be3adf71d16247fad36d467d60c14428e459479d140c13f6",
+      "latent_files_hashed": 257,
+      "mcq": 4,
+      "metrics": 256,
+      "passed": true,
+      "probes": 25,
+      "repeated_gradient": {
+        "gradient_exactly_equal": true,
+        "gradient_max_abs_difference": 0.0,
+        "gradient_sha256": [
+          "22d173d9b17dd36e1a4ef4124846d02eeab725fa2be424def916692cccf89c5a",
+          "22d173d9b17dd36e1a4ef4124846d02eeab725fa2be424def916692cccf89c5a"
+        ],
+        "loss_exactly_equal": true,
+        "loss_max_abs_difference": 0.0
+      },
+      "run_id": "noise-seed-07-open",
+      "zero_gradient_steps": []
+    }
+  ],
+  "schema": "vision_memory.r11-mcq-open-multistart-offline-audit.v1",
+  "source_results_modified": false
+}

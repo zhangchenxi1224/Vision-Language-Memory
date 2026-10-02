@@ -1,0 +1,50 @@
+{
+  "archive_sha256": "0de0462d52c05d2582e39936d38f581d73018e33329bf1556379ec1cfb9f349f",
+  "bytes": 6421766,
+  "parity": {
+    "command_file_sha256": "244b3007b6dfa31b6dd3a8a0f7d4ea3a106660475b845af9fcc0279c38375ca8",
+    "expected_sha256": "e0afd67ab5541b71cf0181df776e8120a7f0c4a3c4697582152881d44ee2ff2e",
+    "inference_complete_sha256": "e14603d00b0ee9ba716d02de21161c5092f0894816b3f700bc4d1134b89e19d3",
+    "inference_results_sha256": "2aa003db92d9a0ee01070ac1704f70c11f7f2e124925005df68df838d2e93c6a",
+    "mismatches": [],
+    "package_manifest_sha256": "ef4d4a91b99d0b05a1561e05875b2d7a7d772267e81c3bf9174dc861f52a8314",
+    "parity_pass": true,
+    "reads_compared": 30,
+    "reference_complete_sha256": "bf9fc2b34728d6a321f918b0c8a85ec1c4c5954971847cb63ba732dcc9598791",
+    "reference_functional_pass": true,
+    "reference_interpretation": "observed_cases_paired_diagnostic",
+    "repetition": 0,
+    "scope": "Engineering parity only. This does not certify functional correctness.",
+    "sequence": 0,
+    "writes_compared": 6
+  },
+  "scope": "All36 commands/results,30 raw reads,6 write PNGs and final persisted PNG reverified locally. Exported parameter tensors remain remote. CLI parity is separate from functional correctness.",
+  "suite": {
+    "deadline_unix": 1789352400.0,
+    "functional_all_registered_correct": false,
+    "matched_results": {
+      "chains": [
+        480,
+        480
+      ],
+      "confirmation": [
+        360,
+        360
+      ],
+      "prefix0": [
+        416,
+        480
+      ],
+      "prefix1": [
+        480,
+        480
+      ]
+    },
+    "parent": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/03f8467-native-condition-full4832",
+    "scope": "Observed c2ec407 cases reused as a paired sampling diagnostic; no fresh holdout claim.",
+    "stage": "all_registered_workloads_finished",
+    "state": "completed",
+    "time_unix": 1789335355.7232018,
+    "validation_commit": "9e27050ea3fe1e7d54fe81714244f93ae07bac81"
+  }
+}

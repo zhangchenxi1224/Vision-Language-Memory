@@ -1,0 +1,259 @@
+{
+  "conditions": [
+    "matched",
+    "blank",
+    "donor"
+  ],
+  "generation": {
+    "do_sample": false,
+    "eos_policy": "original_model",
+    "max_new_tokens": 32
+  },
+  "prompts": [
+    "original_open",
+    "paraphrase_open"
+  ],
+  "schema": "vision_memory.r11-open-answer-replay-config.v1",
+  "targets": [
+    {
+      "artifact": {
+        "archive_path": "C:\\Users\\Expedition\\DreamLite_R11_VAELatent_RawParts_20260831\\target-00.tar.gz",
+        "endpoint_file_sha256": "4ad1bba39b35f4177dbcb5a019b8e5b34dd7fc6d51244111aa009ff49d953e76",
+        "endpoint_member": "target-00/run/endpoint_raw.pt",
+        "endpoint_tensor_sha256": "4d325261c99642f359da581a55e326b73c84a83953ece7cf63404b2e2e75e5fb"
+      },
+      "donor_segment_id": "r5-f1-392d41fd097d069c42218e0a",
+      "donor_target_index": 1,
+      "inputs": {
+        "original_open": "R3 Train Standard Templates 15: At this later check, what is the current material preference for the willow room train 000431?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_open": "R3 Train Standard Templates 15: At this later check, which material does the willow room train 000431 currently prefer?\nUse the memory image to answer. Answer with a short phrase only."
+      },
+      "original": {
+        "answer_index": 1,
+        "choices": [
+          "no active preference",
+          "linen",
+          "leather",
+          "wood"
+        ],
+        "query": "R3 Train Standard Templates 15: At this later check, what is the current material preference for the willow room train 000431? Choose exactly one option."
+      },
+      "scorer_metadata": {
+        "aliases": [],
+        "gold": "linen"
+      },
+      "segment_id": "r5-f1-8015bf53a4067aaa7e882288",
+      "target_index": 0
+    },
+    {
+      "artifact": {
+        "archive_path": "C:\\Users\\Expedition\\DreamLite_R11_VAELatent_RawParts_20260831\\target-01.tar.gz",
+        "endpoint_file_sha256": "d359291de63bb5232325b2e7a9294ff3d861287c06e63da2ab6ebe42eab036b9",
+        "endpoint_member": "target-01/run/endpoint_raw.pt",
+        "endpoint_tensor_sha256": "6857afeffd37124bb196ab7c6607580c57c950d72d760ca6b49f8cc00bdef3f1"
+      },
+      "donor_segment_id": "r5-f1-1aee01c0f3e7684c05c9122c",
+      "donor_target_index": 2,
+      "inputs": {
+        "original_open": "R3 Train Standard Templates 03: At this later check, what is the current music preference for the indigo desk train 001123?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_open": "R3 Train Standard Templates 03: At this later check, which music does the indigo desk train 001123 currently prefer?\nUse the memory image to answer. Answer with a short phrase only."
+      },
+      "original": {
+        "answer_index": 1,
+        "choices": [
+          "no active preference",
+          "ambient",
+          "blues",
+          "jazz"
+        ],
+        "query": "R3 Train Standard Templates 03: At this later check, what is the current music preference for the indigo desk train 001123? Choose exactly one option."
+      },
+      "scorer_metadata": {
+        "aliases": [],
+        "gold": "ambient"
+      },
+      "segment_id": "r5-f1-392d41fd097d069c42218e0a",
+      "target_index": 1
+    },
+    {
+      "artifact": {
+        "archive_path": "C:\\Users\\Expedition\\DreamLite_R11_VAELatent_RawParts_20260831\\target-02.tar.gz",
+        "endpoint_file_sha256": "569d37d94fd78d1b9e49a9387d1461ed046745ec2a5b864d62c3c01ed1a4d00b",
+        "endpoint_member": "target-02/run/endpoint_raw.pt",
+        "endpoint_tensor_sha256": "e780ae9b2ea6fd95f4b50bc30afcb0ec27b6c39373eeecf9b9784d28174a8267"
+      },
+      "donor_segment_id": "r5-f1-807090710dd4c077a97348ba",
+      "donor_target_index": 3,
+      "inputs": {
+        "original_open": "R3 Train Standard Templates 29: After applying this update first, what is the current color preference for the amber desk train 000797?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_open": "R3 Train Standard Templates 29: Once this update has been applied first, which color does the amber desk train 000797 currently prefer?\nUse the memory image to answer. Answer with a short phrase only."
+      },
+      "original": {
+        "answer_index": 0,
+        "choices": [
+          "orange",
+          "red",
+          "no active preference",
+          "purple"
+        ],
+        "query": "R3 Train Standard Templates 29: After applying this update first, what is the current color preference for the amber desk train 000797? Choose exactly one option."
+      },
+      "scorer_metadata": {
+        "aliases": [],
+        "gold": "orange"
+      },
+      "segment_id": "r5-f1-1aee01c0f3e7684c05c9122c",
+      "target_index": 2
+    },
+    {
+      "artifact": {
+        "archive_path": "C:\\Users\\Expedition\\DreamLite_R11_VAELatent_RawParts_20260831\\target-03.tar.gz",
+        "endpoint_file_sha256": "e306317f63c9402cad7ee328dae7c7f4203e265173a498544777e131def869fc",
+        "endpoint_member": "target-03/run/endpoint_raw.pt",
+        "endpoint_tensor_sha256": "77e6d261ef59cbfe02a24acd5db45f3dee44395c746733bcd22d7e84ae562735"
+      },
+      "donor_segment_id": "r5-f1-02c8aa9dc3523351c4d5f9c7",
+      "donor_target_index": 4,
+      "inputs": {
+        "original_open": "R3 Train Standard Templates 24: Before any later update, what is the current color preference for the willow chair train 000408?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_open": "R3 Train Standard Templates 24: Before any subsequent update, which color does the willow chair train 000408 currently prefer?\nUse the memory image to answer. Answer with a short phrase only."
+      },
+      "original": {
+        "answer_index": 0,
+        "choices": [
+          "yellow",
+          "purple",
+          "orange",
+          "no active preference"
+        ],
+        "query": "R3 Train Standard Templates 24: Before any later update, what is the current color preference for the willow chair train 000408? Choose exactly one option."
+      },
+      "scorer_metadata": {
+        "aliases": [],
+        "gold": "yellow"
+      },
+      "segment_id": "r5-f1-807090710dd4c077a97348ba",
+      "target_index": 3
+    },
+    {
+      "artifact": {
+        "archive_path": "C:\\Users\\Expedition\\DreamLite_R11_VAELatent_RawParts_20260831\\target-04.tar.gz",
+        "endpoint_file_sha256": "0b69eb08fe3a43688a64a82d378ba6f4909b3eb382130fb2886349b08e2494a0",
+        "endpoint_member": "target-04/run/endpoint_raw.pt",
+        "endpoint_tensor_sha256": "55c18c26ddc59d87e9bdfa7469fd90667118c739047ff8efda98815e7da7dbf9"
+      },
+      "donor_segment_id": "r5-f1-11dddf29efebc033a995ab92",
+      "donor_target_index": 5,
+      "inputs": {
+        "original_open": "R3 Train Standard Templates 27: Before any later update, what is the current color preference for the linen lamp train 000987?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_open": "R3 Train Standard Templates 27: Before any subsequent update, which color does the linen lamp train 000987 currently prefer?\nUse the memory image to answer. Answer with a short phrase only."
+      },
+      "original": {
+        "answer_index": 1,
+        "choices": [
+          "no active preference",
+          "blue",
+          "green",
+          "yellow"
+        ],
+        "query": "R3 Train Standard Templates 27: Before any later update, what is the current color preference for the linen lamp train 000987? Choose exactly one option."
+      },
+      "scorer_metadata": {
+        "aliases": [],
+        "gold": "blue"
+      },
+      "segment_id": "r5-f1-02c8aa9dc3523351c4d5f9c7",
+      "target_index": 4
+    },
+    {
+      "artifact": {
+        "archive_path": "C:\\Users\\Expedition\\DreamLite_R11_VAELatent_RawParts_20260831\\target-05.tar.gz",
+        "endpoint_file_sha256": "c1c469a7b299a0da46a13ecf93b941e4dcee1f6ca8b93ca33d03b76d6abaa34c",
+        "endpoint_member": "target-05/run/endpoint_raw.pt",
+        "endpoint_tensor_sha256": "ad32cb2782840f36a4d5ab453fd2dc04e08e58488b13979a193c32f40d32cd19"
+      },
+      "donor_segment_id": "r5-f1-de4899e05b0aa7f3d8373171",
+      "donor_target_index": 6,
+      "inputs": {
+        "original_open": "R3 Train Standard Templates 30: Before any later update, what is the current drink preference for the copper desk train 000478?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_open": "R3 Train Standard Templates 30: Before any subsequent update, which drink does the copper desk train 000478 currently prefer?\nUse the memory image to answer. Answer with a short phrase only."
+      },
+      "original": {
+        "answer_index": 0,
+        "choices": [
+          "juice",
+          "no active preference",
+          "coffee",
+          "water"
+        ],
+        "query": "R3 Train Standard Templates 30: Before any later update, what is the current drink preference for the copper desk train 000478? Choose exactly one option."
+      },
+      "scorer_metadata": {
+        "aliases": [],
+        "gold": "juice"
+      },
+      "segment_id": "r5-f1-11dddf29efebc033a995ab92",
+      "target_index": 5
+    },
+    {
+      "artifact": {
+        "archive_path": "C:\\Users\\Expedition\\DreamLite_R11_VAELatent_RawParts_20260831\\target-06.tar.gz",
+        "endpoint_file_sha256": "bcc687a047a080361414ed1198097dbb625637e127b91dcd072a0d9fa4867a4f",
+        "endpoint_member": "target-06/run/endpoint_raw.pt",
+        "endpoint_tensor_sha256": "954de6551449f7fa981cd139d17203bf102a0acfc687aa5338817e6d19d9394c"
+      },
+      "donor_segment_id": "r5-f1-850189e424efde62468b2ef9",
+      "donor_target_index": 7,
+      "inputs": {
+        "original_open": "R3 Train Standard Templates 28: After applying this update first, what is the current meal preference for the linen backpack train 000540?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_open": "R3 Train Standard Templates 28: Once this update has been applied first, which meal does the linen backpack train 000540 currently prefer?\nUse the memory image to answer. Answer with a short phrase only."
+      },
+      "original": {
+        "answer_index": 0,
+        "choices": [
+          "pasta",
+          "salad",
+          "curry",
+          "no active preference"
+        ],
+        "query": "R3 Train Standard Templates 28: After applying this update first, what is the current meal preference for the linen backpack train 000540? Choose exactly one option."
+      },
+      "scorer_metadata": {
+        "aliases": [],
+        "gold": "pasta"
+      },
+      "segment_id": "r5-f1-de4899e05b0aa7f3d8373171",
+      "target_index": 6
+    },
+    {
+      "artifact": {
+        "archive_path": "C:\\Users\\Expedition\\DreamLite_R11_VAELatent_RawParts_20260831\\target-07.tar.gz",
+        "endpoint_file_sha256": "6cba67fb2c4e1d9a807530d3bf2116eba13cb77f6d769a2f1ee0eef31199c25e",
+        "endpoint_member": "target-07/run/endpoint_raw.pt",
+        "endpoint_tensor_sha256": "77c32b82fc04b5c58d1682e6cc50583d6f87d5f0bfcf13690caa8ed30804d04b"
+      },
+      "donor_segment_id": "r5-f1-8015bf53a4067aaa7e882288",
+      "donor_target_index": 0,
+      "inputs": {
+        "original_open": "R3 Train Standard Templates 03: At this later check, what is the current color preference for the silver backpack train 000003?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_open": "R3 Train Standard Templates 03: At this later check, which color does the silver backpack train 000003 currently prefer?\nUse the memory image to answer. Answer with a short phrase only."
+      },
+      "original": {
+        "answer_index": 2,
+        "choices": [
+          "no active preference",
+          "blue",
+          "green",
+          "yellow"
+        ],
+        "query": "R3 Train Standard Templates 03: At this later check, what is the current color preference for the silver backpack train 000003? Choose exactly one option."
+      },
+      "scorer_metadata": {
+        "aliases": [],
+        "gold": "green"
+      },
+      "segment_id": "r5-f1-850189e424efde62468b2ef9",
+      "target_index": 7
+    }
+  ]
+}

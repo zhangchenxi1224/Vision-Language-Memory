@@ -107,6 +107,21 @@ class R12TrainingEntrypointTest(unittest.TestCase):
         self.assertIsNotNone(final.bias.grad)
         self.assertGreater(float(final.bias.grad.abs().sum()), 0.0)
 
+    def test_thresholded_rms_penalty_is_value_equivalent_and_finite_at_zero(self):
+        for magnitude in (0.0, 0.25, 0.75, 1.0):
+            delta = torch.full((1, 4, 8, 8), magnitude, requires_grad=True)
+            observed = trainer._latent_rms_penalty(delta)
+            rms = delta.square().mean().sqrt()
+            expected = trainer.R12_LATENT_RMS_PENALTY * torch.relu(
+                rms - trainer.R12_LATENT_RMS_SOFT_LIMIT
+            ).square()
+            self.assertTrue(torch.equal(observed.detach(), expected.detach()))
+            observed.backward()
+            self.assertIsNotNone(delta.grad)
+            self.assertTrue(torch.isfinite(delta.grad).all())
+            if magnitude <= trainer.R12_LATENT_RMS_SOFT_LIMIT:
+                self.assertEqual(float(delta.grad.abs().sum()), 0.0)
+
     def test_wrong_token_shape_fails_closed(self):
         writer = trainer.SharedEventLatentWriter(
             initial_latent=torch.zeros((1, 4, 128, 128)),

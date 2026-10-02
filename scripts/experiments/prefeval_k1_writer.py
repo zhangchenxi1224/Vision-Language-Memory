@@ -1,0 +1,366 @@
+"""K1 shared Writer: reuse official FM helpers and unchanged native RGB inference."""
+import argparse
+import gc
+import hashlib
+import json
+import os
+import shutil
+from pathlib import Path
+import subprocess
+import sys
+import time
+
+ROOT = Path(__file__).resolve().parents[2]
+sys.path[:0] = [str(ROOT), str(ROOT / 'src')]
+import torch
+from PIL import Image
+from scripts.experiments.prefeval_k1_data import load_records, load_training_records, event_text, sha
+from scripts.experiments.prefeval_k1_teacher import save_json, atomic_save
+from scripts.experiments.prefeval_k1_variants import load_variants,apply_variant,training_variant,select_fm_target
+from scripts.experiments.prefeval_k1_source_bank import load_bank,retention_draw,noise_namespace
+from scripts.experiments.prefeval_k1_condition_store import DiskConditions
+from scripts.experiments.prefeval_k1_refresh_bank import (
+    round_bounds, source_checkpoint, load_refresh_bank, save_once,
+    validate_resume, archive_uncommitted_tail,
+)
+from scripts.eval.prefeval_rgb import append
+from scripts.train.latent_r11_vae_oracle import _save_image
+from vision_memory.dreamlite import DifferentiableDreamLiteMobileSampler
+from vision_memory.dreamlite.conditioning import encode_native_base_edit_condition
+from vision_memory.dreamlite.native_base import NativeBaseEditSampler
+from vision_memory.dreamlite.latent_codec import decode_model_latents_unit_interval
+from vision_memory.training.latent_bank_unet import official_flow_bridge, predict_velocity, stable_seed, OFFICIAL_REFERENCE_COMMIT
+from vision_memory.training.checkpoint import save_training_checkpoint, load_training_checkpoint, load_trainable_weights
+from vision_memory.repro import configure_strict_cuda_determinism
+
+def load_pipe(args):
+    commit = subprocess.check_output(['git','rev-parse','HEAD'], cwd=args.official_source, text=True).strip()
+    assert commit == OFFICIAL_REFERENCE_COMMIT
+    assert not subprocess.check_output(['git','status','--porcelain','--untracked-files=no'], cwd=args.official_source, text=True).strip()
+    sys.path.insert(0, str(args.official_source))
+    from dreamlite import DreamLitePipelineLoRA
+    pipe = DreamLitePipelineLoRA.from_pretrained(args.base, local_files_only=True, torch_dtype=torch.float32).to(args.device)
+    for module in [pipe.unet, pipe.vae, pipe.text_encoder]:
+        module.eval().requires_grad_(False)
+    pipe.unet.requires_grad_(True)
+    load_trainable_weights(args.checkpoint, trainable_module=pipe.unet)
+    pipe.set_progress_bar_config(disable=True)
+    return pipe
+
+@torch.no_grad()
+def encode_source(pipe, image, device):
+    return pipe.prepare_image_latents(pipe.image_processor.preprocess(image), dtype=torch.float32, device=device)
+
+@torch.no_grad()
+def cache_condition(pipe, path, text, device):
+    image = Image.open(path).convert('RGB') if path else Image.new('RGB', (1024,1024), (128,128,128))
+    assert image.size == (1024,1024)
+    source = encode_source(pipe, image, device)
+    c = encode_native_base_edit_condition(pipe, image, text, device=device, dtype=torch.float32)
+    return {'source': source.cpu(), 'embeds': c.prompt_embeds.cpu(), 'mask': c.attention_mask.cpu()}
+
+def train(args, pipe, rows):
+    assert args.split in {'pilot', 'train'}, 'No optimized targets allowed for dev/eval'
+    assert all(0 < step <= args.steps for step in args.snapshot_steps)
+    if args.stage == 'retain':
+        assert args.sources is not None
+    args.output.mkdir(parents=True, exist_ok=True)
+    targets, cache = {}, {}
+    target_hashes = {}
+    variants=load_variants(args.initial_variants,rows) if args.initial_variants else None
+    bank = None
+    refreshed = args.retain_source_mode == 'refresh-bank'
+    refresh_root = None
+    if refreshed:
+        assert args.split == 'train' and args.steps == 23360 and len(rows) == 730 and variants
+        assert args.stage == 'retain' and args.retain_target_mode == 'teacher'
+        start, stop = round_bounds(args.refresh_round)
+        refresh_root = args.sources / f'round-{args.refresh_round}'
+        snapshot = source_checkpoint(args.output, args.checkpoint, args.refresh_round)
+        bank = load_refresh_bank(refresh_root, rows, sha(snapshot), sha(args.initial_variants), args.refresh_round)
+        cache = DiskConditions(refresh_root/'fm-conditions', {
+            'bank_sha256': sha(refresh_root/'bank.json'), 'writer_sha256': sha(Path(__file__)),
+            'conditioning_sha256': sha(ROOT/'src/vision_memory/dreamlite/conditioning.py'),
+            'training_history_sha256': hashlib.sha256(json.dumps(
+                [(r['base_pair_id'],r['history']) for r in rows],sort_keys=True).encode()).hexdigest(),
+            'variants_sha256': sha(args.initial_variants), 'base': str(args.base),
+            'dtype': 'float32', 'official_commit': OFFICIAL_REFERENCE_COMMIT})
+    if args.retain_source_mode == 'four-bank':
+        assert args.split == 'train' and args.steps == 23360 and len(rows) == 730 and variants
+        bank = load_bank(args.sources, rows, sha(args.checkpoint), sha(args.initial_variants))
+        cache = DiskConditions(args.sources/'fm-conditions', {
+            'bank_sha256': sha(args.sources/'bank.json'), 'writer_sha256': sha(Path(__file__)),
+            'conditioning_sha256': sha(ROOT/'src/vision_memory/dreamlite/conditioning.py'),
+            'training_history_sha256': hashlib.sha256(json.dumps(
+                [(r['base_pair_id'],r['history']) for r in rows],sort_keys=True).encode()).hexdigest(),
+            'variants_sha256': sha(args.initial_variants), 'base': str(args.base),
+            'dtype': 'float32', 'official_commit': OFFICIAL_REFERENCE_COMMIT})
+
+    def add_condition(key, path, text):
+        if bank is not None:
+            cache.ensure(key, lambda: cache_condition(pipe, path, text, args.device))
+        else:
+            cache[key] = cache_condition(pipe, path, text, args.device)
+    for i, row in enumerate(rows):
+        pid = row['base_pair_id']
+        parent = args.teachers / pid.replace(':','_')
+        done = json.loads((parent / 'complete.json').read_text())
+        assert done['step'] == 288 and done['binding']['arm'] == args.arm
+        assert done['latent_sha256'] == sha(parent / 'latent.pt')
+        targets[pid] = torch.load(parent / 'latent.pt', map_location='cpu', weights_only=True)
+        target_hashes[pid] = done['latent_sha256']
+        add_condition((pid,0), None, event_text(row['history'][:2]))
+        if variants:
+            add_condition((pid,'V1'),None,event_text(apply_variant(row,variants,1)['history'][:2]))
+        if args.stage == 'retain':
+            for position in range(1,11):
+                if bank is not None:
+                    if refreshed:
+                        # Actual current-student prefix-(p-1), paired with its next exchange p.
+                        add_condition((pid,position,position-1), bank[pid][position-1],
+                                      event_text(row['history'][position*2:position*2+2]))
+                        continue
+                    for source_index, path in enumerate(bank[pid]):
+                        add_condition((pid,position,source_index), path,
+                                      event_text(row['history'][position*2:position*2+2]))
+                    continue
+                # prefix-00 contains initial write; prefix-(p-1) is input to distractor p.
+                source_position = 0 if args.retain_source_mode == 'initial' else position-1
+                path = args.sources / pid.replace(':','_') / 'seed-0' / f'prefix-{source_position:02d}.png'
+                cache[pid,position] = cache_condition(pipe, path,
+                    event_text(row['history'][position*2:position*2+2]), args.device)
+        print(json.dumps({'cached': i+1, 'total': len(rows), 'stage': args.stage}), flush=True)
+    manifest = {'arm': args.arm, 'stage': args.stage, 'steps': args.steps, 'effective_batch': 4,
+        'split': args.split, 'snapshot_steps': sorted(set(args.snapshot_steps)),
+        'parent_sha256': sha(args.checkpoint), 'targets': target_hashes, 'source_root': str(args.sources),
+        'flow': 'official target/noise; source condition only', 'seed': 20260924,
+        'official_commit': OFFICIAL_REFERENCE_COMMIT,
+        'implementation_sha256': sha(Path(__file__))}
+    if args.retain_source_mode == 'initial':
+        manifest['retain_source_mode'] = 'initial_student_png_for_all_distractor_positions'
+    if bank is not None and not refreshed:
+        manifest['retain_source_mode'] = 'four-bank'
+        manifest['source_bank_sha256'] = sha(args.sources/'bank.json')
+        manifest['source_bank_schedule'] = 'source=cycle%4; position=1+(cycle//4+[0,2,5,7][source])%10'
+        manifest['source_bank_code_sha256'] = sha(ROOT/'scripts/experiments/prefeval_k1_source_bank.py')
+        manifest['condition_cache'] = str(cache.root)
+    if refreshed:
+        manifest.update(retain_source_mode='refresh-bank',
+            refresh_endpoints=[5840,11680,17520,23360], source_depths=list(range(10)),
+            refresh_code_sha256=sha(ROOT/'scripts/experiments/prefeval_k1_refresh_bank.py'),
+            rollout_noise_domains=['refresh-0','refresh-1','refresh-2','refresh-3'])
+        save_once(args.output/f'round-{args.refresh_round}.json', {
+            'round': args.refresh_round, 'start_step': start, 'end_step': stop,
+            'source_bank_sha256': sha(refresh_root/'bank.json'),
+            'source_checkpoint_sha256': sha(snapshot)})
+    if args.retain_target_mode == 'source':
+        manifest['retain_target_mode'] = 'official_vae_encode_of_actual_source_png'
+        if bank is None:
+            manifest['source_png_hashes'] = {row['base_pair_id']:sha(args.sources/row['base_pair_id'].replace(':','_')/'seed-0'/'prefix-00.png') for row in rows}
+    if variants:
+        manifest['initial_variants_sha256']=sha(args.initial_variants)
+        manifest['training_variant_indices']=[0,1]
+    save_json(args.output / 'manifest.json', manifest)
+    predictor = DifferentiableDreamLiteMobileSampler.from_pipeline(pipe, checkpoint_unet=False)
+    optimizer = torch.optim.AdamW(pipe.unet.parameters(), lr=5e-5, betas=(.9,.999), eps=1e-8, weight_decay=1e-4)
+    checkpoint = args.output / 'resume.pt'
+    first = 0
+    saved = {'trainer_state': {}}
+    if checkpoint.exists():
+        saved = load_training_checkpoint(checkpoint, trainable_module=pipe.unet, optimizer=optimizer, expected_manifest=manifest)
+        first = saved['optimizer_step']
+    if refreshed:
+        validate_resume(first, args.refresh_round, saved['trainer_state'], sha(refresh_root/'bank.json'))
+        archive_uncommitted_tail(args.output/'optimization.jsonl', first)
+    started = time.monotonic()
+    n = len(rows)
+    for step in range(first, stop if refreshed else args.steps):
+        optimizer.zero_grad(set_to_none=True)
+        values = []
+        for micro in range(4):
+            draw = step*4 + micro
+            # Retain stage alternates initial/retain draws; each lane balances preference independently.
+            lane_draw = draw//2 if args.stage == 'retain' else draw
+            cycle, offset = divmod(lane_draw,n)
+            order = torch.randperm(n, generator=torch.Generator().manual_seed(stable_seed(20260924,'order',cycle))).tolist()
+            row = rows[order[offset]]
+            pid = row['base_pair_id']
+            position = 1 + cycle % 10 if args.stage == 'retain' and draw % 2 else 0
+            variant=training_variant(cycle,variants is not None)
+            source_index = None
+            if bank is not None and position > 0:
+                if refreshed:
+                    source_index = position-1
+                else:
+                    source_index, position = retention_draw(cycle)
+                c = cache[pid,position,source_index]
+            else:
+                c = cache[pid,'V1' if position==0 and variant==1 else position]
+            source = c['source'].to(args.device)
+            target = select_fm_target(targets[pid].to(args.device),source.detach(),position,args.retain_target_mode=='source')
+            rng = torch.Generator().manual_seed(stable_seed(20260924,'sigma',draw))
+            sigma = float(torch.rand((),generator=rng))
+            generator = torch.Generator(device=args.device).manual_seed(stable_seed(20260924,'noise',draw))
+            noise = torch.randn(target.shape, generator=generator, device=args.device, dtype=target.dtype)
+            state, velocity = official_flow_bridge(noise,target,sigma)
+            pred = predict_velocity(predictor,state,source,sigma,c['embeds'].to(args.device),c['mask'].to(args.device),integer_timestep=True)
+            loss = (pred.float()-velocity.float()).square().mean()
+            if not torch.isfinite(loss):
+                raise RuntimeError('Nonfinite FM loss')
+            (loss/4).backward()
+            values.append({'pair_id':pid,'position':position,'sigma':sigma,'mse':float(loss.detach())})
+            if variants:
+                values[-1]['initial_variant']=variant if position==0 else None
+            if bank is not None:
+                values[-1]['source_index']=source_index
+            if refreshed:
+                values[-1]['source_round']=args.refresh_round if position else None
+        norm = torch.nn.utils.clip_grad_norm_(pipe.unet.parameters(),1.,error_if_nonfinite=True)
+        optimizer.step()
+        append(args.output/'optimization.jsonl', {'step':step+1,'draws':values,'grad_norm':float(norm),'seconds':time.monotonic()-started})
+        if (step+1)%32==0:
+            print(json.dumps({'step':step+1,'mse':sum(x['mse'] for x in values)/4,'seconds':time.monotonic()-started}),flush=True)
+        if (step+1)%128==0 or step+1==args.steps or (refreshed and step+1==stop):
+            save_training_checkpoint(checkpoint,trainable_module=pipe.unet,optimizer=optimizer,epoch=0,
+                episode_cursor=(step+1)*4,optimizer_step=step+1,manifest=manifest,
+                trainer_state={'refresh_round':args.refresh_round,
+                    'source_bank_sha256':sha(refresh_root/'bank.json')} if refreshed else None)
+        if step+1 in args.snapshot_steps:
+            save_inference_checkpoint(args.output/f'checkpoint-step-{step+1:06d}.pt', pipe, step+1, manifest)
+    if refreshed:
+        endpoint=args.output/f'checkpoint-step-{stop:06d}.pt'
+        if not endpoint.exists():
+            save_inference_checkpoint(endpoint,pipe,stop,manifest)
+        save_once(args.output/f'round-{args.refresh_round}-complete.json',
+            {'step':stop,'checkpoint_sha256':sha(endpoint),
+             'source_bank_sha256':sha(refresh_root/'bank.json')})
+        if stop < args.steps:
+            return
+    # A compact inference checkpoint excludes optimizer; resumes keep the separate complete checkpoint.
+    save_inference_checkpoint(args.output/'checkpoint-final.pt', pipe, args.steps, manifest)
+    save_json(args.output/'complete.json',{'steps':args.steps,'checkpoint_sha256':sha(args.output/'checkpoint-final.pt')})
+
+
+def save_inference_checkpoint(path, pipe, step, manifest):
+    atomic_save(path, {'schema_version':1,
+        'trainable_state':{k:p.detach().cpu() for k,p in pipe.unet.named_parameters()},
+        'optimizer_step':step,'manifest':manifest})
+
+@torch.no_grad()
+def rollout(args, pipe, rows):
+    pipe.unet.requires_grad_(False)
+    args.output.mkdir(parents=True, exist_ok=True)
+    binding = {'checkpoint_sha256':sha(args.checkpoint),'split':args.split,
+        'steps':28,'cfg':1,'noise_chains':args.noise_chains,'inter_turns':args.inter_turns,
+        'state':'only reopened uint8 RGB PNG; fresh Gaussian each write'}
+    if args.probe_initial_sources:
+        binding['probe_initial_sources'] = str(args.probe_initial_sources)
+        binding['scope'] = 'fixed_training_source_one_step_probe_not_new_initial_write'
+    if args.noise_domain != 'eval':
+        binding['noise_domain'] = args.noise_domain
+    if args.initial_variants:
+        binding['initial_variants_sha256']=sha(args.initial_variants)
+        binding['initial_variant']=args.initial_variant
+        variants=load_variants(args.initial_variants,rows)
+        rows=[apply_variant(row,variants,args.initial_variant) for row in rows]
+    if args.split=='official':
+        binding['benchmark_history_sha256']=sha(args.history_file)
+        binding['history_protocol']=rows[0]['history_protocol']
+    save_json(args.output/'manifest.json',binding)
+    for row in rows:
+        pid = row['base_pair_id']
+        for chain in range(args.noise_chains):
+            out = args.output / pid.replace(':','_') / f'seed-{chain}'
+            out.mkdir(parents=True, exist_ok=True)
+            if (out/'complete.json').exists():
+                done = json.loads((out/'complete.json').read_text())
+                assert done['binding'] == binding
+                assert all(sha(out/name)==h for name,h in done['png_hashes'].items())
+                continue
+            previous = None
+            hashes = {}
+            for position in range(args.inter_turns+1):
+                if position == 0 and args.probe_initial_sources:
+                    original=args.probe_initial_sources/pid.replace(':','_')/'seed-0'/'prefix-00.png'
+                    done=json.loads((original.parent/'complete.json').read_text())
+                    assert sha(original)==done['png_hashes'][original.name]
+                    current=out/'prefix-00.png'
+                    shutil.copyfile(original,current)
+                    hashes[current.name]=sha(current)
+                    previous=current
+                    continue
+                # Only the PNG is carried to the next update, never output.latents.
+                source_image = Image.open(previous).convert('RGB') if previous else Image.new('RGB',(1024,1024),(128,128,128))
+                source = encode_source(pipe,source_image,args.device)
+                text = event_text(row['history'][position*2:position*2+2])
+                seed = stable_seed(20260924,noise_namespace(pid,chain,args.noise_domain),position)
+                generator = torch.Generator(device=args.device).manual_seed(seed)
+                noise = torch.randn(source.shape,generator=generator,device=args.device,dtype=source.dtype)
+                sampler = NativeBaseEditSampler(pipe,source_image=source_image,event_text=text,guidance_scale=1.)
+                generated = sampler(source_latents=source,noise_latents=noise,num_steps=28,return_trajectory=False)
+                current = out / f'prefix-{position:02d}.png'
+                _save_image(current,decode_model_latents_unit_interval(pipe.vae,generated.latents,clamp=True))
+                hashes[current.name] = sha(current)
+                append(out/'writes.jsonl', {'position':position,'source_png_sha256':sha(previous) if previous else None,
+                    'output_png_sha256':hashes[current.name],'noise_seed':seed,'event':text})
+                previous = current
+                del source, noise, generated, sampler
+            save_json(out/'complete.json',{'binding':binding,'png_hashes':hashes})
+            print(json.dumps({'completed':pid,'chain':chain,'inter_turns':args.inter_turns}),flush=True)
+
+def main(args):
+    configure_strict_cuda_determinism(0)
+    if args.retain_source_mode != 'recursive':
+        assert args.mode == 'train' and args.stage == 'retain'
+    if args.retain_target_mode == 'source':
+        assert args.mode == 'train' and args.stage == 'retain' and args.retain_source_mode in {'initial','four-bank'}
+    if args.noise_domain == 'source-bank':
+        assert args.mode == 'rollout' and args.split == 'train' and args.inter_turns == 0
+        assert args.initial_variants and args.initial_variant in {0,1} and args.noise_chains == 2
+        assert not args.probe_initial_sources
+    if args.noise_domain.startswith('refresh-'):
+        assert args.mode == 'rollout' and args.split == 'train' and args.inter_turns == 9
+        assert args.initial_variants and args.initial_variant == int(args.noise_domain[-1]) % 2
+        assert args.noise_chains == 1 and not args.probe_initial_sources and not args.limit
+    if args.probe_initial_sources:
+        assert args.mode == 'rollout' and args.inter_turns == 1 and args.split == 'pilot'
+    rows = load_training_records(args.split) if args.mode == 'train' else load_records(args.split,history_file=args.history_file)
+    if args.limit:
+        rows = rows[:args.limit]
+    if args.shard_count != 1:
+        assert args.noise_domain.startswith('refresh-') and args.shard_count == 2
+        assert args.shard_index in range(args.shard_count)
+        rows = rows[args.shard_index::args.shard_count]
+    pipe = load_pipe(args)
+    if args.mode == 'train':
+        train(args,pipe,rows)
+    else:
+        rollout(args,pipe,rows)
+
+if __name__ == '__main__':
+    p=argparse.ArgumentParser(description=__doc__)
+    p.add_argument('mode',choices=['train','rollout'])
+    p.add_argument('--arm',choices=['A','B'],required=True)
+    p.add_argument('--stage',choices=['write','retain'],default='write')
+    p.add_argument('--split',choices=['pilot','train','dev','official'],default='pilot')
+    p.add_argument('--history-file',type=Path)
+    for name in ['base','official-source','checkpoint','output']:
+        p.add_argument('--'+name,type=Path,required=True)
+    p.add_argument('--teachers',type=Path)
+    p.add_argument('--sources',type=Path)
+    p.add_argument('--retain-source-mode', choices=['recursive','initial','four-bank','refresh-bank'], default='recursive')
+    p.add_argument('--refresh-round',type=int,choices=range(4),default=0)
+    p.add_argument('--shard-index',type=int,default=0)
+    p.add_argument('--shard-count',type=int,default=1)
+    p.add_argument('--retain-target-mode', choices=['teacher','source'], default='teacher')
+    p.add_argument('--probe-initial-sources',type=Path,help='Offline one-step probe from fixed training PNGs; not a fresh rollout.')
+    p.add_argument('--initial-variants',type=Path)
+    p.add_argument('--initial-variant',type=int,choices=[0,1,2],default=0)
+    p.add_argument('--device',default='cuda:0')
+    p.add_argument('--steps',type=int,default=2048)
+    p.add_argument('--snapshot-steps',type=int,nargs='+',default=[])
+    p.add_argument('--inter-turns',type=int,default=10)
+    p.add_argument('--noise-chains',type=int,default=2)
+    p.add_argument('--noise-domain',choices=['eval','source-bank','refresh-0','refresh-1','refresh-2','refresh-3'],default='eval')
+    p.add_argument('--limit',type=int,default=0)
+    main(p.parse_args())

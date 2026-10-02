@@ -1,0 +1,92 @@
+{
+  "captured_utc": "2026-09-25T13:41:06.731164+00:00",
+  "host": "prefeval-k1-read-h200x2-20260924--ab87355e23f9-6jqtqu2wj7",
+  "gpu": "0, 100 %, 14128 MiB\n1, 38 %, 14128 MiB\n",
+  "parents": {
+    "313512": {
+      "cmdline": "bash scripts/inspire/run_prefeval_k1_canonical64_readback.sh ",
+      "cwd": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-deploy-dc8731c",
+      "children": "336084 "
+    },
+    "314433": {
+      "cmdline": "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python scripts/inspire/run_prefeval_k1_b_readback_queue.py ",
+      "cwd": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-deploy-5d1045f",
+      "children": ""
+    },
+    "346391": {
+      "cmdline": "bash -c set -e; trap \"kill -CONT 314433\" EXIT; kill -STOP 314433; bash scripts/inspire/run_prefeval_k1_snapshot_early.sh dev ",
+      "cwd": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-deploy-0874d12",
+      "children": "346409 "
+    }
+  },
+  "launches": [
+    {
+      "lane": "canonical64",
+      "pid": 313512,
+      "gpu": 0,
+      "command": [
+        "bash",
+        "scripts/inspire/run_prefeval_k1_canonical64_readback.sh"
+      ],
+      "code_root": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-deploy-dc8731c",
+      "commit": "dc8731c5ec8c6b20fbb9c708730f5f613819234a",
+      "time_utc": "20260925T133420Z",
+      "log": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/launch-canonical64-20260925T133420Z.log",
+      "host": "prefeval-k1-read-h200x2-20260924--ab87355e23f9-6jqtqu2wj7"
+    },
+    {
+      "lane": "readback",
+      "pid": 314433,
+      "gpu": 1,
+      "command": [
+        "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+        "scripts/inspire/run_prefeval_k1_b_readback_queue.py"
+      ],
+      "code_root": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-deploy-5d1045f",
+      "commit": "5d1045f4d4c4a7b81ae648a91f8a3ec0935a0621",
+      "time_utc": "20260925T133433Z",
+      "log": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/launch-readback-20260925T133433Z.log",
+      "host": "prefeval-k1-read-h200x2-20260924--ab87355e23f9-6jqtqu2wj7"
+    },
+    {
+      "lane": "snapshot-dev",
+      "pid": 346391,
+      "gpu": 1,
+      "command": [
+        "bash",
+        "-c",
+        "set -e; trap \"kill -CONT 314433\" EXIT; kill -STOP 314433; bash scripts/inspire/run_prefeval_k1_snapshot_early.sh dev"
+      ],
+      "code_root": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-deploy-0874d12",
+      "commit": "0874d128173a79d4408565b4332239fbb1baef63",
+      "time_utc": "20260925T133857Z",
+      "log": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/launch-snapshot-dev-20260925T133857Z.log",
+      "host": "prefeval-k1-read-h200x2-20260924--ab87355e23f9-6jqtqu2wj7",
+      "idle_reader_resume_pid": 314433
+    }
+  ],
+  "reader_queue": {
+    "waiting_for": [
+      [
+        "canonical64",
+        "dev",
+        90
+      ],
+      [
+        "identity64",
+        "pilot",
+        64
+      ],
+      [
+        "identity64",
+        "dev",
+        90
+      ]
+    ],
+    "time_unix": 1790343520.1453857
+  },
+  "C_positions10_completed": true,
+  "canonical_dev_complete": 49,
+  "identity_pilot_complete": 94,
+  "snapshot_dev_complete": 10
+}

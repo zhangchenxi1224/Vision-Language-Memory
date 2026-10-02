@@ -1,7 +1,23 @@
 {
   "schema": "vision_memory.r12-shared-event-latent-writer-config.v1",
   "protocol": "R12-Shared-Event-Latent-Writer",
-  "status": "preregistered_after_complete_r11_before_any_r12_model_outcome",
+  "status": "preregistered_with_numerical_amendment_after_failed_preflight_before_any_r12_model_outcome",
+  "technical_amendments": [
+    {
+      "date": "2026-09-04",
+      "scope": "objective-equivalent numerical implementation only",
+      "reason": "the inactive thresholded RMS penalty formed 0*infinity through d(sqrt)(0), while Reader-to-image and VAE-to-latent gradients were finite",
+      "locked_implementation": "m=mean(delta^2); penalty_rms=sqrt(max(m,0.50^2)); penalty=0.10*(penalty_rms-0.50)^2",
+      "scalar_objective_changed": false,
+      "backward_loss_divisor": 1.0,
+      "gradient_clipping": null,
+      "evidence": {
+        "failed_full_preflight_sha256": "c9fa9d6f0df7c5fbfae0514d0ac2a040b24d3931f7b1081100ee5f61778e3531",
+        "localized_failure_sha256": "8d0045a0bf71a86103f384ca7e36599620575e79102cb4c5b5a07672b3804285",
+        "localized_failure_log_sha256": "668045b021a391b52140f4dec2d999b0f0a36c74f0b951ac10cfb92b9e527c7e"
+      }
+    }
+  ],
   "activation": {
     "required_parent_schema": "vision_memory.r11-vae-latent-reachability-comparison.v1",
     "required_parent_sha256": "f8b048f9cbe9fd4df9460043297904b5c9d476f386d6844d12fd4a5f8f636bb5",
@@ -127,8 +143,10 @@
     "gradient_accumulation": 4,
     "optimizer_steps": 1152,
     "gradient_clipping": null,
+    "backward_loss_divisor": 1.0,
     "choice_views": "each segment receives each forward-cyclic view exactly eight times",
     "objective": "Reader CE + 0.10*relu(latent_delta_rms-0.50)^2 + 1e-4*mean(coefficient^2)",
+    "latent_rms_penalty_implementation": "value-equivalent stable form: m=mean(delta^2); 0.10*(sqrt(max(m,0.50^2))-0.50)^2",
     "checkpoints": [0, 288, 576, 864, 1152],
     "primary_endpoint": "raw shared writer step1152",
     "seed": 0,

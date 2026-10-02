@@ -1,0 +1,504 @@
+{
+  "schema": "prefeval.official-alignment.v1",
+  "upstream_revision": "50795054b5ff5f418d2b768a331d71e480f93331",
+  "topic_split_seed": 42,
+  "train_topics": [
+    "entertain_games",
+    "entertain_shows",
+    "travel_activities",
+    "travel_restaurant",
+    "travel_hotel",
+    "lifestyle_dietary",
+    "entertain_music_book",
+    "lifestyle_beauty",
+    "shop_home",
+    "entertain_sports",
+    "shop_fashion",
+    "education_learning_styles",
+    "lifestyle_fit",
+    "lifestyle_health",
+    "professional_work_location_style",
+    "pet_ownership"
+  ],
+  "eval_topics": [
+    "travel_transportation",
+    "shop_technology",
+    "education_resources",
+    "shop_motors"
+  ],
+  "base_pairs": {
+    "eval_topic": 180,
+    "train": 820
+  },
+  "benchmark_disclosures": 3000,
+  "sft_context_conditions": [
+    0,
+    5,
+    10
+  ],
+  "context_condition_policy": "separate datasets/experiments, not one 3x mixed training set",
+  "sft_target": "verbatim released response_to_q; final-answer-only token CE",
+  "teacher_identity_caveat": "paper says Mistral-7B; released filename/README say mistral8x7b",
+  "wording_differences": 30,
+  "source_files": [
+    {
+      "path": "SFT/single_pref_remind/travel_transportation/mistral8x7b_travel_transportation_2turn.json",
+      "sha256": "708ec55b4c12102f0549138d0027ce35069480f25764f8a0b5b5165a9a46e7eb"
+    },
+    {
+      "path": "benchmark_dataset/explicit_preference/travel_transportation.json",
+      "sha256": "85a584668075ab7e771d6ca563ef4a2ab889422778e140f9b5d0de81d29b5ee5"
+    },
+    {
+      "path": "benchmark_dataset/implicit_preference/choice-based/travel_transportation.json",
+      "sha256": "3dbd76c13cb5ec73a8e2c231f165f35a54dd32c999a32cdd19ae911f37188cee"
+    },
+    {
+      "path": "benchmark_dataset/implicit_preference/persona-driven/travel_transportation.json",
+      "sha256": "fc97fc0954780ac4a24e6e5e8f20c2daf415ee09ee38d20a3570f85a7ab6800e"
+    },
+    {
+      "path": "benchmark_dataset/mcq_options/travel_transportation.json",
+      "sha256": "704b1657e7b850d56be66a916e752066b54692a2c0eaa313ab09c9744032efba"
+    },
+    {
+      "path": "SFT/single_pref_remind/shop_motors/mistral8x7b_shop_motors_2turn.json",
+      "sha256": "a741d2ab8d0de18a8eacce6267c55735d5d1a8b6004d4b1b18cbae5e4a4f00f1"
+    },
+    {
+      "path": "benchmark_dataset/explicit_preference/shop_motors.json",
+      "sha256": "15a085e139032c26d053bb1c8b25c95117aa27b76da82b66dbd14abdeb7ffe4a"
+    },
+    {
+      "path": "benchmark_dataset/implicit_preference/choice-based/shop_motors.json",
+      "sha256": "b786d55456b81760b03b22e1f5195756e87b1899029ead9451b0039473d8ed59"
+    },
+    {
+      "path": "benchmark_dataset/implicit_preference/persona-driven/shop_motors.json",
+      "sha256": "3b80db7f747cc3ba6ca46531fd24a76ec134ba1c82bd7c1f40472e9389cb669c"
+    },
+    {
+      "path": "benchmark_dataset/mcq_options/shop_motors.json",
+      "sha256": "f692d6fb39e549af04a1b7095baab6f3de60be9c2cdd7a6da842a6db44e9b492"
+    },
+    {
+      "path": "SFT/single_pref_remind/lifestyle_beauty/mistral8x7b_lifestyle_beauty_2turn.json",
+      "sha256": "fc642a8e41b56998c723321bef373ead3097c4f2d1a111a3d7fd2059abfe5251"
+    },
+    {
+      "path": "benchmark_dataset/explicit_preference/lifestyle_beauty.json",
+      "sha256": "e8f07f2a46ec36015f86a78bf99661a96b2f0335c9a33414586cdeffe5fa2c27"
+    },
+    {
+      "path": "benchmark_dataset/implicit_preference/choice-based/lifestyle_beauty.json",
+      "sha256": "12f9754f067382e1ad01e94d5d4120731dfb80dd3fd6ab34c94b0ad3a6bcba43"
+    },
+    {
+      "path": "benchmark_dataset/implicit_preference/persona-driven/lifestyle_beauty.json",
+      "sha256": "8a58b980d38d9e62839c3c7030ed6a7594d0a9dbc0a8b35de63df2338823486f"
+    },
+    {
+      "path": "benchmark_dataset/mcq_options/lifestyle_beauty.json",
+      "sha256": "3168c32ee4946b629e7827768ec7938453494e28a956d3e0cca55eae7d827a82"
+    },
+    {
+      "path": "SFT/single_pref_remind/travel_restaurant/mistral8x7b_travel_restaurant_2turn.json",
+      "sha256": "8fe2dc8c5fa80aa8668ee75c973949b9ca28b9fb27cc257e38c5b762dc61a3fa"
+    },
+    {
+      "path": "benchmark_dataset/explicit_preference/travel_restaurant.json",
+      "sha256": "48b4cccdf1c6ae1e95c8d314a0053eab45eda8d366e11fc008fa571d0f58dd95"
+    },
+    {
+      "path": "benchmark_dataset/implicit_preference/choice-based/travel_restaurant.json",
+      "sha256": "003048bf10c102aaf4016c87fa881227f86dd8d0d76128d3ad2af1af37c944ff"
+    },
+    {
+      "path": "benchmark_dataset/implicit_preference/persona-driven/travel_restaurant.json",
+      "sha256": "2a628799b6378a176d1cc5906883793f81f38237fb7df74fc17525e1531fffb8"
+    },
+    {
+      "path": "benchmark_dataset/mcq_options/travel_restaurant.json",
+      "sha256": "26efb4ec708a30748682738938f226c47535c685bb36c52b1bef26361de3c225"
+    },
+    {
+      "path": "SFT/single_pref_remind/shop_fashion/mistral8x7b_shop_fashion_2turn.json",
+      "sha256": "12c01a513fa6675fdd30de75cdf3bd8f3fa5a311c1876077cbf1db80bb6a0bc0"
+    },
+    {
+      "path": "benchmark_dataset/explicit_preference/shop_fashion.json",
+      "sha256": "b7e15ac164b94af081f0d3886e40db22936bbf24116b74a3f9378bcaf0d0ba53"
+    },
+    {
+      "path": "benchmark_dataset/implicit_preference/choice-based/shop_fashion.json",
+      "sha256": "cf419d94b1d044ba0733dac1a6b296f2b797879c9a7007b3b6abb455c171cafd"
+    },
+    {
+      "path": "benchmark_dataset/implicit_preference/persona-driven/shop_fashion.json",
+      "sha256": "959fdb214c4243a821130a61789766ec64fb5c09bef60ed99b06b706628ccbee"
+    },
+    {
+      "path": "benchmark_dataset/mcq_options/shop_fashion.json",
+      "sha256": "61969e45aca9dbfb86faac349ea2c807922cbb794f1201d0a1d7d106a9f1233e"
+    },
+    {
+      "path": "SFT/single_pref_remind/entertain_shows/mistral8x7b_entertain_shows_2turn.json",
+      "sha256": "16719a8e2cca80024038ce3cdbee23323d294114b82c7e24f5fc8d03238916f4"
+    },
+    {
+      "path": "benchmark_dataset/explicit_preference/entertain_shows.json",
+      "sha256": "58ae5f378ef4a3ec4a533389adad0404e74c827a7bca8b99642b49cde1b800f4"
+    },
+    {
+      "path": "benchmark_dataset/implicit_preference/choice-based/entertain_shows.json",
+      "sha256": "298434541332c98fffe8750b6cdb8dc5bc87af9c15b1f43ba40326788c59fde6"
+    },
+    {
+      "path": "benchmark_dataset/implicit_preference/persona-driven/entertain_shows.json",
+      "sha256": "affb781598a15b5b31761c90874c6a13347f2d23cf1f311d6f820c6008ee528e"
+    },
+    {
+      "path": "benchmark_dataset/mcq_options/entertain_shows.json",
+      "sha256": "10d64b09e79de0684f92c11236a1159027be6b781890340d568d2fd9c5ab97b1"
+    },
+    {
+      "path": "SFT/single_pref_remind/pet_ownership/mistral8x7b_pet_ownership_2turn.json",
+      "sha256": "aff037abcdf9e31c495effd048f9e150e977d3c086aa7f06a7617ca19029c663"
+    },
+    {
+      "path": "benchmark_dataset/explicit_preference/pet_ownership.json",
+      "sha256": "76c0600cf64f367d61e5a74bb08a1e89e1390141740fb0729a672da6733be8d5"
+    },
+    {
+      "path": "benchmark_dataset/implicit_preference/choice-based/pet_ownership.json",
+      "sha256": "3a76687e1365691583924f3b5627aede5e5e597274a6cba0493ee288d4697e59"
+    },
+    {
+      "path": "benchmark_dataset/implicit_preference/persona-driven/pet_ownership.json",
+      "sha256": "d895b67ceabdca128a64803fc3668e0f9b3ae2946133aa8684299b76262d7811"
+    },
+    {
+      "path": "benchmark_dataset/mcq_options/pet_ownership.json",
+      "sha256": "293aa375ce8d483f30663f6abf02435a6c1559f06f0995ac4aa523b280fdf9fd"
+    },
+    {
+      "path": "SFT/single_pref_remind/lifestyle_fit/mistral8x7b_lifestyle_fit_2turn.json",
+      "sha256": "188027340f02957eba8be305d9d0ebe890acc8487a56af4eff932fde0a8eec44"
+    },
+    {
+      "path": "benchmark_dataset/explicit_preference/lifestyle_fit.json",
+      "sha256": "2f16aa92351f66f5a1b808842f03f250ddc89020e0e8de860eb4fc140d0519a1"
+    },
+    {
+      "path": "benchmark_dataset/implicit_preference/choice-based/lifestyle_fit.json",
+      "sha256": "de367a00f3b49b498bb7b79ee19c86c14a964abbee6c083f414b4dce99b39efd"
+    },
+    {
+      "path": "benchmark_dataset/implicit_preference/persona-driven/lifestyle_fit.json",
+      "sha256": "46c40e42011fab6d916143ab4edb4d779308f863090766bf666e119b16622719"
+    },
+    {
+      "path": "benchmark_dataset/mcq_options/lifestyle_fit.json",
+      "sha256": "b5adc4f344266b478d3e443d4da90b886188cd7ca24b9ee04477aa8aab05ff6a"
+    },
+    {
+      "path": "SFT/single_pref_remind/entertain_games/mistral8x7b_entertain_games_2turn.json",
+      "sha256": "9df0cb41759ab0c53f69200f00ccc4cc35f69ded00d676bc0c8f151a6967b3b8"
+    },
+    {
+      "path": "benchmark_dataset/explicit_preference/entertain_games.json",
+      "sha256": "67b3400942484556af38ba8eeaf5d7d35d1886d27e2681637cb20015b10ce721"
+    },
+    {
+      "path": "benchmark_dataset/implicit_preference/choice-based/entertain_games.json",
+      "sha256": "aea3744e2d252d198586b3af136440f3df29fc0e05e2052327b4fde2efae1eac"
+    },
+    {
+      "path": "benchmark_dataset/implicit_preference/persona-driven/entertain_games.json",
+      "sha256": "c5152e2be052d17609de95c1eef050dace6527357a454fd48a7d1a85a6009b25"
+    },
+    {
+      "path": "benchmark_dataset/mcq_options/entertain_games.json",
+      "sha256": "386ce6adc40dea62a7046a08c01c4daa76bf2a5ac46b018a337ad77e272fb053"
+    },
+    {
+      "path": "SFT/single_pref_remind/shop_home/mistral8x7b_shop_home_2turn.json",
+      "sha256": "9f1a018ba5f7af2830210e3895efd6b2634efbad81ef7a0d400a8791d871112b"
+    },
+    {
+      "path": "benchmark_dataset/explicit_preference/shop_home.json",
+      "sha256": "19aff148bfbb30b76fecf8f8e30e70bb9f863a42df1f63702dfcfdc7e7cce9de"
+    },
+    {
+      "path": "benchmark_dataset/implicit_preference/choice-based/shop_home.json",
+      "sha256": "10edc4cb38bff5f55e6f9faa1fcdbb59cb1a69ff114b0512bd91381ea3824cd2"
+    },
+    {
+      "path": "benchmark_dataset/implicit_preference/persona-driven/shop_home.json",
+      "sha256": "739c8bb2924ac6c23c47aceb897f3cdbfc680bf1820c265f6ce75ec7b96f8ecc"
+    },
+    {
+      "path": "benchmark_dataset/mcq_options/shop_home.json",
+      "sha256": "50d1526748ebd18cd7604edf1ca280f6f3fbf1fdbd4f1881559b56b8934d3502"
+    },
+    {
+      "path": "SFT/single_pref_remind/lifestyle_health/mistral8x7b_lifestyle_health_2turn.json",
+      "sha256": "a94d4cc765dcd6a4a98bb04c136321f447118c84ec630d73e2ea199680f2db2b"
+    },
+    {
+      "path": "benchmark_dataset/explicit_preference/lifestyle_health.json",
+      "sha256": "a24832165bb791f648c163e86300b682543722e7b491d23052b804af8bcec3cc"
+    },
+    {
+      "path": "benchmark_dataset/implicit_preference/choice-based/lifestyle_health.json",
+      "sha256": "ad954f428dffdd44b4cc01763f9a3c26b5f162bbff20ec84388c6630bff25d9c"
+    },
+    {
+      "path": "benchmark_dataset/implicit_preference/persona-driven/lifestyle_health.json",
+      "sha256": "21efadf8d47d2c2c7f2adbf1cabf993866225d733b8da454494cab8c7875db3c"
+    },
+    {
+      "path": "benchmark_dataset/mcq_options/lifestyle_health.json",
+      "sha256": "f6adfcd1a2b538b3a9ee1c843a2792ac8c243d0d45894fbd3470acc6f3a33d78"
+    },
+    {
+      "path": "SFT/single_pref_remind/travel_activities/mistral8x7b_travel_activities_2turn.json",
+      "sha256": "9b98b99bc3a51653ea41914f23b0372ef05872176f24a060660db136c57027d5"
+    },
+    {
+      "path": "benchmark_dataset/explicit_preference/travel_activities.json",
+      "sha256": "cbba03ddbbc7594e37da873342e94c32aba0775e395eb1a9ed3174a4df3b6a4a"
+    },
+    {
+      "path": "benchmark_dataset/implicit_preference/choice-based/travel_activities.json",
+      "sha256": "c32debdde7556e329e3056e8231329e82843869b9edc8d7d4b43d5209835c57e"
+    },
+    {
+      "path": "benchmark_dataset/implicit_preference/persona-driven/travel_activities.json",
+      "sha256": "f4c4df19e21927c092fa61cc2556b6870f15a833218504826df5f3eaf4d8ef89"
+    },
+    {
+      "path": "benchmark_dataset/mcq_options/travel_activities.json",
+      "sha256": "08f1c2e4ceb23ffa49f3c56068d39e65ca32a84c4f1413cef4c967afce4dbba7"
+    },
+    {
+      "path": "SFT/single_pref_remind/education_learning_styles/mistral8x7b_education_learning_styles_2turn.json",
+      "sha256": "bc447a1decee71efd585ec2d185883ff12465d250414c3153d5c0fb8433183a5"
+    },
+    {
+      "path": "benchmark_dataset/explicit_preference/education_learning_styles.json",
+      "sha256": "f6de7600498bd63eee5b97fed8cd3c502acb9a26ec18fa663daec24a2bfe1cf3"
+    },
+    {
+      "path": "benchmark_dataset/implicit_preference/choice-based/education_learning_styles.json",
+      "sha256": "b867c271ace45e733eb1c3ceb6c0efee9a9a9f54ee235d39edcd536b71350bb1"
+    },
+    {
+      "path": "benchmark_dataset/implicit_preference/persona-driven/education_learning_styles.json",
+      "sha256": "a666552631e8303b660b75989b8beaa76860dd0c46d8681a8879df0279d953ac"
+    },
+    {
+      "path": "benchmark_dataset/mcq_options/education_learning_styles.json",
+      "sha256": "21eb73032f10a4801ae66a1f678d059740b41295e3e7c8358ea72bf215d7dfd7"
+    },
+    {
+      "path": "SFT/single_pref_remind/entertain_music_book/mistral8x7b_entertain_music_book_2turn.json",
+      "sha256": "48e86058d1155a6295ec2e5d92885ddc2f4754cb3fc690bc21e76250fb1d6bc7"
+    },
+    {
+      "path": "benchmark_dataset/explicit_preference/entertain_music_book.json",
+      "sha256": "fb8d5c613f0867fa536f951d62103772bfadfe6b43b26fe0c8ec19799a4c88d5"
+    },
+    {
+      "path": "benchmark_dataset/implicit_preference/choice-based/entertain_music_book.json",
+      "sha256": "d963bfa7c3edccc158062687006ebd8fe30c7ee794f26f4c345a24807b61b1f4"
+    },
+    {
+      "path": "benchmark_dataset/implicit_preference/persona-driven/entertain_music_book.json",
+      "sha256": "3d73cac8ef2441885c6991b0b251941f64ca6b91eaccd1495e1be945e1640e20"
+    },
+    {
+      "path": "benchmark_dataset/mcq_options/entertain_music_book.json",
+      "sha256": "94088e25b3ce7acd6329c76aae8d5b3fad62f7c0e1f9b22838ff175353691651"
+    },
+    {
+      "path": "SFT/single_pref_remind/professional_work_location_style/mistral8x7b_professional_work_location_style_2turn.json",
+      "sha256": "51111c5200572e8290d0aec97ad742dee1677aec3fc7caa04a849f705e91e755"
+    },
+    {
+      "path": "benchmark_dataset/explicit_preference/professional_work_location_style.json",
+      "sha256": "6396174c52a131c2a41158b95383c75854e2ed5e1a5304e96c736e8fb0088424"
+    },
+    {
+      "path": "benchmark_dataset/implicit_preference/choice-based/professional_work_location_style.json",
+      "sha256": "160d2dae804da665b9814c4f07fe98bac8d6fcca59565c98af7618bf05476961"
+    },
+    {
+      "path": "benchmark_dataset/implicit_preference/persona-driven/professional_work_location_style.json",
+      "sha256": "bded7af6bba6cb6d46188e8fca7984b33bc9bfa6237f3d62745e7986573e9e3c"
+    },
+    {
+      "path": "benchmark_dataset/mcq_options/professional_work_location_style.json",
+      "sha256": "511c72b6ad89655b5fba693a6d87f378cff62ca23c191efa9ee8a5c220957f6c"
+    },
+    {
+      "path": "SFT/single_pref_remind/education_resources/mistral8x7b_education_resources_2turn.json",
+      "sha256": "18b0ef3eb744dbe988b8d8224b4ad036e1a7469df0dfdb45720876677432d466"
+    },
+    {
+      "path": "benchmark_dataset/explicit_preference/education_resources.json",
+      "sha256": "e378ef0729e1017848b597cdd1ebe9b1498eda42ed679b7c20c8244b77f63981"
+    },
+    {
+      "path": "benchmark_dataset/implicit_preference/choice-based/education_resources.json",
+      "sha256": "cae50fdbd087f8e2e0207166cec8a67f6da3ce6aac643e22252a64300dbe5fdd"
+    },
+    {
+      "path": "benchmark_dataset/implicit_preference/persona-driven/education_resources.json",
+      "sha256": "87b20ed9437a715a1365470da2abad7cf34ba790c11a9e6393f1c68bc619a150"
+    },
+    {
+      "path": "benchmark_dataset/mcq_options/education_resources.json",
+      "sha256": "4278deaf0ffb936d4cd4d655f4b747fa070c8b57acfc0e930ea6e4f74b192c7c"
+    },
+    {
+      "path": "SFT/single_pref_remind/lifestyle_dietary/mistral8x7b_lifestyle_dietary_2turn.json",
+      "sha256": "addae54ecc50d0564db684229768ad7e06c548d63f1803b0a1215a8b6eddc97d"
+    },
+    {
+      "path": "benchmark_dataset/explicit_preference/lifestyle_dietary.json",
+      "sha256": "9fd03c1c89bce06aa81f57e5cf36d08a77d8a2a2b1d36b75b827608f5060338b"
+    },
+    {
+      "path": "benchmark_dataset/implicit_preference/choice-based/lifestyle_dietary.json",
+      "sha256": "f323318d483dccb978233712c21246e707238e61a1a2325377ddd64e232f6116"
+    },
+    {
+      "path": "benchmark_dataset/implicit_preference/persona-driven/lifestyle_dietary.json",
+      "sha256": "c5a451d0f4a1068addf89b39d85c8bb683819f42aadf91d31b02c5f82e275ee9"
+    },
+    {
+      "path": "benchmark_dataset/mcq_options/lifestyle_dietary.json",
+      "sha256": "54af0ad34ef9c40a944656f6bd9938f516d65eb851bbfe042ceda127082758d8"
+    },
+    {
+      "path": "SFT/single_pref_remind/shop_technology/mistral8x7b_shop_technology_2turn.json",
+      "sha256": "58c8afb6311573fc613b071afad356977fb88c17b84d24cb86787a2860388443"
+    },
+    {
+      "path": "benchmark_dataset/explicit_preference/shop_technology.json",
+      "sha256": "ca184ee67c2edda2ac2633e24613ecb500b89b3a77c298f31e3ae986c2ec5f07"
+    },
+    {
+      "path": "benchmark_dataset/implicit_preference/choice-based/shop_technology.json",
+      "sha256": "fe3515b5a9316e14a19d26cfcec41ab4ef7c66a7eac321b245ddc29ada8297d6"
+    },
+    {
+      "path": "benchmark_dataset/implicit_preference/persona-driven/shop_technology.json",
+      "sha256": "9a45bfb1cf6afb27b3443de5e187841a5f838bfa3c95fe72bb973634e0889d97"
+    },
+    {
+      "path": "benchmark_dataset/mcq_options/shop_technology.json",
+      "sha256": "4e3122ee927bcb48f26c917905f83c33ab19d5b19dd98642a4c65213bfbfc324"
+    },
+    {
+      "path": "SFT/single_pref_remind/travel_hotel/mistral8x7b_travel_hotel_2turn.json",
+      "sha256": "df5b712944d79f674cae01e55646b136ce669be1e6404d2bb49d7719c3dd187b"
+    },
+    {
+      "path": "benchmark_dataset/explicit_preference/travel_hotel.json",
+      "sha256": "21d87f8776a28c22db9ecf86a2c6fff7d69734cd7d75fcef2a7ea0b1f878f1d7"
+    },
+    {
+      "path": "benchmark_dataset/implicit_preference/choice-based/travel_hotel.json",
+      "sha256": "771c43585fbfd255aa1bd553f34eff30c56c8a04c330531b778a11f2b6907467"
+    },
+    {
+      "path": "benchmark_dataset/implicit_preference/persona-driven/travel_hotel.json",
+      "sha256": "29e783c409d0d6f2a852e3b98608a074a5bbbc1e8861fd58cd117040a9c6db32"
+    },
+    {
+      "path": "benchmark_dataset/mcq_options/travel_hotel.json",
+      "sha256": "b2188fe05de89f1669c7f89dd85f9475f732f509b988b15b91d017edc098d90b"
+    },
+    {
+      "path": "SFT/single_pref_remind/entertain_sports/mistral8x7b_entertain_sports_2turn.json",
+      "sha256": "addce4f7b6ee479b12b7712fac8fc0d9f7be1178d05fefe22bb4e02c357b0919"
+    },
+    {
+      "path": "benchmark_dataset/explicit_preference/entertain_sports.json",
+      "sha256": "e992b9a8259f9fb7b94f5677014d08347b1b749ac389b9fd5c37f50c7f6d0dc2"
+    },
+    {
+      "path": "benchmark_dataset/implicit_preference/choice-based/entertain_sports.json",
+      "sha256": "f3962a151e76c83780de16795bdf41b3bee0e4c041a7915ecca21dd808be78e5"
+    },
+    {
+      "path": "benchmark_dataset/implicit_preference/persona-driven/entertain_sports.json",
+      "sha256": "aa9493353e94ab8b8159b9eba50465ba5cd0a5c9e54d3ef3ec102dabb79f3ed0"
+    },
+    {
+      "path": "benchmark_dataset/mcq_options/entertain_sports.json",
+      "sha256": "ed329f08eef4df2291605f2d7d1d3eb905b8cabdfc99361ca8dd2b9aa4910fc0"
+    },
+    {
+      "path": "benchmark_dataset/filtered_inter_turns.json",
+      "sha256": "376133e72e151edc56f0046a229ba627241d26f0dccc36767af5fa4dcf2c869f"
+    },
+    {
+      "path": "SFT/train_sft.py",
+      "sha256": "bd844e120216c03f8abc84c941b562b0f77a9649a7e10ef99e6918ea923ccd23"
+    },
+    {
+      "path": "SFT/sft_utils.py",
+      "sha256": "12ebf3bfc35d00e4b7c036d45787bf07a4fb4e6f8b6bf359c3d59b68d240f7e2"
+    },
+    {
+      "path": "utils/common_utils.py",
+      "sha256": "01ef2edadac0784dbcfac04b7f03ba263313354dbc0a3d0af5da5065511666dc"
+    },
+    {
+      "path": "utils/implicit_utils.py",
+      "sha256": "618e9fe74b15259a322ac474516762b605c779a572449f2712fa623924aa6051"
+    }
+  ],
+  "status": "DATA_PREPARED; no SFT or shared Writer training performed",
+  "files": {
+    "benchmark-disclosures.jsonl.gz": {
+      "bytes": 1933976,
+      "sha256": "1bc026502f14e74fde5b3e29ea8fb6da53e3125ba885c7180c301e8589c426d1"
+    },
+    "context-pools.json": {
+      "bytes": 670578,
+      "sha256": "09b686840b253e7431ec71ba0a53e6eef41256a5b67868631e7c1f7a886e2264"
+    },
+    "sft-eval_topic-0interturn.jsonl.gz": {
+      "bytes": 116865,
+      "sha256": "b5a2c7872b9d0ea86d6589fa4545e447ea1a7861697b8cce42ec630faa52b702"
+    },
+    "sft-eval_topic-10interturn.jsonl.gz": {
+      "bytes": 162986,
+      "sha256": "4e9ef75c733f1925a1bc4d10f8f2252e7cb3076d5105d1b6b408baf588844bf1"
+    },
+    "sft-eval_topic-5interturn.jsonl.gz": {
+      "bytes": 149541,
+      "sha256": "21908911035fb06b3e073e256b160a06ae191eb501f87459e7d363a724f8baeb"
+    },
+    "sft-train-0interturn.jsonl.gz": {
+      "bytes": 523703,
+      "sha256": "e68f2c2b60c2ec17d1a4abd8f63b4f1faf81513fcd8b3f65521aebb042356ac0"
+    },
+    "sft-train-10interturn.jsonl.gz": {
+      "bytes": 726186,
+      "sha256": "d0fcf176acdde410d89e7fa933f295b0d4db9a36febc710a03a4b59bf63dc685"
+    },
+    "sft-train-5interturn.jsonl.gz": {
+      "bytes": 672003,
+      "sha256": "fd3bbadc5880acee194605d72182f1a87f076ae71cdf3bdde50b3f335f2bea3d"
+    },
+    "wording-differences.json": {
+      "bytes": 9485,
+      "sha256": "47e01edc495fc70d2922b99eb8ea1941eb8c034932ed9feab094ebdaf5b9be96"
+    }
+  }
+}

@@ -1,0 +1,505 @@
+{
+  "schema": "generated-training-source-pool/v1",
+  "bank_sha256": "c27cd65dab809deabb5f2cb08891517d3590244651d08a8c6763c84fea901592",
+  "parent_package_sha256": "267152e0c1c059f1f1c3a3e041839a68ba0b8f96a6ca4d782a7ef90ba5ccf05f",
+  "parent_checkpoint_sha256": "7294684170578dfc617b4fafcea97e6480c08642ca4f1e5967ff8966aa103182",
+  "parent_commit": "4fbc85725d78427235757ace2661d086b896a97f",
+  "seed_namespace": "source-pool-training-only-v1:<state>",
+  "excluded_plan_hashes": {
+    "broader151-preregistered-plan.json": "c4a6986edf1330e27af5b91e5105ad6e3806040f01d562f791edbd392bd16834",
+    "03-observed-wording-baseline-preregistered.json": "5bc4d57752f770f6201cfc78b96da5884850b4af4c5b41de73715ba883d4335b"
+  },
+  "source": "Reset to official RGB gray128 before each independent write; original training event only.",
+  "protocol": {
+    "native_steps": 28,
+    "guidance_scale": 1.0,
+    "writer_dtype": "float32",
+    "reader_dtype": "bfloat16",
+    "optimization_steps": 0
+  },
+  "qualification": "Preserve all24 outputs and120 raw reads. All five original queries on every PNG must match original token IDs plus immediate EOS. Any failed case rejects the entire pool for training; no replacement seed or best-image selection.",
+  "scope": "Training material generation and qualification only; not a holdout, new training endpoint, or functional acceptance score. No validation PNG is a training input.",
+  "future_training_contract": "If qualified, add these PNG sources and their official VAE latents only on the condition side. Re-encode native event condition on the selected actual PNG. Keep canonical contexts for the complete baseline and evaluation. Official target-noise FM and target bank stay unchanged. A separate training registration is required.",
+  "jobs": [
+    {
+      "id": "ambient-00",
+      "state": "ambient",
+      "repetition": 0,
+      "lane": 0,
+      "seed": 1310638419399091653,
+      "event": "R3 Train Standard Templates 03: For the indigo desk train 001123, remember that the preferred music is ambient.",
+      "queries": {
+        "original_open": "R3 Train Standard Templates 03: At this later check, what is the current music preference for the indigo desk train 001123?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 03: At this later check, which music does the indigo desk train 001123 currently prefer?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 03: What music does the indigo desk train 001123 prefer now, at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_3": "R3 Train Standard Templates 03: For the indigo desk train 001123, what is the music preference currently in effect at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "R3 Train Standard Templates 03: Based on the stored memory, name the current preferred music for the indigo desk train 001123 at this later check.\nUse the memory image to answer.\nAnswer with a short phrase only."
+      },
+      "expected_token_ids": [
+        59614,
+        151645
+      ]
+    },
+    {
+      "id": "ambient-01",
+      "state": "ambient",
+      "repetition": 1,
+      "lane": 1,
+      "seed": 2754081467399193758,
+      "event": "R3 Train Standard Templates 03: For the indigo desk train 001123, remember that the preferred music is ambient.",
+      "queries": {
+        "original_open": "R3 Train Standard Templates 03: At this later check, what is the current music preference for the indigo desk train 001123?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 03: At this later check, which music does the indigo desk train 001123 currently prefer?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 03: What music does the indigo desk train 001123 prefer now, at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_3": "R3 Train Standard Templates 03: For the indigo desk train 001123, what is the music preference currently in effect at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "R3 Train Standard Templates 03: Based on the stored memory, name the current preferred music for the indigo desk train 001123 at this later check.\nUse the memory image to answer.\nAnswer with a short phrase only."
+      },
+      "expected_token_ids": [
+        59614,
+        151645
+      ]
+    },
+    {
+      "id": "ambient-02",
+      "state": "ambient",
+      "repetition": 2,
+      "lane": 2,
+      "seed": 4887800319153381615,
+      "event": "R3 Train Standard Templates 03: For the indigo desk train 001123, remember that the preferred music is ambient.",
+      "queries": {
+        "original_open": "R3 Train Standard Templates 03: At this later check, what is the current music preference for the indigo desk train 001123?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 03: At this later check, which music does the indigo desk train 001123 currently prefer?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 03: What music does the indigo desk train 001123 prefer now, at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_3": "R3 Train Standard Templates 03: For the indigo desk train 001123, what is the music preference currently in effect at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "R3 Train Standard Templates 03: Based on the stored memory, name the current preferred music for the indigo desk train 001123 at this later check.\nUse the memory image to answer.\nAnswer with a short phrase only."
+      },
+      "expected_token_ids": [
+        59614,
+        151645
+      ]
+    },
+    {
+      "id": "ambient-03",
+      "state": "ambient",
+      "repetition": 3,
+      "lane": 3,
+      "seed": 3947215849185373623,
+      "event": "R3 Train Standard Templates 03: For the indigo desk train 001123, remember that the preferred music is ambient.",
+      "queries": {
+        "original_open": "R3 Train Standard Templates 03: At this later check, what is the current music preference for the indigo desk train 001123?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 03: At this later check, which music does the indigo desk train 001123 currently prefer?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 03: What music does the indigo desk train 001123 prefer now, at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_3": "R3 Train Standard Templates 03: For the indigo desk train 001123, what is the music preference currently in effect at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "R3 Train Standard Templates 03: Based on the stored memory, name the current preferred music for the indigo desk train 001123 at this later check.\nUse the memory image to answer.\nAnswer with a short phrase only."
+      },
+      "expected_token_ids": [
+        59614,
+        151645
+      ]
+    },
+    {
+      "id": "ambient-04",
+      "state": "ambient",
+      "repetition": 4,
+      "lane": 0,
+      "seed": 2959789219004645729,
+      "event": "R3 Train Standard Templates 03: For the indigo desk train 001123, remember that the preferred music is ambient.",
+      "queries": {
+        "original_open": "R3 Train Standard Templates 03: At this later check, what is the current music preference for the indigo desk train 001123?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 03: At this later check, which music does the indigo desk train 001123 currently prefer?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 03: What music does the indigo desk train 001123 prefer now, at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_3": "R3 Train Standard Templates 03: For the indigo desk train 001123, what is the music preference currently in effect at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "R3 Train Standard Templates 03: Based on the stored memory, name the current preferred music for the indigo desk train 001123 at this later check.\nUse the memory image to answer.\nAnswer with a short phrase only."
+      },
+      "expected_token_ids": [
+        59614,
+        151645
+      ]
+    },
+    {
+      "id": "ambient-05",
+      "state": "ambient",
+      "repetition": 5,
+      "lane": 1,
+      "seed": 4676203194530224685,
+      "event": "R3 Train Standard Templates 03: For the indigo desk train 001123, remember that the preferred music is ambient.",
+      "queries": {
+        "original_open": "R3 Train Standard Templates 03: At this later check, what is the current music preference for the indigo desk train 001123?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 03: At this later check, which music does the indigo desk train 001123 currently prefer?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 03: What music does the indigo desk train 001123 prefer now, at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_3": "R3 Train Standard Templates 03: For the indigo desk train 001123, what is the music preference currently in effect at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "R3 Train Standard Templates 03: Based on the stored memory, name the current preferred music for the indigo desk train 001123 at this later check.\nUse the memory image to answer.\nAnswer with a short phrase only."
+      },
+      "expected_token_ids": [
+        59614,
+        151645
+      ]
+    },
+    {
+      "id": "ambient-06",
+      "state": "ambient",
+      "repetition": 6,
+      "lane": 2,
+      "seed": 2370939372355530049,
+      "event": "R3 Train Standard Templates 03: For the indigo desk train 001123, remember that the preferred music is ambient.",
+      "queries": {
+        "original_open": "R3 Train Standard Templates 03: At this later check, what is the current music preference for the indigo desk train 001123?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 03: At this later check, which music does the indigo desk train 001123 currently prefer?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 03: What music does the indigo desk train 001123 prefer now, at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_3": "R3 Train Standard Templates 03: For the indigo desk train 001123, what is the music preference currently in effect at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "R3 Train Standard Templates 03: Based on the stored memory, name the current preferred music for the indigo desk train 001123 at this later check.\nUse the memory image to answer.\nAnswer with a short phrase only."
+      },
+      "expected_token_ids": [
+        59614,
+        151645
+      ]
+    },
+    {
+      "id": "ambient-07",
+      "state": "ambient",
+      "repetition": 7,
+      "lane": 3,
+      "seed": 3836013595424402329,
+      "event": "R3 Train Standard Templates 03: For the indigo desk train 001123, remember that the preferred music is ambient.",
+      "queries": {
+        "original_open": "R3 Train Standard Templates 03: At this later check, what is the current music preference for the indigo desk train 001123?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 03: At this later check, which music does the indigo desk train 001123 currently prefer?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 03: What music does the indigo desk train 001123 prefer now, at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_3": "R3 Train Standard Templates 03: For the indigo desk train 001123, what is the music preference currently in effect at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "R3 Train Standard Templates 03: Based on the stored memory, name the current preferred music for the indigo desk train 001123 at this later check.\nUse the memory image to answer.\nAnswer with a short phrase only."
+      },
+      "expected_token_ids": [
+        59614,
+        151645
+      ]
+    },
+    {
+      "id": "jazz-00",
+      "state": "jazz",
+      "repetition": 0,
+      "lane": 0,
+      "seed": 7214076022115497677,
+      "event": "R3 Train Standard Templates 03: For the indigo desk train 001123, remember that the preferred music is jazz.",
+      "queries": {
+        "original_open": "R3 Train Standard Templates 03: At this later check, what is the current music preference for the indigo desk train 001123?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 03: At this later check, which music does the indigo desk train 001123 currently prefer?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 03: What music does the indigo desk train 001123 prefer now, at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_3": "R3 Train Standard Templates 03: For the indigo desk train 001123, what is the music preference currently in effect at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "R3 Train Standard Templates 03: Based on the stored memory, name the current preferred music for the indigo desk train 001123 at this later check.\nUse the memory image to answer.\nAnswer with a short phrase only."
+      },
+      "expected_token_ids": [
+        73,
+        9802,
+        151645
+      ]
+    },
+    {
+      "id": "jazz-01",
+      "state": "jazz",
+      "repetition": 1,
+      "lane": 1,
+      "seed": 3458567035152111501,
+      "event": "R3 Train Standard Templates 03: For the indigo desk train 001123, remember that the preferred music is jazz.",
+      "queries": {
+        "original_open": "R3 Train Standard Templates 03: At this later check, what is the current music preference for the indigo desk train 001123?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 03: At this later check, which music does the indigo desk train 001123 currently prefer?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 03: What music does the indigo desk train 001123 prefer now, at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_3": "R3 Train Standard Templates 03: For the indigo desk train 001123, what is the music preference currently in effect at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "R3 Train Standard Templates 03: Based on the stored memory, name the current preferred music for the indigo desk train 001123 at this later check.\nUse the memory image to answer.\nAnswer with a short phrase only."
+      },
+      "expected_token_ids": [
+        73,
+        9802,
+        151645
+      ]
+    },
+    {
+      "id": "jazz-02",
+      "state": "jazz",
+      "repetition": 2,
+      "lane": 2,
+      "seed": 66655177129123230,
+      "event": "R3 Train Standard Templates 03: For the indigo desk train 001123, remember that the preferred music is jazz.",
+      "queries": {
+        "original_open": "R3 Train Standard Templates 03: At this later check, what is the current music preference for the indigo desk train 001123?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 03: At this later check, which music does the indigo desk train 001123 currently prefer?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 03: What music does the indigo desk train 001123 prefer now, at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_3": "R3 Train Standard Templates 03: For the indigo desk train 001123, what is the music preference currently in effect at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "R3 Train Standard Templates 03: Based on the stored memory, name the current preferred music for the indigo desk train 001123 at this later check.\nUse the memory image to answer.\nAnswer with a short phrase only."
+      },
+      "expected_token_ids": [
+        73,
+        9802,
+        151645
+      ]
+    },
+    {
+      "id": "jazz-03",
+      "state": "jazz",
+      "repetition": 3,
+      "lane": 3,
+      "seed": 4904188072933042508,
+      "event": "R3 Train Standard Templates 03: For the indigo desk train 001123, remember that the preferred music is jazz.",
+      "queries": {
+        "original_open": "R3 Train Standard Templates 03: At this later check, what is the current music preference for the indigo desk train 001123?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 03: At this later check, which music does the indigo desk train 001123 currently prefer?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 03: What music does the indigo desk train 001123 prefer now, at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_3": "R3 Train Standard Templates 03: For the indigo desk train 001123, what is the music preference currently in effect at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "R3 Train Standard Templates 03: Based on the stored memory, name the current preferred music for the indigo desk train 001123 at this later check.\nUse the memory image to answer.\nAnswer with a short phrase only."
+      },
+      "expected_token_ids": [
+        73,
+        9802,
+        151645
+      ]
+    },
+    {
+      "id": "jazz-04",
+      "state": "jazz",
+      "repetition": 4,
+      "lane": 0,
+      "seed": 2625715977169810065,
+      "event": "R3 Train Standard Templates 03: For the indigo desk train 001123, remember that the preferred music is jazz.",
+      "queries": {
+        "original_open": "R3 Train Standard Templates 03: At this later check, what is the current music preference for the indigo desk train 001123?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 03: At this later check, which music does the indigo desk train 001123 currently prefer?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 03: What music does the indigo desk train 001123 prefer now, at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_3": "R3 Train Standard Templates 03: For the indigo desk train 001123, what is the music preference currently in effect at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "R3 Train Standard Templates 03: Based on the stored memory, name the current preferred music for the indigo desk train 001123 at this later check.\nUse the memory image to answer.\nAnswer with a short phrase only."
+      },
+      "expected_token_ids": [
+        73,
+        9802,
+        151645
+      ]
+    },
+    {
+      "id": "jazz-05",
+      "state": "jazz",
+      "repetition": 5,
+      "lane": 1,
+      "seed": 4106343429047064493,
+      "event": "R3 Train Standard Templates 03: For the indigo desk train 001123, remember that the preferred music is jazz.",
+      "queries": {
+        "original_open": "R3 Train Standard Templates 03: At this later check, what is the current music preference for the indigo desk train 001123?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 03: At this later check, which music does the indigo desk train 001123 currently prefer?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 03: What music does the indigo desk train 001123 prefer now, at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_3": "R3 Train Standard Templates 03: For the indigo desk train 001123, what is the music preference currently in effect at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "R3 Train Standard Templates 03: Based on the stored memory, name the current preferred music for the indigo desk train 001123 at this later check.\nUse the memory image to answer.\nAnswer with a short phrase only."
+      },
+      "expected_token_ids": [
+        73,
+        9802,
+        151645
+      ]
+    },
+    {
+      "id": "jazz-06",
+      "state": "jazz",
+      "repetition": 6,
+      "lane": 2,
+      "seed": 6769736103066004982,
+      "event": "R3 Train Standard Templates 03: For the indigo desk train 001123, remember that the preferred music is jazz.",
+      "queries": {
+        "original_open": "R3 Train Standard Templates 03: At this later check, what is the current music preference for the indigo desk train 001123?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 03: At this later check, which music does the indigo desk train 001123 currently prefer?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 03: What music does the indigo desk train 001123 prefer now, at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_3": "R3 Train Standard Templates 03: For the indigo desk train 001123, what is the music preference currently in effect at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "R3 Train Standard Templates 03: Based on the stored memory, name the current preferred music for the indigo desk train 001123 at this later check.\nUse the memory image to answer.\nAnswer with a short phrase only."
+      },
+      "expected_token_ids": [
+        73,
+        9802,
+        151645
+      ]
+    },
+    {
+      "id": "jazz-07",
+      "state": "jazz",
+      "repetition": 7,
+      "lane": 3,
+      "seed": 1903034362102943710,
+      "event": "R3 Train Standard Templates 03: For the indigo desk train 001123, remember that the preferred music is jazz.",
+      "queries": {
+        "original_open": "R3 Train Standard Templates 03: At this later check, what is the current music preference for the indigo desk train 001123?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 03: At this later check, which music does the indigo desk train 001123 currently prefer?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 03: What music does the indigo desk train 001123 prefer now, at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_3": "R3 Train Standard Templates 03: For the indigo desk train 001123, what is the music preference currently in effect at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "R3 Train Standard Templates 03: Based on the stored memory, name the current preferred music for the indigo desk train 001123 at this later check.\nUse the memory image to answer.\nAnswer with a short phrase only."
+      },
+      "expected_token_ids": [
+        73,
+        9802,
+        151645
+      ]
+    },
+    {
+      "id": "clear-00",
+      "state": "clear",
+      "repetition": 0,
+      "lane": 0,
+      "seed": 2656846986044885040,
+      "event": "R3 Train Standard Templates 03: Clear the saved music preference for the indigo desk train 001123.",
+      "queries": {
+        "original_open": "R3 Train Standard Templates 03: At this later check, what is the current music preference for the indigo desk train 001123?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 03: At this later check, which music does the indigo desk train 001123 currently prefer?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 03: What music does the indigo desk train 001123 prefer now, at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_3": "R3 Train Standard Templates 03: For the indigo desk train 001123, what is the music preference currently in effect at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "R3 Train Standard Templates 03: Based on the stored memory, name the current preferred music for the indigo desk train 001123 at this later check.\nUse the memory image to answer.\nAnswer with a short phrase only."
+      },
+      "expected_token_ids": [
+        2152,
+        4541,
+        21933,
+        151645
+      ]
+    },
+    {
+      "id": "clear-01",
+      "state": "clear",
+      "repetition": 1,
+      "lane": 1,
+      "seed": 4205660698065193596,
+      "event": "R3 Train Standard Templates 03: Clear the saved music preference for the indigo desk train 001123.",
+      "queries": {
+        "original_open": "R3 Train Standard Templates 03: At this later check, what is the current music preference for the indigo desk train 001123?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 03: At this later check, which music does the indigo desk train 001123 currently prefer?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 03: What music does the indigo desk train 001123 prefer now, at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_3": "R3 Train Standard Templates 03: For the indigo desk train 001123, what is the music preference currently in effect at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "R3 Train Standard Templates 03: Based on the stored memory, name the current preferred music for the indigo desk train 001123 at this later check.\nUse the memory image to answer.\nAnswer with a short phrase only."
+      },
+      "expected_token_ids": [
+        2152,
+        4541,
+        21933,
+        151645
+      ]
+    },
+    {
+      "id": "clear-02",
+      "state": "clear",
+      "repetition": 2,
+      "lane": 2,
+      "seed": 3692351683025221087,
+      "event": "R3 Train Standard Templates 03: Clear the saved music preference for the indigo desk train 001123.",
+      "queries": {
+        "original_open": "R3 Train Standard Templates 03: At this later check, what is the current music preference for the indigo desk train 001123?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 03: At this later check, which music does the indigo desk train 001123 currently prefer?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 03: What music does the indigo desk train 001123 prefer now, at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_3": "R3 Train Standard Templates 03: For the indigo desk train 001123, what is the music preference currently in effect at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "R3 Train Standard Templates 03: Based on the stored memory, name the current preferred music for the indigo desk train 001123 at this later check.\nUse the memory image to answer.\nAnswer with a short phrase only."
+      },
+      "expected_token_ids": [
+        2152,
+        4541,
+        21933,
+        151645
+      ]
+    },
+    {
+      "id": "clear-03",
+      "state": "clear",
+      "repetition": 3,
+      "lane": 3,
+      "seed": 4767202541635484095,
+      "event": "R3 Train Standard Templates 03: Clear the saved music preference for the indigo desk train 001123.",
+      "queries": {
+        "original_open": "R3 Train Standard Templates 03: At this later check, what is the current music preference for the indigo desk train 001123?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 03: At this later check, which music does the indigo desk train 001123 currently prefer?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 03: What music does the indigo desk train 001123 prefer now, at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_3": "R3 Train Standard Templates 03: For the indigo desk train 001123, what is the music preference currently in effect at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "R3 Train Standard Templates 03: Based on the stored memory, name the current preferred music for the indigo desk train 001123 at this later check.\nUse the memory image to answer.\nAnswer with a short phrase only."
+      },
+      "expected_token_ids": [
+        2152,
+        4541,
+        21933,
+        151645
+      ]
+    },
+    {
+      "id": "clear-04",
+      "state": "clear",
+      "repetition": 4,
+      "lane": 0,
+      "seed": 4797393687362969974,
+      "event": "R3 Train Standard Templates 03: Clear the saved music preference for the indigo desk train 001123.",
+      "queries": {
+        "original_open": "R3 Train Standard Templates 03: At this later check, what is the current music preference for the indigo desk train 001123?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 03: At this later check, which music does the indigo desk train 001123 currently prefer?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 03: What music does the indigo desk train 001123 prefer now, at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_3": "R3 Train Standard Templates 03: For the indigo desk train 001123, what is the music preference currently in effect at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "R3 Train Standard Templates 03: Based on the stored memory, name the current preferred music for the indigo desk train 001123 at this later check.\nUse the memory image to answer.\nAnswer with a short phrase only."
+      },
+      "expected_token_ids": [
+        2152,
+        4541,
+        21933,
+        151645
+      ]
+    },
+    {
+      "id": "clear-05",
+      "state": "clear",
+      "repetition": 5,
+      "lane": 1,
+      "seed": 5562485228922595250,
+      "event": "R3 Train Standard Templates 03: Clear the saved music preference for the indigo desk train 001123.",
+      "queries": {
+        "original_open": "R3 Train Standard Templates 03: At this later check, what is the current music preference for the indigo desk train 001123?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 03: At this later check, which music does the indigo desk train 001123 currently prefer?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 03: What music does the indigo desk train 001123 prefer now, at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_3": "R3 Train Standard Templates 03: For the indigo desk train 001123, what is the music preference currently in effect at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "R3 Train Standard Templates 03: Based on the stored memory, name the current preferred music for the indigo desk train 001123 at this later check.\nUse the memory image to answer.\nAnswer with a short phrase only."
+      },
+      "expected_token_ids": [
+        2152,
+        4541,
+        21933,
+        151645
+      ]
+    },
+    {
+      "id": "clear-06",
+      "state": "clear",
+      "repetition": 6,
+      "lane": 2,
+      "seed": 2143722009116784083,
+      "event": "R3 Train Standard Templates 03: Clear the saved music preference for the indigo desk train 001123.",
+      "queries": {
+        "original_open": "R3 Train Standard Templates 03: At this later check, what is the current music preference for the indigo desk train 001123?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 03: At this later check, which music does the indigo desk train 001123 currently prefer?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 03: What music does the indigo desk train 001123 prefer now, at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_3": "R3 Train Standard Templates 03: For the indigo desk train 001123, what is the music preference currently in effect at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "R3 Train Standard Templates 03: Based on the stored memory, name the current preferred music for the indigo desk train 001123 at this later check.\nUse the memory image to answer.\nAnswer with a short phrase only."
+      },
+      "expected_token_ids": [
+        2152,
+        4541,
+        21933,
+        151645
+      ]
+    },
+    {
+      "id": "clear-07",
+      "state": "clear",
+      "repetition": 7,
+      "lane": 3,
+      "seed": 4014135339815416086,
+      "event": "R3 Train Standard Templates 03: Clear the saved music preference for the indigo desk train 001123.",
+      "queries": {
+        "original_open": "R3 Train Standard Templates 03: At this later check, what is the current music preference for the indigo desk train 001123?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 03: At this later check, which music does the indigo desk train 001123 currently prefer?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 03: What music does the indigo desk train 001123 prefer now, at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_3": "R3 Train Standard Templates 03: For the indigo desk train 001123, what is the music preference currently in effect at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "R3 Train Standard Templates 03: Based on the stored memory, name the current preferred music for the indigo desk train 001123 at this later check.\nUse the memory image to answer.\nAnswer with a short phrase only."
+      },
+      "expected_token_ids": [
+        2152,
+        4541,
+        21933,
+        151645
+      ]
+    }
+  ]
+}

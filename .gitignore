@@ -34,3 +34,26 @@ __pycache__/
 .vscode/
 .DS_Store
 Thumbs.db
+
+# Per-update JSON files are retained in the verified experiment evidence archive.
+/reports/official-alignment-results-20260913/*/train/metrics/
+
+# Full native-output PNGs remain in the evidence archive; track the montage.
+/reports/official-alignment-results-20260913/event-format/*.png
+/reports/official-alignment-results-20260913/cfg1-confirmation/*.png
+/reports/official-alignment-results-20260913/cfg1-chains/*.png
+
+# Complete read traces retained in the experiment evidence archive and compact JSONL.
+/reports/prefeval-rgb-20260917/references-v1/
+/reports/prefeval-rgb-20260917/references-v2/
+/reports/prefeval-rgb-20260917/references-v1-verified.jsonl
+/reports/prefeval-rgb-20260917/visual-recovery-v1-run/
+/reports/prefeval-rgb-20260917/semantic-transfer-v1-run/
+/reports/prefeval-rgb-20260917/semantic-ranking-v1-run/
+/reports/prefeval-rgb-20260917/ranking-learning-trial-v1-run/
+/reports/prefeval-rgb-20260917/ranking-learning-trial-v1.tgz
+/reports/prefeval-rgb-20260917/joint-consolidation-v1-run/
+/reports/prefeval-rgb-20260917/query-family-coverage-v1-run/
+/reports/prefeval-rgb-20260917/attribute-generalization-v1-r2-run/
+/reports/prefeval-rgb-20260917/compositional-evidence-v1-run/
+/reports/prefeval-rgb-20260917/worst-query-consolidation-v1-run/

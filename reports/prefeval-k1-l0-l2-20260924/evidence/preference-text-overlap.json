@@ -1,0 +1,122 @@
+{
+  "normalization": "Unicode NFKC, casefold, whitespace collapse; no semantic matching",
+  "comparisons": [
+    {
+      "left": "pilot",
+      "right": "dev",
+      "left_n": 64,
+      "right_n": 90,
+      "shared_ids": [],
+      "shared_topics": [
+        "education_learning_styles",
+        "entertain_games",
+        "entertain_music_book",
+        "entertain_shows",
+        "entertain_sports",
+        "lifestyle_beauty",
+        "lifestyle_dietary",
+        "lifestyle_fit",
+        "lifestyle_health",
+        "pet_ownership",
+        "professional_work_location_style",
+        "shop_fashion",
+        "shop_home",
+        "travel_activities",
+        "travel_hotel",
+        "travel_restaurant"
+      ],
+      "overlapping_preferences": 0,
+      "overlaps": []
+    },
+    {
+      "left": "train",
+      "right": "dev",
+      "left_n": 730,
+      "right_n": 90,
+      "shared_ids": [],
+      "shared_topics": [
+        "education_learning_styles",
+        "entertain_games",
+        "entertain_music_book",
+        "entertain_shows",
+        "entertain_sports",
+        "lifestyle_beauty",
+        "lifestyle_dietary",
+        "lifestyle_fit",
+        "lifestyle_health",
+        "pet_ownership",
+        "professional_work_location_style",
+        "shop_fashion",
+        "shop_home",
+        "travel_activities",
+        "travel_hotel",
+        "travel_restaurant"
+      ],
+      "overlapping_preferences": 0,
+      "overlaps": []
+    },
+    {
+      "left": "pilot",
+      "right": "official",
+      "left_n": 64,
+      "right_n": 180,
+      "shared_ids": [],
+      "shared_topics": [],
+      "overlapping_preferences": 0,
+      "overlaps": []
+    },
+    {
+      "left": "train",
+      "right": "official",
+      "left_n": 730,
+      "right_n": 180,
+      "shared_ids": [],
+      "shared_topics": [],
+      "overlapping_preferences": 3,
+      "overlaps": [
+        {
+          "left_ids": [
+            "education_learning_styles:0011"
+          ],
+          "right_id": "education_resources:0043",
+          "preference": "I avoid learning materials that are text-heavy due to my dyslexia.",
+          "exact_raw_text_match": true,
+          "same_normalized_T1_question": true
+        },
+        {
+          "left_ids": [
+            "education_learning_styles:0003"
+          ],
+          "right_id": "education_resources:0044",
+          "preference": "I strongly prefer learning through storytelling and narrative-based methods and dislike dry, factual textbooks.",
+          "exact_raw_text_match": true,
+          "same_normalized_T1_question": true
+        },
+        {
+          "left_ids": [
+            "education_learning_styles:0004"
+          ],
+          "right_id": "education_resources:0050",
+          "preference": "I find it difficult to stay engaged in learning activities that don't involve peer-to-peer interaction and group work.",
+          "exact_raw_text_match": true,
+          "same_normalized_T1_question": true
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "file": "reports\\prefeval-official-alignment-20260923\\WRITER_IMPLEMENTATION_SPLIT.json",
+      "sha256": "0da60bb10a5830e35e31b0f7fd5a03094eb9d1f5a51d746f8e8c36a7b6e75421"
+    },
+    {
+      "file": "reports\\prefeval-official-alignment-20260923\\data\\sft-train-10interturn.jsonl.gz",
+      "sha256": "d0fcf176acdde410d89e7fa933f295b0d4db9a36febc710a03a4b59bf63dc685"
+    },
+    {
+      "file": "reports\\prefeval-official-alignment-20260923\\data\\benchmark-disclosures.jsonl.gz",
+      "sha256": "1bc026502f14e74fde5b3e29ea8fb6da53e3125ba885c7180c301e8589c426d1"
+    }
+  ],
+  "interpretation": "No splits, targets, or scores changed. An exact-text nonmatch does not establish semantic novelty. Full 730 training is prepared, not yet executed. Official 180 remains the primary denominator; exposure strata, if reported after full training, are supplementary."
+}

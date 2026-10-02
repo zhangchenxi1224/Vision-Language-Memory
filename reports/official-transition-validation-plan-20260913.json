@@ -1,0 +1,1061 @@
+{
+  "single_writes": [
+    {
+      "state": "ambient",
+      "gold": "ambient",
+      "style": "original_training_event",
+      "noise_seeds": [
+        2714704031322746358,
+        9148694003720054458,
+        3830926574055832324,
+        2905884260688442771,
+        1492202387965234120,
+        7266281222585974790,
+        3130130551757047879,
+        5357575227426183075,
+        200169747931328826,
+        8983087812390788548,
+        253450318271243246,
+        7434381228634866363,
+        8001179664519761102,
+        1792609930323253690,
+        5157888103819959055,
+        7629418222131793609
+      ]
+    },
+    {
+      "state": "ambient",
+      "gold": "ambient",
+      "style": "new_wording_1",
+      "event_text": "Please update the indigo desk train 001123: from now on its music choice is ambient.",
+      "noise_seeds": [
+        2714704031322746358,
+        9148694003720054458,
+        3830926574055832324,
+        2905884260688442771
+      ]
+    },
+    {
+      "state": "ambient",
+      "gold": "ambient",
+      "style": "new_wording_2",
+      "event_text": "The latest music selection for the indigo desk train 001123 is ambient; save this new choice.",
+      "noise_seeds": [
+        2714704031322746358,
+        9148694003720054458,
+        3830926574055832324,
+        2905884260688442771
+      ]
+    },
+    {
+      "state": "jazz",
+      "gold": "jazz",
+      "style": "original_training_event",
+      "noise_seeds": [
+        2714704031322746358,
+        9148694003720054458,
+        3830926574055832324,
+        2905884260688442771,
+        1492202387965234120,
+        7266281222585974790,
+        3130130551757047879,
+        5357575227426183075,
+        200169747931328826,
+        8983087812390788548,
+        253450318271243246,
+        7434381228634866363,
+        8001179664519761102,
+        1792609930323253690,
+        5157888103819959055,
+        7629418222131793609
+      ]
+    },
+    {
+      "state": "jazz",
+      "gold": "jazz",
+      "style": "new_wording_1",
+      "event_text": "Please update the indigo desk train 001123: from now on its music choice is jazz.",
+      "noise_seeds": [
+        2714704031322746358,
+        9148694003720054458,
+        3830926574055832324,
+        2905884260688442771
+      ]
+    },
+    {
+      "state": "jazz",
+      "gold": "jazz",
+      "style": "new_wording_2",
+      "event_text": "The latest music selection for the indigo desk train 001123 is jazz; save this new choice.",
+      "noise_seeds": [
+        2714704031322746358,
+        9148694003720054458,
+        3830926574055832324,
+        2905884260688442771
+      ]
+    },
+    {
+      "state": "clear",
+      "gold": "no active preference",
+      "style": "original_training_event",
+      "noise_seeds": [
+        2714704031322746358,
+        9148694003720054458,
+        3830926574055832324,
+        2905884260688442771,
+        1492202387965234120,
+        7266281222585974790,
+        3130130551757047879,
+        5357575227426183075,
+        200169747931328826,
+        8983087812390788548,
+        253450318271243246,
+        7434381228634866363,
+        8001179664519761102,
+        1792609930323253690,
+        5157888103819959055,
+        7629418222131793609
+      ]
+    },
+    {
+      "state": "clear",
+      "gold": "no active preference",
+      "style": "new_wording_1",
+      "event_text": "Cancel the previously selected music for the indigo desk train 001123. The saved preference should be empty.",
+      "noise_seeds": [
+        2714704031322746358,
+        9148694003720054458,
+        3830926574055832324,
+        2905884260688442771
+      ]
+    },
+    {
+      "state": "clear",
+      "gold": "no active preference",
+      "style": "new_wording_2",
+      "event_text": "Reset the music setting for the indigo desk train 001123 by removing the old selection.",
+      "noise_seeds": [
+        2714704031322746358,
+        9148694003720054458,
+        3830926574055832324,
+        2905884260688442771
+      ]
+    }
+  ],
+  "rgb_chains": [
+    {
+      "sequence": 0,
+      "repetition": 0,
+      "steps": [
+        {
+          "step": 0,
+          "operation": "write",
+          "expected_state": "ambient",
+          "gold": "ambient",
+          "noise_seed": 5979018575807579760,
+          "event_style": "original_training_event"
+        },
+        {
+          "step": 1,
+          "operation": "noop",
+          "expected_state": "ambient",
+          "gold": "ambient",
+          "noise_seed": 1062447373363459599,
+          "event_style": "original_training_event"
+        },
+        {
+          "step": 2,
+          "operation": "write",
+          "expected_state": "jazz",
+          "gold": "jazz",
+          "noise_seed": 4282960891380032461,
+          "event_style": "original_training_event"
+        },
+        {
+          "step": 3,
+          "operation": "noop",
+          "expected_state": "jazz",
+          "gold": "jazz",
+          "noise_seed": 1583327512667226808,
+          "event_style": "original_training_event"
+        },
+        {
+          "step": 4,
+          "operation": "write",
+          "expected_state": "clear",
+          "gold": "no active preference",
+          "noise_seed": 1050533051151907262,
+          "event_style": "original_training_event"
+        },
+        {
+          "step": 5,
+          "operation": "noop",
+          "expected_state": "clear",
+          "gold": "no active preference",
+          "noise_seed": 1563941440588644753,
+          "event_style": "original_training_event"
+        }
+      ]
+    },
+    {
+      "sequence": 0,
+      "repetition": 1,
+      "steps": [
+        {
+          "step": 0,
+          "operation": "write",
+          "expected_state": "ambient",
+          "gold": "ambient",
+          "noise_seed": 2138165097902734697,
+          "event_style": "original_training_event"
+        },
+        {
+          "step": 1,
+          "operation": "noop",
+          "expected_state": "ambient",
+          "gold": "ambient",
+          "noise_seed": 7057575332783794412,
+          "event_style": "original_training_event"
+        },
+        {
+          "step": 2,
+          "operation": "write",
+          "expected_state": "jazz",
+          "gold": "jazz",
+          "noise_seed": 6706415117349077479,
+          "event_style": "original_training_event"
+        },
+        {
+          "step": 3,
+          "operation": "noop",
+          "expected_state": "jazz",
+          "gold": "jazz",
+          "noise_seed": 6631927112287115202,
+          "event_style": "original_training_event"
+        },
+        {
+          "step": 4,
+          "operation": "write",
+          "expected_state": "clear",
+          "gold": "no active preference",
+          "noise_seed": 5170280544778240817,
+          "event_style": "original_training_event"
+        },
+        {
+          "step": 5,
+          "operation": "noop",
+          "expected_state": "clear",
+          "gold": "no active preference",
+          "noise_seed": 2989714014419580475,
+          "event_style": "original_training_event"
+        }
+      ]
+    },
+    {
+      "sequence": 0,
+      "repetition": 2,
+      "steps": [
+        {
+          "step": 0,
+          "operation": "write",
+          "expected_state": "ambient",
+          "gold": "ambient",
+          "noise_seed": 5757679370136956013,
+          "event_style": "new_wording_1",
+          "event_text": "Please update the indigo desk train 001123: from now on its music choice is ambient."
+        },
+        {
+          "step": 1,
+          "operation": "noop",
+          "expected_state": "ambient",
+          "gold": "ambient",
+          "noise_seed": 1582961399051051535,
+          "event_style": "new_wording_1",
+          "event_text": "An unrelated inventory check took place for the indigo desk train 001123. Retain its previous music choice."
+        },
+        {
+          "step": 2,
+          "operation": "write",
+          "expected_state": "jazz",
+          "gold": "jazz",
+          "noise_seed": 2504208357533821086,
+          "event_style": "new_wording_1",
+          "event_text": "Please update the indigo desk train 001123: from now on its music choice is jazz."
+        },
+        {
+          "step": 3,
+          "operation": "noop",
+          "expected_state": "jazz",
+          "gold": "jazz",
+          "noise_seed": 6084638435335018396,
+          "event_style": "new_wording_1",
+          "event_text": "An unrelated inventory check took place for the indigo desk train 001123. Retain its previous music choice."
+        },
+        {
+          "step": 4,
+          "operation": "write",
+          "expected_state": "clear",
+          "gold": "no active preference",
+          "noise_seed": 7907832626500457347,
+          "event_style": "new_wording_1",
+          "event_text": "Cancel the previously selected music for the indigo desk train 001123. The saved preference should be empty."
+        },
+        {
+          "step": 5,
+          "operation": "noop",
+          "expected_state": "clear",
+          "gold": "no active preference",
+          "noise_seed": 8572834167490453501,
+          "event_style": "new_wording_1",
+          "event_text": "An unrelated inventory check took place for the indigo desk train 001123. Retain its previous music choice."
+        }
+      ]
+    },
+    {
+      "sequence": 0,
+      "repetition": 3,
+      "steps": [
+        {
+          "step": 0,
+          "operation": "write",
+          "expected_state": "ambient",
+          "gold": "ambient",
+          "noise_seed": 7970612363090665293,
+          "event_style": "new_wording_2",
+          "event_text": "The latest music selection for the indigo desk train 001123 is ambient; save this new choice."
+        },
+        {
+          "step": 1,
+          "operation": "noop",
+          "expected_state": "ambient",
+          "gold": "ambient",
+          "noise_seed": 792012391678488902,
+          "event_style": "new_wording_2",
+          "event_text": "The indigo desk train 001123 received a routine maintenance notice. Leave its existing music preference intact."
+        },
+        {
+          "step": 2,
+          "operation": "write",
+          "expected_state": "jazz",
+          "gold": "jazz",
+          "noise_seed": 3355248377218671282,
+          "event_style": "new_wording_2",
+          "event_text": "The latest music selection for the indigo desk train 001123 is jazz; save this new choice."
+        },
+        {
+          "step": 3,
+          "operation": "noop",
+          "expected_state": "jazz",
+          "gold": "jazz",
+          "noise_seed": 5059575850148843083,
+          "event_style": "new_wording_2",
+          "event_text": "The indigo desk train 001123 received a routine maintenance notice. Leave its existing music preference intact."
+        },
+        {
+          "step": 4,
+          "operation": "write",
+          "expected_state": "clear",
+          "gold": "no active preference",
+          "noise_seed": 4777269422514417707,
+          "event_style": "new_wording_2",
+          "event_text": "Reset the music setting for the indigo desk train 001123 by removing the old selection."
+        },
+        {
+          "step": 5,
+          "operation": "noop",
+          "expected_state": "clear",
+          "gold": "no active preference",
+          "noise_seed": 3105327422635083035,
+          "event_style": "new_wording_2",
+          "event_text": "The indigo desk train 001123 received a routine maintenance notice. Leave its existing music preference intact."
+        }
+      ]
+    },
+    {
+      "sequence": 1,
+      "repetition": 0,
+      "steps": [
+        {
+          "step": 0,
+          "operation": "write",
+          "expected_state": "jazz",
+          "gold": "jazz",
+          "noise_seed": 5979018575807579760,
+          "event_style": "original_training_event"
+        },
+        {
+          "step": 1,
+          "operation": "noop",
+          "expected_state": "jazz",
+          "gold": "jazz",
+          "noise_seed": 1062447373363459599,
+          "event_style": "original_training_event"
+        },
+        {
+          "step": 2,
+          "operation": "write",
+          "expected_state": "ambient",
+          "gold": "ambient",
+          "noise_seed": 4282960891380032461,
+          "event_style": "original_training_event"
+        },
+        {
+          "step": 3,
+          "operation": "noop",
+          "expected_state": "ambient",
+          "gold": "ambient",
+          "noise_seed": 1583327512667226808,
+          "event_style": "original_training_event"
+        },
+        {
+          "step": 4,
+          "operation": "write",
+          "expected_state": "clear",
+          "gold": "no active preference",
+          "noise_seed": 1050533051151907262,
+          "event_style": "original_training_event"
+        },
+        {
+          "step": 5,
+          "operation": "noop",
+          "expected_state": "clear",
+          "gold": "no active preference",
+          "noise_seed": 1563941440588644753,
+          "event_style": "original_training_event"
+        }
+      ]
+    },
+    {
+      "sequence": 1,
+      "repetition": 1,
+      "steps": [
+        {
+          "step": 0,
+          "operation": "write",
+          "expected_state": "jazz",
+          "gold": "jazz",
+          "noise_seed": 2138165097902734697,
+          "event_style": "original_training_event"
+        },
+        {
+          "step": 1,
+          "operation": "noop",
+          "expected_state": "jazz",
+          "gold": "jazz",
+          "noise_seed": 7057575332783794412,
+          "event_style": "original_training_event"
+        },
+        {
+          "step": 2,
+          "operation": "write",
+          "expected_state": "ambient",
+          "gold": "ambient",
+          "noise_seed": 6706415117349077479,
+          "event_style": "original_training_event"
+        },
+        {
+          "step": 3,
+          "operation": "noop",
+          "expected_state": "ambient",
+          "gold": "ambient",
+          "noise_seed": 6631927112287115202,
+          "event_style": "original_training_event"
+        },
+        {
+          "step": 4,
+          "operation": "write",
+          "expected_state": "clear",
+          "gold": "no active preference",
+          "noise_seed": 5170280544778240817,
+          "event_style": "original_training_event"
+        },
+        {
+          "step": 5,
+          "operation": "noop",
+          "expected_state": "clear",
+          "gold": "no active preference",
+          "noise_seed": 2989714014419580475,
+          "event_style": "original_training_event"
+        }
+      ]
+    },
+    {
+      "sequence": 1,
+      "repetition": 2,
+      "steps": [
+        {
+          "step": 0,
+          "operation": "write",
+          "expected_state": "jazz",
+          "gold": "jazz",
+          "noise_seed": 5757679370136956013,
+          "event_style": "new_wording_1",
+          "event_text": "Please update the indigo desk train 001123: from now on its music choice is jazz."
+        },
+        {
+          "step": 1,
+          "operation": "noop",
+          "expected_state": "jazz",
+          "gold": "jazz",
+          "noise_seed": 1582961399051051535,
+          "event_style": "new_wording_1",
+          "event_text": "An unrelated inventory check took place for the indigo desk train 001123. Retain its previous music choice."
+        },
+        {
+          "step": 2,
+          "operation": "write",
+          "expected_state": "ambient",
+          "gold": "ambient",
+          "noise_seed": 2504208357533821086,
+          "event_style": "new_wording_1",
+          "event_text": "Please update the indigo desk train 001123: from now on its music choice is ambient."
+        },
+        {
+          "step": 3,
+          "operation": "noop",
+          "expected_state": "ambient",
+          "gold": "ambient",
+          "noise_seed": 6084638435335018396,
+          "event_style": "new_wording_1",
+          "event_text": "An unrelated inventory check took place for the indigo desk train 001123. Retain its previous music choice."
+        },
+        {
+          "step": 4,
+          "operation": "write",
+          "expected_state": "clear",
+          "gold": "no active preference",
+          "noise_seed": 7907832626500457347,
+          "event_style": "new_wording_1",
+          "event_text": "Cancel the previously selected music for the indigo desk train 001123. The saved preference should be empty."
+        },
+        {
+          "step": 5,
+          "operation": "noop",
+          "expected_state": "clear",
+          "gold": "no active preference",
+          "noise_seed": 8572834167490453501,
+          "event_style": "new_wording_1",
+          "event_text": "An unrelated inventory check took place for the indigo desk train 001123. Retain its previous music choice."
+        }
+      ]
+    },
+    {
+      "sequence": 1,
+      "repetition": 3,
+      "steps": [
+        {
+          "step": 0,
+          "operation": "write",
+          "expected_state": "jazz",
+          "gold": "jazz",
+          "noise_seed": 7970612363090665293,
+          "event_style": "new_wording_2",
+          "event_text": "The latest music selection for the indigo desk train 001123 is jazz; save this new choice."
+        },
+        {
+          "step": 1,
+          "operation": "noop",
+          "expected_state": "jazz",
+          "gold": "jazz",
+          "noise_seed": 792012391678488902,
+          "event_style": "new_wording_2",
+          "event_text": "The indigo desk train 001123 received a routine maintenance notice. Leave its existing music preference intact."
+        },
+        {
+          "step": 2,
+          "operation": "write",
+          "expected_state": "ambient",
+          "gold": "ambient",
+          "noise_seed": 3355248377218671282,
+          "event_style": "new_wording_2",
+          "event_text": "The latest music selection for the indigo desk train 001123 is ambient; save this new choice."
+        },
+        {
+          "step": 3,
+          "operation": "noop",
+          "expected_state": "ambient",
+          "gold": "ambient",
+          "noise_seed": 5059575850148843083,
+          "event_style": "new_wording_2",
+          "event_text": "The indigo desk train 001123 received a routine maintenance notice. Leave its existing music preference intact."
+        },
+        {
+          "step": 4,
+          "operation": "write",
+          "expected_state": "clear",
+          "gold": "no active preference",
+          "noise_seed": 4777269422514417707,
+          "event_style": "new_wording_2",
+          "event_text": "Reset the music setting for the indigo desk train 001123 by removing the old selection."
+        },
+        {
+          "step": 5,
+          "operation": "noop",
+          "expected_state": "clear",
+          "gold": "no active preference",
+          "noise_seed": 3105327422635083035,
+          "event_style": "new_wording_2",
+          "event_text": "The indigo desk train 001123 received a routine maintenance notice. Leave its existing music preference intact."
+        }
+      ]
+    },
+    {
+      "sequence": 2,
+      "repetition": 0,
+      "steps": [
+        {
+          "step": 0,
+          "operation": "write",
+          "expected_state": "clear",
+          "gold": "no active preference",
+          "noise_seed": 5979018575807579760,
+          "event_style": "original_training_event"
+        },
+        {
+          "step": 1,
+          "operation": "noop",
+          "expected_state": "clear",
+          "gold": "no active preference",
+          "noise_seed": 1062447373363459599,
+          "event_style": "original_training_event"
+        },
+        {
+          "step": 2,
+          "operation": "write",
+          "expected_state": "ambient",
+          "gold": "ambient",
+          "noise_seed": 4282960891380032461,
+          "event_style": "original_training_event"
+        },
+        {
+          "step": 3,
+          "operation": "noop",
+          "expected_state": "ambient",
+          "gold": "ambient",
+          "noise_seed": 1583327512667226808,
+          "event_style": "original_training_event"
+        },
+        {
+          "step": 4,
+          "operation": "write",
+          "expected_state": "jazz",
+          "gold": "jazz",
+          "noise_seed": 1050533051151907262,
+          "event_style": "original_training_event"
+        },
+        {
+          "step": 5,
+          "operation": "noop",
+          "expected_state": "jazz",
+          "gold": "jazz",
+          "noise_seed": 1563941440588644753,
+          "event_style": "original_training_event"
+        }
+      ]
+    },
+    {
+      "sequence": 2,
+      "repetition": 1,
+      "steps": [
+        {
+          "step": 0,
+          "operation": "write",
+          "expected_state": "clear",
+          "gold": "no active preference",
+          "noise_seed": 2138165097902734697,
+          "event_style": "original_training_event"
+        },
+        {
+          "step": 1,
+          "operation": "noop",
+          "expected_state": "clear",
+          "gold": "no active preference",
+          "noise_seed": 7057575332783794412,
+          "event_style": "original_training_event"
+        },
+        {
+          "step": 2,
+          "operation": "write",
+          "expected_state": "ambient",
+          "gold": "ambient",
+          "noise_seed": 6706415117349077479,
+          "event_style": "original_training_event"
+        },
+        {
+          "step": 3,
+          "operation": "noop",
+          "expected_state": "ambient",
+          "gold": "ambient",
+          "noise_seed": 6631927112287115202,
+          "event_style": "original_training_event"
+        },
+        {
+          "step": 4,
+          "operation": "write",
+          "expected_state": "jazz",
+          "gold": "jazz",
+          "noise_seed": 5170280544778240817,
+          "event_style": "original_training_event"
+        },
+        {
+          "step": 5,
+          "operation": "noop",
+          "expected_state": "jazz",
+          "gold": "jazz",
+          "noise_seed": 2989714014419580475,
+          "event_style": "original_training_event"
+        }
+      ]
+    },
+    {
+      "sequence": 2,
+      "repetition": 2,
+      "steps": [
+        {
+          "step": 0,
+          "operation": "write",
+          "expected_state": "clear",
+          "gold": "no active preference",
+          "noise_seed": 5757679370136956013,
+          "event_style": "new_wording_1",
+          "event_text": "Cancel the previously selected music for the indigo desk train 001123. The saved preference should be empty."
+        },
+        {
+          "step": 1,
+          "operation": "noop",
+          "expected_state": "clear",
+          "gold": "no active preference",
+          "noise_seed": 1582961399051051535,
+          "event_style": "new_wording_1",
+          "event_text": "An unrelated inventory check took place for the indigo desk train 001123. Retain its previous music choice."
+        },
+        {
+          "step": 2,
+          "operation": "write",
+          "expected_state": "ambient",
+          "gold": "ambient",
+          "noise_seed": 2504208357533821086,
+          "event_style": "new_wording_1",
+          "event_text": "Please update the indigo desk train 001123: from now on its music choice is ambient."
+        },
+        {
+          "step": 3,
+          "operation": "noop",
+          "expected_state": "ambient",
+          "gold": "ambient",
+          "noise_seed": 6084638435335018396,
+          "event_style": "new_wording_1",
+          "event_text": "An unrelated inventory check took place for the indigo desk train 001123. Retain its previous music choice."
+        },
+        {
+          "step": 4,
+          "operation": "write",
+          "expected_state": "jazz",
+          "gold": "jazz",
+          "noise_seed": 7907832626500457347,
+          "event_style": "new_wording_1",
+          "event_text": "Please update the indigo desk train 001123: from now on its music choice is jazz."
+        },
+        {
+          "step": 5,
+          "operation": "noop",
+          "expected_state": "jazz",
+          "gold": "jazz",
+          "noise_seed": 8572834167490453501,
+          "event_style": "new_wording_1",
+          "event_text": "An unrelated inventory check took place for the indigo desk train 001123. Retain its previous music choice."
+        }
+      ]
+    },
+    {
+      "sequence": 2,
+      "repetition": 3,
+      "steps": [
+        {
+          "step": 0,
+          "operation": "write",
+          "expected_state": "clear",
+          "gold": "no active preference",
+          "noise_seed": 7970612363090665293,
+          "event_style": "new_wording_2",
+          "event_text": "Reset the music setting for the indigo desk train 001123 by removing the old selection."
+        },
+        {
+          "step": 1,
+          "operation": "noop",
+          "expected_state": "clear",
+          "gold": "no active preference",
+          "noise_seed": 792012391678488902,
+          "event_style": "new_wording_2",
+          "event_text": "The indigo desk train 001123 received a routine maintenance notice. Leave its existing music preference intact."
+        },
+        {
+          "step": 2,
+          "operation": "write",
+          "expected_state": "ambient",
+          "gold": "ambient",
+          "noise_seed": 3355248377218671282,
+          "event_style": "new_wording_2",
+          "event_text": "The latest music selection for the indigo desk train 001123 is ambient; save this new choice."
+        },
+        {
+          "step": 3,
+          "operation": "noop",
+          "expected_state": "ambient",
+          "gold": "ambient",
+          "noise_seed": 5059575850148843083,
+          "event_style": "new_wording_2",
+          "event_text": "The indigo desk train 001123 received a routine maintenance notice. Leave its existing music preference intact."
+        },
+        {
+          "step": 4,
+          "operation": "write",
+          "expected_state": "jazz",
+          "gold": "jazz",
+          "noise_seed": 4777269422514417707,
+          "event_style": "new_wording_2",
+          "event_text": "The latest music selection for the indigo desk train 001123 is jazz; save this new choice."
+        },
+        {
+          "step": 5,
+          "operation": "noop",
+          "expected_state": "jazz",
+          "gold": "jazz",
+          "noise_seed": 3105327422635083035,
+          "event_style": "new_wording_2",
+          "event_text": "The indigo desk train 001123 received a routine maintenance notice. Leave its existing music preference intact."
+        }
+      ]
+    },
+    {
+      "sequence": 3,
+      "repetition": 0,
+      "steps": [
+        {
+          "step": 0,
+          "operation": "write",
+          "expected_state": "clear",
+          "gold": "no active preference",
+          "noise_seed": 5979018575807579760,
+          "event_style": "original_training_event"
+        },
+        {
+          "step": 1,
+          "operation": "noop",
+          "expected_state": "clear",
+          "gold": "no active preference",
+          "noise_seed": 1062447373363459599,
+          "event_style": "original_training_event"
+        },
+        {
+          "step": 2,
+          "operation": "write",
+          "expected_state": "jazz",
+          "gold": "jazz",
+          "noise_seed": 4282960891380032461,
+          "event_style": "original_training_event"
+        },
+        {
+          "step": 3,
+          "operation": "noop",
+          "expected_state": "jazz",
+          "gold": "jazz",
+          "noise_seed": 1583327512667226808,
+          "event_style": "original_training_event"
+        },
+        {
+          "step": 4,
+          "operation": "write",
+          "expected_state": "ambient",
+          "gold": "ambient",
+          "noise_seed": 1050533051151907262,
+          "event_style": "original_training_event"
+        },
+        {
+          "step": 5,
+          "operation": "noop",
+          "expected_state": "ambient",
+          "gold": "ambient",
+          "noise_seed": 1563941440588644753,
+          "event_style": "original_training_event"
+        }
+      ]
+    },
+    {
+      "sequence": 3,
+      "repetition": 1,
+      "steps": [
+        {
+          "step": 0,
+          "operation": "write",
+          "expected_state": "clear",
+          "gold": "no active preference",
+          "noise_seed": 2138165097902734697,
+          "event_style": "original_training_event"
+        },
+        {
+          "step": 1,
+          "operation": "noop",
+          "expected_state": "clear",
+          "gold": "no active preference",
+          "noise_seed": 7057575332783794412,
+          "event_style": "original_training_event"
+        },
+        {
+          "step": 2,
+          "operation": "write",
+          "expected_state": "jazz",
+          "gold": "jazz",
+          "noise_seed": 6706415117349077479,
+          "event_style": "original_training_event"
+        },
+        {
+          "step": 3,
+          "operation": "noop",
+          "expected_state": "jazz",
+          "gold": "jazz",
+          "noise_seed": 6631927112287115202,
+          "event_style": "original_training_event"
+        },
+        {
+          "step": 4,
+          "operation": "write",
+          "expected_state": "ambient",
+          "gold": "ambient",
+          "noise_seed": 5170280544778240817,
+          "event_style": "original_training_event"
+        },
+        {
+          "step": 5,
+          "operation": "noop",
+          "expected_state": "ambient",
+          "gold": "ambient",
+          "noise_seed": 2989714014419580475,
+          "event_style": "original_training_event"
+        }
+      ]
+    },
+    {
+      "sequence": 3,
+      "repetition": 2,
+      "steps": [
+        {
+          "step": 0,
+          "operation": "write",
+          "expected_state": "clear",
+          "gold": "no active preference",
+          "noise_seed": 5757679370136956013,
+          "event_style": "new_wording_1",
+          "event_text": "Cancel the previously selected music for the indigo desk train 001123. The saved preference should be empty."
+        },
+        {
+          "step": 1,
+          "operation": "noop",
+          "expected_state": "clear",
+          "gold": "no active preference",
+          "noise_seed": 1582961399051051535,
+          "event_style": "new_wording_1",
+          "event_text": "An unrelated inventory check took place for the indigo desk train 001123. Retain its previous music choice."
+        },
+        {
+          "step": 2,
+          "operation": "write",
+          "expected_state": "jazz",
+          "gold": "jazz",
+          "noise_seed": 2504208357533821086,
+          "event_style": "new_wording_1",
+          "event_text": "Please update the indigo desk train 001123: from now on its music choice is jazz."
+        },
+        {
+          "step": 3,
+          "operation": "noop",
+          "expected_state": "jazz",
+          "gold": "jazz",
+          "noise_seed": 6084638435335018396,
+          "event_style": "new_wording_1",
+          "event_text": "An unrelated inventory check took place for the indigo desk train 001123. Retain its previous music choice."
+        },
+        {
+          "step": 4,
+          "operation": "write",
+          "expected_state": "ambient",
+          "gold": "ambient",
+          "noise_seed": 7907832626500457347,
+          "event_style": "new_wording_1",
+          "event_text": "Please update the indigo desk train 001123: from now on its music choice is ambient."
+        },
+        {
+          "step": 5,
+          "operation": "noop",
+          "expected_state": "ambient",
+          "gold": "ambient",
+          "noise_seed": 8572834167490453501,
+          "event_style": "new_wording_1",
+          "event_text": "An unrelated inventory check took place for the indigo desk train 001123. Retain its previous music choice."
+        }
+      ]
+    },
+    {
+      "sequence": 3,
+      "repetition": 3,
+      "steps": [
+        {
+          "step": 0,
+          "operation": "write",
+          "expected_state": "clear",
+          "gold": "no active preference",
+          "noise_seed": 7970612363090665293,
+          "event_style": "new_wording_2",
+          "event_text": "Reset the music setting for the indigo desk train 001123 by removing the old selection."
+        },
+        {
+          "step": 1,
+          "operation": "noop",
+          "expected_state": "clear",
+          "gold": "no active preference",
+          "noise_seed": 792012391678488902,
+          "event_style": "new_wording_2",
+          "event_text": "The indigo desk train 001123 received a routine maintenance notice. Leave its existing music preference intact."
+        },
+        {
+          "step": 2,
+          "operation": "write",
+          "expected_state": "jazz",
+          "gold": "jazz",
+          "noise_seed": 3355248377218671282,
+          "event_style": "new_wording_2",
+          "event_text": "The latest music selection for the indigo desk train 001123 is jazz; save this new choice."
+        },
+        {
+          "step": 3,
+          "operation": "noop",
+          "expected_state": "jazz",
+          "gold": "jazz",
+          "noise_seed": 5059575850148843083,
+          "event_style": "new_wording_2",
+          "event_text": "The indigo desk train 001123 received a routine maintenance notice. Leave its existing music preference intact."
+        },
+        {
+          "step": 4,
+          "operation": "write",
+          "expected_state": "ambient",
+          "gold": "ambient",
+          "noise_seed": 4777269422514417707,
+          "event_style": "new_wording_2",
+          "event_text": "The latest music selection for the indigo desk train 001123 is ambient; save this new choice."
+        },
+        {
+          "step": 5,
+          "operation": "noop",
+          "expected_state": "ambient",
+          "gold": "ambient",
+          "noise_seed": 3105327422635083035,
+          "event_style": "new_wording_2",
+          "event_text": "The indigo desk train 001123 received a routine maintenance notice. Leave its existing music preference intact."
+        }
+      ]
+    }
+  ],
+  "noise_pairing": "paired across states or sequence orders only; distinct from all prior runs",
+  "scope": "one entity and three states; no unseen-entity or multi-fact claim"
+}

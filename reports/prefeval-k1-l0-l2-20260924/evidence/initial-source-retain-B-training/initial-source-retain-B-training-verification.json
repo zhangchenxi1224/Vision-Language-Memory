@@ -1,0 +1,45 @@
+{
+  "observed_at_utc": "2026-09-24T01:46:22.466604+00:00",
+  "scope": "Completed fixed2048 initial-source-only retain FM; training loss is not memory accuracy",
+  "arms": {
+    "B": {
+      "updates": 2048,
+      "draws": 8192,
+      "write_draws": 4096,
+      "retain_draws": 4096,
+      "draws_per_preference_per_lane": 64,
+      "position_counts": {
+        "0": 4096,
+        "1": 448,
+        "2": 448,
+        "3": 448,
+        "4": 448,
+        "5": 384,
+        "6": 384,
+        "7": 384,
+        "8": 384,
+        "9": 384,
+        "10": 384
+      },
+      "all_losses_and_gradients_finite": true,
+      "first32_identical_to_original": true,
+      "all_draws_match_original": true,
+      "verified_initial_source_pngs": 64,
+      "zero_gradient_steps": 0,
+      "checkpoint_sha256": "914baf66f122e05307a62e11e96a7973d9c9abce39e53531d497f5536e78761b",
+      "parent_checkpoint_sha256": "d446c67bedf2b23a5f5e8294e9738c5101fb431d06eef9536eb3525d0c38e4c3",
+      "trace_sha256": "47c5f21c5109724c463b3c39a6439019dfe9b12a2b1c82370afb55a22851a33f",
+      "training_mse_by_lane": {
+        "first128": {
+          "write": 0.16124936952837743,
+          "retain": 0.5160864559584297
+        },
+        "last128": {
+          "write": 0.13572667996595555,
+          "retain": 0.24932334422919666
+        }
+      },
+      "recorded_seconds": 3228.423026090488
+    }
+  }
+}

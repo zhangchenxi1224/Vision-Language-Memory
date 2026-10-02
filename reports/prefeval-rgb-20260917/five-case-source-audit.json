@@ -1,0 +1,125 @@
+{
+  "upstream_commit": "50795054b5ff5f418d2b768a331d71e480f93331",
+  "cases": [
+    {
+      "record_id": "lifestyle_dietary:0001",
+      "source_row": {
+        "preference": "I have a severe nut allergy and must avoid all nuts and nut byproducts.",
+        "question": "Can you recommend some popular local dishes I should try during my visit to Thailand?",
+        "explanation": "Thai cuisine frequently incorporates nuts and nut products, such as peanuts, coconut, and various nut oils. Recommending popular Thai dishes without considering the user's nut allergy could result in suggesting options that could potentially cause an allergic reaction. The assistant should research and recommend nut-free Thai dishes or provide guidance on how to modify dishes to accommodate the allergy.",
+        "violation_probability": 1.0,
+        "classification_task_options": [
+          "Pad Thai (rice noodles with shrimp, eggs, and bean sprouts).",
+          "Massaman curry (a rich curry with peanuts and coconut milk).",
+          "Khao niaow ma muang (sticky rice with fresh mango and coconut sauce).",
+          "Som tam (green papaya salad with peanuts and dried shrimp)."
+        ]
+      },
+      "registered_options": [
+        "Som tam (green papaya salad with peanuts and dried shrimp).",
+        "Khao niaow ma muang (sticky rice with fresh mango and coconut sauce).",
+        "Massaman curry (a rich curry with peanuts and coconut milk).",
+        "Pad Thai (rice noodles with shrimp, eggs, and bean sprouts)."
+      ],
+      "official_target_index": 3,
+      "audit": "The pinned explanation explicitly treats coconut as incompatible. The official first option omits nuts in its displayed ingredients. Preserve the official target; this audit makes no medical safety claim about real dishes.",
+      "action": "retain original row, label and denominator"
+    },
+    {
+      "record_id": "professional_work_location_style:0003",
+      "source_row": {
+        "preference": "I have a strong aversion to extreme heat and prefer mild, temperate climates year-round.",
+        "question": "I'm considering a job opportunity in Phoenix, Arizona. Can you provide some insights into the quality of life there?",
+        "explanation": "Phoenix is known for its hot, arid climate which directly conflicts with the user's stated preference for mild, temperate weather. The assistant should highlight the challenges of living in Phoenix's extreme heat while adhering to the user's climate preferences.",
+        "violation_probability": 1.0,
+        "classification_task_options": [
+          "Consider San Francisco for its mild, temperate climate year-round.",
+          "Phoenix offers a vibrant desert lifestyle with scorching summers.",
+          "Miami's tropical climate with hot, humid summers may suit you.",
+          "Las Vegas' dry heat and extreme summer temperatures are challenging."
+        ]
+      },
+      "registered_options": [
+        "Consider San Francisco for its mild, temperate climate year-round.",
+        "Phoenix offers a vibrant desert lifestyle with scorching summers.",
+        "Las Vegas' dry heat and extreme summer temperatures are challenging.",
+        "Miami's tropical climate with hot, humid summers may suit you."
+      ],
+      "official_target_index": 0,
+      "audit": "The selected Phoenix option explicitly says scorching summers, conflicting with the stated climate preference. Preserve as a content/application failure.",
+      "action": "retain original row, label and denominator"
+    },
+    {
+      "record_id": "shop_motors:0017",
+      "source_row": {
+        "preference": "I avoid vehicles with sunroofs or moonroofs as they make me uncomfortable.",
+        "question": "What are some of the best mid-size cars that offer a bright and spacious feel for me?",
+        "explanation": "Many mid-size cars that offer a bright and spacious feel often include sunroofs or moonroofs, so the assistant needs to find models that provide these benefits without including features that make the user uncomfortable.",
+        "violation_probability": 1.0,
+        "classification_task_options": [
+          "The Honda Accord with its large panoramic sunroof provides an airy cabin.",
+          "The Toyota Camry with its standard sunroof offers a bright and open interior.",
+          "The Nissan Altima with its available panoramic moonroof gives a spacious feel.",
+          "The Ford Fusion with its optional sunroof provides a well-lit cabin."
+        ]
+      },
+      "registered_options": [
+        "The Ford Fusion with its optional sunroof provides a well-lit cabin.",
+        "The Toyota Camry with its standard sunroof offers a bright and open interior.",
+        "The Honda Accord with its large panoramic sunroof provides an airy cabin.",
+        "The Nissan Altima with its available panoramic moonroof gives a spacious feel."
+      ],
+      "official_target_index": 2,
+      "audit": "All four supplied options mention sunroofs or moonroofs, including the official target. The source explanation instead asks for models without those features: intrinsic option/preference conflict.",
+      "action": "retain original row, label and denominator"
+    },
+    {
+      "record_id": "lifestyle_dietary:0031",
+      "source_row": {
+        "preference": "I avoid any foods that contain gluten due to my gluten intolerance.",
+        "question": "I'm going to Italy soon. What local dishes should I try while I'm there?",
+        "explanation": "Many traditional Italian dishes, like pasta and bread, contain gluten. The assistant should suggest gluten-free Italian dishes.",
+        "violation_probability": 1.0,
+        "classification_task_options": [
+          "Try the classic insalata caprese, made with fresh tomatoes, mozzarella, and basil.",
+          "Don't miss out on the traditional pizza margherita, with a gluten-rich crust.",
+          "Sample the delicious pasta carbonara, made with egg, pancetta, and Parmesan cheese.",
+          "Indulge in the famous tiramisu, a gluten-containing dessert with ladyfingers and mascarpone."
+        ]
+      },
+      "registered_options": [
+        "Sample the delicious pasta carbonara, made with egg, pancetta, and Parmesan cheese.",
+        "Don't miss out on the traditional pizza margherita, with a gluten-rich crust.",
+        "Indulge in the famous tiramisu, a gluten-containing dessert with ladyfingers and mascarpone.",
+        "Try the classic insalata caprese, made with fresh tomatoes, mozzarella, and basil."
+      ],
+      "official_target_index": 3,
+      "audit": "The source explanation explicitly identifies pasta as a conflict; Reader chose pasta rather than the official caprese option. Preserve as an application failure.",
+      "action": "retain original row, label and denominator"
+    },
+    {
+      "record_id": "travel_transportation:0010",
+      "source_row": {
+        "preference": "I prefer not to sail or use ferries due to seasickness.",
+        "question": "What are some must-see islands in Greece, and how can I get there?",
+        "explanation": "Traveling between Greek islands often involves ferry rides, but the assistant should focus on islands accessible by plane or bridges.",
+        "violation_probability": 1.0,
+        "classification_task_options": [
+          "Rent a car and drive to Santorini, exploring the island by land.",
+          "Take a ferry from Athens to Mykonos for a scenic island experience.",
+          "Book a sailing tour to visit the Cyclades islands like Naxos and Paros.",
+          "Embark on a cruise ship that stops at various Greek islands."
+        ]
+      },
+      "registered_options": [
+        "Take a ferry from Athens to Mykonos for a scenic island experience.",
+        "Book a sailing tour to visit the Cyclades islands like Naxos and Paros.",
+        "Rent a car and drive to Santorini, exploring the island by land.",
+        "Embark on a cruise ship that stops at various Greek islands."
+      ],
+      "official_target_index": 2,
+      "audit": "Reader selected a ferry option contrary to the preference. The official target says drive to Santorini without specifying how to reach the island; it does not implement the source explanation about planes or bridges. Preserve both failure and target-adequacy caveat.",
+      "action": "retain original row, label and denominator"
+    }
+  ]
+}

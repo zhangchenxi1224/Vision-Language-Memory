@@ -1,0 +1,2462 @@
+{
+  "b9": {
+    "registration": {
+      "before_commit": "03f8467e5a1201c2dbd9d12484bf2338d7837727",
+      "after_commit": "b9f90e956eea7bda15f638c8877919941ce4fec5",
+      "scope": "All 1990 raw / 1800 matched previously observed expression cells, fixed 03 endpoint versus b9; no new holdout.",
+      "matrices": [
+        {
+          "name": "confirmation",
+          "raw_rows": 390,
+          "matched_rows": 360,
+          "before": {
+            "file": "ff862df-fresh-wording-confirmation-evidence.tgz",
+            "sha256": "98ca77390d3fdffe29804850fe74495ba89684cdedd716ad441bfbc752f8a5eb"
+          },
+          "after": {
+            "file": "56b56a8-fresh-wording-confirmation-evidence.tgz",
+            "sha256": "57bac3c27e408fe181585c9e0d5d3082ca8557d35e4e475f3ceff314726414cf"
+          }
+        },
+        {
+          "name": "chains",
+          "raw_rows": 480,
+          "matched_rows": 480,
+          "before": {
+            "file": "ff862df-fresh-wording-chains-evidence.tgz",
+            "sha256": "299bd08fe2a4f5e8585786a75e984cc347df859af5fe786826626ae660b3c41b"
+          },
+          "after": {
+            "file": "56b56a8-fresh-wording-chains-evidence.tgz",
+            "sha256": "46e90a17acf52b001b4b31e1eabf93094fc7208d2905593e44929c247e771fe4"
+          }
+        },
+        {
+          "name": "prefix0",
+          "raw_rows": 560,
+          "matched_rows": 480,
+          "before": {
+            "file": "ff862df-fresh-wording-prefix0-evidence.tgz",
+            "sha256": "78789c09d966dc06ae1ff6bd9bcf0abfd1027657aea54afe80bc73ae8840b080"
+          },
+          "after": {
+            "file": "56b56a8-fresh-wording-prefix0-evidence.tgz",
+            "sha256": "5c5899ea6700dd0373154c45b54f00e1fc201bd668f8d3d66d3183fd4be05eea"
+          }
+        },
+        {
+          "name": "prefix1",
+          "raw_rows": 560,
+          "matched_rows": 480,
+          "before": {
+            "file": "ff862df-fresh-wording-prefix1-evidence.tgz",
+            "sha256": "a5b831bf6d0679b4d7c60e6546e20acd8cc5ace2b0079c9b52a963516205c463"
+          },
+          "after": {
+            "file": "56b56a8-fresh-wording-prefix1-evidence.tgz",
+            "sha256": "c882c2c4bd72545c5cb2474570b5b0ad2c0d8f99bd5d5952556a8f576f6fe197"
+          }
+        }
+      ]
+    },
+    "matrices": {
+      "confirmation": {
+        "raw_rows": 390,
+        "matched_rows": 360,
+        "before_correct": 360,
+        "after_correct": 360,
+        "changes": {
+          "1->1": 360
+        },
+        "cases": {
+          "ambient_fresh_wording_0": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 80
+            },
+            "failures": {}
+          },
+          "ambient_fresh_wording_1": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "ambient_fresh_wording_2": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "jazz_fresh_wording_0": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 80
+            },
+            "failures": {}
+          },
+          "jazz_fresh_wording_1": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "jazz_fresh_wording_2": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "clear_fresh_wording_0": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 80
+            },
+            "failures": {}
+          },
+          "clear_fresh_wording_1": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "clear_fresh_wording_2": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          }
+        },
+        "after_failure_outputs": []
+      },
+      "chains": {
+        "raw_rows": 480,
+        "matched_rows": 480,
+        "before_correct": 440,
+        "after_correct": 420,
+        "changes": {
+          "1->1": 420,
+          "0->0": 40,
+          "1->0": 20
+        },
+        "cases": {
+          "sequence-0-rep-0-step-0": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-0-rep-0-step-1": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-0-rep-0-step-2": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-0-rep-0-step-3": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-0-rep-0-step-4": {
+            "gold": "no active preference",
+            "changes": {
+              "0->0": 5
+            },
+            "failures": {
+              "jazz": 5
+            }
+          },
+          "sequence-0-rep-0-step-5": {
+            "gold": "no active preference",
+            "changes": {
+              "0->0": 5
+            },
+            "failures": {
+              "jazz": 5
+            }
+          },
+          "sequence-0-rep-1-step-0": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-0-rep-1-step-1": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-0-rep-1-step-2": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-0-rep-1-step-3": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-0-rep-1-step-4": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-0-rep-1-step-5": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-0-rep-2-step-0": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-0-rep-2-step-1": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-0-rep-2-step-2": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-0-rep-2-step-3": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-0-rep-2-step-4": {
+            "gold": "no active preference",
+            "changes": {
+              "1->0": 5
+            },
+            "failures": {
+              "jazz": 5
+            }
+          },
+          "sequence-0-rep-2-step-5": {
+            "gold": "no active preference",
+            "changes": {
+              "1->0": 5
+            },
+            "failures": {
+              "jazz": 5
+            }
+          },
+          "sequence-0-rep-3-step-0": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-0-rep-3-step-1": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-0-rep-3-step-2": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-0-rep-3-step-3": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-0-rep-3-step-4": {
+            "gold": "no active preference",
+            "changes": {
+              "0->0": 5
+            },
+            "failures": {
+              "jazz": 5
+            }
+          },
+          "sequence-0-rep-3-step-5": {
+            "gold": "no active preference",
+            "changes": {
+              "0->0": 5
+            },
+            "failures": {
+              "jazz": 5
+            }
+          },
+          "sequence-1-rep-0-step-0": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-1-rep-0-step-1": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-1-rep-0-step-2": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-1-rep-0-step-3": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-1-rep-0-step-4": {
+            "gold": "no active preference",
+            "changes": {
+              "0->0": 5
+            },
+            "failures": {
+              "ambient": 5
+            }
+          },
+          "sequence-1-rep-0-step-5": {
+            "gold": "no active preference",
+            "changes": {
+              "0->0": 5
+            },
+            "failures": {
+              "ambient": 5
+            }
+          },
+          "sequence-1-rep-1-step-0": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-1-rep-1-step-1": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-1-rep-1-step-2": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-1-rep-1-step-3": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-1-rep-1-step-4": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-1-rep-1-step-5": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-1-rep-2-step-0": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-1-rep-2-step-1": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-1-rep-2-step-2": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-1-rep-2-step-3": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-1-rep-2-step-4": {
+            "gold": "no active preference",
+            "changes": {
+              "1->0": 5
+            },
+            "failures": {
+              "ambient": 5
+            }
+          },
+          "sequence-1-rep-2-step-5": {
+            "gold": "no active preference",
+            "changes": {
+              "1->0": 5
+            },
+            "failures": {
+              "ambient": 5
+            }
+          },
+          "sequence-1-rep-3-step-0": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-1-rep-3-step-1": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-1-rep-3-step-2": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-1-rep-3-step-3": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-1-rep-3-step-4": {
+            "gold": "no active preference",
+            "changes": {
+              "0->0": 5
+            },
+            "failures": {
+              "ambient": 5
+            }
+          },
+          "sequence-1-rep-3-step-5": {
+            "gold": "no active preference",
+            "changes": {
+              "0->0": 5
+            },
+            "failures": {
+              "ambient": 5
+            }
+          },
+          "sequence-2-rep-0-step-0": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-2-rep-0-step-1": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-2-rep-0-step-2": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-2-rep-0-step-3": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-2-rep-0-step-4": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-2-rep-0-step-5": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-2-rep-1-step-0": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-2-rep-1-step-1": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-2-rep-1-step-2": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-2-rep-1-step-3": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-2-rep-1-step-4": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-2-rep-1-step-5": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-2-rep-2-step-0": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-2-rep-2-step-1": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-2-rep-2-step-2": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-2-rep-2-step-3": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-2-rep-2-step-4": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-2-rep-2-step-5": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-2-rep-3-step-0": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-2-rep-3-step-1": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-2-rep-3-step-2": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-2-rep-3-step-3": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-2-rep-3-step-4": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-2-rep-3-step-5": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-3-rep-0-step-0": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-3-rep-0-step-1": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-3-rep-0-step-2": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-3-rep-0-step-3": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-3-rep-0-step-4": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-3-rep-0-step-5": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-3-rep-1-step-0": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-3-rep-1-step-1": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-3-rep-1-step-2": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-3-rep-1-step-3": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-3-rep-1-step-4": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-3-rep-1-step-5": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-3-rep-2-step-0": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-3-rep-2-step-1": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-3-rep-2-step-2": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-3-rep-2-step-3": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-3-rep-2-step-4": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-3-rep-2-step-5": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-3-rep-3-step-0": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-3-rep-3-step-1": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-3-rep-3-step-2": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-3-rep-3-step-3": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-3-rep-3-step-4": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-3-rep-3-step-5": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          }
+        },
+        "after_failure_outputs": [
+          {
+            "gold": "no active preference",
+            "raw": "ambient",
+            "count": 30
+          },
+          {
+            "gold": "no active preference",
+            "raw": "jazz",
+            "count": 30
+          }
+        ]
+      },
+      "prefix0": {
+        "raw_rows": 560,
+        "matched_rows": 480,
+        "before_correct": 452,
+        "after_correct": 480,
+        "changes": {
+          "1->1": 452,
+          "0->1": 28
+        },
+        "cases": {
+          "fresh-target-00-style-0": {
+            "gold": "green",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-00-style-1": {
+            "gold": "green",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-00-style-2": {
+            "gold": "green",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-02-style-0": {
+            "gold": "juice",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-02-style-1": {
+            "gold": "juice",
+            "changes": {
+              "0->1": 17,
+              "1->1": 3
+            },
+            "failures": {}
+          },
+          "fresh-target-02-style-2": {
+            "gold": "juice",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-04-style-0": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-04-style-1": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-04-style-2": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-06-style-0": {
+            "gold": "linen",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-06-style-1": {
+            "gold": "linen",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-06-style-2": {
+            "gold": "linen",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-08-style-0": {
+            "gold": "pasta",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-08-style-1": {
+            "gold": "pasta",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-08-style-2": {
+            "gold": "pasta",
+            "changes": {
+              "1->1": 16,
+              "0->1": 4
+            },
+            "failures": {}
+          },
+          "fresh-target-10-style-0": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-10-style-1": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-10-style-2": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-12-style-0": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 19,
+              "0->1": 1
+            },
+            "failures": {}
+          },
+          "fresh-target-12-style-1": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 18,
+              "0->1": 2
+            },
+            "failures": {}
+          },
+          "fresh-target-12-style-2": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 17,
+              "0->1": 3
+            },
+            "failures": {}
+          },
+          "fresh-target-14-style-0": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 19,
+              "0->1": 1
+            },
+            "failures": {}
+          },
+          "fresh-target-14-style-1": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-14-style-2": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          }
+        },
+        "after_failure_outputs": []
+      },
+      "prefix1": {
+        "raw_rows": 560,
+        "matched_rows": 480,
+        "before_correct": 469,
+        "after_correct": 480,
+        "changes": {
+          "1->1": 469,
+          "0->1": 11
+        },
+        "cases": {
+          "fresh-target-01-style-0": {
+            "gold": "green",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-01-style-1": {
+            "gold": "green",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-01-style-2": {
+            "gold": "green",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-03-style-0": {
+            "gold": "juice",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-03-style-1": {
+            "gold": "juice",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-03-style-2": {
+            "gold": "juice",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-05-style-0": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-05-style-1": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-05-style-2": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-07-style-0": {
+            "gold": "linen",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-07-style-1": {
+            "gold": "linen",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-07-style-2": {
+            "gold": "linen",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-09-style-0": {
+            "gold": "pasta",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-09-style-1": {
+            "gold": "pasta",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-09-style-2": {
+            "gold": "pasta",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-11-style-0": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-11-style-1": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-11-style-2": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-13-style-0": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 17,
+              "0->1": 3
+            },
+            "failures": {}
+          },
+          "fresh-target-13-style-1": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-13-style-2": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 12,
+              "0->1": 8
+            },
+            "failures": {}
+          },
+          "fresh-target-15-style-0": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-15-style-1": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-15-style-2": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          }
+        },
+        "after_failure_outputs": []
+      }
+    },
+    "scope": "All registered raw outputs paired by case/condition/noise/query. Exact tokens plus immediate EOS remain the only success criterion. Failures are preserved verbatim; no semantic rescoring or outcome selection."
+  },
+  "4f": {
+    "registration": {
+      "before_commit": "03f8467e5a1201c2dbd9d12484bf2338d7837727",
+      "after_commit": "4fbc85725d78427235757ace2661d086b896a97f",
+      "scope": "All 1990 raw / 1800 matched previously observed expression cells, fixed 03 endpoint versus 4f; no new holdout.",
+      "matrices": [
+        {
+          "name": "confirmation",
+          "raw_rows": 390,
+          "matched_rows": 360,
+          "before": {
+            "file": "ff862df-fresh-wording-confirmation-evidence.tgz",
+            "sha256": "98ca77390d3fdffe29804850fe74495ba89684cdedd716ad441bfbc752f8a5eb"
+          },
+          "after": {
+            "file": "e372f3c-fresh-wording-confirmation-evidence.tgz",
+            "sha256": "b970f53b7b178aa099a8773b43177dafa27431da8e872edb61e2cfa986a25ef3"
+          }
+        },
+        {
+          "name": "chains",
+          "raw_rows": 480,
+          "matched_rows": 480,
+          "before": {
+            "file": "ff862df-fresh-wording-chains-evidence.tgz",
+            "sha256": "299bd08fe2a4f5e8585786a75e984cc347df859af5fe786826626ae660b3c41b"
+          },
+          "after": {
+            "file": "e372f3c-fresh-wording-chains-evidence.tgz",
+            "sha256": "3136bc3b1ae0829a0d2d82b828f0f0de81060cb28bab7c84ab9c9a1551e3039a"
+          }
+        },
+        {
+          "name": "prefix0",
+          "raw_rows": 560,
+          "matched_rows": 480,
+          "before": {
+            "file": "ff862df-fresh-wording-prefix0-evidence.tgz",
+            "sha256": "78789c09d966dc06ae1ff6bd9bcf0abfd1027657aea54afe80bc73ae8840b080"
+          },
+          "after": {
+            "file": "../../.cache/e372f3c-fresh-wording-prefix0-reconstructed.tgz",
+            "sha256": "9d1ef82d61ab55c4c453d587ef60c6f8f523b93388365d3825c182cc1f87afe6",
+            "parts_manifest": "e372f3c-fresh-wording-prefix0-evidence.tgz.parts/manifest.json",
+            "parts_manifest_sha256": "6e8fc8db8bb4fc8e4c23007aa233094be59ab24602559b142a07390ee6b9b0ea"
+          }
+        },
+        {
+          "name": "prefix1",
+          "raw_rows": 560,
+          "matched_rows": 480,
+          "before": {
+            "file": "ff862df-fresh-wording-prefix1-evidence.tgz",
+            "sha256": "a5b831bf6d0679b4d7c60e6546e20acd8cc5ace2b0079c9b52a963516205c463"
+          },
+          "after": {
+            "file": "../../.cache/e372f3c-fresh-wording-prefix1-reconstructed.tgz",
+            "sha256": "80979508cda588df059e1c6f99e0bed999ace9a3ad9250f738c3d01c5342d03a",
+            "parts_manifest": "e372f3c-fresh-wording-prefix1-evidence.tgz.parts/manifest.json",
+            "parts_manifest_sha256": "54d331e1b40175ff1aab92b85b0e2ec144614886d0f216f65535391c6d5bf27a"
+          }
+        }
+      ]
+    },
+    "matrices": {
+      "confirmation": {
+        "raw_rows": 390,
+        "matched_rows": 360,
+        "before_correct": 360,
+        "after_correct": 360,
+        "changes": {
+          "1->1": 360
+        },
+        "cases": {
+          "ambient_fresh_wording_0": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 80
+            },
+            "failures": {}
+          },
+          "ambient_fresh_wording_1": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "ambient_fresh_wording_2": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "jazz_fresh_wording_0": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 80
+            },
+            "failures": {}
+          },
+          "jazz_fresh_wording_1": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "jazz_fresh_wording_2": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "clear_fresh_wording_0": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 80
+            },
+            "failures": {}
+          },
+          "clear_fresh_wording_1": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "clear_fresh_wording_2": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          }
+        },
+        "after_failure_outputs": []
+      },
+      "chains": {
+        "raw_rows": 480,
+        "matched_rows": 480,
+        "before_correct": 440,
+        "after_correct": 430,
+        "changes": {
+          "1->1": 430,
+          "0->0": 40,
+          "1->0": 10
+        },
+        "cases": {
+          "sequence-0-rep-0-step-0": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-0-rep-0-step-1": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-0-rep-0-step-2": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-0-rep-0-step-3": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-0-rep-0-step-4": {
+            "gold": "no active preference",
+            "changes": {
+              "0->0": 5
+            },
+            "failures": {
+              "jazz": 5
+            }
+          },
+          "sequence-0-rep-0-step-5": {
+            "gold": "no active preference",
+            "changes": {
+              "0->0": 5
+            },
+            "failures": {
+              "jazz": 5
+            }
+          },
+          "sequence-0-rep-1-step-0": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-0-rep-1-step-1": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-0-rep-1-step-2": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-0-rep-1-step-3": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-0-rep-1-step-4": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-0-rep-1-step-5": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-0-rep-2-step-0": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-0-rep-2-step-1": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-0-rep-2-step-2": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-0-rep-2-step-3": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-0-rep-2-step-4": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-0-rep-2-step-5": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-0-rep-3-step-0": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-0-rep-3-step-1": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-0-rep-3-step-2": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-0-rep-3-step-3": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-0-rep-3-step-4": {
+            "gold": "no active preference",
+            "changes": {
+              "0->0": 5
+            },
+            "failures": {
+              "jazz": 5
+            }
+          },
+          "sequence-0-rep-3-step-5": {
+            "gold": "no active preference",
+            "changes": {
+              "0->0": 5
+            },
+            "failures": {
+              "jazz": 5
+            }
+          },
+          "sequence-1-rep-0-step-0": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-1-rep-0-step-1": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-1-rep-0-step-2": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-1-rep-0-step-3": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-1-rep-0-step-4": {
+            "gold": "no active preference",
+            "changes": {
+              "0->0": 5
+            },
+            "failures": {
+              "ambient": 5
+            }
+          },
+          "sequence-1-rep-0-step-5": {
+            "gold": "no active preference",
+            "changes": {
+              "0->0": 5
+            },
+            "failures": {
+              "ambient": 5
+            }
+          },
+          "sequence-1-rep-1-step-0": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-1-rep-1-step-1": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-1-rep-1-step-2": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-1-rep-1-step-3": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-1-rep-1-step-4": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-1-rep-1-step-5": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-1-rep-2-step-0": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-1-rep-2-step-1": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-1-rep-2-step-2": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-1-rep-2-step-3": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-1-rep-2-step-4": {
+            "gold": "no active preference",
+            "changes": {
+              "1->0": 5
+            },
+            "failures": {
+              "ambient": 5
+            }
+          },
+          "sequence-1-rep-2-step-5": {
+            "gold": "no active preference",
+            "changes": {
+              "1->0": 5
+            },
+            "failures": {
+              "ambient": 5
+            }
+          },
+          "sequence-1-rep-3-step-0": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-1-rep-3-step-1": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-1-rep-3-step-2": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-1-rep-3-step-3": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-1-rep-3-step-4": {
+            "gold": "no active preference",
+            "changes": {
+              "0->0": 5
+            },
+            "failures": {
+              "ambient": 5
+            }
+          },
+          "sequence-1-rep-3-step-5": {
+            "gold": "no active preference",
+            "changes": {
+              "0->0": 5
+            },
+            "failures": {
+              "ambient": 5
+            }
+          },
+          "sequence-2-rep-0-step-0": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-2-rep-0-step-1": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-2-rep-0-step-2": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-2-rep-0-step-3": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-2-rep-0-step-4": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-2-rep-0-step-5": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-2-rep-1-step-0": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-2-rep-1-step-1": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-2-rep-1-step-2": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-2-rep-1-step-3": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-2-rep-1-step-4": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-2-rep-1-step-5": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-2-rep-2-step-0": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-2-rep-2-step-1": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-2-rep-2-step-2": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-2-rep-2-step-3": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-2-rep-2-step-4": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-2-rep-2-step-5": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-2-rep-3-step-0": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-2-rep-3-step-1": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-2-rep-3-step-2": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-2-rep-3-step-3": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-2-rep-3-step-4": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-2-rep-3-step-5": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-3-rep-0-step-0": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-3-rep-0-step-1": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-3-rep-0-step-2": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-3-rep-0-step-3": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-3-rep-0-step-4": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-3-rep-0-step-5": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-3-rep-1-step-0": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-3-rep-1-step-1": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-3-rep-1-step-2": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-3-rep-1-step-3": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-3-rep-1-step-4": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-3-rep-1-step-5": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-3-rep-2-step-0": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-3-rep-2-step-1": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-3-rep-2-step-2": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-3-rep-2-step-3": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-3-rep-2-step-4": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-3-rep-2-step-5": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-3-rep-3-step-0": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-3-rep-3-step-1": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-3-rep-3-step-2": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-3-rep-3-step-3": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-3-rep-3-step-4": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          },
+          "sequence-3-rep-3-step-5": {
+            "gold": "ambient",
+            "changes": {
+              "1->1": 5
+            },
+            "failures": {}
+          }
+        },
+        "after_failure_outputs": [
+          {
+            "gold": "no active preference",
+            "raw": "ambient",
+            "count": 30
+          },
+          {
+            "gold": "no active preference",
+            "raw": "jazz",
+            "count": 20
+          }
+        ]
+      },
+      "prefix0": {
+        "raw_rows": 560,
+        "matched_rows": 480,
+        "before_correct": 452,
+        "after_correct": 480,
+        "changes": {
+          "1->1": 452,
+          "0->1": 28
+        },
+        "cases": {
+          "fresh-target-00-style-0": {
+            "gold": "green",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-00-style-1": {
+            "gold": "green",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-00-style-2": {
+            "gold": "green",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-02-style-0": {
+            "gold": "juice",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-02-style-1": {
+            "gold": "juice",
+            "changes": {
+              "0->1": 17,
+              "1->1": 3
+            },
+            "failures": {}
+          },
+          "fresh-target-02-style-2": {
+            "gold": "juice",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-04-style-0": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-04-style-1": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-04-style-2": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-06-style-0": {
+            "gold": "linen",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-06-style-1": {
+            "gold": "linen",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-06-style-2": {
+            "gold": "linen",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-08-style-0": {
+            "gold": "pasta",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-08-style-1": {
+            "gold": "pasta",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-08-style-2": {
+            "gold": "pasta",
+            "changes": {
+              "1->1": 16,
+              "0->1": 4
+            },
+            "failures": {}
+          },
+          "fresh-target-10-style-0": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-10-style-1": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-10-style-2": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-12-style-0": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 19,
+              "0->1": 1
+            },
+            "failures": {}
+          },
+          "fresh-target-12-style-1": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 18,
+              "0->1": 2
+            },
+            "failures": {}
+          },
+          "fresh-target-12-style-2": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 17,
+              "0->1": 3
+            },
+            "failures": {}
+          },
+          "fresh-target-14-style-0": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 19,
+              "0->1": 1
+            },
+            "failures": {}
+          },
+          "fresh-target-14-style-1": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-14-style-2": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          }
+        },
+        "after_failure_outputs": []
+      },
+      "prefix1": {
+        "raw_rows": 560,
+        "matched_rows": 480,
+        "before_correct": 469,
+        "after_correct": 480,
+        "changes": {
+          "1->1": 469,
+          "0->1": 11
+        },
+        "cases": {
+          "fresh-target-01-style-0": {
+            "gold": "green",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-01-style-1": {
+            "gold": "green",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-01-style-2": {
+            "gold": "green",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-03-style-0": {
+            "gold": "juice",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-03-style-1": {
+            "gold": "juice",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-03-style-2": {
+            "gold": "juice",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-05-style-0": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-05-style-1": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-05-style-2": {
+            "gold": "jazz",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-07-style-0": {
+            "gold": "linen",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-07-style-1": {
+            "gold": "linen",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-07-style-2": {
+            "gold": "linen",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-09-style-0": {
+            "gold": "pasta",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-09-style-1": {
+            "gold": "pasta",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-09-style-2": {
+            "gold": "pasta",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-11-style-0": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-11-style-1": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-11-style-2": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-13-style-0": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 17,
+              "0->1": 3
+            },
+            "failures": {}
+          },
+          "fresh-target-13-style-1": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-13-style-2": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 12,
+              "0->1": 8
+            },
+            "failures": {}
+          },
+          "fresh-target-15-style-0": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-15-style-1": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          },
+          "fresh-target-15-style-2": {
+            "gold": "no active preference",
+            "changes": {
+              "1->1": 20
+            },
+            "failures": {}
+          }
+        },
+        "after_failure_outputs": []
+      }
+    },
+    "scope": "All registered raw outputs paired by case/condition/noise/query. Exact tokens plus immediate EOS remain the only success criterion. Failures are preserved verbatim; no semantic rescoring or outcome selection."
+  }
+}

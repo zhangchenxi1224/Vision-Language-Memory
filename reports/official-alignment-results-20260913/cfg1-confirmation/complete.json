@@ -1,0 +1,956 @@
+{
+  "all_generated_answer_eos": false,
+  "artifact_hashes": {
+    "ambient_blank.pt": "d7970277202721f70ab6dbb5ec564f5481ed99f41f402d75bd110e39ad22a382",
+    "ambient_donor.pt": "aacd67f8ba4d5b8a0428e402a213fba6c15b71a0e77077bd4b288d496b5ca855",
+    "ambient_reworded_1-seed-00.png": "37b00bb127cc3f1135b51de71382b1309c1a72af239110d844d7f2738d8da5cc",
+    "ambient_reworded_1-seed-00.pt": "fae1a8a20c13acd85eaea50e936cda7a361a9bee75a03aafc23e1474a3877945",
+    "ambient_reworded_1-seed-01.png": "5e65ca9cb96f5fade763ff4423adda1bf7ee4b2dbd09d477ae220eb3c60bed82",
+    "ambient_reworded_1-seed-01.pt": "5e9f0d4158b731e4edbf11f06a8663b1631fa92f5de8b785df43ab56e4b9a8b5",
+    "ambient_reworded_1-seed-02.png": "00862beeb9072e6eae6245968e7947251bc2333b2d46dc3e8d28f7563dc83563",
+    "ambient_reworded_1-seed-02.pt": "d5e3ff636295631e2fbf98c6c18c15d04973d859f34b65ca476d8cea2adb919a",
+    "ambient_reworded_1-seed-03.png": "ecb178423d7a169066839cad6b63c73b780564abdce8c501fc152e4eb2907c15",
+    "ambient_reworded_1-seed-03.pt": "7386efe9456d410e31d7e2e8dbb585ead86f2701dbc78f36dd14e29aded9f435",
+    "ambient_reworded_2-seed-00.png": "ec151976629d8cc2f2166778058c4b5e9d9e08f7f0552c1bf0109290977a305c",
+    "ambient_reworded_2-seed-00.pt": "b705d9bd5acf4a8d411a2d8c7b7b0d5d80116ce9a439200743b65310e4549448",
+    "ambient_reworded_2-seed-01.png": "de4a289c3717576a4bebd8d24a11ec4ef004a1eab30dbdd078c7b4a03c603c39",
+    "ambient_reworded_2-seed-01.pt": "25a4e55a79da69fd1ae2c24afaa58c3bcffbd39b6b0e841a73191714dfd48d69",
+    "ambient_reworded_2-seed-02.png": "1caa9087c488eb487bc77480a08ec61645ebaf655061a6f05724f369d1d63fa1",
+    "ambient_reworded_2-seed-02.pt": "042688785cfd80dc0425da4955ebd64605780546956f83c10c93a933c76aae0d",
+    "ambient_reworded_2-seed-03.png": "a40797f95ea239a6d4d1626c787c6c0575b8b514a702575cd2c87fa0ae7850b5",
+    "ambient_reworded_2-seed-03.pt": "9b12f3b12b8a00634fcf8827667237dfecdb5013feb93354a80d5e0d84cb1eb2",
+    "ambient_trained-seed-00.png": "9fd43ceec3ab065bf5acb287f2de4cb60e05596a0781ef98a7d2ed64fa6617e7",
+    "ambient_trained-seed-00.pt": "8632602ee71bcedc6288bf200a3df42a0603895be1024b2291f30bd46075a4ec",
+    "ambient_trained-seed-01.png": "a8c07e44448111597f780d309c8da43539c2aab35eea7e1710a1e78f9f8f489f",
+    "ambient_trained-seed-01.pt": "37c0d2d1abb7d7fabdbc83760314905ee8ac9ba929441e1f3681b0abdadd8ca0",
+    "ambient_trained-seed-02.png": "a1301c48e4be95a35b9e33725df9427d1c74c85d588db8c3786f809c065564f8",
+    "ambient_trained-seed-02.pt": "b9cf0601cbf07cf87d0ee9fa5c4c06f9b709882308b2fe96c8ab3b5f89e7b5f2",
+    "ambient_trained-seed-03.png": "48401563ce0df8328833111fd67326cb215b7ee0821796cabcb75755ade4b569",
+    "ambient_trained-seed-03.pt": "1f253db3cbf6c3f551846acdd06aa5d076b10f716b5f978cf2900535bf6839b5",
+    "ambient_trained-seed-04.png": "0e9913b5f66d769945acc2adf6791881cb2ee047dd964cf030551d088ea73b2d",
+    "ambient_trained-seed-04.pt": "db697aa1bb4ea2bd979342a0a7a9b569574aee164ed8aa80bda53ad4b238b9e5",
+    "ambient_trained-seed-05.png": "e8163e782ef0f6ee1de42fe90e5d442cc54f278f714e4fd0c2125bcf991d2328",
+    "ambient_trained-seed-05.pt": "e5c5788c6bc414ef6719733d3bf9bd60e4dc7c0cfcc70946d2bab425e0eb7591",
+    "ambient_trained-seed-06.png": "4c1232d18f248f5b036d37a06041225c3e7763ae7fa24a4e990b63d6e8cd4f1e",
+    "ambient_trained-seed-06.pt": "9a8cd3e9f54679a627f043c574c9cf8bd319ee4c8d9fcb53bb7dd950c723553d",
+    "ambient_trained-seed-07.png": "c46fc1341f8205c5c6466f623b0ff5182aed5bbd428a107e06f3e3d02cd344f2",
+    "ambient_trained-seed-07.pt": "e457b3d72ae50d2154c4c6fb0677b7d87223e29f8a57f4a5a59678f7b07aaa88",
+    "ambient_trained-seed-08.png": "cd38a1e826190811d3b43219abaa450ce707b609032898ade4ef2d9002fb460c",
+    "ambient_trained-seed-08.pt": "cd1347ac02ed9dc843b0b7ef52c1fd89203c370ecb5d9c6fc16c2e6dabdbcb67",
+    "ambient_trained-seed-09.png": "3d7eb6377604e2539b2837f71b5d34556dc761ac4282eb6580643a5efcdccf31",
+    "ambient_trained-seed-09.pt": "6e49aa46af5003961267dfaad39500155799c1f8481de0a29fe69c9f741b1875",
+    "ambient_trained-seed-10.png": "329cb4bb5da8ebdee062ecb5415b55132b539cf77fa8aa89374f31b5e1ff254d",
+    "ambient_trained-seed-10.pt": "96eb7367d53f49a51f80205223fd6fc6c6ceaa1028219b106860677dbbebce41",
+    "ambient_trained-seed-11.png": "6904d577d4d4795c974cdd607861ec1c580e098a82739270d0881a8518083a40",
+    "ambient_trained-seed-11.pt": "21888f3e63dcf19f8d93a9bdcc1591349a3c6c381dc0b8402bc3b22b596c9980",
+    "ambient_trained-seed-12.png": "5c7e80cfb1121e8e5aad64003ea314b9da56582ff87e3ef021a7b64e05df21b7",
+    "ambient_trained-seed-12.pt": "ae24d86f8028f80f2cda4deb8202a159046302157023970e18925ed1531c8aeb",
+    "ambient_trained-seed-13.png": "dd67d6c9c7a3935feac17cd7b6ebebd226ae4329eee332b6b38c5a4097146b33",
+    "ambient_trained-seed-13.pt": "2b1e90e8020c844749b1191c2515227e5224146d26282dce6330b7150a7feea1",
+    "ambient_trained-seed-14.png": "66b101dbb7e99b54212ae0c37e6f339cf383df428653dcc8b4cc66bad2bd6125",
+    "ambient_trained-seed-14.pt": "20065c5366ff3220a6c2c512d1ab48c74fbde0674cb2edb00eac0450c56c020c",
+    "ambient_trained-seed-15.png": "b0c115c5b6bd1cac63cbefa17e2580a46f1677df08a6f100b7bdb9b88931d3cb",
+    "ambient_trained-seed-15.pt": "e26f84596f1866b54358c8554ec9466f58437517155646bbd283594252b458b7",
+    "clear_blank.pt": "39028f2cc56edc2adceb405617c46fd2e4d3e61a6b263c0186218ce9e6dda94d",
+    "clear_donor.pt": "45cb5a4a3936413d74d78222613f8d232cfd7e18e5809dc9a79339684a7c7c82",
+    "clear_reworded_1-seed-00.png": "bec4ff5e24fedadeb1f5ce9733a6a1f84b42f92e8383f1163a8ddc00cf4775fe",
+    "clear_reworded_1-seed-00.pt": "7e72dc54f5a039ba915d99e2b8adda4941e81871630582935188cff447533aef",
+    "clear_reworded_1-seed-01.png": "7e28b3fa2703dce16ae1af35c0256ffb5b481e58492aa5cce79d23479ca9596f",
+    "clear_reworded_1-seed-01.pt": "505f2a24a4d557595c447db93ac02df485ae2abf83adef2def47a5ef669ca6df",
+    "clear_reworded_1-seed-02.png": "edbe60c2798f8183f4a0b5d50482a74e997435a569c603b80d9c2a81ae3781e5",
+    "clear_reworded_1-seed-02.pt": "18675aaf647f4152d7566386e54a353345aeee5d7f74e63d218400c709c385d0",
+    "clear_reworded_1-seed-03.png": "16dc856afd40ce4963dee7b3726c27dfe45df5593b96783aae833c9fb4138ea8",
+    "clear_reworded_1-seed-03.pt": "d9dab09920d6eb5d8457cee8339bd178b931fbcd9286805797e3d1a7e1683c2c",
+    "clear_reworded_2-seed-00.png": "05a116f53f5841bf4e55a699d0b82b4e1d01d535c7f6433a6fe5caafd42032a6",
+    "clear_reworded_2-seed-00.pt": "90f9a58ededdcc32ef97bfccb8d49da649429ac3995c40313d8281b69519933e",
+    "clear_reworded_2-seed-01.png": "0eea8f1c88bc06a5c4eb96ac49459d0a00ad1316aa6172e1aa097793c39a7c03",
+    "clear_reworded_2-seed-01.pt": "d72ec29fb67d0515be35e3b32324a545c8f5375c1383a604c215c55cf1dddc44",
+    "clear_reworded_2-seed-02.png": "ce1db74c4d2b215cda6aea7b15d188bfff41be9d3cfb8a9c496a7f504820761a",
+    "clear_reworded_2-seed-02.pt": "c2a08fd1d6ddd856627836047b5ac3f3aa506708cff60429792c4de26ce29228",
+    "clear_reworded_2-seed-03.png": "43f7554731fb876337c192ad79730d75fa9a6905f49a4adfed0548caa4cc5dc5",
+    "clear_reworded_2-seed-03.pt": "c59223ed9e2c40e12d57bb7c71d32c2987cd2b00b5e2d75d78956fa150b4776b",
+    "clear_trained-seed-00.png": "e38153a10111e9b2ffa44f38ef5e9ccdb5ac9d3852120c2b6b7adc0ad1bda0f0",
+    "clear_trained-seed-00.pt": "b43b59014ef005df7031e47d77526ac28d82529beaa91ec096b4ad2f789b3adc",
+    "clear_trained-seed-01.png": "1ad09ec61b7b4a7d5b36a2f0d73d26f6c349c058abfcdc515437d150e9f6ce3c",
+    "clear_trained-seed-01.pt": "b8b0421dda6805f466aa6fe6f7f5369ac9415d8d597485e2a5a52b1bd0a4c269",
+    "clear_trained-seed-02.png": "f5cf0a08078d7814d46bee87c19731478802da8193653f227f0d66917540b2ca",
+    "clear_trained-seed-02.pt": "ffb0f00376ad010a0f843d70f625e34bf050bc94c17fe998395ab56c172ae414",
+    "clear_trained-seed-03.png": "4f1a334c580bf31d1443731526c464621a7ff62d3b1f9a3284fd42b914aa2db5",
+    "clear_trained-seed-03.pt": "41125afd0d813749d8abef06f7922763be0735ab0e9a38836fd71a7a6119551d",
+    "clear_trained-seed-04.png": "1009cbb274ece916c613adf521319874848b928fd81450df282f3b9b921f3ba5",
+    "clear_trained-seed-04.pt": "940516a07d48d7df9d2d2ffd5205f13b0f43f3b88ceb1035ae4280f062ffadd7",
+    "clear_trained-seed-05.png": "cf60164e63b22b4b1a972b75ff47685adb778411962427179d85666634127845",
+    "clear_trained-seed-05.pt": "193c2d51936dca62290354e6f1e4b3c54a89e79d610c472050464c9c85c2fbe5",
+    "clear_trained-seed-06.png": "de40cd2b7fcf0956a1be60457d1780e2cfba4fd48b0bef2e4f229923a5d63635",
+    "clear_trained-seed-06.pt": "b92b34b9f9a74f5949794ed13b22fa235851c244a7e0492da2ec803e5357c5a6",
+    "clear_trained-seed-07.png": "ad2fde91869768d0b1da878de2f6d84afdd3cdf9ebade3cf7008347febff782b",
+    "clear_trained-seed-07.pt": "58b41749f905153683bac3a1e2730ac07ae54170df6af08c8120ec8dc2f931d0",
+    "clear_trained-seed-08.png": "be51b4b030d836947f4e3611f45b4d3ffe8a2921b78e7a57c3b161d82c921ad0",
+    "clear_trained-seed-08.pt": "d58169083a28b07a981a661a700b4cd9fc51e9e25c3f7685c1642d02077acdd3",
+    "clear_trained-seed-09.png": "3394f53d7230b043ff6612c2c33bab92826c55be247a666dad23209396bffe63",
+    "clear_trained-seed-09.pt": "a56f2880bd02bbe341a672c1ce4c3c48c75a494c79eb8515368e69bf598716e9",
+    "clear_trained-seed-10.png": "8faf86bfc02d770e1a013fb42d33b7c6920f87207b674812677845638ffad548",
+    "clear_trained-seed-10.pt": "1457a9588f0edfc2a2f290d6a73b352a9eda659ff22f4b995de0a3d61d2751d6",
+    "clear_trained-seed-11.png": "1b1d6ea8f908c6f9065f21f24f0163c07bb64f4e42367e6ef584478ac9715d93",
+    "clear_trained-seed-11.pt": "34e24aec10c3932865fe7d0f8f8fb8f879187e85a5bf6c2d15ca02fc70992118",
+    "clear_trained-seed-12.png": "7da892d464d0afa9dedb90cd54c8d3193533d0660cdaf51e4dadd16e422e8cd2",
+    "clear_trained-seed-12.pt": "707bb3100ca5ac54fcb8e3acdc73004d844c6f4e6fccb9625c70a6a288594bf4",
+    "clear_trained-seed-13.png": "c2b0971a4aee3334821ce547bc6b706e7997cf66c8eb059b30fcbc0af530d383",
+    "clear_trained-seed-13.pt": "79fbbf81f3c723b631c3a42c46f256eca7300a51e465951fd411d6e3ea74dc40",
+    "clear_trained-seed-14.png": "a4227dcb534d4f109b150c868f47a8d3c2cf0119e99ec467911717c58a561d92",
+    "clear_trained-seed-14.pt": "ca343621b26e1c33fd99437ae86dc74634a2917d14593bc8666a6d0ed0d877e8",
+    "clear_trained-seed-15.png": "99a565bcf712bcd5c6c4bb17567fcbe46941be4e6e571e30d9848f2ddcfa09a2",
+    "clear_trained-seed-15.pt": "72db8c712fce7626ec3d9e85932a5f74eb6ebe33d01998f7b0a204f4936f24ac",
+    "generations.jsonl": "66eaf2cbdc928a838eb620692eca5c98810a7c864c887f079f2a1e7dc737e4bf",
+    "identity.json": "b68a9afda97f37061ca2426c8ebf74d5972e2663b6fb9e815a5af8bc794669ab",
+    "jazz_blank.pt": "12f6245f08b8ae4fbdeba8262147c4691f9b7b7c2053ce626bfdfe47df32b448",
+    "jazz_donor.pt": "df37e9cde8c691b9255d399a5499d42ca85bb8e7942a6091a1caf3b901f6a308",
+    "jazz_reworded_1-seed-00.png": "3e0684d883c6d5587b59f3647032e1a393d9df3ce3c2391812ba1d0fa64787af",
+    "jazz_reworded_1-seed-00.pt": "ba77471fb13e2513e04acd71fb274ee8eee6d67e3cff39a6474bc4018bc95f1c",
+    "jazz_reworded_1-seed-01.png": "d3a8e6a5d60d3d59983a4a05319e2f0625f688ccf085cdd96fdb009839f009b4",
+    "jazz_reworded_1-seed-01.pt": "18c094e870207e6bbc5c32a7ab8e903c9f64a2a9fd1501cd329fb5a9ee7eea7f",
+    "jazz_reworded_1-seed-02.png": "d4d6657d501730b53539944858cd78a955fe66e9ebac99815dde0b5a5985a017",
+    "jazz_reworded_1-seed-02.pt": "7573aece3cdd7cec647ef57dc668fe9a3d1ae6ccd41a2f8eee7aa47e131a645f",
+    "jazz_reworded_1-seed-03.png": "9c5b0d848ae6aaa19aadf3074e2b63f28cf3f50a74482e2dff0e314ab3a94e69",
+    "jazz_reworded_1-seed-03.pt": "876d9a999b1c9e5689dd74140b0f2761663a886fbbab5a643f4ad23af090f711",
+    "jazz_reworded_2-seed-00.png": "8a62d973f482dec0411a42e5fb1f498c8d1a3a986004ff3442c8e1854d9e7dbf",
+    "jazz_reworded_2-seed-00.pt": "440363a82e2c28ab3530d7b47e4c38a44f69642d50ad8daafaa385a56f441e68",
+    "jazz_reworded_2-seed-01.png": "98b57b966970204c1e3a28c0b3cb9a83e4d2366f7aec12154ee435130eb176d7",
+    "jazz_reworded_2-seed-01.pt": "063c9961a79e9949f18009a2a716614299bf1bfa7233dbd5b8000aca848e5a65",
+    "jazz_reworded_2-seed-02.png": "f828ad66315a051f7ace3a92917bda52ef746cfe383ba6007142d1b849ca537b",
+    "jazz_reworded_2-seed-02.pt": "6813c434564d76c96c8013ef2eb729d5bd1210310896572edd7c8ae4b5e32ab8",
+    "jazz_reworded_2-seed-03.png": "dc64493680368c372c3bfb3a02a5c69b0fafbd00404ee9400b8c02bbc17d622b",
+    "jazz_reworded_2-seed-03.pt": "c1d3df3e59b604871f46e15b0868c6d8a7d402b28ef6821b9b35703622503921",
+    "jazz_trained-seed-00.png": "28b2e8bd05a25838314446256578ddf3651d80d7d835be0ffec5d6e51a2bcac0",
+    "jazz_trained-seed-00.pt": "5527ed107b61ce51ceb6a10179ea38ee905d8769a6e74d9c2dfe3b78ea7aa0d4",
+    "jazz_trained-seed-01.png": "406d7ca59690191d0c1dad3481fc58fef97f08654ed8bbe187a1e171cfd8a87a",
+    "jazz_trained-seed-01.pt": "68ac450063fcf968ccc12fe0ef5a7563ed1d5b07b511aa114815b9d8a4228d1e",
+    "jazz_trained-seed-02.png": "e22856baec4ff1e688dbe8d3d7aec0abbb01e2c6723e7a07beb422bf8cbb7fef",
+    "jazz_trained-seed-02.pt": "6de8fb3d46d3713496c3b7e79ab12127d7761b656c0b7cccceb8cd8aeca0c616",
+    "jazz_trained-seed-03.png": "a9aa4c68f58e592c2f79b216eadfd78d8bf9dbdc957d15cf0c7f36c075fe67f0",
+    "jazz_trained-seed-03.pt": "260d417abb4084d6d837edc4820994ad87f560e4a3e8dddec4a64cf6e8d28737",
+    "jazz_trained-seed-04.png": "6dcc5e4db22d278a421ce070a9e9a154679b2abde1122874f289476bf01d870c",
+    "jazz_trained-seed-04.pt": "a81d6a91f40de9c69544be655a1fa17c736d50ad1a64155458be73171180eddd",
+    "jazz_trained-seed-05.png": "cb5146fab021a367fcf9a19783cbfa823cd18a4dc8392aa530779c4bdbce7533",
+    "jazz_trained-seed-05.pt": "3a94c867a80534bfb174e607a0cc2ac23918e56b305d21ec9ee7d89d3f981f66",
+    "jazz_trained-seed-06.png": "00a8574e70e53eebee927b05f129a8fe851d72cc84597f6fff599361c5fe22b3",
+    "jazz_trained-seed-06.pt": "de725d1623c44fe4bd7b0b3565197bdfd7cd670a302c54b0e34d5ad9ef9e8310",
+    "jazz_trained-seed-07.png": "3a9eb3f3456bd25b406bc8216b48163f7e5d22980663d5f9e6065979fdc4f715",
+    "jazz_trained-seed-07.pt": "042197ee25968f23a590d6d06f1f9141482b08319c36c61b4b6db218bb973914",
+    "jazz_trained-seed-08.png": "6de8f20f3e049ad159af7244f9c8aefa534c87df122e2d018e38e757fc2a4675",
+    "jazz_trained-seed-08.pt": "15957432d4b1e0de7f2ae3411ab7fd012cf656c933a9abc666ba92be1049d611",
+    "jazz_trained-seed-09.png": "826f4399b6bbd0908e39f3d62a425d9c758af6b28afe22fa0b177116c4531b43",
+    "jazz_trained-seed-09.pt": "edbafb228189346317efff46f1ba8cc5c74f228f89b4b3bd9de553b7b698e6aa",
+    "jazz_trained-seed-10.png": "ef6a0546bc210d02cee44fd08cfba35c324dbd082c064d646e5d4a9e7f6d0f0b",
+    "jazz_trained-seed-10.pt": "8c3a403d85e9e6faf9ce8d58b9d47c742679023ce56dd50791e66bad5e5b8027",
+    "jazz_trained-seed-11.png": "12886f7036d951b1c5ba217d8882f6e5af36c406c0c3ae42f12c702c13c9e3b7",
+    "jazz_trained-seed-11.pt": "3154f2583f01d14ccfe04040284423e482572ed541c984f0254ca58f473ea7b1",
+    "jazz_trained-seed-12.png": "2d9f252238de02cc071459b802a10e9dce75bb045b0ac1bf835c6f7fb5d861d9",
+    "jazz_trained-seed-12.pt": "3874eff45fe333f0639f3af360446f20ff926d5f610cf1ef05ccc7b29eb1fbeb",
+    "jazz_trained-seed-13.png": "ca0fa19d646aa8783da23fecb61efaec15c504c6a0534f030459e90d360506ed",
+    "jazz_trained-seed-13.pt": "0b179b2c0cf66f2c5165b76c143a2ee87dd9c8e04f3e077db13d4a4e6503d1b2",
+    "jazz_trained-seed-14.png": "e1933cf902c89577681a29eba9f716394e7f3c6f115fa2950abc6d438ba39e34",
+    "jazz_trained-seed-14.pt": "7a96e9dfb67aa9536b890666a67e0befd0936a217a4b9950d0f484856109f6da",
+    "jazz_trained-seed-15.png": "cd2cb08646f103a6b7b488487a0c9acfcd08d436244eb871f7ce1eb4d019d4cd",
+    "jazz_trained-seed-15.pt": "7c21eeaab7610337fb4b9111ab2eb1d5a2ebc1c7481ae343130f6182dd0ec19e"
+  },
+  "cells": {
+    "ambient_blank/original_open": {
+      "answer_eos": 0,
+      "exact_match": 0,
+      "n": 1
+    },
+    "ambient_blank/paraphrase_1": {
+      "answer_eos": 0,
+      "exact_match": 0,
+      "n": 1
+    },
+    "ambient_blank/paraphrase_2": {
+      "answer_eos": 0,
+      "exact_match": 0,
+      "n": 1
+    },
+    "ambient_blank/paraphrase_3": {
+      "answer_eos": 0,
+      "exact_match": 0,
+      "n": 1
+    },
+    "ambient_blank/paraphrase_4": {
+      "answer_eos": 0,
+      "exact_match": 0,
+      "n": 1
+    },
+    "ambient_donor/original_open": {
+      "answer_eos": 0,
+      "exact_match": 0,
+      "n": 1
+    },
+    "ambient_donor/paraphrase_1": {
+      "answer_eos": 0,
+      "exact_match": 0,
+      "n": 1
+    },
+    "ambient_donor/paraphrase_2": {
+      "answer_eos": 0,
+      "exact_match": 0,
+      "n": 1
+    },
+    "ambient_donor/paraphrase_3": {
+      "answer_eos": 0,
+      "exact_match": 0,
+      "n": 1
+    },
+    "ambient_donor/paraphrase_4": {
+      "answer_eos": 0,
+      "exact_match": 0,
+      "n": 1
+    },
+    "ambient_reworded_1/original_open": {
+      "answer_eos": 4,
+      "exact_match": 4,
+      "n": 4
+    },
+    "ambient_reworded_1/paraphrase_1": {
+      "answer_eos": 4,
+      "exact_match": 4,
+      "n": 4
+    },
+    "ambient_reworded_1/paraphrase_2": {
+      "answer_eos": 4,
+      "exact_match": 4,
+      "n": 4
+    },
+    "ambient_reworded_1/paraphrase_3": {
+      "answer_eos": 4,
+      "exact_match": 4,
+      "n": 4
+    },
+    "ambient_reworded_1/paraphrase_4": {
+      "answer_eos": 4,
+      "exact_match": 4,
+      "n": 4
+    },
+    "ambient_reworded_2/original_open": {
+      "answer_eos": 4,
+      "exact_match": 4,
+      "n": 4
+    },
+    "ambient_reworded_2/paraphrase_1": {
+      "answer_eos": 4,
+      "exact_match": 4,
+      "n": 4
+    },
+    "ambient_reworded_2/paraphrase_2": {
+      "answer_eos": 4,
+      "exact_match": 4,
+      "n": 4
+    },
+    "ambient_reworded_2/paraphrase_3": {
+      "answer_eos": 4,
+      "exact_match": 4,
+      "n": 4
+    },
+    "ambient_reworded_2/paraphrase_4": {
+      "answer_eos": 4,
+      "exact_match": 4,
+      "n": 4
+    },
+    "ambient_trained/original_open": {
+      "answer_eos": 16,
+      "exact_match": 16,
+      "n": 16
+    },
+    "ambient_trained/paraphrase_1": {
+      "answer_eos": 16,
+      "exact_match": 16,
+      "n": 16
+    },
+    "ambient_trained/paraphrase_2": {
+      "answer_eos": 16,
+      "exact_match": 16,
+      "n": 16
+    },
+    "ambient_trained/paraphrase_3": {
+      "answer_eos": 16,
+      "exact_match": 16,
+      "n": 16
+    },
+    "ambient_trained/paraphrase_4": {
+      "answer_eos": 16,
+      "exact_match": 16,
+      "n": 16
+    },
+    "clear_blank/original_open": {
+      "answer_eos": 0,
+      "exact_match": 0,
+      "n": 1
+    },
+    "clear_blank/paraphrase_1": {
+      "answer_eos": 0,
+      "exact_match": 0,
+      "n": 1
+    },
+    "clear_blank/paraphrase_2": {
+      "answer_eos": 0,
+      "exact_match": 0,
+      "n": 1
+    },
+    "clear_blank/paraphrase_3": {
+      "answer_eos": 0,
+      "exact_match": 0,
+      "n": 1
+    },
+    "clear_blank/paraphrase_4": {
+      "answer_eos": 0,
+      "exact_match": 0,
+      "n": 1
+    },
+    "clear_donor/original_open": {
+      "answer_eos": 0,
+      "exact_match": 0,
+      "n": 1
+    },
+    "clear_donor/paraphrase_1": {
+      "answer_eos": 0,
+      "exact_match": 0,
+      "n": 1
+    },
+    "clear_donor/paraphrase_2": {
+      "answer_eos": 0,
+      "exact_match": 0,
+      "n": 1
+    },
+    "clear_donor/paraphrase_3": {
+      "answer_eos": 0,
+      "exact_match": 0,
+      "n": 1
+    },
+    "clear_donor/paraphrase_4": {
+      "answer_eos": 0,
+      "exact_match": 0,
+      "n": 1
+    },
+    "clear_reworded_1/original_open": {
+      "answer_eos": 0,
+      "exact_match": 0,
+      "n": 4
+    },
+    "clear_reworded_1/paraphrase_1": {
+      "answer_eos": 0,
+      "exact_match": 0,
+      "n": 4
+    },
+    "clear_reworded_1/paraphrase_2": {
+      "answer_eos": 0,
+      "exact_match": 0,
+      "n": 4
+    },
+    "clear_reworded_1/paraphrase_3": {
+      "answer_eos": 0,
+      "exact_match": 0,
+      "n": 4
+    },
+    "clear_reworded_1/paraphrase_4": {
+      "answer_eos": 0,
+      "exact_match": 0,
+      "n": 4
+    },
+    "clear_reworded_2/original_open": {
+      "answer_eos": 0,
+      "exact_match": 0,
+      "n": 4
+    },
+    "clear_reworded_2/paraphrase_1": {
+      "answer_eos": 0,
+      "exact_match": 0,
+      "n": 4
+    },
+    "clear_reworded_2/paraphrase_2": {
+      "answer_eos": 0,
+      "exact_match": 0,
+      "n": 4
+    },
+    "clear_reworded_2/paraphrase_3": {
+      "answer_eos": 0,
+      "exact_match": 0,
+      "n": 4
+    },
+    "clear_reworded_2/paraphrase_4": {
+      "answer_eos": 0,
+      "exact_match": 0,
+      "n": 4
+    },
+    "clear_trained/original_open": {
+      "answer_eos": 16,
+      "exact_match": 16,
+      "n": 16
+    },
+    "clear_trained/paraphrase_1": {
+      "answer_eos": 16,
+      "exact_match": 16,
+      "n": 16
+    },
+    "clear_trained/paraphrase_2": {
+      "answer_eos": 16,
+      "exact_match": 16,
+      "n": 16
+    },
+    "clear_trained/paraphrase_3": {
+      "answer_eos": 16,
+      "exact_match": 16,
+      "n": 16
+    },
+    "clear_trained/paraphrase_4": {
+      "answer_eos": 16,
+      "exact_match": 16,
+      "n": 16
+    },
+    "jazz_blank/original_open": {
+      "answer_eos": 0,
+      "exact_match": 0,
+      "n": 1
+    },
+    "jazz_blank/paraphrase_1": {
+      "answer_eos": 0,
+      "exact_match": 0,
+      "n": 1
+    },
+    "jazz_blank/paraphrase_2": {
+      "answer_eos": 0,
+      "exact_match": 0,
+      "n": 1
+    },
+    "jazz_blank/paraphrase_3": {
+      "answer_eos": 0,
+      "exact_match": 0,
+      "n": 1
+    },
+    "jazz_blank/paraphrase_4": {
+      "answer_eos": 0,
+      "exact_match": 0,
+      "n": 1
+    },
+    "jazz_donor/original_open": {
+      "answer_eos": 0,
+      "exact_match": 0,
+      "n": 1
+    },
+    "jazz_donor/paraphrase_1": {
+      "answer_eos": 0,
+      "exact_match": 0,
+      "n": 1
+    },
+    "jazz_donor/paraphrase_2": {
+      "answer_eos": 0,
+      "exact_match": 0,
+      "n": 1
+    },
+    "jazz_donor/paraphrase_3": {
+      "answer_eos": 0,
+      "exact_match": 0,
+      "n": 1
+    },
+    "jazz_donor/paraphrase_4": {
+      "answer_eos": 0,
+      "exact_match": 0,
+      "n": 1
+    },
+    "jazz_reworded_1/original_open": {
+      "answer_eos": 4,
+      "exact_match": 4,
+      "n": 4
+    },
+    "jazz_reworded_1/paraphrase_1": {
+      "answer_eos": 4,
+      "exact_match": 4,
+      "n": 4
+    },
+    "jazz_reworded_1/paraphrase_2": {
+      "answer_eos": 4,
+      "exact_match": 4,
+      "n": 4
+    },
+    "jazz_reworded_1/paraphrase_3": {
+      "answer_eos": 4,
+      "exact_match": 4,
+      "n": 4
+    },
+    "jazz_reworded_1/paraphrase_4": {
+      "answer_eos": 4,
+      "exact_match": 4,
+      "n": 4
+    },
+    "jazz_reworded_2/original_open": {
+      "answer_eos": 4,
+      "exact_match": 4,
+      "n": 4
+    },
+    "jazz_reworded_2/paraphrase_1": {
+      "answer_eos": 4,
+      "exact_match": 4,
+      "n": 4
+    },
+    "jazz_reworded_2/paraphrase_2": {
+      "answer_eos": 4,
+      "exact_match": 4,
+      "n": 4
+    },
+    "jazz_reworded_2/paraphrase_3": {
+      "answer_eos": 4,
+      "exact_match": 4,
+      "n": 4
+    },
+    "jazz_reworded_2/paraphrase_4": {
+      "answer_eos": 4,
+      "exact_match": 4,
+      "n": 4
+    },
+    "jazz_trained/original_open": {
+      "answer_eos": 16,
+      "exact_match": 16,
+      "n": 16
+    },
+    "jazz_trained/paraphrase_1": {
+      "answer_eos": 16,
+      "exact_match": 16,
+      "n": 16
+    },
+    "jazz_trained/paraphrase_2": {
+      "answer_eos": 16,
+      "exact_match": 16,
+      "n": 16
+    },
+    "jazz_trained/paraphrase_3": {
+      "answer_eos": 16,
+      "exact_match": 16,
+      "n": 16
+    },
+    "jazz_trained/paraphrase_4": {
+      "answer_eos": 16,
+      "exact_match": 16,
+      "n": 16
+    }
+  },
+  "identity": {
+    "bank_sha256": "5165c059a0a4c0760cd4b0df1663c642132e52bf55a13031cd99207fd200bb86",
+    "checkpoint_sha256": "3c4b0679f16dd7714a662cfaddcd7716f7d3d43a49920898ab19a522d77af38d",
+    "conditional_state_count": 3,
+    "deadline_unix": 1789251300.0,
+    "guidance_control_gate": {
+      "complete_sha256": "dfe525cb6b37880e525365c872d289656bec446dea2ec46bf0c5f72cb980fb78",
+      "identity": {
+        "cached_condition_sha256": null,
+        "checkpoint_sha256": "3c4b0679f16dd7714a662cfaddcd7716f7d3d43a49920898ab19a522d77af38d",
+        "condition_style": "native",
+        "guidance_scale": 1.0,
+        "image_guidance_scale": 1.0,
+        "inference_steps": 28,
+        "optimizer_updates": 0,
+        "parent_result_sha256": "4dfb56f942d7dea62ac1d52ec91a0a814df30d4f6accc1238f9310dd822dff14",
+        "probe_commit": "1e4acd2bcd9cbf9f0b2878e51694c17bebe06110",
+        "scope": "Same checkpoint, noise, native prompt, image and Reader; only CFG changes 7.5 to 1",
+        "seed": 20260913,
+        "trainable_scope": "full_unet"
+      }
+    },
+    "guidance_scale": 1.0,
+    "image_guidance_scale": 1.0,
+    "inference_steps": 28,
+    "optimizer_updates": 0,
+    "parent_commit": "c90896c55c7b6cd6f489ccb7848ade2cff587daa",
+    "parent_result_sha256": "4dfb56f942d7dea62ac1d52ec91a0a814df30d4f6accc1238f9310dd822dff14",
+    "plan": [
+      {
+        "case": "ambient_trained",
+        "event": "R3 Train Standard Templates 03: For the indigo desk train 001123, remember that the preferred music is ambient.",
+        "gold": "ambient",
+        "question_id": "r5-f1-392d41fd097d069c42218e0a-state-ambient",
+        "seeds": [
+          6111847791805634731,
+          6664537592120271533,
+          7452023695451201443,
+          6214586318859129421,
+          4398406155763725347,
+          2005496710673399096,
+          264086871677559714,
+          2371478938469660153,
+          8553887925862612132,
+          5491146181988245324,
+          4354971798857337027,
+          2213890128814681272,
+          614687594472184893,
+          1491820010505241912,
+          6494453391875569915,
+          2023698763420143126
+        ],
+        "state": "ambient",
+        "style": "trained"
+      },
+      {
+        "case": "ambient_reworded_1",
+        "event": "R3 Train Standard Templates 03: Set the current music preference of the indigo desk train 001123 to ambient.",
+        "gold": "ambient",
+        "question_id": "r5-f1-392d41fd097d069c42218e0a-state-ambient",
+        "seeds": [
+          6111847791805634731,
+          6664537592120271533,
+          7452023695451201443,
+          6214586318859129421
+        ],
+        "state": "ambient",
+        "style": "reworded_1"
+      },
+      {
+        "case": "ambient_reworded_2",
+        "event": "The indigo desk train 001123 now prefers ambient music. Store this as its current music preference.",
+        "gold": "ambient",
+        "question_id": "r5-f1-392d41fd097d069c42218e0a-state-ambient",
+        "seeds": [
+          6111847791805634731,
+          6664537592120271533,
+          7452023695451201443,
+          6214586318859129421
+        ],
+        "state": "ambient",
+        "style": "reworded_2"
+      },
+      {
+        "case": "jazz_trained",
+        "event": "R3 Train Standard Templates 03: For the indigo desk train 001123, remember that the preferred music is jazz.",
+        "gold": "jazz",
+        "question_id": "r5-f1-392d41fd097d069c42218e0a-state-jazz",
+        "seeds": [
+          6111847791805634731,
+          6664537592120271533,
+          7452023695451201443,
+          6214586318859129421,
+          4398406155763725347,
+          2005496710673399096,
+          264086871677559714,
+          2371478938469660153,
+          8553887925862612132,
+          5491146181988245324,
+          4354971798857337027,
+          2213890128814681272,
+          614687594472184893,
+          1491820010505241912,
+          6494453391875569915,
+          2023698763420143126
+        ],
+        "state": "jazz",
+        "style": "trained"
+      },
+      {
+        "case": "jazz_reworded_1",
+        "event": "R3 Train Standard Templates 03: Set the current music preference of the indigo desk train 001123 to jazz.",
+        "gold": "jazz",
+        "question_id": "r5-f1-392d41fd097d069c42218e0a-state-jazz",
+        "seeds": [
+          6111847791805634731,
+          6664537592120271533,
+          7452023695451201443,
+          6214586318859129421
+        ],
+        "state": "jazz",
+        "style": "reworded_1"
+      },
+      {
+        "case": "jazz_reworded_2",
+        "event": "The indigo desk train 001123 now prefers jazz music. Store this as its current music preference.",
+        "gold": "jazz",
+        "question_id": "r5-f1-392d41fd097d069c42218e0a-state-jazz",
+        "seeds": [
+          6111847791805634731,
+          6664537592120271533,
+          7452023695451201443,
+          6214586318859129421
+        ],
+        "state": "jazz",
+        "style": "reworded_2"
+      },
+      {
+        "case": "clear_trained",
+        "event": "R3 Train Standard Templates 03: Clear the saved music preference for the indigo desk train 001123.",
+        "gold": "no active preference",
+        "question_id": "r5-f1-392d41fd097d069c42218e0a-state-clear",
+        "seeds": [
+          6111847791805634731,
+          6664537592120271533,
+          7452023695451201443,
+          6214586318859129421,
+          4398406155763725347,
+          2005496710673399096,
+          264086871677559714,
+          2371478938469660153,
+          8553887925862612132,
+          5491146181988245324,
+          4354971798857337027,
+          2213890128814681272,
+          614687594472184893,
+          1491820010505241912,
+          6494453391875569915,
+          2023698763420143126
+        ],
+        "state": "clear",
+        "style": "trained"
+      },
+      {
+        "case": "clear_reworded_1",
+        "event": "R3 Train Standard Templates 03: Remove the music preference stored for the indigo desk train 001123; it now has no active music preference.",
+        "gold": "no active preference",
+        "question_id": "r5-f1-392d41fd097d069c42218e0a-state-clear",
+        "seeds": [
+          6111847791805634731,
+          6664537592120271533,
+          7452023695451201443,
+          6214586318859129421
+        ],
+        "state": "clear",
+        "style": "reworded_1"
+      },
+      {
+        "case": "clear_reworded_2",
+        "event": "For the indigo desk train 001123, forget its saved music preference. There is no current music preference.",
+        "gold": "no active preference",
+        "question_id": "r5-f1-392d41fd097d069c42218e0a-state-clear",
+        "seeds": [
+          6111847791805634731,
+          6664537592120271533,
+          7452023695451201443,
+          6214586318859129421
+        ],
+        "state": "clear",
+        "style": "reworded_2"
+      }
+    ],
+    "probe_commit": "09b324dc7574ed33c0236ee09a4f5c3526fb85bb",
+    "protocol_binding": {
+      "base_snapshot": {
+        "files": [
+          {
+            "bytes": 1641,
+            "hf_etag": "a82744f53a7fb2bd90ab1667ef5dccdfae0094d2",
+            "path": ".gitattributes",
+            "sha256": "019d31f916e3d6fb9ed369200040376aa0f395c2d412df2a22bb0664b28e4746"
+          },
+          {
+            "bytes": 1157,
+            "hf_etag": "cf86c331d4e123815f3cb3b9ef196db41a1cdb92",
+            "path": "README.md",
+            "sha256": "f1051a6285bd9d1c8adba94634df7b6d16e641a2c5814b4f6f39073cad7f0b82"
+          },
+          {
+            "bytes": 519,
+            "hf_etag": "661e08ff3eb1443002955166776e009dcaef6bc5",
+            "path": "model_index.json",
+            "sha256": "1c5161bcb184ceb7c32f3610d1307030c241dbe9a4fe924e4daaceabd55455be"
+          },
+          {
+            "bytes": 707,
+            "hf_etag": "b54f9135e44c1e81047e8d05cb027af8bc039eed",
+            "path": "processor/added_tokens.json",
+            "sha256": "c0284b582e14987fbd3d5a2cb2bd139084371ed9acbae488829a1c900833c680"
+          },
+          {
+            "bytes": 5292,
+            "hf_etag": "124386803f142761528f710e77ae483f5f8c4fc4",
+            "path": "processor/chat_template.jinja",
+            "sha256": "3636d0f0bd6bef02654cdffdc447b79cb2cef8ab02cc75267345946291a489e4"
+          },
+          {
+            "bytes": 1671853,
+            "hf_etag": "31349551d90c7606f325fe0f11bbb8bd5fa0d7c7",
+            "path": "processor/merges.txt",
+            "sha256": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5"
+          },
+          {
+            "bytes": 782,
+            "hf_etag": "2fa6553554f69b4e3a6b742a75264ff9dff90ad0",
+            "path": "processor/preprocessor_config.json",
+            "sha256": "93585062a80db5e8ca038efc7726a3e6411d9db948472d81d63c6303993be8c5"
+          },
+          {
+            "bytes": 613,
+            "hf_etag": "ac23c0aaa2434523c494330aeb79c58395378103",
+            "path": "processor/special_tokens_map.json",
+            "sha256": "76862e765266b85aa9459767e33cbaf13970f327a0e88d1c65846c2ddd3a1ecd"
+          },
+          {
+            "bytes": 11422654,
+            "hf_etag": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+            "path": "processor/tokenizer.json",
+            "sha256": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4"
+          },
+          {
+            "bytes": 5445,
+            "hf_etag": "fec7f182135c384a08ea2fc9635566ca79c45afc",
+            "path": "processor/tokenizer_config.json",
+            "sha256": "81ec7bb9530159b326c0bef1d0b6c33d392090524014ea3f0123a3c1eb9c2af5"
+          },
+          {
+            "bytes": 817,
+            "hf_etag": "e32b1d90356f74457edbfca27aa1e121dab7cdc7",
+            "path": "processor/video_preprocessor_config.json",
+            "sha256": "59c5c9eb52182eb14c06ffb10ca9effd29adce5f238a95de23ca14a38dbd2cb1"
+          },
+          {
+            "bytes": 2776833,
+            "hf_etag": "4783fe10ac3adce15ac8f358ef5462739852c569",
+            "path": "processor/vocab.json",
+            "sha256": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910"
+          },
+          {
+            "bytes": 481,
+            "hf_etag": "8ffe55493d9aab2b2a200c65879b00e062ff0531",
+            "path": "scheduler/scheduler_config.json",
+            "sha256": "a20515a2393e2ed1e41a9e9fecab581cb626dc8361ee578eac8f71e8d5a9e90a"
+          },
+          {
+            "bytes": 1546,
+            "hf_etag": "454cc4936468d57e3c36067d8afe9f39de2e5f6c",
+            "path": "text_encoder/config.json",
+            "sha256": "79ca0168d4f0286439068ab397e610088756790a6e61dbbb8ae401e6b705f5f2"
+          },
+          {
+            "bytes": 213,
+            "hf_etag": "3dd2c545b96b4d51586680d7bb27fdca5c90dfe9",
+            "path": "text_encoder/generation_config.json",
+            "sha256": "a12101ea177dca07e73e58c38379eac5f023e4524253df22ccfd097f6b4b6a2d"
+          },
+          {
+            "bytes": 4255140312,
+            "hf_etag": "7de1838c87a5349b016c26a1c3f7d2bc400a3d485f95ef39a7059ffd734977a0",
+            "path": "text_encoder/model.safetensors",
+            "sha256": "7de1838c87a5349b016c26a1c3f7d2bc400a3d485f95ef39a7059ffd734977a0"
+          },
+          {
+            "bytes": 707,
+            "hf_etag": "b54f9135e44c1e81047e8d05cb027af8bc039eed",
+            "path": "tokenizer/added_tokens.json",
+            "sha256": "c0284b582e14987fbd3d5a2cb2bd139084371ed9acbae488829a1c900833c680"
+          },
+          {
+            "bytes": 5292,
+            "hf_etag": "124386803f142761528f710e77ae483f5f8c4fc4",
+            "path": "tokenizer/chat_template.jinja",
+            "sha256": "3636d0f0bd6bef02654cdffdc447b79cb2cef8ab02cc75267345946291a489e4"
+          },
+          {
+            "bytes": 1671853,
+            "hf_etag": "31349551d90c7606f325fe0f11bbb8bd5fa0d7c7",
+            "path": "tokenizer/merges.txt",
+            "sha256": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5"
+          },
+          {
+            "bytes": 613,
+            "hf_etag": "ac23c0aaa2434523c494330aeb79c58395378103",
+            "path": "tokenizer/special_tokens_map.json",
+            "sha256": "76862e765266b85aa9459767e33cbaf13970f327a0e88d1c65846c2ddd3a1ecd"
+          },
+          {
+            "bytes": 11422654,
+            "hf_etag": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+            "path": "tokenizer/tokenizer.json",
+            "sha256": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4"
+          },
+          {
+            "bytes": 5404,
+            "hf_etag": "1d4fba2de0e94e8f97e08927cfb7d084160c2880",
+            "path": "tokenizer/tokenizer_config.json",
+            "sha256": "355f2b4e5bad7b01f11ef6cb68ebc176f61b95c3276092ea225b1bea0e01e95c"
+          },
+          {
+            "bytes": 2776833,
+            "hf_etag": "4783fe10ac3adce15ac8f358ef5462739852c569",
+            "path": "tokenizer/vocab.json",
+            "sha256": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910"
+          },
+          {
+            "bytes": 1971,
+            "hf_etag": "238e7ee5455f13fc726372a75dd1301db5aa8de9",
+            "path": "unet/config.json",
+            "sha256": "5bb219157837199dbe325e23e3ca0d9f8ef28b09b11e5970463b593ce526d3f2"
+          },
+          {
+            "bytes": 780074688,
+            "hf_etag": "f983bd1710344cb44f7d12d05c0ca961984b48391dcbb095ad710609cbde3246",
+            "path": "unet/diffusion_pytorch_model.safetensors",
+            "sha256": "f983bd1710344cb44f7d12d05c0ca961984b48391dcbb095ad710609cbde3246"
+          },
+          {
+            "bytes": 634,
+            "hf_etag": "e8d284adced0c0d59bad19fadf2fccdb9784878f",
+            "path": "vae/config.json",
+            "sha256": "27fa78b2c236868031fa2108168aa9c8332d694c315c27c81f0b62677d8de6bc"
+          },
+          {
+            "bytes": 4903270,
+            "hf_etag": "e175c3284b8514a2ecb1a70f004b0b09320decd6842e77dfebbdb5dbbdf0312b",
+            "path": "vae/diffusion_pytorch_model.safetensors",
+            "sha256": "e175c3284b8514a2ecb1a70f004b0b09320decd6842e77dfebbdb5dbbdf0312b"
+          }
+        ],
+        "model_dir": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+        "payload_sha256": "fc70dd11ccc652805388e0b0e687383c1441fbf9ea34c5384c8d7a241c7f7a72",
+        "revision": "a9a0f151ffd99d3c37f3fd0472f5e8f1b31215aa",
+        "schema": "hf-local-download-seal/v1"
+      },
+      "inference_guidance_scale": 7.5,
+      "inference_image_guidance_scale": 1.0,
+      "inference_prompt": "native upstream diptych+CFG",
+      "inference_steps": 28,
+      "official_source_commit": "a6e20c8cc94027f37dd7c5a81b0b3b472aa18409",
+      "source_bindings": {
+        "r5-f1-392d41fd097d069c42218e0a-state-ambient": {
+          "bank_source_sha256": "5f8c07caa37de38cae96d0b0e28851b1b831bea8728182e9fbd14b1588ac3743",
+          "official_source_sha256": "fee703bb760f4269db3311991c9af4b633a2bc3c85d38e8b93cd65bcdcf24607",
+          "reason": "official source PIL gray128 preprocessing instead of historical exact float gray0.5",
+          "rms_difference": 0.006467190105777682
+        },
+        "r5-f1-392d41fd097d069c42218e0a-state-clear": {
+          "bank_source_sha256": "5f8c07caa37de38cae96d0b0e28851b1b831bea8728182e9fbd14b1588ac3743",
+          "official_source_sha256": "fee703bb760f4269db3311991c9af4b633a2bc3c85d38e8b93cd65bcdcf24607",
+          "reason": "official source PIL gray128 preprocessing instead of historical exact float gray0.5",
+          "rms_difference": 0.006467190105777682
+        },
+        "r5-f1-392d41fd097d069c42218e0a-state-jazz": {
+          "bank_source_sha256": "5f8c07caa37de38cae96d0b0e28851b1b831bea8728182e9fbd14b1588ac3743",
+          "official_source_sha256": "fee703bb760f4269db3311991c9af4b633a2bc3c85d38e8b93cd65bcdcf24607",
+          "reason": "official source PIL gray128 preprocessing instead of historical exact float gray0.5",
+          "rms_difference": 0.006467190105777682
+        }
+      },
+      "student": "official DreamLitePipelineLoRA base",
+      "train_prompt": "raw event, upstream LoRA example",
+      "vae_weights_sha256": {
+        "diffusion_pytorch_model.safetensors": "e175c3284b8514a2ecb1a70f004b0b09320decd6842e77dfebbdb5dbbdf0312b"
+      }
+    },
+    "scope": "Fixed three states; 16 paired fresh noises per trained event; two unseen wordings with four paired noises each; no sequential memory update test",
+    "semantic_question_count": 1,
+    "snapshots": {
+      "dreamlite_mobile": {
+        "file_count": 27,
+        "manifest_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-mobile/.snapshot_manifest.json",
+        "manifest_sha256": "1bcf41b170c4b4a806bac6701cbdf4fabd5c3c53fa67415d065ab95ce2703159",
+        "model_dir": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-mobile",
+        "passed": true,
+        "repo_id": "carlofkl/DreamLite-mobile",
+        "revision": "6695c3f4be230f0493fa5dbf78be3bc4d3bb2ab4",
+        "snapshot_payload_sha256": "3fb839f465793b01ecafc4df433031a063dd7b395a050960cde57c2807031337",
+        "total_bytes": 5071894300
+      },
+      "qwen_reader": {
+        "file_count": 14,
+        "manifest_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct/.snapshot_manifest.json",
+        "manifest_sha256": "159a504daaae6dc412535978f087150a0eb8e50164afd70a8a17f83906f1127c",
+        "model_dir": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+        "passed": true,
+        "repo_id": "Qwen/Qwen3-VL-4B-Instruct",
+        "revision": "ebb281ec70b05090aa6165b016eac8ec08e71b17",
+        "snapshot_payload_sha256": "45be3ffb00017b02bffa79f4f8e6f301760ac50c0bb78b2c4e5a7fe8aa3d52c6",
+        "total_bytes": 8887292732
+      }
+    }
+  }
+}

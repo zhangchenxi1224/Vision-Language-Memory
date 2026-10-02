@@ -1,0 +1,26 @@
+{
+  "formal_success_claim": false,
+  "interpretation": "R13 converts R12's event-independent visual-prompt collapse into partial target-specific fit (14/36 train-audit), but it still fails the fixed boundary and does not generalize causally to held-out entities.",
+  "next_preregistered_test": "Explicit symmetric own-versus-wrong-donor ranking during training, with the R13 normal/reset/donor/base evaluation held unchanged.",
+  "r12_analysis_path": "D:\\2026WorkExperience\\VisonLearnableMemory\\reports\\r12-shared-event-latent-writer-results-20260904\\ANALYSIS.json",
+  "r12_analysis_sha256": "6890a39d481a72b3218ce9765abaa4610decec4713730ab3129b6a1845d5de08",
+  "schema": "vision_memory.r12-r13-comparison.v1",
+  "status": "completed",
+  "target_pass_counts": {
+    "dev_final": {
+      "r12_conditioned": 0,
+      "r13_centered_residual": 6,
+      "required": 24
+    },
+    "dev_select": {
+      "r12_conditioned": 0,
+      "r13_centered_residual": 1,
+      "required": 24
+    },
+    "train_audit": {
+      "r12_conditioned": 0,
+      "r13_centered_residual": 14,
+      "required": 36
+    }
+  }
+}

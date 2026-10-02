@@ -1,0 +1,43 @@
+{
+  "backend": "nccl",
+  "bitwise_rank_agreement": true,
+  "devices": [
+    {
+      "device": "0",
+      "local_rank": 0,
+      "name": "NVIDIA H200",
+      "pid": 478724,
+      "rank": 0
+    },
+    {
+      "device": "1",
+      "local_rank": 1,
+      "name": "NVIDIA H200",
+      "pid": 478725,
+      "rank": 1
+    },
+    {
+      "device": "2",
+      "local_rank": 2,
+      "name": "NVIDIA H200",
+      "pid": 478726,
+      "rank": 2
+    },
+    {
+      "device": "3",
+      "local_rank": 3,
+      "name": "NVIDIA H200",
+      "pid": 478727,
+      "rank": 3
+    }
+  ],
+  "nccl_algorithm": "Ring",
+  "nccl_protocol": "Simple",
+  "parameter_sha256_by_rank": [
+    "16bf39236d6828dc9bc7ed7168f7e10092ccc9ea4868647f9f7c62b0d6a73975",
+    "16bf39236d6828dc9bc7ed7168f7e10092ccc9ea4868647f9f7c62b0d6a73975",
+    "16bf39236d6828dc9bc7ed7168f7e10092ccc9ea4868647f9f7c62b0d6a73975",
+    "16bf39236d6828dc9bc7ed7168f7e10092ccc9ea4868647f9f7c62b0d6a73975"
+  ],
+  "world_size": 4
+}

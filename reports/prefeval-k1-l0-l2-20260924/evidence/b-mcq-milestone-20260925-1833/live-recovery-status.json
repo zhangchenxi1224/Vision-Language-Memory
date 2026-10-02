@@ -1,0 +1,122 @@
+{
+  "time": "2026-09-25T10:52:26Z",
+  "host": "prefeval-k1-h200x2-20260924--f1a8505aaf2e-z33pme3icj",
+  "processes": [
+    "  59868       1     839 bash scripts/inspire/run_prefeval_k1_robust730.sh",
+    "  59880       1     839 bash scripts/inspire/run_prefeval_k1_identity64.sh"
+  ],
+  "gpu": "index, memory.used [MiB], utilization.gpu [%]\n0, 40159 MiB, 100 %\n1, 14129 MiB, 100 %\n",
+  "identity64_receipt": {
+    "lane": "identity64",
+    "pid": 59880,
+    "gpu": 1,
+    "command": [
+      "bash",
+      "scripts/inspire/run_prefeval_k1_identity64.sh"
+    ],
+    "code_root": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-deploy-dc8731c",
+    "commit": "dc8731c5ec8c6b20fbb9c708730f5f613819234a",
+    "time_utc": "20260925T103827Z",
+    "log": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/launch-identity64-20260925T103827Z.log",
+    "host": "prefeval-k1-h200x2-20260924--f1a8505aaf2e-z33pme3icj"
+  },
+  "robust730_receipt": {
+    "lane": "robust730",
+    "pid": 59868,
+    "gpu": 0,
+    "command": [
+      "bash",
+      "scripts/inspire/run_prefeval_k1_robust730.sh"
+    ],
+    "code_root": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-deploy-5d1045f",
+    "commit": "5d1045f4d4c4a7b81ae648a91f8a3ec0935a0621",
+    "time_utc": "20260925T103827Z",
+    "log": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/launch-robust730-20260925T103827Z.log",
+    "host": "prefeval-k1-h200x2-20260924--f1a8505aaf2e-z33pme3icj"
+  },
+  "canonical64_receipt": {
+    "lane": "canonical64",
+    "pid": 22925,
+    "gpu": 0,
+    "command": [
+      "bash",
+      "scripts/inspire/run_prefeval_k1_canonical64_readback.sh"
+    ],
+    "code_root": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-deploy-dc8731c",
+    "commit": "dc8731c5ec8c6b20fbb9c708730f5f613819234a",
+    "time_utc": "20260925T104154Z",
+    "log": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/launch-canonical64-20260925T104154Z.log",
+    "host": "prefeval-k1-l012-h200x4-20260924--dacf2dea6e9f-ytavotbaya"
+  },
+  "readback_receipt": {
+    "lane": "readback",
+    "pid": 22937,
+    "gpu": 1,
+    "command": [
+      "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+      "scripts/inspire/run_prefeval_k1_b_readback_queue.py"
+    ],
+    "code_root": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-deploy-5d1045f",
+    "commit": "5d1045f4d4c4a7b81ae648a91f8a3ec0935a0621",
+    "time_utc": "20260925T104154Z",
+    "log": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/launch-readback-20260925T104154Z.log",
+    "host": "prefeval-k1-l012-h200x4-20260924--dacf2dea6e9f-ytavotbaya"
+  },
+  "exit_status": {
+    "identity64": "no exit status",
+    "robust730": "no exit status",
+    "canonical64": "no exit status"
+  },
+  "B730_last": {
+    "step": 3047,
+    "draws": [
+      {
+        "pair_id": "pet_ownership:0016",
+        "position": 0,
+        "sigma": 0.8307722806930542,
+        "mse": 0.282112717628479,
+        "initial_variant": 0
+      },
+      {
+        "pair_id": "travel_activities:0007",
+        "position": 0,
+        "sigma": 0.6056860685348511,
+        "mse": 0.29273301362991333,
+        "initial_variant": 0
+      },
+      {
+        "pair_id": "entertain_music_book:0022",
+        "position": 0,
+        "sigma": 0.8099846243858337,
+        "mse": 0.18103668093681335,
+        "initial_variant": 0
+      },
+      {
+        "pair_id": "entertain_games:0049",
+        "position": 0,
+        "sigma": 0.34453463554382324,
+        "mse": 0.4250797629356384,
+        "initial_variant": 0
+      }
+    ],
+    "grad_norm": 0.06306584179401398,
+    "seconds": 356.0430597020313
+  },
+  "I_pilot_completed": 9,
+  "I_pilot_log_tail": "30s/it]\nLoading pipeline components...: 100%|████████████| 6/6 [00:12<00:00,  1.87s/it]\nLoading pipeline components...: 100%|████████████| 6/6 [00:12<00:00,  2.01s/it]\n/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/lib/python3.12/site-packages/diffusers/loaders/lora_pipeline.py:6850: FutureWarning: `LoraLoaderMixin` is deprecated and will be removed in version 1.0.0. LoraLoaderMixin is deprecated and this will be removed in a future version. Please use `StableDiffusionLoraLoaderMixin`, instead.\n  deprecate(\"LoraLoaderMixin\", \"1.0.0\", deprecation_message)\n{\"completed\": \"entertain_games:0007\", \"chain\": 1, \"inter_turns\": 10}\n{\"completed\": \"entertain_games:0036\", \"chain\": 0, \"inter_turns\": 10}\n{\"completed\": \"entertain_games:0036\", \"chain\": 1, \"inter_turns\": 10}\n{\"completed\": \"entertain_games:0023\", \"chain\": 0, \"inter_turns\": 10}\n{\"completed\": \"entertain_games:0023\", \"chain\": 1, \"inter_turns\": 10}\n{\"completed\": \"entertain_shows:0040\", \"chain\": 0, \"inter_turns\": 10}\n",
+  "B_train_log_tail": "e\": \"write\"}\n{\"cached\": 721, \"total\": 730, \"stage\": \"write\"}\n{\"cached\": 722, \"total\": 730, \"stage\": \"write\"}\n{\"cached\": 723, \"total\": 730, \"stage\": \"write\"}\n{\"cached\": 724, \"total\": 730, \"stage\": \"write\"}\n{\"cached\": 725, \"total\": 730, \"stage\": \"write\"}\n{\"cached\": 726, \"total\": 730, \"stage\": \"write\"}\n{\"cached\": 727, \"total\": 730, \"stage\": \"write\"}\n{\"cached\": 728, \"total\": 730, \"stage\": \"write\"}\n{\"cached\": 729, \"total\": 730, \"stage\": \"write\"}\n{\"cached\": 730, \"total\": 730, \"stage\": \"write\"}\n{\"step\": 2848, \"mse\": 0.8083406202495098, \"seconds\": 48.43786550872028}\n{\"step\": 2880, \"mse\": 0.6593052744865417, \"seconds\": 96.26495355088264}\n{\"step\": 2912, \"mse\": 0.777032308280468, \"seconds\": 144.18482114886865}\n{\"step\": 2944, \"mse\": 0.6957442238926888, \"seconds\": 193.03540794178843}\n{\"step\": 2976, \"mse\": 0.33811640180647373, \"seconds\": 246.96552114607766}\n{\"step\": 3008, \"mse\": 0.6459607481956482, \"seconds\": 296.16082962602377}\n{\"step\": 3040, \"mse\": 0.49747133255004883, \"seconds\": 345.29206259083}\n",
+  "gpu_process_details": [
+    {
+      "pid": 59899,
+      "cmdline": "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python scripts/experiments/prefeval_k1_writer.py train --arm B --base /inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907 --official-source /inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite --split train --stage write --steps 23360 --snapshot-steps 2048 --initial-variants /inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/variants-train.json --teachers /inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-k1-scale730-20260924/teachers/B --checkpoint /inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/4fbc857-clear-retention-full4832/train/checkpoint-final.pt --output /inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/robust730/train ",
+      "cwd": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-deploy-5d1045f",
+      "cuda": "CUDA_VISIBLE_DEVICES=0"
+    },
+    {
+      "pid": 72800,
+      "cmdline": "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python scripts/experiments/prefeval_k1_writer.py rollout --arm B --base /inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907 --official-source /inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite --split pilot --inter-turns 10 --noise-chains 2 --checkpoint /inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/identity64/train/checkpoint-final.pt --output /inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/identity64/pilot ",
+      "cwd": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-deploy-dc8731c",
+      "cuda": "CUDA_VISIBLE_DEVICES=1"
+    }
+  ]
+}

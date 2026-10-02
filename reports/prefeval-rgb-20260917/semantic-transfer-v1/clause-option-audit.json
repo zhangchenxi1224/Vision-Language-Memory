@@ -1,0 +1,1159 @@
+{
+  "725749d44093": {
+    "source": "I dislike series with a lot of episodes; they feel overwhelming.",
+    "scope": "entertain_shows",
+    "clauses": [
+      "Avoid series with a large number of episodes"
+    ],
+    "options": [
+      {
+        "attributes": "the entire story has three episodes",
+        "clause_satisfaction": [
+          true
+        ],
+        "reason": "Three episodes is a short complete series"
+      },
+      {
+        "attributes": "the entire story has 120 episodes",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "120 episodes is a large episode count"
+      },
+      {
+        "attributes": "the entire story has 180 episodes",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "180 episodes is a large episode count"
+      },
+      {
+        "attributes": "the entire story has 240 episodes",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "240 episodes is a large episode count"
+      }
+    ],
+    "correct_option": 0,
+    "authoring_inputs": "sanitized preference-only view; no original question, options, outcomes or explanations"
+  },
+  "9d27f7f69aba": {
+    "source": "I avoid anything involving space or outer space adventures.",
+    "scope": "entertain_shows",
+    "clauses": [
+      "Avoid content involving space or outer-space adventures"
+    ],
+    "options": [
+      {
+        "attributes": "every scene takes place in an ordinary Earth town, with no space travel or space setting",
+        "clause_satisfaction": [
+          true
+        ],
+        "reason": "Earth-only story has no space content"
+      },
+      {
+        "attributes": "the story follows astronauts on an outer-space voyage",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "Outer-space voyage violates exclusion"
+      },
+      {
+        "attributes": "the adventure is set aboard a space station",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "Space station violates exclusion"
+      },
+      {
+        "attributes": "the characters explore distant planets in outer space",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "Outer-space planet exploration violates exclusion"
+      }
+    ],
+    "correct_option": 0,
+    "authoring_inputs": "sanitized preference-only view; no original question, options, outcomes or explanations"
+  },
+  "93de0f2a5c4c": {
+    "source": "I avoid using any talc-based beauty products.",
+    "scope": "lifestyle_beauty",
+    "clauses": [
+      "Use no talc-based beauty product"
+    ],
+    "options": [
+      {
+        "attributes": "its complete ingredient specification is talc-free",
+        "clause_satisfaction": [
+          true
+        ],
+        "reason": "Explicitly free of talc"
+      },
+      {
+        "attributes": "talc is its main base ingredient",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "Talc base violates exclusion"
+      },
+      {
+        "attributes": "its formulation uses a talc powder base",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "Talc powder base violates exclusion"
+      },
+      {
+        "attributes": "its cosmetic base contains talc",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "Talc-containing base violates exclusion"
+      }
+    ],
+    "correct_option": 0,
+    "authoring_inputs": "sanitized preference-only view; no original question, options, outcomes or explanations"
+  },
+  "16daf0784754": {
+    "source": "I only consume foods that are foraged or wild-crafted.",
+    "scope": "lifestyle_dietary",
+    "clauses": [
+      "Every consumed food is foraged or wild-crafted"
+    ],
+    "options": [
+      {
+        "attributes": "every food ingredient is certified wild-foraged, with no cultivated ingredients",
+        "clause_satisfaction": [
+          true
+        ],
+        "reason": "All ingredients meet the sourcing condition"
+      },
+      {
+        "attributes": "every food ingredient was cultivated on a conventional farm",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "Cultivated ingredients fail the condition"
+      },
+      {
+        "attributes": "the ingredients mix wild-foraged foods with cultivated farm foods",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "Mixed sourcing fails the only-consume restriction"
+      },
+      {
+        "attributes": "every food ingredient was cultivated in an indoor growing facility",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "Indoor cultivation is not wild foraging"
+      }
+    ],
+    "correct_option": 0,
+    "authoring_inputs": "sanitized preference-only view; no original question, options, outcomes or explanations"
+  },
+  "9385f4500dad": {
+    "source": "I strongly dislike any form of meditation or mindfulness practices that involve sitting still.",
+    "scope": "lifestyle_health",
+    "clauses": [
+      "Avoid meditation or mindfulness that involves sitting still"
+    ],
+    "options": [
+      {
+        "attributes": "participants walk continuously and never sit during the practice",
+        "clause_satisfaction": [
+          true
+        ],
+        "reason": "Continuous walking involves no sitting still"
+      },
+      {
+        "attributes": "participants sit still throughout the practice",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "Seated stillness violates exclusion"
+      },
+      {
+        "attributes": "the practice requires a seated motionless period",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "Required seated stillness violates exclusion"
+      },
+      {
+        "attributes": "participants remain seated and still during every exercise",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "Every exercise violates exclusion"
+      }
+    ],
+    "correct_option": 0,
+    "authoring_inputs": "sanitized preference-only view; no original question, options, outcomes or explanations"
+  },
+  "a5f82138f2f9": {
+    "source": "I avoid all supplements and only get nutrients from whole foods.",
+    "scope": "lifestyle_health",
+    "clauses": [
+      "Avoid all supplements",
+      "Obtain nutrients only from whole foods"
+    ],
+    "options": [
+      {
+        "attributes": "all nutrients come from intact whole foods requiring meal preparation, with no supplements",
+        "clause_satisfaction": [
+          true,
+          true
+        ],
+        "reason": "Whole foods only and no supplements"
+      },
+      {
+        "attributes": "nutrients come from ready-to-use supplement capsules rather than whole foods",
+        "clause_satisfaction": [
+          false,
+          false
+        ],
+        "reason": "Capsules violate both conditions"
+      },
+      {
+        "attributes": "nutrients come from whole foods plus a convenient daily supplement powder",
+        "clause_satisfaction": [
+          false,
+          false
+        ],
+        "reason": "Adding any supplement violates both exclusive conditions"
+      },
+      {
+        "attributes": "nutrients come solely from ready-to-use supplement tablets",
+        "clause_satisfaction": [
+          false,
+          false
+        ],
+        "reason": "Tablets violate both conditions"
+      }
+    ],
+    "correct_option": 0,
+    "authoring_inputs": "sanitized preference-only view; no original question, options, outcomes or explanations"
+  },
+  "5ea4b78f22f2": {
+    "source": "I don't like fish or any aquatic animals as pets.",
+    "scope": "pet_ownership",
+    "clauses": [
+      "Avoid fish and every aquatic animal as a pet"
+    ],
+    "options": [
+      {
+        "attributes": "the animal is a fully terrestrial mammal that lives on dry land",
+        "clause_satisfaction": [
+          true
+        ],
+        "reason": "Terrestrial non-fish meets exclusion"
+      },
+      {
+        "attributes": "the animal is a fish that lives in water",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "Fish excluded"
+      },
+      {
+        "attributes": "the animal is a fully aquatic invertebrate",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "All aquatic animals excluded, including invertebrates"
+      },
+      {
+        "attributes": "the animal is a fully aquatic animal that is not a fish",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "Non-fish aquatic animals are also excluded"
+      }
+    ],
+    "correct_option": 0,
+    "authoring_inputs": "sanitized preference-only view; no original question, options, outcomes or explanations"
+  },
+  "eaebedccb6c6": {
+    "source": "I'm not comfortable with pets that can jump on furniture.",
+    "scope": "pet_ownership",
+    "clauses": [
+      "Avoid pets capable of jumping onto furniture"
+    ],
+    "options": [
+      {
+        "attributes": "this animal is physically unable to jump or climb onto furniture",
+        "clause_satisfaction": [
+          true
+        ],
+        "reason": "Explicit inability meets constraint"
+      },
+      {
+        "attributes": "this animal can jump onto a sofa",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "Sofa-jumping capability violates constraint"
+      },
+      {
+        "attributes": "this animal can leap onto household chairs",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "Chair-jumping capability violates constraint"
+      },
+      {
+        "attributes": "this animal can jump onto tables and beds",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "Table and bed jumping violates constraint"
+      }
+    ],
+    "correct_option": 0,
+    "authoring_inputs": "sanitized preference-only view; no original question, options, outcomes or explanations"
+  },
+  "0c45f209a304": {
+    "source": "I strongly prefer areas that are not prone to natural disasters.",
+    "scope": "professional_work_location_style",
+    "clauses": [
+      "Strongly prefer an area not prone to natural disasters"
+    ],
+    "options": [
+      {
+        "attributes": "the district is explicitly rated low-risk for all natural disasters and has a 60-minute commute",
+        "clause_satisfaction": [
+          true
+        ],
+        "reason": "Explicit all-hazard low risk meets preference"
+      },
+      {
+        "attributes": "the district is frequently affected by natural-disaster floods and has a five-minute commute",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "Frequent floods indicate disaster proneness"
+      },
+      {
+        "attributes": "the district is highly prone to natural-disaster earthquakes and is next to the workplace",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "High earthquake proneness conflicts"
+      },
+      {
+        "attributes": "the district has recurrent severe natural-disaster storms and a ten-minute commute",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "Recurrent severe storms conflict"
+      }
+    ],
+    "correct_option": 0,
+    "authoring_inputs": "sanitized preference-only view; no original question, options, outcomes or explanations"
+  },
+  "424c15cb3f43": {
+    "source": "I dislike using any artificial lighting; I prefer natural light sources.",
+    "scope": "shop_home",
+    "clauses": [
+      "Avoid all artificial lighting",
+      "Prefer natural light sources"
+    ],
+    "options": [
+      {
+        "attributes": "illumination comes only from daylight through windows, with no artificial lights",
+        "clause_satisfaction": [
+          true,
+          true
+        ],
+        "reason": "Natural daylight only satisfies both clauses"
+      },
+      {
+        "attributes": "illumination comes entirely from electric lamps",
+        "clause_satisfaction": [
+          false,
+          false
+        ],
+        "reason": "Artificial lamps fail both"
+      },
+      {
+        "attributes": "daylight is supplemented by artificial electric lights",
+        "clause_satisfaction": [
+          false,
+          true
+        ],
+        "reason": "Natural component does not cancel artificial-light exclusion"
+      },
+      {
+        "attributes": "illumination uses artificial ceiling lights",
+        "clause_satisfaction": [
+          false,
+          false
+        ],
+        "reason": "Artificial ceiling lights fail both"
+      }
+    ],
+    "correct_option": 0,
+    "authoring_inputs": "sanitized preference-only view; no original question, options, outcomes or explanations"
+  },
+  "73fad3c8843e": {
+    "source": "I have a deep dislike for high-gloss finishes and prefer matte, textured surfaces in my home decor.",
+    "scope": "shop_home",
+    "clauses": [
+      "Avoid high-gloss finishes",
+      "Prefer matte surfaces",
+      "Prefer textured surfaces"
+    ],
+    "options": [
+      {
+        "attributes": "the surface is matte, visibly textured, and has no high-gloss coating",
+        "clause_satisfaction": [
+          true,
+          true,
+          true
+        ],
+        "reason": "Meets every finish clause"
+      },
+      {
+        "attributes": "the surface is high-gloss and textured",
+        "clause_satisfaction": [
+          false,
+          false,
+          true
+        ],
+        "reason": "Gloss violates two clauses"
+      },
+      {
+        "attributes": "the surface is matte but completely smooth, without texture",
+        "clause_satisfaction": [
+          true,
+          true,
+          false
+        ],
+        "reason": "Lacks required preferred texture"
+      },
+      {
+        "attributes": "the surface is high-gloss and completely smooth",
+        "clause_satisfaction": [
+          false,
+          false,
+          false
+        ],
+        "reason": "Glossy smooth surface fails all clauses"
+      }
+    ],
+    "correct_option": 0,
+    "authoring_inputs": "sanitized preference-only view; no original question, options, outcomes or explanations"
+  },
+  "18108aebcab9": {
+    "source": "I strongly prefer cars with a high ground clearance.",
+    "scope": "shop_motors",
+    "clauses": [
+      "Strongly prefer high ground clearance"
+    ],
+    "options": [
+      {
+        "attributes": "the car is explicitly specified as having high ground clearance",
+        "clause_satisfaction": [
+          true
+        ],
+        "reason": "Explicit high clearance meets preference"
+      },
+      {
+        "attributes": "the car is specified as having very low ground clearance",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "Very low clearance conflicts"
+      },
+      {
+        "attributes": "the car has a low-slung body and low ground clearance",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "Low clearance conflicts"
+      },
+      {
+        "attributes": "the car is specified as having minimal ground clearance",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "Minimal clearance conflicts"
+      }
+    ],
+    "correct_option": 0,
+    "authoring_inputs": "sanitized preference-only view; no original question, options, outcomes or explanations"
+  },
+  "44bbd1a52e31": {
+    "source": "Due to my severe allergies, I require a vehicle with an advanced air filtration system that can effectively remove pollen, dust, and other airborne particles from the cabin.",
+    "scope": "shop_motors",
+    "clauses": [
+      "Require an advanced cabin air-filtration system",
+      "Effectively remove pollen",
+      "Effectively remove dust",
+      "Effectively remove other airborne particles"
+    ],
+    "options": [
+      {
+        "attributes": "an advanced cabin filter is certified to effectively remove pollen, dust, and all other airborne particles, with an audible fan",
+        "clause_satisfaction": [
+          true,
+          true,
+          true,
+          true
+        ],
+        "reason": "Advanced system handles every specified contaminant"
+      },
+      {
+        "attributes": "the quiet advanced cabin filter removes pollen but cannot remove dust or other airborne particles",
+        "clause_satisfaction": [
+          true,
+          true,
+          false,
+          false
+        ],
+        "reason": "Missing dust and other-particle removal"
+      },
+      {
+        "attributes": "the quiet advanced cabin filter removes dust but cannot remove pollen or other airborne particles",
+        "clause_satisfaction": [
+          true,
+          false,
+          true,
+          false
+        ],
+        "reason": "Missing pollen and other-particle removal"
+      },
+      {
+        "attributes": "the vehicle has no cabin air-filtration system and no filter fan noise",
+        "clause_satisfaction": [
+          false,
+          false,
+          false,
+          false
+        ],
+        "reason": "No required system or removal capability"
+      }
+    ],
+    "correct_option": 0,
+    "authoring_inputs": "sanitized preference-only view; no original question, options, outcomes or explanations"
+  },
+  "e817c4ba51c9": {
+    "source": "I prefer not to use any cloud storage solutions due to data security concerns.",
+    "scope": "shop_technology",
+    "clauses": [
+      "Avoid every cloud-storage solution"
+    ],
+    "options": [
+      {
+        "attributes": "all files remain solely on local offline drives, with no cloud storage",
+        "clause_satisfaction": [
+          true
+        ],
+        "reason": "Local-only offline storage meets exclusion"
+      },
+      {
+        "attributes": "all files are uploaded to cloud storage",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "Cloud upload violates exclusion"
+      },
+      {
+        "attributes": "local copies are also synchronized to cloud storage",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "A local copy does not remove cloud use"
+      },
+      {
+        "attributes": "the only file repository is a remote cloud-storage service",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "Cloud-only storage violates exclusion"
+      }
+    ],
+    "correct_option": 0,
+    "authoring_inputs": "sanitized preference-only view; no original question, options, outcomes or explanations"
+  },
+  "4568d04f3883": {
+    "source": "\"I do not enjoy casinos or gaming environments.\"",
+    "scope": "travel_hotel",
+    "clauses": [
+      "Avoid casinos and gaming environments"
+    ],
+    "options": [
+      {
+        "attributes": "the environment contains neither casinos nor gaming activities",
+        "clause_satisfaction": [
+          true
+        ],
+        "reason": "No casino or gaming content"
+      },
+      {
+        "attributes": "the environment is a casino with gambling games",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "Casino and gambling fail exclusion"
+      },
+      {
+        "attributes": "the environment is a gaming hall inside the hotel",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "Gaming environment fails exclusion"
+      },
+      {
+        "attributes": "the environment is a casino gaming lounge",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "Casino gaming lounge fails exclusion"
+      }
+    ],
+    "correct_option": 0,
+    "authoring_inputs": "sanitized preference-only view; no original question, options, outcomes or explanations"
+  },
+  "b96d18edef65": {
+    "source": "I have a strong aversion to staying in hotels with casino facilities.",
+    "scope": "travel_hotel",
+    "clauses": [
+      "Avoid staying in hotels with casino facilities"
+    ],
+    "options": [
+      {
+        "attributes": "the hotel has no casino facilities anywhere on its property",
+        "clause_satisfaction": [
+          true
+        ],
+        "reason": "No hotel casino facilities"
+      },
+      {
+        "attributes": "the hotel contains an on-site casino",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "On-site casino violates preference"
+      },
+      {
+        "attributes": "the hotel includes casino facilities in its adjoining hotel wing",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "Adjoining hotel-wing casino is a hotel facility"
+      },
+      {
+        "attributes": "the hotel operates casino facilities on a guest floor",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "Guest-floor casino is a hotel facility"
+      }
+    ],
+    "correct_option": 0,
+    "authoring_inputs": "sanitized preference-only view; no original question, options, outcomes or explanations"
+  },
+  "454ea38bbb5d": {
+    "source": "I avoid dining at places that primarily serve red meat.",
+    "scope": "travel_restaurant",
+    "clauses": [
+      "Avoid places whose primary menu is red meat"
+    ],
+    "options": [
+      {
+        "attributes": "the menu is primarily vegetables and grains, with no red-meat dishes",
+        "clause_satisfaction": [
+          true
+        ],
+        "reason": "Menu is not primarily red meat"
+      },
+      {
+        "attributes": "90 percent of main dishes are explicitly red meat",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "Ninety percent makes red meat primary"
+      },
+      {
+        "attributes": "the restaurant primarily serves red-meat dishes",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "Explicitly red-meat-primary venue fails"
+      },
+      {
+        "attributes": "80 percent of the menu consists of explicitly red-meat dishes",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "Eighty percent makes red meat primary"
+      }
+    ],
+    "correct_option": 0,
+    "authoring_inputs": "sanitized preference-only view; no original question, options, outcomes or explanations"
+  },
+  "46b713c35ff4": {
+    "source": "I have a severe peanut allergy, so I avoid any dishes or restaurants that may contain traces of peanuts.",
+    "scope": "travel_restaurant",
+    "clauses": [
+      "Avoid dishes that may contain any peanut traces",
+      "Avoid restaurants with possible peanut traces"
+    ],
+    "options": [
+      {
+        "attributes": "the dedicated restaurant and every ingredient are verified completely peanut-free, with zero possible peanut traces or cross-contact; it serves plain vegetable dishes",
+        "clause_satisfaction": [
+          true,
+          true
+        ],
+        "reason": "Both dish and restaurant verified free of trace risk"
+      },
+      {
+        "attributes": "the dish is a spicy peanut sauce meal in a restaurant that handles peanuts",
+        "clause_satisfaction": [
+          false,
+          false
+        ],
+        "reason": "Direct peanuts violate both exclusions"
+      },
+      {
+        "attributes": "the rich-flavored ingredients contain no peanuts but the restaurant warns of possible peanut traces from cross-contact",
+        "clause_satisfaction": [
+          false,
+          false
+        ],
+        "reason": "Cross-contact risk violates trace exclusion"
+      },
+      {
+        "attributes": "the restaurant offers a wide spicy tasting menu but cannot exclude peanut traces in the dish or on its premises",
+        "clause_satisfaction": [
+          false,
+          false
+        ],
+        "reason": "Unknown trace risk violates both exclusions"
+      }
+    ],
+    "correct_option": 0,
+    "authoring_inputs": "sanitized preference-only view; no original question, options, outcomes or explanations"
+  },
+  "227fc8c8ee28": {
+    "source": "I try to avoid air travel due to its environmental impact, so I almost exclusively use trains for long-distance journeys.",
+    "scope": "travel_transportation",
+    "clauses": [
+      "Try to avoid air travel for environmental reasons",
+      "Use trains for almost all long-distance journeys"
+    ],
+    "options": [
+      {
+        "attributes": "the entire journey uses a train and includes no flight",
+        "clause_satisfaction": [
+          true,
+          true
+        ],
+        "reason": "Train-only journey satisfies both travel preferences"
+      },
+      {
+        "attributes": "the entire journey uses an airplane flight",
+        "clause_satisfaction": [
+          false,
+          false
+        ],
+        "reason": "Flight conflicts with both preferences"
+      },
+      {
+        "attributes": "the journey requires two airplane flights",
+        "clause_satisfaction": [
+          false,
+          false
+        ],
+        "reason": "Two flights conflict with both preferences"
+      },
+      {
+        "attributes": "the main long-distance segment uses air travel",
+        "clause_satisfaction": [
+          false,
+          false
+        ],
+        "reason": "Air-travel main segment conflicts with both preferences"
+      }
+    ],
+    "correct_option": 0,
+    "authoring_inputs": "sanitized preference-only view; no original question, options, outcomes or explanations"
+  },
+  "95b06384b3dd": {
+    "source": "I dislike crowded public transportation.",
+    "scope": "travel_transportation",
+    "clauses": [
+      "Avoid crowded public transportation"
+    ],
+    "options": [
+      {
+        "attributes": "the service is explicitly uncrowded, with plenty of unoccupied space, and departs in 40 minutes",
+        "clause_satisfaction": [
+          true
+        ],
+        "reason": "Uncrowded public transport meets preference"
+      },
+      {
+        "attributes": "the service is packed with passengers and has no free space, but departs immediately",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "Packed service conflicts"
+      },
+      {
+        "attributes": "the service is explicitly overcrowded and departs in five minutes",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "Overcrowded service conflicts"
+      },
+      {
+        "attributes": "the service is crowded with standing passengers shoulder to shoulder and leaves in ten minutes",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "Shoulder-to-shoulder crowding conflicts"
+      }
+    ],
+    "correct_option": 0,
+    "authoring_inputs": "sanitized preference-only view; no original question, options, outcomes or explanations"
+  },
+  "1f4d726552b2": {
+    "source": "I avoid any fitness activities that involve swimming or water due to a phobia.",
+    "scope": "lifestyle_fit",
+    "clauses": [
+      "Avoid swimming",
+      "Avoid every water-involving fitness activity"
+    ],
+    "options": [
+      {
+        "attributes": "the workout is a choreographed dance entirely on dry land, with no water or swimming",
+        "clause_satisfaction": [
+          true,
+          true
+        ],
+        "reason": "Dry dancing has neither swimming nor water"
+      },
+      {
+        "attributes": "the workout is plain swimming, with no dance or choreographed movements",
+        "clause_satisfaction": [
+          false,
+          false
+        ],
+        "reason": "Swimming violates both exclusions"
+      },
+      {
+        "attributes": "the workout is a choreographed dance performed in water",
+        "clause_satisfaction": [
+          true,
+          false
+        ],
+        "reason": "Water involvement violates the second exclusion"
+      },
+      {
+        "attributes": "the workout combines swimming with choreographed dance movements",
+        "clause_satisfaction": [
+          false,
+          false
+        ],
+        "reason": "Swimming and water violate both"
+      }
+    ],
+    "correct_option": 0,
+    "authoring_inputs": "sanitized preference-only view; no original question, options, outcomes or explanations"
+  },
+  "04b941980f25": {
+    "source": "I strongly dislike any workout routines that involve dancing or choreographed movements.",
+    "scope": "lifestyle_fit",
+    "clauses": [
+      "Avoid dancing in workouts",
+      "Avoid choreographed movements in workouts"
+    ],
+    "options": [
+      {
+        "attributes": "the workout is a choreographed dance entirely on dry land, with no water or swimming",
+        "clause_satisfaction": [
+          false,
+          false
+        ],
+        "reason": "Dancing and choreography violate both exclusions"
+      },
+      {
+        "attributes": "the workout is plain swimming, with no dance or choreographed movements",
+        "clause_satisfaction": [
+          true,
+          true
+        ],
+        "reason": "Plain swimming has neither prohibited movement type"
+      },
+      {
+        "attributes": "the workout is a choreographed dance performed in water",
+        "clause_satisfaction": [
+          false,
+          false
+        ],
+        "reason": "Dance and choreography violate both"
+      },
+      {
+        "attributes": "the workout combines swimming with choreographed dance movements",
+        "clause_satisfaction": [
+          false,
+          false
+        ],
+        "reason": "Dance and choreography violate both"
+      }
+    ],
+    "correct_option": 1,
+    "authoring_inputs": "sanitized preference-only view; no original question, options, outcomes or explanations"
+  },
+  "dbe3b1c2a338": {
+    "source": "I have a strong aversion to electronic dance music and will not listen to any songs that fall into that genre.",
+    "scope": "entertain_music_book",
+    "clauses": [
+      "Do not listen to any electronic dance music"
+    ],
+    "options": [
+      {
+        "attributes": "listen only to music explicitly classified as non-EDM while reading a superhero-centered comic book",
+        "clause_satisfaction": [
+          true
+        ],
+        "reason": "All music is non-EDM"
+      },
+      {
+        "attributes": "listen to music explicitly classified as electronic dance music while reading an ordinary-life comic with no superhero themes",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "EDM violates music exclusion"
+      },
+      {
+        "attributes": "listen to electronic dance music while reading a superhero-centered comic",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "EDM violates music exclusion"
+      },
+      {
+        "attributes": "listen to an electronic-dance-music song collection while reading another superhero-centered comic",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "EDM violates music exclusion"
+      }
+    ],
+    "correct_option": 0,
+    "authoring_inputs": "sanitized preference-only view; no original question, options, outcomes or explanations"
+  },
+  "c03abba07093": {
+    "source": "I avoid comic books centered around superhero themes.",
+    "scope": "entertain_music_book",
+    "clauses": [
+      "Avoid comic books centered on superhero themes"
+    ],
+    "options": [
+      {
+        "attributes": "listen only to music explicitly classified as non-EDM while reading a superhero-centered comic book",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "Superhero-centered comic violates exclusion"
+      },
+      {
+        "attributes": "listen to music explicitly classified as electronic dance music while reading an ordinary-life comic with no superhero themes",
+        "clause_satisfaction": [
+          true
+        ],
+        "reason": "Comic explicitly has no superhero themes"
+      },
+      {
+        "attributes": "listen to electronic dance music while reading a superhero-centered comic",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "Superhero-centered comic violates exclusion"
+      },
+      {
+        "attributes": "listen to an electronic-dance-music song collection while reading another superhero-centered comic",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "Superhero-centered comic violates exclusion"
+      }
+    ],
+    "correct_option": 1,
+    "authoring_inputs": "sanitized preference-only view; no original question, options, outcomes or explanations"
+  },
+  "80dcaefb8690": {
+    "source": "\"I do not wear clothes made from wool.\"",
+    "scope": "shop_fashion",
+    "clauses": [
+      "Wear no wool clothing"
+    ],
+    "options": [
+      {
+        "attributes": "the garment is entirely wool-free cotton and has floral patterns",
+        "clause_satisfaction": [
+          true
+        ],
+        "reason": "Wool-free cotton meets wool exclusion"
+      },
+      {
+        "attributes": "the garment is made entirely from wool and has a plain pattern with no flowers",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "Pure wool violates exclusion"
+      },
+      {
+        "attributes": "the garment is made from wool and has floral patterns",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "Wool violates exclusion"
+      },
+      {
+        "attributes": "the garment contains a wool blend and is covered with floral patterns",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "Any wool content violates exclusion"
+      }
+    ],
+    "correct_option": 0,
+    "authoring_inputs": "sanitized preference-only view; no original question, options, outcomes or explanations"
+  },
+  "e8558e421757": {
+    "source": "\"I dislike floral patterns.\"",
+    "scope": "shop_fashion",
+    "clauses": [
+      "Avoid floral patterns"
+    ],
+    "options": [
+      {
+        "attributes": "the garment is entirely wool-free cotton and has floral patterns",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "Floral pattern violates preference"
+      },
+      {
+        "attributes": "the garment is made entirely from wool and has a plain pattern with no flowers",
+        "clause_satisfaction": [
+          true
+        ],
+        "reason": "Plain non-floral pattern meets preference"
+      },
+      {
+        "attributes": "the garment is made from wool and has floral patterns",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "Floral pattern violates preference"
+      },
+      {
+        "attributes": "the garment contains a wool blend and is covered with floral patterns",
+        "clause_satisfaction": [
+          false
+        ],
+        "reason": "Floral pattern violates preference"
+      }
+    ],
+    "correct_option": 1,
+    "authoring_inputs": "sanitized preference-only view; no original question, options, outcomes or explanations"
+  },
+  "c26533292d16": {
+    "source": "I strongly prefer to avoid commercialized and heavily marketed tourist activities.",
+    "scope": "travel_activities",
+    "clauses": [
+      "Avoid commercialized tourist activities",
+      "Avoid heavily marketed tourist activities"
+    ],
+    "options": [
+      {
+        "attributes": "join friends in a private card-gambling game with no casino, fees, sales, advertising, tourism business, or marketing",
+        "clause_satisfaction": [
+          true,
+          true
+        ],
+        "reason": "Private noncommercial unmarketed activity meets both tourism clauses"
+      },
+      {
+        "attributes": "join a commercialized, heavily advertised tourist history walk with no gambling or casino involvement",
+        "clause_satisfaction": [
+          false,
+          false
+        ],
+        "reason": "Commercialization and heavy marketing violate both"
+      },
+      {
+        "attributes": "join a heavily marketed commercial tourist casino visit involving gambling",
+        "clause_satisfaction": [
+          false,
+          false
+        ],
+        "reason": "Commercial marketed tourism violates both"
+      },
+      {
+        "attributes": "join a commercialized tourist gambling event inside a casino, promoted by a large advertising campaign",
+        "clause_satisfaction": [
+          false,
+          false
+        ],
+        "reason": "Commercial marketed tourism violates both"
+      }
+    ],
+    "correct_option": 0,
+    "authoring_inputs": "sanitized preference-only view; no original question, options, outcomes or explanations"
+  },
+  "b84bfa160556": {
+    "source": "I dislike any form of gambling or casinos.",
+    "scope": "travel_activities",
+    "clauses": [
+      "Avoid every form of gambling",
+      "Avoid casinos"
+    ],
+    "options": [
+      {
+        "attributes": "join friends in a private card-gambling game with no casino, fees, sales, advertising, tourism business, or marketing",
+        "clause_satisfaction": [
+          false,
+          true
+        ],
+        "reason": "Card gambling violates the gambling clause despite no casino"
+      },
+      {
+        "attributes": "join a commercialized, heavily advertised tourist history walk with no gambling or casino involvement",
+        "clause_satisfaction": [
+          true,
+          true
+        ],
+        "reason": "No gambling and no casino meets both clauses"
+      },
+      {
+        "attributes": "join a heavily marketed commercial tourist casino visit involving gambling",
+        "clause_satisfaction": [
+          false,
+          false
+        ],
+        "reason": "Both gambling and casino violate exclusions"
+      },
+      {
+        "attributes": "join a commercialized tourist gambling event inside a casino, promoted by a large advertising campaign",
+        "clause_satisfaction": [
+          false,
+          false
+        ],
+        "reason": "Both gambling and casino violate exclusions"
+      }
+    ],
+    "correct_option": 1,
+    "authoring_inputs": "sanitized preference-only view; no original question, options, outcomes or explanations"
+  }
+}

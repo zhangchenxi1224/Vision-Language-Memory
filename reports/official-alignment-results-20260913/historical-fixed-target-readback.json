@@ -1,0 +1,255 @@
+{
+  "bank_sha256": "d54895adb15b91c3befd52c57f6248c76cf2abadb44916af830726a0736e688c",
+  "correct_eos": 154,
+  "interpretation": "Two selected target images already fail some Reader queries. Exact latent imitation cannot by itself certify all-five-query success. This is not a measured or theoretical accuracy bound for a stochastic Writer.",
+  "next_action": "Preserve all original data; refine the fixed selection for all sixteen questions with the previously verified three-prompt FP32 oracle recipe, then requalify both image forms. Do not drop or swap only the failed questions.",
+  "optimizer_updates": 0,
+  "questions_passing_both_forms_all_five": 14,
+  "raw_rows": 160,
+  "readback_archive_sha256": "b002f07d9ab7ca37f7dadebf8282a0ac0fb312f8a38d37b21bcfbe04b5ddc5c5",
+  "selected": [
+    {
+      "correct_eos": 10,
+      "failures": [],
+      "historical_checkpoint_sha256": "ef12e84de29be2a714ba0502c664a0bdd202d788edf5b9ca4355c25a1ed3c9cd",
+      "latent_sha256": "9ec0fb6e52d2c5edea54bc56279ca218bf64266cb9404ab0f46b00f4dc5bb41f",
+      "question_id": "r3-train-semantic-001175-historical-prefix",
+      "rows": 10,
+      "target_index": 0,
+      "teacher_id": "r3-train-semantic-001175-historical-prefix-seed-2-9ec0fb6e52d2c5ed"
+    },
+    {
+      "correct_eos": 10,
+      "failures": [],
+      "historical_checkpoint_sha256": "f45fbe8d0664b4fada922fbf26558f72443637fe653572d9af9b9e7d2b9eeea2",
+      "latent_sha256": "401fc66a615bce22577d208d8f10060621075101299511118c7d0c681a114fd9",
+      "question_id": "r3-train-semantic-000414-historical-prefix",
+      "rows": 10,
+      "target_index": 1,
+      "teacher_id": "r3-train-semantic-000414-historical-prefix-seed-2-401fc66a615bce22"
+    },
+    {
+      "correct_eos": 10,
+      "failures": [],
+      "historical_checkpoint_sha256": "479588d5524c0e1823cb3e61ad00702d0e21d315ea3307acfb3ca947da20ba13",
+      "latent_sha256": "9f4761f210596547b3fd4e719c8c8688e79969d6c17c469d488b02080b685b84",
+      "question_id": "r3-train-semantic-000271-historical-prefix",
+      "rows": 10,
+      "target_index": 2,
+      "teacher_id": "r3-train-semantic-000271-historical-prefix-seed-3-9f4761f210596547"
+    },
+    {
+      "correct_eos": 8,
+      "failures": [
+        {
+          "generated_token_ids": [
+            17444,
+            8253,
+            7027,
+            21933,
+            13,
+            151645
+          ],
+          "gold": "juice",
+          "image_form": "fp32_vae_decoded",
+          "prompt_id": "paraphrase_4",
+          "query": "Read the memory image and report the current drink preference of the amber mug train 001242.\nReturn only a short phrase.",
+          "raw": "Cannot determine drink preference."
+        },
+        {
+          "generated_token_ids": [
+            17444,
+            8253,
+            7027,
+            21933,
+            13,
+            151645
+          ],
+          "gold": "juice",
+          "image_form": "rgb_uint8",
+          "prompt_id": "paraphrase_4",
+          "query": "Read the memory image and report the current drink preference of the amber mug train 001242.\nReturn only a short phrase.",
+          "raw": "Cannot determine drink preference."
+        }
+      ],
+      "historical_checkpoint_sha256": "34427820a6113f3b3c90b2fa9c2689ee215047c6aac393ad597e6db91ec12f9a",
+      "latent_sha256": "c74d77d46d09f2c6e367fbc21c12d44e952ebbbc0eccf55b62310dc0df38b10b",
+      "question_id": "r3-train-semantic-001242-historical-prefix",
+      "rows": 10,
+      "target_index": 3,
+      "teacher_id": "r3-train-semantic-001242-historical-prefix-seed-0-c74d77d46d09f2c6"
+    },
+    {
+      "correct_eos": 10,
+      "failures": [],
+      "historical_checkpoint_sha256": "32871a55c922bf93dcebfd70bee355db6ffb67e46c35bdc83a54513bdf98050f",
+      "latent_sha256": "e5ce438a6d0ef6955aa9102acad14c83124f09799443e0567be721e52295ced4",
+      "question_id": "r3-train-semantic-000550-historical-prefix",
+      "rows": 10,
+      "target_index": 4,
+      "teacher_id": "r3-train-semantic-000550-historical-prefix-seed-1-e5ce438a6d0ef695"
+    },
+    {
+      "correct_eos": 10,
+      "failures": [],
+      "historical_checkpoint_sha256": "cccb54a559e32c36ed96864520f160e08ec5dd97143539573bd87ace45c5f026",
+      "latent_sha256": "881eb84be9fee7dfce47ea1650a706606ed8c21c7a00695572dbcb2682d83a98",
+      "question_id": "r3-train-semantic-000190-historical-prefix",
+      "rows": 10,
+      "target_index": 5,
+      "teacher_id": "r3-train-semantic-000190-historical-prefix-seed-2-881eb84be9fee7df"
+    },
+    {
+      "correct_eos": 10,
+      "failures": [],
+      "historical_checkpoint_sha256": "72c415227f4bfab2f9711747d050a28d53d88adcc93f1511a8fd770fdb8b68d5",
+      "latent_sha256": "1b4460b4388debf27af6ac774e2fe3ade4956f8f9835b40aa881e41a5aa4f9c5",
+      "question_id": "r3-train-semantic-000608-historical-prefix",
+      "rows": 10,
+      "target_index": 6,
+      "teacher_id": "r3-train-semantic-000608-historical-prefix-seed-2-1b4460b4388debf2"
+    },
+    {
+      "correct_eos": 10,
+      "failures": [],
+      "historical_checkpoint_sha256": "8f7da9e5b136e90f95da55380edc05c7cef128d29a76be1c3ffc83f03d09c31a",
+      "latent_sha256": "a0c46d745285ee3212b6fa4ce09229d227818abc79c4965c1f10befa9baa07d0",
+      "question_id": "r3-train-semantic-000613-historical-prefix",
+      "rows": 10,
+      "target_index": 7,
+      "teacher_id": "r3-train-semantic-000613-historical-prefix-seed-3-a0c46d745285ee32"
+    },
+    {
+      "correct_eos": 10,
+      "failures": [],
+      "historical_checkpoint_sha256": "a41fae0d3f8e24c6c6f968aaa8a686b27d2f55b4f7543168372c4eaa9f59b4fe",
+      "latent_sha256": "a73fc81e5fc6eb12d6e9bb6ac3b7b7e82ce598d03258c166c6d0be33ac467b7f",
+      "question_id": "r3-train-semantic-000327-historical-prefix",
+      "rows": 10,
+      "target_index": 8,
+      "teacher_id": "r3-train-semantic-000327-historical-prefix-seed-3-a73fc81e5fc6eb12"
+    },
+    {
+      "correct_eos": 10,
+      "failures": [],
+      "historical_checkpoint_sha256": "8f14e0243057cc489efb8f6005fd5614a00277aee3cdede45170a4246027b06d",
+      "latent_sha256": "56d80540b0893945eda498835b2fb52fd2eec2d1859e2cebcd4762b20306b2e0",
+      "question_id": "r3-train-semantic-000147-historical-prefix",
+      "rows": 10,
+      "target_index": 9,
+      "teacher_id": "r3-train-semantic-000147-historical-prefix-seed-0-56d80540b0893945"
+    },
+    {
+      "correct_eos": 10,
+      "failures": [],
+      "historical_checkpoint_sha256": "f2af49a3ebc591a35bf76c5458d26e202e3950fabda27c9ee34494eaa203f966",
+      "latent_sha256": "ac5912b26a2236ae83a5b006d05ca47a51ec9a3818bd0dbbf0016ef03d4e61b7",
+      "question_id": "r3-train-semantic-000986-historical-prefix",
+      "rows": 10,
+      "target_index": 10,
+      "teacher_id": "r3-train-semantic-000986-historical-prefix-seed-3-ac5912b26a2236ae"
+    },
+    {
+      "correct_eos": 10,
+      "failures": [],
+      "historical_checkpoint_sha256": "0882ab11fa87156aaee874b5dc688a06619f5773794fbe5007015c839747f69e",
+      "latent_sha256": "d2f80134a5611e74f5941337057ec9be5e16dec8e5c6cdd428fd7d395da905ba",
+      "question_id": "r3-train-semantic-000024-historical-prefix",
+      "rows": 10,
+      "target_index": 11,
+      "teacher_id": "r3-train-semantic-000024-historical-prefix-seed-3-d2f80134a5611e74"
+    },
+    {
+      "correct_eos": 10,
+      "failures": [],
+      "historical_checkpoint_sha256": "7305d1a39965a5ffa4fa4db7cb82a9c6daa40afc917d5af00887bc6feb833ae7",
+      "latent_sha256": "ac5276b973ddc619c71ee064f9aa4b4058fb64d905e045c54a91d01b09b126af",
+      "question_id": "r3-train-semantic-001048-historical-prefix",
+      "rows": 10,
+      "target_index": 12,
+      "teacher_id": "r3-train-semantic-001048-historical-prefix-seed-0-ac5276b973ddc619"
+    },
+    {
+      "correct_eos": 10,
+      "failures": [],
+      "historical_checkpoint_sha256": "9b85211da5a91160994dc56976e6475c4fa10b38de48fc9f4d2ecd13e01d6e01",
+      "latent_sha256": "ccca72a52bcdb948e0ab373186f3c3f8204a3ef3e076a64fb1c524d95a6a88e4",
+      "question_id": "r3-train-semantic-001224-historical-prefix",
+      "rows": 10,
+      "target_index": 13,
+      "teacher_id": "r3-train-semantic-001224-historical-prefix-seed-2-ccca72a52bcdb948"
+    },
+    {
+      "correct_eos": 6,
+      "failures": [
+        {
+          "generated_token_ids": [
+            2152,
+            21933,
+            151645
+          ],
+          "gold": "no active preference",
+          "image_form": "fp32_vae_decoded",
+          "prompt_id": "paraphrase_3",
+          "query": "Which material preference is currently stored for the linen room train 000250?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+          "raw": "no preference"
+        },
+        {
+          "generated_token_ids": [
+            2152,
+            21933,
+            151645
+          ],
+          "gold": "no active preference",
+          "image_form": "fp32_vae_decoded",
+          "prompt_id": "paraphrase_4",
+          "query": "Read the memory image and report the current material preference of the linen room train 000250.\nReturn only a short phrase.",
+          "raw": "no preference"
+        },
+        {
+          "generated_token_ids": [
+            2152,
+            21933,
+            151645
+          ],
+          "gold": "no active preference",
+          "image_form": "rgb_uint8",
+          "prompt_id": "paraphrase_3",
+          "query": "Which material preference is currently stored for the linen room train 000250?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+          "raw": "no preference"
+        },
+        {
+          "generated_token_ids": [
+            2152,
+            21933,
+            151645
+          ],
+          "gold": "no active preference",
+          "image_form": "rgb_uint8",
+          "prompt_id": "paraphrase_4",
+          "query": "Read the memory image and report the current material preference of the linen room train 000250.\nReturn only a short phrase.",
+          "raw": "no preference"
+        }
+      ],
+      "historical_checkpoint_sha256": "14adb2c21fa0bd17ea863d75cb009536722cf1948d7147a06d455e635610cf1a",
+      "latent_sha256": "709cec593210b13f5981b596800fa3ee8ce4fd62503c041c4a1f92bd07d7fc3b",
+      "question_id": "r3-train-semantic-000250-historical-prefix",
+      "rows": 10,
+      "target_index": 14,
+      "teacher_id": "r3-train-semantic-000250-historical-prefix-seed-0-709cec593210b13f"
+    },
+    {
+      "correct_eos": 10,
+      "failures": [],
+      "historical_checkpoint_sha256": "82ec7aebef4b9d90d42f5d7d3ddc757f146642c515aa2af2e7f7d2d280451585",
+      "latent_sha256": "b89c347c4379fbb32ad7f934820904548a967d61c6d6d826d48668c66649eec9",
+      "question_id": "r3-train-semantic-001209-historical-prefix",
+      "rows": 10,
+      "target_index": 15,
+      "teacher_id": "r3-train-semantic-001209-historical-prefix-seed-2-b89c347c4379fbb3"
+    }
+  ],
+  "selected_questions": 16,
+  "selection_rule": "existing member_split hash order, first training member; no outcome-based substitution",
+  "writer_calls": 0
+}

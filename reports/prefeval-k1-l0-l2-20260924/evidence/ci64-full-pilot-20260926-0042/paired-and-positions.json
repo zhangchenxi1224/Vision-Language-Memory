@@ -1,0 +1,353 @@
+{
+  "positions": {
+    "C": {
+      "0": {
+        "rows": 640,
+        "position_correct_of_128": {
+          "official": 124,
+          "0": 124,
+          "1": 121,
+          "2": 120,
+          "3": 117
+        },
+        "four_positions_correct_of_128": 114,
+        "four_positions_two_noises_correct_of_64": 55,
+        "same_semantic_option_of_128": 115,
+        "parse_failures": 0,
+        "truncations": 0
+      },
+      "10": {
+        "rows": 640,
+        "position_correct_of_128": {
+          "official": 49,
+          "0": 49,
+          "1": 59,
+          "2": 63,
+          "3": 55
+        },
+        "four_positions_correct_of_128": 34,
+        "four_positions_two_noises_correct_of_64": 16,
+        "same_semantic_option_of_128": 72,
+        "parse_failures": 0,
+        "truncations": 0
+      }
+    },
+    "I": {
+      "0": {
+        "rows": 640,
+        "position_correct_of_128": {
+          "official": 123,
+          "0": 123,
+          "1": 126,
+          "2": 122,
+          "3": 117
+        },
+        "four_positions_correct_of_128": 115,
+        "four_positions_two_noises_correct_of_64": 55,
+        "same_semantic_option_of_128": 115,
+        "parse_failures": 0,
+        "truncations": 0
+      },
+      "10": {
+        "rows": 640,
+        "position_correct_of_128": {
+          "official": 52,
+          "0": 52,
+          "1": 60,
+          "2": 60,
+          "3": 53
+        },
+        "four_positions_correct_of_128": 34,
+        "four_positions_two_noises_correct_of_64": 17,
+        "same_semantic_option_of_128": 68,
+        "parse_failures": 0,
+        "truncations": 0
+      }
+    }
+  },
+  "paired_C_I": [
+    {
+      "family": "T1",
+      "prefix": 0,
+      "total": 128,
+      "I_correct_C_wrong": 1,
+      "C_correct_I_wrong": 0
+    },
+    {
+      "family": "T1",
+      "prefix": 1,
+      "total": 128,
+      "I_correct_C_wrong": 17,
+      "C_correct_I_wrong": 0
+    },
+    {
+      "family": "T1",
+      "prefix": 5,
+      "total": 128,
+      "I_correct_C_wrong": 20,
+      "C_correct_I_wrong": 3
+    },
+    {
+      "family": "T1",
+      "prefix": 10,
+      "total": 128,
+      "I_correct_C_wrong": 1,
+      "C_correct_I_wrong": 0
+    },
+    {
+      "family": "T2",
+      "prefix": 0,
+      "total": 128,
+      "I_correct_C_wrong": 2,
+      "C_correct_I_wrong": 0
+    },
+    {
+      "family": "T2",
+      "prefix": 1,
+      "total": 128,
+      "I_correct_C_wrong": 18,
+      "C_correct_I_wrong": 1
+    },
+    {
+      "family": "T2",
+      "prefix": 5,
+      "total": 128,
+      "I_correct_C_wrong": 19,
+      "C_correct_I_wrong": 1
+    },
+    {
+      "family": "T2",
+      "prefix": 10,
+      "total": 128,
+      "I_correct_C_wrong": 0,
+      "C_correct_I_wrong": 2
+    },
+    {
+      "family": "T3",
+      "prefix": 0,
+      "total": 128,
+      "I_correct_C_wrong": 3,
+      "C_correct_I_wrong": 1
+    },
+    {
+      "family": "T3",
+      "prefix": 1,
+      "total": 128,
+      "I_correct_C_wrong": 20,
+      "C_correct_I_wrong": 0
+    },
+    {
+      "family": "T3",
+      "prefix": 5,
+      "total": 128,
+      "I_correct_C_wrong": 14,
+      "C_correct_I_wrong": 2
+    },
+    {
+      "family": "T3",
+      "prefix": 10,
+      "total": 128,
+      "I_correct_C_wrong": 3,
+      "C_correct_I_wrong": 2
+    },
+    {
+      "family": "O1",
+      "prefix": 0,
+      "total": 128,
+      "I_correct_C_wrong": 4,
+      "C_correct_I_wrong": 3
+    },
+    {
+      "family": "O1",
+      "prefix": 1,
+      "total": 128,
+      "I_correct_C_wrong": 12,
+      "C_correct_I_wrong": 0
+    },
+    {
+      "family": "O1",
+      "prefix": 5,
+      "total": 128,
+      "I_correct_C_wrong": 10,
+      "C_correct_I_wrong": 1
+    },
+    {
+      "family": "O1",
+      "prefix": 10,
+      "total": 128,
+      "I_correct_C_wrong": 0,
+      "C_correct_I_wrong": 1
+    },
+    {
+      "family": "O2",
+      "prefix": 0,
+      "total": 128,
+      "I_correct_C_wrong": 5,
+      "C_correct_I_wrong": 2
+    },
+    {
+      "family": "O2",
+      "prefix": 1,
+      "total": 128,
+      "I_correct_C_wrong": 21,
+      "C_correct_I_wrong": 0
+    },
+    {
+      "family": "O2",
+      "prefix": 5,
+      "total": 128,
+      "I_correct_C_wrong": 10,
+      "C_correct_I_wrong": 1
+    },
+    {
+      "family": "O2",
+      "prefix": 10,
+      "total": 128,
+      "I_correct_C_wrong": 4,
+      "C_correct_I_wrong": 1
+    }
+  ],
+  "conditional_on_both_initially_correct": [
+    {
+      "family": "T1",
+      "prefix": 0,
+      "total": 122,
+      "C": 122,
+      "I": 122
+    },
+    {
+      "family": "T1",
+      "prefix": 1,
+      "total": 122,
+      "C": 103,
+      "I": 119
+    },
+    {
+      "family": "T1",
+      "prefix": 5,
+      "total": 122,
+      "C": 56,
+      "I": 73
+    },
+    {
+      "family": "T1",
+      "prefix": 10,
+      "total": 122,
+      "C": 55,
+      "I": 56
+    },
+    {
+      "family": "T2",
+      "prefix": 0,
+      "total": 124,
+      "C": 124,
+      "I": 124
+    },
+    {
+      "family": "T2",
+      "prefix": 1,
+      "total": 124,
+      "C": 108,
+      "I": 123
+    },
+    {
+      "family": "T2",
+      "prefix": 5,
+      "total": 124,
+      "C": 51,
+      "I": 69
+    },
+    {
+      "family": "T2",
+      "prefix": 10,
+      "total": 124,
+      "C": 50,
+      "I": 48
+    },
+    {
+      "family": "T3",
+      "prefix": 0,
+      "total": 122,
+      "C": 122,
+      "I": 122
+    },
+    {
+      "family": "T3",
+      "prefix": 1,
+      "total": 122,
+      "C": 105,
+      "I": 121
+    },
+    {
+      "family": "T3",
+      "prefix": 5,
+      "total": 122,
+      "C": 69,
+      "I": 81
+    },
+    {
+      "family": "T3",
+      "prefix": 10,
+      "total": 122,
+      "C": 65,
+      "I": 66
+    },
+    {
+      "family": "O1",
+      "prefix": 0,
+      "total": 104,
+      "C": 104,
+      "I": 104
+    },
+    {
+      "family": "O1",
+      "prefix": 1,
+      "total": 104,
+      "C": 93,
+      "I": 104
+    },
+    {
+      "family": "O1",
+      "prefix": 5,
+      "total": 104,
+      "C": 59,
+      "I": 68
+    },
+    {
+      "family": "O1",
+      "prefix": 10,
+      "total": 104,
+      "C": 58,
+      "I": 57
+    },
+    {
+      "family": "O2",
+      "prefix": 0,
+      "total": 115,
+      "C": 115,
+      "I": 115
+    },
+    {
+      "family": "O2",
+      "prefix": 1,
+      "total": 115,
+      "C": 98,
+      "I": 112
+    },
+    {
+      "family": "O2",
+      "prefix": 5,
+      "total": 115,
+      "C": 63,
+      "I": 71
+    },
+    {
+      "family": "O2",
+      "prefix": 10,
+      "total": 115,
+      "C": 57,
+      "I": 60
+    }
+  ],
+  "note": "Full denominators are primary; two seeds and five forms are repeated measurements, not independent preferences."
+}

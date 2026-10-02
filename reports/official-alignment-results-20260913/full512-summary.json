@@ -1,0 +1,209 @@
+{
+  "adapter_delta_l2": null,
+  "loss_first64_mean": 0.45925577741581947,
+  "loss_interpretation": "unpaired sampled training loss, not functional accuracy or a paired loss comparison",
+  "loss_last64_mean": 0.0546921760328587,
+  "optimizer_steps": 512,
+  "paired_evaluation": {
+    "exact_match_delta_count": 40,
+    "exact_match_transitions": {
+      "both_correct": 0,
+      "both_incorrect": 0,
+      "correct_to_incorrect": 0,
+      "incorrect_to_correct": 40
+    },
+    "paired_matched_cells": 40
+  },
+  "phases": {
+    "baseline": {
+      "cells": {
+        "blank/original_open": {
+          "answer_eos": 0,
+          "exact_match": 0,
+          "n": 1
+        },
+        "blank/paraphrase_1": {
+          "answer_eos": 0,
+          "exact_match": 0,
+          "n": 1
+        },
+        "blank/paraphrase_2": {
+          "answer_eos": 0,
+          "exact_match": 0,
+          "n": 1
+        },
+        "blank/paraphrase_3": {
+          "answer_eos": 0,
+          "exact_match": 0,
+          "n": 1
+        },
+        "blank/paraphrase_4": {
+          "answer_eos": 0,
+          "exact_match": 0,
+          "n": 1
+        },
+        "donor/original_open": {
+          "answer_eos": 0,
+          "exact_match": 0,
+          "n": 1
+        },
+        "donor/paraphrase_1": {
+          "answer_eos": 0,
+          "exact_match": 0,
+          "n": 1
+        },
+        "donor/paraphrase_2": {
+          "answer_eos": 0,
+          "exact_match": 0,
+          "n": 1
+        },
+        "donor/paraphrase_3": {
+          "answer_eos": 0,
+          "exact_match": 0,
+          "n": 1
+        },
+        "donor/paraphrase_4": {
+          "answer_eos": 0,
+          "exact_match": 0,
+          "n": 1
+        },
+        "matched/original_open": {
+          "answer_eos": 0,
+          "exact_match": 0,
+          "n": 8
+        },
+        "matched/paraphrase_1": {
+          "answer_eos": 0,
+          "exact_match": 0,
+          "n": 8
+        },
+        "matched/paraphrase_2": {
+          "answer_eos": 0,
+          "exact_match": 0,
+          "n": 8
+        },
+        "matched/paraphrase_3": {
+          "answer_eos": 0,
+          "exact_match": 0,
+          "n": 8
+        },
+        "matched/paraphrase_4": {
+          "answer_eos": 0,
+          "exact_match": 0,
+          "n": 8
+        }
+      },
+      "generation_rows": 50,
+      "matched_raw": {
+        "No music preference recorded.": 10,
+        "No music preference set": 8,
+        "No music preference specified.": 10,
+        "No music preference stored.": 8,
+        "None": 1,
+        "None provided.": 1,
+        "no music preference": 2
+      }
+    },
+    "trained": {
+      "cells": {
+        "blank/original_open": {
+          "answer_eos": 0,
+          "exact_match": 0,
+          "n": 1
+        },
+        "blank/paraphrase_1": {
+          "answer_eos": 0,
+          "exact_match": 0,
+          "n": 1
+        },
+        "blank/paraphrase_2": {
+          "answer_eos": 0,
+          "exact_match": 0,
+          "n": 1
+        },
+        "blank/paraphrase_3": {
+          "answer_eos": 0,
+          "exact_match": 0,
+          "n": 1
+        },
+        "blank/paraphrase_4": {
+          "answer_eos": 0,
+          "exact_match": 0,
+          "n": 1
+        },
+        "donor/original_open": {
+          "answer_eos": 0,
+          "exact_match": 0,
+          "n": 1
+        },
+        "donor/paraphrase_1": {
+          "answer_eos": 0,
+          "exact_match": 0,
+          "n": 1
+        },
+        "donor/paraphrase_2": {
+          "answer_eos": 0,
+          "exact_match": 0,
+          "n": 1
+        },
+        "donor/paraphrase_3": {
+          "answer_eos": 0,
+          "exact_match": 0,
+          "n": 1
+        },
+        "donor/paraphrase_4": {
+          "answer_eos": 0,
+          "exact_match": 0,
+          "n": 1
+        },
+        "matched/original_open": {
+          "answer_eos": 8,
+          "exact_match": 8,
+          "n": 8
+        },
+        "matched/paraphrase_1": {
+          "answer_eos": 8,
+          "exact_match": 8,
+          "n": 8
+        },
+        "matched/paraphrase_2": {
+          "answer_eos": 8,
+          "exact_match": 8,
+          "n": 8
+        },
+        "matched/paraphrase_3": {
+          "answer_eos": 8,
+          "exact_match": 8,
+          "n": 8
+        },
+        "matched/paraphrase_4": {
+          "answer_eos": 8,
+          "exact_match": 8,
+          "n": 8
+        }
+      },
+      "generation_rows": 50,
+      "matched_raw": {
+        "ambient": 40
+      }
+    }
+  },
+  "result_and_checkpoint_verified": true,
+  "run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/b0a06f5-full512-single-20260913",
+  "sigma_above_half": 1025,
+  "sigma_max": 0.9992198348045349,
+  "sigma_min": 0.0014261603355407715,
+  "terminal": {
+    "matched_all_five_prompts_answer_eos": 8,
+    "matched_all_five_prompts_correct": 8,
+    "matched_question_noise_pairs": 8,
+    "scope": "single-question regression evaluation; not evidence of event-conditioned generalization",
+    "state": "completed",
+    "time_unix": 1789240190.16566,
+    "training_result_sha256": "51332a99686e4de865bdfc344e68f371b132e0d9a741c1f0410c5852563f485b"
+  },
+  "trainable_scope": "full_unet",
+  "training_draws": 2048,
+  "training_noise_count": 2048,
+  "unet_parameter_delta_l2": 19.940393660417154
+}

@@ -1,0 +1,816 @@
+{
+  "config": {
+    "activation": {
+      "requires_complete_48_generations_and_32_anchor_rows": true,
+      "requires_old_matched_reverse_cyclic4_anchor_reproduced": true,
+      "requires_original_model_snapshots_and_available_device": true,
+      "stage1_config": "configs/experiments/r11_open_answer_replay.json",
+      "stage1_config_sha256": "d004c6f41cc6264e425eaecd2b8559722ea7640182376cc93d27a759971e3c12",
+      "stage1_scientific_outcome_used_for_selection": false,
+      "technical_failure_action": "repair_and_reverify_before_any_pilot_optimization"
+    },
+    "analysis": {
+      "blank_reported_separately": true,
+      "compare_numeric_values_of_different_training_losses": false,
+      "geometry": [
+        "whole-tensor RMS and L2",
+        "pairwise RMSE and cosine of z(t)",
+        "distance and cosine to common z_ref",
+        "distance and cosine to own z0",
+        "cosine and RMSE of z(t)-z0",
+        "cosine and RMSE of z(t)-z_ref",
+        "paired cross-arm endpoint RMSE and cosine",
+        "within-arm mean pairwise squared RMSE and initial-normalized contraction",
+        "descriptive initial-to-final distance-matrix association",
+        "distance to same-arm blank trajectory",
+        "one-step and four-step update distances"
+      ],
+      "high_raw_latent_cosine_not_sufficient": true,
+      "independent_random_start_count": 8,
+      "main_geometry_population": "the eight random starts within each arm; blank excluded from averages",
+      "mmd_or_distribution_equality_test": false,
+      "pair_count_is_not_independent_sample_count": true,
+      "paired_arms": true,
+      "primary_behavior": [
+        "paired per-seed open success by arm",
+        "paired per-seed MCQ success by arm",
+        "matched-minus-blank open accuracy",
+        "matched-minus-fixed-donor open accuracy"
+      ],
+      "success_conditioned_geometry": "secondary only; include all eight random runs in primary geometry",
+      "threshold_for_same_point_or_same_distribution": null
+    },
+    "budget": {
+      "arm_count": 2,
+      "fixed_forward_view_probe_evaluations": 360,
+      "fixed_open_ce_probe_evaluations": 90,
+      "matched_endpoint_mcq_view_evaluations": 72,
+      "open_endpoint_generations": 108,
+      "optimizer_steps_total": 4608,
+      "run_count": 18,
+      "starts_per_arm": 9,
+      "target_count": 1
+    },
+    "diagnostic_only": true,
+    "endpoint_evaluation": {
+      "fixed_donor_semantics": "same old target-02 endpoint for every new endpoint; corruption control, not a counterfactual labeled state",
+      "generation": {
+        "do_sample": false,
+        "eos_policy": "original_model",
+        "max_new_tokens": 32
+      },
+      "gold_visible_during_generation": false,
+      "image_conditions": [
+        "matched",
+        "blank",
+        "fixed_donor"
+      ],
+      "mcq_choice_permutations": [
+        [
+          3,
+          2,
+          1,
+          0
+        ],
+        [
+          2,
+          1,
+          0,
+          3
+        ],
+        [
+          1,
+          0,
+          3,
+          2
+        ],
+        [
+          0,
+          3,
+          2,
+          1
+        ]
+      ],
+      "mcq_conditions": [
+        "matched"
+      ],
+      "mcq_primary_success": "all four reverse-cyclic views choose gold",
+      "open_primary_success": "matched original_open normalized exact match",
+      "open_secondary_robust_success": "both matched original_open and matched paraphrase_open normalized exact match",
+      "prompts": [
+        "original_open",
+        "paraphrase_open"
+      ],
+      "save_exact_prompts_input_token_ids_output_token_ids_raw_text_stop_reason": true,
+      "scoring": "same frozen normalized exact match as stage1; casefold, whitespace collapse/trim, trailing Unicode punctuation removal only; aliases empty"
+    },
+    "fixed_donor": {
+      "artifact": {
+        "archive_path": "C:\\Users\\Expedition\\DreamLite_R11_VAELatent_RawParts_20260831\\target-02.tar.gz",
+        "endpoint_file_sha256": "569d37d94fd78d1b9e49a9387d1461ed046745ec2a5b864d62c3c01ed1a4d00b",
+        "endpoint_member": "target-02/run/endpoint_raw.pt",
+        "endpoint_tensor_sha256": "e780ae9b2ea6fd95f4b50bc30afcb0ec27b6c39373eeecf9b9784d28174a8267"
+      },
+      "segment_id": "r5-f1-1aee01c0f3e7684c05c9122c",
+      "target_index": 2
+    },
+    "initialization": {
+      "canonical_hash_schema": "vision_memory.canonical_tensor.v1",
+      "draw": "torch.randn(reference.shape, generator=generator, device=\"cpu\", dtype=torch.float32)",
+      "dtype": "float32",
+      "epsilon": "raw_noise.float64() / sqrt(mean(raw_noise.float64() ** 2)) over the entire tensor",
+      "formula": "z0 = (z_ref.float64() + rho * RMS(z_ref.float64()) * epsilon).float32()",
+      "independent_generator": "torch.Generator(device=\"cpu\").manual_seed(init_seed)",
+      "materialize_once_and_clone_for_both_arms": true,
+      "paired_initial_tensor_hash_equality_required": true,
+      "reference": "old R11 uniform RGB 127/255 posterior-mean VAE source, promoted to fp32",
+      "reference_rms_scope": "one shared whole-tensor RMS from the common z_ref, never recomputed per seed",
+      "reference_tensor_sha256": "719e92867b60546b21b281cfc633ab782c8ce2274bfb41c6b3cee6d673e74eaa",
+      "save_reference_noise_epsilon_z0_and_hashes_before_optimization": true,
+      "shape": [
+        1,
+        4,
+        128,
+        128
+      ],
+      "starts": [
+        {
+          "included_in_random_start_statistics": false,
+          "init_id": "blank",
+          "init_seed": null,
+          "rho": 0.0
+        },
+        {
+          "included_in_random_start_statistics": true,
+          "init_id": "noise-seed-00",
+          "init_seed": 0,
+          "rho": 0.1
+        },
+        {
+          "included_in_random_start_statistics": true,
+          "init_id": "noise-seed-01",
+          "init_seed": 1,
+          "rho": 0.1
+        },
+        {
+          "included_in_random_start_statistics": true,
+          "init_id": "noise-seed-02",
+          "init_seed": 2,
+          "rho": 0.1
+        },
+        {
+          "included_in_random_start_statistics": true,
+          "init_id": "noise-seed-03",
+          "init_seed": 3,
+          "rho": 0.1
+        },
+        {
+          "included_in_random_start_statistics": true,
+          "init_id": "noise-seed-04",
+          "init_seed": 4,
+          "rho": 0.1
+        },
+        {
+          "included_in_random_start_statistics": true,
+          "init_id": "noise-seed-05",
+          "init_seed": 5,
+          "rho": 0.1
+        },
+        {
+          "included_in_random_start_statistics": true,
+          "init_id": "noise-seed-06",
+          "init_seed": 6,
+          "rho": 0.1
+        },
+        {
+          "included_in_random_start_statistics": true,
+          "init_id": "noise-seed-07",
+          "init_seed": 7,
+          "rho": 0.1
+        }
+      ]
+    },
+    "logging": {
+      "fixed_probe_steps": [
+        0,
+        64,
+        128,
+        192,
+        256
+      ],
+      "fixed_probes_both_arms": [
+        "all four forward-cyclic MCQ views",
+        "original_open gold-token CE"
+      ],
+      "full_adam_and_rng_checkpoint_steps": [
+        0,
+        64,
+        128,
+        192,
+        256
+      ],
+      "generation_only_at_primary_endpoint": true,
+      "latent_and_checkpoint_hashes": true,
+      "latent_raw_bytes_per_step": 262144,
+      "latent_save_steps": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113,
+        114,
+        115,
+        116,
+        117,
+        118,
+        119,
+        120,
+        121,
+        122,
+        123,
+        124,
+        125,
+        126,
+        127,
+        128,
+        129,
+        130,
+        131,
+        132,
+        133,
+        134,
+        135,
+        136,
+        137,
+        138,
+        139,
+        140,
+        141,
+        142,
+        143,
+        144,
+        145,
+        146,
+        147,
+        148,
+        149,
+        150,
+        151,
+        152,
+        153,
+        154,
+        155,
+        156,
+        157,
+        158,
+        159,
+        160,
+        161,
+        162,
+        163,
+        164,
+        165,
+        166,
+        167,
+        168,
+        169,
+        170,
+        171,
+        172,
+        173,
+        174,
+        175,
+        176,
+        177,
+        178,
+        179,
+        180,
+        181,
+        182,
+        183,
+        184,
+        185,
+        186,
+        187,
+        188,
+        189,
+        190,
+        191,
+        192,
+        193,
+        194,
+        195,
+        196,
+        197,
+        198,
+        199,
+        200,
+        201,
+        202,
+        203,
+        204,
+        205,
+        206,
+        207,
+        208,
+        209,
+        210,
+        211,
+        212,
+        213,
+        214,
+        215,
+        216,
+        217,
+        218,
+        219,
+        220,
+        221,
+        222,
+        223,
+        224,
+        225,
+        226,
+        227,
+        228,
+        229,
+        230,
+        231,
+        232,
+        233,
+        234,
+        235,
+        236,
+        237,
+        238,
+        239,
+        240,
+        241,
+        242,
+        243,
+        244,
+        245,
+        246,
+        247,
+        248,
+        249,
+        250,
+        251,
+        252,
+        253,
+        254,
+        255,
+        256
+      ],
+      "probes_no_grad_and_rng_preserving": true,
+      "scalar_training_metrics": [
+        "loss_before_step",
+        "gradient_l2",
+        "gradient_rms",
+        "gradient_nonzero_fraction",
+        "actual_update_l2",
+        "actual_update_rms",
+        "latent_rms",
+        "delta_from_own_start_rms",
+        "delta_from_shared_reference_rms",
+        "elapsed_seconds",
+        "training_view_if_mcq"
+      ],
+      "scalar_training_metrics_every_steps": 1
+    },
+    "protocol": "old-R11-mcq-vs-open-paired-multistart-pilot",
+    "schema": "vision_memory.r11-mcq-open-multistart-config.v1",
+    "status": "preregistered_not_started",
+    "target": {
+      "artifact": {
+        "archive_path": "C:\\Users\\Expedition\\DreamLite_R11_VAELatent_RawParts_20260831\\target-01.tar.gz",
+        "endpoint_file_sha256": "d359291de63bb5232325b2e7a9294ff3d861287c06e63da2ab6ebe42eab036b9",
+        "endpoint_member": "target-01/run/endpoint_raw.pt",
+        "endpoint_tensor_sha256": "6857afeffd37124bb196ab7c6607580c57c950d72d760ca6b49f8cc00bdef3f1"
+      },
+      "donor_segment_id": "r5-f1-1aee01c0f3e7684c05c9122c",
+      "donor_target_index": 2,
+      "inputs": {
+        "original_open": "R3 Train Standard Templates 03: At this later check, what is the current music preference for the indigo desk train 001123?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_open": "R3 Train Standard Templates 03: At this later check, which music does the indigo desk train 001123 currently prefer?\nUse the memory image to answer. Answer with a short phrase only."
+      },
+      "original": {
+        "answer_index": 1,
+        "choices": [
+          "no active preference",
+          "ambient",
+          "blues",
+          "jazz"
+        ],
+        "query": "R3 Train Standard Templates 03: At this later check, what is the current music preference for the indigo desk train 001123? Choose exactly one option."
+      },
+      "scorer_metadata": {
+        "aliases": [],
+        "gold": "ambient"
+      },
+      "segment_id": "r5-f1-392d41fd097d069c42218e0a",
+      "target_index": 1
+    },
+    "technical_controls": {
+      "numeric_trajectory_noise_floor_estimated": false,
+      "pairwise_identical_input_tensor_hash": true,
+      "record_forward_equal_or_max_abs_difference": true,
+      "repeat_forward_before_optimization_same_rng": true,
+      "repeat_full_blank_trajectory_count": 0,
+      "same_objective_gradient_reproducibility_check": true
+    },
+    "training": {
+      "arms": {
+        "mcq": {
+          "exposures_per_view": 64,
+          "objective": "original qwen3vl_choice_ce over negative mean answer-token NLL for all four candidates",
+          "query_source": "target.original",
+          "target_phase": 0,
+          "target_phase_formula": "int.from_bytes(sha256(segment_id.encode()).digest()[:2], \"big\") % 4",
+          "train_choice_permutations": [
+            [
+              0,
+              1,
+              2,
+              3
+            ],
+            [
+              1,
+              2,
+              3,
+              0
+            ],
+            [
+              2,
+              3,
+              0,
+              1
+            ],
+            [
+              3,
+              0,
+              1,
+              2
+            ]
+          ],
+          "view_index": "(step_zero + target_phase) % 4"
+        },
+        "open": {
+          "append_eos_to_target": false,
+          "objective": "qwen3vl_target_only_ce mean teacher-forced CE over gold answer tokens",
+          "paraphrase_used_in_training": false,
+          "query_source": "target.inputs.original_open",
+          "target_source": "target.scorer_metadata.gold"
+        }
+      },
+      "best_checkpoint_selection": false,
+      "decode_contract": "unchanged original DreamLite VAE with original scale/shift, compute dtype and unit-RGB clamp",
+      "dreamlite_unet_used": false,
+      "early_stopping": false,
+      "only_trainable": "one unconstrained float32 VAE model-space latent tensor per run",
+      "optimization_seed": 0,
+      "optimizer": {
+        "amsgrad": false,
+        "betas": [
+          0.9,
+          0.999
+        ],
+        "epsilon": 1e-08,
+        "gradient_clipping": null,
+        "learning_rate": 0.05,
+        "name": "Adam",
+        "schedule": "constant",
+        "weight_decay": 0.0
+      },
+      "optimizer_steps": 256,
+      "primary_endpoint_step": 256,
+      "reader_contract": "same validated stage1 model/processor/chat-template/numerical image path",
+      "reader_frozen_eval": true,
+      "reset_adam_state_before_each_run": true,
+      "reset_all_rng_before_each_run": true,
+      "restore_same_rng_state_before_each_paired_arm": true,
+      "run_order": [
+        {
+          "arm": "mcq",
+          "init_id": "blank",
+          "run_id": "blank-mcq"
+        },
+        {
+          "arm": "open",
+          "init_id": "blank",
+          "run_id": "blank-open"
+        },
+        {
+          "arm": "open",
+          "init_id": "noise-seed-00",
+          "run_id": "noise-seed-00-open"
+        },
+        {
+          "arm": "mcq",
+          "init_id": "noise-seed-00",
+          "run_id": "noise-seed-00-mcq"
+        },
+        {
+          "arm": "mcq",
+          "init_id": "noise-seed-01",
+          "run_id": "noise-seed-01-mcq"
+        },
+        {
+          "arm": "open",
+          "init_id": "noise-seed-01",
+          "run_id": "noise-seed-01-open"
+        },
+        {
+          "arm": "open",
+          "init_id": "noise-seed-02",
+          "run_id": "noise-seed-02-open"
+        },
+        {
+          "arm": "mcq",
+          "init_id": "noise-seed-02",
+          "run_id": "noise-seed-02-mcq"
+        },
+        {
+          "arm": "mcq",
+          "init_id": "noise-seed-03",
+          "run_id": "noise-seed-03-mcq"
+        },
+        {
+          "arm": "open",
+          "init_id": "noise-seed-03",
+          "run_id": "noise-seed-03-open"
+        },
+        {
+          "arm": "open",
+          "init_id": "noise-seed-04",
+          "run_id": "noise-seed-04-open"
+        },
+        {
+          "arm": "mcq",
+          "init_id": "noise-seed-04",
+          "run_id": "noise-seed-04-mcq"
+        },
+        {
+          "arm": "mcq",
+          "init_id": "noise-seed-05",
+          "run_id": "noise-seed-05-mcq"
+        },
+        {
+          "arm": "open",
+          "init_id": "noise-seed-05",
+          "run_id": "noise-seed-05-open"
+        },
+        {
+          "arm": "open",
+          "init_id": "noise-seed-06",
+          "run_id": "noise-seed-06-open"
+        },
+        {
+          "arm": "mcq",
+          "init_id": "noise-seed-06",
+          "run_id": "noise-seed-06-mcq"
+        },
+        {
+          "arm": "mcq",
+          "init_id": "noise-seed-07",
+          "run_id": "noise-seed-07-mcq"
+        },
+        {
+          "arm": "open",
+          "init_id": "noise-seed-07",
+          "run_id": "noise-seed-07-open"
+        }
+      ],
+      "strict_determinism": true,
+      "vae_frozen_eval": true
+    }
+  },
+  "config_sha256": "f64f45f21f3b8122a7cff222976a03a31508827e48858c81fb5c6555f1154c72",
+  "controls_cached": false,
+  "created_at_utc": "2026-09-06T20:45:12.929008+00:00",
+  "determinism": {
+    "cuda_matmul_allow_tf32": false,
+    "cudnn_allow_tf32": false,
+    "cudnn_benchmark": false,
+    "cudnn_deterministic": true,
+    "deterministic_algorithms": true,
+    "deterministic_warn_only": false,
+    "environment": {
+      "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+      "MKL_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "PYTHONHASHSEED": "0",
+      "TOKENIZERS_PARALLELISM": "false"
+    },
+    "float32_matmul_precision": "highest",
+    "sdpa": {
+      "cudnn": false,
+      "flash": false,
+      "math": true,
+      "memory_efficient": false
+    },
+    "seed": 0
+  },
+  "formal_success": false,
+  "git_commit": "5d06b7622a4f7081d02e42c656a97cffafe66207",
+  "git_status": "",
+  "model_snapshot_payloads_start": {
+    "dreamlite_mobile": {
+      "file_count": 27,
+      "manifest_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-mobile/.snapshot_manifest.json",
+      "manifest_sha256": "1bcf41b170c4b4a806bac6701cbdf4fabd5c3c53fa67415d065ab95ce2703159",
+      "model_dir": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-mobile",
+      "passed": true,
+      "repo_id": "carlofkl/DreamLite-mobile",
+      "revision": "6695c3f4be230f0493fa5dbf78be3bc4d3bb2ab4",
+      "snapshot_payload_sha256": "3fb839f465793b01ecafc4df433031a063dd7b395a050960cde57c2807031337",
+      "total_bytes": 5071894300
+    },
+    "qwen_reader": {
+      "file_count": 14,
+      "manifest_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct/.snapshot_manifest.json",
+      "manifest_sha256": "159a504daaae6dc412535978f087150a0eb8e50164afd70a8a17f83906f1127c",
+      "model_dir": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+      "passed": true,
+      "repo_id": "Qwen/Qwen3-VL-4B-Instruct",
+      "revision": "ebb281ec70b05090aa6165b016eac8ec08e71b17",
+      "snapshot_payload_sha256": "45be3ffb00017b02bffa79f4f8e6f301760ac50c0bb78b2c4e5a7fe8aa3d52c6",
+      "total_bytes": 8887292732
+    }
+  },
+  "open_target_appends_eos": false,
+  "prerequisite": {
+    "config_line_ending_binding": {
+      "matched_line_ending_form": "lf_to_crlf",
+      "preregistered_sha256": "d004c6f41cc6264e425eaecd2b8559722ea7640182376cc93d27a759971e3c12",
+      "raw_sha256": "5420dafd73b1cabd9b0d77f1e8eda4d94eb9179f4ac157dc0d8993a1d10ef7a5"
+    },
+    "model_snapshot_payloads": {
+      "dreamlite_mobile": {
+        "file_count": 27,
+        "manifest_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-mobile/.snapshot_manifest.json",
+        "manifest_sha256": "1bcf41b170c4b4a806bac6701cbdf4fabd5c3c53fa67415d065ab95ce2703159",
+        "model_dir": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-mobile",
+        "passed": true,
+        "repo_id": "carlofkl/DreamLite-mobile",
+        "revision": "6695c3f4be230f0493fa5dbf78be3bc4d3bb2ab4",
+        "snapshot_payload_sha256": "3fb839f465793b01ecafc4df433031a063dd7b395a050960cde57c2807031337",
+        "total_bytes": 5071894300
+      },
+      "qwen_reader": {
+        "file_count": 14,
+        "manifest_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct/.snapshot_manifest.json",
+        "manifest_sha256": "159a504daaae6dc412535978f087150a0eb8e50164afd70a8a17f83906f1127c",
+        "model_dir": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+        "passed": true,
+        "repo_id": "Qwen/Qwen3-VL-4B-Instruct",
+        "revision": "ebb281ec70b05090aa6165b016eac8ec08e71b17",
+        "snapshot_payload_sha256": "45be3ffb00017b02bffa79f4f8e6f301760ac50c0bb78b2c4e5a7fe8aa3d52c6",
+        "total_bytes": 8887292732
+      }
+    },
+    "replay_config_sha256": "5420dafd73b1cabd9b0d77f1e8eda4d94eb9179f4ac157dc0d8993a1d10ef7a5",
+    "summary_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open/replay-9f86bc9-20260907-round01/summary.json",
+    "summary_sha256": "2f3a224428a7b9c427cf031df9e11ede4e1f8a51fc75ab5f81c924beb9f19ad0",
+    "technical_passed": true
+  },
+  "primary_endpoint_step": 256,
+  "reader_device": "cuda:1",
+  "runtime": {
+    "cudnn": 90701,
+    "executable": "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+    "nvidia_smi": "0, NVIDIA H200, GPU-25442c52-fb4d-7807-d6c8-b08f83d407c0, 595.58.03\n1, NVIDIA H200, GPU-1d429113-ba28-25f0-ba05-094884fefe10, 595.58.03",
+    "packages": {
+      "accelerate": "1.12.0",
+      "diffusers": "0.39.0",
+      "numpy": "1.26.4",
+      "peft": "0.18.1",
+      "safetensors": "0.8.0",
+      "torch": "2.7.0a0+ecf3bae40a.nv25.2",
+      "torchvision": "0.22.0a0",
+      "transformers": "4.57.3"
+    },
+    "platform": "Linux-5.15.0-119-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3 (main, Jan 17 2025, 18:03:48) [GCC 13.3.0]",
+    "torch_cuda": "12.8"
+  },
+  "schema": "vision_memory.r11-mcq-open-multistart.v1.manifest",
+  "source_sha256": {
+    "models.lock.json": "4a5ec02e9c212308c78665fc51ca6d1e0cc3b3fc7a2e466cfec9c8498a06ad4e",
+    "scripts/experiments/run_r11_mcq_open_multistart.py": "67669f5b407a4c2f2834b54ef66ae277572161aece80f35832b9bd2b5a851327",
+    "scripts/experiments/run_r11_open_answer_replay.py": "c30adc4d9604feb69581c6a1f36bf837d42349bd75aa870af36203abb7bebd06",
+    "scripts/train/latent_r11_vae_oracle.py": "5d8afd430dbde693348ff58706cb1e60e761a2e2e7e6b00b4fcdcdc0ff80bd94",
+    "src/vision_memory/reader/open_answer.py": "64fec7c47b045fa3c60b1e96616ab928337fa5cfe4ad916639bcee7ef6c8096d",
+    "src/vision_memory/reader/qwen3vl.py": "2e4dbc7d159d5c8c5d62a21040d5d4ed0adcd586a627061ceef988e25ac6d2d0"
+  },
+  "vae_device": "cuda:0"
+}

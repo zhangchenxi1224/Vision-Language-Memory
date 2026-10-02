@@ -1,0 +1,230 @@
+{
+  "config_sha256": "5de4cbb6b3eb3619ad044f094e0944b14b154702632a3098ac8631dd7bd775bf",
+  "criterion_pass_counts": {
+    "dev_final": {
+      "base_acc": 14,
+      "base_ce": 13,
+      "base_did": 14,
+      "base_views": 11,
+      "donor_acc": 9,
+      "donor_ce": 15,
+      "donor_did": 16,
+      "donor_views": 12,
+      "m0_acc": 14,
+      "m0_ce": 24,
+      "m0_views": 24,
+      "reset_did": 24
+    },
+    "dev_replay": {
+      "base_acc": 10,
+      "base_ce": 11,
+      "base_did": 11,
+      "base_views": 8,
+      "donor_acc": 9,
+      "donor_ce": 13,
+      "donor_did": 13,
+      "donor_views": 12,
+      "m0_acc": 14,
+      "m0_ce": 24,
+      "m0_views": 24,
+      "reset_did": 24
+    },
+    "dev_select": {
+      "base_acc": 5,
+      "base_ce": 4,
+      "base_did": 5,
+      "base_views": 4,
+      "donor_acc": 3,
+      "donor_ce": 7,
+      "donor_did": 9,
+      "donor_views": 5,
+      "m0_acc": 8,
+      "m0_ce": 24,
+      "m0_views": 24,
+      "reset_did": 24
+    },
+    "train_audit": {
+      "base_acc": 26,
+      "base_ce": 36,
+      "base_did": 36,
+      "base_views": 36,
+      "donor_acc": 22,
+      "donor_ce": 35,
+      "donor_did": 35,
+      "donor_views": 34,
+      "m0_acc": 36,
+      "m0_ce": 36,
+      "m0_views": 36,
+      "reset_did": 36
+    }
+  },
+  "decision": "centered_residual_writer_did_not_fit_fixed_f1_boundary",
+  "endpoint_aggregates": {
+    "dev_final": {
+      "base_accuracy": 0.21875,
+      "base_ce": 1.3982959028022985,
+      "donor_accuracy": 0.28125,
+      "donor_ce": 3.2252000921289437,
+      "m0_accuracy": 0.0,
+      "m0_ce": 24.963118771711986,
+      "normal_accuracy": 0.4479166666666667,
+      "normal_accuracy_delta_vs_base": 0.22916666666666669,
+      "normal_accuracy_delta_vs_donor": 0.16666666666666669,
+      "normal_ce": 2.2645894160765843,
+      "normal_relative_ce_vs_base": 0.6195351867499312,
+      "normal_relative_ce_vs_donor": -0.2978452959854232,
+      "required_target_pass_count": 24,
+      "reset_accuracy": 0.0,
+      "reset_ce": 24.963118771711986,
+      "split": "dev_final",
+      "target_pass_count": 6,
+      "targets": 24
+    },
+    "dev_replay": {
+      "base_accuracy": 0.2916666666666667,
+      "base_ce": 1.3679710555200775,
+      "donor_accuracy": 0.2916666666666667,
+      "donor_ce": 3.1171676820279877,
+      "m0_accuracy": 0.0,
+      "m0_ce": 24.358342245221138,
+      "normal_accuracy": 0.4270833333333333,
+      "normal_accuracy_delta_vs_base": 0.13541666666666663,
+      "normal_accuracy_delta_vs_donor": 0.13541666666666663,
+      "normal_ce": 2.0826692689734045,
+      "normal_relative_ce_vs_base": 0.5224512686649001,
+      "normal_relative_ce_vs_donor": -0.33187127500999636,
+      "required_target_pass_count": 24,
+      "reset_accuracy": 0.0,
+      "reset_ce": 24.358342245221138,
+      "split": "dev_replay",
+      "target_pass_count": 5,
+      "targets": 24
+    },
+    "dev_select": {
+      "base_accuracy": 0.2916666666666667,
+      "base_ce": 1.3533110652739804,
+      "donor_accuracy": 0.3958333333333333,
+      "donor_ce": 2.334982911166056,
+      "m0_accuracy": 0.0,
+      "m0_ce": 25.00755041340987,
+      "normal_accuracy": 0.19791666666666666,
+      "normal_accuracy_delta_vs_base": -0.09375000000000003,
+      "normal_accuracy_delta_vs_donor": -0.19791666666666666,
+      "normal_ce": 2.910538882625891,
+      "normal_relative_ce_vs_base": 1.1506798823348472,
+      "normal_relative_ce_vs_donor": 0.24649258403883167,
+      "required_target_pass_count": 24,
+      "reset_accuracy": 0.0,
+      "reset_ce": 25.00755041340987,
+      "split": "dev_select",
+      "target_pass_count": 1,
+      "targets": 24
+    },
+    "train_audit": {
+      "base_accuracy": 0.5,
+      "base_ce": 1.139950920517246,
+      "donor_accuracy": 0.4930555555555556,
+      "donor_ce": 1.7029933980658016,
+      "m0_accuracy": 0.0,
+      "m0_ce": 23.94902253482077,
+      "normal_accuracy": 1.0,
+      "normal_accuracy_delta_vs_base": 0.5,
+      "normal_accuracy_delta_vs_donor": 0.5069444444444444,
+      "normal_ce": 0.024402021500362834,
+      "normal_relative_ce_vs_base": -0.9785937963984532,
+      "normal_relative_ce_vs_donor": -0.985671100353015,
+      "required_target_pass_count": 36,
+      "reset_accuracy": 0.0,
+      "reset_ce": 23.94902253482077,
+      "split": "train_audit",
+      "target_pass_count": 14,
+      "targets": 36
+    }
+  },
+  "final_center_constraints": {
+    "train_mean_residual_coefficient_max_abs": 1.1589791881760902e-07,
+    "train_mean_residual_delta_max_abs": 3.899865532730473e-07
+  },
+  "first_principles_interpretation": {
+    "meaning_of_unreadable_images": "The decoded images are measurable high-frequency visual codes without a human-readable semantic payload. This is compatible with Picture Memory, but it neither proves uniform all-pixel storage nor establishes causal/generalizable memory by itself.",
+    "next_action": "Explicit symmetric own-versus-wrong-donor ranking during training, with the R13 normal/reset/donor/base evaluation held unchanged.",
+    "what_failed": "Wrong-event donor and zero-residual base remained correct too often in train-audit, while held-out normal accuracy fell to 19.8%-44.8% and the conditional residual often underperformed the fixed base. The shared event-to-code map is therefore overfit and insufficiently discriminative.",
+    "what_worked": "The fixed base plus centered conditional residual reached 100% train-audit normal accuracy, 0% reset accuracy, and 14/36 full causal target gates, improving on R12's 0/36."
+  },
+  "fixed_base_latent_sha256": "51fcc191ac3914ebdbfe07a914d95a51c20458de9a4352de999d7cb8c3595fb5",
+  "formal_success_claim": false,
+  "git_commit": "866da17ccec2b98943644d10ba231818ae004db9",
+  "renderer_sha256": "592637b6b7fce407d5430d56997aacd950c3340aef7e7d0b41918ee22fee6357",
+  "required_target_pass_counts": {
+    "dev_final": 24,
+    "dev_replay": 24,
+    "dev_select": 24,
+    "train_audit": 36
+  },
+  "schema": "vision_memory.r13-centered-residual-rendered-analysis.v1",
+  "scientific_arm_gate": false,
+  "source_sha256": {
+    "artifact_inventory": "35841fd1b9a6ee50ea26b9ede39ecffa45cb60e8581be54234985e6edf43a19a",
+    "manifest": "99b444b82594b8597c1a6403e951203d353746e3bb49a00651c814a39057b828",
+    "report_source_archive": "18b76d9df69e59f0e3de842a988dfd086fc095e938a0df53eec21b585f25b691",
+    "summary": "d1d4e8a944e855ccca979e7e13b1ba58f6fd0c18c1ae96db49326be2cca48632",
+    "technical_gate": "a5ab853ce537fc2ccd8b776e1456b388cf6eb99f7eb6e6abfdababd4ca0f66d3",
+    "terminal": "9644e5b1875943de80d0e0553d215dc3960e779b76593bab6174ab5a2d556561"
+  },
+  "split_target_pass_counts": {
+    "dev_final": 6,
+    "dev_replay": 5,
+    "dev_select": 1,
+    "train_audit": 14
+  },
+  "status": "completed",
+  "technical_gate": true,
+  "training": {
+    "first_64_micro_ce": 1.1258065304718912,
+    "gradient_clipped_steps": 0,
+    "last_64_micro_ce": 0.05820233203121461,
+    "maximum_gradient_norm": 55.54416801265313,
+    "micro_steps": 4608,
+    "minimum_64_micro_ce": 0.02216910742527034,
+    "optimizer_steps": 1152,
+    "optimizer_steps_gradient_norm_gt_10": 75
+  },
+  "visual_code_representative_pixel_differences": [
+    {
+      "donor_base_pixel_rms": 0.09255137378944152,
+      "normal_base_mean_abs": 0.07306751767205055,
+      "normal_base_pixel_rms": 0.10323753243052532,
+      "normal_donor_pixel_rms": 0.11563568841555702,
+      "segment_id": "r5-f1-ee59008270e04ddeb87f5940",
+      "split": "train_audit",
+      "target_value": "tacos"
+    },
+    {
+      "donor_base_pixel_rms": 0.1398820029281606,
+      "normal_base_mean_abs": 0.1125622034367546,
+      "normal_base_pixel_rms": 0.15401212089092045,
+      "normal_donor_pixel_rms": 0.15703332925470745,
+      "segment_id": "r5-f1-e1fb95a44d70110ed3edaaa4",
+      "split": "dev_select",
+      "target_value": "purple"
+    },
+    {
+      "donor_base_pixel_rms": 0.10257663147972733,
+      "normal_base_mean_abs": 0.07928628334489884,
+      "normal_base_pixel_rms": 0.11067727150959357,
+      "normal_donor_pixel_rms": 0.11844463485206656,
+      "segment_id": "r5-f1-a3e0a264c6669d943382da4f",
+      "split": "dev_replay",
+      "target_value": "purple"
+    },
+    {
+      "donor_base_pixel_rms": 0.08927100258916275,
+      "normal_base_mean_abs": 0.07234990829225636,
+      "normal_base_pixel_rms": 0.10178452814655238,
+      "normal_donor_pixel_rms": 0.07495089870292865,
+      "segment_id": "r5-f1-865bcf071bbf554889ae9c0a",
+      "split": "dev_final",
+      "target_value": "blues"
+    }
+  ]
+}

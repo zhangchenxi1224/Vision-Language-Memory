@@ -1,0 +1,46 @@
+[
+  {
+    "arm": "C",
+    "pid": 775763,
+    "host": "b-cr4-low-0927--35735fae3214-vlpgftkp5f",
+    "command": [
+      "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+      "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681/scripts/inspire/run_prefeval_k1_refresh730.py",
+      "--arm",
+      "C",
+      "--gpus",
+      "1"
+    ],
+    "gpus": [
+      1
+    ],
+    "code_root": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681",
+    "commit": "55596810cee2062022b894ef93feb1ab4cd6b07b",
+    "log": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-C/driver-recovery-20260927-1030.log",
+    "utc": "2026-09-27T07:15:31.037112+00:00",
+    "reason": "resume after platform auto-recycle; preserve C completed training/readback and resume R remaining fixed global budget"
+  },
+  {
+    "arm": "R",
+    "pid": 775764,
+    "host": "b-cr4-low-0927--35735fae3214-vlpgftkp5f",
+    "command": [
+      "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+      "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681/scripts/inspire/run_prefeval_k1_refresh730.py",
+      "--arm",
+      "R",
+      "--gpus",
+      "2",
+      "3"
+    ],
+    "gpus": [
+      2,
+      3
+    ],
+    "code_root": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-refresh-5559681",
+    "commit": "55596810cee2062022b894ef93feb1ab4cd6b07b",
+    "log": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/retain730-R/driver-recovery-20260927-1030.log",
+    "utc": "2026-09-27T07:15:31.041211+00:00",
+    "reason": "resume after platform auto-recycle; preserve C completed training/readback and resume R remaining fixed global budget"
+  }
+]

@@ -1,0 +1,78 @@
+{
+  "observed_at_utc": "2026-09-24T00:18:33.848503+00:00",
+  "scope": "Completed fixed2048 retain FM; training loss is not memory accuracy",
+  "arms": {
+    "A": {
+      "updates": 2048,
+      "draws": 8192,
+      "write_draws": 4096,
+      "retain_draws": 4096,
+      "draws_per_preference_per_lane": 64,
+      "position_counts": {
+        "0": 4096,
+        "1": 448,
+        "2": 448,
+        "3": 448,
+        "4": 448,
+        "5": 384,
+        "6": 384,
+        "7": 384,
+        "8": 384,
+        "9": 384,
+        "10": 384
+      },
+      "all_losses_and_gradients_finite": true,
+      "zero_gradient_steps": 0,
+      "checkpoint_sha256": "473f9ec4b02af5693f4df5c74cc851144dc1ed742894f2fc6cdff5185440a01b",
+      "parent_checkpoint_sha256": "8991bf27faed941c5d37214b3a6721fb6cd217a542d3d32ca4b8f83508ead06b",
+      "trace_sha256": "972efaf221e341a8cc42e8c9258bdc198f9988be792bb150133c32fb7a489f75",
+      "training_mse_by_lane": {
+        "first128": {
+          "write": 0.3272429701173678,
+          "retain": 1.005135393817909
+        },
+        "last128": {
+          "write": 0.23029595026309835,
+          "retain": 0.943925988744013
+        }
+      },
+      "recorded_seconds": 3231.9013035669923
+    },
+    "B": {
+      "updates": 2048,
+      "draws": 8192,
+      "write_draws": 4096,
+      "retain_draws": 4096,
+      "draws_per_preference_per_lane": 64,
+      "position_counts": {
+        "0": 4096,
+        "1": 448,
+        "2": 448,
+        "3": 448,
+        "4": 448,
+        "5": 384,
+        "6": 384,
+        "7": 384,
+        "8": 384,
+        "9": 384,
+        "10": 384
+      },
+      "all_losses_and_gradients_finite": true,
+      "zero_gradient_steps": 0,
+      "checkpoint_sha256": "66001224f511877cc55c750664a9439d888899cbd59103ccf7fe4e6971ca68b7",
+      "parent_checkpoint_sha256": "d446c67bedf2b23a5f5e8294e9738c5101fb431d06eef9536eb3525d0c38e4c3",
+      "trace_sha256": "49a0122201b9594d83592d0b935e052db332083a9501898743a478103cf8410f",
+      "training_mse_by_lane": {
+        "first128": {
+          "write": 0.16057965985964984,
+          "retain": 0.5330903968424536
+        },
+        "last128": {
+          "write": 0.1399252837545646,
+          "retain": 0.4636844959168229
+        }
+      },
+      "recorded_seconds": 3252.5491094272584
+    }
+  }
+}

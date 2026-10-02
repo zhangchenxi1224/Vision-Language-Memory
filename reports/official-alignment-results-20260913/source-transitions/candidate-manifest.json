@@ -1,0 +1,1137 @@
+{
+  "bank_status": "sealed",
+  "conditional_group_count": 15,
+  "groups": [
+    {
+      "answer": "ambient",
+      "donor_control": {
+        "answer": "orange",
+        "image_file_sha256": "8fbde49d9a764f1ac179fed0ada70e2528a87cf39eaf8266e287b746f105d40a",
+        "image_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/f5c9c9e-direct-multiprompt-dl-base-seed20260908/bank/controls/r5-f1-392d41fd097d069c42218e0a-donor.pt",
+        "image_sha256": "546eb5c562c6193804da7598f0f5941773fbef620505fc11aff5d40869d66452"
+      },
+      "event_text": "R3 Train Standard Templates 03: For the indigo desk train 001123, remember that the preferred music is ambient.",
+      "operation": "set",
+      "planned_count": 1,
+      "question_id": "r5-f1-392d41fd097d069c42218e0a-from-gray-set-to-ambient",
+      "question_variants": {
+        "original_open": "R3 Train Standard Templates 03: At this later check, what is the current music preference for the indigo desk train 001123?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 03: At this later check, which music does the indigo desk train 001123 currently prefer?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 03: What music does the indigo desk train 001123 prefer now, at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_3": "R3 Train Standard Templates 03: For the indigo desk train 001123, what is the music preference currently in effect at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "R3 Train Standard Templates 03: Based on the stored memory, name the current preferred music for the indigo desk train 001123 at this later check.\nUse the memory image to answer.\nAnswer with a short phrase only."
+      },
+      "semantic_question_id": "r5-f1-392d41fd097d069c42218e0a",
+      "source_kind": "blank_gray_1024",
+      "source_latent_file_sha256": "a57d81ae0f15f3ec99a700b2cedffefd84cb09c587efb71619a8be8bd7dee8b0",
+      "source_latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/f5c9c9e-direct-multiprompt-dl-base-seed20260908/bank/conditions/r5-f1-392d41fd097d069c42218e0a-source.pt",
+      "source_latent_sha256": "5f8c07caa37de38cae96d0b0e28851b1b831bea8728182e9fbd14b1588ac3743",
+      "source_state": "gray",
+      "state": "ambient",
+      "successful_run_count": 1,
+      "target_state": "ambient",
+      "teacher_ids": [
+        "r5-f1-392d41fd097d069c42218e0a-from-gray-set-to-ambient-e910e9b89ed3861e"
+      ],
+      "termination_contract": {
+        "assistant_end_token_id": 151645,
+        "assistant_end_token_text": "<|im_end|>",
+        "chat_suffix": "<|im_end|>\n",
+        "chat_suffix_token_ids": [
+          151645,
+          198
+        ],
+        "generation_eos_token_ids": [
+          151645,
+          151643
+        ],
+        "selection": "first token after an assistant answer in actual chat template, checked against generation EOS",
+        "tokenizer_eos_token_id": 151645
+      }
+    },
+    {
+      "answer": "jazz",
+      "donor_control": {
+        "answer": "orange",
+        "image_file_sha256": "8fbde49d9a764f1ac179fed0ada70e2528a87cf39eaf8266e287b746f105d40a",
+        "image_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/f5c9c9e-direct-multiprompt-dl-base-seed20260908/bank/controls/r5-f1-392d41fd097d069c42218e0a-donor.pt",
+        "image_sha256": "546eb5c562c6193804da7598f0f5941773fbef620505fc11aff5d40869d66452"
+      },
+      "event_text": "R3 Train Standard Templates 03: For the indigo desk train 001123, remember that the preferred music is jazz.",
+      "operation": "set",
+      "planned_count": 1,
+      "question_id": "r5-f1-392d41fd097d069c42218e0a-from-gray-set-to-jazz",
+      "question_variants": {
+        "original_open": "R3 Train Standard Templates 03: At this later check, what is the current music preference for the indigo desk train 001123?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 03: At this later check, which music does the indigo desk train 001123 currently prefer?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 03: What music does the indigo desk train 001123 prefer now, at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_3": "R3 Train Standard Templates 03: For the indigo desk train 001123, what is the music preference currently in effect at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "R3 Train Standard Templates 03: Based on the stored memory, name the current preferred music for the indigo desk train 001123 at this later check.\nUse the memory image to answer.\nAnswer with a short phrase only."
+      },
+      "semantic_question_id": "r5-f1-392d41fd097d069c42218e0a",
+      "source_kind": "blank_gray_1024",
+      "source_latent_file_sha256": "a57d81ae0f15f3ec99a700b2cedffefd84cb09c587efb71619a8be8bd7dee8b0",
+      "source_latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/f5c9c9e-direct-multiprompt-dl-base-seed20260908/bank/conditions/r5-f1-392d41fd097d069c42218e0a-source.pt",
+      "source_latent_sha256": "5f8c07caa37de38cae96d0b0e28851b1b831bea8728182e9fbd14b1588ac3743",
+      "source_state": "gray",
+      "state": "jazz",
+      "successful_run_count": 1,
+      "target_state": "jazz",
+      "teacher_ids": [
+        "r5-f1-392d41fd097d069c42218e0a-from-gray-set-to-jazz-842d8d949f8bcf55"
+      ],
+      "termination_contract": {
+        "assistant_end_token_id": 151645,
+        "assistant_end_token_text": "<|im_end|>",
+        "chat_suffix": "<|im_end|>\n",
+        "chat_suffix_token_ids": [
+          151645,
+          198
+        ],
+        "generation_eos_token_ids": [
+          151645,
+          151643
+        ],
+        "selection": "first token after an assistant answer in actual chat template, checked against generation EOS",
+        "tokenizer_eos_token_id": 151645
+      }
+    },
+    {
+      "answer": "no active preference",
+      "donor_control": {
+        "answer": "orange",
+        "image_file_sha256": "8fbde49d9a764f1ac179fed0ada70e2528a87cf39eaf8266e287b746f105d40a",
+        "image_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/f5c9c9e-direct-multiprompt-dl-base-seed20260908/bank/controls/r5-f1-392d41fd097d069c42218e0a-donor.pt",
+        "image_sha256": "546eb5c562c6193804da7598f0f5941773fbef620505fc11aff5d40869d66452"
+      },
+      "event_text": "R3 Train Standard Templates 03: Clear the saved music preference for the indigo desk train 001123.",
+      "operation": "clear",
+      "planned_count": 1,
+      "question_id": "r5-f1-392d41fd097d069c42218e0a-from-gray-clear-to-clear",
+      "question_variants": {
+        "original_open": "R3 Train Standard Templates 03: At this later check, what is the current music preference for the indigo desk train 001123?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 03: At this later check, which music does the indigo desk train 001123 currently prefer?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 03: What music does the indigo desk train 001123 prefer now, at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_3": "R3 Train Standard Templates 03: For the indigo desk train 001123, what is the music preference currently in effect at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "R3 Train Standard Templates 03: Based on the stored memory, name the current preferred music for the indigo desk train 001123 at this later check.\nUse the memory image to answer.\nAnswer with a short phrase only."
+      },
+      "semantic_question_id": "r5-f1-392d41fd097d069c42218e0a",
+      "source_kind": "blank_gray_1024",
+      "source_latent_file_sha256": "a57d81ae0f15f3ec99a700b2cedffefd84cb09c587efb71619a8be8bd7dee8b0",
+      "source_latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/f5c9c9e-direct-multiprompt-dl-base-seed20260908/bank/conditions/r5-f1-392d41fd097d069c42218e0a-source.pt",
+      "source_latent_sha256": "5f8c07caa37de38cae96d0b0e28851b1b831bea8728182e9fbd14b1588ac3743",
+      "source_state": "gray",
+      "state": "clear",
+      "successful_run_count": 1,
+      "target_state": "clear",
+      "teacher_ids": [
+        "r5-f1-392d41fd097d069c42218e0a-from-gray-clear-to-clear-c3132b6f9575ecc6"
+      ],
+      "termination_contract": {
+        "assistant_end_token_id": 151645,
+        "assistant_end_token_text": "<|im_end|>",
+        "chat_suffix": "<|im_end|>\n",
+        "chat_suffix_token_ids": [
+          151645,
+          198
+        ],
+        "generation_eos_token_ids": [
+          151645,
+          151643
+        ],
+        "selection": "first token after an assistant answer in actual chat template, checked against generation EOS",
+        "tokenizer_eos_token_id": 151645
+      }
+    },
+    {
+      "answer": "ambient",
+      "donor_control": {
+        "answer": "orange",
+        "image_file_sha256": "8fbde49d9a764f1ac179fed0ada70e2528a87cf39eaf8266e287b746f105d40a",
+        "image_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/f5c9c9e-direct-multiprompt-dl-base-seed20260908/bank/controls/r5-f1-392d41fd097d069c42218e0a-donor.pt",
+        "image_sha256": "546eb5c562c6193804da7598f0f5941773fbef620505fc11aff5d40869d66452"
+      },
+      "event_text": "R3 Train Standard Templates 03: For the indigo desk train 001123, remember that the preferred music is ambient.",
+      "operation": "set",
+      "planned_count": 1,
+      "question_id": "r5-f1-392d41fd097d069c42218e0a-from-ambient-set-to-ambient",
+      "question_variants": {
+        "original_open": "R3 Train Standard Templates 03: At this later check, what is the current music preference for the indigo desk train 001123?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 03: At this later check, which music does the indigo desk train 001123 currently prefer?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 03: What music does the indigo desk train 001123 prefer now, at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_3": "R3 Train Standard Templates 03: For the indigo desk train 001123, what is the music preference currently in effect at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "R3 Train Standard Templates 03: Based on the stored memory, name the current preferred music for the indigo desk train 001123 at this later check.\nUse the memory image to answer.\nAnswer with a short phrase only."
+      },
+      "semantic_question_id": "r5-f1-392d41fd097d069c42218e0a",
+      "source_answer": "ambient",
+      "source_image_file_sha256": "6b183003e706437808d8580dc9e3ba4a283d0be240fa374fc2fd14434bbb0730",
+      "source_image_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/6419eda-source-transitions/ambient-source.png",
+      "source_kind": "sealed_rgb_1024",
+      "source_latent_file_sha256": "caf6027721b40311b9a6b6471ddf938f864b9de9dcacb01b64e5391f01a1a32c",
+      "source_latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/6419eda-source-transitions/ambient-source.pt",
+      "source_latent_sha256": "787a54920208408d1c38bc20253e3fc3e046e8b6c87167691cff1e4ae33ee78b",
+      "source_state": "ambient",
+      "state": "ambient",
+      "successful_run_count": 1,
+      "target_state": "ambient",
+      "teacher_ids": [
+        "r5-f1-392d41fd097d069c42218e0a-from-ambient-set-to-ambient-e910e9b89ed3861e"
+      ],
+      "termination_contract": {
+        "assistant_end_token_id": 151645,
+        "assistant_end_token_text": "<|im_end|>",
+        "chat_suffix": "<|im_end|>\n",
+        "chat_suffix_token_ids": [
+          151645,
+          198
+        ],
+        "generation_eos_token_ids": [
+          151645,
+          151643
+        ],
+        "selection": "first token after an assistant answer in actual chat template, checked against generation EOS",
+        "tokenizer_eos_token_id": 151645
+      }
+    },
+    {
+      "answer": "jazz",
+      "donor_control": {
+        "answer": "orange",
+        "image_file_sha256": "8fbde49d9a764f1ac179fed0ada70e2528a87cf39eaf8266e287b746f105d40a",
+        "image_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/f5c9c9e-direct-multiprompt-dl-base-seed20260908/bank/controls/r5-f1-392d41fd097d069c42218e0a-donor.pt",
+        "image_sha256": "546eb5c562c6193804da7598f0f5941773fbef620505fc11aff5d40869d66452"
+      },
+      "event_text": "R3 Train Standard Templates 03: For the indigo desk train 001123, remember that the preferred music is jazz.",
+      "operation": "set",
+      "planned_count": 1,
+      "question_id": "r5-f1-392d41fd097d069c42218e0a-from-ambient-set-to-jazz",
+      "question_variants": {
+        "original_open": "R3 Train Standard Templates 03: At this later check, what is the current music preference for the indigo desk train 001123?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 03: At this later check, which music does the indigo desk train 001123 currently prefer?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 03: What music does the indigo desk train 001123 prefer now, at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_3": "R3 Train Standard Templates 03: For the indigo desk train 001123, what is the music preference currently in effect at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "R3 Train Standard Templates 03: Based on the stored memory, name the current preferred music for the indigo desk train 001123 at this later check.\nUse the memory image to answer.\nAnswer with a short phrase only."
+      },
+      "semantic_question_id": "r5-f1-392d41fd097d069c42218e0a",
+      "source_answer": "ambient",
+      "source_image_file_sha256": "6b183003e706437808d8580dc9e3ba4a283d0be240fa374fc2fd14434bbb0730",
+      "source_image_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/6419eda-source-transitions/ambient-source.png",
+      "source_kind": "sealed_rgb_1024",
+      "source_latent_file_sha256": "caf6027721b40311b9a6b6471ddf938f864b9de9dcacb01b64e5391f01a1a32c",
+      "source_latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/6419eda-source-transitions/ambient-source.pt",
+      "source_latent_sha256": "787a54920208408d1c38bc20253e3fc3e046e8b6c87167691cff1e4ae33ee78b",
+      "source_state": "ambient",
+      "state": "jazz",
+      "successful_run_count": 1,
+      "target_state": "jazz",
+      "teacher_ids": [
+        "r5-f1-392d41fd097d069c42218e0a-from-ambient-set-to-jazz-842d8d949f8bcf55"
+      ],
+      "termination_contract": {
+        "assistant_end_token_id": 151645,
+        "assistant_end_token_text": "<|im_end|>",
+        "chat_suffix": "<|im_end|>\n",
+        "chat_suffix_token_ids": [
+          151645,
+          198
+        ],
+        "generation_eos_token_ids": [
+          151645,
+          151643
+        ],
+        "selection": "first token after an assistant answer in actual chat template, checked against generation EOS",
+        "tokenizer_eos_token_id": 151645
+      }
+    },
+    {
+      "answer": "no active preference",
+      "donor_control": {
+        "answer": "orange",
+        "image_file_sha256": "8fbde49d9a764f1ac179fed0ada70e2528a87cf39eaf8266e287b746f105d40a",
+        "image_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/f5c9c9e-direct-multiprompt-dl-base-seed20260908/bank/controls/r5-f1-392d41fd097d069c42218e0a-donor.pt",
+        "image_sha256": "546eb5c562c6193804da7598f0f5941773fbef620505fc11aff5d40869d66452"
+      },
+      "event_text": "R3 Train Standard Templates 03: Clear the saved music preference for the indigo desk train 001123.",
+      "operation": "clear",
+      "planned_count": 1,
+      "question_id": "r5-f1-392d41fd097d069c42218e0a-from-ambient-clear-to-clear",
+      "question_variants": {
+        "original_open": "R3 Train Standard Templates 03: At this later check, what is the current music preference for the indigo desk train 001123?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 03: At this later check, which music does the indigo desk train 001123 currently prefer?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 03: What music does the indigo desk train 001123 prefer now, at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_3": "R3 Train Standard Templates 03: For the indigo desk train 001123, what is the music preference currently in effect at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "R3 Train Standard Templates 03: Based on the stored memory, name the current preferred music for the indigo desk train 001123 at this later check.\nUse the memory image to answer.\nAnswer with a short phrase only."
+      },
+      "semantic_question_id": "r5-f1-392d41fd097d069c42218e0a",
+      "source_answer": "ambient",
+      "source_image_file_sha256": "6b183003e706437808d8580dc9e3ba4a283d0be240fa374fc2fd14434bbb0730",
+      "source_image_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/6419eda-source-transitions/ambient-source.png",
+      "source_kind": "sealed_rgb_1024",
+      "source_latent_file_sha256": "caf6027721b40311b9a6b6471ddf938f864b9de9dcacb01b64e5391f01a1a32c",
+      "source_latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/6419eda-source-transitions/ambient-source.pt",
+      "source_latent_sha256": "787a54920208408d1c38bc20253e3fc3e046e8b6c87167691cff1e4ae33ee78b",
+      "source_state": "ambient",
+      "state": "clear",
+      "successful_run_count": 1,
+      "target_state": "clear",
+      "teacher_ids": [
+        "r5-f1-392d41fd097d069c42218e0a-from-ambient-clear-to-clear-c3132b6f9575ecc6"
+      ],
+      "termination_contract": {
+        "assistant_end_token_id": 151645,
+        "assistant_end_token_text": "<|im_end|>",
+        "chat_suffix": "<|im_end|>\n",
+        "chat_suffix_token_ids": [
+          151645,
+          198
+        ],
+        "generation_eos_token_ids": [
+          151645,
+          151643
+        ],
+        "selection": "first token after an assistant answer in actual chat template, checked against generation EOS",
+        "tokenizer_eos_token_id": 151645
+      }
+    },
+    {
+      "answer": "ambient",
+      "donor_control": {
+        "answer": "orange",
+        "image_file_sha256": "8fbde49d9a764f1ac179fed0ada70e2528a87cf39eaf8266e287b746f105d40a",
+        "image_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/f5c9c9e-direct-multiprompt-dl-base-seed20260908/bank/controls/r5-f1-392d41fd097d069c42218e0a-donor.pt",
+        "image_sha256": "546eb5c562c6193804da7598f0f5941773fbef620505fc11aff5d40869d66452"
+      },
+      "event_text": "R3 Train Standard Templates 03: A delivery arrived for the indigo desk train 001123. Keep its saved music preference unchanged.",
+      "operation": "noop",
+      "planned_count": 1,
+      "question_id": "r5-f1-392d41fd097d069c42218e0a-from-ambient-noop-to-ambient",
+      "question_variants": {
+        "original_open": "R3 Train Standard Templates 03: At this later check, what is the current music preference for the indigo desk train 001123?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 03: At this later check, which music does the indigo desk train 001123 currently prefer?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 03: What music does the indigo desk train 001123 prefer now, at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_3": "R3 Train Standard Templates 03: For the indigo desk train 001123, what is the music preference currently in effect at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "R3 Train Standard Templates 03: Based on the stored memory, name the current preferred music for the indigo desk train 001123 at this later check.\nUse the memory image to answer.\nAnswer with a short phrase only."
+      },
+      "semantic_question_id": "r5-f1-392d41fd097d069c42218e0a",
+      "source_answer": "ambient",
+      "source_image_file_sha256": "6b183003e706437808d8580dc9e3ba4a283d0be240fa374fc2fd14434bbb0730",
+      "source_image_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/6419eda-source-transitions/ambient-source.png",
+      "source_kind": "sealed_rgb_1024",
+      "source_latent_file_sha256": "caf6027721b40311b9a6b6471ddf938f864b9de9dcacb01b64e5391f01a1a32c",
+      "source_latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/6419eda-source-transitions/ambient-source.pt",
+      "source_latent_sha256": "787a54920208408d1c38bc20253e3fc3e046e8b6c87167691cff1e4ae33ee78b",
+      "source_state": "ambient",
+      "state": "ambient",
+      "successful_run_count": 1,
+      "target_state": "ambient",
+      "teacher_ids": [
+        "r5-f1-392d41fd097d069c42218e0a-from-ambient-noop-to-ambient-e910e9b89ed3861e"
+      ],
+      "termination_contract": {
+        "assistant_end_token_id": 151645,
+        "assistant_end_token_text": "<|im_end|>",
+        "chat_suffix": "<|im_end|>\n",
+        "chat_suffix_token_ids": [
+          151645,
+          198
+        ],
+        "generation_eos_token_ids": [
+          151645,
+          151643
+        ],
+        "selection": "first token after an assistant answer in actual chat template, checked against generation EOS",
+        "tokenizer_eos_token_id": 151645
+      }
+    },
+    {
+      "answer": "ambient",
+      "donor_control": {
+        "answer": "orange",
+        "image_file_sha256": "8fbde49d9a764f1ac179fed0ada70e2528a87cf39eaf8266e287b746f105d40a",
+        "image_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/f5c9c9e-direct-multiprompt-dl-base-seed20260908/bank/controls/r5-f1-392d41fd097d069c42218e0a-donor.pt",
+        "image_sha256": "546eb5c562c6193804da7598f0f5941773fbef620505fc11aff5d40869d66452"
+      },
+      "event_text": "R3 Train Standard Templates 03: For the indigo desk train 001123, remember that the preferred music is ambient.",
+      "operation": "set",
+      "planned_count": 1,
+      "question_id": "r5-f1-392d41fd097d069c42218e0a-from-jazz-set-to-ambient",
+      "question_variants": {
+        "original_open": "R3 Train Standard Templates 03: At this later check, what is the current music preference for the indigo desk train 001123?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 03: At this later check, which music does the indigo desk train 001123 currently prefer?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 03: What music does the indigo desk train 001123 prefer now, at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_3": "R3 Train Standard Templates 03: For the indigo desk train 001123, what is the music preference currently in effect at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "R3 Train Standard Templates 03: Based on the stored memory, name the current preferred music for the indigo desk train 001123 at this later check.\nUse the memory image to answer.\nAnswer with a short phrase only."
+      },
+      "semantic_question_id": "r5-f1-392d41fd097d069c42218e0a",
+      "source_answer": "jazz",
+      "source_image_file_sha256": "bd9dc5233762fa076871ba2d1fba2dc43fef68c7ee1f4dd3474566662d8d8b5e",
+      "source_image_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/6419eda-source-transitions/jazz-source.png",
+      "source_kind": "sealed_rgb_1024",
+      "source_latent_file_sha256": "abb4e3bfc4722c70750384a0ccdd09db5c9d95e3fc2b94a13b2624fa6303da51",
+      "source_latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/6419eda-source-transitions/jazz-source.pt",
+      "source_latent_sha256": "4ff2c7d685f76f07070f4e7398d5b06765df297d523cf4ef08b3e1b9a3acd1ed",
+      "source_state": "jazz",
+      "state": "ambient",
+      "successful_run_count": 1,
+      "target_state": "ambient",
+      "teacher_ids": [
+        "r5-f1-392d41fd097d069c42218e0a-from-jazz-set-to-ambient-e910e9b89ed3861e"
+      ],
+      "termination_contract": {
+        "assistant_end_token_id": 151645,
+        "assistant_end_token_text": "<|im_end|>",
+        "chat_suffix": "<|im_end|>\n",
+        "chat_suffix_token_ids": [
+          151645,
+          198
+        ],
+        "generation_eos_token_ids": [
+          151645,
+          151643
+        ],
+        "selection": "first token after an assistant answer in actual chat template, checked against generation EOS",
+        "tokenizer_eos_token_id": 151645
+      }
+    },
+    {
+      "answer": "jazz",
+      "donor_control": {
+        "answer": "orange",
+        "image_file_sha256": "8fbde49d9a764f1ac179fed0ada70e2528a87cf39eaf8266e287b746f105d40a",
+        "image_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/f5c9c9e-direct-multiprompt-dl-base-seed20260908/bank/controls/r5-f1-392d41fd097d069c42218e0a-donor.pt",
+        "image_sha256": "546eb5c562c6193804da7598f0f5941773fbef620505fc11aff5d40869d66452"
+      },
+      "event_text": "R3 Train Standard Templates 03: For the indigo desk train 001123, remember that the preferred music is jazz.",
+      "operation": "set",
+      "planned_count": 1,
+      "question_id": "r5-f1-392d41fd097d069c42218e0a-from-jazz-set-to-jazz",
+      "question_variants": {
+        "original_open": "R3 Train Standard Templates 03: At this later check, what is the current music preference for the indigo desk train 001123?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 03: At this later check, which music does the indigo desk train 001123 currently prefer?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 03: What music does the indigo desk train 001123 prefer now, at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_3": "R3 Train Standard Templates 03: For the indigo desk train 001123, what is the music preference currently in effect at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "R3 Train Standard Templates 03: Based on the stored memory, name the current preferred music for the indigo desk train 001123 at this later check.\nUse the memory image to answer.\nAnswer with a short phrase only."
+      },
+      "semantic_question_id": "r5-f1-392d41fd097d069c42218e0a",
+      "source_answer": "jazz",
+      "source_image_file_sha256": "bd9dc5233762fa076871ba2d1fba2dc43fef68c7ee1f4dd3474566662d8d8b5e",
+      "source_image_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/6419eda-source-transitions/jazz-source.png",
+      "source_kind": "sealed_rgb_1024",
+      "source_latent_file_sha256": "abb4e3bfc4722c70750384a0ccdd09db5c9d95e3fc2b94a13b2624fa6303da51",
+      "source_latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/6419eda-source-transitions/jazz-source.pt",
+      "source_latent_sha256": "4ff2c7d685f76f07070f4e7398d5b06765df297d523cf4ef08b3e1b9a3acd1ed",
+      "source_state": "jazz",
+      "state": "jazz",
+      "successful_run_count": 1,
+      "target_state": "jazz",
+      "teacher_ids": [
+        "r5-f1-392d41fd097d069c42218e0a-from-jazz-set-to-jazz-842d8d949f8bcf55"
+      ],
+      "termination_contract": {
+        "assistant_end_token_id": 151645,
+        "assistant_end_token_text": "<|im_end|>",
+        "chat_suffix": "<|im_end|>\n",
+        "chat_suffix_token_ids": [
+          151645,
+          198
+        ],
+        "generation_eos_token_ids": [
+          151645,
+          151643
+        ],
+        "selection": "first token after an assistant answer in actual chat template, checked against generation EOS",
+        "tokenizer_eos_token_id": 151645
+      }
+    },
+    {
+      "answer": "no active preference",
+      "donor_control": {
+        "answer": "orange",
+        "image_file_sha256": "8fbde49d9a764f1ac179fed0ada70e2528a87cf39eaf8266e287b746f105d40a",
+        "image_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/f5c9c9e-direct-multiprompt-dl-base-seed20260908/bank/controls/r5-f1-392d41fd097d069c42218e0a-donor.pt",
+        "image_sha256": "546eb5c562c6193804da7598f0f5941773fbef620505fc11aff5d40869d66452"
+      },
+      "event_text": "R3 Train Standard Templates 03: Clear the saved music preference for the indigo desk train 001123.",
+      "operation": "clear",
+      "planned_count": 1,
+      "question_id": "r5-f1-392d41fd097d069c42218e0a-from-jazz-clear-to-clear",
+      "question_variants": {
+        "original_open": "R3 Train Standard Templates 03: At this later check, what is the current music preference for the indigo desk train 001123?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 03: At this later check, which music does the indigo desk train 001123 currently prefer?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 03: What music does the indigo desk train 001123 prefer now, at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_3": "R3 Train Standard Templates 03: For the indigo desk train 001123, what is the music preference currently in effect at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "R3 Train Standard Templates 03: Based on the stored memory, name the current preferred music for the indigo desk train 001123 at this later check.\nUse the memory image to answer.\nAnswer with a short phrase only."
+      },
+      "semantic_question_id": "r5-f1-392d41fd097d069c42218e0a",
+      "source_answer": "jazz",
+      "source_image_file_sha256": "bd9dc5233762fa076871ba2d1fba2dc43fef68c7ee1f4dd3474566662d8d8b5e",
+      "source_image_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/6419eda-source-transitions/jazz-source.png",
+      "source_kind": "sealed_rgb_1024",
+      "source_latent_file_sha256": "abb4e3bfc4722c70750384a0ccdd09db5c9d95e3fc2b94a13b2624fa6303da51",
+      "source_latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/6419eda-source-transitions/jazz-source.pt",
+      "source_latent_sha256": "4ff2c7d685f76f07070f4e7398d5b06765df297d523cf4ef08b3e1b9a3acd1ed",
+      "source_state": "jazz",
+      "state": "clear",
+      "successful_run_count": 1,
+      "target_state": "clear",
+      "teacher_ids": [
+        "r5-f1-392d41fd097d069c42218e0a-from-jazz-clear-to-clear-c3132b6f9575ecc6"
+      ],
+      "termination_contract": {
+        "assistant_end_token_id": 151645,
+        "assistant_end_token_text": "<|im_end|>",
+        "chat_suffix": "<|im_end|>\n",
+        "chat_suffix_token_ids": [
+          151645,
+          198
+        ],
+        "generation_eos_token_ids": [
+          151645,
+          151643
+        ],
+        "selection": "first token after an assistant answer in actual chat template, checked against generation EOS",
+        "tokenizer_eos_token_id": 151645
+      }
+    },
+    {
+      "answer": "jazz",
+      "donor_control": {
+        "answer": "orange",
+        "image_file_sha256": "8fbde49d9a764f1ac179fed0ada70e2528a87cf39eaf8266e287b746f105d40a",
+        "image_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/f5c9c9e-direct-multiprompt-dl-base-seed20260908/bank/controls/r5-f1-392d41fd097d069c42218e0a-donor.pt",
+        "image_sha256": "546eb5c562c6193804da7598f0f5941773fbef620505fc11aff5d40869d66452"
+      },
+      "event_text": "R3 Train Standard Templates 03: A delivery arrived for the indigo desk train 001123. Keep its saved music preference unchanged.",
+      "operation": "noop",
+      "planned_count": 1,
+      "question_id": "r5-f1-392d41fd097d069c42218e0a-from-jazz-noop-to-jazz",
+      "question_variants": {
+        "original_open": "R3 Train Standard Templates 03: At this later check, what is the current music preference for the indigo desk train 001123?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 03: At this later check, which music does the indigo desk train 001123 currently prefer?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 03: What music does the indigo desk train 001123 prefer now, at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_3": "R3 Train Standard Templates 03: For the indigo desk train 001123, what is the music preference currently in effect at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "R3 Train Standard Templates 03: Based on the stored memory, name the current preferred music for the indigo desk train 001123 at this later check.\nUse the memory image to answer.\nAnswer with a short phrase only."
+      },
+      "semantic_question_id": "r5-f1-392d41fd097d069c42218e0a",
+      "source_answer": "jazz",
+      "source_image_file_sha256": "bd9dc5233762fa076871ba2d1fba2dc43fef68c7ee1f4dd3474566662d8d8b5e",
+      "source_image_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/6419eda-source-transitions/jazz-source.png",
+      "source_kind": "sealed_rgb_1024",
+      "source_latent_file_sha256": "abb4e3bfc4722c70750384a0ccdd09db5c9d95e3fc2b94a13b2624fa6303da51",
+      "source_latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/6419eda-source-transitions/jazz-source.pt",
+      "source_latent_sha256": "4ff2c7d685f76f07070f4e7398d5b06765df297d523cf4ef08b3e1b9a3acd1ed",
+      "source_state": "jazz",
+      "state": "jazz",
+      "successful_run_count": 1,
+      "target_state": "jazz",
+      "teacher_ids": [
+        "r5-f1-392d41fd097d069c42218e0a-from-jazz-noop-to-jazz-842d8d949f8bcf55"
+      ],
+      "termination_contract": {
+        "assistant_end_token_id": 151645,
+        "assistant_end_token_text": "<|im_end|>",
+        "chat_suffix": "<|im_end|>\n",
+        "chat_suffix_token_ids": [
+          151645,
+          198
+        ],
+        "generation_eos_token_ids": [
+          151645,
+          151643
+        ],
+        "selection": "first token after an assistant answer in actual chat template, checked against generation EOS",
+        "tokenizer_eos_token_id": 151645
+      }
+    },
+    {
+      "answer": "ambient",
+      "donor_control": {
+        "answer": "orange",
+        "image_file_sha256": "8fbde49d9a764f1ac179fed0ada70e2528a87cf39eaf8266e287b746f105d40a",
+        "image_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/f5c9c9e-direct-multiprompt-dl-base-seed20260908/bank/controls/r5-f1-392d41fd097d069c42218e0a-donor.pt",
+        "image_sha256": "546eb5c562c6193804da7598f0f5941773fbef620505fc11aff5d40869d66452"
+      },
+      "event_text": "R3 Train Standard Templates 03: For the indigo desk train 001123, remember that the preferred music is ambient.",
+      "operation": "set",
+      "planned_count": 1,
+      "question_id": "r5-f1-392d41fd097d069c42218e0a-from-clear-set-to-ambient",
+      "question_variants": {
+        "original_open": "R3 Train Standard Templates 03: At this later check, what is the current music preference for the indigo desk train 001123?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 03: At this later check, which music does the indigo desk train 001123 currently prefer?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 03: What music does the indigo desk train 001123 prefer now, at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_3": "R3 Train Standard Templates 03: For the indigo desk train 001123, what is the music preference currently in effect at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "R3 Train Standard Templates 03: Based on the stored memory, name the current preferred music for the indigo desk train 001123 at this later check.\nUse the memory image to answer.\nAnswer with a short phrase only."
+      },
+      "semantic_question_id": "r5-f1-392d41fd097d069c42218e0a",
+      "source_answer": "no active preference",
+      "source_image_file_sha256": "2c84d7c9d3c1ef2963734260812c74aab2fcd3855bfadf60c7ded946fa5c9631",
+      "source_image_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/6419eda-source-transitions/clear-source.png",
+      "source_kind": "sealed_rgb_1024",
+      "source_latent_file_sha256": "8855e43c10913ee9caf0af7b4488f6decc5a7ec55b019f95d6493d3c73482da0",
+      "source_latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/6419eda-source-transitions/clear-source.pt",
+      "source_latent_sha256": "04c9a8d91ab8f3bd2bbbd0572db3bc37e0072fa39aa40c0edc2379f0841ac53f",
+      "source_state": "clear",
+      "state": "ambient",
+      "successful_run_count": 1,
+      "target_state": "ambient",
+      "teacher_ids": [
+        "r5-f1-392d41fd097d069c42218e0a-from-clear-set-to-ambient-e910e9b89ed3861e"
+      ],
+      "termination_contract": {
+        "assistant_end_token_id": 151645,
+        "assistant_end_token_text": "<|im_end|>",
+        "chat_suffix": "<|im_end|>\n",
+        "chat_suffix_token_ids": [
+          151645,
+          198
+        ],
+        "generation_eos_token_ids": [
+          151645,
+          151643
+        ],
+        "selection": "first token after an assistant answer in actual chat template, checked against generation EOS",
+        "tokenizer_eos_token_id": 151645
+      }
+    },
+    {
+      "answer": "jazz",
+      "donor_control": {
+        "answer": "orange",
+        "image_file_sha256": "8fbde49d9a764f1ac179fed0ada70e2528a87cf39eaf8266e287b746f105d40a",
+        "image_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/f5c9c9e-direct-multiprompt-dl-base-seed20260908/bank/controls/r5-f1-392d41fd097d069c42218e0a-donor.pt",
+        "image_sha256": "546eb5c562c6193804da7598f0f5941773fbef620505fc11aff5d40869d66452"
+      },
+      "event_text": "R3 Train Standard Templates 03: For the indigo desk train 001123, remember that the preferred music is jazz.",
+      "operation": "set",
+      "planned_count": 1,
+      "question_id": "r5-f1-392d41fd097d069c42218e0a-from-clear-set-to-jazz",
+      "question_variants": {
+        "original_open": "R3 Train Standard Templates 03: At this later check, what is the current music preference for the indigo desk train 001123?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 03: At this later check, which music does the indigo desk train 001123 currently prefer?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 03: What music does the indigo desk train 001123 prefer now, at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_3": "R3 Train Standard Templates 03: For the indigo desk train 001123, what is the music preference currently in effect at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "R3 Train Standard Templates 03: Based on the stored memory, name the current preferred music for the indigo desk train 001123 at this later check.\nUse the memory image to answer.\nAnswer with a short phrase only."
+      },
+      "semantic_question_id": "r5-f1-392d41fd097d069c42218e0a",
+      "source_answer": "no active preference",
+      "source_image_file_sha256": "2c84d7c9d3c1ef2963734260812c74aab2fcd3855bfadf60c7ded946fa5c9631",
+      "source_image_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/6419eda-source-transitions/clear-source.png",
+      "source_kind": "sealed_rgb_1024",
+      "source_latent_file_sha256": "8855e43c10913ee9caf0af7b4488f6decc5a7ec55b019f95d6493d3c73482da0",
+      "source_latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/6419eda-source-transitions/clear-source.pt",
+      "source_latent_sha256": "04c9a8d91ab8f3bd2bbbd0572db3bc37e0072fa39aa40c0edc2379f0841ac53f",
+      "source_state": "clear",
+      "state": "jazz",
+      "successful_run_count": 1,
+      "target_state": "jazz",
+      "teacher_ids": [
+        "r5-f1-392d41fd097d069c42218e0a-from-clear-set-to-jazz-842d8d949f8bcf55"
+      ],
+      "termination_contract": {
+        "assistant_end_token_id": 151645,
+        "assistant_end_token_text": "<|im_end|>",
+        "chat_suffix": "<|im_end|>\n",
+        "chat_suffix_token_ids": [
+          151645,
+          198
+        ],
+        "generation_eos_token_ids": [
+          151645,
+          151643
+        ],
+        "selection": "first token after an assistant answer in actual chat template, checked against generation EOS",
+        "tokenizer_eos_token_id": 151645
+      }
+    },
+    {
+      "answer": "no active preference",
+      "donor_control": {
+        "answer": "orange",
+        "image_file_sha256": "8fbde49d9a764f1ac179fed0ada70e2528a87cf39eaf8266e287b746f105d40a",
+        "image_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/f5c9c9e-direct-multiprompt-dl-base-seed20260908/bank/controls/r5-f1-392d41fd097d069c42218e0a-donor.pt",
+        "image_sha256": "546eb5c562c6193804da7598f0f5941773fbef620505fc11aff5d40869d66452"
+      },
+      "event_text": "R3 Train Standard Templates 03: Clear the saved music preference for the indigo desk train 001123.",
+      "operation": "clear",
+      "planned_count": 1,
+      "question_id": "r5-f1-392d41fd097d069c42218e0a-from-clear-clear-to-clear",
+      "question_variants": {
+        "original_open": "R3 Train Standard Templates 03: At this later check, what is the current music preference for the indigo desk train 001123?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 03: At this later check, which music does the indigo desk train 001123 currently prefer?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 03: What music does the indigo desk train 001123 prefer now, at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_3": "R3 Train Standard Templates 03: For the indigo desk train 001123, what is the music preference currently in effect at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "R3 Train Standard Templates 03: Based on the stored memory, name the current preferred music for the indigo desk train 001123 at this later check.\nUse the memory image to answer.\nAnswer with a short phrase only."
+      },
+      "semantic_question_id": "r5-f1-392d41fd097d069c42218e0a",
+      "source_answer": "no active preference",
+      "source_image_file_sha256": "2c84d7c9d3c1ef2963734260812c74aab2fcd3855bfadf60c7ded946fa5c9631",
+      "source_image_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/6419eda-source-transitions/clear-source.png",
+      "source_kind": "sealed_rgb_1024",
+      "source_latent_file_sha256": "8855e43c10913ee9caf0af7b4488f6decc5a7ec55b019f95d6493d3c73482da0",
+      "source_latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/6419eda-source-transitions/clear-source.pt",
+      "source_latent_sha256": "04c9a8d91ab8f3bd2bbbd0572db3bc37e0072fa39aa40c0edc2379f0841ac53f",
+      "source_state": "clear",
+      "state": "clear",
+      "successful_run_count": 1,
+      "target_state": "clear",
+      "teacher_ids": [
+        "r5-f1-392d41fd097d069c42218e0a-from-clear-clear-to-clear-c3132b6f9575ecc6"
+      ],
+      "termination_contract": {
+        "assistant_end_token_id": 151645,
+        "assistant_end_token_text": "<|im_end|>",
+        "chat_suffix": "<|im_end|>\n",
+        "chat_suffix_token_ids": [
+          151645,
+          198
+        ],
+        "generation_eos_token_ids": [
+          151645,
+          151643
+        ],
+        "selection": "first token after an assistant answer in actual chat template, checked against generation EOS",
+        "tokenizer_eos_token_id": 151645
+      }
+    },
+    {
+      "answer": "no active preference",
+      "donor_control": {
+        "answer": "orange",
+        "image_file_sha256": "8fbde49d9a764f1ac179fed0ada70e2528a87cf39eaf8266e287b746f105d40a",
+        "image_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/f5c9c9e-direct-multiprompt-dl-base-seed20260908/bank/controls/r5-f1-392d41fd097d069c42218e0a-donor.pt",
+        "image_sha256": "546eb5c562c6193804da7598f0f5941773fbef620505fc11aff5d40869d66452"
+      },
+      "event_text": "R3 Train Standard Templates 03: A delivery arrived for the indigo desk train 001123. Keep its saved music preference unchanged.",
+      "operation": "noop",
+      "planned_count": 1,
+      "question_id": "r5-f1-392d41fd097d069c42218e0a-from-clear-noop-to-clear",
+      "question_variants": {
+        "original_open": "R3 Train Standard Templates 03: At this later check, what is the current music preference for the indigo desk train 001123?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 03: At this later check, which music does the indigo desk train 001123 currently prefer?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 03: What music does the indigo desk train 001123 prefer now, at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_3": "R3 Train Standard Templates 03: For the indigo desk train 001123, what is the music preference currently in effect at this later check?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "R3 Train Standard Templates 03: Based on the stored memory, name the current preferred music for the indigo desk train 001123 at this later check.\nUse the memory image to answer.\nAnswer with a short phrase only."
+      },
+      "semantic_question_id": "r5-f1-392d41fd097d069c42218e0a",
+      "source_answer": "no active preference",
+      "source_image_file_sha256": "2c84d7c9d3c1ef2963734260812c74aab2fcd3855bfadf60c7ded946fa5c9631",
+      "source_image_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/6419eda-source-transitions/clear-source.png",
+      "source_kind": "sealed_rgb_1024",
+      "source_latent_file_sha256": "8855e43c10913ee9caf0af7b4488f6decc5a7ec55b019f95d6493d3c73482da0",
+      "source_latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/6419eda-source-transitions/clear-source.pt",
+      "source_latent_sha256": "04c9a8d91ab8f3bd2bbbd0572db3bc37e0072fa39aa40c0edc2379f0841ac53f",
+      "source_state": "clear",
+      "state": "clear",
+      "successful_run_count": 1,
+      "target_state": "clear",
+      "teacher_ids": [
+        "r5-f1-392d41fd097d069c42218e0a-from-clear-noop-to-clear-c3132b6f9575ecc6"
+      ],
+      "termination_contract": {
+        "assistant_end_token_id": 151645,
+        "assistant_end_token_text": "<|im_end|>",
+        "chat_suffix": "<|im_end|>\n",
+        "chat_suffix_token_ids": [
+          151645,
+          198
+        ],
+        "generation_eos_token_ids": [
+          151645,
+          151643
+        ],
+        "selection": "first token after an assistant answer in actual chat template, checked against generation EOS",
+        "tokenizer_eos_token_id": 151645
+      }
+    }
+  ],
+  "models": {
+    "dreamlite_mobile": {
+      "file_count": 27,
+      "manifest_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-mobile/.snapshot_manifest.json",
+      "manifest_sha256": "1bcf41b170c4b4a806bac6701cbdf4fabd5c3c53fa67415d065ab95ce2703159",
+      "model_dir": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-mobile",
+      "passed": true,
+      "repo_id": "carlofkl/DreamLite-mobile",
+      "revision": "6695c3f4be230f0493fa5dbf78be3bc4d3bb2ab4",
+      "snapshot_payload_sha256": "3fb839f465793b01ecafc4df433031a063dd7b395a050960cde57c2807031337",
+      "total_bytes": 5071894300
+    },
+    "qwen_reader": {
+      "file_count": 14,
+      "manifest_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct/.snapshot_manifest.json",
+      "manifest_sha256": "159a504daaae6dc412535978f087150a0eb8e50164afd70a8a17f83906f1127c",
+      "model_dir": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+      "passed": true,
+      "repo_id": "Qwen/Qwen3-VL-4B-Instruct",
+      "revision": "ebb281ec70b05090aa6165b016eac8ec08e71b17",
+      "snapshot_payload_sha256": "45be3ffb00017b02bffa79f4f8e6f301760ac50c0bb78b2c4e5a7fe8aa3d52c6",
+      "total_bytes": 8887292732
+    }
+  },
+  "provenance": {
+    "optimizer_updates": 0,
+    "parent_bank_sha256": "5165c059a0a4c0760cd4b0df1663c642132e52bf55a13031cd99207fd200bb86",
+    "target_latents": "unchanged parent endpoints; copied records identify conditional groups, not new independent targets"
+  },
+  "release_status": "candidate_runtime_verification_pending",
+  "route": "direct",
+  "schema": "latent-teacher-bank/v1",
+  "semantic_question_count": 1,
+  "snapshots": {
+    "dreamlite_mobile": {
+      "file_count": 27,
+      "manifest_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-mobile/.snapshot_manifest.json",
+      "manifest_sha256": "1bcf41b170c4b4a806bac6701cbdf4fabd5c3c53fa67415d065ab95ce2703159",
+      "model_dir": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-mobile",
+      "passed": true,
+      "repo_id": "carlofkl/DreamLite-mobile",
+      "revision": "6695c3f4be230f0493fa5dbf78be3bc4d3bb2ab4",
+      "snapshot_payload_sha256": "3fb839f465793b01ecafc4df433031a063dd7b395a050960cde57c2807031337",
+      "total_bytes": 5071894300
+    },
+    "qwen_reader": {
+      "file_count": 14,
+      "manifest_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct/.snapshot_manifest.json",
+      "manifest_sha256": "159a504daaae6dc412535978f087150a0eb8e50164afd70a8a17f83906f1127c",
+      "model_dir": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+      "passed": true,
+      "repo_id": "Qwen/Qwen3-VL-4B-Instruct",
+      "revision": "ebb281ec70b05090aa6165b016eac8ec08e71b17",
+      "snapshot_payload_sha256": "45be3ffb00017b02bffa79f4f8e6f301760ac50c0bb78b2c4e5a7fe8aa3d52c6",
+      "total_bytes": 8887292732
+    }
+  },
+  "teachers": [
+    {
+      "answer": "ambient",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "a20bff365affb07ddc9df1b321b725b40fbcddc4132248c4f8d816acbe937159",
+      "gold_eos_appended": true,
+      "latent_file_sha256": "249f391e74628ef62396228c5be13302a6cef7fd4ee634ceba55d4571a65baa9",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/c3bee0e-state-oracles/bank/latents/ambient.pt",
+      "latent_sha256": "e910e9b89ed3861ef7c36176c762bccde7d9d809e2510618b5318202313777f6",
+      "question_id": "r5-f1-392d41fd097d069c42218e0a-from-gray-set-to-ambient",
+      "reused_original_teacher": "r5-f1-392d41fd097d069c42218e0a-e910e9b89ed3861e",
+      "reused_parent_teacher": "r5-f1-392d41fd097d069c42218e0a-state-ambient-e910e9b89ed3861e",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/c3bee0e-state-oracles/runs/state-ambient",
+      "target": {
+        "answer": "ambient",
+        "strict_correct": true
+      },
+      "teacher_id": "r5-f1-392d41fd097d069c42218e0a-from-gray-set-to-ambient-e910e9b89ed3861e"
+    },
+    {
+      "answer": "jazz",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "928c499552244bd6e657e6cdb9a3c6f2ca3b3310343a4fc40ee707a6f001ab9a",
+      "gold_eos_appended": true,
+      "latent_file_sha256": "9e92ebba400571017f8ff795844d49997b674b2c6938e4de8f92faa49d21dd07",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/c3bee0e-state-oracles/bank/latents/jazz.pt",
+      "latent_sha256": "842d8d949f8bcf5579c9971ea8e15e24727c89b79d9c6d7a42b0d8d478144414",
+      "question_id": "r5-f1-392d41fd097d069c42218e0a-from-gray-set-to-jazz",
+      "reused_original_teacher": null,
+      "reused_parent_teacher": "r5-f1-392d41fd097d069c42218e0a-state-jazz-842d8d949f8bcf55",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/c3bee0e-state-oracles/runs/state-jazz",
+      "target": {
+        "answer": "jazz",
+        "strict_correct": true
+      },
+      "teacher_id": "r5-f1-392d41fd097d069c42218e0a-from-gray-set-to-jazz-842d8d949f8bcf55"
+    },
+    {
+      "answer": "no active preference",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "c531a5cc3340f25f1be2fdbaa8adb3e2561c0159f9668cba107a44d8b4833ff1",
+      "gold_eos_appended": true,
+      "latent_file_sha256": "b5b4942914052bd0f375b177e9a99ae17e1b8bfa4e02100113472d85b72f8867",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/c3bee0e-state-oracles/bank/latents/clear.pt",
+      "latent_sha256": "c3132b6f9575ecc652e2aaaa81151e775b8cb178f2a35ee64539364afeb8738e",
+      "question_id": "r5-f1-392d41fd097d069c42218e0a-from-gray-clear-to-clear",
+      "reused_original_teacher": null,
+      "reused_parent_teacher": "r5-f1-392d41fd097d069c42218e0a-state-clear-c3132b6f9575ecc6",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/c3bee0e-state-oracles/runs/state-clear",
+      "target": {
+        "answer": "no active preference",
+        "strict_correct": true
+      },
+      "teacher_id": "r5-f1-392d41fd097d069c42218e0a-from-gray-clear-to-clear-c3132b6f9575ecc6"
+    },
+    {
+      "answer": "ambient",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "a20bff365affb07ddc9df1b321b725b40fbcddc4132248c4f8d816acbe937159",
+      "gold_eos_appended": true,
+      "latent_file_sha256": "249f391e74628ef62396228c5be13302a6cef7fd4ee634ceba55d4571a65baa9",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/c3bee0e-state-oracles/bank/latents/ambient.pt",
+      "latent_sha256": "e910e9b89ed3861ef7c36176c762bccde7d9d809e2510618b5318202313777f6",
+      "question_id": "r5-f1-392d41fd097d069c42218e0a-from-ambient-set-to-ambient",
+      "reused_original_teacher": "r5-f1-392d41fd097d069c42218e0a-e910e9b89ed3861e",
+      "reused_parent_teacher": "r5-f1-392d41fd097d069c42218e0a-state-ambient-e910e9b89ed3861e",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/c3bee0e-state-oracles/runs/state-ambient",
+      "target": {
+        "answer": "ambient",
+        "strict_correct": true
+      },
+      "teacher_id": "r5-f1-392d41fd097d069c42218e0a-from-ambient-set-to-ambient-e910e9b89ed3861e"
+    },
+    {
+      "answer": "jazz",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "928c499552244bd6e657e6cdb9a3c6f2ca3b3310343a4fc40ee707a6f001ab9a",
+      "gold_eos_appended": true,
+      "latent_file_sha256": "9e92ebba400571017f8ff795844d49997b674b2c6938e4de8f92faa49d21dd07",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/c3bee0e-state-oracles/bank/latents/jazz.pt",
+      "latent_sha256": "842d8d949f8bcf5579c9971ea8e15e24727c89b79d9c6d7a42b0d8d478144414",
+      "question_id": "r5-f1-392d41fd097d069c42218e0a-from-ambient-set-to-jazz",
+      "reused_original_teacher": null,
+      "reused_parent_teacher": "r5-f1-392d41fd097d069c42218e0a-state-jazz-842d8d949f8bcf55",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/c3bee0e-state-oracles/runs/state-jazz",
+      "target": {
+        "answer": "jazz",
+        "strict_correct": true
+      },
+      "teacher_id": "r5-f1-392d41fd097d069c42218e0a-from-ambient-set-to-jazz-842d8d949f8bcf55"
+    },
+    {
+      "answer": "no active preference",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "c531a5cc3340f25f1be2fdbaa8adb3e2561c0159f9668cba107a44d8b4833ff1",
+      "gold_eos_appended": true,
+      "latent_file_sha256": "b5b4942914052bd0f375b177e9a99ae17e1b8bfa4e02100113472d85b72f8867",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/c3bee0e-state-oracles/bank/latents/clear.pt",
+      "latent_sha256": "c3132b6f9575ecc652e2aaaa81151e775b8cb178f2a35ee64539364afeb8738e",
+      "question_id": "r5-f1-392d41fd097d069c42218e0a-from-ambient-clear-to-clear",
+      "reused_original_teacher": null,
+      "reused_parent_teacher": "r5-f1-392d41fd097d069c42218e0a-state-clear-c3132b6f9575ecc6",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/c3bee0e-state-oracles/runs/state-clear",
+      "target": {
+        "answer": "no active preference",
+        "strict_correct": true
+      },
+      "teacher_id": "r5-f1-392d41fd097d069c42218e0a-from-ambient-clear-to-clear-c3132b6f9575ecc6"
+    },
+    {
+      "answer": "ambient",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "a20bff365affb07ddc9df1b321b725b40fbcddc4132248c4f8d816acbe937159",
+      "gold_eos_appended": true,
+      "latent_file_sha256": "249f391e74628ef62396228c5be13302a6cef7fd4ee634ceba55d4571a65baa9",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/c3bee0e-state-oracles/bank/latents/ambient.pt",
+      "latent_sha256": "e910e9b89ed3861ef7c36176c762bccde7d9d809e2510618b5318202313777f6",
+      "question_id": "r5-f1-392d41fd097d069c42218e0a-from-ambient-noop-to-ambient",
+      "reused_original_teacher": "r5-f1-392d41fd097d069c42218e0a-e910e9b89ed3861e",
+      "reused_parent_teacher": "r5-f1-392d41fd097d069c42218e0a-state-ambient-e910e9b89ed3861e",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/c3bee0e-state-oracles/runs/state-ambient",
+      "target": {
+        "answer": "ambient",
+        "strict_correct": true
+      },
+      "teacher_id": "r5-f1-392d41fd097d069c42218e0a-from-ambient-noop-to-ambient-e910e9b89ed3861e"
+    },
+    {
+      "answer": "ambient",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "a20bff365affb07ddc9df1b321b725b40fbcddc4132248c4f8d816acbe937159",
+      "gold_eos_appended": true,
+      "latent_file_sha256": "249f391e74628ef62396228c5be13302a6cef7fd4ee634ceba55d4571a65baa9",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/c3bee0e-state-oracles/bank/latents/ambient.pt",
+      "latent_sha256": "e910e9b89ed3861ef7c36176c762bccde7d9d809e2510618b5318202313777f6",
+      "question_id": "r5-f1-392d41fd097d069c42218e0a-from-jazz-set-to-ambient",
+      "reused_original_teacher": "r5-f1-392d41fd097d069c42218e0a-e910e9b89ed3861e",
+      "reused_parent_teacher": "r5-f1-392d41fd097d069c42218e0a-state-ambient-e910e9b89ed3861e",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/c3bee0e-state-oracles/runs/state-ambient",
+      "target": {
+        "answer": "ambient",
+        "strict_correct": true
+      },
+      "teacher_id": "r5-f1-392d41fd097d069c42218e0a-from-jazz-set-to-ambient-e910e9b89ed3861e"
+    },
+    {
+      "answer": "jazz",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "928c499552244bd6e657e6cdb9a3c6f2ca3b3310343a4fc40ee707a6f001ab9a",
+      "gold_eos_appended": true,
+      "latent_file_sha256": "9e92ebba400571017f8ff795844d49997b674b2c6938e4de8f92faa49d21dd07",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/c3bee0e-state-oracles/bank/latents/jazz.pt",
+      "latent_sha256": "842d8d949f8bcf5579c9971ea8e15e24727c89b79d9c6d7a42b0d8d478144414",
+      "question_id": "r5-f1-392d41fd097d069c42218e0a-from-jazz-set-to-jazz",
+      "reused_original_teacher": null,
+      "reused_parent_teacher": "r5-f1-392d41fd097d069c42218e0a-state-jazz-842d8d949f8bcf55",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/c3bee0e-state-oracles/runs/state-jazz",
+      "target": {
+        "answer": "jazz",
+        "strict_correct": true
+      },
+      "teacher_id": "r5-f1-392d41fd097d069c42218e0a-from-jazz-set-to-jazz-842d8d949f8bcf55"
+    },
+    {
+      "answer": "no active preference",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "c531a5cc3340f25f1be2fdbaa8adb3e2561c0159f9668cba107a44d8b4833ff1",
+      "gold_eos_appended": true,
+      "latent_file_sha256": "b5b4942914052bd0f375b177e9a99ae17e1b8bfa4e02100113472d85b72f8867",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/c3bee0e-state-oracles/bank/latents/clear.pt",
+      "latent_sha256": "c3132b6f9575ecc652e2aaaa81151e775b8cb178f2a35ee64539364afeb8738e",
+      "question_id": "r5-f1-392d41fd097d069c42218e0a-from-jazz-clear-to-clear",
+      "reused_original_teacher": null,
+      "reused_parent_teacher": "r5-f1-392d41fd097d069c42218e0a-state-clear-c3132b6f9575ecc6",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/c3bee0e-state-oracles/runs/state-clear",
+      "target": {
+        "answer": "no active preference",
+        "strict_correct": true
+      },
+      "teacher_id": "r5-f1-392d41fd097d069c42218e0a-from-jazz-clear-to-clear-c3132b6f9575ecc6"
+    },
+    {
+      "answer": "jazz",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "928c499552244bd6e657e6cdb9a3c6f2ca3b3310343a4fc40ee707a6f001ab9a",
+      "gold_eos_appended": true,
+      "latent_file_sha256": "9e92ebba400571017f8ff795844d49997b674b2c6938e4de8f92faa49d21dd07",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/c3bee0e-state-oracles/bank/latents/jazz.pt",
+      "latent_sha256": "842d8d949f8bcf5579c9971ea8e15e24727c89b79d9c6d7a42b0d8d478144414",
+      "question_id": "r5-f1-392d41fd097d069c42218e0a-from-jazz-noop-to-jazz",
+      "reused_original_teacher": null,
+      "reused_parent_teacher": "r5-f1-392d41fd097d069c42218e0a-state-jazz-842d8d949f8bcf55",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/c3bee0e-state-oracles/runs/state-jazz",
+      "target": {
+        "answer": "jazz",
+        "strict_correct": true
+      },
+      "teacher_id": "r5-f1-392d41fd097d069c42218e0a-from-jazz-noop-to-jazz-842d8d949f8bcf55"
+    },
+    {
+      "answer": "ambient",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "a20bff365affb07ddc9df1b321b725b40fbcddc4132248c4f8d816acbe937159",
+      "gold_eos_appended": true,
+      "latent_file_sha256": "249f391e74628ef62396228c5be13302a6cef7fd4ee634ceba55d4571a65baa9",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/c3bee0e-state-oracles/bank/latents/ambient.pt",
+      "latent_sha256": "e910e9b89ed3861ef7c36176c762bccde7d9d809e2510618b5318202313777f6",
+      "question_id": "r5-f1-392d41fd097d069c42218e0a-from-clear-set-to-ambient",
+      "reused_original_teacher": "r5-f1-392d41fd097d069c42218e0a-e910e9b89ed3861e",
+      "reused_parent_teacher": "r5-f1-392d41fd097d069c42218e0a-state-ambient-e910e9b89ed3861e",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/c3bee0e-state-oracles/runs/state-ambient",
+      "target": {
+        "answer": "ambient",
+        "strict_correct": true
+      },
+      "teacher_id": "r5-f1-392d41fd097d069c42218e0a-from-clear-set-to-ambient-e910e9b89ed3861e"
+    },
+    {
+      "answer": "jazz",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "928c499552244bd6e657e6cdb9a3c6f2ca3b3310343a4fc40ee707a6f001ab9a",
+      "gold_eos_appended": true,
+      "latent_file_sha256": "9e92ebba400571017f8ff795844d49997b674b2c6938e4de8f92faa49d21dd07",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/c3bee0e-state-oracles/bank/latents/jazz.pt",
+      "latent_sha256": "842d8d949f8bcf5579c9971ea8e15e24727c89b79d9c6d7a42b0d8d478144414",
+      "question_id": "r5-f1-392d41fd097d069c42218e0a-from-clear-set-to-jazz",
+      "reused_original_teacher": null,
+      "reused_parent_teacher": "r5-f1-392d41fd097d069c42218e0a-state-jazz-842d8d949f8bcf55",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/c3bee0e-state-oracles/runs/state-jazz",
+      "target": {
+        "answer": "jazz",
+        "strict_correct": true
+      },
+      "teacher_id": "r5-f1-392d41fd097d069c42218e0a-from-clear-set-to-jazz-842d8d949f8bcf55"
+    },
+    {
+      "answer": "no active preference",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "c531a5cc3340f25f1be2fdbaa8adb3e2561c0159f9668cba107a44d8b4833ff1",
+      "gold_eos_appended": true,
+      "latent_file_sha256": "b5b4942914052bd0f375b177e9a99ae17e1b8bfa4e02100113472d85b72f8867",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/c3bee0e-state-oracles/bank/latents/clear.pt",
+      "latent_sha256": "c3132b6f9575ecc652e2aaaa81151e775b8cb178f2a35ee64539364afeb8738e",
+      "question_id": "r5-f1-392d41fd097d069c42218e0a-from-clear-clear-to-clear",
+      "reused_original_teacher": null,
+      "reused_parent_teacher": "r5-f1-392d41fd097d069c42218e0a-state-clear-c3132b6f9575ecc6",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/c3bee0e-state-oracles/runs/state-clear",
+      "target": {
+        "answer": "no active preference",
+        "strict_correct": true
+      },
+      "teacher_id": "r5-f1-392d41fd097d069c42218e0a-from-clear-clear-to-clear-c3132b6f9575ecc6"
+    },
+    {
+      "answer": "no active preference",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "c531a5cc3340f25f1be2fdbaa8adb3e2561c0159f9668cba107a44d8b4833ff1",
+      "gold_eos_appended": true,
+      "latent_file_sha256": "b5b4942914052bd0f375b177e9a99ae17e1b8bfa4e02100113472d85b72f8867",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/c3bee0e-state-oracles/bank/latents/clear.pt",
+      "latent_sha256": "c3132b6f9575ecc652e2aaaa81151e775b8cb178f2a35ee64539364afeb8738e",
+      "question_id": "r5-f1-392d41fd097d069c42218e0a-from-clear-noop-to-clear",
+      "reused_original_teacher": null,
+      "reused_parent_teacher": "r5-f1-392d41fd097d069c42218e0a-state-clear-c3132b6f9575ecc6",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/c3bee0e-state-oracles/runs/state-clear",
+      "target": {
+        "answer": "no active preference",
+        "strict_correct": true
+      },
+      "teacher_id": "r5-f1-392d41fd097d069c42218e0a-from-clear-noop-to-clear-c3132b6f9575ecc6"
+    }
+  ],
+  "unique_target_state_count": 3
+}

@@ -1,0 +1,50 @@
+{
+  "status": "first_empirical_gate_failed",
+  "rows": 2048,
+  "strict_counts": {
+    "blank/train/official_mcq": [
+      7,
+      64
+    ],
+    "text/train/official_mcq": [
+      18,
+      64
+    ],
+    "blank/dev/official_mcq": [
+      4,
+      32
+    ],
+    "text/dev/official_mcq": [
+      10,
+      32
+    ],
+    "blank/train/derived_recovery": [
+      64,
+      512
+    ],
+    "text/train/derived_recovery": [
+      432,
+      512
+    ],
+    "blank/dev/derived_recovery": [
+      32,
+      416
+    ],
+    "text/dev/derived_recovery": [
+      351,
+      416
+    ]
+  },
+  "text_failure_diagnostics": {
+    "wrong_tag_but_correct_letter": 63,
+    "scope_prefix_or_quote_only": 145,
+    "other_mcq_failure": 5
+  },
+  "allocation_gate": {
+    "official_mcq": 0.8,
+    "derived_recovery": 0.9,
+    "passed": false
+  },
+  "interpretation": "Most failures may be formatting; diagnostic categories do not amend strict scores. No teacher or shared Writer training launched.",
+  "next_review": "Restore the exact upstream MCQ prompt example and remove ambiguity in scope/value and literal quotation formatting; preregister and rerun the same references before teacher training."
+}

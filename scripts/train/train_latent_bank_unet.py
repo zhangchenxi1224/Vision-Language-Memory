@@ -1,0 +1,961 @@
+"""Train DreamLite U-Net LoRA from a sealed successful-latent set, then evaluate.
+
+The two oracle routes use this identical entry point and budget independently.
+The default is upstream target/noise flow matching, without Reader QA loss.
+Only new-noise four-step Writer outputs determine final QA performance.
+"""
+from __future__ import annotations
+
+import argparse
+from collections import Counter
+import hashlib
+import json
+import os
+from pathlib import Path
+import signal
+import subprocess
+import sys
+import time
+import traceback
+from typing import Any
+
+import numpy as np
+import torch
+
+ROOT = Path(__file__).resolve().parents[2]
+sys.path[:0] = [str(ROOT), str(ROOT / "src")]
+
+from vision_memory.dreamlite import DifferentiableDreamLiteMobileSampler
+from vision_memory.dreamlite.conditioning import encode_image_edit_condition, encode_latent_path_condition
+from vision_memory.dreamlite.latent_codec import decode_model_latents_unit_interval
+from vision_memory.reader.open_answer import generate_short_answer
+from vision_memory.reader.open_eos import assistant_termination_contract, generation_diagnostics, qwen3vl_answer_eos_ce
+from vision_memory.reader.qwen3vl import R3_QWEN_READER_RESIZE_CONTRACT
+from vision_memory.repro import canonical_tensor_sha256, configure_strict_cuda_determinism, lora_trainable_parameters
+from vision_memory.training.checkpoint import checkpoint_due, load_training_checkpoint, save_training_checkpoint
+from vision_memory.training.latent_bank_unet import (EFFECTIVE_SIGMAS, START_SIGMA, anchored_flow_bridge,
+    OFFICIAL_REFERENCE_COMMIT, OFFICIAL_RAW_SIGMAS, official_flow_bridge,
+    balanced_draw, bank_geometry, file_sha256, load_teacher_bank, member_split, predict_velocity, stable_seed)
+
+
+def is_official_flow(args) -> bool:
+    # Older diagnostic entry points construct their own Namespace. Preserve
+    # their explicitly historical behavior; the public CLI defaults to official.
+    return getattr(args, "flow_protocol", "legacy_anchored") == "official"
+
+
+def training_groups(bank, target_mode):
+    if target_mode == "bank":
+        return bank["groups"]
+    if target_mode != "single":
+        raise ValueError("Unknown target mode")
+    # Select a training member by hash only, never by test-prompt performance.
+    return [{**g, "teacher_ids": [member_split(g["teacher_ids"])[0][0]]} for g in bank["groups"]]
+
+
+class TrainingPaused(Exception):
+    """An interruption is resumable, not a successful completed training run."""
+
+
+def pause_if_requested(runtime) -> None:
+    if runtime.get("should_pause", lambda: False)():
+        raise TrainingPaused("Signal or configured lease deadline; deterministic evaluation/optimizer recovery is available")
+
+
+def write_json(path: Path, value: dict) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temp = path.with_suffix(path.suffix + ".tmp")
+    temp.write_text(json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True, allow_nan=False) + "\n", encoding="utf-8")
+    temp.replace(path)
+
+
+def append_jsonl(path: Path, value: dict) -> None:
+    with path.open("a", encoding="utf-8") as handle:
+        handle.write(json.dumps(value, ensure_ascii=False, sort_keys=True, allow_nan=False) + "\n")
+        handle.flush()
+        os.fsync(handle.fileno())
+
+
+def atomic_tensor(path: Path, value: Any) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_suffix(path.suffix + ".tmp")
+    torch.save(value, temporary)
+    temporary.replace(path)
+
+
+def source_hashes() -> dict[str, str]:
+    return {p.relative_to(ROOT).as_posix(): file_sha256(p)
+            for tree in ("scripts", "src") for p in sorted((ROOT / tree).rglob("*.py"))}
+
+
+def resolve_payload(record: dict, prefix: str, bank_path: Path) -> torch.Tensor:
+    path = Path(record[prefix + "_path"])
+    if not path.is_absolute():
+        path = bank_path.parent / path
+    if file_sha256(path) != record[prefix + "_file_sha256"]:
+        raise ValueError(f"Bound {prefix} file changed")
+    value = torch.load(path, map_location="cpu", weights_only=True)
+    key = record.get(prefix + "_tensor_key")
+    if key:
+        value = value[key]
+    if not isinstance(value, torch.Tensor) or not torch.isfinite(value).all():
+        raise ValueError(f"Invalid {prefix} tensor")
+    tensor_hash = record.get(prefix + "_sha256")
+    if tensor_hash is not None and canonical_tensor_sha256(value) != tensor_hash:
+        raise ValueError(f"Bound {prefix} tensor changed")
+    return value
+
+
+def frozen_versions(pipe, reader) -> dict[str, int]:
+    modules = {"vae": pipe.vae, "condition_encoder": pipe.text_encoder, "reader": reader, "unet": pipe.unet}
+    return {f"{label}.{name}": int(p._version) for label, module in modules.items()
+            for name, p in module.named_parameters() if not p.requires_grad}
+
+
+def trainable_unet_parameters(unet, scope="lora"):
+    if scope=="lora":
+        return lora_trainable_parameters(unet)
+    if scope!="full_unet":
+        raise ValueError("Unknown U-Net trainable scope")
+    named=list(unet.named_parameters())
+    if not named or any(not p.requires_grad or "lora_" in n for n,p in named):
+        raise RuntimeError("Full U-Net training requires every base weight and no added LoRA")
+    return [p for _,p in named]
+
+
+def verify_baseline_reference(output_dir, reference, expected_result_sha256, *, native_condition_control=False, reference_phase='baseline'):
+    """Fail before optimization if the co-located/full-weight baseline differs."""
+    if not expected_result_sha256 or file_sha256(reference/"train/result.json")!=expected_result_sha256:
+        raise RuntimeError("Reference result hash mismatch")
+    terminal=json.loads((reference/"terminal.json").read_text())
+    if terminal.get("state")!="completed" or terminal["training_result_sha256"]!=expected_result_sha256:
+        raise RuntimeError("Reference is not a verified completed run")
+    current_runtime=json.loads((output_dir/"runtime.json").read_text())
+    prior_runtime=json.loads((reference/"train/runtime.json").read_text())
+    if native_condition_control:
+        if (current_runtime['additional_protocol_binding']['train_prompt'] !=
+                'native Base edit, conditional row of upstream three-branch encoding'
+                or prior_runtime['additional_protocol_binding']['train_prompt'] != 'raw event, upstream LoRA example'
+                or set(current_runtime['condition_sha256']) != set(prior_runtime['condition_sha256'])
+                or not current_runtime['condition_sha256']):
+            raise RuntimeError('Unexpected native/raw training-condition control')
+        # Only the explicitly changed training condition may differ. Inference,
+        # models, source images, termination and effective sigma arrays stay exact.
+        current_runtime['condition_sha256']=prior_runtime['condition_sha256']
+        current_runtime['additional_protocol_binding']['train_prompt']=prior_runtime['additional_protocol_binding']['train_prompt']
+    if current_runtime!=prior_runtime:
+        raise RuntimeError("Reference model, condition or native schedule differs")
+    if reference_phase not in ('baseline', 'trained') or (reference_phase == 'trained' and native_condition_control):
+        raise ValueError('Unsupported baseline reference phase or combined condition change')
+    left,right=output_dir/"baseline",reference/'train'/reference_phase
+    hashes=[json.loads((p/"complete.json").read_text())["artifact_hashes"] for p in (left,right)]
+    names=[{n for n in h if n.endswith(".pt")} for h in hashes]
+    if names[0]!=names[1] or not names[0]:
+        raise RuntimeError("Reference baseline sample coverage differs")
+    checked=[]
+    for name in sorted(names[0]):
+        values=[]
+        for directory,h in zip((left,right),hashes):
+            if file_sha256(directory/name)!=h[name]:
+                raise RuntimeError("Reference or current baseline payload changed")
+            values.append(torch.load(directory/name,map_location="cpu",weights_only=True))
+        if values[0]["noise_seed"]!=values[1]["noise_seed"] or any(
+            not torch.equal(values[0][k],values[1][k]) for k in ("latent","image")):
+            raise RuntimeError("Baseline is not bitwise equal to the sealed reference baseline")
+        paths=[v["trajectory"] for v in values]
+        if len(paths[0])!=len(paths[1]) or any(not torch.equal(x,y) for x,y in zip(*paths)):
+            raise RuntimeError("Baseline native trajectories differ from reference")
+        checked.append(name)
+    records=[]
+    for directory,h in zip((left,right),hashes):
+        path=directory/"generations.jsonl"
+        if file_sha256(path)!=h[path.name]:
+            raise RuntimeError("Baseline generation evidence changed")
+        records.append([json.loads(x) for x in path.read_text().splitlines()])
+    if reference_phase == 'trained':
+        for rows, phase in zip(records, ('baseline', 'trained')):
+            if any(row.get('phase') != phase for row in rows):
+                raise RuntimeError('Unexpected raw generation phase')
+        # Only the administrative phase label changes at a parameter restart.
+        records = [[{key: value for key, value in row.items() if key != 'phase'} for row in rows] for rows in records]
+    if records[0]!=records[1]:
+        raise RuntimeError("Baseline raw generations/CE differ from reference")
+    report={"reference":str(reference),"reference_result_sha256":expected_result_sha256,
+        "bitwise_latents_and_images":True,"bitwise_trajectories":True,
+        "identical_raw_generation_records":True,"samples":checked}
+    if native_condition_control:
+        report['explicit_training_condition_change']='official_raw -> native_base; only encoder hashes and train_prompt metadata may differ'
+    if reference_phase == 'trained':
+        report['reference_phase'] = 'trained'
+        report['raw_comparison_exclusion'] = 'phase label only: baseline versus trained'
+    write_json(output_dir/"baseline-reference-check.json",report)
+    return report
+
+
+def verify_initialized_baseline_reference(output_dir, reference, expected_result_sha256, *, native_condition_control=False, reference_phase='baseline'):
+    """Compare two newly measured baselines from the same explicit parameter export."""
+    current = json.loads((output_dir / 'identity.json').read_text())
+    prior = json.loads((reference / 'train/identity.json').read_text())
+    if not current.get('initial_writer') or not prior.get('initial_writer'):
+        raise ValueError('Both baselines require an explicit initialized Writer')
+    if reference_phase not in ('baseline', 'trained'):
+        raise ValueError('Unsupported initialized reference phase')
+    if reference_phase == 'trained':
+        if native_condition_control:
+            raise ValueError('Continuation cannot also change the condition protocol')
+        result_path = reference / 'train/result.json'
+        if file_sha256(result_path) != expected_result_sha256:
+            raise ValueError('Continuation reference result differs')
+        result = json.loads(result_path.read_text())
+        initial = current['initial_writer']
+        if (result.get('status') != 'completed'
+                or initial.get('parent_commit') != prior.get('git_commit')
+                or initial.get('parent_result_sha256') != expected_result_sha256
+                or initial.get('parent_checkpoint_sha256') != result.get('checkpoint_sha256')
+                or initial.get('parent_optimizer_steps') != result.get('optimizer_steps')
+                or file_sha256(reference / 'train/checkpoint-final.pt') != result.get('checkpoint_sha256')):
+            raise ValueError('Continuation initial parameters do not bind the completed trained reference')
+    if native_condition_control and (current.get('prompt_style')!='native_base' or prior.get('prompt_style')!='official_raw'
+            or current.get('model_variant')!='base' or current.get('sampling')!=prior.get('sampling')):
+        raise ValueError('Native condition control requires the same Base sampler and explicit raw/native styles')
+    for key in ('initial_writer', 'bank_manifest_sha256', 'seed', 'eval_seeds', 'model_variant', 'trainable_scope',
+                'flow_protocol', 'prompt_style', 'steps', 'lr', 'gradient_accumulation_steps', 'weight_decay'):
+        if key=='prompt_style' and native_condition_control:
+            continue
+        if reference_phase == 'trained' and key in ('initial_writer', 'lr'):
+            continue
+        if current.get(key) != prior.get(key):
+            raise ValueError('Controlled sampler baseline differs in ' + key)
+    return verify_baseline_reference(output_dir, reference, expected_result_sha256,
+        native_condition_control=native_condition_control, reference_phase=reference_phase)
+
+
+def frozen_audit(pipe, reader, versions: dict[str, int], *, scope="lora") -> None:
+    if frozen_versions(pipe, reader) != versions:
+        raise RuntimeError("A frozen model parameter was modified in memory")
+    for module in (pipe.vae, pipe.text_encoder, reader):
+        if module.training or any(p.requires_grad or p.grad is not None for p in module.parameters()):
+            raise RuntimeError("VAE, Reader and condition encoder must stay frozen")
+    trainable_unet_parameters(pipe.unet,scope)
+    if any(p.grad is not None for p in pipe.unet.parameters() if not p.requires_grad):
+        raise RuntimeError("A frozen U-Net base weight received a gradient")
+
+
+@torch.no_grad()
+def load_runtime(args, bank) -> dict:
+    if getattr(args,"model_variant","mobile") == "base":
+        from scripts.train.official_base_runtime import load_base_runtime
+        return load_base_runtime(args,bank)
+    from scripts.train import r11_new_frozen_dreamlite_oracle as legacy
+    from scripts.experiments.run_r11_open_answer_replay import snapshot_bindings
+    from peft import LoraConfig, get_peft_model
+    args.reader = args.reader_model
+    snapshots = snapshot_bindings(args)
+    def snapshot_identities(values):
+        return {(v["repo_id"], v["revision"], v["snapshot_payload_sha256"]) for v in values.values()}
+    if snapshot_identities(bank["snapshots"]) != snapshot_identities(snapshots):
+        raise RuntimeError("Writer models differ from the teacher bank's locked model snapshots")
+    vd, rd = torch.device(args.dreamlite_device), torch.device(args.reader_device)
+    if vd.type != "cuda" or rd.type != "cuda" or vd == rd or not torch.cuda.is_available():
+        raise ValueError("Writer and Reader require distinct CUDA devices")
+    pipe = legacy._load_pipeline(args, vd, torch.float32)
+    processor, reader = legacy._load_reader(args, rd, torch.bfloat16)
+    torch.manual_seed(args.seed)
+    pipe.unet = get_peft_model(pipe.unet, LoraConfig(r=args.lora_rank, lora_alpha=args.lora_rank,
+        lora_dropout=0.0, target_modules=["to_q", "to_k", "to_v", "to_out.0"]))
+    pipe.unet.eval()
+    lora_trainable_parameters(pipe.unet)
+    sampler = DifferentiableDreamLiteMobileSampler.from_pipeline(pipe, checkpoint_unet=False)
+    contexts = {}
+    for group in bank["groups"]:
+        qid = group["question_id"]
+        if group.get("source_kind") != "blank_gray_1024":
+            raise ValueError("Initial protocol is restricted to single-event gray-source conditions")
+        source = resolve_payload(group, "source_latent", args.bank_manifest).to(vd, dtype=torch.float32)
+        actual = legacy.encode_model_latent(pipe.vae, legacy.blank_source_rgb(device=vd, dtype=torch.float32))
+        if source.shape != actual.shape or not torch.equal(source, actual):
+            raise ValueError("Teacher source latent differs from the current FP32 gray-source encoder")
+        if is_official_flow(args):
+            from PIL import Image
+            condition = encode_image_edit_condition(pipe, Image.new("RGB", (1024, 1024), (128, 128, 128)),
+                group["event_text"], device=vd, dtype=source.dtype, prompt_style=args.prompt_style)
+        else:
+            condition = encode_latent_path_condition(pipe, source, group["event_text"])
+        raw_sigmas = OFFICIAL_RAW_SIGMAS if is_official_flow(args) else EFFECTIVE_SIGMAS
+        actual_timesteps, effective = sampler._prepare_timesteps(source, 4, raw_sigmas,
+                                                               sigmas_are_effective=not is_official_flow(args))
+        expected_t = torch.tensor(effective, device=vd) * int(pipe.scheduler.config.num_train_timesteps)
+        if not torch.allclose(actual_timesteps.float(), expected_t.float(), atol=2e-3, rtol=2e-6):
+            raise RuntimeError("Flow-matching training timestep units differ from the actual scheduler")
+        blank = decode_model_latents_unit_interval(pipe.vae, source, clamp=True).cpu()
+        donor = group.get("donor_control", bank.get("donor_control", {}))
+        if not donor or not donor.get("answer") or donor["answer"].casefold() == group["answer"].casefold():
+            raise ValueError("A fixed different-answer donor is mandatory for image-dependence evaluation")
+        if "image_path" in donor:
+            donor_pixels = resolve_payload(donor, "image", args.bank_manifest)
+        else:
+            donor_z = resolve_payload(donor, "latent", args.bank_manifest).to(vd, dtype=torch.float32)
+            donor_pixels = decode_model_latents_unit_interval(pipe.vae, donor_z, clamp=True).cpu()
+        if donor_pixels.ndim == 3:
+            donor_pixels = donor_pixels.unsqueeze(0)
+        if donor_pixels.shape[0:2] != (1, 3) or donor_pixels.min() < 0 or donor_pixels.max() > 1:
+            raise ValueError("Donor is not a raw unit-RGB image")
+        contexts[qid] = {"source": source, "condition": condition, "effective_sigmas": effective,
+                         "blank": blank, "donor": donor_pixels, "donor_answer": donor["answer"]}
+    return dict(pipe=pipe, reader=reader, processor=processor, sampler=sampler, contexts=contexts,
+                vae_device=vd, reader_device=rd, snapshots=snapshots,
+                termination=assistant_termination_contract(reader, processor))
+
+
+def summarize_evaluation(rows: list[dict], geometry: dict) -> dict:
+    cells = {}
+    for row in rows:
+        key = row["condition"] + "/" + row["prompt_id"]
+        cell = cells.setdefault(key, {"n": 0, "exact_match": 0, "answer_eos": 0, "answer_prefix": 0, "overgeneration": 0})
+        cell["n"] += 1
+        for out, metric in (("exact_match", "strict_correct"), ("answer_prefix", "answer_prefix_token_exact"),
+                            ("overgeneration", "overgeneration")):
+            cell[out] += int(row["scorer"][metric])
+        cell["answer_eos"] += int(row["scorer"]["strict_correct"] and
+                                  row["scorer"].get("answer_followed_immediately_by_eos", False))
+    for cell in cells.values():
+        cell.update({k + "_rate": cell[k] / cell["n"] for k in ("exact_match", "answer_eos", "answer_prefix", "overgeneration")})
+    per_noise = {}
+    for row in rows:
+        if row["condition"] == "matched":
+            prompts = per_noise.setdefault((row["question_id"], row["noise_seed"]), {})
+            if row["prompt_id"] in prompts:
+                raise RuntimeError("Duplicate Writer prompt in a question/noise pair")
+            prompts[row["prompt_id"]] = row["scorer"]
+    if any(len(v) != 5 for v in per_noise.values()):
+        raise RuntimeError("Each Writer question/noise pair requires all five prompts")
+    return {"cells": cells,
+            "matched_all_five_prompts_correct": sum(all(s["strict_correct"] for s in v.values()) for v in per_noise.values()),
+            "matched_all_five_prompts_answer_eos": sum(all(s["strict_correct"] and
+                s.get("answer_followed_immediately_by_eos", False) for s in v.values()) for v in per_noise.values()),
+            "matched_question_noise_pairs": len(per_noise), "geometry": geometry,
+            "controls": "One deterministic generation per question/prompt/control; not inflated by duplicating noise seeds"}
+
+
+def paired_evaluation(before: list[dict], after: list[dict]) -> dict:
+    def index(rows):
+        values = {(r["question_id"], r["condition"], r["noise_seed"], r["prompt_id"]): r for r in rows}
+        if len(values) != len(rows):
+            raise RuntimeError("Duplicate Writer evaluation cells")
+        return values
+    base, trained = index(before), index(after)
+    if set(base) != set(trained):
+        raise RuntimeError("Baseline and trained Writer are not evaluated on identical question/noise/prompt cells")
+    flips = {"incorrect_to_correct": 0, "correct_to_incorrect": 0, "both_correct": 0, "both_incorrect": 0}
+    for key, left in base.items():
+        right = trained[key]
+        if left["query"] != right["query"] or left["gold"] != right["gold"]:
+            raise RuntimeError("A paired evaluation prompt or gold changed")
+        if left["condition"] != "matched":
+            if left["image_sha256"] != right["image_sha256"]:
+                raise RuntimeError("A frozen blank/donor control changed between baseline and trained Writer")
+            continue
+        old, new = bool(left["scorer"]["strict_correct"]), bool(right["scorer"]["strict_correct"])
+        cell = "both_correct" if old and new else "correct_to_incorrect" if old else "incorrect_to_correct" if new else "both_incorrect"
+        flips[cell] += 1
+    return {"paired_matched_cells": sum(flips.values()), "exact_match_transitions": flips,
+            "exact_match_delta_count": flips["incorrect_to_correct"] - flips["correct_to_incorrect"]}
+
+
+@torch.no_grad()
+def verify_training_teacher_readback(args, runtime, groups, teachers):
+    """Recheck the original positive control before spending optimizer updates.
+
+    This result uses an oracle latent directly and is never Writer accuracy.
+    No member is silently dropped, replaced, or selected using this readback.
+    """
+    rows = []
+    for group in groups:
+        ids, _ = member_split(group["teacher_ids"])
+        for tid in ids:
+            pause_if_requested(runtime)
+            pixels = decode_model_latents_unit_interval(runtime["pipe"].vae,
+                teachers[tid].to(runtime["vae_device"]), clamp=True)
+            query = group["question_variants"]["original_open"]
+            ce = qwen3vl_answer_eos_ce(model=runtime["reader"], processor=runtime["processor"],
+                image=pixels[0].to(runtime["reader_device"]), device=runtime["reader_device"],
+                query=query, target=group["answer"], termination=runtime["termination"], lambda_eos=1.,
+                require_image_grad=False, deterministic_ce=True, reader_resize_contract=R3_QWEN_READER_RESIZE_CONTRACT)
+            generation = generate_short_answer(model=runtime["reader"], processor=runtime["processor"],
+                image=pixels.to(runtime["reader_device"]), query=query, device=runtime["reader_device"],
+                max_new_tokens=32, do_sample=False)
+            score = generation_diagnostics(generation, group["answer"], ce.target_ids[0,:ce.answer_token_count].cpu().tolist())
+            rows.append({"teacher_id": tid, "question_id": group["question_id"], "query":query,
+                "gold":group["answer"], "image_sha256":canonical_tensor_sha256(pixels.cpu()),
+                **generation, "scorer":score})
+            write_json(args.output_dir / "teacher-readback.json", {"scope":"direct oracle positive control, not Writer output", "rows":rows})
+            if not score["strict_correct"] or not score["answer_followed_immediately_by_eos"]:
+                raise RuntimeError(f"Previously correct teacher no longer passes raw answer/EOS readback: {tid}")
+
+
+@torch.no_grad()
+def evaluate(args, runtime, bank, teachers, phase: str) -> dict:
+    directory = args.output_dir / phase
+    directory.mkdir(parents=True, exist_ok=True)
+    complete = directory / "complete.json"
+    if complete.exists():
+        saved = json.loads(complete.read_text(encoding="utf-8"))
+        for relative, sha in saved["artifact_hashes"].items():
+            if file_sha256(directory / relative) != sha:
+                raise RuntimeError("Completed evaluation artifact changed")
+        return saved["summary"]
+    # Partial phase is recoverable by deterministic replay; retain its previous rows.
+    rows_path = directory / "generations.jsonl"
+    if rows_path.exists():
+        rows_path.rename(directory / f"interrupted-generations-{time.time_ns()}.jsonl")
+    rows, geometries = [], {}
+    for group in bank["groups"]:
+        pause_if_requested(runtime)
+        context = runtime["contexts"][group["question_id"]]
+        condition = context["condition"]
+        outputs = []
+        images = [("blank", None, context["blank"]), ("donor", None, context["donor"])]
+        for i in range(args.eval_seeds):
+            pause_if_requested(runtime)
+            noise_seed = stable_seed(args.seed, "heldout-evaluation-noise", i)
+            noise = torch.randn(context["source"].shape, generator=torch.Generator().manual_seed(noise_seed),
+                                dtype=torch.float32).to(runtime["vae_device"])
+            count=context.get("num_inference_steps",4)
+            output = context.get("inference_sampler",runtime["sampler"])(source_latents=context["source"], noise_latents=noise,
+                prompt_embeds=condition.prompt_embeds, prompt_attention_mask=condition.attention_mask,
+                num_steps=count, edit_start_sigma=1.0 if is_official_flow(args) else START_SIGMA, return_trajectory=True)
+            expected_sigmas = context.get("effective_sigmas", EFFECTIVE_SIGMAS)
+            if (len(output.effective_sigmas) != count or output.trajectory is None or len(output.trajectory) != count+1
+                    or any(abs(a-b) > 2e-6 for a, b in zip(output.effective_sigmas, expected_sigmas))):
+                raise RuntimeError("Writer schedule differs from preregistration")
+            if is_official_flow(args) and not torch.equal(output.trajectory[0], noise):
+                raise RuntimeError("Official Writer must start from the supplied Gaussian noise")
+            latent = output.latents.cpu()
+            outputs.append(latent)
+            pixels = decode_model_latents_unit_interval(runtime["pipe"].vae, output.latents, clamp=True).cpu()
+            filename = hashlib.sha256(group["question_id"].encode()).hexdigest()[:16] + f"-seed-{i:02d}.pt"
+            atomic_tensor(directory / filename, {"question_id": group["question_id"], "noise_seed": noise_seed,
+                "latent": latent, "image": pixels, "trajectory": [x.cpu() for x in output.trajectory]})
+            images.append(("matched", noise_seed, pixels))
+        ids = group["teacher_ids"]
+        _, held = member_split(ids)
+        if getattr(args, "teacher_split", "holdout") == "all":
+            held = []
+        geometries[group["question_id"]] = bank_geometry(torch.cat(outputs), torch.cat([teachers[t] for t in ids]), ids, held)
+        for image_kind, noise_seed, pixels in images:
+            for prompt_id, query in group["question_variants"].items():
+                pause_if_requested(runtime)
+                loss = qwen3vl_answer_eos_ce(model=runtime["reader"], processor=runtime["processor"],
+                    image=pixels[0].to(runtime["reader_device"]), device=runtime["reader_device"],
+                    query=query, target=group["answer"], termination=runtime["termination"], lambda_eos=1.,
+                    require_image_grad=False, deterministic_ce=True, reader_resize_contract=R3_QWEN_READER_RESIZE_CONTRACT)
+                gold_ids = loss.target_ids[0, :loss.answer_token_count].cpu().tolist()
+                generation = generate_short_answer(model=runtime["reader"], processor=runtime["processor"],
+                    image=pixels.to(runtime["reader_device"]), query=query, device=runtime["reader_device"],
+                    max_new_tokens=32, do_sample=False)
+                row = {"phase": phase, "question_id": group["question_id"], "condition": image_kind,
+                    "noise_seed": noise_seed, "prompt_id": prompt_id, "query": query, "gold": group["answer"],
+                    "image_sha256": canonical_tensor_sha256(pixels), **generation,
+                    "answer_ce": float(loss.answer_loss), "eos_ce": float(loss.eos_loss),
+                    "scorer": generation_diagnostics(generation, group["answer"], gold_ids)}
+                rows.append(row)
+                append_jsonl(rows_path, row)
+        print(json.dumps({"stage": phase, "question": group["question_id"], "generation_rows": len(rows)}), flush=True)
+    expected = len(bank["groups"]) * (args.eval_seeds + 2) * 5
+    if len(rows) != expected:
+        raise RuntimeError("Incomplete Writer evaluation coverage")
+    summary = summarize_evaluation(rows, geometries)
+    write_json(directory / "summary.json", summary)
+    write_json(complete, {"summary": summary, "generation_rows": expected,
+        "artifact_hashes": {p.name: file_sha256(p) for p in directory.iterdir()
+                            if p.name in {"generations.jsonl", "summary.json"} or p.suffix == ".pt"}})
+    return summary
+
+
+def flow_microbatch(args, runtime, groups, teachers, draw_index):
+    official = is_official_flow(args)
+    group, teacher_id, noise_seed, sigma = balanced_draw(groups, args.seed, draw_index,
+        max_sigma=1.0 if official else START_SIGMA, sampling_strategy=getattr(args, 'sampling_strategy', 'condition'))
+    context = runtime["contexts"][group["question_id"]]
+    noise = torch.randn(context["source"].shape, generator=torch.Generator().manual_seed(noise_seed),
+                        dtype=torch.float32).to(runtime["vae_device"])
+    target = teachers[teacher_id].to(runtime["vae_device"])
+    state, true_velocity = (official_flow_bridge(noise, target, sigma) if official
+                            else anchored_flow_bridge(context["source"], noise, target, sigma))
+    condition = context["condition"]
+    source = context["source"]
+    augmentation = {}
+    if getattr(args, 'generated_source_pool', None) and group.get('source_kind') == 'sealed_rgb_1024':
+        from scripts.train.generated_source_augmentation import source_variant_index
+        index = source_variant_index(args.seed, draw_index, group['question_id'])
+        source, condition = context['training_source_variants'][index]
+        augmentation['training_source_variant'] = context['training_source_variant_binding'][index]
+    if getattr(args, 'historical_wording_augmentation', False) and 'historical_target_index' in group:
+        from scripts.experiments.historical_wording_protocol import wording_index
+        index = wording_index(args.seed, draw_index, group['question_id'])
+        condition = context['training_condition_variants'][index]
+        augmentation['training_condition_variant'] = context['training_condition_variant_binding'][index]
+    prediction = predict_velocity(runtime["sampler"], state, source, sigma,
+        condition.prompt_embeds, condition.attention_mask, integer_timestep=official)
+    loss = (prediction.float() - true_velocity.float()).square().mean()
+    if not torch.isfinite(loss):
+        raise RuntimeError("Nonfinite U-Net flow-matching loss")
+    (loss / args.gradient_accumulation_steps).backward()
+    return {"question_id": group["question_id"], "teacher_id": teacher_id,
+            "noise_seed": noise_seed, "effective_sigma": sigma, "flow_matching_mse": float(loss.detach()), **augmentation}
+
+
+def parallel_gradient_preflight(args, runtime, groups, teachers, parallel, parameters):
+    """Compare the actual full U-Net's first four draws without optimizer updates."""
+    if not parallel.enabled:
+        return
+    from vision_memory.training.synchronous_parallel import microbatch_indices, reduce_gradients
+    from vision_memory.training.checkpoint import _rng_state, _restore_rng_state
+    rng = _rng_state()
+    serial_rows, serial_grads = [], []
+    if parallel.root:
+        for i in range(args.gradient_accumulation_steps):
+            serial_rows.append(flow_microbatch(args, runtime, groups, teachers, i))
+        serial_grads = [p.grad.detach().cpu().clone() for p in parameters]
+    for p in parameters:
+        p.grad = None
+    parallel.barrier()
+    local_rows = [flow_microbatch(args, runtime, groups, teachers, i)
+                  for i in microbatch_indices(args.gradient_accumulation_steps, parallel.world, parallel.rank)]
+    reduce_gradients(parameters)
+    gathered = parallel.gather(local_rows)
+    report = None
+    if parallel.root:
+        rows = [gathered[i % parallel.world][i // parallel.world] for i in range(args.gradient_accumulation_steps)]
+        error2, reference2, max_error, max_reference = 0., 0., 0., 0.
+        for p, reference in zip(parameters, serial_grads):
+            actual = p.grad.detach().cpu()
+            delta = (actual - reference).double()
+            error2 += float(delta.square().sum())
+            reference2 += float(reference.double().square().sum())
+            max_error = max(max_error, float(delta.abs().max()))
+            max_reference = max(max_reference, float(reference.abs().max()))
+        relative_l2 = (error2 / max(reference2, 1e-30)) ** .5
+        relative_max = max_error / max(max_reference, 1e-30)
+        report = {"scope": "actual full U-Net gradient only; no optimizer update or success claim",
+            "global_microbatches": args.gradient_accumulation_steps, "world_size": parallel.world,
+            "serial_microbatches": serial_rows, "parallel_microbatches": rows,
+            "identical_draws_and_losses": rows == serial_rows, "gradient_relative_l2_error": relative_l2,
+            "gradient_max_absolute_error": max_error, "gradient_relative_max_error": relative_max,
+            "relative_tolerance": 2e-6,
+            "passed": rows == serial_rows and relative_l2 <= 2e-6 and relative_max <= 2e-6}
+        write_json(args.output_dir / "parallel-gradient-preflight.json", report)
+    reports = parallel.gather(report)
+    for p in parameters:
+        p.grad = None
+    _restore_rng_state(rng)
+    if reports[0]["passed"] is not True:
+        raise RuntimeError("Actual full-U-Net serial/parallel gradient comparison failed")
+
+
+def run(args) -> dict:
+    import fcntl
+    from scripts.inspire.model_snapshot_manifest import verify_snapshot_binding
+    from vision_memory.training.synchronous_parallel import ParallelExecution, microbatch_indices, reduce_gradients
+    from vision_memory.training.checkpoint import _rng_state, _restore_rng_state
+    parallel = ParallelExecution(args)
+    args.output_dir.mkdir(parents=True, exist_ok=True)
+    if parallel.root:
+        lock = (args.output_dir / ".training.lock").open("a")
+        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    parallel.barrier()
+    scope=getattr(args,"trainable_scope","lora")
+    interval=getattr(args,"checkpoint_interval",1)
+    if interval<1 or (scope=="full_unet" and (args.model_variant!="base" or not is_official_flow(args))):
+        raise ValueError("Full U-Net control requires official Base; checkpoint interval must be positive")
+    if getattr(args,"colocate_models",False) and args.model_variant!="base":
+        raise ValueError("Explicit co-location is implemented for Base only")
+    bank, teachers = load_teacher_bank(args.bank_manifest)
+    commit = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
+    dirty = subprocess.check_output(["git", "status", "--porcelain"], cwd=ROOT, text=True).strip()
+    if commit != args.expected_commit or dirty:
+        raise RuntimeError("U-Net run requires the exact immutable clean source commit")
+    configure_strict_cuda_determinism(args.seed)
+    stop_requested = [False]
+    def stop_handler(_signal, _frame):
+        stop_requested[0] = True
+    signal.signal(signal.SIGTERM, stop_handler)
+    signal.signal(signal.SIGINT, stop_handler)
+    groups = training_groups(bank, args.target_mode)
+    semantic_questions = {g.get("semantic_question_id", g["question_id"]) for g in groups}
+    official = is_official_flow(args)
+    from vision_memory.training.writer_initialization import initial_writer_binding, apply_initial_writer
+    initialization = initial_writer_binding(args)
+    inference_steps=28 if args.model_variant=="base" else 4
+    binding = {"schema": "latent-bank-unet/v2", "git_commit": commit, "source_hashes": source_hashes(),
+        "bank_manifest_sha256": file_sha256(args.bank_manifest), "route": bank["route"],
+        "steps": args.steps, "seed": args.seed, "lr": args.lr, "lora_rank": args.lora_rank if scope=="lora" else None,
+        "trainable_scope":scope,"checkpoint_interval":interval,
+        "colocate_models":getattr(args,"colocate_models",False),
+        "dreamlite_device":"rank-local-cuda" if parallel.enabled else args.dreamlite_device,
+        "reader_device":"rank-local-cuda" if parallel.enabled else args.reader_device,
+        "baseline_reference":str(args.baseline_reference) if getattr(args,"baseline_reference",None) else None,
+        "baseline_reference_result_sha256":getattr(args,"baseline_reference_result_sha256",None),
+        "checkpoint_recovery":"exact saved optimizer/RNG; replay unsaved updates after a hard interruption",
+        "eval_seeds": args.eval_seeds, "objective": "official target-noise flow matching" if official else "legacy source-anchored flow matching",
+        "flow_protocol": args.flow_protocol, "upstream_commit": OFFICIAL_REFERENCE_COMMIT,
+        "model_variant":args.model_variant,"inference_steps":inference_steps,
+        "prompt_style": args.prompt_style if official else "legacy_decoded_source_diptych",
+        "gradient_accumulation_steps": args.gradient_accumulation_steps, "weight_decay": args.weight_decay,
+        "target_mode": args.target_mode,
+        "semantic_question_count": len(semantic_questions), "conditional_group_count": len(groups),
+        "raw_inference_sigmas": np.linspace(1.,1./inference_steps,inference_steps).tolist() if official else None,
+        "training_timestep": "floor(1000*sigma)" if official else "1000*sigma",
+        "dreamlite_dtype": "float32", "reader_dtype": "bfloat16", "source_sigma": 1.0 if official else START_SIGMA,
+        "unet_input_keys": ["interpolated_flow_state", "source_latent", "event_condition", "effective_sigma", "time_ids"],
+        "flow_state_construction_inputs": (["fresh_random_noise", "sampled_successful_target", "sigma"] if official
+                                          else ["source_latent", "fresh_random_noise", "sampled_successful_target", "effective_sigma"]),
+        "excluded_additional_condition_inputs": ["question", "answer", "target_latent", "teacher_id", "question_id"],
+        "dreamlite_model_path": str(args.dreamlite.resolve()), "reader_model_path": str(args.reader_model.resolve()),
+        "target_split": {g["question_id"]: dict(zip(("train", "heldout"), member_split(g["teacher_ids"]))) for g in groups},
+        "generalization_scope": "single-question Writer mechanism" if len(semantic_questions) == 1 else "seen-question Writer; no held-out-question claim"}
+    if initialization is not None:
+        binding["initial_writer"] = initialization
+    strategy = getattr(args, 'sampling_strategy', 'condition')
+    if getattr(args, 'historical_wording_augmentation', False):
+        if not official or args.model_variant != 'base' or args.prompt_style != 'native_base' or strategy != 'logical_condition':
+            raise ValueError('Historical augmentation requires official native Base and logical sampling')
+        from scripts.experiments.historical_wording_protocol import POLICY, variants, text_sha
+        binding['training_augmentation'] = {'policy': POLICY,
+            'event_text_sha256': {qid: [text_sha(event) for event in events] for qid, events in variants(bank).items()},
+            'writer_input': False}
+    if strategy != 'condition':
+        from vision_memory.training.latent_bank_unet import logical_condition_strata
+        strata = logical_condition_strata(groups)
+        binding['sampling'] = {'strategy': strategy, 'strata': {key: [groups[index]['question_id'] for index in indices]
+            for key, indices in strata.items()}, 'within_stratum': 'balanced seeded expression cycles',
+            'writer_input': False}
+    if getattr(args, 'initial_baseline_match', None):
+        if initialization is None or getattr(args, 'baseline_reference', None) or not args.initial_baseline_match_result_sha256:
+            raise ValueError('Initialized baseline match requires its result SHA and an explicit parameter initialization')
+        binding['initial_baseline_match'] = {'reference': str(args.initial_baseline_match),
+            'result_sha256': args.initial_baseline_match_result_sha256, 'baseline_is_measured_again': True}
+        if getattr(args, 'initial_baseline_reference_phase', 'baseline') == 'trained':
+            binding['initial_baseline_match']['reference_phase'] = 'trained'
+        if getattr(args, 'native_condition_baseline_control', False):
+            if args.model_variant!='base' or args.prompt_style!='native_base':
+                raise ValueError('Native condition baseline control requires Base/native_base')
+            binding['initial_baseline_match']['training_condition_control']='official_raw -> native_base'
+    elif getattr(args, 'native_condition_baseline_control', False):
+        raise ValueError('Native condition control requires a sealed initialized baseline reference')
+    if parallel.enabled:
+        binding["data_parallel"] = {"world_size": parallel.world,
+            "nccl_algorithm": "Ring", "nccl_protocol": "Simple", "gradient_bucket_bytes": 32 * 1024 * 1024,
+            "global_microbatches_per_update": args.gradient_accumulation_steps,
+            "local_microbatches_per_update": args.gradient_accumulation_steps // parallel.world,
+            "gradient_reduction": "SUM(loss/global_microbatches gradients), then global clip and AdamW",
+            "draw_assignment": "global draw index = step*global_microbatches + rank + local_micro*world_size",
+            "evaluation": "native batch-one inference; disjoint complete condition groups by rank",
+            "serial_numerical_equivalence": "same objective and draws; reduction order can change FP32 rounding"}
+    from scripts.train.generated_source_augmentation import source_pool_binding
+    generated_pool = source_pool_binding(args)
+    if generated_pool is not None:
+        binding['generated_source_pool'] = generated_pool
+    parallel.agree(binding, "training identity")
+    identity_path = args.output_dir / "identity.json"
+    if identity_path.exists() and json.loads(identity_path.read_text(encoding="utf-8")) != binding:
+        raise RuntimeError("Output directory belongs to another bank/source/budget")
+    if parallel.root:
+        write_json(identity_path, binding)
+    parallel.barrier()
+    runtime = load_runtime(args, bank)
+    if getattr(args, 'generated_source_pool', None):
+        source_binding = runtime['generated_source_augmentation_binding']
+        parallel.agree(source_binding, 'generated source PNG and native condition encodings')
+        source_binding_path = args.output_dir / 'training-source-augmentation.json'
+        if source_binding_path.exists() and json.loads(source_binding_path.read_bytes()) != source_binding:
+            raise RuntimeError('Generated source condition changed across resume')
+        if parallel.root:
+            write_json(source_binding_path, source_binding)
+        parallel.barrier()
+    if getattr(args, 'historical_wording_augmentation', False):
+        augmentation_binding = runtime['training_augmentation_binding']
+        parallel.agree(augmentation_binding, 'historical training condition encodings')
+        augmentation_path = args.output_dir / 'training-condition-augmentation.json'
+        if augmentation_path.exists() and json.loads(augmentation_path.read_bytes()) != augmentation_binding:
+            raise RuntimeError('Historical condition encoding changed across resume')
+        if parallel.root:
+            write_json(augmentation_path, augmentation_binding)
+        parallel.barrier()
+    runtime["should_pause"] = lambda: stop_requested[0] or bool(args.deadline_unix and time.time() >= args.deadline_unix - 90)
+    pause_if_requested(runtime)
+    runtime_binding = {"snapshots": runtime["snapshots"], "termination": runtime["termination"],
+        "additional_protocol_binding":runtime.get("protocol_binding",{}),
+        "scheduler_config": dict(runtime["pipe"].scheduler.config),
+        "effective_inference_sigmas": {k: list(v["effective_sigmas"]) for k,v in runtime["contexts"].items()},
+        "condition_sha256": {k: canonical_tensor_sha256(v["condition"].prompt_embeds) for k,v in runtime["contexts"].items()}}
+    runtime_path = args.output_dir / "runtime.json"
+    if runtime_path.exists() and json.loads(runtime_path.read_text(encoding="utf-8")) != runtime_binding:
+        raise RuntimeError("Model/runtime identity changed")
+    parallel.agree(runtime_binding, "model/runtime identity")
+    if parallel.root:
+        write_json(runtime_path, runtime_binding)
+    parallel.barrier()
+    binding = {**binding, **runtime_binding}
+    if initialization is not None:
+        apply_initial_writer(args, runtime, initialization)
+    pipe, reader = runtime["pipe"], runtime["reader"]
+    frozen = frozen_versions(pipe, reader)
+    parameters = trainable_unet_parameters(pipe.unet,scope)
+    initial_rank_check = parallel.check_parameters(pipe.unet)
+    if parallel.enabled and parallel.root:
+        write_json(args.output_dir / "parallel-initial-parameters.json", initial_rank_check)
+    initial_parameters = {n: p.detach().cpu().clone() for n,p in pipe.unet.named_parameters() if p.requires_grad}
+    optimizer = torch.optim.AdamW(parameters, lr=args.lr, betas=(.9, .999), eps=1e-8, weight_decay=args.weight_decay)
+    checkpoint = args.output_dir / "checkpoint-latest.pt"
+    parallel_gradient_preflight(args, runtime, groups, teachers, parallel, parameters)
+    parallel.teacher_readback(args, runtime, groups, teachers, sys.modules[__name__])
+    # Measure the declared starting parameters before any new update or resume
+    # load: pretrained/zero LoRA by default, or an explicitly sealed warm start.
+    baseline = parallel.evaluate(args, runtime, bank, teachers, "baseline", sys.modules[__name__])
+    if getattr(args,"baseline_reference",None):
+        verify_baseline_reference(args.output_dir,args.baseline_reference,args.baseline_reference_result_sha256)
+    if getattr(args, 'initial_baseline_match', None):
+        outcome = None
+        if parallel.root:
+            try:
+                verify_initialized_baseline_reference(args.output_dir, args.initial_baseline_match, args.initial_baseline_match_result_sha256,
+                    native_condition_control=getattr(args, 'native_condition_baseline_control', False),
+                    reference_phase=getattr(args, 'initial_baseline_reference_phase', 'baseline'))
+                outcome = {'passed': True}
+            except Exception as error:
+                outcome = {'passed': False, 'error': str(error)}
+        # Propagate a failed check to every replica before any optimizer update.
+        outcome = parallel.gather(outcome)[0]
+        if not outcome['passed']:
+            raise RuntimeError('Initialized baseline comparison failed: ' + outcome['error'])
+    step = 0
+    if checkpoint.exists():
+        if not args.resume:
+            raise RuntimeError("Checkpoint exists; use --resume for exact recovery")
+        loaded = load_training_checkpoint(checkpoint, trainable_module=pipe.unet, optimizer=optimizer,
+                                          expected_manifest=binding)
+        if parallel.enabled:
+            states = loaded["trainer_state"].get("distributed_rng_states", [])
+            if len(states) != parallel.world:
+                raise RuntimeError("Checkpoint lacks exact per-rank RNG states")
+            _restore_rng_state(states[parallel.rank])
+        step = int(loaded["optimizer_step"])
+        if not 0 <= step <= args.steps:
+            raise RuntimeError("Checkpoint optimizer cursor is outside its bound budget")
+        if step and parallel.root:
+            write_json(args.output_dir / "metrics" / f"step-{step:06d}.json", loaded["trainer_state"]["metrics_row"])
+    elif args.resume and (args.output_dir / "training.jsonl").exists():
+        raise RuntimeError("Metrics exist without a recoverable optimizer checkpoint")
+    parallel.barrier()
+    parallel.check_parameters(pipe.unet)
+    # Canonical metric files recover the tiny checkpoint-to-log write interval.
+    log_rows = []
+    for i in range(1, step + 1):
+        metric = json.loads((args.output_dir / "metrics" / f"step-{i:06d}.json").read_text(encoding="utf-8"))
+        if metric["optimizer_step"] != i:
+            raise RuntimeError("Optimizer metric sequence is corrupt")
+        log_rows.append(metric)
+    log_path = args.output_dir / "training.jsonl"
+    if parallel.root and args.resume and log_path.exists():
+        # Preserve the physical pre-recovery history, including any updates
+        # beyond the last periodic checkpoint that must be replayed exactly.
+        log_path.rename(args.output_dir / f"training-before-recovery-{time.time_ns()}.jsonl")
+    temporary_log = log_path.with_suffix(".jsonl.tmp")
+    if parallel.root:
+        temporary_log.write_text("".join(json.dumps(row, sort_keys=True) + "\n" for row in log_rows), encoding="utf-8")
+        temporary_log.replace(log_path)
+    parallel.barrier()
+    question_updates = Counter(q for row in log_rows for q in {m["question_id"] for m in row["microbatches"]})
+    teacher_updates = Counter(t for row in log_rows for t in {m["teacher_id"] for m in row["microbatches"]})
+    last_saved_step=step
+    last_row=log_rows[-1] if log_rows else None
+    def save_current():
+        nonlocal last_saved_step
+        if step>last_saved_step:
+            trainer_state = {"metrics_row": last_row}
+            if parallel.enabled:
+                trainer_state["distributed_rng_states"] = parallel.gather(_rng_state())
+            if parallel.root:
+                save_training_checkpoint(checkpoint, trainable_module=pipe.unet, optimizer=optimizer,
+                    epoch=0, episode_cursor=step, optimizer_step=step, manifest=binding, trainer_state=trainer_state)
+            parallel.barrier()
+            last_saved_step=step
+    started = time.monotonic()
+    while step < args.steps:
+        stop_now = parallel.any_stop(runtime["should_pause"]())
+        if stop_now:
+            save_current()
+            raise TrainingPaused("A rank requested pause or reached the configured deadline")
+        optimizer.zero_grad(set_to_none=True)
+        microbatches = []
+        for micro in microbatch_indices(args.gradient_accumulation_steps, parallel.world, parallel.rank):
+            draw_index = step * args.gradient_accumulation_steps + micro
+            microbatches.append(flow_microbatch(args, runtime, groups, teachers, draw_index))
+        if parallel.enabled:
+            reduce_gradients(parameters)
+            gathered = parallel.gather(microbatches)
+            microbatches = [gathered[i % parallel.world][i // parallel.world]
+                            for i in range(args.gradient_accumulation_steps)]
+        grads = [p.grad for p in parameters if p.grad is not None]
+        if not grads or not all(torch.isfinite(g).all() for g in grads) or not any((g != 0).any() for g in grads):
+            raise RuntimeError("Trainable U-Net parameters have no finite nonzero gradient")
+        norm = float(torch.nn.utils.clip_grad_norm_(parameters, 1.0, error_if_nonfinite=True))
+        optimizer.step()
+        optimizer.zero_grad(set_to_none=True)
+        if not all(torch.isfinite(p).all() for p in parameters):
+            raise RuntimeError("Nonfinite trainable U-Net parameter")
+        step += 1
+        row = {"optimizer_step": step, **{k: microbatches[-1][k]
+               for k in ("question_id", "teacher_id", "noise_seed", "effective_sigma")},
+               "flow_matching_mse": sum(m["flow_matching_mse"] for m in microbatches) / len(microbatches),
+               "microbatches": microbatches,
+               ("lora_grad_norm_before_clip" if scope=="lora" else "unet_grad_norm_before_clip"): norm,
+               "elapsed_since_resume_seconds": time.monotonic() - started}
+        last_row=row
+        stop_now = parallel.any_stop(runtime["should_pause"]())
+        if checkpoint_due(step,args.steps,interval,stopping=stop_now):
+            save_current()
+        if parallel.root:
+            write_json(args.output_dir / "metrics" / f"step-{step:06d}.json", row)
+            append_jsonl(args.output_dir / "training.jsonl", row)
+        if parallel.enabled and (step == 1 or step == args.steps):
+            rank_check = parallel.check_parameters(pipe.unet)
+            if parallel.root:
+                write_json(args.output_dir / f"parallel-parameters-step-{step:06d}.json", rank_check)
+        question_updates.update({m["question_id"] for m in microbatches})
+        teacher_updates.update({m["teacher_id"] for m in microbatches})
+        if step % 16 == 0 or step == 1:
+            if parallel.root:
+                print(json.dumps({"stage": "unet_training", **row}), flush=True)
+            frozen_audit(pipe, reader, frozen,scope=scope)
+        del grads
+        if stop_now:
+            save_current()
+            result = {"status": "paused", "optimizer_steps": step, "checkpoint": str(checkpoint),
+                      "reason": "signal or configured deadline; resume preserves optimizer/RNG"}
+            if parallel.root:
+                write_json(args.output_dir / "terminal.json", result)
+            return result
+    # Keep a durable final adapter/optimizer before costly Reader evaluation.
+    if parallel.root:
+        atomic_tensor(args.output_dir / "checkpoint-final.pt", torch.load(checkpoint, map_location="cpu", weights_only=False))
+    parallel.barrier()
+    after = parallel.evaluate(args, runtime, bank, teachers, "trained", sys.modules[__name__])
+    paired = paired_evaluation(*[[json.loads(line) for line in (args.output_dir / phase / "generations.jsonl").read_text(encoding="utf-8").splitlines()]
+                                 for phase in ("baseline", "trained")])
+    frozen_audit(pipe, reader, frozen,scope=scope)
+    if source_hashes() != binding["source_hashes"] or file_sha256(args.bank_manifest) != binding["bank_manifest_sha256"]:
+        raise RuntimeError("Source or bank manifest changed during U-Net training")
+    load_teacher_bank(args.bank_manifest)
+    for snapshot in runtime["snapshots"].values():
+        verify_snapshot_binding(snapshot)
+    runtime.get("verify_additional_bindings",lambda:None)()
+    if initialization is not None and initial_writer_binding(args) != initialization:
+        raise RuntimeError("Initial Writer package changed during the new experiment")
+    delta = sum(float((p.detach().cpu() - initial_parameters[n]).double().square().sum())
+                for n,p in pipe.unet.named_parameters() if p.requires_grad)
+    if not delta > 0:
+        raise RuntimeError("No actual U-Net parameter update occurred")
+    result = {"status": "completed", "route": bank["route"], "optimizer_steps": step,
+        "trainable_scope":scope,"checkpoint_interval":interval,
+        "unet_trainable_parameters": sum(p.numel() for p in parameters), "unet_parameter_delta_l2": delta**.5,
+        "unet_adapter_delta_l2": delta**.5 if scope=="lora" else None,
+        "optimizer_updates_by_question": dict(question_updates), "optimizer_updates_by_teacher": dict(teacher_updates),
+        "baseline": baseline, "trained": after, "paired_evaluation": paired, "generalization_scope": binding["generalization_scope"],
+        "success_interpretation": "Training completion is not QA success; inspect paired raw exact match, controls and mode coverage",
+        "oracle_question_coverage": bank.get("question_coverage"),
+        "excluded_questions_without_success": bank.get("excluded_question_ids", []),
+        "route_comparison_limit": "Same total optimizer budget does not imply same per-question exposure when bank question counts differ; route EM differences are not a causal bank-quality comparison",
+        "checkpoint_sha256": file_sha256(args.output_dir / "checkpoint-final.pt")}
+    if parallel.root:
+        write_json(args.output_dir / "result.json", result)
+        write_json(args.output_dir / "terminal.json", {"status": "completed", "optimizer_steps": step,
+            "result_sha256": file_sha256(args.output_dir / "result.json"), "checkpoint_sha256": result["checkpoint_sha256"]})
+    parallel.barrier()
+    return result
+
+
+def parser() -> argparse.ArgumentParser:
+    p = argparse.ArgumentParser(description=__doc__)
+    p.add_argument("--bank-manifest", type=Path, required=True)
+    p.add_argument("--output-dir", type=Path, required=True)
+    p.add_argument("--dreamlite", type=Path)
+    p.add_argument("--model-variant",choices=("mobile","base"),default="mobile")
+    p.add_argument("--teacher-dreamlite",type=Path)
+    p.add_argument("--official-source",type=Path)
+    p.add_argument("--base-manifest",type=Path)
+    p.add_argument("--base-guidance-scale",type=float,default=7.5,
+                   help="Explicit native Base inference guidance; training FM is unchanged")
+    p.add_argument("--reader-model", type=Path)
+    p.add_argument("--dreamlite-device", default="cuda:0")
+    p.add_argument("--reader-device", default="cuda:1")
+    p.add_argument("--expected-commit")
+    p.add_argument("--steps", type=int, default=3500)
+    p.add_argument("--seed", type=int, default=20260908)
+    p.add_argument("--lr", type=float, default=5e-5)
+    p.add_argument("--lora-rank", type=int, default=16)
+    p.add_argument("--trainable-scope",choices=("lora","full_unet"),default="lora")
+    p.add_argument("--checkpoint-interval",type=int,default=1)
+    p.add_argument("--colocate-models",action="store_true")
+    p.add_argument("--data-parallel", action="store_true")
+    p.add_argument("--baseline-reference",type=Path)
+    p.add_argument("--baseline-reference-result-sha256")
+    p.add_argument("--initial-writer-package", type=Path)
+    p.add_argument("--initial-writer-package-sha256")
+    p.add_argument('--initial-baseline-match', type=Path)
+    p.add_argument('--initial-baseline-match-result-sha256')
+    p.add_argument('--initial-baseline-reference-phase', choices=('baseline', 'trained'), default='baseline')
+    p.add_argument('--sampling-strategy', choices=('condition', 'logical_condition'), default='condition')
+    p.add_argument('--historical-wording-augmentation', action='store_true')
+    p.add_argument('--generated-source-pool', type=Path)
+    p.add_argument('--generated-source-pool-sha256')
+    p.add_argument('--native-condition-baseline-control', action='store_true')
+    p.add_argument("--gradient-accumulation-steps", type=int, default=4)
+    p.add_argument("--weight-decay", type=float, default=1e-4)
+    p.add_argument("--flow-protocol", choices=("official", "legacy_anchored"), default="official")
+    p.add_argument("--prompt-style", choices=("official_raw", "mobile_diptych", "native_base"), default="official_raw")
+    p.add_argument("--target-mode", choices=("bank", "single"), default="bank")
+    p.add_argument("--eval-seeds", type=int, default=8)
+    p.add_argument("--resume", action="store_true")
+    p.add_argument("--validate-only", action="store_true")
+    p.add_argument("--deadline-unix", type=float, default=0.)
+    return p
+
+
+def main() -> int:
+    args = parser().parse_args()
+    if args.initial_baseline_reference_phase != 'baseline' and not args.initial_baseline_match:
+        raise ValueError('Trained-phase restart requires an explicit baseline reference')
+    if not 1.0 <= args.base_guidance_scale <= 100.0 or (args.model_variant != "base" and args.base_guidance_scale != 7.5):
+        raise ValueError("Base guidance must be in [1,100] and applies only to Base")
+    if (args.steps <= 0 or args.eval_seeds < 2 or args.lora_rank <= 0 or args.lr <= 0
+            or args.gradient_accumulation_steps <= 0 or args.weight_decay < 0 or args.checkpoint_interval < 1):
+        raise ValueError("Positive training budget/rank/lr and at least two held-out noise seeds required")
+    if args.validate_only:
+        bank, teachers = load_teacher_bank(args.bank_manifest)
+        print(json.dumps({"status": "bank_validated", "route": bank["route"], "teachers": len(teachers),
+                          "questions": len(bank["groups"])}))
+        return 0
+    if not args.dreamlite or not args.reader_model or not args.expected_commit:
+        raise ValueError("Training needs locked DreamLite, Reader and exact commit")
+    try:
+        result = run(args)
+        print(json.dumps({"status": result["status"], "optimizer_steps": result["optimizer_steps"]}), flush=True)
+        return 0 if result["status"] == "completed" else 75
+    except TrainingPaused as error:
+        checkpoint = args.output_dir / "checkpoint-latest.pt"
+        step = int(torch.load(checkpoint, map_location="cpu", weights_only=False)["optimizer_step"]) if checkpoint.exists() else 0
+        terminal_name = "terminal.json" if int(os.environ.get("RANK", "0")) == 0 else "terminal-rank-" + os.environ["RANK"] + ".json"
+        write_json(args.output_dir / terminal_name, {"status": "paused", "optimizer_steps": step,
+            "checkpoint": str(checkpoint) if checkpoint.exists() else None, "reason": str(error)})
+        return 75
+    except BaseException as error:
+        failure_name = "failure.json" if int(os.environ.get("RANK", "0")) == 0 else "failure-rank-" + os.environ["RANK"] + ".json"
+        write_json(args.output_dir / failure_name, {"status": "failed", "error": str(error),
+            "traceback": traceback.format_exc(), "time_unix": time.time()})
+        raise
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -1,0 +1,2586 @@
+{
+  "bank_status": "sealed",
+  "conditional_group_count": 16,
+  "groups": [
+    {
+      "answer": "green",
+      "donor_control": {
+        "answer": "no active preference",
+        "interpretation": "fixed different-answer donor owner; response to this target query is measured, not assumed",
+        "latent_file_sha256": "e8477c80c1ded870c42e23f356f3d5d469dbda700cf7b065128a3576efb8c4bb",
+        "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-10-seed-0.pt",
+        "latent_sha256": "98321b2c03cc3cfeae504ff1d8b2900bd72e5c434b879c1fdf0a7c947668595e",
+        "owner_question_id": "r3-train-semantic-000986-historical-prefix"
+      },
+      "event_input_scope": "one gray-source write of the full ordered event-only prefix; not a live sequential-memory test",
+      "event_text": "R3 Train Standard Templates 23: For the marble lamp train 001175, remember that the preferred color is green.",
+      "historical_target_index": 0,
+      "planned_count": 4,
+      "question_id": "r3-train-semantic-001175-historical-prefix",
+      "question_instruction_contract": "historical-r11-five-prompts/v1",
+      "question_variants": {
+        "original_open": "R3 Train Standard Templates 23: Before any later update, what is the current color preference for the marble lamp train 001175?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 23: Before any later update, which color does the marble lamp train 001175 currently prefer?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 23: Before any later update, name the currently stored color preference for the marble lamp train 001175.\nReturn only a short phrase.",
+        "paraphrase_3": "Which color preference is currently stored for the marble lamp train 001175?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "Read the memory image and report the current color preference of the marble lamp train 001175.\nReturn only a short phrase."
+      },
+      "semantic_question_id": "r3-train-semantic-001175",
+      "source_event_stream": [
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 23: For the marble lamp train 001175, remember that the preferred color is green."
+        }
+      ],
+      "source_kind": "blank_gray_1024",
+      "source_latent_file_sha256": "a57d81ae0f15f3ec99a700b2cedffefd84cb09c587efb71619a8be8bd7dee8b0",
+      "source_latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/f5c9c9e-direct-multiprompt-dl-base-seed20260908/bank/conditions/r5-f1-392d41fd097d069c42218e0a-source.pt",
+      "source_latent_sha256": "5f8c07caa37de38cae96d0b0e28851b1b831bea8728182e9fbd14b1588ac3743",
+      "successful_run_count": 4,
+      "teacher_ids": [
+        "r3-train-semantic-001175-historical-prefix-seed-0-ce3344b57d829462",
+        "r3-train-semantic-001175-historical-prefix-seed-1-85c9ee943165204e",
+        "r3-train-semantic-001175-historical-prefix-seed-2-9ec0fb6e52d2c5ed",
+        "r3-train-semantic-001175-historical-prefix-seed-3-d39d6cbe1ac42c5f"
+      ],
+      "termination_contract": {
+        "assistant_end_token_id": 151645,
+        "assistant_end_token_text": "<|im_end|>",
+        "chat_suffix": "<|im_end|>\n",
+        "chat_suffix_token_ids": [
+          151645,
+          198
+        ],
+        "generation_eos_token_ids": [
+          151645,
+          151643
+        ],
+        "selection": "first token after an assistant answer in actual chat template, checked against generation EOS",
+        "tokenizer_eos_token_id": 151645
+      }
+    },
+    {
+      "answer": "green",
+      "donor_control": {
+        "answer": "no active preference",
+        "interpretation": "fixed different-answer donor owner; response to this target query is measured, not assumed",
+        "latent_file_sha256": "e8477c80c1ded870c42e23f356f3d5d469dbda700cf7b065128a3576efb8c4bb",
+        "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-10-seed-0.pt",
+        "latent_sha256": "98321b2c03cc3cfeae504ff1d8b2900bd72e5c434b879c1fdf0a7c947668595e",
+        "owner_question_id": "r3-train-semantic-000986-historical-prefix"
+      },
+      "event_input_scope": "one gray-source write of the full ordered event-only prefix; not a live sequential-memory test",
+      "event_text": "R3 Train Standard Templates 30: For the linen desk train 000414, remember that the preferred color is purple.\nR3 Train Standard Templates 30: For the linen desk train 000414, remember that the preferred color is green.",
+      "historical_target_index": 1,
+      "planned_count": 4,
+      "question_id": "r3-train-semantic-000414-historical-prefix",
+      "question_instruction_contract": "historical-r11-five-prompts/v1",
+      "question_variants": {
+        "original_open": "R3 Train Standard Templates 30: At this later check, what is the current color preference for the linen desk train 000414?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 30: At this later check, which color does the linen desk train 000414 currently prefer?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 30: At this later check, name the currently stored color preference for the linen desk train 000414.\nReturn only a short phrase.",
+        "paraphrase_3": "Which color preference is currently stored for the linen desk train 000414?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "Read the memory image and report the current color preference of the linen desk train 000414.\nReturn only a short phrase."
+      },
+      "semantic_question_id": "r3-train-semantic-000414",
+      "source_event_stream": [
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 30: For the linen desk train 000414, remember that the preferred color is purple."
+        },
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 30: For the linen desk train 000414, remember that the preferred color is green."
+        }
+      ],
+      "source_kind": "blank_gray_1024",
+      "source_latent_file_sha256": "a57d81ae0f15f3ec99a700b2cedffefd84cb09c587efb71619a8be8bd7dee8b0",
+      "source_latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/f5c9c9e-direct-multiprompt-dl-base-seed20260908/bank/conditions/r5-f1-392d41fd097d069c42218e0a-source.pt",
+      "source_latent_sha256": "5f8c07caa37de38cae96d0b0e28851b1b831bea8728182e9fbd14b1588ac3743",
+      "successful_run_count": 4,
+      "teacher_ids": [
+        "r3-train-semantic-000414-historical-prefix-seed-0-fc37d823710584b1",
+        "r3-train-semantic-000414-historical-prefix-seed-1-1e7ae6497f609fce",
+        "r3-train-semantic-000414-historical-prefix-seed-2-401fc66a615bce22",
+        "r3-train-semantic-000414-historical-prefix-seed-3-c0e9471876c858c6"
+      ],
+      "termination_contract": {
+        "assistant_end_token_id": 151645,
+        "assistant_end_token_text": "<|im_end|>",
+        "chat_suffix": "<|im_end|>\n",
+        "chat_suffix_token_ids": [
+          151645,
+          198
+        ],
+        "generation_eos_token_ids": [
+          151645,
+          151643
+        ],
+        "selection": "first token after an assistant answer in actual chat template, checked against generation EOS",
+        "tokenizer_eos_token_id": 151645
+      }
+    },
+    {
+      "answer": "juice",
+      "donor_control": {
+        "answer": "no active preference",
+        "interpretation": "fixed different-answer donor owner; response to this target query is measured, not assumed",
+        "latent_file_sha256": "c319fa1da72bfe7c758438b398852f79720918220999afcbfa46eb642b4cbd1e",
+        "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-12-seed-0.pt",
+        "latent_sha256": "ac5276b973ddc619c71ee064f9aa4b4058fb64d905e045c54a91d01b09b126af",
+        "owner_question_id": "r3-train-semantic-001048-historical-prefix"
+      },
+      "event_input_scope": "one gray-source write of the full ordered event-only prefix; not a live sequential-memory test",
+      "event_text": "R3 Train Standard Templates 15: Save juice as the current drink preference for the indigo notebook train 000271.",
+      "historical_target_index": 2,
+      "planned_count": 4,
+      "question_id": "r3-train-semantic-000271-historical-prefix",
+      "question_instruction_contract": "historical-r11-five-prompts/v1",
+      "question_variants": {
+        "original_open": "R3 Train Standard Templates 15: Before any later update, what is the current drink preference for the indigo notebook train 000271?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 15: Before any later update, which drink does the indigo notebook train 000271 currently prefer?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 15: Before any later update, name the currently stored drink preference for the indigo notebook train 000271.\nReturn only a short phrase.",
+        "paraphrase_3": "Which drink preference is currently stored for the indigo notebook train 000271?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "Read the memory image and report the current drink preference of the indigo notebook train 000271.\nReturn only a short phrase."
+      },
+      "semantic_question_id": "r3-train-semantic-000271",
+      "source_event_stream": [
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 15: Save juice as the current drink preference for the indigo notebook train 000271."
+        }
+      ],
+      "source_kind": "blank_gray_1024",
+      "source_latent_file_sha256": "a57d81ae0f15f3ec99a700b2cedffefd84cb09c587efb71619a8be8bd7dee8b0",
+      "source_latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/f5c9c9e-direct-multiprompt-dl-base-seed20260908/bank/conditions/r5-f1-392d41fd097d069c42218e0a-source.pt",
+      "source_latent_sha256": "5f8c07caa37de38cae96d0b0e28851b1b831bea8728182e9fbd14b1588ac3743",
+      "successful_run_count": 4,
+      "teacher_ids": [
+        "r3-train-semantic-000271-historical-prefix-seed-0-768fccec2cb2227b",
+        "r3-train-semantic-000271-historical-prefix-seed-1-f4ae321b35711d5c",
+        "r3-train-semantic-000271-historical-prefix-seed-2-f48c70dcd32ec9bd",
+        "r3-train-semantic-000271-historical-prefix-seed-3-9f4761f210596547"
+      ],
+      "termination_contract": {
+        "assistant_end_token_id": 151645,
+        "assistant_end_token_text": "<|im_end|>",
+        "chat_suffix": "<|im_end|>\n",
+        "chat_suffix_token_ids": [
+          151645,
+          198
+        ],
+        "generation_eos_token_ids": [
+          151645,
+          151643
+        ],
+        "selection": "first token after an assistant answer in actual chat template, checked against generation EOS",
+        "tokenizer_eos_token_id": 151645
+      }
+    },
+    {
+      "answer": "juice",
+      "donor_control": {
+        "answer": "no active preference",
+        "interpretation": "fixed different-answer donor owner; response to this target query is measured, not assumed",
+        "latent_file_sha256": "c319fa1da72bfe7c758438b398852f79720918220999afcbfa46eb642b4cbd1e",
+        "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-12-seed-0.pt",
+        "latent_sha256": "ac5276b973ddc619c71ee064f9aa4b4058fb64d905e045c54a91d01b09b126af",
+        "owner_question_id": "r3-train-semantic-001048-historical-prefix"
+      },
+      "event_input_scope": "one gray-source write of the full ordered event-only prefix; not a live sequential-memory test",
+      "event_text": "R3 Train Standard Templates 26: For the amber mug train 001242, remember that the preferred drink is coffee.\nR3 Train Standard Templates 26: Replace the earlier drink preference for the amber mug train 001242 with juice.",
+      "historical_target_index": 3,
+      "planned_count": 4,
+      "question_id": "r3-train-semantic-001242-historical-prefix",
+      "question_instruction_contract": "historical-r11-five-prompts/v1",
+      "question_variants": {
+        "original_open": "R3 Train Standard Templates 26: After applying this update first, what is the current drink preference for the amber mug train 001242?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 26: After applying this update first, which drink does the amber mug train 001242 currently prefer?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 26: After applying this update first, name the currently stored drink preference for the amber mug train 001242.\nReturn only a short phrase.",
+        "paraphrase_3": "Which drink preference is currently stored for the amber mug train 001242?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "Read the memory image and report the current drink preference of the amber mug train 001242.\nReturn only a short phrase."
+      },
+      "semantic_question_id": "r3-train-semantic-001242",
+      "source_event_stream": [
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 26: For the amber mug train 001242, remember that the preferred drink is coffee."
+        },
+        {
+          "event_kind": "overwrite",
+          "event_text": "R3 Train Standard Templates 26: Replace the earlier drink preference for the amber mug train 001242 with juice."
+        }
+      ],
+      "source_kind": "blank_gray_1024",
+      "source_latent_file_sha256": "a57d81ae0f15f3ec99a700b2cedffefd84cb09c587efb71619a8be8bd7dee8b0",
+      "source_latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/f5c9c9e-direct-multiprompt-dl-base-seed20260908/bank/conditions/r5-f1-392d41fd097d069c42218e0a-source.pt",
+      "source_latent_sha256": "5f8c07caa37de38cae96d0b0e28851b1b831bea8728182e9fbd14b1588ac3743",
+      "successful_run_count": 4,
+      "teacher_ids": [
+        "r3-train-semantic-001242-historical-prefix-seed-0-c74d77d46d09f2c6",
+        "r3-train-semantic-001242-historical-prefix-seed-1-c7becbef9baf77d9",
+        "r3-train-semantic-001242-historical-prefix-seed-2-53c1bd446a465d98",
+        "r3-train-semantic-001242-historical-prefix-seed-3-fda2cdb4a3476a07"
+      ],
+      "termination_contract": {
+        "assistant_end_token_id": 151645,
+        "assistant_end_token_text": "<|im_end|>",
+        "chat_suffix": "<|im_end|>\n",
+        "chat_suffix_token_ids": [
+          151645,
+          198
+        ],
+        "generation_eos_token_ids": [
+          151645,
+          151643
+        ],
+        "selection": "first token after an assistant answer in actual chat template, checked against generation EOS",
+        "tokenizer_eos_token_id": 151645
+      }
+    },
+    {
+      "answer": "jazz",
+      "donor_control": {
+        "answer": "green",
+        "interpretation": "fixed different-answer donor owner; response to this target query is measured, not assumed",
+        "latent_file_sha256": "f7ac93392acd3efe1fe81e86569fed9c79fc3d4e0c6e76c7e220b5bb281b8f16",
+        "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-00-seed-0.pt",
+        "latent_sha256": "ce3344b57d82946203dcd39ee9390d442c38c862d9cf1c43a80bff3b086356fe",
+        "owner_question_id": "r3-train-semantic-001175-historical-prefix"
+      },
+      "event_input_scope": "one gray-source write of the full ordered event-only prefix; not a live sequential-memory test",
+      "event_text": "R3 Train Standard Templates 06: For the willow desk train 000550, remember that the preferred music is jazz.",
+      "historical_target_index": 4,
+      "planned_count": 4,
+      "question_id": "r3-train-semantic-000550-historical-prefix",
+      "question_instruction_contract": "historical-r11-five-prompts/v1",
+      "question_variants": {
+        "original_open": "R3 Train Standard Templates 06: Before any later update, what is the current music preference for the willow desk train 000550?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 06: Before any later update, which music does the willow desk train 000550 currently prefer?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 06: Before any later update, name the currently stored music preference for the willow desk train 000550.\nReturn only a short phrase.",
+        "paraphrase_3": "Which music preference is currently stored for the willow desk train 000550?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "Read the memory image and report the current music preference of the willow desk train 000550.\nReturn only a short phrase."
+      },
+      "semantic_question_id": "r3-train-semantic-000550",
+      "source_event_stream": [
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 06: For the willow desk train 000550, remember that the preferred music is jazz."
+        }
+      ],
+      "source_kind": "blank_gray_1024",
+      "source_latent_file_sha256": "a57d81ae0f15f3ec99a700b2cedffefd84cb09c587efb71619a8be8bd7dee8b0",
+      "source_latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/f5c9c9e-direct-multiprompt-dl-base-seed20260908/bank/conditions/r5-f1-392d41fd097d069c42218e0a-source.pt",
+      "source_latent_sha256": "5f8c07caa37de38cae96d0b0e28851b1b831bea8728182e9fbd14b1588ac3743",
+      "successful_run_count": 4,
+      "teacher_ids": [
+        "r3-train-semantic-000550-historical-prefix-seed-0-04cd098358191cdd",
+        "r3-train-semantic-000550-historical-prefix-seed-1-e5ce438a6d0ef695",
+        "r3-train-semantic-000550-historical-prefix-seed-2-7b0fda0517649dfd",
+        "r3-train-semantic-000550-historical-prefix-seed-3-710f7f734085200c"
+      ],
+      "termination_contract": {
+        "assistant_end_token_id": 151645,
+        "assistant_end_token_text": "<|im_end|>",
+        "chat_suffix": "<|im_end|>\n",
+        "chat_suffix_token_ids": [
+          151645,
+          198
+        ],
+        "generation_eos_token_ids": [
+          151645,
+          151643
+        ],
+        "selection": "first token after an assistant answer in actual chat template, checked against generation EOS",
+        "tokenizer_eos_token_id": 151645
+      }
+    },
+    {
+      "answer": "jazz",
+      "donor_control": {
+        "answer": "green",
+        "interpretation": "fixed different-answer donor owner; response to this target query is measured, not assumed",
+        "latent_file_sha256": "f7ac93392acd3efe1fe81e86569fed9c79fc3d4e0c6e76c7e220b5bb281b8f16",
+        "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-00-seed-0.pt",
+        "latent_sha256": "ce3344b57d82946203dcd39ee9390d442c38c862d9cf1c43a80bff3b086356fe",
+        "owner_question_id": "r3-train-semantic-001175-historical-prefix"
+      },
+      "event_input_scope": "one gray-source write of the full ordered event-only prefix; not a live sequential-memory test",
+      "event_text": "R3 Train Standard Templates 30: For the indigo mug train 000190, remember that the preferred music is jazz.",
+      "historical_target_index": 5,
+      "planned_count": 4,
+      "question_id": "r3-train-semantic-000190-historical-prefix",
+      "question_instruction_contract": "historical-r11-five-prompts/v1",
+      "question_variants": {
+        "original_open": "R3 Train Standard Templates 30: Before any later update, what is the current music preference for the indigo mug train 000190?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 30: Before any later update, which music does the indigo mug train 000190 currently prefer?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 30: Before any later update, name the currently stored music preference for the indigo mug train 000190.\nReturn only a short phrase.",
+        "paraphrase_3": "Which music preference is currently stored for the indigo mug train 000190?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "Read the memory image and report the current music preference of the indigo mug train 000190.\nReturn only a short phrase."
+      },
+      "semantic_question_id": "r3-train-semantic-000190",
+      "source_event_stream": [
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 30: For the indigo mug train 000190, remember that the preferred music is jazz."
+        }
+      ],
+      "source_kind": "blank_gray_1024",
+      "source_latent_file_sha256": "a57d81ae0f15f3ec99a700b2cedffefd84cb09c587efb71619a8be8bd7dee8b0",
+      "source_latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/f5c9c9e-direct-multiprompt-dl-base-seed20260908/bank/conditions/r5-f1-392d41fd097d069c42218e0a-source.pt",
+      "source_latent_sha256": "5f8c07caa37de38cae96d0b0e28851b1b831bea8728182e9fbd14b1588ac3743",
+      "successful_run_count": 4,
+      "teacher_ids": [
+        "r3-train-semantic-000190-historical-prefix-seed-0-5b932371de509e46",
+        "r3-train-semantic-000190-historical-prefix-seed-1-94a8bef4b6df07c3",
+        "r3-train-semantic-000190-historical-prefix-seed-2-881eb84be9fee7df",
+        "r3-train-semantic-000190-historical-prefix-seed-3-c31f6ead7537f22c"
+      ],
+      "termination_contract": {
+        "assistant_end_token_id": 151645,
+        "assistant_end_token_text": "<|im_end|>",
+        "chat_suffix": "<|im_end|>\n",
+        "chat_suffix_token_ids": [
+          151645,
+          198
+        ],
+        "generation_eos_token_ids": [
+          151645,
+          151643
+        ],
+        "selection": "first token after an assistant answer in actual chat template, checked against generation EOS",
+        "tokenizer_eos_token_id": 151645
+      }
+    },
+    {
+      "answer": "linen",
+      "donor_control": {
+        "answer": "no active preference",
+        "interpretation": "fixed different-answer donor owner; response to this target query is measured, not assumed",
+        "latent_file_sha256": "daaaffa8a67ab66f11d46d306ee1a101a887cced8ff933b49d9d04a8a1d5bfb9",
+        "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-14-seed-0.pt",
+        "latent_sha256": "709cec593210b13f5981b596800fa3ee8ce4fd62503c041c4a1f92bd07d7fc3b",
+        "owner_question_id": "r3-train-semantic-000250-historical-prefix"
+      },
+      "event_input_scope": "one gray-source write of the full ordered event-only prefix; not a live sequential-memory test",
+      "event_text": "R3 Train Standard Templates 00: Save leather as the current material preference for the silver lamp train 000608.\nR3 Train Standard Templates 00: Save linen as the current material preference for the silver lamp train 000608.",
+      "historical_target_index": 6,
+      "planned_count": 4,
+      "question_id": "r3-train-semantic-000608-historical-prefix",
+      "question_instruction_contract": "historical-r11-five-prompts/v1",
+      "question_variants": {
+        "original_open": "R3 Train Standard Templates 00: At this later check, what is the current material preference for the silver lamp train 000608?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 00: At this later check, which material does the silver lamp train 000608 currently prefer?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 00: At this later check, name the currently stored material preference for the silver lamp train 000608.\nReturn only a short phrase.",
+        "paraphrase_3": "Which material preference is currently stored for the silver lamp train 000608?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "Read the memory image and report the current material preference of the silver lamp train 000608.\nReturn only a short phrase."
+      },
+      "semantic_question_id": "r3-train-semantic-000608",
+      "source_event_stream": [
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 00: Save leather as the current material preference for the silver lamp train 000608."
+        },
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 00: Save linen as the current material preference for the silver lamp train 000608."
+        }
+      ],
+      "source_kind": "blank_gray_1024",
+      "source_latent_file_sha256": "a57d81ae0f15f3ec99a700b2cedffefd84cb09c587efb71619a8be8bd7dee8b0",
+      "source_latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/f5c9c9e-direct-multiprompt-dl-base-seed20260908/bank/conditions/r5-f1-392d41fd097d069c42218e0a-source.pt",
+      "source_latent_sha256": "5f8c07caa37de38cae96d0b0e28851b1b831bea8728182e9fbd14b1588ac3743",
+      "successful_run_count": 4,
+      "teacher_ids": [
+        "r3-train-semantic-000608-historical-prefix-seed-0-d865e844b7b75576",
+        "r3-train-semantic-000608-historical-prefix-seed-1-7490c863fa88a3fd",
+        "r3-train-semantic-000608-historical-prefix-seed-2-1b4460b4388debf2",
+        "r3-train-semantic-000608-historical-prefix-seed-3-06d3722976fdb07d"
+      ],
+      "termination_contract": {
+        "assistant_end_token_id": 151645,
+        "assistant_end_token_text": "<|im_end|>",
+        "chat_suffix": "<|im_end|>\n",
+        "chat_suffix_token_ids": [
+          151645,
+          198
+        ],
+        "generation_eos_token_ids": [
+          151645,
+          151643
+        ],
+        "selection": "first token after an assistant answer in actual chat template, checked against generation EOS",
+        "tokenizer_eos_token_id": 151645
+      }
+    },
+    {
+      "answer": "linen",
+      "donor_control": {
+        "answer": "no active preference",
+        "interpretation": "fixed different-answer donor owner; response to this target query is measured, not assumed",
+        "latent_file_sha256": "daaaffa8a67ab66f11d46d306ee1a101a887cced8ff933b49d9d04a8a1d5bfb9",
+        "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-14-seed-0.pt",
+        "latent_sha256": "709cec593210b13f5981b596800fa3ee8ce4fd62503c041c4a1f92bd07d7fc3b",
+        "owner_question_id": "r3-train-semantic-000250-historical-prefix"
+      },
+      "event_input_scope": "one gray-source write of the full ordered event-only prefix; not a live sequential-memory test",
+      "event_text": "R3 Train Standard Templates 05: Save ceramic as the current material preference for the amber room train 000613.\nR3 Train Standard Templates 05: The material preference for the amber room train 000613 is now linen, not the previous value.",
+      "historical_target_index": 7,
+      "planned_count": 4,
+      "question_id": "r3-train-semantic-000613-historical-prefix",
+      "question_instruction_contract": "historical-r11-five-prompts/v1",
+      "question_variants": {
+        "original_open": "R3 Train Standard Templates 05: At this later check, what is the current material preference for the amber room train 000613?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 05: At this later check, which material does the amber room train 000613 currently prefer?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 05: At this later check, name the currently stored material preference for the amber room train 000613.\nReturn only a short phrase.",
+        "paraphrase_3": "Which material preference is currently stored for the amber room train 000613?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "Read the memory image and report the current material preference of the amber room train 000613.\nReturn only a short phrase."
+      },
+      "semantic_question_id": "r3-train-semantic-000613",
+      "source_event_stream": [
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 05: Save ceramic as the current material preference for the amber room train 000613."
+        },
+        {
+          "event_kind": "overwrite",
+          "event_text": "R3 Train Standard Templates 05: The material preference for the amber room train 000613 is now linen, not the previous value."
+        }
+      ],
+      "source_kind": "blank_gray_1024",
+      "source_latent_file_sha256": "a57d81ae0f15f3ec99a700b2cedffefd84cb09c587efb71619a8be8bd7dee8b0",
+      "source_latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/f5c9c9e-direct-multiprompt-dl-base-seed20260908/bank/conditions/r5-f1-392d41fd097d069c42218e0a-source.pt",
+      "source_latent_sha256": "5f8c07caa37de38cae96d0b0e28851b1b831bea8728182e9fbd14b1588ac3743",
+      "successful_run_count": 4,
+      "teacher_ids": [
+        "r3-train-semantic-000613-historical-prefix-seed-0-24a66889599b2d7f",
+        "r3-train-semantic-000613-historical-prefix-seed-1-a5f60ef825167ffe",
+        "r3-train-semantic-000613-historical-prefix-seed-2-58fdafae0ff4b76a",
+        "r3-train-semantic-000613-historical-prefix-seed-3-a0c46d745285ee32"
+      ],
+      "termination_contract": {
+        "assistant_end_token_id": 151645,
+        "assistant_end_token_text": "<|im_end|>",
+        "chat_suffix": "<|im_end|>\n",
+        "chat_suffix_token_ids": [
+          151645,
+          198
+        ],
+        "generation_eos_token_ids": [
+          151645,
+          151643
+        ],
+        "selection": "first token after an assistant answer in actual chat template, checked against generation EOS",
+        "tokenizer_eos_token_id": 151645
+      }
+    },
+    {
+      "answer": "pasta",
+      "donor_control": {
+        "answer": "green",
+        "interpretation": "fixed different-answer donor owner; response to this target query is measured, not assumed",
+        "latent_file_sha256": "f7ac93392acd3efe1fe81e86569fed9c79fc3d4e0c6e76c7e220b5bb281b8f16",
+        "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-00-seed-0.pt",
+        "latent_sha256": "ce3344b57d82946203dcd39ee9390d442c38c862d9cf1c43a80bff3b086356fe",
+        "owner_question_id": "r3-train-semantic-001175-historical-prefix"
+      },
+      "event_input_scope": "one gray-source write of the full ordered event-only prefix; not a live sequential-memory test",
+      "event_text": "R3 Train Standard Templates 07: For the indigo lamp train 000327, remember that the preferred meal is rice.\nR3 Train Standard Templates 07: Replace the earlier meal preference for the indigo lamp train 000327 with pasta.",
+      "historical_target_index": 8,
+      "planned_count": 4,
+      "question_id": "r3-train-semantic-000327-historical-prefix",
+      "question_instruction_contract": "historical-r11-five-prompts/v1",
+      "question_variants": {
+        "original_open": "R3 Train Standard Templates 07: At this later check, what is the current meal preference for the indigo lamp train 000327?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 07: At this later check, which meal does the indigo lamp train 000327 currently prefer?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 07: At this later check, name the currently stored meal preference for the indigo lamp train 000327.\nReturn only a short phrase.",
+        "paraphrase_3": "Which meal preference is currently stored for the indigo lamp train 000327?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "Read the memory image and report the current meal preference of the indigo lamp train 000327.\nReturn only a short phrase."
+      },
+      "semantic_question_id": "r3-train-semantic-000327",
+      "source_event_stream": [
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 07: For the indigo lamp train 000327, remember that the preferred meal is rice."
+        },
+        {
+          "event_kind": "overwrite",
+          "event_text": "R3 Train Standard Templates 07: Replace the earlier meal preference for the indigo lamp train 000327 with pasta."
+        }
+      ],
+      "source_kind": "blank_gray_1024",
+      "source_latent_file_sha256": "a57d81ae0f15f3ec99a700b2cedffefd84cb09c587efb71619a8be8bd7dee8b0",
+      "source_latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/f5c9c9e-direct-multiprompt-dl-base-seed20260908/bank/conditions/r5-f1-392d41fd097d069c42218e0a-source.pt",
+      "source_latent_sha256": "5f8c07caa37de38cae96d0b0e28851b1b831bea8728182e9fbd14b1588ac3743",
+      "successful_run_count": 4,
+      "teacher_ids": [
+        "r3-train-semantic-000327-historical-prefix-seed-0-f49995f2e6f13492",
+        "r3-train-semantic-000327-historical-prefix-seed-1-07a7309336d65e65",
+        "r3-train-semantic-000327-historical-prefix-seed-2-660b3dd1f65af578",
+        "r3-train-semantic-000327-historical-prefix-seed-3-a73fc81e5fc6eb12"
+      ],
+      "termination_contract": {
+        "assistant_end_token_id": 151645,
+        "assistant_end_token_text": "<|im_end|>",
+        "chat_suffix": "<|im_end|>\n",
+        "chat_suffix_token_ids": [
+          151645,
+          198
+        ],
+        "generation_eos_token_ids": [
+          151645,
+          151643
+        ],
+        "selection": "first token after an assistant answer in actual chat template, checked against generation EOS",
+        "tokenizer_eos_token_id": 151645
+      }
+    },
+    {
+      "answer": "pasta",
+      "donor_control": {
+        "answer": "green",
+        "interpretation": "fixed different-answer donor owner; response to this target query is measured, not assumed",
+        "latent_file_sha256": "f7ac93392acd3efe1fe81e86569fed9c79fc3d4e0c6e76c7e220b5bb281b8f16",
+        "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-00-seed-0.pt",
+        "latent_sha256": "ce3344b57d82946203dcd39ee9390d442c38c862d9cf1c43a80bff3b086356fe",
+        "owner_question_id": "r3-train-semantic-001175-historical-prefix"
+      },
+      "event_input_scope": "one gray-source write of the full ordered event-only prefix; not a live sequential-memory test",
+      "event_text": "R3 Train Standard Templates 19: Save pasta as the current meal preference for the silver mug train 000147.",
+      "historical_target_index": 9,
+      "planned_count": 4,
+      "question_id": "r3-train-semantic-000147-historical-prefix",
+      "question_instruction_contract": "historical-r11-five-prompts/v1",
+      "question_variants": {
+        "original_open": "R3 Train Standard Templates 19: Before any later update, what is the current meal preference for the silver mug train 000147?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 19: Before any later update, which meal does the silver mug train 000147 currently prefer?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 19: Before any later update, name the currently stored meal preference for the silver mug train 000147.\nReturn only a short phrase.",
+        "paraphrase_3": "Which meal preference is currently stored for the silver mug train 000147?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "Read the memory image and report the current meal preference of the silver mug train 000147.\nReturn only a short phrase."
+      },
+      "semantic_question_id": "r3-train-semantic-000147",
+      "source_event_stream": [
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 19: Save pasta as the current meal preference for the silver mug train 000147."
+        }
+      ],
+      "source_kind": "blank_gray_1024",
+      "source_latent_file_sha256": "a57d81ae0f15f3ec99a700b2cedffefd84cb09c587efb71619a8be8bd7dee8b0",
+      "source_latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/f5c9c9e-direct-multiprompt-dl-base-seed20260908/bank/conditions/r5-f1-392d41fd097d069c42218e0a-source.pt",
+      "source_latent_sha256": "5f8c07caa37de38cae96d0b0e28851b1b831bea8728182e9fbd14b1588ac3743",
+      "successful_run_count": 4,
+      "teacher_ids": [
+        "r3-train-semantic-000147-historical-prefix-seed-0-56d80540b0893945",
+        "r3-train-semantic-000147-historical-prefix-seed-1-ca6ce5b8e10341c8",
+        "r3-train-semantic-000147-historical-prefix-seed-2-eed6277c247698cb",
+        "r3-train-semantic-000147-historical-prefix-seed-3-7d4018aa87ab8341"
+      ],
+      "termination_contract": {
+        "assistant_end_token_id": 151645,
+        "assistant_end_token_text": "<|im_end|>",
+        "chat_suffix": "<|im_end|>\n",
+        "chat_suffix_token_ids": [
+          151645,
+          198
+        ],
+        "generation_eos_token_ids": [
+          151645,
+          151643
+        ],
+        "selection": "first token after an assistant answer in actual chat template, checked against generation EOS",
+        "tokenizer_eos_token_id": 151645
+      }
+    },
+    {
+      "answer": "no active preference",
+      "donor_control": {
+        "answer": "green",
+        "interpretation": "fixed different-answer donor owner; response to this target query is measured, not assumed",
+        "latent_file_sha256": "f7ac93392acd3efe1fe81e86569fed9c79fc3d4e0c6e76c7e220b5bb281b8f16",
+        "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-00-seed-0.pt",
+        "latent_sha256": "ce3344b57d82946203dcd39ee9390d442c38c862d9cf1c43a80bff3b086356fe",
+        "owner_question_id": "r3-train-semantic-001175-historical-prefix"
+      },
+      "event_input_scope": "one gray-source write of the full ordered event-only prefix; not a live sequential-memory test",
+      "event_text": "R3 Train Standard Templates 26: Save yellow as the current color preference for the marble backpack train 000986.\nR3 Train Standard Templates 26: Forget the current color choice for the marble backpack train 000986; none is active now.",
+      "historical_target_index": 10,
+      "planned_count": 4,
+      "question_id": "r3-train-semantic-000986-historical-prefix",
+      "question_instruction_contract": "historical-r11-five-prompts/v1",
+      "question_variants": {
+        "original_open": "R3 Train Standard Templates 26: After applying this update first, what is the current color preference for the marble backpack train 000986?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 26: After applying this update first, which color does the marble backpack train 000986 currently prefer?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 26: After applying this update first, name the currently stored color preference for the marble backpack train 000986.\nReturn only a short phrase.",
+        "paraphrase_3": "Which color preference is currently stored for the marble backpack train 000986?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "Read the memory image and report the current color preference of the marble backpack train 000986.\nReturn only a short phrase."
+      },
+      "semantic_question_id": "r3-train-semantic-000986",
+      "source_event_stream": [
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 26: Save yellow as the current color preference for the marble backpack train 000986."
+        },
+        {
+          "event_kind": "clear",
+          "event_text": "R3 Train Standard Templates 26: Forget the current color choice for the marble backpack train 000986; none is active now."
+        }
+      ],
+      "source_kind": "blank_gray_1024",
+      "source_latent_file_sha256": "a57d81ae0f15f3ec99a700b2cedffefd84cb09c587efb71619a8be8bd7dee8b0",
+      "source_latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/f5c9c9e-direct-multiprompt-dl-base-seed20260908/bank/conditions/r5-f1-392d41fd097d069c42218e0a-source.pt",
+      "source_latent_sha256": "5f8c07caa37de38cae96d0b0e28851b1b831bea8728182e9fbd14b1588ac3743",
+      "successful_run_count": 4,
+      "teacher_ids": [
+        "r3-train-semantic-000986-historical-prefix-seed-0-98321b2c03cc3cfe",
+        "r3-train-semantic-000986-historical-prefix-seed-1-694b43219b06ac34",
+        "r3-train-semantic-000986-historical-prefix-seed-2-f53527b362a789d0",
+        "r3-train-semantic-000986-historical-prefix-seed-3-ac5912b26a2236ae"
+      ],
+      "termination_contract": {
+        "assistant_end_token_id": 151645,
+        "assistant_end_token_text": "<|im_end|>",
+        "chat_suffix": "<|im_end|>\n",
+        "chat_suffix_token_ids": [
+          151645,
+          198
+        ],
+        "generation_eos_token_ids": [
+          151645,
+          151643
+        ],
+        "selection": "first token after an assistant answer in actual chat template, checked against generation EOS",
+        "tokenizer_eos_token_id": 151645
+      }
+    },
+    {
+      "answer": "no active preference",
+      "donor_control": {
+        "answer": "green",
+        "interpretation": "fixed different-answer donor owner; response to this target query is measured, not assumed",
+        "latent_file_sha256": "f7ac93392acd3efe1fe81e86569fed9c79fc3d4e0c6e76c7e220b5bb281b8f16",
+        "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-00-seed-0.pt",
+        "latent_sha256": "ce3344b57d82946203dcd39ee9390d442c38c862d9cf1c43a80bff3b086356fe",
+        "owner_question_id": "r3-train-semantic-001175-historical-prefix"
+      },
+      "event_input_scope": "one gray-source write of the full ordered event-only prefix; not a live sequential-memory test",
+      "event_text": "R3 Train Standard Templates 24: For the linen notebook train 000024, remember that the preferred color is yellow.\nR3 Train Standard Templates 24: Clear the saved color preference for the linen notebook train 000024.",
+      "historical_target_index": 11,
+      "planned_count": 4,
+      "question_id": "r3-train-semantic-000024-historical-prefix",
+      "question_instruction_contract": "historical-r11-five-prompts/v1",
+      "question_variants": {
+        "original_open": "R3 Train Standard Templates 24: After applying this update first, what is the current color preference for the linen notebook train 000024?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 24: After applying this update first, which color does the linen notebook train 000024 currently prefer?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 24: After applying this update first, name the currently stored color preference for the linen notebook train 000024.\nReturn only a short phrase.",
+        "paraphrase_3": "Which color preference is currently stored for the linen notebook train 000024?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "Read the memory image and report the current color preference of the linen notebook train 000024.\nReturn only a short phrase."
+      },
+      "semantic_question_id": "r3-train-semantic-000024",
+      "source_event_stream": [
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 24: For the linen notebook train 000024, remember that the preferred color is yellow."
+        },
+        {
+          "event_kind": "clear",
+          "event_text": "R3 Train Standard Templates 24: Clear the saved color preference for the linen notebook train 000024."
+        }
+      ],
+      "source_kind": "blank_gray_1024",
+      "source_latent_file_sha256": "a57d81ae0f15f3ec99a700b2cedffefd84cb09c587efb71619a8be8bd7dee8b0",
+      "source_latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/f5c9c9e-direct-multiprompt-dl-base-seed20260908/bank/conditions/r5-f1-392d41fd097d069c42218e0a-source.pt",
+      "source_latent_sha256": "5f8c07caa37de38cae96d0b0e28851b1b831bea8728182e9fbd14b1588ac3743",
+      "successful_run_count": 4,
+      "teacher_ids": [
+        "r3-train-semantic-000024-historical-prefix-seed-0-03b1c1dc9d0618ea",
+        "r3-train-semantic-000024-historical-prefix-seed-1-59a6cf7f56a4518b",
+        "r3-train-semantic-000024-historical-prefix-seed-2-34636a1522b45820",
+        "r3-train-semantic-000024-historical-prefix-seed-3-d2f80134a5611e74"
+      ],
+      "termination_contract": {
+        "assistant_end_token_id": 151645,
+        "assistant_end_token_text": "<|im_end|>",
+        "chat_suffix": "<|im_end|>\n",
+        "chat_suffix_token_ids": [
+          151645,
+          198
+        ],
+        "generation_eos_token_ids": [
+          151645,
+          151643
+        ],
+        "selection": "first token after an assistant answer in actual chat template, checked against generation EOS",
+        "tokenizer_eos_token_id": 151645
+      }
+    },
+    {
+      "answer": "no active preference",
+      "donor_control": {
+        "answer": "juice",
+        "interpretation": "fixed different-answer donor owner; response to this target query is measured, not assumed",
+        "latent_file_sha256": "34f7831466e0516c194225629b8286d1e0d8ab2a35dc90312a75689ffbc12575",
+        "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-02-seed-0.pt",
+        "latent_sha256": "768fccec2cb2227b6f27c813ca7574dde6e480e6203f5f0f53456186c6a1f781",
+        "owner_question_id": "r3-train-semantic-000271-historical-prefix"
+      },
+      "event_input_scope": "one gray-source write of the full ordered event-only prefix; not a live sequential-memory test",
+      "event_text": "R3 Train Standard Templates 24: Save cocoa as the current drink preference for the copper backpack train 001048.\nR3 Train Standard Templates 24: Forget the current drink choice for the copper backpack train 001048; none is active now.",
+      "historical_target_index": 12,
+      "planned_count": 4,
+      "question_id": "r3-train-semantic-001048-historical-prefix",
+      "question_instruction_contract": "historical-r11-five-prompts/v1",
+      "question_variants": {
+        "original_open": "R3 Train Standard Templates 24: After applying this update first, what is the current drink preference for the copper backpack train 001048?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 24: After applying this update first, which drink does the copper backpack train 001048 currently prefer?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 24: After applying this update first, name the currently stored drink preference for the copper backpack train 001048.\nReturn only a short phrase.",
+        "paraphrase_3": "Which drink preference is currently stored for the copper backpack train 001048?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "Read the memory image and report the current drink preference of the copper backpack train 001048.\nReturn only a short phrase."
+      },
+      "semantic_question_id": "r3-train-semantic-001048",
+      "source_event_stream": [
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 24: Save cocoa as the current drink preference for the copper backpack train 001048."
+        },
+        {
+          "event_kind": "clear",
+          "event_text": "R3 Train Standard Templates 24: Forget the current drink choice for the copper backpack train 001048; none is active now."
+        }
+      ],
+      "source_kind": "blank_gray_1024",
+      "source_latent_file_sha256": "a57d81ae0f15f3ec99a700b2cedffefd84cb09c587efb71619a8be8bd7dee8b0",
+      "source_latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/f5c9c9e-direct-multiprompt-dl-base-seed20260908/bank/conditions/r5-f1-392d41fd097d069c42218e0a-source.pt",
+      "source_latent_sha256": "5f8c07caa37de38cae96d0b0e28851b1b831bea8728182e9fbd14b1588ac3743",
+      "successful_run_count": 4,
+      "teacher_ids": [
+        "r3-train-semantic-001048-historical-prefix-seed-0-ac5276b973ddc619",
+        "r3-train-semantic-001048-historical-prefix-seed-1-019f6113d69686cb",
+        "r3-train-semantic-001048-historical-prefix-seed-2-55f14e534403a2f9",
+        "r3-train-semantic-001048-historical-prefix-seed-3-6a28a13d32d3123f"
+      ],
+      "termination_contract": {
+        "assistant_end_token_id": 151645,
+        "assistant_end_token_text": "<|im_end|>",
+        "chat_suffix": "<|im_end|>\n",
+        "chat_suffix_token_ids": [
+          151645,
+          198
+        ],
+        "generation_eos_token_ids": [
+          151645,
+          151643
+        ],
+        "selection": "first token after an assistant answer in actual chat template, checked against generation EOS",
+        "tokenizer_eos_token_id": 151645
+      }
+    },
+    {
+      "answer": "no active preference",
+      "donor_control": {
+        "answer": "juice",
+        "interpretation": "fixed different-answer donor owner; response to this target query is measured, not assumed",
+        "latent_file_sha256": "34f7831466e0516c194225629b8286d1e0d8ab2a35dc90312a75689ffbc12575",
+        "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-02-seed-0.pt",
+        "latent_sha256": "768fccec2cb2227b6f27c813ca7574dde6e480e6203f5f0f53456186c6a1f781",
+        "owner_question_id": "r3-train-semantic-000271-historical-prefix"
+      },
+      "event_input_scope": "one gray-source write of the full ordered event-only prefix; not a live sequential-memory test",
+      "event_text": "R3 Train Standard Templates 08: For the willow chair train 001224, remember that the preferred drink is coffee.\nR3 Train Standard Templates 08: Clear the saved drink preference for the willow chair train 001224.",
+      "historical_target_index": 13,
+      "planned_count": 4,
+      "question_id": "r3-train-semantic-001224-historical-prefix",
+      "question_instruction_contract": "historical-r11-five-prompts/v1",
+      "question_variants": {
+        "original_open": "R3 Train Standard Templates 08: At this later check, what is the current drink preference for the willow chair train 001224?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 08: At this later check, which drink does the willow chair train 001224 currently prefer?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 08: At this later check, name the currently stored drink preference for the willow chair train 001224.\nReturn only a short phrase.",
+        "paraphrase_3": "Which drink preference is currently stored for the willow chair train 001224?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "Read the memory image and report the current drink preference of the willow chair train 001224.\nReturn only a short phrase."
+      },
+      "semantic_question_id": "r3-train-semantic-001224",
+      "source_event_stream": [
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 08: For the willow chair train 001224, remember that the preferred drink is coffee."
+        },
+        {
+          "event_kind": "clear",
+          "event_text": "R3 Train Standard Templates 08: Clear the saved drink preference for the willow chair train 001224."
+        }
+      ],
+      "source_kind": "blank_gray_1024",
+      "source_latent_file_sha256": "a57d81ae0f15f3ec99a700b2cedffefd84cb09c587efb71619a8be8bd7dee8b0",
+      "source_latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/f5c9c9e-direct-multiprompt-dl-base-seed20260908/bank/conditions/r5-f1-392d41fd097d069c42218e0a-source.pt",
+      "source_latent_sha256": "5f8c07caa37de38cae96d0b0e28851b1b831bea8728182e9fbd14b1588ac3743",
+      "successful_run_count": 4,
+      "teacher_ids": [
+        "r3-train-semantic-001224-historical-prefix-seed-0-e6fa598f319190e1",
+        "r3-train-semantic-001224-historical-prefix-seed-1-a8e9427470e132c8",
+        "r3-train-semantic-001224-historical-prefix-seed-2-ccca72a52bcdb948",
+        "r3-train-semantic-001224-historical-prefix-seed-3-294a798cf99309ab"
+      ],
+      "termination_contract": {
+        "assistant_end_token_id": 151645,
+        "assistant_end_token_text": "<|im_end|>",
+        "chat_suffix": "<|im_end|>\n",
+        "chat_suffix_token_ids": [
+          151645,
+          198
+        ],
+        "generation_eos_token_ids": [
+          151645,
+          151643
+        ],
+        "selection": "first token after an assistant answer in actual chat template, checked against generation EOS",
+        "tokenizer_eos_token_id": 151645
+      }
+    },
+    {
+      "answer": "no active preference",
+      "donor_control": {
+        "answer": "linen",
+        "interpretation": "fixed different-answer donor owner; response to this target query is measured, not assumed",
+        "latent_file_sha256": "ca18f33ab0bf22657468af64551a0335987526783f6daca52dd215bcea80a68b",
+        "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-06-seed-0.pt",
+        "latent_sha256": "d865e844b7b75576c314ac98b6616efb4b2e12be95ec7f5bcc22ae1ac1e0ef95",
+        "owner_question_id": "r3-train-semantic-000608-historical-prefix"
+      },
+      "event_input_scope": "one gray-source write of the full ordered event-only prefix; not a live sequential-memory test",
+      "event_text": "R3 Train Standard Templates 26: For the linen room train 000250, remember that the preferred material is glass.\nR3 Train Standard Templates 26: Clear the saved material preference for the linen room train 000250.",
+      "historical_target_index": 14,
+      "planned_count": 4,
+      "question_id": "r3-train-semantic-000250-historical-prefix",
+      "question_instruction_contract": "historical-r11-five-prompts/v1",
+      "question_variants": {
+        "original_open": "R3 Train Standard Templates 26: After applying this update first, what is the current material preference for the linen room train 000250?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 26: After applying this update first, which material does the linen room train 000250 currently prefer?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 26: After applying this update first, name the currently stored material preference for the linen room train 000250.\nReturn only a short phrase.",
+        "paraphrase_3": "Which material preference is currently stored for the linen room train 000250?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "Read the memory image and report the current material preference of the linen room train 000250.\nReturn only a short phrase."
+      },
+      "semantic_question_id": "r3-train-semantic-000250",
+      "source_event_stream": [
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 26: For the linen room train 000250, remember that the preferred material is glass."
+        },
+        {
+          "event_kind": "clear",
+          "event_text": "R3 Train Standard Templates 26: Clear the saved material preference for the linen room train 000250."
+        }
+      ],
+      "source_kind": "blank_gray_1024",
+      "source_latent_file_sha256": "a57d81ae0f15f3ec99a700b2cedffefd84cb09c587efb71619a8be8bd7dee8b0",
+      "source_latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/f5c9c9e-direct-multiprompt-dl-base-seed20260908/bank/conditions/r5-f1-392d41fd097d069c42218e0a-source.pt",
+      "source_latent_sha256": "5f8c07caa37de38cae96d0b0e28851b1b831bea8728182e9fbd14b1588ac3743",
+      "successful_run_count": 4,
+      "teacher_ids": [
+        "r3-train-semantic-000250-historical-prefix-seed-0-709cec593210b13f",
+        "r3-train-semantic-000250-historical-prefix-seed-1-45c60f8065d2f2e0",
+        "r3-train-semantic-000250-historical-prefix-seed-2-463e153b3c76ab96",
+        "r3-train-semantic-000250-historical-prefix-seed-3-e8e740ff3f86c159"
+      ],
+      "termination_contract": {
+        "assistant_end_token_id": 151645,
+        "assistant_end_token_text": "<|im_end|>",
+        "chat_suffix": "<|im_end|>\n",
+        "chat_suffix_token_ids": [
+          151645,
+          198
+        ],
+        "generation_eos_token_ids": [
+          151645,
+          151643
+        ],
+        "selection": "first token after an assistant answer in actual chat template, checked against generation EOS",
+        "tokenizer_eos_token_id": 151645
+      }
+    },
+    {
+      "answer": "no active preference",
+      "donor_control": {
+        "answer": "linen",
+        "interpretation": "fixed different-answer donor owner; response to this target query is measured, not assumed",
+        "latent_file_sha256": "ca18f33ab0bf22657468af64551a0335987526783f6daca52dd215bcea80a68b",
+        "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-06-seed-0.pt",
+        "latent_sha256": "d865e844b7b75576c314ac98b6616efb4b2e12be95ec7f5bcc22ae1ac1e0ef95",
+        "owner_question_id": "r3-train-semantic-000608-historical-prefix"
+      },
+      "event_input_scope": "one gray-source write of the full ordered event-only prefix; not a live sequential-memory test",
+      "event_text": "R3 Train Standard Templates 25: Save leather as the current material preference for the amber backpack train 001209.\nR3 Train Standard Templates 25: Forget the current material choice for the amber backpack train 001209; none is active now.",
+      "historical_target_index": 15,
+      "planned_count": 4,
+      "question_id": "r3-train-semantic-001209-historical-prefix",
+      "question_instruction_contract": "historical-r11-five-prompts/v1",
+      "question_variants": {
+        "original_open": "R3 Train Standard Templates 25: After applying this update first, what is the current material preference for the amber backpack train 001209?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_1": "R3 Train Standard Templates 25: After applying this update first, which material does the amber backpack train 001209 currently prefer?\nUse the memory image to answer. Answer with a short phrase only.",
+        "paraphrase_2": "R3 Train Standard Templates 25: After applying this update first, name the currently stored material preference for the amber backpack train 001209.\nReturn only a short phrase.",
+        "paraphrase_3": "Which material preference is currently stored for the amber backpack train 001209?\nUse the memory image to answer.\nAnswer with a short phrase only.",
+        "paraphrase_4": "Read the memory image and report the current material preference of the amber backpack train 001209.\nReturn only a short phrase."
+      },
+      "semantic_question_id": "r3-train-semantic-001209",
+      "source_event_stream": [
+        {
+          "event_kind": "set",
+          "event_text": "R3 Train Standard Templates 25: Save leather as the current material preference for the amber backpack train 001209."
+        },
+        {
+          "event_kind": "clear",
+          "event_text": "R3 Train Standard Templates 25: Forget the current material choice for the amber backpack train 001209; none is active now."
+        }
+      ],
+      "source_kind": "blank_gray_1024",
+      "source_latent_file_sha256": "a57d81ae0f15f3ec99a700b2cedffefd84cb09c587efb71619a8be8bd7dee8b0",
+      "source_latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/oracle-to-unet/f5c9c9e-direct-multiprompt-dl-base-seed20260908/bank/conditions/r5-f1-392d41fd097d069c42218e0a-source.pt",
+      "source_latent_sha256": "5f8c07caa37de38cae96d0b0e28851b1b831bea8728182e9fbd14b1588ac3743",
+      "successful_run_count": 4,
+      "teacher_ids": [
+        "r3-train-semantic-001209-historical-prefix-seed-0-1399c2857ca55c00",
+        "r3-train-semantic-001209-historical-prefix-seed-1-49e0a8cdf5ed9ae6",
+        "r3-train-semantic-001209-historical-prefix-seed-2-b89c347c4379fbb3",
+        "r3-train-semantic-001209-historical-prefix-seed-3-2de7cbc8f618bf00"
+      ],
+      "termination_contract": {
+        "assistant_end_token_id": 151645,
+        "assistant_end_token_text": "<|im_end|>",
+        "chat_suffix": "<|im_end|>\n",
+        "chat_suffix_token_ids": [
+          151645,
+          198
+        ],
+        "generation_eos_token_ids": [
+          151645,
+          151643
+        ],
+        "selection": "first token after an assistant answer in actual chat template, checked against generation EOS",
+        "tokenizer_eos_token_id": 151645
+      }
+    }
+  ],
+  "models": {
+    "dreamlite_mobile": {
+      "file_count": 27,
+      "manifest_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-mobile/.snapshot_manifest.json",
+      "manifest_sha256": "1bcf41b170c4b4a806bac6701cbdf4fabd5c3c53fa67415d065ab95ce2703159",
+      "model_dir": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-mobile",
+      "passed": true,
+      "repo_id": "carlofkl/DreamLite-mobile",
+      "revision": "6695c3f4be230f0493fa5dbf78be3bc4d3bb2ab4",
+      "snapshot_payload_sha256": "3fb839f465793b01ecafc4df433031a063dd7b395a050960cde57c2807031337",
+      "total_bytes": 5071894300
+    },
+    "qwen_reader": {
+      "file_count": 14,
+      "manifest_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct/.snapshot_manifest.json",
+      "manifest_sha256": "159a504daaae6dc412535978f087150a0eb8e50164afd70a8a17f83906f1127c",
+      "model_dir": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+      "passed": true,
+      "repo_id": "Qwen/Qwen3-VL-4B-Instruct",
+      "revision": "ebb281ec70b05090aa6165b016eac8ec08e71b17",
+      "snapshot_payload_sha256": "45be3ffb00017b02bffa79f4f8e6f301760ac50c0bb78b2c4e5a7fe8aa3d52c6",
+      "total_bytes": 8887292732
+    }
+  },
+  "provenance": {
+    "builder_commit": "7ee3a927d0abc7ead642fdc3e9795498efa20171",
+    "gray_reference_bank_sha256": "962f02846ed1a1933e6c219604bc22ee520e28f2dfe2721e26f111dc36ea122e",
+    "inference_success_claim": false,
+    "panel_sha256": "17f00e924ea8a2e66999fd63fb45db8848be8f1c91083155b4a21f9d011b45b5",
+    "qualification_sha256": "3ea31c28bcf985c914af17bc5bd11c182feb7ebf06365fd4a9d9448cf5f630eb",
+    "question_exposure": "allfive queries observed in teacher qualification; none is a fresh Writer research holdout",
+    "readback_complete_sha256": "091eb3d68eba1553ff7f34dab7a620e044003443ac811064ccd3730dee890a0e",
+    "readback_summary_including_failures": {
+      "all_matched_correct_eos": false,
+      "cells": {
+        "blank/rgb_uint8/original_open": {
+          "correct_eos": 0,
+          "n": 16
+        },
+        "blank/rgb_uint8/paraphrase_1": {
+          "correct_eos": 0,
+          "n": 16
+        },
+        "blank/rgb_uint8/paraphrase_2": {
+          "correct_eos": 0,
+          "n": 16
+        },
+        "blank/rgb_uint8/paraphrase_3": {
+          "correct_eos": 0,
+          "n": 16
+        },
+        "blank/rgb_uint8/paraphrase_4": {
+          "correct_eos": 0,
+          "n": 16
+        },
+        "matched/fp32_vae_decoded/original_open": {
+          "correct_eos": 64,
+          "n": 64
+        },
+        "matched/fp32_vae_decoded/paraphrase_1": {
+          "correct_eos": 64,
+          "n": 64
+        },
+        "matched/fp32_vae_decoded/paraphrase_2": {
+          "correct_eos": 61,
+          "n": 64
+        },
+        "matched/fp32_vae_decoded/paraphrase_3": {
+          "correct_eos": 63,
+          "n": 64
+        },
+        "matched/fp32_vae_decoded/paraphrase_4": {
+          "correct_eos": 60,
+          "n": 64
+        },
+        "matched/rgb_uint8/original_open": {
+          "correct_eos": 64,
+          "n": 64
+        },
+        "matched/rgb_uint8/paraphrase_1": {
+          "correct_eos": 64,
+          "n": 64
+        },
+        "matched/rgb_uint8/paraphrase_2": {
+          "correct_eos": 61,
+          "n": 64
+        },
+        "matched/rgb_uint8/paraphrase_3": {
+          "correct_eos": 63,
+          "n": 64
+        },
+        "matched/rgb_uint8/paraphrase_4": {
+          "correct_eos": 60,
+          "n": 64
+        }
+      },
+      "members_passing_both_forms_all_five": 57,
+      "passing_members_per_target": {
+        "0": 4,
+        "1": 4,
+        "10": 4,
+        "11": 3,
+        "12": 4,
+        "13": 4,
+        "14": 2,
+        "15": 3,
+        "2": 4,
+        "3": 3,
+        "4": 3,
+        "5": 3,
+        "6": 4,
+        "7": 4,
+        "8": 4,
+        "9": 4
+      },
+      "raw_rows": 720,
+      "scope": "Direct oracle compatibility readback only; no Writer trained or evaluated.",
+      "shared_writer_success": false,
+      "targets_passing_all_four_seeds": 10
+    },
+    "scope": "broader seen-question shared-Writer training input only; no claim of unseen entities, simultaneous facts, or sequential editing",
+    "selection": "all16 preregistered targets times all4 original seeds; zero outcome filtering or replacement"
+  },
+  "route": "direct",
+  "schema": "latent-teacher-bank/v1",
+  "semantic_question_count": 16,
+  "snapshots": {
+    "dreamlite_mobile": {
+      "file_count": 27,
+      "manifest_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-mobile/.snapshot_manifest.json",
+      "manifest_sha256": "1bcf41b170c4b4a806bac6701cbdf4fabd5c3c53fa67415d065ab95ce2703159",
+      "model_dir": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-mobile",
+      "passed": true,
+      "repo_id": "carlofkl/DreamLite-mobile",
+      "revision": "6695c3f4be230f0493fa5dbf78be3bc4d3bb2ab4",
+      "snapshot_payload_sha256": "3fb839f465793b01ecafc4df433031a063dd7b395a050960cde57c2807031337",
+      "total_bytes": 5071894300
+    },
+    "qwen_reader": {
+      "file_count": 14,
+      "manifest_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct/.snapshot_manifest.json",
+      "manifest_sha256": "159a504daaae6dc412535978f087150a0eb8e50164afd70a8a17f83906f1127c",
+      "model_dir": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+      "passed": true,
+      "repo_id": "Qwen/Qwen3-VL-4B-Instruct",
+      "revision": "ebb281ec70b05090aa6165b016eac8ec08e71b17",
+      "snapshot_payload_sha256": "45be3ffb00017b02bffa79f4f8e6f301760ac50c0bb78b2c4e5a7fe8aa3d52c6",
+      "total_bytes": 8887292732
+    }
+  },
+  "teachers": [
+    {
+      "answer": "green",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "7ea1b75c8a35ea50b6e51992ea3acef61f71c31f6e7f5a663d2c53ca1510eea5",
+      "latent_file_sha256": "f7ac93392acd3efe1fe81e86569fed9c79fc3d4e0c6e76c7e220b5bb281b8f16",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-00-seed-0.pt",
+      "latent_sha256": "ce3344b57d82946203dcd39ee9390d442c38c862d9cf1c43a80bff3b086356fe",
+      "original_positive_control_sha256": "abfd8134e1d593ba4a3a554e1657515f2ff4cd806c2de1993bc1a7a0a19d0bce",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-001175-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-000-seed-00-B",
+      "target": {
+        "answer": "green",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-001175-historical-prefix-seed-0-ce3344b57d829462"
+    },
+    {
+      "answer": "green",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "1fd6380f33ab6a95ec0d96eb8dd94d1e82f47c88a1fd90cc011b23fd75195f4b",
+      "latent_file_sha256": "b2d153d227dac35be238b9eb2a1e950879758910df80fffe96930a153df98edb",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-00-seed-1.pt",
+      "latent_sha256": "85c9ee943165204e7643860a3b57278a7b80a0db57ea538d1f6d47c8c932629e",
+      "original_positive_control_sha256": "04cd760803f3320f9c3e979f5c3cc52d4868553cb2f5882ac895bf3928603675",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-001175-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-000-seed-01-B",
+      "target": {
+        "answer": "green",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-001175-historical-prefix-seed-1-85c9ee943165204e"
+    },
+    {
+      "answer": "green",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "ef12e84de29be2a714ba0502c664a0bdd202d788edf5b9ca4355c25a1ed3c9cd",
+      "latent_file_sha256": "b41fc49b547da56a43b8cc7d11261131f0c65f9876d96da5eb70aaab6e5c443b",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-00-seed-2.pt",
+      "latent_sha256": "9ec0fb6e52d2c5edea54bc56279ca218bf64266cb9404ab0f46b00f4dc5bb41f",
+      "original_positive_control_sha256": "840ca17842a70fe7bd732e1952021af597112142c0794cd4bf16dd34ff063334",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-001175-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-000-seed-02-B",
+      "target": {
+        "answer": "green",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-001175-historical-prefix-seed-2-9ec0fb6e52d2c5ed"
+    },
+    {
+      "answer": "green",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "229dee16707c073c8a49ab18bbec4998ec06174d02932afc0e7c993cc7682d8b",
+      "latent_file_sha256": "7ae38d6f0148aa1c90d3d80a5f0dacd98fa99ca685faa5f42b0a85fca0f74723",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-00-seed-3.pt",
+      "latent_sha256": "d39d6cbe1ac42c5f33571b69c9d81629611c8713551adb126a223b5a92562705",
+      "original_positive_control_sha256": "e42eb3c9096f78cdb6aac1ace9f80455204391559ae6ac5f6b38095fee9f8d7e",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-001175-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-000-seed-03-B",
+      "target": {
+        "answer": "green",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-001175-historical-prefix-seed-3-d39d6cbe1ac42c5f"
+    },
+    {
+      "answer": "green",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "5841d80e31d659ff47229f2bf86729665291114fa125e4eee4212d47e0f847f3",
+      "latent_file_sha256": "181af8b667d4125d22b74952652e2f88b70b501834e71407cf6a6024ba1bf484",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-01-seed-0.pt",
+      "latent_sha256": "fc37d823710584b1660dd6a8c9e435940511748ab15bdc7b56cf0f218453f97f",
+      "original_positive_control_sha256": "1542c9c70eceffd2af03350b6c48499574fef4b380288f5f23ba41a3fcde75e1",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-000414-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-001-seed-00-B",
+      "target": {
+        "answer": "green",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000414-historical-prefix-seed-0-fc37d823710584b1"
+    },
+    {
+      "answer": "green",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "dbda6047b84a00c50204e7f8d81ad5a9d05792d77853cf989c7db5f235371587",
+      "latent_file_sha256": "c5887acf9c6188d6724edfdfb4a8577c38a5c6ce38fe61c9b4f25b3678404e8e",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-01-seed-1.pt",
+      "latent_sha256": "1e7ae6497f609fce142987eb5c2b9b413e161b9806c5ce6244f158005ab65487",
+      "original_positive_control_sha256": "24b3f29478203f0a8618254c749ae8bad6ecb70758211943cc820dcccd0d234a",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-000414-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-001-seed-01-B",
+      "target": {
+        "answer": "green",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000414-historical-prefix-seed-1-1e7ae6497f609fce"
+    },
+    {
+      "answer": "green",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "f45fbe8d0664b4fada922fbf26558f72443637fe653572d9af9b9e7d2b9eeea2",
+      "latent_file_sha256": "1cba266e006391d2daae747d177598c44110eb502773b15ee85859faf5d09f11",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-01-seed-2.pt",
+      "latent_sha256": "401fc66a615bce22577d208d8f10060621075101299511118c7d0c681a114fd9",
+      "original_positive_control_sha256": "545f9f0d469dc3ada94fed59c050e5acf8cf0a11d08fc81fa0a7e90b919a5734",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-000414-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-001-seed-02-B",
+      "target": {
+        "answer": "green",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000414-historical-prefix-seed-2-401fc66a615bce22"
+    },
+    {
+      "answer": "green",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "1ba158a4e005340712fcadec3532ba7d27cc9d687522c9f997fd47537ee1ec0f",
+      "latent_file_sha256": "2f5ec38f7c2ab59a882b2b51da35c5789617d703eda1e68d50b4d1796a139264",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-01-seed-3.pt",
+      "latent_sha256": "c0e9471876c858c6ac3dfa3d79b86d81724cbc066a818ea0666de35cc0f16fca",
+      "original_positive_control_sha256": "91dc526b08b3846546550645ccb10721f770f195324e0b6245ec8a6caab23b24",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-000414-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-001-seed-03-B",
+      "target": {
+        "answer": "green",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000414-historical-prefix-seed-3-c0e9471876c858c6"
+    },
+    {
+      "answer": "juice",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "02ae7e0c913b922a340abd20972b8720f4aeae4502a4ea6e39e8bc60c08e36d7",
+      "latent_file_sha256": "34f7831466e0516c194225629b8286d1e0d8ab2a35dc90312a75689ffbc12575",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-02-seed-0.pt",
+      "latent_sha256": "768fccec2cb2227b6f27c813ca7574dde6e480e6203f5f0f53456186c6a1f781",
+      "original_positive_control_sha256": "67d71482cc42dd994ea4de511952978e9136e4aad6562366970774311552db32",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-000271-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-002-seed-00-B",
+      "target": {
+        "answer": "juice",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000271-historical-prefix-seed-0-768fccec2cb2227b"
+    },
+    {
+      "answer": "juice",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "3b6bde0b6c5d14b1866345f7b3c26c0a8c346dac81eea99af56c53bd96de5c7c",
+      "latent_file_sha256": "87bd21e40f288fd4777b539af03444c37c4ab406b831af8b28aadb908c6c63a2",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-02-seed-1.pt",
+      "latent_sha256": "f4ae321b35711d5c915291037960c8073f5a73c8e8e1324418eb4abafdeab119",
+      "original_positive_control_sha256": "6690df6aac351f71ffc846b2c7d50b21af65c8c54ea1fd48ff9c3a95307adee7",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-000271-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-002-seed-01-B",
+      "target": {
+        "answer": "juice",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000271-historical-prefix-seed-1-f4ae321b35711d5c"
+    },
+    {
+      "answer": "juice",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "7d6d08bbd2663f9a67a76237c55eabeb39357e343599819e9a3d0023c0a730c3",
+      "latent_file_sha256": "39bf8ac39354db19296b7f38397221a85021fe42fc05a952bef9a0cf140ec586",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-02-seed-2.pt",
+      "latent_sha256": "f48c70dcd32ec9bd779637da688047d4034adb2475889fbc9a35d668fec58186",
+      "original_positive_control_sha256": "2d46f64e700854fa175b109bdbeb1c38c5e45852a5c9a30de7a5419e3c1ee47c",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-000271-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-002-seed-02-B",
+      "target": {
+        "answer": "juice",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000271-historical-prefix-seed-2-f48c70dcd32ec9bd"
+    },
+    {
+      "answer": "juice",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "479588d5524c0e1823cb3e61ad00702d0e21d315ea3307acfb3ca947da20ba13",
+      "latent_file_sha256": "066889147659d5f573104f66c9d6276340c49319139a76c411e61ffd8c49db39",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-02-seed-3.pt",
+      "latent_sha256": "9f4761f210596547b3fd4e719c8c8688e79969d6c17c469d488b02080b685b84",
+      "original_positive_control_sha256": "63bfaff0ee5223dafde29f40cb907c78c2d5a2182c617c80520db1d2bda636d1",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-000271-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-002-seed-03-B",
+      "target": {
+        "answer": "juice",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000271-historical-prefix-seed-3-9f4761f210596547"
+    },
+    {
+      "answer": "juice",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "34427820a6113f3b3c90b2fa9c2689ee215047c6aac393ad597e6db91ec12f9a",
+      "latent_file_sha256": "ad5ed987e41825a56de921a21a378c44b196415e0623e3ec58bd8fbea8055b60",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-03-seed-0.pt",
+      "latent_sha256": "c74d77d46d09f2c6e367fbc21c12d44e952ebbbc0eccf55b62310dc0df38b10b",
+      "original_positive_control_sha256": "f21c80be078cc6e091666c7bd3c0d11866df2fe3735300ee2b1e3725ef991736",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-001242-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-003-seed-00-B",
+      "target": {
+        "answer": "juice",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-001242-historical-prefix-seed-0-c74d77d46d09f2c6"
+    },
+    {
+      "answer": "juice",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "c9b25985e1f86de0a70a8a23705aa678af41f0fe065e98002cb5afccb48b30a2",
+      "latent_file_sha256": "2c46ce9c574d9ed48cc7b510a35d21afe1cce33ece56f7e496e85bb93cfacef3",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-03-seed-1.pt",
+      "latent_sha256": "c7becbef9baf77d90aad59215c7613d2a26a19a16aff4d4404ae22a06cbc0824",
+      "original_positive_control_sha256": "e8ce4f783579e48de0645777bef64eef3cd5c9d94c1a09c41d7e0fffd866bf17",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-001242-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-003-seed-01-B",
+      "target": {
+        "answer": "juice",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-001242-historical-prefix-seed-1-c7becbef9baf77d9"
+    },
+    {
+      "answer": "juice",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "a3453050d2b8c30109c4e802c2ce3f63a71c07cbd1142add96f6101e01d25e64",
+      "latent_file_sha256": "2072588f705472ee1922922fc8e4997b54b287bbd1296fb7db1a01f646593495",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-03-seed-2.pt",
+      "latent_sha256": "53c1bd446a465d98228363698d6bd8ce4be93d624054809e220c59390eaf5202",
+      "original_positive_control_sha256": "a331fc575e438a48ce03005d5c9708eb5a64682833159563441fe04b0aa21ea9",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-001242-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-003-seed-02-B",
+      "target": {
+        "answer": "juice",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-001242-historical-prefix-seed-2-53c1bd446a465d98"
+    },
+    {
+      "answer": "juice",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "c5007f1fcce56fa1d492706253900c4a7c8d735f1490e58f34fa0526ae0c5b06",
+      "latent_file_sha256": "fc7219067915f4fcc19e4a2000044b42f68d96315ba4e9cec9e92571543d21cc",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-03-seed-3.pt",
+      "latent_sha256": "fda2cdb4a3476a0706ead19b25c01451ddd6d7d795564f5a1c44d65265de1f38",
+      "original_positive_control_sha256": "6f35396d62b0327f4d64cb0c64b6432fd54e601643d97c9cf05f888ca63c8d06",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-001242-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-003-seed-03-B",
+      "target": {
+        "answer": "juice",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-001242-historical-prefix-seed-3-fda2cdb4a3476a07"
+    },
+    {
+      "answer": "jazz",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "38d1bd55072a1ddde4d982c58bbbafb013759387060efc38bf2c58dd3504e6cf",
+      "latent_file_sha256": "84c3c25f485e1ecccb58ea40848e94f02b02ed04305135e163a91f282bb3fd67",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-04-seed-0.pt",
+      "latent_sha256": "04cd098358191cdd1a11e8ecc38b81bdd2a2538f3ec2acf74d1cae974a9d8e9f",
+      "original_positive_control_sha256": "97be52fad0029e97ce682a35dc33baf84942c2235ea8319686626e96235a5ed6",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-000550-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-004-seed-00-B",
+      "target": {
+        "answer": "jazz",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000550-historical-prefix-seed-0-04cd098358191cdd"
+    },
+    {
+      "answer": "jazz",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "32871a55c922bf93dcebfd70bee355db6ffb67e46c35bdc83a54513bdf98050f",
+      "latent_file_sha256": "fee43067b687dd7aecfa0ddcf55594267f9b9deba26613a2b85e23bc44eafb06",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-04-seed-1.pt",
+      "latent_sha256": "e5ce438a6d0ef6955aa9102acad14c83124f09799443e0567be721e52295ced4",
+      "original_positive_control_sha256": "c1c04c833679e6f1949ffdba81dc14e06da9f5e09c2fd99eb402bed19f634af5",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-000550-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-004-seed-01-B",
+      "target": {
+        "answer": "jazz",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000550-historical-prefix-seed-1-e5ce438a6d0ef695"
+    },
+    {
+      "answer": "jazz",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "1f520c09a70421b698b34187d8715d3e638ab7834b2bfef22dc2a72ece860af9",
+      "latent_file_sha256": "98a21d1b31dccf171d25ac5ef7bdf74f2d61b7bc78f2b57e29aa6b5cfa03f5a5",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-04-seed-2.pt",
+      "latent_sha256": "7b0fda0517649dfde84c7e8d8ec218c3ee09c2968b1aaf3d37ad0f8931803703",
+      "original_positive_control_sha256": "d12b3e1ec1870b272497dcc6c23fa9cde792a70f252644a29013e8bd190aa6b0",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-000550-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-004-seed-02-B",
+      "target": {
+        "answer": "jazz",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000550-historical-prefix-seed-2-7b0fda0517649dfd"
+    },
+    {
+      "answer": "jazz",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "760496a64cb9e3bfc7380c54939168ce25d203c7533d9c5e0876a536845412c6",
+      "latent_file_sha256": "309e0d6d9c4b128333f34845b28aaee9ed2f8b9d2b8da630adba49f2e1f94410",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-04-seed-3.pt",
+      "latent_sha256": "710f7f734085200cdf7f1b000376de0e5e5617078f3149c7b3d89fb4c8bcff10",
+      "original_positive_control_sha256": "96e5388488d18ef65859494c0d690d40712d1e404f1f80c193c0023f3e6c4603",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-000550-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-004-seed-03-B",
+      "target": {
+        "answer": "jazz",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000550-historical-prefix-seed-3-710f7f734085200c"
+    },
+    {
+      "answer": "jazz",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "4aea0116ba371e1acff322984b2b53364d53a4282d3af9ad168cea8485e51669",
+      "latent_file_sha256": "f2bb178f4f47fc0f0f75385d132ab8087ec4a0c74001099c2cc6f299f6a7c4f1",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-05-seed-0.pt",
+      "latent_sha256": "5b932371de509e4667551105a474ffe4ea6d2c316f7aaf83eeeb496067d3391e",
+      "original_positive_control_sha256": "9e58a98b5bd479969c5a32ff85ccfd94799bd3c02fe4b5631237b9f4413738f6",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-000190-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-005-seed-00-B",
+      "target": {
+        "answer": "jazz",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000190-historical-prefix-seed-0-5b932371de509e46"
+    },
+    {
+      "answer": "jazz",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "8d312a9383f9fb2f0a7a66400c1d6002b26e5e82c20b6f09175bdfe8ec870af5",
+      "latent_file_sha256": "6fa52c872703d6ae88264b840d7153fcdcbf9fd3085e7ed3bb839fad78a7ffd5",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-05-seed-1.pt",
+      "latent_sha256": "94a8bef4b6df07c3b32c9435aef76868441bda41e527e2ceec169d788ceeccdc",
+      "original_positive_control_sha256": "dfe198d4a659ffb84a97ba3c55c4632fab0eb9059b951c3787b4f0fa37978b4c",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-000190-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-005-seed-01-B",
+      "target": {
+        "answer": "jazz",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000190-historical-prefix-seed-1-94a8bef4b6df07c3"
+    },
+    {
+      "answer": "jazz",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "cccb54a559e32c36ed96864520f160e08ec5dd97143539573bd87ace45c5f026",
+      "latent_file_sha256": "d46b8deb0dd8678e971a8d2452cd3e5a1325b8c5762c984e89421569b4262d28",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-05-seed-2.pt",
+      "latent_sha256": "881eb84be9fee7dfce47ea1650a706606ed8c21c7a00695572dbcb2682d83a98",
+      "original_positive_control_sha256": "489f76bb12527eb5dc1bb6644f00f71bb6652674abdbf24c3507f4708cc09983",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-000190-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-005-seed-02-B",
+      "target": {
+        "answer": "jazz",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000190-historical-prefix-seed-2-881eb84be9fee7df"
+    },
+    {
+      "answer": "jazz",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "270450786df3d1485bb519eb66dcd4260e9fb567ec0348c10916f051a5007972",
+      "latent_file_sha256": "6eba5149b7d8b32b5e7203e4803de78eab5801cca1eab003667c2cff0cda56c5",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-05-seed-3.pt",
+      "latent_sha256": "c31f6ead7537f22c1a9f0c2223e987c64158a04ebd28cced7fedcef18b2cebe6",
+      "original_positive_control_sha256": "2877c2624a784e58b8264a3e04334d3472e6117c40057d71a283a9e8d9983e3a",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-000190-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-005-seed-03-B",
+      "target": {
+        "answer": "jazz",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000190-historical-prefix-seed-3-c31f6ead7537f22c"
+    },
+    {
+      "answer": "linen",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "22133d7eff9c9b82e9611109bf04d161833a1ad66d1ace8f6870115ea67998b2",
+      "latent_file_sha256": "ca18f33ab0bf22657468af64551a0335987526783f6daca52dd215bcea80a68b",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-06-seed-0.pt",
+      "latent_sha256": "d865e844b7b75576c314ac98b6616efb4b2e12be95ec7f5bcc22ae1ac1e0ef95",
+      "original_positive_control_sha256": "21b6858df9787e079bead4357c44bfb0527f63a4b209b308a23640aac4a02ac0",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-000608-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-006-seed-00-B",
+      "target": {
+        "answer": "linen",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000608-historical-prefix-seed-0-d865e844b7b75576"
+    },
+    {
+      "answer": "linen",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "d8e7164d6107ad1e9c67ef28a39ded06fe4745cc3a9d44ee759f0e28508c5d19",
+      "latent_file_sha256": "4e78093810d6d61fdeedd86274fb56ce29fca9df869dcc5b40f06348cb6d4269",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-06-seed-1.pt",
+      "latent_sha256": "7490c863fa88a3fdd6bb3415221574da0f2dc794a5e9b846bf1d57c4eb6c741a",
+      "original_positive_control_sha256": "7ee9fecd00a020ee486eb3c68b716e37b6797e36a545ab2dda8543a14a927aca",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-000608-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-006-seed-01-B",
+      "target": {
+        "answer": "linen",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000608-historical-prefix-seed-1-7490c863fa88a3fd"
+    },
+    {
+      "answer": "linen",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "72c415227f4bfab2f9711747d050a28d53d88adcc93f1511a8fd770fdb8b68d5",
+      "latent_file_sha256": "2447e3d29f0d7836d5dbfbab1de9165825d9d82a205879200343bf6f500730aa",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-06-seed-2.pt",
+      "latent_sha256": "1b4460b4388debf27af6ac774e2fe3ade4956f8f9835b40aa881e41a5aa4f9c5",
+      "original_positive_control_sha256": "71095a2a44e543a7be5fba9c6ae7ef85176a3d9d746356fe79d5d740085f5320",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-000608-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-006-seed-02-B",
+      "target": {
+        "answer": "linen",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000608-historical-prefix-seed-2-1b4460b4388debf2"
+    },
+    {
+      "answer": "linen",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "d3575df3565723a51fb54df15ddf799e22c86ad84a6cbc1f63c53a863dbf7c7b",
+      "latent_file_sha256": "e9319e67417fed64e058673bf190032ed5ae5bc9c3907d1820913414c8116599",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-06-seed-3.pt",
+      "latent_sha256": "06d3722976fdb07d6060b3d963cfde21449416a3823a6bc2fd3e60efc23af51a",
+      "original_positive_control_sha256": "31f5f39d07c3fcb2613a640f2294a4aa0455aa209dcf30055148d4bdf4a3ba10",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-000608-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-006-seed-03-B",
+      "target": {
+        "answer": "linen",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000608-historical-prefix-seed-3-06d3722976fdb07d"
+    },
+    {
+      "answer": "linen",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "1ed07ed87f03b515c0a4b4d0d8c3a10d0e4c607478ddbf03a11e57efd3d78f00",
+      "latent_file_sha256": "05e90ae0e96a7a6e151c5e3d5f3639985b5611b400586bc83176ad83958a811f",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-07-seed-0.pt",
+      "latent_sha256": "24a66889599b2d7f748b59da2bf858628d2d88cc1637f082dde73a9e0be19c1a",
+      "original_positive_control_sha256": "2aec08349ac9ca4fcb3619ad332f037d3f8b49d986618d03b2b449e565f9eae4",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-000613-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-007-seed-00-B",
+      "target": {
+        "answer": "linen",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000613-historical-prefix-seed-0-24a66889599b2d7f"
+    },
+    {
+      "answer": "linen",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "584b58e1c96d464fe3423febfc8c68aaeae0d4dd3f8905a67bf41f41879240bc",
+      "latent_file_sha256": "1aba0a2ab1328610c5d39b5e4eea397e7192cca5f15318b7b9ab167699df3aa7",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-07-seed-1.pt",
+      "latent_sha256": "a5f60ef825167ffec18a52eff74ec5964eda436c6ab126512505bf876a5717e1",
+      "original_positive_control_sha256": "e7ef67304cb0cfc1df9d46cc7f2f189276bbee47e03d53dc31a72102e7ab579e",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-000613-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-007-seed-01-B",
+      "target": {
+        "answer": "linen",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000613-historical-prefix-seed-1-a5f60ef825167ffe"
+    },
+    {
+      "answer": "linen",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "47e79e33bb81479e4e985996e5539d4b223452110b91ba671563b69284bb4b08",
+      "latent_file_sha256": "b417ed1807fff305426536e380d7b326b5b307eaf27189930e5ffb513886c76c",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-07-seed-2.pt",
+      "latent_sha256": "58fdafae0ff4b76aefac5566fbc88c5e0826f6e1315e37a807820eaac4290edc",
+      "original_positive_control_sha256": "965af216d63053a794c1957f4153236a27f6f23db41c2d8364b162a144ea3ed9",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-000613-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-007-seed-02-B",
+      "target": {
+        "answer": "linen",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000613-historical-prefix-seed-2-58fdafae0ff4b76a"
+    },
+    {
+      "answer": "linen",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "8f7da9e5b136e90f95da55380edc05c7cef128d29a76be1c3ffc83f03d09c31a",
+      "latent_file_sha256": "02f4550c3e70cbe80aa15b059907d2e37e90e98171163564f09d76588f315aa0",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-07-seed-3.pt",
+      "latent_sha256": "a0c46d745285ee3212b6fa4ce09229d227818abc79c4965c1f10befa9baa07d0",
+      "original_positive_control_sha256": "80d4cad027c35da0fe05c81555dbf2fb7703e3ca34c6ca69d26d2028e8da399e",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-000613-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-007-seed-03-B",
+      "target": {
+        "answer": "linen",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000613-historical-prefix-seed-3-a0c46d745285ee32"
+    },
+    {
+      "answer": "pasta",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "9fe45dd9bd0fd430141195d2282cd3724df8bbc8df9c79656bf02782a68703a6",
+      "latent_file_sha256": "a058e2a54d61bdbb2074902682d46f56fef075f90fffdf546152de704ef01c14",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-08-seed-0.pt",
+      "latent_sha256": "f49995f2e6f13492db4bebc3599f952cbebe373b803959d6337b9d64f7a34c7d",
+      "original_positive_control_sha256": "99c96d23d77a0cc218ee371eac1e05382b2365c5f93e2a1a4699d72b7002e137",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-000327-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-008-seed-00-B",
+      "target": {
+        "answer": "pasta",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000327-historical-prefix-seed-0-f49995f2e6f13492"
+    },
+    {
+      "answer": "pasta",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "028902a7f390c2048e4e45acc806a98d924a0eb5621f4abd920f92fe390c57d6",
+      "latent_file_sha256": "0ca59df46c3f2c07f942d0c718718d3891e2bccb89b042e99b4c79a243107eac",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-08-seed-1.pt",
+      "latent_sha256": "07a7309336d65e65b98f8dcbb6e6a162a7b575ba2b56c6a019237f51baef0868",
+      "original_positive_control_sha256": "4253a0b8e1baeb9bba59a4c33f3396ba1e60121784dba35c6d5bdafe83271609",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-000327-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-008-seed-01-B",
+      "target": {
+        "answer": "pasta",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000327-historical-prefix-seed-1-07a7309336d65e65"
+    },
+    {
+      "answer": "pasta",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "5c7ba6ada6915afb2d08b3e0bc514ca68fd1a724759a78ee3e16db445c6f2634",
+      "latent_file_sha256": "97ee33d2a14010c2f2e655de420429bdc694e78c2b41ac57721f76e1c9f299a6",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-08-seed-2.pt",
+      "latent_sha256": "660b3dd1f65af578a4c98871a6d39effe0a23cb2f98307f07bafd588779788a5",
+      "original_positive_control_sha256": "68950754574a3650d8753c37dee77fa4f845e3eec827d2364480733fa6da2d98",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-000327-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-008-seed-02-B",
+      "target": {
+        "answer": "pasta",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000327-historical-prefix-seed-2-660b3dd1f65af578"
+    },
+    {
+      "answer": "pasta",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "a41fae0d3f8e24c6c6f968aaa8a686b27d2f55b4f7543168372c4eaa9f59b4fe",
+      "latent_file_sha256": "ccdc28b7231c54ba847bd707561985a78c0ace39ce955c8432b38ae34698be0f",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-08-seed-3.pt",
+      "latent_sha256": "a73fc81e5fc6eb12d6e9bb6ac3b7b7e82ce598d03258c166c6d0be33ac467b7f",
+      "original_positive_control_sha256": "c1dd9cd70ba6b09f5fb061b95a812d379404bef454daf208310c4fdded17a1e5",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-000327-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-008-seed-03-B",
+      "target": {
+        "answer": "pasta",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000327-historical-prefix-seed-3-a73fc81e5fc6eb12"
+    },
+    {
+      "answer": "pasta",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "8f14e0243057cc489efb8f6005fd5614a00277aee3cdede45170a4246027b06d",
+      "latent_file_sha256": "3ab7fbb96713179672709f85f29da2984a59cf3ce988120af2382848fc7ecdc1",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-09-seed-0.pt",
+      "latent_sha256": "56d80540b0893945eda498835b2fb52fd2eec2d1859e2cebcd4762b20306b2e0",
+      "original_positive_control_sha256": "c255a84f7361a89857f6ecbf5bfc5a5cc8d84babf99893e3231630a8b92dfa70",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-000147-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-009-seed-00-B",
+      "target": {
+        "answer": "pasta",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000147-historical-prefix-seed-0-56d80540b0893945"
+    },
+    {
+      "answer": "pasta",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "ef6a713ab551bcd40729ea1a4f6196a8cfb8cb53f6d5e807062d33a9dc6c407e",
+      "latent_file_sha256": "413b4181e2ce5dc569cb94a9ffbaab88c48f5c8906f8103f91479dfbbd2d51d6",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-09-seed-1.pt",
+      "latent_sha256": "ca6ce5b8e10341c847bf014a971c119601e43e8a2df48aefe6b1d5a792e1b0aa",
+      "original_positive_control_sha256": "c8661083c0941b9d61e18c233258acbbd01d00c8c3ab306f99aa545b623d0f92",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-000147-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-009-seed-01-B",
+      "target": {
+        "answer": "pasta",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000147-historical-prefix-seed-1-ca6ce5b8e10341c8"
+    },
+    {
+      "answer": "pasta",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "781fab2ccd1205da5d2a2da9c65e63f8bf5a154c244ef6e83c97b3f9bb6d7728",
+      "latent_file_sha256": "90a90ff6e653cb2d219a4a523d326252f750c7a748d523699d0e0249086e6aef",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-09-seed-2.pt",
+      "latent_sha256": "eed6277c247698cb08024ce67f34ff4b2bd90ca5f8d175ad244cac11697e6a9c",
+      "original_positive_control_sha256": "252699a5310a487f4c352752a22223e534a7ad7df4cfe5c513e4d0b93e3962a2",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-000147-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-009-seed-02-B",
+      "target": {
+        "answer": "pasta",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000147-historical-prefix-seed-2-eed6277c247698cb"
+    },
+    {
+      "answer": "pasta",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "a1d97e958862fc73c60d744d1a110587aed66fe82427cbdec5790d8b7c49a1d3",
+      "latent_file_sha256": "b495a8612d6806bc19dc9cc8557dd2a1884b5e1df69d0769ef3365d5c5d4befe",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-09-seed-3.pt",
+      "latent_sha256": "7d4018aa87ab8341f142c006bc3c0eb20044cbe6d4224f6b9e511fcbb64f9a6d",
+      "original_positive_control_sha256": "f3199cd73cd56bd20d42549a695c58a36e2f40675d338bd43961f5a51848fe68",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-000147-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-009-seed-03-B",
+      "target": {
+        "answer": "pasta",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000147-historical-prefix-seed-3-7d4018aa87ab8341"
+    },
+    {
+      "answer": "no active preference",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "40db621600451ad2fb38278a1e40af1d1ac19533fd7ae6fea680793a4241347a",
+      "latent_file_sha256": "e8477c80c1ded870c42e23f356f3d5d469dbda700cf7b065128a3576efb8c4bb",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-10-seed-0.pt",
+      "latent_sha256": "98321b2c03cc3cfeae504ff1d8b2900bd72e5c434b879c1fdf0a7c947668595e",
+      "original_positive_control_sha256": "abd865f24e2690a6e84fec2d7ac5a1de14482c98e3eb744ced6d825f21e749d8",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-000986-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-010-seed-00-B",
+      "target": {
+        "answer": "no active preference",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000986-historical-prefix-seed-0-98321b2c03cc3cfe"
+    },
+    {
+      "answer": "no active preference",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "2dcf3037248e0c88f51ecffd422c64a50a1ff007cd12f2df8bbecb3f490d35f9",
+      "latent_file_sha256": "41a3f39db9117a33564198e508658ef35e7bf7ec0a9f5eb45f275890106758f5",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-10-seed-1.pt",
+      "latent_sha256": "694b43219b06ac34f5a4a01d77c1c89162c553a5565766223d08f22fb517c49f",
+      "original_positive_control_sha256": "bd8bcb2c65db3cfa73e2a8ea46e1faa55c0f4e776e7bf6f5e737638fa7c38c6e",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-000986-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-010-seed-01-B",
+      "target": {
+        "answer": "no active preference",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000986-historical-prefix-seed-1-694b43219b06ac34"
+    },
+    {
+      "answer": "no active preference",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "33bd7d09fc3e104c775ed3ea4c599693de6d345d1499058d679716767f649d80",
+      "latent_file_sha256": "2a27d7505e5e592c374847ef5e3b29f0acec348bc76e05b2af84a65b7a3591c6",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-10-seed-2.pt",
+      "latent_sha256": "f53527b362a789d0ba12f3f0241d9e3ae6ab67074db1a2bde3b897462e3e5155",
+      "original_positive_control_sha256": "f306baad482473b7ca2d3d5a33f23095fca80c81d1f68c48f4bd5d99fd5f2244",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-000986-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-010-seed-02-B",
+      "target": {
+        "answer": "no active preference",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000986-historical-prefix-seed-2-f53527b362a789d0"
+    },
+    {
+      "answer": "no active preference",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "f2af49a3ebc591a35bf76c5458d26e202e3950fabda27c9ee34494eaa203f966",
+      "latent_file_sha256": "68ed9fcfb99a98d7a8a8b904ca2b3652c01c3685383cc4216e38ccc2449f5ba7",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-10-seed-3.pt",
+      "latent_sha256": "ac5912b26a2236ae83a5b006d05ca47a51ec9a3818bd0dbbf0016ef03d4e61b7",
+      "original_positive_control_sha256": "bffecb296bc84183ba9a501cb7d6c30389cee692bbe041b4c916583348c534c3",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-000986-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-010-seed-03-B",
+      "target": {
+        "answer": "no active preference",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000986-historical-prefix-seed-3-ac5912b26a2236ae"
+    },
+    {
+      "answer": "no active preference",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "133adab66b072bb5a322fa1f192da2aa006ad1d377be5032fb243ddf96aaec4e",
+      "latent_file_sha256": "fc8f9be85c978f7ddcb997089dd95d139f88ef056f37df4ce9474bbc45828d6b",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-11-seed-0.pt",
+      "latent_sha256": "03b1c1dc9d0618eae12ab5db27692c76fee103e188be8b376b7eb174f3ad8b78",
+      "original_positive_control_sha256": "be136ad1598ffbf30b784873453658d086881c50473bd32d756a062924e2cb8e",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-000024-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-011-seed-00-B",
+      "target": {
+        "answer": "no active preference",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000024-historical-prefix-seed-0-03b1c1dc9d0618ea"
+    },
+    {
+      "answer": "no active preference",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "8698d35747e1893b1cb4cd2f6756fa24c5fb5423e5f40480cd37d56ed490d5fc",
+      "latent_file_sha256": "e9ad064487a8f5de40feefbd0398b2e2453f8dee2b2f48e6a6ffa21ef6aa9ab0",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-11-seed-1.pt",
+      "latent_sha256": "59a6cf7f56a4518b211e0ade3366fbe895b942d61706c771496ea25c5fb8fe95",
+      "original_positive_control_sha256": "71c0b5102b4fed9575c52fd65ac5570f38416c478f7cae289f375e74a95c23d1",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-000024-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-011-seed-01-B",
+      "target": {
+        "answer": "no active preference",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000024-historical-prefix-seed-1-59a6cf7f56a4518b"
+    },
+    {
+      "answer": "no active preference",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "16ad91145e3049b82d6e0770e8da45092e114ee2ff5ec5aa9f35f697b2009a19",
+      "latent_file_sha256": "b350627a9d43a62b6d9d1b3ceb5616f983a5c21683afc4113a344ebaca5a1494",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-11-seed-2.pt",
+      "latent_sha256": "34636a1522b4582020d63ac0b69e8ab8667bb8fcfea52b190af5c38081f8134f",
+      "original_positive_control_sha256": "a4935b42ade2d8132b31064dc2ede345db2a7ca11406fe6bc405094f3fb48aa8",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-000024-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-011-seed-02-B",
+      "target": {
+        "answer": "no active preference",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000024-historical-prefix-seed-2-34636a1522b45820"
+    },
+    {
+      "answer": "no active preference",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "0882ab11fa87156aaee874b5dc688a06619f5773794fbe5007015c839747f69e",
+      "latent_file_sha256": "74dbf3f96eb86414032702591b4fe58aeb8423d7722324e88544daa7a8811508",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-11-seed-3.pt",
+      "latent_sha256": "d2f80134a5611e74f5941337057ec9be5e16dec8e5c6cdd428fd7d395da905ba",
+      "original_positive_control_sha256": "4e5006eb554f1c0dbd1cf4316776cfba19c34723ccf12c335382c2bdb6d6f69d",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-000024-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-011-seed-03-B",
+      "target": {
+        "answer": "no active preference",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000024-historical-prefix-seed-3-d2f80134a5611e74"
+    },
+    {
+      "answer": "no active preference",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "7305d1a39965a5ffa4fa4db7cb82a9c6daa40afc917d5af00887bc6feb833ae7",
+      "latent_file_sha256": "c319fa1da72bfe7c758438b398852f79720918220999afcbfa46eb642b4cbd1e",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-12-seed-0.pt",
+      "latent_sha256": "ac5276b973ddc619c71ee064f9aa4b4058fb64d905e045c54a91d01b09b126af",
+      "original_positive_control_sha256": "dfdd70766a271471e4bbc4ed370e3ae4a430771ce4853dcd0d5b64db9ddf0791",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-001048-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-012-seed-00-B",
+      "target": {
+        "answer": "no active preference",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-001048-historical-prefix-seed-0-ac5276b973ddc619"
+    },
+    {
+      "answer": "no active preference",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "97da334cf13b87f4cf53b697ee0fb60e706dbcfaa21cc342ef3f10fee657cca7",
+      "latent_file_sha256": "b758a2f8d8f35efbb829c4926fb94bf120b24ee2aab9ec5163f8f3d8c6d1496e",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-12-seed-1.pt",
+      "latent_sha256": "019f6113d69686cbc8fac186ae855f46992959dbe3db0d4759fee3a906a55c89",
+      "original_positive_control_sha256": "915eb7ca45cfca42afbe36f3e1a7ffc6e31c8ce6832fb5a12c1313fde9050f28",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-001048-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-012-seed-01-B",
+      "target": {
+        "answer": "no active preference",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-001048-historical-prefix-seed-1-019f6113d69686cb"
+    },
+    {
+      "answer": "no active preference",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "c7aa1effecd42f4a16f2f6d4481c9c239b4debe08f2cfcd7a88649bd87d11f3f",
+      "latent_file_sha256": "572f7c2571967e6ff4913aea6b8fcd8d50ea401b86b4de648b9d907a708df191",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-12-seed-2.pt",
+      "latent_sha256": "55f14e534403a2f91c242f388dd8cf9319763b3399993e27503b3e80375a4f22",
+      "original_positive_control_sha256": "eaa8c1f378bb93a3e3b57e79a8b955a1d72e156e0d3fb8ec8d742d87254083e7",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-001048-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-012-seed-02-B",
+      "target": {
+        "answer": "no active preference",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-001048-historical-prefix-seed-2-55f14e534403a2f9"
+    },
+    {
+      "answer": "no active preference",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "b31dc75abc86f826fef146b4d5e8c3872f859a626d3f7e534da6cc18071bfad1",
+      "latent_file_sha256": "e772482f03fa7bad09a0d3ed7b215a9ccb65ebd4895ec68002b50ea47e431623",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-12-seed-3.pt",
+      "latent_sha256": "6a28a13d32d3123f1aa65f78dadc16f65bfe7aaead63d00f5b8e2f62721521af",
+      "original_positive_control_sha256": "aa2437165321d40b036d23e546ae14945e0e5a22993190f6510c27ef3fe1cc62",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-001048-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-012-seed-03-B",
+      "target": {
+        "answer": "no active preference",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-001048-historical-prefix-seed-3-6a28a13d32d3123f"
+    },
+    {
+      "answer": "no active preference",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "db3f14ae5a5037cbe248bc1d1989f30575a724cf2a2f058c3019f9472dc9982b",
+      "latent_file_sha256": "d2678af5dd9baddab47ed0f49849d808bc6e3077808ba1446e1709f5b9f36770",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-13-seed-0.pt",
+      "latent_sha256": "e6fa598f319190e1426f94dec68622533e63a8e8dacc143a1359c13d3ffe6700",
+      "original_positive_control_sha256": "10e6e4a57485c6b419bcf308eaffd69685b7b564394cfc625cbca7d8d2df4751",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-001224-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-013-seed-00-B",
+      "target": {
+        "answer": "no active preference",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-001224-historical-prefix-seed-0-e6fa598f319190e1"
+    },
+    {
+      "answer": "no active preference",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "eb77f9f8c6e91de222486ec7af4296e8866ebf17b2ac88ebac14fb9a6fec9d59",
+      "latent_file_sha256": "eb4d6764404c756aa63aaaa203e2639feadb75f266e29fdcad6b8b5d2e4218e3",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-13-seed-1.pt",
+      "latent_sha256": "a8e9427470e132c8023c23b25d53940d0e7895b3cab99a01e0be8a24312ec5e2",
+      "original_positive_control_sha256": "f4919a2f0052a71bca13a66c722b6b6a1b32845a6a605b5e0d4a90116353c5ac",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-001224-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-013-seed-01-B",
+      "target": {
+        "answer": "no active preference",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-001224-historical-prefix-seed-1-a8e9427470e132c8"
+    },
+    {
+      "answer": "no active preference",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "9b85211da5a91160994dc56976e6475c4fa10b38de48fc9f4d2ecd13e01d6e01",
+      "latent_file_sha256": "aa4b07c26f9d565dd6ddce31d180bfbc7f7b21e50e11afaa779058ea046372bc",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-13-seed-2.pt",
+      "latent_sha256": "ccca72a52bcdb948e0ab373186f3c3f8204a3ef3e076a64fb1c524d95a6a88e4",
+      "original_positive_control_sha256": "4edf329bbb3f420422114a9465b2a709ce5e4ed0a38cec86663ed966578ab594",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-001224-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-013-seed-02-B",
+      "target": {
+        "answer": "no active preference",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-001224-historical-prefix-seed-2-ccca72a52bcdb948"
+    },
+    {
+      "answer": "no active preference",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "c29979d7610e5e697f35e9ae232ecb302edfd129d09bc741ea519602b3466af1",
+      "latent_file_sha256": "663b6ac32919c2fb0b6805648ea1e3c55e5892c3823e96832dc265af083bc037",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-13-seed-3.pt",
+      "latent_sha256": "294a798cf99309ab42ef22703ecc917a9cc3424b74a2cce074c155b505a2a967",
+      "original_positive_control_sha256": "5c98cdbee9d4353c78114b7145b2f413ee29ff7582d8d825222e5b7f38827cf3",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-001224-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-013-seed-03-B",
+      "target": {
+        "answer": "no active preference",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-001224-historical-prefix-seed-3-294a798cf99309ab"
+    },
+    {
+      "answer": "no active preference",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "14adb2c21fa0bd17ea863d75cb009536722cf1948d7147a06d455e635610cf1a",
+      "latent_file_sha256": "daaaffa8a67ab66f11d46d306ee1a101a887cced8ff933b49d9d04a8a1d5bfb9",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-14-seed-0.pt",
+      "latent_sha256": "709cec593210b13f5981b596800fa3ee8ce4fd62503c041c4a1f92bd07d7fc3b",
+      "original_positive_control_sha256": "c393fe6215a8582f61d745b4d55301e399a5c67c90a4acc5862ef7fae07b4d0c",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-000250-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-014-seed-00-B",
+      "target": {
+        "answer": "no active preference",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000250-historical-prefix-seed-0-709cec593210b13f"
+    },
+    {
+      "answer": "no active preference",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "bf2aba8f98ed805cca8228794757cc79cce1230b127f9aa3a644db7983c0416c",
+      "latent_file_sha256": "bf204ed55859fd4bf7fbc7b8e7830de5400ee57f1c972b133c178dae51ac2f58",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-14-seed-1.pt",
+      "latent_sha256": "45c60f8065d2f2e0d85d7c8828103aa335ebb107d05e75ce1e6b835c2c97c060",
+      "original_positive_control_sha256": "d08f863cbf84b9e3e3ab1b9c040725691344582dd75e1a93beed3ccdeaccdbc8",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-000250-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-014-seed-01-B",
+      "target": {
+        "answer": "no active preference",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000250-historical-prefix-seed-1-45c60f8065d2f2e0"
+    },
+    {
+      "answer": "no active preference",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "6adc62e253cc34b7bdd1245269366b7c9294834dcd0ed6ae1e451c3da026e4cc",
+      "latent_file_sha256": "d6b96ee22c85ae78cba1475ad0b8a988ec39ae4ab85f2a3ae89db8b82ec1c0f9",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-14-seed-2.pt",
+      "latent_sha256": "463e153b3c76ab96b941d8a81eb6ea0ac8dc5ece9443e0a5e48606e7d3e6f03c",
+      "original_positive_control_sha256": "09224dd2e2628fa13e16502f64373d7814795d59107e7bd85ac0ec92d9a34547",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-000250-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-014-seed-02-B",
+      "target": {
+        "answer": "no active preference",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000250-historical-prefix-seed-2-463e153b3c76ab96"
+    },
+    {
+      "answer": "no active preference",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "e31045c9fe50585a6c7c1a6d4a3aa0a3dfb012bb5dd1473bbda1ec2029df482e",
+      "latent_file_sha256": "ad1bbfb6e1d13caf6eca51c455b96b146581913d74ecf3f59f0c44add0a26f59",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-14-seed-3.pt",
+      "latent_sha256": "e8e740ff3f86c159d76d1ea24f1d14dd21ed4e546d468ec797ef02b171b30622",
+      "original_positive_control_sha256": "3c7c666a573095f15c2d1cde32075ae0e990af4d6a6495214f99e52e08904715",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-000250-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-0/runs/target-014-seed-03-B",
+      "target": {
+        "answer": "no active preference",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-000250-historical-prefix-seed-3-e8e740ff3f86c159"
+    },
+    {
+      "answer": "no active preference",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "6568ac20ae7b09a6be56dd26d1c5d65673aa6c588ced461790f74ae6aa3b3443",
+      "latent_file_sha256": "326b5ab3d4607a1cc7eb8483b7824b4eb7a06fe86d3f81f941d31f57e35c355a",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-15-seed-0.pt",
+      "latent_sha256": "1399c2857ca55c008a6db94dcf3d4e4ba282390d5690578c5ba6f1529821d5c6",
+      "original_positive_control_sha256": "98371554d5dff1e342aeaa19423ecb13290403770a75be7b1b221a318ee913be",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-001209-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-015-seed-00-B",
+      "target": {
+        "answer": "no active preference",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-001209-historical-prefix-seed-0-1399c2857ca55c00"
+    },
+    {
+      "answer": "no active preference",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "3df82a6562ad42060cd5556ecfc51c86efdb373421572e57ecd67e24533c8c44",
+      "latent_file_sha256": "2363e8adfa92d449c6784e23f466fd7bc1007521f23fb4661c64459025faf313",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-15-seed-1.pt",
+      "latent_sha256": "49e0a8cdf5ed9ae695991606cd6b4e659c820077481c45005244b732af7aece3",
+      "original_positive_control_sha256": "c70e7f7f4008d5ba3abcff04c1f91aea7032ad3ecec9a68b45d348fb838cd61d",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-001209-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-015-seed-01-B",
+      "target": {
+        "answer": "no active preference",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-001209-historical-prefix-seed-1-49e0a8cdf5ed9ae6"
+    },
+    {
+      "answer": "no active preference",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "82ec7aebef4b9d90d42f5d7d3ddc757f146642c515aa2af2e7f7d2d280451585",
+      "latent_file_sha256": "f94971afb0ee5f2ff0d2be3226f9c783b5ffcf77ca87270bdd229db7da013e18",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-15-seed-2.pt",
+      "latent_sha256": "b89c347c4379fbb32ad7f934820904548a967d61c6d6d826d48668c66649eec9",
+      "original_positive_control_sha256": "2cb084dc503b0d9bd9c86d788da01866098d112824f084a7d94407315443d64e",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-001209-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-015-seed-02-B",
+      "target": {
+        "answer": "no active preference",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-001209-historical-prefix-seed-2-b89c347c4379fbb3"
+    },
+    {
+      "answer": "no active preference",
+      "endpoint_step": 256,
+      "evaluation_generation": {
+        "do_sample": false,
+        "max_new_tokens": 32
+      },
+      "generation_file_sha256": "16d5bdc7611a8442b9e15da03353fd6d483631e7c4389555ca9cf829a23bfc74",
+      "gold_eos_appended": true,
+      "historical_checkpoint_sha256": "38bc19b8952bf3e27ad54e768a72e6ff5c032aa2881052843f59f5d68f09231c",
+      "latent_file_sha256": "b959ff95690b3efe03b1193f08275bd215ae141697430efab93ccc789a3762cd",
+      "latent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/7ee3a92-historical-writer-bank/latents/target-15-seed-3.pt",
+      "latent_sha256": "2de7cbc8f618bf00f505fe3525f03dcee6a5c669c8e4e0eaccbf6999879890e2",
+      "original_positive_control_sha256": "ef0781dcb0fda0af6101361885c8b4b015bb190e932e379f8821a206562de19e",
+      "qualification": "both FP32 and RGB original-open answer plus immediateEOS; rewrites are not filtered",
+      "question_id": "r3-train-semantic-001209-historical-prefix",
+      "source_run": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/vision-language-memory-r11-open-eos-multiquestion/paired-2c0e41c-20260908-r01/lane-1/runs/target-015-seed-03-B",
+      "target": {
+        "answer": "no active preference",
+        "strict_correct": true
+      },
+      "teacher_id": "r3-train-semantic-001209-historical-prefix-seed-3-2de7cbc8f618bf00"
+    }
+  ]
+}

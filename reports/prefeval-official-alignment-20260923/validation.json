@@ -1,0 +1,28 @@
+{
+  "upstream_revision": "50795054b5ff5f418d2b768a331d71e480f93331",
+  "upstream_topic_order_and_sklearn_seed42_permutation": "PASS",
+  "sft_renderings_equal_to_actual_upstream_process_input": 3000,
+  "conditions": [
+    0,
+    5,
+    10
+  ],
+  "counts_per_condition": {
+    "train": 820,
+    "eval_topic": 180
+  },
+  "historical_train_topics_overlapping_new_official_eval": [
+    "shop_motors",
+    "shop_technology",
+    "travel_transportation"
+  ],
+  "historical_sentinel_topics_overlapping_new_official_eval": [
+    "shop_motors",
+    "shop_technology",
+    "travel_transportation"
+  ],
+  "gpu_training_launched": false,
+  "claim": "data preparation and CPU parity only",
+  "exported_topic_and_row_order_matches_upstream": "PASS",
+  "focused_tests_passed": 7
+}

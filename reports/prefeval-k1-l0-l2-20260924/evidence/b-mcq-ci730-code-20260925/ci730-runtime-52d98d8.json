@@ -1,0 +1,40 @@
+{
+  "utc": "2026-09-25T11:39:19Z",
+  "code_root": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-deploy-52d98d8",
+  "checks": [
+    {
+      "command": [
+        "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+        "scripts/experiments/prefeval_k1_writer.py",
+        "--help"
+      ],
+      "returncode": 0,
+      "stdout": "usage: prefeval_k1_writer.py [-h] --arm {A,B} [--stage {write,retain}]\n                             [--split {pilot,train,dev,official}]\n                             [--history-file HISTORY_FILE] --base BASE\n                             --official-source OFFICIAL_SOURCE --checkpoint\n                             CHECKPOINT --output OUTPUT [--teachers TEACHERS]\n                             [--sources SOURCES]\n                             [--retain-source-mode {recursive,initial,four-bank}]\n                             [--retain-target-mode {teacher,source}]\n                             [--probe-initial-sources PROBE_INITIAL_SOURCES]\n                             [--initial-variants INITIAL_VARIANTS]\n                             [--initial-variant {0,1,2}] [--device DEVICE]\n                             [--steps STEPS]\n                             [--snapshot-steps SNAPSHOT_STEPS [SNAPSHOT_STEPS ...]]\n                             [--inter-turns INTER_TURNS]\n                             [--noise-chains NOISE_CHAINS]\n                             [--noise-domain {eval,source-bank}]\n                             [--limit LIMIT]\n                             {train,rollout}\n\nK1 shared Writer: reuse official FM helpers and unchanged native RGB\ninference.\n\npositional arguments:\n  {train,rollout}\n\noptions:\n  -h, --help            show this help message and exit\n  --arm {A,B}\n  --stage {write,retain}\n  --split {pilot,train,dev,official}\n  --history-file HISTORY_FILE\n  --base BASE\n  --official-source OFFICIAL_SOURCE\n  --checkpoint CHECKPOINT\n  --output OUTPUT\n  --teachers TEACHERS\n  --sources SOURCES\n  --retain-source-mode {recursive,initial,four-bank}\n  --retain-target-mode {teacher,source}\n  --probe-initial-sources PROBE_INITIAL_SOURCES\n                        Offline one-step probe from fixed training PNGs; not a\n                        fresh rollout.\n  --initial-variants INITIAL_VARIANTS\n  --initial-variant {0,1,2}\n  --device DEVICE\n  --steps STEPS\n  --snapshot-steps SNAPSHOT_STEPS [SNAPSHOT_STEPS ...]\n  --inter-turns INTER_TURNS\n  --noise-chains NOISE_CHAINS\n  --noise-domain {eval,source-bank}\n  --limit LIMIT\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+        "scripts/experiments/prefeval_k1_source_bank.py",
+        "--help"
+      ],
+      "returncode": 0,
+      "stdout": "usage: prefeval_k1_source_bank.py [-h] --root ROOT --checkpoint CHECKPOINT\n                                  --variants VARIANTS\n\nShared, unfiltered four-PNG bank for the registered C730/I730 comparison.\n\noptions:\n  -h, --help            show this help message and exit\n  --root ROOT\n  --checkpoint CHECKPOINT\n  --variants VARIANTS\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+        "-m",
+        "pytest",
+        "tests/test_prefeval_k1_source_bank.py",
+        "tests/test_prefeval_k1_variants.py",
+        "-q"
+      ],
+      "returncode": 0,
+      "stdout": "Running 8 items in this shard\n........                                                                 [100%]\n8 passed in 2.39s\n",
+      "stderr": ""
+    }
+  ],
+  "gpu_model_loaded": false
+}

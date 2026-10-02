@@ -193,6 +193,62 @@ class ReaderLossContractTest(unittest.TestCase):
         result.loss.backward()
         self.assertIsNotNone(image.grad)
 
+    def test_boundary_recovery_preserves_generation_prefix_and_target_gradient(self):
+        class BoundaryTokenizer(MockTokenizer):
+            def __call__(self, text, add_special_tokens, return_tensors):
+                mapping = {'prompt ': [0, 1], 'prompt \nanswer': [0, 6, 3], '\nanswer': [2, 3]}
+                return {'input_ids': torch.tensor([mapping[text]], dtype=torch.long)}
+
+            def decode(self, ids, **kwargs):
+                self.asserted_ids = ids.tolist()
+                return '\nanswer'
+
+        class TypedProcessor(MockProcessor):
+            def __call__(self, **kwargs):
+                batch = super().__call__(**kwargs)
+                batch['mm_token_type_ids'] = torch.tensor([[1, 0]])
+                return batch
+
+        class RecordingModel(MockBaseModel):
+            def forward(self, *, mm_token_type_ids, **kwargs):
+                self.ids = kwargs['input_ids'].detach().clone()
+                self.mask = kwargs['attention_mask'].detach().clone()
+                self.types = mm_token_type_ids.detach().clone()
+                return super().forward(**kwargs)
+
+        torch.manual_seed(31)
+        model = freeze_module(MockQwen())
+        model.model = RecordingModel()
+        processor = TypedProcessor()
+        processor.tokenizer = BoundaryTokenizer()
+        image = torch.rand(3, 8, 8, requires_grad=True)
+        result = qwen3vl_target_only_ce(model=model, processor=processor, image=image,
+            query='question', target='\nanswer', device=torch.device('cpu'), preserve_generation_prefix=True)
+        self.assertEqual(model.model.ids.tolist(), [[0, 1, 2, 3]])
+        self.assertEqual(model.model.mask.tolist(), [[1, 1, 1, 1]])
+        self.assertEqual(model.model.types.tolist(), [[1, 0, 0, 0]])
+        self.assertEqual(result.target_ids.tolist(), [[2, 3]])
+        self.assertEqual(processor.observed_processor_texts, ['prompt '])
+        # Prediction positions must be the last prompt token and then the first answer token.
+        expected_hidden = torch.nn.functional.one_hot(torch.tensor([1, 2]), num_classes=4).float() + image.mean()
+        expected = torch.nn.functional.cross_entropy(model.lm_head(expected_hidden), torch.tensor([2, 3]))
+        torch.testing.assert_close(result.loss, expected)
+        result.loss.backward()
+        self.assertTrue(torch.isfinite(image.grad).all())
+        self.assertGreater(image.grad.norm().item(), 0.0)
+
+    def test_boundary_recovery_does_not_change_stable_contextual_suffix(self):
+        model = freeze_module(MockQwen())
+        image = torch.rand(3, 8, 8, requires_grad=True)
+        ordinary = qwen3vl_target_only_ce(model=model, processor=MockProcessor(), image=image,
+            query='question', target='answer', device=torch.device('cpu'))
+        processor = MockProcessor()
+        recovered = qwen3vl_target_only_ce(model=model, processor=processor, image=image,
+            query='question', target='answer', device=torch.device('cpu'), preserve_generation_prefix=True)
+        torch.testing.assert_close(recovered.loss, ordinary.loss, rtol=0, atol=0)
+        self.assertEqual(recovered.target_ids.tolist(), [[6, 7]])
+        self.assertNotIn('answer', processor.tokenizer.observed_texts)
+
     def test_choice_scorer_propagates_disabled_resize_to_every_choice(self):
         model = freeze_module(MockQwen())
         processor = MockProcessor()

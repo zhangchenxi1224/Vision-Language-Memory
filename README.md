@@ -1,11 +1,53 @@
 # Vision Learnable Memory
 
+> 最新完整本地复核：[4f原注册功能集](reports/official-alignment-results-20260913/clear-retention-registered-review.md)1790/1800，[已观察表达回归](reports/official-alignment-results-20260913/clear-retention-observed-wording-review.md)1750/1800；两套全部3980 raw、720生成PNG及真实CLI均已核验。两套各修复b9的10条旧错误，均无新增退步；仍有10+50条清除及后续保持错误。[完整PNG读回](reports/official-alignment-results-20260913/clear-retention-png-validation-review.md)796张PNG、3980 raw本地复核3540/3600，无答案翻转。接下来补测[固定03完整表达基线](reports/official-03-observed-wording-baseline-plan-20260914.md)，尚未达到完整可用。
+
+> 2026-09-14 13:28：来源图/权重交叉诊断已完成。基于03参数与较低学习率的[继续训练](reports/official-alignment-results-20260913/clear-retention-development-review.md)已完成固定4832次更新；全量本地复核开发1510/1510、19328次训练抽样及302张量审计绑定。四卡正在运行完整功能回归，尚无本轮完整可用结论。下面各轮结果保留用于比较。
+
+> 最新核验（2026-09-14）：新4H200完成历史表达增强训练，开发1510/1510；[旧案例](reports/official-alignment-results-20260913/historical-wording-validation-review.md)1780/1800，[固定新表述](reports/official-alignment-results-20260913/fresh-wording-validation-review.md)1740/1800。两套完整raw、PNG及实际CLI已本地复核；历史前缀均全对，连续链仍分别20/60条清空及后续保持不变失败。[完整PNG读回](reports/official-alignment-results-20260913/png-readback-validation-review.md)全部3980raw、796张PNG本地复核为3520/3600，没有匹配答案翻转。继续[权重与源图交叉诊断](reports/official-clear-source-swap-plan-20260914.md)；尚无通过完整验收的可用版本。
+
+> 2026-09-13：[官方DreamLite训练对齐审计](reports/official-alignment-audit-20260913.md)与[实训结果](reports/official-alignment-results-20260913/README.md)。新训练入口默认官方target/noise FM、source条件与纯噪声推理；Base直接使用原生官方28步pipeline。显式`--base-guidance-scale 1`只改变Base推理，默认7.5保留。旧source-anchored文档和下方旧实验阶段记录仅供历史复现，当前结论以上方完整结果为准。
+
+> 2026-09-08：已同步 [旧 R11 同题多起点实验的真实结果](reports/r11-mcq-open-multistart-results-20260907/README.md)，包含汇总、原文回答、审计记录与轨迹图。
+
 This repository is the reproducible engineering shell for the DreamLite + Qwen3-VL
 stateful-memory experiments. The laptop is for framework development, mock autograd
 tests, and API validation. Real model probes and episode training run on a Linux GPU
 cluster.
 
-## Canonical baseline
+## Current official-alignment experiment
+
+The current branch uses the pinned upstream DreamLite Base pipeline with target/noise
+flow matching over the full training time interval, source-image conditioning, pure-noise
+initialization, and native 28-step inference. The tested candidate trains the full U-Net
+and uses explicit CFG1 at inference. The completed training comparison also encodes training
+events using the conditional row of upstream Base's full three-prompt edit batch,
+instead of the upstream LoRA example's raw event. This changes training conditioning
+only; native inference remains fixed. These differences in trainable parameters and
+training conditions are explicit; the [audit](reports/official-alignment-audit-20260913.md)
+records that choice and the remaining experimental differences.
+
+Recurrent validation carries the actual generated RGB PNG between events and applies
+the official VAE encoding at every write. The completed45-condition four-GPU model
+passed development but failed independent event wording and chain tests. Its exported
+package passed an actual bank-free six-write/thirty-read native replay; identical output
+does not remove those functional failures. The current151-condition experiment adds
+training expressions and16 qualified historical full-prefix targets, with fresh transition
+wording and broader prefix validation registered before training. See the
+[experiment plan](reports/official-broader-writer-plan-20260913.md) and
+[live-run handoff](reports/official-alignment-continuation-20260913.md).
+
+Both native-condition training and frozen raw-condition inference now pass all1510
+development reads. Their full paired functional validations and bank-free CLI replays
+remain separate acceptance requirements; development success alone does not certify
+a usable memory model. Raw-condition packages explicitly use a v2 schema so a v1
+loader cannot silently substitute native conditioning.
+
+The earlier direct-latent BPTT protocol below is preserved for historical experiments.
+Neither teacher readback nor seen-question development establishes unseen-entity,
+simultaneous multi-fact, or general memory functionality.
+
+## Historical Mobile baseline
 
 - Runtime pipeline: Diffusers 0.39.0 `DreamLiteMobilePipeline`.
 - Read-only reference: ByteVisionLab/DreamLite at the exact commit in `models.lock.json`.
@@ -17,7 +59,7 @@ Qwen source is not cloned because Qwen3-VL is supplied by Transformers. Model we
 are reconstructed from `models.lock.json`, loaded with `local_files_only=True`, and never
 committed to Git.
 
-## Exact technical scope
+## Historical Mobile technical scope
 
 The official mobile pipeline is kept untouched as the inference and numerical reference.
 Its public call is inference-oriented: it is under `torch.no_grad()`, creates target noise,

@@ -1,0 +1,76 @@
+{
+  "utc": "2026-09-27T07:18:22.280536+00:00",
+  "c_reader_rows": 5914,
+  "c_prior_rows": 5711,
+  "c_prior_prefix_unchanged": true,
+  "c_new_rows": 203,
+  "c_pngs_verified": 1980,
+  "c_chains_verified": 180,
+  "c_png_modified_since_launch": 0,
+  "r_log_last": 11471,
+  "r_contiguous_unique": true,
+  "r_write_retain_1_to_1": true,
+  "r_uncommitted_tail_rows": 98,
+  "r_resumed_first": {
+    "step": 11393,
+    "draws": [
+      {
+        "pair_id": "lifestyle_dietary:0000",
+        "position": 0,
+        "sigma": 0.5606156587600708,
+        "mse": 0.08813022077083588,
+        "initial_variant": 1,
+        "source_index": null,
+        "source_round": null
+      },
+      {
+        "pair_id": "lifestyle_dietary:0000",
+        "position": 2,
+        "sigma": 0.44465214014053345,
+        "mse": 0.7682534456253052,
+        "initial_variant": null,
+        "source_index": 1,
+        "source_round": 1
+      },
+      {
+        "pair_id": "professional_work_location_style:0017",
+        "position": 0,
+        "sigma": 0.5964402556419373,
+        "mse": 0.09113971889019012,
+        "initial_variant": 1,
+        "source_index": null,
+        "source_round": null
+      },
+      {
+        "pair_id": "professional_work_location_style:0017",
+        "position": 2,
+        "sigma": 0.5217831134796143,
+        "mse": 0.3099713921546936,
+        "initial_variant": null,
+        "source_index": 1,
+        "source_round": 1
+      }
+    ],
+    "grad_norm": 0.3143320381641388,
+    "seconds": 2.0859751910029445
+  },
+  "r_resume_before": {
+    "step": 11392,
+    "cursor": 45568,
+    "optimizer_steps": [
+      11392
+    ],
+    "optimizer_parameters": 1075,
+    "rng_keys": [
+      "python",
+      "numpy",
+      "torch_cpu",
+      "torch_cuda"
+    ],
+    "trainer_state": {
+      "refresh_round": 1,
+      "source_bank_sha256": "1fe8cf804b8bf12afcf2240f1d4eb65eb61c0cadd19dc542b3fb511cf66c74f8"
+    },
+    "sha256": "cc2f31cf9b1ff91db759e51707d1f7944c8eb12a036fcd2b6ef1efc3749e936e"
+  }
+}

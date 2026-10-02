@@ -1,0 +1,97 @@
+﻿target_index,segment_id,condition,prompt_id,query,gold,raw,raw_json,raw_with_special_tokens,normalized,strict_correct,format_status,has_extra_text,expected_text_present,truncated,finish_reason,generated_token_count,donor_target_index,donor_gold,donor_gold_string_match
+0,r5-f1-8015bf53a4067aaa7e882288,matched,original_open,"R3 Train Standard Templates 15: At this later check, what is the current material preference for the willow room train 000431?
+Use the memory image to answer. Answer with a short phrase only.",linen,wood,"""wood""",wood<|im_end|>,wood,False,different_answer,False,False,False,eos,2,,,
+0,r5-f1-8015bf53a4067aaa7e882288,matched,paraphrase_open,"R3 Train Standard Templates 15: At this later check, which material does the willow room train 000431 currently prefer?
+Use the memory image to answer. Answer with a short phrase only.",linen,Linen,"""Linen""",Linen<|im_end|>,linen,True,exact_short_answer,False,True,False,eos,3,,,
+0,r5-f1-8015bf53a4067aaa7e882288,blank,original_open,"R3 Train Standard Templates 15: At this later check, what is the current material preference for the willow room train 000431?
+Use the memory image to answer. Answer with a short phrase only.",linen,None,"""None""",None<|im_end|>,none,False,different_answer,False,False,False,eos,2,,,
+0,r5-f1-8015bf53a4067aaa7e882288,blank,paraphrase_open,"R3 Train Standard Templates 15: At this later check, which material does the willow room train 000431 currently prefer?
+Use the memory image to answer. Answer with a short phrase only.",linen,None,"""None""",None<|im_end|>,none,False,different_answer,False,False,False,eos,2,,,
+0,r5-f1-8015bf53a4067aaa7e882288,donor,original_open,"R3 Train Standard Templates 15: At this later check, what is the current material preference for the willow room train 000431?
+Use the memory image to answer. Answer with a short phrase only.",linen,wood,"""wood""",wood<|im_end|>,wood,False,different_answer,False,False,False,eos,2,1,ambient,False
+0,r5-f1-8015bf53a4067aaa7e882288,donor,paraphrase_open,"R3 Train Standard Templates 15: At this later check, which material does the willow room train 000431 currently prefer?
+Use the memory image to answer. Answer with a short phrase only.",linen,Willow Room Train 000431 currently prefers the material: **Willow**.,"""Willow Room Train 000431 currently prefers the material: **Willow**.""",Willow Room Train 000431 currently prefers the material: **Willow**.<|im_end|>,willow room train 000431 currently prefers the material: **willow,False,different_answer,False,False,False,eos,22,1,ambient,False
+1,r5-f1-392d41fd097d069c42218e0a,matched,original_open,"R3 Train Standard Templates 03: At this later check, what is the current music preference for the indigo desk train 001123?
+Use the memory image to answer. Answer with a short phrase only.",ambient,indigo,"""indigo""",indigo<|im_end|>,indigo,False,different_answer,False,False,False,eos,3,,,
+1,r5-f1-392d41fd097d069c42218e0a,matched,paraphrase_open,"R3 Train Standard Templates 03: At this later check, which music does the indigo desk train 001123 currently prefer?
+Use the memory image to answer. Answer with a short phrase only.",ambient,R3 Train Standard Templates 03,"""R3 Train Standard Templates 03""",R3 Train Standard Templates 03<|im_end|>,r3 train standard templates 03,False,different_answer,False,False,False,eos,9,,,
+1,r5-f1-392d41fd097d069c42218e0a,blank,original_open,"R3 Train Standard Templates 03: At this later check, what is the current music preference for the indigo desk train 001123?
+Use the memory image to answer. Answer with a short phrase only.",ambient,No music preference recorded.,"""No music preference recorded.""",No music preference recorded.<|im_end|>,no music preference recorded,False,different_answer,False,False,False,eos,6,,,
+1,r5-f1-392d41fd097d069c42218e0a,blank,paraphrase_open,"R3 Train Standard Templates 03: At this later check, which music does the indigo desk train 001123 currently prefer?
+Use the memory image to answer. Answer with a short phrase only.",ambient,None,"""None""",None<|im_end|>,none,False,different_answer,False,False,False,eos,2,,,
+1,r5-f1-392d41fd097d069c42218e0a,donor,original_open,"R3 Train Standard Templates 03: At this later check, what is the current music preference for the indigo desk train 001123?
+Use the memory image to answer. Answer with a short phrase only.",ambient,"Yellow, not indigo.","""Yellow, not indigo.""","Yellow, not indigo.<|im_end|>","yellow, not indigo",False,different_answer,False,False,False,eos,7,2,orange,False
+1,r5-f1-392d41fd097d069c42218e0a,donor,paraphrase_open,"R3 Train Standard Templates 03: At this later check, which music does the indigo desk train 001123 currently prefer?
+Use the memory image to answer. Answer with a short phrase only.",ambient,"Yellow, not indigo.","""Yellow, not indigo.""","Yellow, not indigo.<|im_end|>","yellow, not indigo",False,different_answer,False,False,False,eos,7,2,orange,False
+2,r5-f1-1aee01c0f3e7684c05c9122c,matched,original_open,"R3 Train Standard Templates 29: After applying this update first, what is the current color preference for the amber desk train 000797?
+Use the memory image to answer. Answer with a short phrase only.",orange,Yellow,"""Yellow""",Yellow<|im_end|>,yellow,False,different_answer,False,False,False,eos,2,,,
+2,r5-f1-1aee01c0f3e7684c05c9122c,matched,paraphrase_open,"R3 Train Standard Templates 29: Once this update has been applied first, which color does the amber desk train 000797 currently prefer?
+Use the memory image to answer. Answer with a short phrase only.",orange,Yellow,"""Yellow""",Yellow<|im_end|>,yellow,False,different_answer,False,False,False,eos,2,,,
+2,r5-f1-1aee01c0f3e7684c05c9122c,blank,original_open,"R3 Train Standard Templates 29: After applying this update first, what is the current color preference for the amber desk train 000797?
+Use the memory image to answer. Answer with a short phrase only.",orange,gray,"""gray""",gray<|im_end|>,gray,False,different_answer,False,False,False,eos,2,,,
+2,r5-f1-1aee01c0f3e7684c05c9122c,blank,paraphrase_open,"R3 Train Standard Templates 29: Once this update has been applied first, which color does the amber desk train 000797 currently prefer?
+Use the memory image to answer. Answer with a short phrase only.",orange,gray,"""gray""",gray<|im_end|>,gray,False,different_answer,False,False,False,eos,2,,,
+2,r5-f1-1aee01c0f3e7684c05c9122c,donor,original_open,"R3 Train Standard Templates 29: After applying this update first, what is the current color preference for the amber desk train 000797?
+Use the memory image to answer. Answer with a short phrase only.",orange,yellow,"""yellow""",yellow<|im_end|>,yellow,False,different_answer,False,False,False,eos,2,3,yellow,True
+2,r5-f1-1aee01c0f3e7684c05c9122c,donor,paraphrase_open,"R3 Train Standard Templates 29: Once this update has been applied first, which color does the amber desk train 000797 currently prefer?
+Use the memory image to answer. Answer with a short phrase only.",orange,yellow,"""yellow""",yellow<|im_end|>,yellow,False,different_answer,False,False,False,eos,2,3,yellow,True
+3,r5-f1-807090710dd4c077a97348ba,matched,original_open,"R3 Train Standard Templates 24: Before any later update, what is the current color preference for the willow chair train 000408?
+Use the memory image to answer. Answer with a short phrase only.",yellow,yellow,"""yellow""",yellow<|im_end|>,yellow,True,exact_short_answer,False,True,False,eos,2,,,
+3,r5-f1-807090710dd4c077a97348ba,matched,paraphrase_open,"R3 Train Standard Templates 24: Before any subsequent update, which color does the willow chair train 000408 currently prefer?
+Use the memory image to answer. Answer with a short phrase only.",yellow,yellow,"""yellow""",yellow<|im_end|>,yellow,True,exact_short_answer,False,True,False,eos,2,,,
+3,r5-f1-807090710dd4c077a97348ba,blank,original_open,"R3 Train Standard Templates 24: Before any later update, what is the current color preference for the willow chair train 000408?
+Use the memory image to answer. Answer with a short phrase only.",yellow,gray,"""gray""",gray<|im_end|>,gray,False,different_answer,False,False,False,eos,2,,,
+3,r5-f1-807090710dd4c077a97348ba,blank,paraphrase_open,"R3 Train Standard Templates 24: Before any subsequent update, which color does the willow chair train 000408 currently prefer?
+Use the memory image to answer. Answer with a short phrase only.",yellow,gray,"""gray""",gray<|im_end|>,gray,False,different_answer,False,False,False,eos,2,,,
+3,r5-f1-807090710dd4c077a97348ba,donor,original_open,"R3 Train Standard Templates 24: Before any later update, what is the current color preference for the willow chair train 000408?
+Use the memory image to answer. Answer with a short phrase only.",yellow,Blue,"""Blue""",Blue<|im_end|>,blue,False,different_answer,False,False,False,eos,2,4,blue,True
+3,r5-f1-807090710dd4c077a97348ba,donor,paraphrase_open,"R3 Train Standard Templates 24: Before any subsequent update, which color does the willow chair train 000408 currently prefer?
+Use the memory image to answer. Answer with a short phrase only.",yellow,blue,"""blue""",blue<|im_end|>,blue,False,different_answer,False,False,False,eos,2,4,blue,True
+4,r5-f1-02c8aa9dc3523351c4d5f9c7,matched,original_open,"R3 Train Standard Templates 27: Before any later update, what is the current color preference for the linen lamp train 000987?
+Use the memory image to answer. Answer with a short phrase only.",blue,White,"""White""",White<|im_end|>,white,False,different_answer,False,False,False,eos,2,,,
+4,r5-f1-02c8aa9dc3523351c4d5f9c7,matched,paraphrase_open,"R3 Train Standard Templates 27: Before any subsequent update, which color does the linen lamp train 000987 currently prefer?
+Use the memory image to answer. Answer with a short phrase only.",blue,White,"""White""",White<|im_end|>,white,False,different_answer,False,False,False,eos,2,,,
+4,r5-f1-02c8aa9dc3523351c4d5f9c7,blank,original_open,"R3 Train Standard Templates 27: Before any later update, what is the current color preference for the linen lamp train 000987?
+Use the memory image to answer. Answer with a short phrase only.",blue,gray,"""gray""",gray<|im_end|>,gray,False,different_answer,False,False,False,eos,2,,,
+4,r5-f1-02c8aa9dc3523351c4d5f9c7,blank,paraphrase_open,"R3 Train Standard Templates 27: Before any subsequent update, which color does the linen lamp train 000987 currently prefer?
+Use the memory image to answer. Answer with a short phrase only.",blue,gray,"""gray""",gray<|im_end|>,gray,False,different_answer,False,False,False,eos,2,,,
+4,r5-f1-02c8aa9dc3523351c4d5f9c7,donor,original_open,"R3 Train Standard Templates 27: Before any later update, what is the current color preference for the linen lamp train 000987?
+Use the memory image to answer. Answer with a short phrase only.",blue,Yellow,"""Yellow""",Yellow<|im_end|>,yellow,False,different_answer,False,False,False,eos,2,5,juice,False
+4,r5-f1-02c8aa9dc3523351c4d5f9c7,donor,paraphrase_open,"R3 Train Standard Templates 27: Before any subsequent update, which color does the linen lamp train 000987 currently prefer?
+Use the memory image to answer. Answer with a short phrase only.",blue,Blue,"""Blue""",Blue<|im_end|>,blue,True,exact_short_answer,False,True,False,eos,2,5,juice,False
+5,r5-f1-11dddf29efebc033a995ab92,matched,original_open,"R3 Train Standard Templates 30: Before any later update, what is the current drink preference for the copper desk train 000478?
+Use the memory image to answer. Answer with a short phrase only.",juice,Juice,"""Juice""",Juice<|im_end|>,juice,True,exact_short_answer,False,True,False,eos,3,,,
+5,r5-f1-11dddf29efebc033a995ab92,matched,paraphrase_open,"R3 Train Standard Templates 30: Before any subsequent update, which drink does the copper desk train 000478 currently prefer?
+Use the memory image to answer. Answer with a short phrase only.",juice,Juice,"""Juice""",Juice<|im_end|>,juice,True,exact_short_answer,False,True,False,eos,3,,,
+5,r5-f1-11dddf29efebc033a995ab92,blank,original_open,"R3 Train Standard Templates 30: Before any later update, what is the current drink preference for the copper desk train 000478?
+Use the memory image to answer. Answer with a short phrase only.",juice,No drink preference recorded.,"""No drink preference recorded.""",No drink preference recorded.<|im_end|>,no drink preference recorded,False,different_answer,False,False,False,eos,6,,,
+5,r5-f1-11dddf29efebc033a995ab92,blank,paraphrase_open,"R3 Train Standard Templates 30: Before any subsequent update, which drink does the copper desk train 000478 currently prefer?
+Use the memory image to answer. Answer with a short phrase only.",juice,None,"""None""",None<|im_end|>,none,False,different_answer,False,False,False,eos,2,,,
+5,r5-f1-11dddf29efebc033a995ab92,donor,original_open,"R3 Train Standard Templates 30: Before any later update, what is the current drink preference for the copper desk train 000478?
+Use the memory image to answer. Answer with a short phrase only.",juice,Coca-Cola,"""Coca-Cola""",Coca-Cola<|im_end|>,coca-cola,False,different_answer,False,False,False,eos,4,6,pasta,False
+5,r5-f1-11dddf29efebc033a995ab92,donor,paraphrase_open,"R3 Train Standard Templates 30: Before any subsequent update, which drink does the copper desk train 000478 currently prefer?
+Use the memory image to answer. Answer with a short phrase only.",juice,Coca-Cola,"""Coca-Cola""",Coca-Cola<|im_end|>,coca-cola,False,different_answer,False,False,False,eos,4,6,pasta,False
+6,r5-f1-de4899e05b0aa7f3d8373171,matched,original_open,"R3 Train Standard Templates 28: After applying this update first, what is the current meal preference for the linen backpack train 000540?
+Use the memory image to answer. Answer with a short phrase only.",pasta,"With one, food sort.","""With one, food sort.""","With one, food sort.<|im_end|>","with one, food sort",False,different_answer,False,False,False,eos,7,,,
+6,r5-f1-de4899e05b0aa7f3d8373171,matched,paraphrase_open,"R3 Train Standard Templates 28: Once this update has been applied first, which meal does the linen backpack train 000540 currently prefer?
+Use the memory image to answer. Answer with a short phrase only.",pasta,$11.00,"""$11.00""",$11.00<|im_end|>,$11.00,False,different_answer,False,False,False,eos,7,,,
+6,r5-f1-de4899e05b0aa7f3d8373171,blank,original_open,"R3 Train Standard Templates 28: After applying this update first, what is the current meal preference for the linen backpack train 000540?
+Use the memory image to answer. Answer with a short phrase only.",pasta,none,"""none""",none<|im_end|>,none,False,different_answer,False,False,False,eos,2,,,
+6,r5-f1-de4899e05b0aa7f3d8373171,blank,paraphrase_open,"R3 Train Standard Templates 28: Once this update has been applied first, which meal does the linen backpack train 000540 currently prefer?
+Use the memory image to answer. Answer with a short phrase only.",pasta,None,"""None""",None<|im_end|>,none,False,different_answer,False,False,False,eos,2,,,
+6,r5-f1-de4899e05b0aa7f3d8373171,donor,original_open,"R3 Train Standard Templates 28: After applying this update first, what is the current meal preference for the linen backpack train 000540?
+Use the memory image to answer. Answer with a short phrase only.",pasta,Vegetarian,"""Vegetarian""",Vegetarian<|im_end|>,vegetarian,False,different_answer,False,False,False,eos,4,7,green,False
+6,r5-f1-de4899e05b0aa7f3d8373171,donor,paraphrase_open,"R3 Train Standard Templates 28: Once this update has been applied first, which meal does the linen backpack train 000540 currently prefer?
+Use the memory image to answer. Answer with a short phrase only.",pasta,Green Vegetables,"""Green Vegetables""",Green Vegetables<|im_end|>,green vegetables,False,different_answer,False,False,False,eos,4,7,green,False
+7,r5-f1-850189e424efde62468b2ef9,matched,original_open,"R3 Train Standard Templates 03: At this later check, what is the current color preference for the silver backpack train 000003?
+Use the memory image to answer. Answer with a short phrase only.",green,Green,"""Green""",Green<|im_end|>,green,True,exact_short_answer,False,True,False,eos,2,,,
+7,r5-f1-850189e424efde62468b2ef9,matched,paraphrase_open,"R3 Train Standard Templates 03: At this later check, which color does the silver backpack train 000003 currently prefer?
+Use the memory image to answer. Answer with a short phrase only.",green,Green,"""Green""",Green<|im_end|>,green,True,exact_short_answer,False,True,False,eos,2,,,
+7,r5-f1-850189e424efde62468b2ef9,blank,original_open,"R3 Train Standard Templates 03: At this later check, what is the current color preference for the silver backpack train 000003?
+Use the memory image to answer. Answer with a short phrase only.",green,gray,"""gray""",gray<|im_end|>,gray,False,different_answer,False,False,False,eos,2,,,
+7,r5-f1-850189e424efde62468b2ef9,blank,paraphrase_open,"R3 Train Standard Templates 03: At this later check, which color does the silver backpack train 000003 currently prefer?
+Use the memory image to answer. Answer with a short phrase only.",green,gray,"""gray""",gray<|im_end|>,gray,False,different_answer,False,False,False,eos,2,,,
+7,r5-f1-850189e424efde62468b2ef9,donor,original_open,"R3 Train Standard Templates 03: At this later check, what is the current color preference for the silver backpack train 000003?
+Use the memory image to answer. Answer with a short phrase only.",green,blue,"""blue""",blue<|im_end|>,blue,False,different_answer,False,False,False,eos,2,0,linen,False
+7,r5-f1-850189e424efde62468b2ef9,donor,paraphrase_open,"R3 Train Standard Templates 03: At this later check, which color does the silver backpack train 000003 currently prefer?
+Use the memory image to answer. Answer with a short phrase only.",green,Blue,"""Blue""",Blue<|im_end|>,blue,False,different_answer,False,False,False,eos,2,0,linen,False

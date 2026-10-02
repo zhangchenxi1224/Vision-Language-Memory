@@ -1,0 +1,71 @@
+{
+  "global_microbatches": 4,
+  "gradient_max_absolute_error": 3.725290298461914e-09,
+  "gradient_relative_l2_error": 3.233411062128955e-08,
+  "gradient_relative_max_error": 5.942027676538831e-08,
+  "identical_draws_and_losses": true,
+  "parallel_microbatches": [
+    {
+      "effective_sigma": 0.912028431892395,
+      "flow_matching_mse": 0.0016208153683692217,
+      "noise_seed": 3358586985970429025,
+      "question_id": "r5-f1-392d41fd097d069c42218e0a-from-clear-set-to-ambient-wording-0",
+      "teacher_id": "r5-f1-392d41fd097d069c42218e0a-from-clear-set-to-ambient-wording-0-e910e9b89ed3861e"
+    },
+    {
+      "effective_sigma": 0.041594862937927246,
+      "flow_matching_mse": 0.14521631598472595,
+      "noise_seed": 4718512447247521995,
+      "question_id": "r5-f1-392d41fd097d069c42218e0a-from-ambient-set-to-ambient-wording-0",
+      "teacher_id": "r5-f1-392d41fd097d069c42218e0a-from-ambient-set-to-ambient-wording-0-e910e9b89ed3861e"
+    },
+    {
+      "effective_sigma": 0.4868795871734619,
+      "flow_matching_mse": 0.0028673596680164337,
+      "noise_seed": 2114436240044005134,
+      "question_id": "r5-f1-392d41fd097d069c42218e0a-from-jazz-set-to-ambient-wording-0",
+      "teacher_id": "r5-f1-392d41fd097d069c42218e0a-from-jazz-set-to-ambient-wording-0-e910e9b89ed3861e"
+    },
+    {
+      "effective_sigma": 0.6183444857597351,
+      "flow_matching_mse": 0.0017501887632533908,
+      "noise_seed": 8741197459766712596,
+      "question_id": "r5-f1-392d41fd097d069c42218e0a-from-ambient-noop-to-ambient-wording-2",
+      "teacher_id": "r5-f1-392d41fd097d069c42218e0a-from-ambient-noop-to-ambient-wording-2-e910e9b89ed3861e"
+    }
+  ],
+  "passed": true,
+  "relative_tolerance": 2e-06,
+  "scope": "actual full U-Net gradient only; no optimizer update or success claim",
+  "serial_microbatches": [
+    {
+      "effective_sigma": 0.912028431892395,
+      "flow_matching_mse": 0.0016208153683692217,
+      "noise_seed": 3358586985970429025,
+      "question_id": "r5-f1-392d41fd097d069c42218e0a-from-clear-set-to-ambient-wording-0",
+      "teacher_id": "r5-f1-392d41fd097d069c42218e0a-from-clear-set-to-ambient-wording-0-e910e9b89ed3861e"
+    },
+    {
+      "effective_sigma": 0.041594862937927246,
+      "flow_matching_mse": 0.14521631598472595,
+      "noise_seed": 4718512447247521995,
+      "question_id": "r5-f1-392d41fd097d069c42218e0a-from-ambient-set-to-ambient-wording-0",
+      "teacher_id": "r5-f1-392d41fd097d069c42218e0a-from-ambient-set-to-ambient-wording-0-e910e9b89ed3861e"
+    },
+    {
+      "effective_sigma": 0.4868795871734619,
+      "flow_matching_mse": 0.0028673596680164337,
+      "noise_seed": 2114436240044005134,
+      "question_id": "r5-f1-392d41fd097d069c42218e0a-from-jazz-set-to-ambient-wording-0",
+      "teacher_id": "r5-f1-392d41fd097d069c42218e0a-from-jazz-set-to-ambient-wording-0-e910e9b89ed3861e"
+    },
+    {
+      "effective_sigma": 0.6183444857597351,
+      "flow_matching_mse": 0.0017501887632533908,
+      "noise_seed": 8741197459766712596,
+      "question_id": "r5-f1-392d41fd097d069c42218e0a-from-ambient-noop-to-ambient-wording-2",
+      "teacher_id": "r5-f1-392d41fd097d069c42218e0a-from-ambient-noop-to-ambient-wording-2-e910e9b89ed3861e"
+    }
+  ],
+  "world_size": 4
+}

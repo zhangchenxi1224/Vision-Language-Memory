@@ -133,6 +133,32 @@ def make_inputs():
 
 
 class DifferentiableSamplerContractTest(unittest.TestCase):
+    def test_distillation_reference_uses_actual_rounded_scheduler(self):
+        from vision_memory.training.empirical_bank_flow import EmpiricalBankFlow
+        from vision_memory.training.reference_distillation import reference_trajectory
+
+        class RoundedScheduler(MockFlowScheduler):
+            def set_timesteps(self, **kwargs):
+                super().set_timesteps(**kwargs)
+                self.sigmas[0] = .4999999701976776
+                self.sigmas[3] = .1249999925494194
+                self.timesteps = self.sigmas[:-1] * 1000
+
+        sampler = DifferentiableDreamLiteMobileSampler(
+            unet=MockDreamLiteUNet(), scheduler=RoundedScheduler(), vae_scale_factor=8)
+        generator = torch.Generator().manual_seed(37)
+        source = torch.randn(1, 4, 8, 8, generator=generator)
+        noise = torch.randn(1, 4, 8, 8, generator=generator)
+        target = torch.full_like(source, .2)
+        output = sampler(source_latents=source, noise_latents=noise,
+            prompt_embeds=torch.ones(1, 3, 6), prompt_attention_mask=torch.ones(1, 3),
+            edit_start_sigma=.5, return_trajectory=True)
+        ref = reference_trajectory(EmpiricalBankFlow(source, target[None],
+            start_sigma=output.effective_sigmas[0]), source, noise, sigmas=output.effective_sigmas)
+        self.assertFalse(torch.equal(.5*source+.5*noise, output.trajectory[0]))
+        self.assertTrue(torch.equal(ref[0], output.trajectory[0]))
+        torch.testing.assert_close(ref[-1], target, atol=1e-7, rtol=0)
+
     def make_sampler(self, *, checkpoint_unet=False):
         return DifferentiableDreamLiteMobileSampler(
             unet=MockDreamLiteUNet(),

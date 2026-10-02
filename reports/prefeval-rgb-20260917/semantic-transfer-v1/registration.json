@@ -1,0 +1,53 @@
+{
+  "plan": "prefeval-rgb-semantic-query-mixture-05",
+  "parent_endpoint_digest": "8211468b5a465a61416bb01ff8532210e4764358285df1e057ecdccdaa1bbe09",
+  "manifest_digest": "207d43f27df4dd9d63aeb820eff0ef1497c3c0fa2bb961d54f5b2965f7d2eaf2",
+  "overlay_digest": "f5b04c1bf74d7cd0baf9f06223fb3c1dda54324585a278785f18fc7eca6347b5",
+  "training_digest": "45de1bfcfe9d935e27b43abc2272345fb7a650219971fc18a56f0c9e630f75ce",
+  "evaluation_digest": "d154af4136e1bfcdc911949fb995244027ca5f3d97051c32fc3fa4bb54d6b4d6",
+  "files": {
+    "authoring-source.json": "ccce93ef060fb36c1ed327fd13aa4faffabd896a9f4c5ed6a651453cf297822e",
+    "training-scenarios.json": "d6f13022cdcca007ef6b037c588ff2fca54f6f44e39582bd49f18468088fb156",
+    "reserved-scenarios.json": "cecda8de719f28a6066c6ced9d038f1667cc678c33ea52b3ac9c4a91260e1158",
+    "clause-option-audit.json": "467259e29063abe2ef27adbdd7f9fe3c6837683f3828dcc8f8d18270401e762d"
+  },
+  "budgets": {
+    "feasibility": 672,
+    "additional_updates": 20480,
+    "gradient_slot_forwards": 45056,
+    "final_reads": 3408,
+    "total_generations": 4080
+  },
+  "feasibility_min_correct": 303,
+  "feasibility_total": 336,
+  "progression": {
+    "recovery": {
+      "K1": [
+        18,
+        20
+      ],
+      "K2": [
+        3,
+        4
+      ],
+      "K4": [
+        9,
+        12
+      ]
+    },
+    "original_mcq": [
+      68,
+      84
+    ],
+    "reserved_application": [
+      135,
+      168
+    ],
+    "macro_gain_over_control": 0.1
+  },
+  "inherited_steps_per_state": 256,
+  "added_steps_per_state_per_arm": 256,
+  "arm_order": "A then B for even lexicographic target index, B then A for odd; each target pair on one GPU",
+  "compute_matching": "same updates and slot-forward counts; token counts/FLOPs/wall-time may differ",
+  "probe_limitation": "reserved scenarios use distinct action contexts from the same authored attribute schemas; original MCQ is the separate application diagnostic"
+}

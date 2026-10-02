@@ -1,0 +1,45 @@
+{
+  "source_archive_sha256": "be548e5bc63560ccb3578c58a8824f91cf2f3a34b8c3ccd0b02f0f26593e973d",
+  "matched_rows": 360,
+  "failed_rows": 80,
+  "failed_seeds": 16,
+  "failure_cases": [
+    "clear_original_training_event"
+  ],
+  "failure_events": [
+    "R3 Train Standard Templates 03: Clear the saved music preference for the indigo desk train 001123."
+  ],
+  "raw_failure_counts": [
+    {
+      "case": "clear_original_training_event",
+      "raw": "No music preference recorded.",
+      "count": 32
+    },
+    {
+      "case": "clear_original_training_event",
+      "raw": "No music preference set",
+      "count": 1
+    },
+    {
+      "case": "clear_original_training_event",
+      "raw": "No music preference specified.",
+      "count": 16
+    },
+    {
+      "case": "clear_original_training_event",
+      "raw": "No music preference stored.",
+      "count": 16
+    },
+    {
+      "case": "clear_original_training_event",
+      "raw": "indigo desk train 001123 music preference: none",
+      "count": 13
+    },
+    {
+      "case": "clear_original_training_event",
+      "raw": "no music preference",
+      "count": 2
+    }
+  ],
+  "scope": "Exact answer token sequence followed immediately by EOS; no answer normalization or output selection. Observed paired diagnostic."
+}

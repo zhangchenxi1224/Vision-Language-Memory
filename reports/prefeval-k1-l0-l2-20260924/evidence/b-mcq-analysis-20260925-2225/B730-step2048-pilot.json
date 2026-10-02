@@ -1,0 +1,547 @@
+{
+  "split": "pilot",
+  "preferences": 64,
+  "chains": 2,
+  "prefixes": [
+    0
+  ],
+  "families": [
+    "T1"
+  ],
+  "observations": 384,
+  "matrix_complete": true,
+  "metrics": [
+    {
+      "control": "blank",
+      "family": "T1",
+      "prefix": 0,
+      "correct": 27,
+      "total": 64,
+      "parse_failures": 0,
+      "truncations": 0
+    },
+    {
+      "control": "memory",
+      "family": "T1",
+      "prefix": 0,
+      "correct": 52,
+      "total": 128,
+      "parse_failures": 0,
+      "truncations": 0
+    },
+    {
+      "control": "mismatch",
+      "family": "T1",
+      "prefix": 0,
+      "correct": 53,
+      "total": 128,
+      "parse_failures": 0,
+      "truncations": 0
+    },
+    {
+      "control": "text",
+      "family": "T1",
+      "prefix": 0,
+      "correct": 59,
+      "total": 64,
+      "parse_failures": 0,
+      "truncations": 0
+    }
+  ],
+  "matched_mismatched_pairs": [
+    {
+      "family": "T1",
+      "prefix": 0,
+      "total": 128,
+      "repair": 0,
+      "regression": 1,
+      "both_correct": 52,
+      "both_wrong": 75
+    }
+  ],
+  "noise_joint": [
+    {
+      "family": "T1",
+      "prefix": 0,
+      "definition": "all_noise_chains_correct_per_preference",
+      "correct": 26,
+      "total": 64
+    }
+  ],
+  "ood_joint": [],
+  "conditional_retention": [],
+  "trajectory_joint": [
+    {
+      "family": "T1",
+      "prefixes": [
+        0
+      ],
+      "definition": "all_requested_prefixes_and_all_noise_chains_correct_per_preference",
+      "correct": 26,
+      "total": 64
+    }
+  ],
+  "memory_failures": [
+    {
+      "pair_id": "entertain_games:0001",
+      "chain": 0,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "entertain_games:0001",
+      "chain": 1,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "entertain_games:0007",
+      "chain": 0,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "entertain_games:0007",
+      "chain": 1,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "entertain_games:0023",
+      "chain": 0,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "entertain_games:0023",
+      "chain": 1,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "entertain_shows:0040",
+      "chain": 0,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "entertain_shows:0040",
+      "chain": 1,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "entertain_shows:0031",
+      "chain": 0,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "entertain_shows:0031",
+      "chain": 1,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "travel_activities:0004",
+      "chain": 0,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "travel_activities:0004",
+      "chain": 1,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "travel_activities:0051",
+      "chain": 0,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "travel_activities:0051",
+      "chain": 1,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "travel_activities:0055",
+      "chain": 0,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "travel_activities:0055",
+      "chain": 1,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "travel_restaurant:0054",
+      "chain": 0,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "travel_restaurant:0054",
+      "chain": 1,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "travel_restaurant:0030",
+      "chain": 0,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "travel_restaurant:0030",
+      "chain": 1,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "travel_restaurant:0041",
+      "chain": 0,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "travel_restaurant:0041",
+      "chain": 1,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "travel_hotel:0052",
+      "chain": 0,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "travel_hotel:0052",
+      "chain": 1,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "travel_hotel:0045",
+      "chain": 0,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "travel_hotel:0045",
+      "chain": 1,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "lifestyle_dietary:0022",
+      "chain": 0,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "lifestyle_dietary:0022",
+      "chain": 1,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "lifestyle_dietary:0042",
+      "chain": 0,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "lifestyle_dietary:0042",
+      "chain": 1,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "entertain_music_book:0038",
+      "chain": 0,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "entertain_music_book:0038",
+      "chain": 1,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "lifestyle_beauty:0012",
+      "chain": 0,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "lifestyle_beauty:0012",
+      "chain": 1,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "lifestyle_beauty:0002",
+      "chain": 0,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "lifestyle_beauty:0002",
+      "chain": 1,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "shop_home:0016",
+      "chain": 0,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "shop_home:0016",
+      "chain": 1,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "shop_home:0042",
+      "chain": 0,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "shop_home:0042",
+      "chain": 1,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "shop_home:0005",
+      "chain": 0,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "shop_home:0005",
+      "chain": 1,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "entertain_sports:0015",
+      "chain": 0,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "entertain_sports:0015",
+      "chain": 1,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "entertain_sports:0048",
+      "chain": 0,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "entertain_sports:0048",
+      "chain": 1,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "entertain_sports:0045",
+      "chain": 0,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "entertain_sports:0045",
+      "chain": 1,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "shop_fashion:0029",
+      "chain": 0,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "shop_fashion:0029",
+      "chain": 1,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "shop_fashion:0042",
+      "chain": 0,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "shop_fashion:0042",
+      "chain": 1,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "shop_fashion:0040",
+      "chain": 0,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "shop_fashion:0040",
+      "chain": 1,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "education_learning_styles:0009",
+      "chain": 0,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "education_learning_styles:0009",
+      "chain": 1,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "education_learning_styles:0030",
+      "chain": 0,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "education_learning_styles:0030",
+      "chain": 1,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "lifestyle_fit:0038",
+      "chain": 0,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "lifestyle_fit:0038",
+      "chain": 1,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "lifestyle_fit:0017",
+      "chain": 0,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "lifestyle_fit:0017",
+      "chain": 1,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "lifestyle_fit:0011",
+      "chain": 0,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "lifestyle_fit:0011",
+      "chain": 1,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "lifestyle_health:0036",
+      "chain": 0,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "lifestyle_health:0036",
+      "chain": 1,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "lifestyle_health:0030",
+      "chain": 0,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "lifestyle_health:0030",
+      "chain": 1,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "lifestyle_health:0042",
+      "chain": 0,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "lifestyle_health:0042",
+      "chain": 1,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "lifestyle_health:0040",
+      "chain": 0,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "lifestyle_health:0040",
+      "chain": 1,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "professional_work_location_style:0000",
+      "chain": 0,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "professional_work_location_style:0000",
+      "chain": 1,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "pet_ownership:0039",
+      "chain": 0,
+      "prefix": 0,
+      "family": "T1"
+    },
+    {
+      "pair_id": "pet_ownership:0039",
+      "chain": 1,
+      "prefix": 0,
+      "family": "T1"
+    }
+  ],
+  "source_files": {
+    "runs\\b-mcq-analysis-20260925-2225\\robust730\\readback-step-002048-pilot-V1\\readback-0.jsonl": "3ee2980dcbb8e38f115f1d242d6edd08c130a90734be4e9e49a87ae42c2c06f3"
+  },
+  "official_parser_sha256": "9b50b51c55015698d4c0dde9be7e1dc1f8bd4dfe57334d3987f2e7d289bbe8d9",
+  "note": "Seeds and question forms are repeated measurements. Conditional retention does not replace the full denominator. No free-answer judge is involved."
+}

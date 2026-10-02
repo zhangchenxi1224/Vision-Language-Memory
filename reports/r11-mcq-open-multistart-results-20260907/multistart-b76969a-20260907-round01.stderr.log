@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory-r11-open-9f86bc9-20260907/scripts/experiments/run_r11_mcq_open_multistart.py", line 675, in main
+    summary = run(args)
+              ^^^^^^^^^
+  File "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory-r11-open-9f86bc9-20260907/scripts/experiments/run_r11_mcq_open_multistart.py", line 588, in run
+    prerequisite = verify_replay_gate(args.replay_summary, args.replay_config, config)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory-r11-open-9f86bc9-20260907/scripts/experiments/run_r11_mcq_open_multistart.py", line 111, in verify_replay_gate
+    raise ValueError("Prerequisite replay configuration hash does not match preregistration.")
+ValueError: Prerequisite replay configuration hash does not match preregistration.

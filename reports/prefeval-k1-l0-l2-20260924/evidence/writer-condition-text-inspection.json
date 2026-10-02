@@ -1,0 +1,34 @@
+{
+  "observed_at_utc": "2026-09-24T02:19:43.977982+00:00",
+  "official_commit": "a6e20c8cc94027f37dd7c5a81b0b3b472aa18409",
+  "official_file": "dreamlite/pipelines/dreamlite/pipeline_dreamlite_lora.py",
+  "file_sha256": "932296c0661adc9e28cb192efa3ea9b18c2123fb9ba0bae2d3aa80ae3c7d8337",
+  "encode_prompt_lines": [
+    156,
+    235
+  ],
+  "max_sequence_length_argument_unused_in_function_body": true,
+  "explicit_processor_or_tokenizer_truncation_or_max_length": false,
+  "edit_hidden_state_prefix_drop": 64,
+  "rows": {
+    "pilot": {
+      "records": 64,
+      "minimum_event_characters": 412,
+      "maximum_event_characters": 1503,
+      "event_preserves_both_message_contents_exactly": true
+    },
+    "train": {
+      "records": 730,
+      "minimum_event_characters": 262,
+      "maximum_event_characters": 1503,
+      "event_preserves_both_message_contents_exactly": true
+    },
+    "dev": {
+      "records": 90,
+      "minimum_event_characters": 268,
+      "maximum_event_characters": 1512,
+      "event_preserves_both_message_contents_exactly": true
+    }
+  },
+  "scope": "Source and event serialization inspection only; does not assert semantic uptake or replace runtime tensor checks."
+}

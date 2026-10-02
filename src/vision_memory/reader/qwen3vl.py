@@ -171,6 +171,10 @@ def _tokenizer_ids(tokenizer: Any, text: str) -> Tensor:
     return input_ids
 
 
+class PromptBoundaryRetokenizationError(RuntimeError):
+    """The combined text would change an already supplied generation token."""
+
+
 def _joint_prompt_target_tokenization(processor: Any, prompt: str, target: str) -> tuple[str, Tensor]:
     """Tokenize the assistant continuation in the prompt's actual left context.
 
@@ -188,7 +192,7 @@ def _joint_prompt_target_tokenization(processor: Any, prompt: str, target: str) 
     if joint_ids.shape[1] <= prompt_length:
         raise ValueError("The target tokenized to an empty continuation in joint chat context.")
     if not torch.equal(joint_ids[:, :prompt_length], prompt_ids):
-        raise RuntimeError(
+        raise PromptBoundaryRetokenizationError(
             "Appending the target retokenized the chat-template prefix. "
             "The generation prompt must end on a stable tokenizer boundary."
         )
@@ -207,6 +211,7 @@ def _qwen3vl_target_only_ce_prepared(
     do_resize: bool | None,
     locked_resize_contract: bool,
     deterministic_ce: bool,
+    preserve_generation_prefix: bool = False,
 ) -> ReaderLossOutput:
     messages = [
         {
@@ -218,7 +223,24 @@ def _qwen3vl_target_only_ce_prepared(
         }
     ]
     prompt = processor.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
-    joint_text, target_ids = _joint_prompt_target_tokenization(processor, prompt, target)
+    append_continuation = False
+    try:
+        joint_text, target_ids = _joint_prompt_target_tokenization(processor, prompt, target)
+    except PromptBoundaryRetokenizationError:
+        if not preserve_generation_prefix:
+            raise
+        # Generation cannot retokenize its existing prefix. Keep those tokens and
+        # append an exact, independently encoded continuation (including whitespace).
+        joint_text = prompt
+        target_ids = _tokenizer_ids(processor.tokenizer, target)
+        if target_ids.shape[1] == 0:
+            raise ValueError("The target tokenized to an empty continuation.")
+        decoded = processor.tokenizer.decode(
+            target_ids[0], skip_special_tokens=False, clean_up_tokenization_spaces=False
+        )
+        if decoded != target:
+            raise RuntimeError("Continuation tokenization did not preserve the exact target text.")
+        append_continuation = True
     processor_kwargs = {
         "text": [joint_text],
         "images": [image],
@@ -243,6 +265,12 @@ def _qwen3vl_target_only_ce_prepared(
     input_ids = batch["input_ids"]
     attention_mask = batch["attention_mask"]
     target_length = target_ids.shape[1]
+    if append_continuation:
+        input_ids = torch.cat([input_ids, target_ids], dim=1)
+        attention_mask = torch.cat([attention_mask, attention_mask.new_ones(target_ids.shape)], dim=1)
+        if "mm_token_type_ids" in batch:
+            types = batch["mm_token_type_ids"]
+            batch["mm_token_type_ids"] = torch.cat([types, types.new_zeros(target_ids.shape)], dim=1)
     if input_ids.shape[1] <= target_length:
         raise RuntimeError("Joint Qwen input contains no non-target chat prefix.")
     if not torch.equal(input_ids[:, -target_length:], target_ids):
@@ -300,6 +328,7 @@ def qwen3vl_target_only_ce(
     do_resize: bool | None = None,
     reader_resize_contract: str | None = None,
     deterministic_ce: bool = False,
+    preserve_generation_prefix: bool = False,
 ) -> ReaderLossOutput:
     """Compute teacher-forced CE while retaining image-to-loss autograd.
 
@@ -323,6 +352,7 @@ def qwen3vl_target_only_ce(
         do_resize=do_resize,
         locked_resize_contract=reader_resize_contract is not None,
         deterministic_ce=deterministic_ce,
+        preserve_generation_prefix=preserve_generation_prefix,
     )
 
 

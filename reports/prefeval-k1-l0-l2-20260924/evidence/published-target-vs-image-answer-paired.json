@@ -1,0 +1,3499 @@
+{
+  "caveat": "Post-hoc associations with substitute-judge labels, not manual data-quality labels or an accuracy upper bound. No filtering or training changes.",
+  "groups": {
+    "A/teacher/0": {
+      "both_pass": 38,
+      "target_only_pass": 14,
+      "image_only_pass": 2,
+      "both_fail": 10
+    },
+    "A/student/0": {
+      "target_only_pass": 49,
+      "both_fail": 11,
+      "both_pass": 3,
+      "image_only_pass": 1
+    },
+    "A/student/1": {
+      "target_only_pass": 49,
+      "both_fail": 11,
+      "both_pass": 3,
+      "image_only_pass": 1
+    },
+    "B/teacher/0": {
+      "target_only_pass": 48,
+      "both_fail": 11,
+      "image_only_pass": 1,
+      "both_pass": 4
+    },
+    "B/student/0": {
+      "target_only_pass": 47,
+      "both_fail": 10,
+      "both_pass": 5,
+      "image_only_pass": 2
+    },
+    "B/student/1": {
+      "target_only_pass": 47,
+      "both_fail": 10,
+      "both_pass": 5,
+      "image_only_pass": 2
+    }
+  },
+  "pairs": [
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "lifestyle_health:0040",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "travel_hotel:0045",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "professional_work_location_style:0035",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "education_learning_styles:0007",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "travel_activities:0052",
+      "published_target_pass": false,
+      "image_answer_pass": true,
+      "relation": "image_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "shop_fashion:0040",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "lifestyle_dietary:0022",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "professional_work_location_style:0034",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "travel_restaurant:0030",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "entertain_music_book:0012",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "lifestyle_fit:0038",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "travel_activities:0051",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "entertain_shows:0037",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "entertain_games:0001",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "pet_ownership:0016",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "entertain_music_book:0038",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "entertain_sports:0045",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "lifestyle_health:0036",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "lifestyle_fit:0017",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "lifestyle_beauty:0012",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "lifestyle_dietary:0042",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "shop_home:0042",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "education_learning_styles:0001",
+      "published_target_pass": false,
+      "image_answer_pass": true,
+      "relation": "image_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "lifestyle_dietary:0017",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "shop_fashion:0029",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "shop_fashion:0042",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "entertain_shows:0052",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "lifestyle_health:0030",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "lifestyle_health:0042",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "shop_home:0046",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "travel_restaurant:0041",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "entertain_sports:0015",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "shop_home:0016",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "travel_hotel:0003",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "professional_work_location_style:0000",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "lifestyle_fit:0011",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "lifestyle_beauty:0037",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "travel_hotel:0039",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "entertain_games:0023",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "shop_home:0005",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "lifestyle_beauty:0002",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "education_learning_styles:0009",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "entertain_sports:0048",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "pet_ownership:0015",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "lifestyle_fit:0000",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "lifestyle_dietary:0047",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "shop_fashion:0041",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "travel_hotel:0052",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "lifestyle_beauty:0038",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "entertain_games:0007",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "entertain_shows:0031",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "pet_ownership:0031",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "professional_work_location_style:0006",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "entertain_games:0036",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "entertain_sports:0009",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "travel_activities:0004",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "entertain_shows:0040",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "travel_restaurant:0054",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "education_learning_styles:0030",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "travel_activities:0055",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "pet_ownership:0039",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "entertain_music_book:0044",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "travel_restaurant:0009",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "entertain_music_book:0016",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "travel_hotel:0039",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "shop_home:0005",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "shop_home:0005",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "entertain_sports:0045",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "lifestyle_fit:0017",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "travel_restaurant:0030",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "travel_activities:0055",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "lifestyle_dietary:0022",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "shop_home:0042",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "travel_restaurant:0009",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "lifestyle_fit:0000",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "entertain_music_book:0038",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "entertain_sports:0009",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "lifestyle_fit:0011",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "travel_hotel:0003",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "travel_activities:0004",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "travel_activities:0051",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "lifestyle_health:0030",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "lifestyle_fit:0017",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "lifestyle_beauty:0002",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "shop_fashion:0041",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "lifestyle_beauty:0012",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "travel_restaurant:0054",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "travel_activities:0052",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "travel_hotel:0052",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "lifestyle_dietary:0022",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "lifestyle_beauty:0012",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "entertain_music_book:0016",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "education_learning_styles:0030",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "lifestyle_dietary:0047",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "travel_activities:0052",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "shop_home:0046",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "professional_work_location_style:0006",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "lifestyle_health:0036",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "entertain_shows:0031",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "entertain_music_book:0012",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "entertain_shows:0052",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "entertain_games:0001",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "lifestyle_health:0040",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "professional_work_location_style:0034",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "shop_fashion:0040",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "entertain_music_book:0038",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "professional_work_location_style:0000",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "pet_ownership:0039",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "entertain_shows:0031",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "entertain_shows:0040",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "entertain_games:0036",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "professional_work_location_style:0000",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "lifestyle_fit:0000",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "entertain_sports:0015",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "shop_fashion:0040",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "shop_home:0046",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "entertain_sports:0048",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "entertain_sports:0045",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "pet_ownership:0031",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "travel_hotel:0045",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "travel_hotel:0003",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "entertain_music_book:0044",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "shop_fashion:0029",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "travel_restaurant:0009",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "travel_hotel:0039",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "professional_work_location_style:0006",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "entertain_sports:0009",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "lifestyle_health:0030",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "education_learning_styles:0009",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "education_learning_styles:0001",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "lifestyle_dietary:0042",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "travel_hotel:0052",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "shop_home:0042",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "pet_ownership:0031",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "travel_activities:0051",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "entertain_sports:0048",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "pet_ownership:0016",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "shop_fashion:0041",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "lifestyle_beauty:0038",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "education_learning_styles:0009",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "entertain_games:0001",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "lifestyle_fit:0038",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "education_learning_styles:0001",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "entertain_games:0007",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "professional_work_location_style:0035",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "lifestyle_beauty:0002",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "shop_fashion:0042",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "pet_ownership:0016",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "pet_ownership:0015",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "entertain_music_book:0016",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "shop_home:0016",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "entertain_games:0023",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "education_learning_styles:0030",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "travel_activities:0055",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "travel_restaurant:0054",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "travel_activities:0004",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "lifestyle_health:0040",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "travel_hotel:0045",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "shop_home:0016",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "lifestyle_dietary:0017",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "entertain_games:0007",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "entertain_shows:0037",
+      "published_target_pass": false,
+      "image_answer_pass": true,
+      "relation": "image_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "professional_work_location_style:0034",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "lifestyle_fit:0038",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "entertain_shows:0037",
+      "published_target_pass": false,
+      "image_answer_pass": true,
+      "relation": "image_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "lifestyle_fit:0011",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "entertain_games:0023",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "lifestyle_beauty:0037",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "lifestyle_beauty:0037",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "shop_fashion:0029",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "education_learning_styles:0007",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "travel_restaurant:0030",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "travel_restaurant:0041",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "travel_restaurant:0041",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "entertain_games:0036",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "pet_ownership:0015",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "lifestyle_dietary:0042",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "entertain_music_book:0012",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "pet_ownership:0039",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "entertain_shows:0040",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "entertain_music_book:0044",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "lifestyle_health:0036",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "lifestyle_health:0042",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "lifestyle_beauty:0038",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "shop_fashion:0042",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "lifestyle_health:0042",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "lifestyle_dietary:0017",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "education_learning_styles:0007",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "entertain_sports:0015",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "entertain_shows:0052",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "professional_work_location_style:0035",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "A",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "lifestyle_dietary:0047",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "lifestyle_health:0040",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "shop_fashion:0040",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "entertain_shows:0052",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "entertain_shows:0037",
+      "published_target_pass": false,
+      "image_answer_pass": true,
+      "relation": "image_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "travel_restaurant:0030",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "entertain_games:0007",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "lifestyle_dietary:0017",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "professional_work_location_style:0035",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "education_learning_styles:0001",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "travel_activities:0004",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "professional_work_location_style:0000",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "education_learning_styles:0030",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "lifestyle_beauty:0012",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "pet_ownership:0016",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "shop_fashion:0042",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "lifestyle_fit:0038",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "entertain_music_book:0044",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "pet_ownership:0031",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "travel_restaurant:0041",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "entertain_sports:0009",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "professional_work_location_style:0006",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "lifestyle_fit:0017",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "lifestyle_health:0042",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "entertain_games:0036",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "lifestyle_health:0030",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "lifestyle_dietary:0042",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "entertain_music_book:0016",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "shop_home:0016",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "lifestyle_health:0036",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "entertain_games:0023",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "entertain_music_book:0038",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "lifestyle_fit:0000",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "travel_activities:0051",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "pet_ownership:0039",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "lifestyle_dietary:0047",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "entertain_games:0001",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "shop_home:0042",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "travel_hotel:0039",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "professional_work_location_style:0034",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "shop_home:0046",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "lifestyle_beauty:0002",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "entertain_shows:0031",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "pet_ownership:0015",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "entertain_sports:0045",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "shop_fashion:0029",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "education_learning_styles:0007",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "shop_fashion:0041",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "lifestyle_fit:0011",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "travel_hotel:0045",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "lifestyle_dietary:0022",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "education_learning_styles:0009",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "travel_activities:0052",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "entertain_music_book:0012",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "travel_hotel:0052",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "travel_restaurant:0009",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "shop_home:0005",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "entertain_shows:0040",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "travel_hotel:0003",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "entertain_sports:0015",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "lifestyle_beauty:0037",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "travel_activities:0055",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "entertain_sports:0048",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "travel_restaurant:0054",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "teacher",
+      "chain": 0,
+      "pair_id": "lifestyle_beauty:0038",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "education_learning_styles:0007",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "lifestyle_dietary:0047",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "entertain_games:0023",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "travel_activities:0052",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "travel_activities:0055",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "lifestyle_dietary:0042",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "lifestyle_fit:0038",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "entertain_games:0007",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "professional_work_location_style:0035",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "shop_fashion:0029",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "lifestyle_dietary:0022",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "lifestyle_fit:0038",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "travel_activities:0051",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "travel_activities:0004",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "professional_work_location_style:0034",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "lifestyle_fit:0000",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "travel_restaurant:0041",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "entertain_music_book:0038",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "shop_fashion:0041",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "entertain_games:0023",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "travel_restaurant:0054",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "travel_restaurant:0054",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "travel_hotel:0045",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "lifestyle_dietary:0017",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "travel_activities:0051",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "entertain_sports:0045",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "shop_fashion:0040",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "shop_fashion:0029",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "entertain_music_book:0038",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "professional_work_location_style:0000",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "shop_home:0005",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "pet_ownership:0015",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "pet_ownership:0039",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "travel_hotel:0003",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "entertain_sports:0009",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "entertain_music_book:0044",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "travel_activities:0055",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "shop_fashion:0042",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "lifestyle_beauty:0037",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "travel_hotel:0052",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "travel_hotel:0039",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "entertain_shows:0037",
+      "published_target_pass": false,
+      "image_answer_pass": true,
+      "relation": "image_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "pet_ownership:0015",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "entertain_music_book:0016",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "lifestyle_dietary:0042",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "entertain_music_book:0016",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "shop_fashion:0040",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "entertain_music_book:0044",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "lifestyle_fit:0017",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "pet_ownership:0031",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "professional_work_location_style:0006",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "entertain_sports:0009",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "entertain_music_book:0012",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "lifestyle_beauty:0038",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "professional_work_location_style:0035",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "shop_home:0005",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "entertain_music_book:0012",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "travel_restaurant:0041",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "pet_ownership:0016",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "entertain_shows:0031",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "education_learning_styles:0001",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "shop_home:0046",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "entertain_sports:0048",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "shop_home:0042",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "lifestyle_fit:0011",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "travel_hotel:0052",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "travel_restaurant:0030",
+      "published_target_pass": false,
+      "image_answer_pass": true,
+      "relation": "image_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "entertain_shows:0037",
+      "published_target_pass": false,
+      "image_answer_pass": true,
+      "relation": "image_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "lifestyle_beauty:0037",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "entertain_games:0007",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "shop_home:0042",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "travel_hotel:0039",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "travel_hotel:0045",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "professional_work_location_style:0000",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "education_learning_styles:0030",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "shop_fashion:0041",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "lifestyle_beauty:0012",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "entertain_shows:0052",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "lifestyle_dietary:0047",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "education_learning_styles:0001",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "professional_work_location_style:0034",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "education_learning_styles:0007",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "lifestyle_beauty:0038",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "lifestyle_dietary:0022",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "travel_activities:0004",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "pet_ownership:0039",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "shop_home:0016",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "entertain_shows:0031",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "lifestyle_beauty:0012",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "lifestyle_fit:0000",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "lifestyle_beauty:0002",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "travel_hotel:0003",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "entertain_sports:0045",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "entertain_games:0001",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "travel_restaurant:0030",
+      "published_target_pass": false,
+      "image_answer_pass": true,
+      "relation": "image_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "lifestyle_beauty:0002",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "lifestyle_health:0040",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "entertain_games:0036",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "entertain_games:0001",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "entertain_shows:0040",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "lifestyle_fit:0011",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "entertain_sports:0015",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "education_learning_styles:0009",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "entertain_shows:0040",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "entertain_sports:0015",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "shop_home:0046",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "entertain_sports:0048",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "travel_restaurant:0009",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "professional_work_location_style:0006",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "lifestyle_health:0036",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "lifestyle_health:0030",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "education_learning_styles:0009",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "lifestyle_health:0042",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "education_learning_styles:0030",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "lifestyle_health:0030",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "entertain_shows:0052",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "entertain_games:0036",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "lifestyle_health:0042",
+      "published_target_pass": true,
+      "image_answer_pass": true,
+      "relation": "both_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "travel_activities:0052",
+      "published_target_pass": false,
+      "image_answer_pass": false,
+      "relation": "both_fail"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "lifestyle_health:0040",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "pet_ownership:0016",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "shop_home:0016",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "travel_restaurant:0009",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "pet_ownership:0031",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "lifestyle_fit:0017",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "shop_fashion:0042",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 1,
+      "pair_id": "lifestyle_health:0036",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    },
+    {
+      "arm": "B",
+      "stage": "student",
+      "chain": 0,
+      "pair_id": "lifestyle_dietary:0017",
+      "published_target_pass": true,
+      "image_answer_pass": false,
+      "relation": "target_only_pass"
+    }
+  ]
+}

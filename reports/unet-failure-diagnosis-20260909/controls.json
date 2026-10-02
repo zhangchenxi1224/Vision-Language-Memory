@@ -1,0 +1,768 @@
+{
+  "adapter_load_bitwise": true,
+  "bank_sha256": "be0832584d82eeb50782c353e083a9c4793abfe9426fca53361d7c5525b37087",
+  "checkpoint_sha256": "2c5731ed3ffb328f4cd7a12c52541bd30f95737af4b1235d71df685f96538957",
+  "completed_epoch": 1788885837.1879566,
+  "exact_velocity_control_target_max_error": 2.384185791015625e-7,
+  "flow_probes": {
+    "baseline": [
+      {
+        "one_step_endpoint_error_rms": 0.3172983434375428,
+        "sigma": 0.5,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-5dc9e2555c0d1508",
+        "training_teacher": true,
+        "velocity_mse": 0.4027129549114443
+      },
+      {
+        "one_step_endpoint_error_rms": 0.32652348618581883,
+        "sigma": 0.5,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-095c7af0424b5be3",
+        "training_teacher": true,
+        "velocity_mse": 0.4264703479786662
+      },
+      {
+        "one_step_endpoint_error_rms": 0.31057524653648977,
+        "sigma": 0.5,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-6b9e6abe468ad06b",
+        "training_teacher": true,
+        "velocity_mse": 0.38582793532375265
+      },
+      {
+        "one_step_endpoint_error_rms": 0.31659936158968116,
+        "sigma": 0.5,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-ec631a953825f565",
+        "training_teacher": true,
+        "velocity_mse": 0.40094062293687255
+      },
+      {
+        "one_step_endpoint_error_rms": 0.31863422333862174,
+        "sigma": 0.5,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-db7929a66448d242",
+        "training_teacher": false,
+        "velocity_mse": 0.4061110734411933
+      },
+      {
+        "one_step_endpoint_error_rms": 0.3121572836706169,
+        "sigma": 0.5,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-c657016094541aef",
+        "training_teacher": false,
+        "velocity_mse": 0.38976867900105583
+      },
+      {
+        "one_step_endpoint_error_rms": 0.31266961453277514,
+        "sigma": 0.5,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-e8af4af074be4c97",
+        "training_teacher": false,
+        "velocity_mse": 0.3910491513336228
+      },
+      {
+        "one_step_endpoint_error_rms": 0.31831113069003264,
+        "sigma": 0.5,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-d1f06e007fe4f46e",
+        "training_teacher": false,
+        "velocity_mse": 0.40528790381012414
+      },
+      {
+        "one_step_endpoint_error_rms": 0.3199644073732066,
+        "sigma": 0.375,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-5dc9e2555c0d1508",
+        "training_teacher": true,
+        "velocity_mse": 0.7280158011342284
+      },
+      {
+        "one_step_endpoint_error_rms": 0.3292496152495254,
+        "sigma": 0.375,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-095c7af0424b5be3",
+        "training_teacher": true,
+        "velocity_mse": 0.7708821978060569
+      },
+      {
+        "one_step_endpoint_error_rms": 0.3134743218366119,
+        "sigma": 0.375,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-6b9e6abe468ad06b",
+        "training_teacher": true,
+        "velocity_mse": 0.6987815139154209
+      },
+      {
+        "one_step_endpoint_error_rms": 0.3194011060269229,
+        "sigma": 0.375,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-ec631a953825f565",
+        "training_teacher": true,
+        "velocity_mse": 0.7254546958848114
+      },
+      {
+        "one_step_endpoint_error_rms": 0.32142097134038883,
+        "sigma": 0.375,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-db7929a66448d242",
+        "training_teacher": false,
+        "velocity_mse": 0.7346591344686759
+      },
+      {
+        "one_step_endpoint_error_rms": 0.314871891841115,
+        "sigma": 0.375,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-c657016094541aef",
+        "training_teacher": false,
+        "velocity_mse": 0.7050261916777004
+      },
+      {
+        "one_step_endpoint_error_rms": 0.3155201167642773,
+        "sigma": 0.375,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-e8af4af074be4c97",
+        "training_teacher": false,
+        "velocity_mse": 0.7079320475663601
+      },
+      {
+        "one_step_endpoint_error_rms": 0.3209464503371931,
+        "sigma": 0.375,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-d1f06e007fe4f46e",
+        "training_teacher": false,
+        "velocity_mse": 0.7324915486213358
+      },
+      {
+        "one_step_endpoint_error_rms": 0.3087645229657233,
+        "sigma": 0.25,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-5dc9e2555c0d1508",
+        "training_teacher": true,
+        "velocity_mse": 1.5253684910621936
+      },
+      {
+        "one_step_endpoint_error_rms": 0.31750996243228713,
+        "sigma": 0.25,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-095c7af0424b5be3",
+        "training_teacher": true,
+        "velocity_mse": 1.6130012202862103
+      },
+      {
+        "one_step_endpoint_error_rms": 0.313726366020937,
+        "sigma": 0.25,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-6b9e6abe468ad06b",
+        "training_teacher": true,
+        "velocity_mse": 1.5747877228837066
+      },
+      {
+        "one_step_endpoint_error_rms": 0.3178623291808433,
+        "sigma": 0.25,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-ec631a953825f565",
+        "training_teacher": true,
+        "velocity_mse": 1.616583364557574
+      },
+      {
+        "one_step_endpoint_error_rms": 0.314979657060192,
+        "sigma": 0.25,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-db7929a66448d242",
+        "training_teacher": false,
+        "velocity_mse": 1.587394950848892
+      },
+      {
+        "one_step_endpoint_error_rms": 0.30826302641771214,
+        "sigma": 0.25,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-c657016094541aef",
+        "training_teacher": false,
+        "velocity_mse": 1.5204174959324106
+      },
+      {
+        "one_step_endpoint_error_rms": 0.3123063147158267,
+        "sigma": 0.25,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-e8af4af074be4c97",
+        "training_teacher": false,
+        "velocity_mse": 1.5605637473424356
+      },
+      {
+        "one_step_endpoint_error_rms": 0.3092731759396927,
+        "sigma": 0.25,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-d1f06e007fe4f46e",
+        "training_teacher": false,
+        "velocity_mse": 1.530398357701719
+      },
+      {
+        "one_step_endpoint_error_rms": 0.19738512476309508,
+        "sigma": 0.125,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-5dc9e2555c0d1508",
+        "training_teacher": true,
+        "velocity_mse": 2.4934967944952082
+      },
+      {
+        "one_step_endpoint_error_rms": 0.2034857973005372,
+        "sigma": 0.125,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-095c7af0424b5be3",
+        "training_teacher": true,
+        "velocity_mse": 2.650014060322502
+      },
+      {
+        "one_step_endpoint_error_rms": 0.19231925442870734,
+        "sigma": 0.125,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-6b9e6abe468ad06b",
+        "training_teacher": true,
+        "velocity_mse": 2.367148521187623
+      },
+      {
+        "one_step_endpoint_error_rms": 0.19474714933350692,
+        "sigma": 0.125,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-ec631a953825f565",
+        "training_teacher": true,
+        "velocity_mse": 2.4272929410278907
+      },
+      {
+        "one_step_endpoint_error_rms": 0.1978089682154416,
+        "sigma": 0.125,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-db7929a66448d242",
+        "training_teacher": false,
+        "velocity_mse": 2.504216829752741
+      },
+      {
+        "one_step_endpoint_error_rms": 0.195902042975132,
+        "sigma": 0.125,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-c657016094541aef",
+        "training_teacher": false,
+        "velocity_mse": 2.4561670703596956
+      },
+      {
+        "one_step_endpoint_error_rms": 0.19395510282181105,
+        "sigma": 0.125,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-e8af4af074be4c97",
+        "training_teacher": false,
+        "velocity_mse": 2.4075892424581116
+      },
+      {
+        "one_step_endpoint_error_rms": 0.1977205499049938,
+        "sigma": 0.125,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-d1f06e007fe4f46e",
+        "training_teacher": false,
+        "velocity_mse": 2.5019786165566034
+      },
+      {
+        "one_step_endpoint_error_rms": 0.08285998525510879,
+        "sigma": 0.05,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-5dc9e2555c0d1508",
+        "training_teacher": true,
+        "velocity_mse": 2.7463107783966842
+      },
+      {
+        "one_step_endpoint_error_rms": 0.0860707713896786,
+        "sigma": 0.05,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-095c7af0424b5be3",
+        "training_teacher": true,
+        "velocity_mse": 2.9632710068429096
+      },
+      {
+        "one_step_endpoint_error_rms": 0.07961854259413066,
+        "sigma": 0.05,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-6b9e6abe468ad06b",
+        "training_teacher": true,
+        "velocity_mse": 2.5356448667226577
+      },
+      {
+        "one_step_endpoint_error_rms": 0.08125038104521187,
+        "sigma": 0.05,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-ec631a953825f565",
+        "training_teacher": true,
+        "velocity_mse": 2.6406496920232443
+      },
+      {
+        "one_step_endpoint_error_rms": 0.08298098857996053,
+        "sigma": 0.05,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-db7929a66448d242",
+        "training_teacher": false,
+        "velocity_mse": 2.754337714882093
+      },
+      {
+        "one_step_endpoint_error_rms": 0.08208913411287719,
+        "sigma": 0.05,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-c657016094541aef",
+        "training_teacher": false,
+        "velocity_mse": 2.6954503008841915
+      },
+      {
+        "one_step_endpoint_error_rms": 0.0815359239693234,
+        "sigma": 0.05,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-e8af4af074be4c97",
+        "training_teacher": false,
+        "velocity_mse": 2.659242682542682
+      },
+      {
+        "one_step_endpoint_error_rms": 0.08320263918448458,
+        "sigma": 0.05,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-d1f06e007fe4f46e",
+        "training_teacher": false,
+        "velocity_mse": 2.7690715843208933
+      }
+    ],
+    "trained": [
+      {
+        "one_step_endpoint_error_rms": 0.3173183006058386,
+        "sigma": 0.5,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-5dc9e2555c0d1508",
+        "training_teacher": true,
+        "velocity_mse": 0.402763615689165
+      },
+      {
+        "one_step_endpoint_error_rms": 0.32698812181824777,
+        "sigma": 0.5,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-095c7af0424b5be3",
+        "training_teacher": true,
+        "velocity_mse": 0.427684926991324
+      },
+      {
+        "one_step_endpoint_error_rms": 0.310887139286806,
+        "sigma": 0.5,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-6b9e6abe468ad06b",
+        "training_teacher": true,
+        "velocity_mse": 0.38660325359802095
+      },
+      {
+        "one_step_endpoint_error_rms": 0.31671810654481847,
+        "sigma": 0.5,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-ec631a953825f565",
+        "training_teacher": true,
+        "velocity_mse": 0.4012414358843461
+      },
+      {
+        "one_step_endpoint_error_rms": 0.3187418365838599,
+        "sigma": 0.5,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-db7929a66448d242",
+        "training_teacher": false,
+        "velocity_mse": 0.4063854336492008
+      },
+      {
+        "one_step_endpoint_error_rms": 0.31201192536792227,
+        "sigma": 0.5,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-c657016094541aef",
+        "training_teacher": false,
+        "velocity_mse": 0.3894057663130995
+      },
+      {
+        "one_step_endpoint_error_rms": 0.31273126483284586,
+        "sigma": 0.5,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-e8af4af074be4c97",
+        "training_teacher": false,
+        "velocity_mse": 0.39120337626984497
+      },
+      {
+        "one_step_endpoint_error_rms": 0.31834096062771994,
+        "sigma": 0.5,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-d1f06e007fe4f46e",
+        "training_teacher": false,
+        "velocity_mse": 0.4053638691171757
+      },
+      {
+        "one_step_endpoint_error_rms": 0.3047690143785086,
+        "sigma": 0.375,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-5dc9e2555c0d1508",
+        "training_teacher": true,
+        "velocity_mse": 0.660509526807994
+      },
+      {
+        "one_step_endpoint_error_rms": 0.3179371912762722,
+        "sigma": 0.375,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-095c7af0424b5be3",
+        "training_teacher": true,
+        "velocity_mse": 0.7188199638661121
+      },
+      {
+        "one_step_endpoint_error_rms": 0.2917776745977319,
+        "sigma": 0.375,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-6b9e6abe468ad06b",
+        "training_teacher": true,
+        "velocity_mse": 0.6053988368604666
+      },
+      {
+        "one_step_endpoint_error_rms": 0.29846029982271377,
+        "sigma": 0.375,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-ec631a953825f565",
+        "training_teacher": true,
+        "velocity_mse": 0.6334474715287679
+      },
+      {
+        "one_step_endpoint_error_rms": 0.3047508909272942,
+        "sigma": 0.375,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-db7929a66448d242",
+        "training_teacher": false,
+        "velocity_mse": 0.6604309720358883
+      },
+      {
+        "one_step_endpoint_error_rms": 0.29803949533945656,
+        "sigma": 0.375,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-c657016094541aef",
+        "training_teacher": false,
+        "velocity_mse": 0.6316625112542236
+      },
+      {
+        "one_step_endpoint_error_rms": 0.2966903334723142,
+        "sigma": 0.375,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-e8af4af074be4c97",
+        "training_teacher": false,
+        "velocity_mse": 0.6259566503515965
+      },
+      {
+        "one_step_endpoint_error_rms": 0.30607425296540974,
+        "sigma": 0.375,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-d1f06e007fe4f46e",
+        "training_teacher": false,
+        "velocity_mse": 0.6661791883431868
+      },
+      {
+        "one_step_endpoint_error_rms": 0.24966934630282994,
+        "sigma": 0.25,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-5dc9e2555c0d1508",
+        "training_teacher": true,
+        "velocity_mse": 0.997356520592966
+      },
+      {
+        "one_step_endpoint_error_rms": 0.2679314130923803,
+        "sigma": 0.25,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-095c7af0424b5be3",
+        "training_teacher": true,
+        "velocity_mse": 1.1485958735407231
+      },
+      {
+        "one_step_endpoint_error_rms": 0.23348360120043204,
+        "sigma": 0.25,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-6b9e6abe468ad06b",
+        "training_teacher": true,
+        "velocity_mse": 0.872233473051599
+      },
+      {
+        "one_step_endpoint_error_rms": 0.24111155125126116,
+        "sigma": 0.25,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-ec631a953825f565",
+        "training_teacher": true,
+        "velocity_mse": 0.9301564827600476
+      },
+      {
+        "one_step_endpoint_error_rms": 0.24933427501219024,
+        "sigma": 0.25,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-db7929a66448d242",
+        "training_teacher": false,
+        "velocity_mse": 0.9946812923862521
+      },
+      {
+        "one_step_endpoint_error_rms": 0.24462058234853312,
+        "sigma": 0.25,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-c657016094541aef",
+        "training_teacher": false,
+        "velocity_mse": 0.9574276696593679
+      },
+      {
+        "one_step_endpoint_error_rms": 0.24128272850288277,
+        "sigma": 0.25,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-e8af4af074be4c97",
+        "training_teacher": false,
+        "velocity_mse": 0.9314776817502984
+      },
+      {
+        "one_step_endpoint_error_rms": 0.2523377772615151,
+        "sigma": 0.25,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-d1f06e007fe4f46e",
+        "training_teacher": false,
+        "velocity_mse": 1.0187896606391234
+      },
+      {
+        "one_step_endpoint_error_rms": 0.14264283463192337,
+        "sigma": 0.125,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-5dc9e2555c0d1508",
+        "training_teacher": true,
+        "velocity_mse": 1.3022066076862202
+      },
+      {
+        "one_step_endpoint_error_rms": 0.14764368279758075,
+        "sigma": 0.125,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-095c7af0424b5be3",
+        "training_teacher": true,
+        "velocity_mse": 1.3951140520068581
+      },
+      {
+        "one_step_endpoint_error_rms": 0.1377110448494551,
+        "sigma": 0.125,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-6b9e6abe468ad06b",
+        "training_teacher": true,
+        "velocity_mse": 1.2137172409523302
+      },
+      {
+        "one_step_endpoint_error_rms": 0.1398370073222798,
+        "sigma": 0.125,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-ec631a953825f565",
+        "training_teacher": true,
+        "velocity_mse": 1.2514808742799701
+      },
+      {
+        "one_step_endpoint_error_rms": 0.14245386752719189,
+        "sigma": 0.125,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-db7929a66448d242",
+        "training_teacher": false,
+        "velocity_mse": 1.2987586797827717
+      },
+      {
+        "one_step_endpoint_error_rms": 0.14140082138501633,
+        "sigma": 0.125,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-c657016094541aef",
+        "training_teacher": false,
+        "velocity_mse": 1.2796283069594327
+      },
+      {
+        "one_step_endpoint_error_rms": 0.14020815074907145,
+        "sigma": 0.125,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-e8af4af074be4c97",
+        "training_teacher": false,
+        "velocity_mse": 1.2581328343269027
+      },
+      {
+        "one_step_endpoint_error_rms": 0.14333988445924914,
+        "sigma": 0.125,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-d1f06e007fe4f46e",
+        "training_teacher": false,
+        "velocity_mse": 1.3149646406857352
+      },
+      {
+        "one_step_endpoint_error_rms": 0.05568344701455633,
+        "sigma": 0.05,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-5dc9e2555c0d1508",
+        "training_teacher": true,
+        "velocity_mse": 1.2402584605262148
+      },
+      {
+        "one_step_endpoint_error_rms": 0.056459384128036104,
+        "sigma": 0.05,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-095c7af0424b5be3",
+        "training_teacher": true,
+        "velocity_mse": 1.275064780401175
+      },
+      {
+        "one_step_endpoint_error_rms": 0.0552288207185663,
+        "sigma": 0.05,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-6b9e6abe468ad06b",
+        "training_teacher": true,
+        "velocity_mse": 1.2200890180103103
+      },
+      {
+        "one_step_endpoint_error_rms": 0.05539970131829489,
+        "sigma": 0.05,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-ec631a953825f565",
+        "training_teacher": true,
+        "velocity_mse": 1.2276507168596327
+      },
+      {
+        "one_step_endpoint_error_rms": 0.055629035893806106,
+        "sigma": 0.05,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-db7929a66448d242",
+        "training_teacher": false,
+        "velocity_mse": 1.23783580868909
+      },
+      {
+        "one_step_endpoint_error_rms": 0.055550078086165175,
+        "sigma": 0.05,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-c657016094541aef",
+        "training_teacher": false,
+        "velocity_mse": 1.2343244264953028
+      },
+      {
+        "one_step_endpoint_error_rms": 0.0553778838425267,
+        "sigma": 0.05,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-e8af4af074be4c97",
+        "training_teacher": false,
+        "velocity_mse": 1.2266839688008047
+      },
+      {
+        "one_step_endpoint_error_rms": 0.05571285715445605,
+        "sigma": 0.05,
+        "teacher_id": "r5-f1-392d41fd097d069c42218e0a-d1f06e007fe4f46e",
+        "training_teacher": false,
+        "velocity_mse": 1.2415689346460108
+      }
+    ]
+  },
+  "heldout_teachers": 19,
+  "hostname": "vlm-r11-trust-h200x4-20260907-r3--1529e224dfc5-wj6s2jn4v3",
+  "initial_noise_seed": 1714865758548534000,
+  "optimizer_updates": 0,
+  "qa": [
+    {
+      "answer_ce": 0.00020599365234375,
+      "answer_prefix": true,
+      "distance_to_source_rms": 0.3136340928856252,
+      "distance_to_train_mean_rms": 0.3092106947696766,
+      "eos_ce": 0.0001373291015625,
+      "image_sha256": "9736348dc0d1a613f913757376a10f06c9ada6f432c794701e9fe6c0519a7d96",
+      "label": "successful_teacher_0",
+      "latent_sha256": "5dc9e2555c0d15084e5558f54c641e2b68ff2ae3ceb630d87cb3d9f8b96ae77d",
+      "raw": "ambient",
+      "strict_correct": true
+    },
+    {
+      "answer_ce": 0.00026702880859375,
+      "answer_prefix": true,
+      "distance_to_source_rms": 0.32317716040680067,
+      "distance_to_train_mean_rms": 0.3193503856997531,
+      "eos_ce": 0.0001068115234375,
+      "image_sha256": "fe3b30548de8dd266ce3aa4689deee33a75cda80dbade442c5b060aa808098ce",
+      "label": "successful_teacher_1",
+      "latent_sha256": "095c7af0424b5be325da77e4706935cdac5c897a6a1975f293bd89da1d2f0bff",
+      "raw": "ambient",
+      "strict_correct": true
+    },
+    {
+      "answer_ce": 0.0001544952392578125,
+      "answer_prefix": true,
+      "distance_to_source_rms": 0.307098535689098,
+      "distance_to_train_mean_rms": 0.3034719696246462,
+      "eos_ce": 0.000026702880859375,
+      "image_sha256": "2b9ebb6b6a82cda0ada007e11b4d462d78fe4189dd5195c0fe30939ece233275",
+      "label": "successful_teacher_2",
+      "latent_sha256": "6b9e6abe468ad06b7a8b2bee5acdff80c6974635a3ed59bc63603011ce31c7ed",
+      "raw": "ambient",
+      "strict_correct": true
+    },
+    {
+      "answer_ce": 11.132879257202148,
+      "answer_prefix": false,
+      "distance_to_source_rms": 0,
+      "distance_to_train_mean_rms": 0.046243206182809436,
+      "eos_ce": 3.9258556365966797,
+      "image_sha256": "d58c3e2fe353592063b77a3e8ecab70cc7f9924011538e96262c34a8c3575441",
+      "label": "gray_source",
+      "latent_sha256": "5f8c07caa37de38cae96d0b0e28851b1b831bea8728182e9fbd14b1588ac3743",
+      "raw": "No music preference recorded.",
+      "strict_correct": false
+    },
+    {
+      "answer_ce": 7.550960540771484,
+      "answer_prefix": false,
+      "distance_to_source_rms": 0.046243206182809436,
+      "distance_to_train_mean_rms": 0,
+      "eos_ce": 1.0697612762451172,
+      "image_sha256": "9087d67542c2d79d892b729eca9a86a21b40e46f443fb55e05e8770798e622fa",
+      "label": "mean_of_77_training_teachers",
+      "latent_sha256": "cad3ebb206c6671bb183e006900e2e49a78444f36fb3633c47ac0e63bde5ad6a",
+      "raw": "No music preference",
+      "strict_correct": false
+    },
+    {
+      "answer_ce": 4.254444122314453,
+      "answer_prefix": false,
+      "distance_to_source_rms": 0.22460212110202807,
+      "distance_to_train_mean_rms": 0.21872165750059316,
+      "eos_ce": 4.307609558105469,
+      "image_sha256": "227dbc957e34afaa5ae0c5e1b0d20c99571b560d4f1fedc4adc7cde8d6c5de99",
+      "label": "midpoint_of_two_successful_teachers",
+      "latent_sha256": "078ffba47eb1227ac133ec3ae204ed4b191860c1ee2a9b12a5c63e63dcf577c9",
+      "raw": "indigo desk train 001123 prefers jazz.",
+      "strict_correct": false
+    },
+    {
+      "answer_ce": 12.061288833618164,
+      "answer_prefix": false,
+      "distance_to_source_rms": 0.08343512559341776,
+      "distance_to_train_mean_rms": 0.09540715117785221,
+      "eos_ce": 4.036800384521484,
+      "image_sha256": "efe01e76171956e0b90e75a1833144e6488d6f2a5693438742ca97c78270fb88",
+      "label": "baseline_manual_4step",
+      "latent_sha256": "126b465cc568c35cef8710fa0bd222c88c18b858e114dcb59695770c2c8285cb",
+      "raw": "No music preference recorded.",
+      "strict_correct": false
+    },
+    {
+      "answer_ce": 10.27006721496582,
+      "answer_prefix": false,
+      "distance_to_source_rms": 0.15485583425225508,
+      "distance_to_train_mean_rms": 0.16095098877142233,
+      "eos_ce": 4.035699844360352,
+      "image_sha256": "1e1ff3f655a85b6df97c41662c4cbae44e9c8ed40ce8286ae41b8ead6ad05c63",
+      "label": "trained_actual_4step",
+      "latent_sha256": "c03256272f264ee629470ccc4fcad2dd2c8159e269a00caca9e93358f5949e40",
+      "raw": "No music preference recorded.",
+      "strict_correct": false
+    },
+    {
+      "answer_ce": 11.445486068725586,
+      "answer_prefix": false,
+      "distance_to_source_rms": 0.24405835521616362,
+      "distance_to_train_mean_rms": 0.24786565658333604,
+      "eos_ce": 5.1277618408203125,
+      "image_sha256": "c1ddd331bba914ca55fcbd9904f46f8dc1cfa2c9f421438d3c59646f77778976",
+      "label": "trained_manual_16step",
+      "latent_sha256": "d97c717e2bbf9ad87438f4a95a92e22cec49851d6cf50cc65d31868ba0742caf",
+      "raw": "No music preference recorded.",
+      "strict_correct": false
+    },
+    {
+      "answer_ce": 12.254234313964844,
+      "answer_prefix": false,
+      "distance_to_source_rms": 0.27891941967393596,
+      "distance_to_train_mean_rms": 0.28221380106765903,
+      "eos_ce": 5.939191818237305,
+      "image_sha256": "815f098cd5a7aaa032bd77aba3abd147ee8d2441ae328ab05f4756b117c0a980",
+      "label": "trained_manual_64step",
+      "latent_sha256": "d456f65a90ec0434bebfa7e70e22f6339607193d38bec8de033932e9617625bb",
+      "raw": "No music preference recorded.",
+      "strict_correct": false
+    },
+    {
+      "answer_ce": 9.410888671875,
+      "answer_prefix": false,
+      "distance_to_source_rms": 0.13957035421889238,
+      "distance_to_train_mean_rms": 0.14224900605251226,
+      "eos_ce": 3.668924331665039,
+      "image_sha256": "6999f6e04b9d14eedfeacd429b16da8953a2e5d7445c178bc0c424a4388cdc26",
+      "label": "trained_to_teacher_alpha_0.25",
+      "latent_sha256": "f61fe574ce34380f94edf6f4e117ef50955cbe8052fb896f386080ed60340ba5",
+      "raw": "No music preference recorded.",
+      "strict_correct": false
+    },
+    {
+      "answer_ce": 1.9364204406738281,
+      "answer_prefix": true,
+      "distance_to_source_rms": 0.17429114845093935,
+      "distance_to_train_mean_rms": 0.17309623017101494,
+      "eos_ce": 0.9767494201660156,
+      "image_sha256": "482a4468221d1c1e56c8c0c1d8ba380e2d5828e132ff58c04849c8db06a1d976",
+      "label": "trained_to_teacher_alpha_0.5",
+      "latent_sha256": "12c8b40c5557d9b2c2e082cf93c8d19ad4e98aa2cd7413bb6ed76f8302a92f10",
+      "raw": "ambient",
+      "strict_correct": true
+    },
+    {
+      "answer_ce": 0.040767669677734375,
+      "answer_prefix": true,
+      "distance_to_source_rms": 0.23806068820739718,
+      "distance_to_train_mean_rms": 0.23470789563374775,
+      "eos_ce": 0.015401840209960938,
+      "image_sha256": "51d73b1b869c18ba9aa8da5ab9cd897d58d6f7b7f8875d01160e57f7937b94e3",
+      "label": "trained_to_teacher_alpha_0.75",
+      "latent_sha256": "a6dccf4787a5a605044a227c271a9a8ddfe6f3f99356941111803cabef92dff3",
+      "raw": "ambient",
+      "strict_correct": true
+    },
+    {
+      "answer_ce": 0.000659942626953125,
+      "answer_prefix": true,
+      "distance_to_source_rms": 0.28256185669037104,
+      "distance_to_train_mean_rms": 0.2784853868364278,
+      "eos_ce": 0.00058746337890625,
+      "image_sha256": "c52ff33111adf194740c140ab625b1c470fa6851fe3e35401a15e18bdfd0090e",
+      "label": "trained_to_teacher_alpha_0.9",
+      "latent_sha256": "66c5040d83b661955135d23b4713d1156fe111c29338c01394d284841a674d31",
+      "raw": "ambient",
+      "strict_correct": true
+    },
+    {
+      "answer_ce": 0.00020599365234375,
+      "answer_prefix": true,
+      "distance_to_source_rms": 0.3136340931175743,
+      "distance_to_train_mean_rms": 0.3092106949436377,
+      "eos_ce": 0.0001373291015625,
+      "image_sha256": "0a6199d0f671eb0e897fc3f3e27334eef7b75b749612516547c973f1352ca5de",
+      "label": "exact_velocity_control",
+      "latent_sha256": "59962f5d96b8bef0d1bb493cb27755e060f40b5c325e49e47697ab809e8f600f",
+      "raw": "ambient",
+      "strict_correct": true
+    }
+  ],
+  "started_epoch": 1788885807.7743819,
+  "status": "completed",
+  "teacher_decode_bitwise_original": true,
+  "teacher_dispersion_rms": 0.31996489479925677,
+  "train_teachers": 77,
+  "trained_inference_replay_max_error": 0,
+  "trained_inference_replays_saved_latent": true,
+  "trained_vs_baseline_latent_rms": 0.1601031539708414,
+  "training_forward_vs_sampler_4step_max_error": 0.0000024586915969848633
+}

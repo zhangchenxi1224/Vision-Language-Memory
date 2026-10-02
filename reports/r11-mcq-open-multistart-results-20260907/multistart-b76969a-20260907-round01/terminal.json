@@ -1,0 +1,10 @@
+{
+  "elapsed_seconds": 0.004273069789633155,
+  "error": "Prerequisite replay configuration hash does not match preregistration.",
+  "error_type": "ValueError",
+  "formal_success": false,
+  "schema": "vision_memory.r11-mcq-open-multistart.v1.terminal",
+  "status": "failed",
+  "technical_passed": false,
+  "traceback": "Traceback (most recent call last):\n  File \"/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory-r11-open-9f86bc9-20260907/scripts/experiments/run_r11_mcq_open_multistart.py\", line 675, in main\n    summary = run(args)\n              ^^^^^^^^^\n  File \"/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory-r11-open-9f86bc9-20260907/scripts/experiments/run_r11_mcq_open_multistart.py\", line 588, in run\n    prerequisite = verify_replay_gate(args.replay_summary, args.replay_config, config)\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory-r11-open-9f86bc9-20260907/scripts/experiments/run_r11_mcq_open_multistart.py\", line 111, in verify_replay_gate\n    raise ValueError(\"Prerequisite replay configuration hash does not match preregistration.\")\nValueError: Prerequisite replay configuration hash does not match preregistration.\n"
+}

@@ -1,0 +1,45 @@
+{
+  "time_unix": 1790355347.5995407,
+  "host": "prefeval-k1-h200x4-high-20260924--506d5fcf84c1-ck5fp533ke",
+  "processes": [
+    {
+      "pid": 2009358,
+      "state": "S",
+      "command": "bash scripts/inspire/run_prefeval_k1_robust730.sh ",
+      "cwd": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-deploy-5d1045f"
+    },
+    {
+      "pid": 2009378,
+      "state": "S",
+      "command": "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python scripts/experiments/prefeval_k1_writer.py train --arm B --base /inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907 --official-source /inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite --split train --stage write --steps 23360 --snapshot-steps 2048 --initial-variants /inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/variants-train.json --teachers /inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-k1-scale730-20260924/teachers/B --checkpoint /inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-official-alignment/4fbc857-clear-retention-full4832/train/checkpoint-final.pt --output /inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/robust730/train ",
+      "cwd": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-deploy-5d1045f"
+    }
+  ],
+  "gpu": "0, 96 %, 40427 MiB\n1, 0 %, 0 MiB\n2, 0 %, 0 MiB\n3, 0 %, 0 MiB\n",
+  "B730_step": 16087,
+  "C_dev_chains": 148,
+  "reader_active": {
+    "name": "identity64-dev-positions-0",
+    "command": [
+      "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+      "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-b-deploy-5d1045f/scripts/experiments/prefeval_k1_position_probe.py",
+      "--kind",
+      "student",
+      "--split",
+      "dev",
+      "--reader",
+      "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+      "--images",
+      "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/identity64/dev",
+      "--prefix",
+      "0",
+      "--order-mode",
+      "official-cyclic",
+      "--output",
+      "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/readback-queue/identity64-dev-positions-0.jsonl"
+    ],
+    "started_unix": 1790355140.2060661
+  },
+  "budget": 23360,
+  "resume_steps_unique_and_contiguous": true
+}

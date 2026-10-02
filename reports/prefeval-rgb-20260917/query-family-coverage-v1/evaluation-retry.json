@@ -1,0 +1,20 @@
+{
+  "plan": "prefeval-rgb-query-family-coverage-09-evaluation-retry",
+  "parent_registration_digest": "64406da59ad3f1a885720969b80943e7f8b2a24d68e6ca236b7a6f3c66d1d0af",
+  "training_code": "c316456d34fe3b87264c26fdf90939529ee6d4d4",
+  "failed_evaluation_exit_status": 1,
+  "failed_evaluation_error": "KeyError target_index in derived XML generation scoring after endpoint generation",
+  "user_instance_override": true,
+  "instance": "vlm-r11-trust-h200x4-20260907-r3",
+  "actual": {
+    "hostname": "vlm-r11-trust-h200x4-20260907-r3--1529e224dfc5-t72jrjqcfx",
+    "gpus": [
+      "0, GPU-2a1abd85-388b-4bbc-8ea2-7801c0d68f33, NVIDIA H200",
+      "1, GPU-9aa323d2-9507-cb5d-02fb-da79c3659d41, NVIDIA H200",
+      "2, GPU-9f3c3f77-fa42-dda7-d5ce-be2664e8c0c6, NVIDIA H200",
+      "3, GPU-a0064558-bbc6-f2ea-f89e-c2312186f15d, NVIDIA H200"
+    ]
+  },
+  "platform_status": "Name: vlm-r11-trust-h200x4-20260907-r3\nStatus: RUNNING\nProject: 前沿课题探索\nWorkspace: 分布式训练空间\nCompute Group: 开发区-H200-3号机房\nResource: 4x H200, 80 CPU, 900 GiB\nNode: qb-prod-gpu1889 (READY)\n",
+  "scope": "evaluation and GPU-dependent verification only; preserve completed training endpoints; no added optimization"
+}
