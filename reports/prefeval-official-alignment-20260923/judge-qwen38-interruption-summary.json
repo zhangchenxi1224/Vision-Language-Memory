@@ -1,0 +1,33 @@
+{
+  "checked_at_utc": "2026-09-24T05:01:23.567464+00:00",
+  "status": "stopped_api_arrearage",
+  "model": "qwen3.8-max",
+  "expected_answers": 12060,
+  "expected_checks": 48240,
+  "progress": {
+    "condition_files": 266,
+    "checks_completed": 5168,
+    "complete_answers": 1288,
+    "malformed_checks": 0,
+    "length_finish_reasons": 0,
+    "complete_condition_files": 253,
+    "partial_answers": 10
+  },
+  "by_corpus": {
+    "ackmix_checks": 2402,
+    "ackmix_complete_answers": 600,
+    "original_checks": 2766,
+    "original_complete_answers": 688
+  },
+  "successful_response_usage": {
+    "prompt_tokens": 3083739,
+    "completion_tokens": 163182,
+    "total_tokens": 3246921
+  },
+  "returned_models": {
+    "qwen3.8-max": 5168
+  },
+  "latest_judgment_utc": "2026-09-24T04:49:09.369526+00:00",
+  "score_status": "incomplete; no final A/B generation score",
+  "next_action": "User restores account and requests resume; reuse completed checks, do not restart automatically"
+}

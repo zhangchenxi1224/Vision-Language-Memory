@@ -1,0 +1,90 @@
+{
+  "session_id": "b2187482df5649ae812ffde225bec0a2",
+  "phase": "train-input",
+  "host": "dl-clear-retain-h200x4-20260914--a823c55e800a-3eiz2r5ftf",
+  "started_at": 1790207766.7525697,
+  "workers": [
+    {
+      "pid": 295617,
+      "gpu": 0,
+      "arm": "A",
+      "shard": 0,
+      "log": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-prefeval-official-ab-20260924/train-input-A-0-b2187482df5649ae812ffde225bec0a2.log",
+      "command": [
+        "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+        "-u",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/repos/dreamlite-prefeval-official-20260924/scripts/inspire/run_prefeval_train_input_diagnostic.py",
+        "--output",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-prefeval-official-ab-20260924",
+        "--arm",
+        "A",
+        "--shard",
+        "0",
+        "--shards",
+        "2"
+      ]
+    },
+    {
+      "pid": 295618,
+      "gpu": 1,
+      "arm": "A",
+      "shard": 1,
+      "log": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-prefeval-official-ab-20260924/train-input-A-1-b2187482df5649ae812ffde225bec0a2.log",
+      "command": [
+        "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+        "-u",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/repos/dreamlite-prefeval-official-20260924/scripts/inspire/run_prefeval_train_input_diagnostic.py",
+        "--output",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-prefeval-official-ab-20260924",
+        "--arm",
+        "A",
+        "--shard",
+        "1",
+        "--shards",
+        "2"
+      ]
+    },
+    {
+      "pid": 295619,
+      "gpu": 2,
+      "arm": "B",
+      "shard": 0,
+      "log": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-prefeval-official-ab-20260924/train-input-B-0-b2187482df5649ae812ffde225bec0a2.log",
+      "command": [
+        "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+        "-u",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/repos/dreamlite-prefeval-official-20260924/scripts/inspire/run_prefeval_train_input_diagnostic.py",
+        "--output",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-prefeval-official-ab-20260924",
+        "--arm",
+        "B",
+        "--shard",
+        "0",
+        "--shards",
+        "2"
+      ]
+    },
+    {
+      "pid": 295620,
+      "gpu": 3,
+      "arm": "B",
+      "shard": 1,
+      "log": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-prefeval-official-ab-20260924/train-input-B-1-b2187482df5649ae812ffde225bec0a2.log",
+      "command": [
+        "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+        "-u",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/repos/dreamlite-prefeval-official-20260924/scripts/inspire/run_prefeval_train_input_diagnostic.py",
+        "--output",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-prefeval-official-ab-20260924",
+        "--arm",
+        "B",
+        "--shard",
+        "1",
+        "--shards",
+        "2"
+      ]
+    }
+  ],
+  "commit": "1ea44f8c9ce181e6bc6c99b80d6a6368329122fe",
+  "gpu_binding": "0, GPU-25442c52-fb4d-7807-d6c8-b08f83d407c0, NVIDIA H200\n1, GPU-1d429113-ba28-25f0-ba05-094884fefe10, NVIDIA H200\n2, GPU-606f398f-b889-d977-1c48-7416a681a903, NVIDIA H200\n3, GPU-ab477c8a-e703-20b5-e302-02acc84e9970, NVIDIA H200\n"
+}

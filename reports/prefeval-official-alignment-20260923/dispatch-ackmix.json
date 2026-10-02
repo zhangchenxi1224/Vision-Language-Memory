@@ -1,0 +1,50 @@
+{
+  "session_id": "de87783932384e7b813c5c7cd76d945e",
+  "phase": "ackmix",
+  "host": "dl-clear-retain-h200x4-20260914--a823c55e800a-3eiz2r5ftf",
+  "started_at": 1790210362.9016228,
+  "workers": [
+    {
+      "pid": 722505,
+      "gpu": "0,1",
+      "arm": "A",
+      "shard": 0,
+      "log": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-prefeval-official-ab-20260924/ackmix-A-0-de87783932384e7b813c5c7cd76d945e.log",
+      "command": [
+        "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+        "-u",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/repos/dreamlite-prefeval-official-20260924/scripts/inspire/run_prefeval_official_pilot.py",
+        "--output",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-prefeval-official-ab-20260924",
+        "--arm",
+        "A",
+        "--gpus",
+        "0,1",
+        "--stage",
+        "write-ackmix"
+      ]
+    },
+    {
+      "pid": 722506,
+      "gpu": "2,3",
+      "arm": "B",
+      "shard": 0,
+      "log": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-prefeval-official-ab-20260924/ackmix-B-0-de87783932384e7b813c5c7cd76d945e.log",
+      "command": [
+        "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+        "-u",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/repos/dreamlite-prefeval-official-20260924/scripts/inspire/run_prefeval_official_pilot.py",
+        "--output",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-prefeval-official-ab-20260924",
+        "--arm",
+        "B",
+        "--gpus",
+        "2,3",
+        "--stage",
+        "write-ackmix"
+      ]
+    }
+  ],
+  "commit": "e6f379f0fce1ae8dc6ebf9c298ac66295ddec3f0",
+  "gpu_binding": "0, GPU-25442c52-fb4d-7807-d6c8-b08f83d407c0, NVIDIA H200\n1, GPU-1d429113-ba28-25f0-ba05-094884fefe10, NVIDIA H200\n2, GPU-606f398f-b889-d977-1c48-7416a681a903, NVIDIA H200\n3, GPU-ab477c8a-e703-20b5-e302-02acc84e9970, NVIDIA H200\n"
+}

@@ -1,4 +1,50 @@
-# Latest steering — 2026-09-24: paired supervision and 3+2 question forms
+# Latest status — 2026-09-24: judge stopped by API Arrearage
+
+Both local judges exited.5,168 saved checks cover1,288 complete and10 partial
+answers. Partial evidence and logs are archived; no final A/B score exists.
+Automation is paused pending account recovery and explicit user resume. Do not
+retry paid work, switch models, or restart any training. Goal remains paused.
+Read the official-alignment directory's EXECUTION_LIVE.md and
+QWEN38_JUDGE_STATUS.json. Older running/continuation entries below are historical.
+
+# Previous authority — 2026-09-24: Qwen3.8-max judge authorized
+
+New training and the Goal remain paused. Existing remote write-ackmix A/B
+pipelines are complete. The user authorized replacing the pending judge with
+qwen3.8-max; two local processes now score12,060 saved answers, with original
+PrefEval prompts/parsers/aggregation. Read the official-alignment directory's
+QWEN38_JUDGE.md, QWEN38_JUDGE_STATUS.json and EXECUTION_LIVE.md before acting.
+Do not duplicate live judges or restart completed GPU Readers. Archive/report
+the final results, then pause completion monitoring; no new iteration.
+
+# Previous authority — 2026-09-24: pause new iterations, finish existing run
+
+User explicitly requests that the currently running remote experiment finish;
+new iterations and the Goal remain paused. Current write-ackmix Readers resumed
+after a brief SIGSTOP; no new run was launched. At11:31 CST A354/462 and
+B357/462 conditions were complete. Monitor/archive/report this fixed run only,
+then pause the completion-monitor automation. No new diagnostic, training,
+retain/K2/K4, instance restart or recovery jobs without further user direction.
+Read `../prefeval-official-alignment-20260923/EXECUTION_LIVE.md` and
+`../prefeval-official-alignment-20260923/COMPLETED_EXPERIMENTS_REVIEW_20260924.md`.
+All older continuation instructions below are superseded by this pause.
+
+# Previous running correction — 2026-09-24: paired acknowledgment FM augmentation
+
+Read `../prefeval-official-alignment-20260923/EXECUTION_LIVE.md` first.
+Completed exact-input diagnostic: T1 A38/64, B62/64 vs same-seed benchmark-input
+A29/64, B30/64. Acknowledgment sensitivity is a major failure mechanism.
+Read TRAIN_INPUT_RESULTS_AND_ACKMIX_PLAN.md. New write-ackmix session
+ de87783932384e7b813c5c7cd76d945e runs on dl-clear-retain-h200x4-20260914 only,
+both2048 additional official-FM updates per arm completed, unchanged teachers,
+two train-only acknowledgment versions. All616 benchmark PNGs are complete;
+four Readers now evaluate them (A191/462,B194/462 at10:30 CST). Both corrected
+Writer files are fully uploaded; complete fixed scores remain pending. All original results remain archived. Dev90 preferences
+remain outside optimization;7,440 natural answers await the official judge.
+Finish the fixed correction/readout before retain/K2/K4 or further changes.
+Old Plan13/C2C instructions below are superseded. Do not duplicate workers.
+
+# Previous steering — 2026-09-24: paired supervision and 3+2 question forms
 
 Read `../prefeval-official-alignment-20260923/NEXT_EXPERIMENT_PLAN.md` first.
 User confirmed A full-answer CE / B official-MCQ completion CE in parallel, with

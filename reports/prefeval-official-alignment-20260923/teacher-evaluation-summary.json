@@ -1,0 +1,174 @@
+{
+  "created_unix": 1790190168.1116316,
+  "source": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-prefeval-official-ab-20260924",
+  "status": "teacher_evaluation_complete_writer_evaluation_pending",
+  "mcq_matrix": [
+    {
+      "phase": "teachers",
+      "arm": "A",
+      "stage": "write",
+      "split": "train",
+      "condition": "teacher",
+      "position": 0,
+      "family": "O1",
+      "correct": 43,
+      "n": 64,
+      "accuracy": 0.671875,
+      "format_failures": 0
+    },
+    {
+      "phase": "teachers",
+      "arm": "A",
+      "stage": "write",
+      "split": "train",
+      "condition": "teacher",
+      "position": 0,
+      "family": "O2",
+      "correct": 42,
+      "n": 64,
+      "accuracy": 0.65625,
+      "format_failures": 0
+    },
+    {
+      "phase": "teachers",
+      "arm": "A",
+      "stage": "write",
+      "split": "train",
+      "condition": "teacher",
+      "position": 0,
+      "family": "T1",
+      "correct": 44,
+      "n": 64,
+      "accuracy": 0.6875,
+      "format_failures": 0
+    },
+    {
+      "phase": "teachers",
+      "arm": "A",
+      "stage": "write",
+      "split": "train",
+      "condition": "teacher",
+      "position": 0,
+      "family": "T2",
+      "correct": 44,
+      "n": 64,
+      "accuracy": 0.6875,
+      "format_failures": 0
+    },
+    {
+      "phase": "teachers",
+      "arm": "A",
+      "stage": "write",
+      "split": "train",
+      "condition": "teacher",
+      "position": 0,
+      "family": "T3",
+      "correct": 44,
+      "n": 64,
+      "accuracy": 0.6875,
+      "format_failures": 0
+    },
+    {
+      "phase": "teachers",
+      "arm": "B",
+      "stage": "write",
+      "split": "train",
+      "condition": "teacher",
+      "position": 0,
+      "family": "O1",
+      "correct": 64,
+      "n": 64,
+      "accuracy": 1.0,
+      "format_failures": 0
+    },
+    {
+      "phase": "teachers",
+      "arm": "B",
+      "stage": "write",
+      "split": "train",
+      "condition": "teacher",
+      "position": 0,
+      "family": "O2",
+      "correct": 64,
+      "n": 64,
+      "accuracy": 1.0,
+      "format_failures": 0
+    },
+    {
+      "phase": "teachers",
+      "arm": "B",
+      "stage": "write",
+      "split": "train",
+      "condition": "teacher",
+      "position": 0,
+      "family": "T1",
+      "correct": 64,
+      "n": 64,
+      "accuracy": 1.0,
+      "format_failures": 0
+    },
+    {
+      "phase": "teachers",
+      "arm": "B",
+      "stage": "write",
+      "split": "train",
+      "condition": "teacher",
+      "position": 0,
+      "family": "T2",
+      "correct": 64,
+      "n": 64,
+      "accuracy": 1.0,
+      "format_failures": 0
+    },
+    {
+      "phase": "teachers",
+      "arm": "B",
+      "stage": "write",
+      "split": "train",
+      "condition": "teacher",
+      "position": 0,
+      "family": "T3",
+      "correct": 64,
+      "n": 64,
+      "accuracy": 1.0,
+      "format_failures": 0
+    }
+  ],
+  "same_png_ood_joint": [
+    {
+      "phase": "teachers",
+      "arm": "A",
+      "stage": "write",
+      "split": "train",
+      "condition": "teacher",
+      "position": 0,
+      "correct": 40,
+      "n": 64,
+      "both_ood_correct": 0.625
+    },
+    {
+      "phase": "teachers",
+      "arm": "B",
+      "stage": "write",
+      "split": "train",
+      "condition": "teacher",
+      "position": 0,
+      "correct": 64,
+      "n": 64,
+      "both_ood_correct": 1.0
+    }
+  ],
+  "paired_seed0_controls": [],
+  "generation_pending_official_judge": 640,
+  "evaluation_files": 128,
+  "completed_shards": [
+    "evaluations/teachers/A/write/complete-0.json",
+    "evaluations/teachers/B/write/complete-0.json"
+  ],
+  "limits": [
+    "No automatic method selection from OOD or MCQ proxy.",
+    "Teacher results are training-content fit; dev students measure new-preference transfer.",
+    "Matched matrix includes two correlated noise seeds; paired comparisons use seed0 only.",
+    "No official generation accuracy until the external judge completes."
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "created_unix": 1790212458.8208728,
+  "stage": "write-ackmix",
+  "status": "training_complete_benchmark_rollout_running",
+  "arms": {
+    "A": {
+      "steps": 2048,
+      "draws": 8192,
+      "training_states": 64,
+      "condition_versions": 128,
+      "draws_per_condition": 64,
+      "initial_checkpoint_sha256": "683366926f3351a82acb926e0fadd487ceacb8436f31478d723c005839bbe3d7",
+      "checkpoint_sha256": "bfe2393ac7ad48bd492c32bccf0709777fd3469a70b6357ff577ffbb05cbe03e",
+      "checkpoint_bytes": 1560539490,
+      "recorded_train_seconds": 1600.2886717231013,
+      "optimization_log_sha256": "9e0e7682fcb0124b62ee2a3d987afbea1f3587e68d71fa5d75a31d819492373a"
+    },
+    "B": {
+      "steps": 2048,
+      "draws": 8192,
+      "training_states": 64,
+      "condition_versions": 128,
+      "draws_per_condition": 64,
+      "initial_checkpoint_sha256": "eea5387129d42ed156c2439cc2161a80515bcf1920011b203c1891d02b2da849",
+      "checkpoint_sha256": "229f714cf94278be495fab6bd5648e32973bb202c57818dfd4288572fd64eb2e",
+      "checkpoint_bytes": 1560539490,
+      "recorded_train_seconds": 1603.5099587831646,
+      "optimization_log_sha256": "219b21073d4f37cc7a661b79bc7af13cfb5bdcbc893ac28c6d24e33f6548f62d"
+    }
+  },
+  "limits": [
+    "Training completion and finite loss are not shared-memory performance.",
+    "All64 targets fixed; no new teacher optimization; no dev inputs in training.",
+    "No official generation scores without configured external judge."
+  ],
+  "archive": {
+    "records": 15,
+    "bytes": 919045,
+    "sha256": "32dce16b3244a0dd609d54b41d71de17e8b572a285b6152a10996f288dc3f806"
+  }
+}

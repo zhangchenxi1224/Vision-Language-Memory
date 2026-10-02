@@ -1,0 +1,190 @@
+{
+  "source": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/dreamlite-prefeval-official-ab-20260924",
+  "arms": {
+    "A": {
+      "states": 64,
+      "latent_shape": [
+        1,
+        4,
+        128,
+        128
+      ],
+      "bank_mean_mse": 0.42341846227645874,
+      "latent_global_rms": 0.8730475306510925,
+      "fm_steps": 2048,
+      "fm_log_sha256": "87587aad798a6772ce4722172364b36103a53f6a3ee11ecd9017974a17e396b8",
+      "windows": {
+        "first256": [
+          {
+            "sigma_range": [
+              0.0,
+              0.25
+            ],
+            "draws": 280,
+            "velocity_mse": 1.4435081490448542,
+            "target_noised_clean_mse": 0.028973486074106086
+          },
+          {
+            "sigma_range": [
+              0.25,
+              0.5
+            ],
+            "draws": 258,
+            "velocity_mse": 1.330970522969268,
+            "target_noised_clean_mse": 0.20040005333136537
+          },
+          {
+            "sigma_range": [
+              0.5,
+              0.75
+            ],
+            "draws": 244,
+            "velocity_mse": 0.9944950068583254,
+            "target_noised_clean_mse": 0.3776526078346898
+          },
+          {
+            "sigma_range": [
+              0.75,
+              1.0
+            ],
+            "draws": 242,
+            "velocity_mse": 0.5896590850200535,
+            "target_noised_clean_mse": 0.4504019310259495
+          }
+        ],
+        "last256": [
+          {
+            "sigma_range": [
+              0.0,
+              0.25
+            ],
+            "draws": 249,
+            "velocity_mse": 0.7040124777928892,
+            "target_noised_clean_mse": 0.010452996917734016
+          },
+          {
+            "sigma_range": [
+              0.25,
+              0.5
+            ],
+            "draws": 233,
+            "velocity_mse": 0.18933354733839566,
+            "target_noised_clean_mse": 0.024141863211951546
+          },
+          {
+            "sigma_range": [
+              0.5,
+              0.75
+            ],
+            "draws": 299,
+            "velocity_mse": 0.06969055617508482,
+            "target_noised_clean_mse": 0.026444276297253138
+          },
+          {
+            "sigma_range": [
+              0.75,
+              1.0
+            ],
+            "draws": 243,
+            "velocity_mse": 0.03905231948681329,
+            "target_noised_clean_mse": 0.02920727832630884
+          }
+        ]
+      }
+    },
+    "B": {
+      "states": 64,
+      "latent_shape": [
+        1,
+        4,
+        128,
+        128
+      ],
+      "bank_mean_mse": 0.13968706130981445,
+      "latent_global_rms": 0.6803683638572693,
+      "fm_steps": 2048,
+      "fm_log_sha256": "1c7cbf9f4d436d5a975e8afb9af954c933e8bd7d3d6d9739ea156eb9c3137b87",
+      "windows": {
+        "first256": [
+          {
+            "sigma_range": [
+              0.0,
+              0.25
+            ],
+            "draws": 280,
+            "velocity_mse": 1.140353651344776,
+            "target_noised_clean_mse": 0.020616736619392315
+          },
+          {
+            "sigma_range": [
+              0.25,
+              0.5
+            ],
+            "draws": 258,
+            "velocity_mse": 0.6813022657189258,
+            "target_noised_clean_mse": 0.09767779664314198
+          },
+          {
+            "sigma_range": [
+              0.5,
+              0.75
+            ],
+            "draws": 244,
+            "velocity_mse": 0.3537645300270104,
+            "target_noised_clean_mse": 0.13230569790008764
+          },
+          {
+            "sigma_range": [
+              0.75,
+              1.0
+            ],
+            "draws": 242,
+            "velocity_mse": 0.19848943848070527,
+            "target_noised_clean_mse": 0.15046338809570795
+          }
+        ],
+        "last256": [
+          {
+            "sigma_range": [
+              0.0,
+              0.25
+            ],
+            "draws": 249,
+            "velocity_mse": 0.4980912271991791,
+            "target_noised_clean_mse": 0.005582551435674214
+          },
+          {
+            "sigma_range": [
+              0.25,
+              0.5
+            ],
+            "draws": 233,
+            "velocity_mse": 0.08408630476233274,
+            "target_noised_clean_mse": 0.010401018152487451
+          },
+          {
+            "sigma_range": [
+              0.5,
+              0.75
+            ],
+            "draws": 299,
+            "velocity_mse": 0.028132628730457764,
+            "target_noised_clean_mse": 0.010714871354872311
+          },
+          {
+            "sigma_range": [
+              0.75,
+              1.0
+            ],
+            "draws": 243,
+            "velocity_mse": 0.015074954442909839,
+            "target_noised_clean_mse": 0.011220876859410712
+          }
+        ]
+      }
+    }
+  },
+  "scope": "All64 training teachers only; no generated-student performance claim",
+  "identity": "For a training bridge x=(1-sigma)z+sigma*epsilon, z_hat=x-sigma*v_hat; clean MSE=sigma^2*velocity MSE.",
+  "limits": "Residuals use target-noised training inputs, not free-running Gaussian trajectories. Cross-window draws differ. Bank-mean error is a geometric reference, not a tested unconditional model."
+}

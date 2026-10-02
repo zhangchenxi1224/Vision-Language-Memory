@@ -1,5 +1,55 @@
 # PrefEval RGB memory: execution brief, 2026-09-17
 
+## Latest: judge interrupted by account Arrearage; waiting for user
+
+2026-09-24 13:01 CST: both Qwen3.8-max judge processes have exited with HTTP400
+Arrearage.5,168 checks and1,288 complete answers are preserved, with10 additional
+partial answers. No final score. Automation and training remain paused; no paid
+retry, replacement model or training restart. Read the official-alignment
+directory's `judge-qwen38-interruption-summary.json` and `QWEN38_JUDGE_STATUS.json`.
+The complete partial judgment/log archive is saved; resume requires account
+recovery and user direction, reusing existing checks.
+
+## Latest: Qwen3.8-max judge running; training remains paused
+
+2026-09-24: user authorized `qwen3.8-max` for saved free-answer judging.
+Both remote write-ackmix pipelines are complete; no Reader restart is needed.
+Two disjoint local judge processes score the full12,060 answers using unchanged
+official prompts/parsers/aggregation and the substituted judge model.
+Read `../prefeval-official-alignment-20260923/QWEN38_JUDGE.md` and
+`QWEN38_JUDGE_STATUS.json` there for process identities and logs. At12:28 CST,
+180 answers had all four checks,735 checks were saved, and none were malformed.
+These are progress counts only. New training and the Goal remain paused.
+The completion monitor now covers judging, final result aggregation and archive.
+
+## Latest authority: new iterations paused; existing evaluation continues
+
+2026-09-24: user requested a full results review and paused new iterations,
+then explicitly instructed that the already-running remote experiment finish.
+Goal is paused. Existing write-ackmix Readers resumed; do not duplicate them.
+At11:31 CST A354/462 and B357/462 conditions were complete. Only monitor,
+archive and report this fixed run, then pause the completion-monitor automation.
+No new diagnostic/training/retain/K2/K4, instance restart or recovery dispatch.
+This supersedes every older continuation instruction below.
+Read [the comprehensive completed-experiment report](../prefeval-official-alignment-20260923/COMPLETED_EXPERIMENTS_REVIEW_20260924.md)
+and [current execution state](../prefeval-official-alignment-20260923/EXECUTION_LIVE.md).
+
+## Live: acknowledgment sensitivity located; paired FM correction running
+
+Read `../prefeval-official-alignment-20260923/EXECUTION_LIVE.md` and
+`TRAIN_INPUT_RESULTS_AND_ACKMIX_PLAN.md` first. Exact training input raises
+T1 student MCQ from A29/64 to38/64 and B30/64 to62/64 with frozen weights/noise.
+The fixed benchmark dev scores remain near blank, so this is input-generalization
+evidence, not unseen-preference success. All diagnostic data and128 PNGs are on
+GitHub.7,440 natural answers remain unjudged. The new `write-ackmix` stage mixes
+released SFT / Reader acknowledgments only on64 training states, same targets,
+official FM,2048 additional updates per arm. Session de87783932384e7b813c5c7cd76d945e
+completed both2048-update FM endpoints on the designated notebook. Original
+drivers completed all616 benchmark PNGs and now read them on four GPUs
+(A191/462,B194/462 conditions at10:30 CST), then stop for analysis. Both corrected
+Writer checkpoints are fully uploaded and verified. No final corrected score yet.
+No retain/K2/K4 queued. Inspect current receipts before resuming. No C2C.
+
 ## Latest: parallel official-answer / MCQ supervision, 2026-09-24
 
 Read `../prefeval-official-alignment-20260923/NEXT_EXPERIMENT_PLAN.md` first.
