@@ -1,46 +1,14 @@
-# Data directory
+# 当前数据入口
 
-Generated synthetic JSONL and external dataset snapshots are not committed. Recreate them with:
+固定官方 PrefEval 来源：`50795054b5ff5f418d2b768a331d71e480f93331`。
 
-```bash
-python scripts/data/generate_synthetic.py --output-dir data/synthetic_v2 --seed 2026
-python scripts/data/generate_synthetic.py \
-  --output-dir data/synthetic_v2_set_only --seed 2026 --transition-profile set-only
-python scripts/bootstrap/fetch_datasets.py --data-root data/external
-```
+- 官方导出与 SHA 清单：`reports/prefeval-official-alignment-20260923/data/`。
+- K1 划分、问法及登记：`reports/prefeval-k1-l0-l2-20260924/`。
+- 多目标 bank 与登记：`reports/prefeval-multitarget-20260927/`。
+- 当前读取实现：`scripts/experiments/prefeval_k1_data.py`。
 
-Every generated split and imported PrefEval source file is content-addressed in its manifest.
-The `set-only` curriculum is generated independently; it is never produced by deleting
-overwrite/clear turns from the full episodes.
+官方 seed42 的820/180主题划分与项目730/90内部划分分别记录。完整对话、acknowledgment、最终答案mask和评分信息隔离遵循官方对齐入口；训练问法、替代Judge和去重视图单独声明。
 
-Synthetic schema v2 records both metadata IDs and the actual controlled surfaces:
+旧seed2026自定义 PrefEval 数据、复述与人工排序实验已退出当前数据入口。历史生成器、独立文本baseline和通用schema保留兼容用途，其旧分数不自动成为当前baseline。原始官方数据不会因曾被旧实验使用而失效。
 
-- `entity_surface` is the exact entity string present in state-changing events and queries.
-- `template_family` is a literal marker present in every event and query. Entity surfaces,
-  template families, and normalized model-visible template skeletons are split-disjoint and
-  hashed under `manifest.json -> surface_partitions`.
-- `distractor_variant`, `distractor_pair_id`, and `distractor_episode_id` identify reciprocal
-  clean/distractor streams. `query.comparison_id` matches corresponding queries without
-  encoding the answer. The clean member contains no `noop` event.
-- Mixed queries remain explicit `mixed` turns; their count is recorded per split in the
-  manifest and validation report. The router/update code receives turn text only, never these
-  analysis fields or `target_index`.
-
-Each semantic counterfactual is crossed with clean/distractor variants in groups of four.
-For the full transition profile, all four semantic counterfactual reads that share a visible
-query and candidate set also share one deterministic ordered choice tuple. Each candidate is
-the target exactly once before the clean/distractor duplication. This makes the target share
-conditional on the complete query-only payload exactly 25%, including groups that contain
-`no active preference`; the validator fails closed if either the order or target balance drifts.
-The formal Qwen sanity gate scores the complete 500-episode dev split after deduplicating
-clean/distractor copies by `comparison_id`. For the full profile this produces 500 comparison
-reads but only 125 exact model-visible payloads; each payload is paired with all four targets.
-The gate saves every comparison read and all four choice NLLs for audit. The independently
-generated set-only curriculum does not have that single-factor counterfactual certificate, so
-it is explicitly treated as a curriculum-transfer experiment and must pass its own empirical
-oracle/query-only Qwen sanity gate before training.
-
-Because each 250-example OOD stratum leaves a two-example residue, those eight episodes are
-marked `unpaired` and excluded from matched distractor damage while remaining valid semantic
-counterfactual pairs. Length-OOD clean streams use target-consistent overwrite reaffirmations
-to preserve the 9–16-turn requirement; the manifest records this definition explicitly.
+保留依据见 `docs/ALIGNMENT_BOUNDARY.md`。本次仓库清理没有删除外部共享盘、原工作树中的未跟踪文件或模型权重。

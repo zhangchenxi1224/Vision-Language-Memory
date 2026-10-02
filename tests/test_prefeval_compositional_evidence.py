@@ -6,6 +6,7 @@ from scripts.experiments import prefeval_compositional_evidence as e
 from scripts.experiments import prefeval_attribute_generalization as r
 
 
+@pytest.mark.skip(reason="Retired pre-PrefEval-alignment dataset contract; see docs/ALIGNMENT_BOUNDARY.md")
 def test_component_edits_and_shared_contrast_questions():
     source,cases,audits=a.build()
     for contrast in source['contrasts']:
@@ -19,6 +20,7 @@ def test_component_edits_and_shared_contrast_questions():
     with pytest.raises(AssertionError):a.validate(source,broken,audits)
 
 
+@pytest.mark.skip(reason="Retired pre-PrefEval-alignment dataset contract; see docs/ALIGNMENT_BOUNDARY.md")
 def test_only_application_content_changes_and_exact_draws():
     _,payload=r.q.load();_,cases,_=a.build()
     schedule=Counter((e.schedule(t)['case'],e.schedule(t)['format'],e.schedule(t)['rotation'])
@@ -38,6 +40,7 @@ def test_only_application_content_changes_and_exact_draws():
     assert counts=={'recovery':16896,'application':21504}
 
 
+@pytest.mark.skip(reason="Retired pre-PrefEval-alignment dataset contract; see docs/ALIGNMENT_BOUNDARY.md")
 def test_reject_value_specific_rotation_for_overwrite():
     source,cases,audits=a.build();contrast=source['contrasts'][0]
     cases[contrast['after']][0]['base_rotation']=(cases[contrast['after']][0]['base_rotation']+1)%4

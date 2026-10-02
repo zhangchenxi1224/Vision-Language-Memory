@@ -1,4 +1,9 @@
-# Inspire R3 runtime
+# Historical Inspire R3 runtime
+
+> 2026-10-02: Historical reproduction context only. This file is not the current
+> experiment entrypoint or a live resource inventory. Current protocol and
+> evidence roots are defined in `experiments/registry.json` and `README.md`.
+> Do not launch retired R1–R3 runs as current aligned baselines.
 
 This file records non-secret project context only. Account configuration, proxy
 tokens, Hugging Face tokens, and `.inspire/config.toml` must remain outside the

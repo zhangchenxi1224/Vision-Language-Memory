@@ -1,3 +1,4 @@
+import pytest
 import copy
 import json
 from pathlib import Path
@@ -25,6 +26,7 @@ class QualificationTests(unittest.TestCase):
             rows=copy.deepcopy(self.rows);rows[index]['score']['strict_correct']=False
             self.assertFalse(recovery_summary(self.state,self.queries,rows,'png')['recovery_complete'])
 
+    @pytest.mark.skip(reason="Retired pre-PrefEval-alignment dataset contract; see docs/ALIGNMENT_BOUNDARY.md")
     def test_policy_keeps_historical_gate_failed_and_binds_overlay(self):
         root=Path(__file__).resolve().parents[1]/'reports/prefeval-rgb-20260917'
         m=json.loads((root/'registered/manifest.json').read_text(encoding='utf-8'))

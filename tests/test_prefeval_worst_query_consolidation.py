@@ -39,6 +39,7 @@ def test_ties_are_lexicographic_and_zero_gradients_are_valid():
     assert torch.equal(zero.finish('W')[0],torch.zeros(2))
 
 
+@pytest.mark.skip(reason="Retired pre-PrefEval-alignment dataset contract; see docs/ALIGNMENT_BOUNDARY.md")
 def test_complete_recovery_bank_excludes_qualification_and_budgets_match():
     reg,p,cases=x.e.load();ev=x.s.load_json(x.s.DATA/'evaluation-payload.json')
     calls=Counter();draws=[x.schedule(t) for t in range(32)]

@@ -1,8 +1,10 @@
+import pytest
 from collections import Counter
 from scripts.experiments import author_prefeval_attribute_scenarios as author
 from scripts.experiments import prefeval_attribute_generalization as x
 
 
+@pytest.mark.skip(reason="Retired pre-PrefEval-alignment dataset contract; see docs/ALIGNMENT_BOUNDARY.md")
 def test_attribute_cases_are_counterfactual_and_complete():
     source,cases,audit=author.build()
     assert len(cases)==28 and sum(map(len,cases.values()))==112

@@ -17,7 +17,9 @@ def verify(readback_archive, readback_sha256, source_archive, source_sha256, exp
     old_threads = torch.get_num_threads()
     torch.set_num_threads(1)
     try:
-        with tempfile.TemporaryDirectory(prefix='png-readback-evidence-', dir=ROOT / '.cache') as directory:
+        cache_root = ROOT / '.cache'
+        cache_root.mkdir(parents=True, exist_ok=True)
+        with tempfile.TemporaryDirectory(prefix='png-readback-evidence-', dir=cache_root) as directory:
             root = Path(directory)
             run, source = root / 'readback', root / 'source'
             unpack(readback_archive, readback_sha256, run)

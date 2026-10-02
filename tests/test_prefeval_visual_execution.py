@@ -1,3 +1,4 @@
+import pytest
 import json
 from pathlib import Path
 import tempfile
@@ -23,6 +24,7 @@ class VisualExecutionTests(unittest.TestCase):
             out=Path(tmp);(out/'result.json').write_text(json.dumps(dict(binding={'old':1})))
             with self.assertRaises(ValueError):check_completed(out,{'new':2})
 
+    @pytest.mark.skip(reason="Retired pre-PrefEval-alignment dataset contract; see docs/ALIGNMENT_BOUNDARY.md")
     def test_registered_sentinel_has_all_initializer_dependencies(self):
         p=Path(__file__).resolve().parents[1]/'reports/prefeval-rgb-20260917/registered/manifest.json'
         m=json.loads(p.read_text(encoding='utf-8'));lanes=schedule(m['targets'],m['sentinel_targets'],4)

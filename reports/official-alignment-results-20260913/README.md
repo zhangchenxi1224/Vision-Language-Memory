@@ -1,4 +1,10 @@
-# 官方对齐：真实实验结果与当前状态
+# DreamLite 对齐工程证据与历史记录
+
+> 2026-10-02 分类：`engineering_provenance`。此目录同时包含转折期 raw/native
+> 条件控制、修复前后配对结果、teacher bank、初始化谱系及测试夹具。所有下述
+> “当前”“正在运行”均为原记录时刻的陈述，不代表现在的资源状态。
+> 本目录不进入当前 PrefEval 性能汇总；当前结果入口见 `../../experiments/registry.json`。
+> 保留旧控制用于解释修复，不恢复旧基线的当前有效性。详见 `../../docs/ALIGNMENT_BOUNDARY.md`。
 
 16:38：24张新训练源图及120raw完整通过，原生噪声重放与全部本地证据齐全。下一轮ef163b2源图条件增强实现已部署，新四卡仍排队，尚未有新训练结果。见[完整源图报告](generated-source-pool-review.md)。
 

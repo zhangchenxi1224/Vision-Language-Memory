@@ -23,6 +23,7 @@ def test_reconstruction_drift_does_not_modify_archived_pixels():
         d.matched_images(torch.zeros_like(png),png,'cpu')
     assert torch.equal(png,saved)
 
+@pytest.mark.skip(reason="Retired pre-PrefEval-alignment dataset contract; see docs/ALIGNMENT_BOUNDARY.md")
 def test_query_partitions_and_all_registered_coverage():
     m=d.load_json(d.REPORT/'registered/manifest.json');o=d.load_json(d.REPORT/'reader-format-v2.json')
     total=0
@@ -39,6 +40,7 @@ def test_missing_and_duplicate_cells_fail():
     for bad in (rows[:1],rows+rows[:1],rows+[{'id':'c'}]):
         with pytest.raises(ValueError):exact_index(bad,key,{'a','b'})
 
+@pytest.mark.skip(reason="Retired pre-PrefEval-alignment dataset contract; see docs/ALIGNMENT_BOUNDARY.md")
 def test_current_value_mcq_lineage_retains_all_occurrences():
     m=d.load_json(d.REPORT/'registered/manifest.json');o=d.load_json(d.REPORT/'reader-format-v2.json')
     count=0;overwritten=0;cleared=0
@@ -55,6 +57,7 @@ def test_current_value_mcq_lineage_retains_all_occurrences():
         cleared+=sum(v is None for v in t['state'].values())
     assert count==84 and overwritten>0 and cleared==4
 
+@pytest.mark.skip(reason="Retired pre-PrefEval-alignment dataset contract; see docs/ALIGNMENT_BOUNDARY.md")
 def test_missing_current_mcq_cannot_fall_back_to_stale_label():
     m=d.load_json(d.REPORT/'registered/manifest.json');o=d.load_json(d.REPORT/'reader-format-v2.json')
     sid=m['sentinel_targets'][0];scope=next(iter(m['targets'][sid]['state']))

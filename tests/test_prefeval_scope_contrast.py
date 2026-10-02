@@ -78,6 +78,7 @@ def test_zero_hinge_empty_rivals_and_verifier_detects_bad_margin():
     assert loss==0 and torch.equal(torch.autograd.grad(loss,vals)[0],torch.zeros_like(vals))
 
 
+@pytest.mark.skip(reason="Retired pre-PrefEval-alignment dataset contract; see docs/ALIGNMENT_BOUNDARY.md")
 def test_rivals_and_exact_coverage_budget_exclude_qualification():
     assert x.rivals({'state':{'a':'same','b':'SAME','c':'different','d':'different'}},'a')==['different','no active preference']
     assert x.rivals({'state':{'a':None}},'a')==[]

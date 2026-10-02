@@ -1,3 +1,4 @@
+import pytest
 import json,inspect
 from collections import Counter
 from types import SimpleNamespace
@@ -7,6 +8,7 @@ from PIL import Image
 from scripts.experiments import prefeval_joint_consolidation as j
 s=j.s
 
+@pytest.mark.skip(reason="Retired pre-PrefEval-alignment dataset contract; see docs/ALIGNMENT_BOUNDARY.md")
 def test_population_schedule_weights_and_exact_budget():
     _,p=s.trial_load();counts=Counter();rec_counts=Counter()
     for t in p['targets'].values():
@@ -28,6 +30,7 @@ def test_population_schedule_weights_and_exact_budget():
     assert counts=={'C':16896,'J':38400} and rec_counts=={'C':16896,'J':16896}
     assert 40*2*64==5120 and sum(counts.values())==55296
 
+@pytest.mark.skip(reason="Retired pre-PrefEval-alignment dataset contract; see docs/ALIGNMENT_BOUNDARY.md")
 def test_evaluation_excludes_training_until_frozen_and_budget():
     _,p=s.trial_load();e=s.load_json(s.DATA/'evaluation-payload.json');reg=s.load_json(s.TRIAL_DATA/'registration.json')
     perarm=sum(sum(len(t[pan]) for pan in ('recovery_training','qualification','application_training','mcq','application_reserved')) for t in e['targets'].values())
@@ -38,6 +41,7 @@ def test_evaluation_excludes_training_until_frozen_and_budget():
     evaluation=inspect.getsource(j.evaluate)
     assert evaluation.index("done['additional_updates']==64")<evaluation.index("evaluation-payload.json")
 
+@pytest.mark.skip(reason="Retired pre-PrefEval-alignment dataset contract; see docs/ALIGNMENT_BOUNDARY.md")
 def test_real_training_loop_accumulates_same_image_before_single_adam_step(tmp_path,monkeypatch):
     _,p=s.trial_load();sid=sorted(p['targets'])[0];t=p['targets'][sid];p=dict(targets={sid:t})
     source=tmp_path/'old';folder=source/'training/B'/sid;folder.mkdir(parents=True)

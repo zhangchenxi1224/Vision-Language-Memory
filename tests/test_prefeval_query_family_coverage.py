@@ -1,9 +1,11 @@
+import pytest
 import inspect
 from collections import Counter
 import torch
 from scripts.experiments import prefeval_query_family_coverage as q
 s=q.s
 
+@pytest.mark.skip(reason="Retired pre-PrefEval-alignment dataset contract; see docs/ALIGNMENT_BOUNDARY.md")
 def test_exact_schedule_weights_and_compute():
     _,p=q.j.load();counts=Counter();coverage=Counter();formats=Counter()
     for sid,t in p['targets'].items():
@@ -24,6 +26,7 @@ def test_exact_schedule_weights_and_compute():
     assert 40*2*64==5120 and sum(counts.values())==76800
     assert formats['V','application']==formats['V','derived_xml_application']
 
+@pytest.mark.skip(reason="Retired pre-PrefEval-alignment dataset contract; see docs/ALIGNMENT_BOUNDARY.md")
 def test_xml_mapping_and_query_isolation():
     _,p=q.j.load();case=next(iter(next(iter(p['targets'].values()))['applications']))
     seen=[]
@@ -38,6 +41,7 @@ def test_xml_mapping_and_query_isolation():
     for forbidden in ('evaluation-payload','reserved-scenarios','qualification'):
         assert forbidden not in code
 
+@pytest.mark.skip(reason="Retired pre-PrefEval-alignment dataset contract; see docs/ALIGNMENT_BOUNDARY.md")
 def test_joint_objective_uses_one_image_and_one_step(monkeypatch):
     _,p=q.j.load();t=next(iter(p['targets'].values()));z=torch.full((1,3,2,2),.4,requires_grad=True)
     for arm in ('U','V'):

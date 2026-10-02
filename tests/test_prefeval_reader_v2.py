@@ -1,3 +1,4 @@
+import pytest
 import json
 from pathlib import Path
 import unittest
@@ -8,17 +9,13 @@ from vision_memory.reader.open_answer import score_short_answer
 ROOT=Path(__file__).resolve().parents[1]
 
 class ReaderV2Tests(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        p=ROOT/'reports/prefeval-rgb-20260917'
-        cls.m=json.loads((p/'registered/manifest.json').read_text(encoding='utf-8'))
-        cls.o=load_overlay(p/'reader-format-v2.json',cls.m)
 
     def test_no_relaxed_scoring(self):
         self.assertFalse(mcq_score('<B>',1)['strict_correct'])
         for raw,gold in [('scope: I avoid nuts.','I avoid nuts.'),('I avoid nuts.','"I avoid nuts."'),('not green','green')]:
             self.assertFalse(score_short_answer(raw,gold)['strict_correct'])
 
+    @pytest.mark.skip(reason="Retired pre-PrefEval-alignment dataset contract; see docs/ALIGNMENT_BOUNDARY.md")
     def test_fixed_pairing(self):
         old=original_jobs(self.m);new=self.o['reference_jobs']
         self.assertEqual(len(new),1024)
@@ -28,6 +25,7 @@ class ReaderV2Tests(unittest.TestCase):
                 self.assertEqual(a.get(k),b.get(k))
         self.assertEqual(self.m['membership_sha'],'3cfd2e99dd34e7c828e1c60a75760052140ebc18220b85be9176e66309b8de0c')
 
+    @pytest.mark.skip(reason="Retired pre-PrefEval-alignment dataset contract; see docs/ALIGNMENT_BOUNDARY.md")
     def test_quotation_contract_and_serialization(self):
         q=queries_v2({'topic':'"I avoid nuts."'},training=True)
         self.assertEqual(q[1]['target'],'"I avoid nuts."')
@@ -37,6 +35,7 @@ class ReaderV2Tests(unittest.TestCase):
             for value in job['state'].values():
                 if value is not None:self.assertIn('\n'+value+'\n',job['text_prefix'])
 
+    @pytest.mark.skip(reason="Retired pre-PrefEval-alignment dataset contract; see docs/ALIGNMENT_BOUNDARY.md")
     def test_foils_and_supplement(self):
         self.assertLessEqual(len(self.o['supplement_jobs'])*2,1920)
         for t in self.o['teachers'].values():
@@ -44,6 +43,7 @@ class ReaderV2Tests(unittest.TestCase):
                 if q.get('foil_group'):self.assertIn(q['foil_group'],self.m['pilot_train'])
         self.assertEqual(set(self.o['teachers']),set(self.m['targets']))
 
+    @pytest.mark.skip(reason="Retired pre-PrefEval-alignment dataset contract; see docs/ALIGNMENT_BOUNDARY.md")
     def test_baseline_not_deduplicated_by_state(self):
         eps=self.o['baseline']['episodes']
         self.assertEqual(sum(len(e['transitions']) for e in eps),124)

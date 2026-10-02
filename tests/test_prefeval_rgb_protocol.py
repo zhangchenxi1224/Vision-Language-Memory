@@ -1,3 +1,4 @@
+import pytest
 from pathlib import Path
 import json
 import sys
@@ -11,10 +12,8 @@ from vision_memory.prefeval.rgb_protocol import (
 
 
 class ProtocolTests(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        cls.manifest = json.loads((ROOT / "reports/prefeval-rgb-20260917/registered/manifest.json").read_text(encoding="utf-8"))
 
+    @pytest.mark.skip(reason="Retired pre-PrefEval-alignment dataset contract; see docs/ALIGNMENT_BOUNDARY.md")
     def test_components_and_nested_subsets(self):
         m = self.manifest
         self.assertLessEqual(set(m["pilot_train"]), set(m["small"]))
@@ -27,6 +26,7 @@ class ProtocolTests(unittest.TestCase):
             expected = ep["split"]
             self.assertEqual({m["groups"][gid]["split"] for gid in ep["semantic_groups"]}, {expected})
 
+    @pytest.mark.skip(reason="Retired pre-PrefEval-alignment dataset contract; see docs/ALIGNMENT_BOUNDARY.md")
     def test_predecessor_graph_is_acyclic(self):
         targets = self.manifest["targets"]
         for sid in targets:
@@ -36,6 +36,7 @@ class ProtocolTests(unittest.TestCase):
                 seen.add(sid)
                 sid = targets[sid]["predecessor"]
 
+    @pytest.mark.skip(reason="Retired pre-PrefEval-alignment dataset contract; see docs/ALIGNMENT_BOUNDARY.md")
     def test_teacher_training_excludes_eval_combinations(self):
         m = self.manifest
         planned = {t["target_state_id"] for ep in m["episodes"]
@@ -66,6 +67,7 @@ class ProtocolTests(unittest.TestCase):
         self.assertEqual(set(writer_input(image, "Keep all my preferences.")), {"image", "event"})
         self.assertIs(writer_input(image, "Current event")["image"], image)
 
+    @pytest.mark.skip(reason="Retired pre-PrefEval-alignment dataset contract; see docs/ALIGNMENT_BOUNDARY.md")
     def test_transitions_reconstruct_registered_states(self):
         for ep in self.manifest["episodes"]:
             previous = {}
