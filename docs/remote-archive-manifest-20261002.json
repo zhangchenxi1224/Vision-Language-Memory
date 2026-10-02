@@ -1,0 +1,435 @@
+{
+  "schema_version": 1,
+  "repository": "https://github.com/zhangchenxi1224/Vision-Language-Memory",
+  "date": "2026-10-02",
+  "published_cleanup_commit": "e6fa9c8669823747f32a62ad325b9ae6d4a948c6",
+  "verification_scope": "Cleanup publication and remote reference convergence; subsequent documentation commits advance main.",
+  "verification": {
+    "stage": "verify",
+    "verified_at_utc": "2026-10-02T10:48:28.225017+00:00",
+    "main": "e6fa9c8669823747f32a62ad325b9ae6d4a948c6",
+    "heads": {
+      "refs/heads/main": "e6fa9c8669823747f32a62ad325b9ae6d4a948c6"
+    },
+    "tag_count": 34,
+    "archive_tags_verified": 33,
+    "pull_request_state": "closed",
+    "pull_request_merged": false,
+    "releases_unchanged": true,
+    "release_assets": 27,
+    "default_branch": "main"
+  },
+  "archive_tags": [
+    {
+      "branch": "codex/b730-exposure512-20260927",
+      "sha": "52f39711368a1cbcc84867d92602d4240a4726ed",
+      "category": "current_experiment",
+      "commits_not_in_cleanup_candidate": 0,
+      "tag": "archive/2026-10-02/codex/b730-exposure512-20260927"
+    },
+    {
+      "branch": "codex/direct-latent-geometry-20260908",
+      "sha": "bd49f65f764a302880e8aafbc5ad2e4e33cf15ba",
+      "category": "legacy_experiment",
+      "commits_not_in_cleanup_candidate": 2,
+      "tag": "archive/2026-10-02/codex/direct-latent-geometry-20260908"
+    },
+    {
+      "branch": "codex/direct-multiprompt-eos-20260908",
+      "sha": "67373b7c516350589a118f3d089a2730f52eab01",
+      "category": "legacy_experiment",
+      "commits_not_in_cleanup_candidate": 5,
+      "tag": "archive/2026-10-02/codex/direct-multiprompt-eos-20260908"
+    },
+    {
+      "branch": "codex/dreamlite-official-alignment-20260913",
+      "sha": "0cd46b7de367570d5cfd0e2e85df709d63d72d93",
+      "category": "alignment_provenance",
+      "commits_not_in_cleanup_candidate": 0,
+      "tag": "archive/2026-10-02/codex/dreamlite-official-alignment-20260913"
+    },
+    {
+      "branch": "codex/dreamlite-optimizer-diagnostics-20260720",
+      "sha": "94bfc6c532392d7c1304b42dea2ab2b867ce7345",
+      "category": "legacy_experiment",
+      "commits_not_in_cleanup_candidate": 0,
+      "tag": "archive/2026-10-02/codex/dreamlite-optimizer-diagnostics-20260720"
+    },
+    {
+      "branch": "codex/dreamlite-prefeval-rgb-20260917",
+      "sha": "b41021af6ce2425aeeca64ac6789e8c1e9a107fd",
+      "category": "current_experiment",
+      "commits_not_in_cleanup_candidate": 0,
+      "tag": "archive/2026-10-02/codex/dreamlite-prefeval-rgb-20260917"
+    },
+    {
+      "branch": "codex/dreamlite-r4-freepixel-20260722",
+      "sha": "d8e9401c45ed929f8dfd0cf07f300fad68e1a45c",
+      "category": "legacy_experiment",
+      "commits_not_in_cleanup_candidate": 0,
+      "tag": "archive/2026-10-02/codex/dreamlite-r4-freepixel-20260722"
+    },
+    {
+      "branch": "codex/frozen-oracle-eos-20260908",
+      "sha": "2c8a2ab4b7f23fc707ef59dfc12651a74cdd61be",
+      "category": "legacy_experiment",
+      "commits_not_in_cleanup_candidate": 50,
+      "tag": "archive/2026-10-02/codex/frozen-oracle-eos-20260908"
+    },
+    {
+      "branch": "codex/frozen-oracle-geometry-20260908",
+      "sha": "86a8ed25972d8911b9e8d4f8c6f5f675f12d92d2",
+      "category": "legacy_experiment",
+      "commits_not_in_cleanup_candidate": 48,
+      "tag": "archive/2026-10-02/codex/frozen-oracle-geometry-20260908"
+    },
+    {
+      "branch": "codex/latent-bank-unet-20260908",
+      "sha": "f68bf06d41f046b02136a922a2f15c3e5f3f6fc5",
+      "category": "legacy_experiment",
+      "commits_not_in_cleanup_candidate": 0,
+      "tag": "archive/2026-10-02/codex/latent-bank-unet-20260908"
+    },
+    {
+      "branch": "codex/prefeval-k1-l0-l2-20260924",
+      "sha": "e3fdde027a8fb143c9405de4f3ff5c98c4bc25de",
+      "category": "current_experiment",
+      "commits_not_in_cleanup_candidate": 0,
+      "tag": "archive/2026-10-02/codex/prefeval-k1-l0-l2-20260924"
+    },
+    {
+      "branch": "codex/prefeval-multitarget-20260927",
+      "sha": "b79e5341e512c0c6f8ce92be8ac5bc49cee24e34",
+      "category": "current_experiment",
+      "commits_not_in_cleanup_candidate": 0,
+      "tag": "archive/2026-10-02/codex/prefeval-multitarget-20260927"
+    },
+    {
+      "branch": "codex/qwen-full-event-history-baseline-20260721",
+      "sha": "ec43a83f671f8debc1ca14f7dae3975c989e43d8",
+      "category": "qwen_independent",
+      "commits_not_in_cleanup_candidate": 0,
+      "tag": "archive/2026-10-02/codex/qwen-full-event-history-baseline-20260721"
+    },
+    {
+      "branch": "codex/qwen-history-mixed-materializer-hotfix-20260722",
+      "sha": "7048e7749b37e4a8b1f862b783491b4d6fa25717",
+      "category": "qwen_independent",
+      "commits_not_in_cleanup_candidate": 1,
+      "tag": "archive/2026-10-02/codex/qwen-history-mixed-materializer-hotfix-20260722"
+    },
+    {
+      "branch": "codex/qwen-structured-history-r4-20260722",
+      "sha": "372fcbb92f52f3fbd10f5ec6b4d125c8254d33bf",
+      "category": "qwen_independent",
+      "commits_not_in_cleanup_candidate": 6,
+      "tag": "archive/2026-10-02/codex/qwen-structured-history-r4-20260722"
+    },
+    {
+      "branch": "codex/r11-new-bridge-distance-20260905",
+      "sha": "7c27edb8ecb58f5d4e446aa1653d1e4615d5a196",
+      "category": "legacy_experiment",
+      "commits_not_in_cleanup_candidate": 44,
+      "tag": "archive/2026-10-02/codex/r11-new-bridge-distance-20260905"
+    },
+    {
+      "branch": "codex/r11-new-frozen-dreamlite-oracle-20260904",
+      "sha": "fb7592ec39877c60ad8a7571310816a9f5216a25",
+      "category": "legacy_experiment",
+      "commits_not_in_cleanup_candidate": 0,
+      "tag": "archive/2026-10-02/codex/r11-new-frozen-dreamlite-oracle-20260904"
+    },
+    {
+      "branch": "codex/r11-new-sigma-audit-fix-20260905",
+      "sha": "2cde77ece6f020ab8c747d7c73e19dac4d8fba1b",
+      "category": "legacy_experiment",
+      "commits_not_in_cleanup_candidate": 0,
+      "tag": "archive/2026-10-02/codex/r11-new-sigma-audit-fix-20260905"
+    },
+    {
+      "branch": "codex/r11-open-answer-20260907",
+      "sha": "c6a294b66dd0b37fe74b46db258e25ca2e3b2f86",
+      "category": "legacy_experiment",
+      "commits_not_in_cleanup_candidate": 0,
+      "tag": "archive/2026-10-02/codex/r11-open-answer-20260907"
+    },
+    {
+      "branch": "codex/r11-open-eos-20260908",
+      "sha": "a081f6c921f6f16a7c79c4155b07abce4d84a681",
+      "category": "legacy_experiment",
+      "commits_not_in_cleanup_candidate": 3,
+      "tag": "archive/2026-10-02/codex/r11-open-eos-20260908"
+    },
+    {
+      "branch": "codex/r11-open-eos-multiquestion-20260908",
+      "sha": "3f7c20fc55bbb53b84db3f798c2ce0ac2d600106",
+      "category": "legacy_experiment",
+      "commits_not_in_cleanup_candidate": 1,
+      "tag": "archive/2026-10-02/codex/r11-open-eos-multiquestion-20260908"
+    },
+    {
+      "branch": "codex/r11-open-eos-question-only-20260908",
+      "sha": "468d055f5626e89c8f73f4360517fa4bfadb1c99",
+      "category": "legacy_experiment",
+      "commits_not_in_cleanup_candidate": 5,
+      "tag": "archive/2026-10-02/codex/r11-open-eos-question-only-20260908"
+    },
+    {
+      "branch": "codex/r12-shared-latent-writer-20260831",
+      "sha": "061f4dc6223da0e7476f904df1a74c5e2e6546c3",
+      "category": "legacy_experiment",
+      "commits_not_in_cleanup_candidate": 0,
+      "tag": "archive/2026-10-02/codex/r12-shared-latent-writer-20260831"
+    },
+    {
+      "branch": "codex/r13-centered-residual-writer-20260904",
+      "sha": "47cebc97e59ffed00571d4bb67fbb08933b3f8d6",
+      "category": "legacy_experiment",
+      "commits_not_in_cleanup_candidate": 0,
+      "tag": "archive/2026-10-02/codex/r13-centered-residual-writer-20260904"
+    },
+    {
+      "branch": "codex/r14-symmetric-donor-ranking-20260904",
+      "sha": "066c44c2c530fba323f0edd76954245cbe91505e",
+      "category": "legacy_experiment",
+      "commits_not_in_cleanup_candidate": 3,
+      "tag": "archive/2026-10-02/codex/r14-symmetric-donor-ranking-20260904"
+    },
+    {
+      "branch": "codex/r15-synchronous-round-robin-20260905",
+      "sha": "4bc9dab92a0bc5e5e073b62fb533cf2e6e01663a",
+      "category": "legacy_experiment",
+      "commits_not_in_cleanup_candidate": 8,
+      "tag": "archive/2026-10-02/codex/r15-synchronous-round-robin-20260905"
+    },
+    {
+      "branch": "codex/r5-compose-20260829",
+      "sha": "8c9188de64f7e8d8e69a96c0805c7049806b52a0",
+      "category": "legacy_experiment",
+      "commits_not_in_cleanup_candidate": 0,
+      "tag": "archive/2026-10-02/codex/r5-compose-20260829"
+    },
+    {
+      "branch": "codex/r6-source-anchored-20260829",
+      "sha": "cf4f7a5504b52d5e690a31320e69fd39d5fe2983",
+      "category": "legacy_experiment",
+      "commits_not_in_cleanup_candidate": 0,
+      "tag": "archive/2026-10-02/codex/r6-source-anchored-20260829"
+    },
+    {
+      "branch": "codex/r7-gradient-balancing-20260830",
+      "sha": "17ea5b9a19bb6e994c0120b872d3e1585b2ccc90",
+      "category": "legacy_experiment",
+      "commits_not_in_cleanup_candidate": 0,
+      "tag": "archive/2026-10-02/codex/r7-gradient-balancing-20260830"
+    },
+    {
+      "branch": "codex/unet-cause-audit-20260909",
+      "sha": "2c97e0b442748859fa902c3c55c5f095a6459953",
+      "category": "legacy_experiment",
+      "commits_not_in_cleanup_candidate": 7,
+      "tag": "archive/2026-10-02/codex/unet-cause-audit-20260909"
+    },
+    {
+      "branch": "codex/unet-learnability-20260909",
+      "sha": "e0ac497e1521d02f6148bf7749ba06e58d570e04",
+      "category": "legacy_experiment",
+      "commits_not_in_cleanup_candidate": 5,
+      "tag": "archive/2026-10-02/codex/unet-learnability-20260909"
+    },
+    {
+      "branch": null,
+      "sha": "4b8a3303568fd82e73514932abac8e47c27cf33c",
+      "category": "pre_publish_main",
+      "tag": "archive/2026-10-02/main-before-alignment"
+    },
+    {
+      "branch": null,
+      "sha": "dce38bd02b568ab24d5b9bbd3c27ba8716d68e78",
+      "category": "pre_cleanup_integration",
+      "tag": "archive/pre-alignment-cleanup-20261002"
+    }
+  ],
+  "pull_request": {
+    "number": 1,
+    "url": "https://github.com/zhangchenxi1224/Vision-Language-Memory/pull/1",
+    "head": "codex/qwen-structured-history-r4-20260722",
+    "sha": "372fcbb92f52f3fbd10f5ec6b4d125c8254d33bf",
+    "action": "close_without_merge",
+    "state": "closed",
+    "merged": false
+  },
+  "retained_releases": [
+    {
+      "id": 394939498,
+      "tag_name": "prefeval-official-ab-teachers-20260924",
+      "draft": false,
+      "prerelease": true,
+      "assets": [
+        {
+          "id": 584352133,
+          "name": "teacher-bank-manifest.json",
+          "size": 87614,
+          "updated_at": "2026-09-23T18:22:07Z"
+        },
+        {
+          "id": 584352134,
+          "name": "teacher-raw-records.jsonl.gz",
+          "size": 1208776,
+          "updated_at": "2026-09-23T18:22:08Z"
+        },
+        {
+          "id": 584352135,
+          "name": "teacher-training-summary.json",
+          "size": 777,
+          "updated_at": "2026-09-23T18:22:07Z"
+        },
+        {
+          "id": 584420026,
+          "name": "teacher-evaluation-summary.json",
+          "size": 3965,
+          "updated_at": "2026-09-23T19:07:36Z"
+        },
+        {
+          "id": 584420027,
+          "name": "write-teacher-evidence.jsonl.gz",
+          "size": 1551751,
+          "updated_at": "2026-09-23T19:07:39Z"
+        },
+        {
+          "id": 584420028,
+          "name": "teacher-bank-B.tgz",
+          "size": 125634394,
+          "updated_at": "2026-09-23T19:11:17Z"
+        },
+        {
+          "id": 584420029,
+          "name": "teacher-bank-A.tgz",
+          "size": 148888318,
+          "updated_at": "2026-09-23T19:11:38Z"
+        },
+        {
+          "id": 584579549,
+          "name": "reference-and-rollout-evidence.jsonl.gz",
+          "size": 1827394,
+          "updated_at": "2026-09-23T21:05:20Z"
+        },
+        {
+          "id": 584579550,
+          "name": "reference-evaluation-summary.json",
+          "size": 6900,
+          "updated_at": "2026-09-23T21:05:18Z"
+        },
+        {
+          "id": 584642828,
+          "name": "writer-A-write-2048.pt",
+          "size": 1560357922,
+          "updated_at": "2026-09-23T21:52:24Z"
+        },
+        {
+          "id": 584642831,
+          "name": "writer-B-write-2048.pt",
+          "size": 1560357922,
+          "updated_at": "2026-09-23T21:52:58Z"
+        },
+        {
+          "id": 584690279,
+          "name": "student-rgb-B-write.tar",
+          "size": 255866880,
+          "updated_at": "2026-09-23T22:30:19Z"
+        },
+        {
+          "id": 584690289,
+          "name": "student-rgb-A-write.tar",
+          "size": 354949120,
+          "updated_at": "2026-09-23T22:29:54Z"
+        },
+        {
+          "id": 584790040,
+          "name": "write-evaluation-summary.json",
+          "size": 39987,
+          "updated_at": "2026-09-23T23:56:38Z"
+        },
+        {
+          "id": 584790041,
+          "name": "write-complete-evidence.jsonl.gz",
+          "size": 7004601,
+          "updated_at": "2026-09-23T23:56:45Z"
+        },
+        {
+          "id": 584790046,
+          "name": "write-complete-evidence-manifest.json",
+          "size": 195,
+          "updated_at": "2026-09-23T23:56:38Z"
+        },
+        {
+          "id": 584852390,
+          "name": "training-input-evidence.jsonl.gz",
+          "size": 800238,
+          "updated_at": "2026-09-24T00:38:42Z"
+        },
+        {
+          "id": 584852391,
+          "name": "training-input-evaluation-summary.json",
+          "size": 14063,
+          "updated_at": "2026-09-24T00:38:42Z"
+        },
+        {
+          "id": 584852393,
+          "name": "training-input-evidence-manifest.json",
+          "size": 120,
+          "updated_at": "2026-09-24T00:38:42Z"
+        },
+        {
+          "id": 584854736,
+          "name": "student-rgb-B-training-initial.tar",
+          "size": 63621120,
+          "updated_at": "2026-09-24T00:40:04Z"
+        },
+        {
+          "id": 584854737,
+          "name": "student-rgb-A-training-initial.tar",
+          "size": 85514240,
+          "updated_at": "2026-09-24T00:40:00Z"
+        },
+        {
+          "id": 584908869,
+          "name": "ackmix-training-evidence.jsonl.gz",
+          "size": 919045,
+          "updated_at": "2026-09-24T01:15:13Z"
+        },
+        {
+          "id": 584908870,
+          "name": "ackmix-training-summary.json",
+          "size": 1622,
+          "updated_at": "2026-09-24T01:15:13Z"
+        },
+        {
+          "id": 584909618,
+          "name": "writer-A-write-ackmix-2048.pt",
+          "size": 1560539490,
+          "updated_at": "2026-09-24T01:20:02Z"
+        },
+        {
+          "id": 584909646,
+          "name": "writer-B-write-ackmix-2048.pt",
+          "size": 1560539490,
+          "updated_at": "2026-09-24T01:26:35Z"
+        },
+        {
+          "id": 584959960,
+          "name": "student-rgb-B-write-ackmix.tar",
+          "size": 278763520,
+          "updated_at": "2026-09-24T01:59:57Z"
+        },
+        {
+          "id": 584959962,
+          "name": "student-rgb-A-write-ackmix.tar",
+          "size": 384788480,
+          "updated_at": "2026-09-24T02:00:42Z"
+        }
+      ]
+    }
+  ],
+  "history_rewrite_performed": false
+}

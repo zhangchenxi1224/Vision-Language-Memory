@@ -2,6 +2,8 @@
 
 当前主线：**官方 PrefEval 输入与任务 → 视觉教师目标 → DreamLite 官方 target–noise flow matching → 实际 RGB 写入与读取 → 内容泛化和连续保持。**
 
+2026-10-02 已完成远端收敛：开发分支仅保留 `main`，31 个旧分支均先保留归档标签再删除引用。历史恢复、PR 收尾与 Release 核验见[部署记录](docs/REMOTE_CONSOLIDATION_20261002.md)；Git 体积与后续迁移方案见[历史瘦身评估](docs/HISTORY_SIZE_ASSESSMENT_20261002.md)。
+
 教师可读性、共享 Writer 单次写入、未见偏好泛化和连续保持分别报告。训练完成不代表评测完成；教师分数不能替代学生分数。
 
 ## 官方对齐边界
@@ -59,3 +61,5 @@ python -m pytest tests/test_official_fm_parity.py tests/test_native_base_trainin
 [DreamLite 对齐审计](reports/official-alignment-audit-20260913.md)及 `reports/official-alignment-results-20260913/` 保留转折期配对控制、bank、初始化和测试夹具，统一属于 `engineering_provenance`，不进入当前 PrefEval 成绩汇总。
 
 被撤下文件可按清单记录的 Git 提交和 blob 身份恢复。新的结果入口以注册表为准，后续实验不得重新用未对齐基线填充当前成绩表。
+
+历史报告中的 `codex/...` 分支已归档为 `archive/2026-10-02/codex/...` 标签。新实验从 `main` 开始；复现历史实验时先获取对应归档标签，再检出报告锁定的精确提交。既有冻结恢复目录继续使用原提交。浅克隆可能缺少 `git show` 所需的历史对象，不能直接替代历史复现环境。
