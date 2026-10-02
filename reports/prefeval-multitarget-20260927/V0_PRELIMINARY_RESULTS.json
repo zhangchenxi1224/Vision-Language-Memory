@@ -1,0 +1,1780 @@
+{
+  "scope": "PRELIMINARY V0 ONLY, train64; V1 still running; no method selection until both finish",
+  "archive_sha256": "b03e7778b39c838eca748ee7a2cbc111fd00ac2bb7b1548879ac159a4292603a",
+  "arms": {
+    "F1": {
+      "counts": {
+        "memory/T1": [
+          500,
+          512
+        ],
+        "memory/T2": [
+          493,
+          512
+        ],
+        "memory/T3": [
+          507,
+          512
+        ],
+        "mismatch/T1": [
+          201,
+          512
+        ],
+        "mismatch/T2": [
+          196,
+          512
+        ],
+        "mismatch/T3": [
+          256,
+          512
+        ],
+        "blank/T1": [
+          27,
+          64
+        ],
+        "blank/T2": [
+          24,
+          64
+        ],
+        "blank/T3": [
+          31,
+          64
+        ],
+        "text/T1": [
+          57,
+          64
+        ],
+        "text/T2": [
+          59,
+          64
+        ],
+        "text/T3": [
+          59,
+          64
+        ]
+      },
+      "all3": [
+        488,
+        512
+      ],
+      "parse_failures": 0,
+      "readback_sha256": "3292e0c623aa82903feae8841b37420397ffc3f41dc9139f717960ba1d44b8c0",
+      "per_preference": {
+        "education_learning_styles:0001": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 1
+        },
+        "education_learning_styles:0007": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "education_learning_styles:0009": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 1
+        },
+        "education_learning_styles:0030": {
+          "T1": 1,
+          "all3": 0.5,
+          "T1_matched_gain": 1
+        },
+        "entertain_games:0001": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 1
+        },
+        "entertain_games:0007": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 1
+        },
+        "entertain_games:0023": {
+          "T1": 1,
+          "all3": 0.875,
+          "T1_matched_gain": 1
+        },
+        "entertain_games:0036": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "entertain_music_book:0012": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "entertain_music_book:0016": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "entertain_music_book:0038": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 1
+        },
+        "entertain_music_book:0044": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "entertain_shows:0031": {
+          "T1": 1,
+          "all3": 0.75,
+          "T1_matched_gain": 1
+        },
+        "entertain_shows:0037": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "entertain_shows:0040": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 1
+        },
+        "entertain_shows:0052": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "entertain_sports:0009": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "entertain_sports:0015": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 1
+        },
+        "entertain_sports:0045": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 1
+        },
+        "entertain_sports:0048": {
+          "T1": 0.5,
+          "all3": 0.375,
+          "T1_matched_gain": 0.5
+        },
+        "lifestyle_beauty:0002": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 1
+        },
+        "lifestyle_beauty:0012": {
+          "T1": 0.25,
+          "all3": 0.25,
+          "T1_matched_gain": 0.25
+        },
+        "lifestyle_beauty:0037": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "lifestyle_beauty:0038": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "lifestyle_dietary:0017": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "lifestyle_dietary:0022": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 1
+        },
+        "lifestyle_dietary:0042": {
+          "T1": 1,
+          "all3": 0.875,
+          "T1_matched_gain": 1
+        },
+        "lifestyle_dietary:0047": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "lifestyle_fit:0000": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 1
+        },
+        "lifestyle_fit:0011": {
+          "T1": 0.75,
+          "all3": 0.375,
+          "T1_matched_gain": -0.25
+        },
+        "lifestyle_fit:0017": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 1
+        },
+        "lifestyle_fit:0038": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 1
+        },
+        "lifestyle_health:0030": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 1
+        },
+        "lifestyle_health:0036": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 1
+        },
+        "lifestyle_health:0040": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 1
+        },
+        "lifestyle_health:0042": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 1
+        },
+        "pet_ownership:0015": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "pet_ownership:0016": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "pet_ownership:0031": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "pet_ownership:0039": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 1
+        },
+        "professional_work_location_style:0000": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "professional_work_location_style:0006": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "professional_work_location_style:0034": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 1
+        },
+        "professional_work_location_style:0035": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "shop_fashion:0029": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 1
+        },
+        "shop_fashion:0040": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 1
+        },
+        "shop_fashion:0041": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "shop_fashion:0042": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 1
+        },
+        "shop_home:0005": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 1
+        },
+        "shop_home:0016": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "shop_home:0042": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 1
+        },
+        "shop_home:0046": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 1
+        },
+        "travel_activities:0004": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 1
+        },
+        "travel_activities:0051": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 1
+        },
+        "travel_activities:0052": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "travel_activities:0055": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 1
+        },
+        "travel_hotel:0003": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0.875
+        },
+        "travel_hotel:0039": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "travel_hotel:0045": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 1
+        },
+        "travel_hotel:0052": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 1
+        },
+        "travel_restaurant:0009": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "travel_restaurant:0030": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 1
+        },
+        "travel_restaurant:0041": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 1
+        },
+        "travel_restaurant:0054": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        }
+      }
+    },
+    "F8": {
+      "counts": {
+        "memory/T1": [
+          211,
+          512
+        ],
+        "memory/T2": [
+          196,
+          512
+        ],
+        "memory/T3": [
+          251,
+          512
+        ],
+        "mismatch/T1": [
+          204,
+          512
+        ],
+        "mismatch/T2": [
+          196,
+          512
+        ],
+        "mismatch/T3": [
+          247,
+          512
+        ],
+        "blank/T1": [
+          27,
+          64
+        ],
+        "blank/T2": [
+          24,
+          64
+        ],
+        "blank/T3": [
+          31,
+          64
+        ],
+        "text/T1": [
+          57,
+          64
+        ],
+        "text/T2": [
+          59,
+          64
+        ],
+        "text/T3": [
+          59,
+          64
+        ]
+      },
+      "all3": [
+        153,
+        512
+      ],
+      "parse_failures": 0,
+      "readback_sha256": "e4be33dba1fc31b145a744b65ef29598941eb52d63b15e166a60101490c3ccad",
+      "per_preference": {
+        "education_learning_styles:0001": {
+          "T1": 1,
+          "all3": 0,
+          "T1_matched_gain": 0.25
+        },
+        "education_learning_styles:0007": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "education_learning_styles:0009": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "education_learning_styles:0030": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "entertain_games:0001": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "entertain_games:0007": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "entertain_games:0023": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "entertain_games:0036": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "entertain_music_book:0012": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "entertain_music_book:0016": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "entertain_music_book:0038": {
+          "T1": 0.75,
+          "all3": 0.75,
+          "T1_matched_gain": 0.5
+        },
+        "entertain_music_book:0044": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "entertain_shows:0031": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "entertain_shows:0037": {
+          "T1": 1,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "entertain_shows:0040": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "entertain_shows:0052": {
+          "T1": 1,
+          "all3": 0.5,
+          "T1_matched_gain": 0
+        },
+        "entertain_sports:0009": {
+          "T1": 1,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "entertain_sports:0015": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "entertain_sports:0045": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "entertain_sports:0048": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "lifestyle_beauty:0002": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "lifestyle_beauty:0012": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "lifestyle_beauty:0037": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "lifestyle_beauty:0038": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "lifestyle_dietary:0017": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "lifestyle_dietary:0022": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "lifestyle_dietary:0042": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "lifestyle_dietary:0047": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "lifestyle_fit:0000": {
+          "T1": 1,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "lifestyle_fit:0011": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "lifestyle_fit:0017": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "lifestyle_fit:0038": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "lifestyle_health:0030": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "lifestyle_health:0036": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "lifestyle_health:0040": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "lifestyle_health:0042": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "pet_ownership:0015": {
+          "T1": 0.875,
+          "all3": 0.875,
+          "T1_matched_gain": 0.125
+        },
+        "pet_ownership:0016": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "pet_ownership:0031": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "pet_ownership:0039": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "professional_work_location_style:0000": {
+          "T1": 0.25,
+          "all3": 0,
+          "T1_matched_gain": -0.125
+        },
+        "professional_work_location_style:0006": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "professional_work_location_style:0034": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "professional_work_location_style:0035": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "shop_fashion:0029": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "shop_fashion:0040": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "shop_fashion:0041": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "shop_fashion:0042": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "shop_home:0005": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "shop_home:0016": {
+          "T1": 0.125,
+          "all3": 0.125,
+          "T1_matched_gain": 0.125
+        },
+        "shop_home:0042": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "shop_home:0046": {
+          "T1": 0.375,
+          "all3": 0,
+          "T1_matched_gain": 0.0
+        },
+        "travel_activities:0004": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "travel_activities:0051": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "travel_activities:0052": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "travel_activities:0055": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "travel_hotel:0003": {
+          "T1": 1,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "travel_hotel:0039": {
+          "T1": 1,
+          "all3": 0.75,
+          "T1_matched_gain": 0
+        },
+        "travel_hotel:0045": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "travel_hotel:0052": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "travel_restaurant:0009": {
+          "T1": 1,
+          "all3": 0.125,
+          "T1_matched_gain": 0
+        },
+        "travel_restaurant:0030": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "travel_restaurant:0041": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "travel_restaurant:0054": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        }
+      }
+    },
+    "S8": {
+      "counts": {
+        "memory/T1": [
+          425,
+          512
+        ],
+        "memory/T2": [
+          425,
+          512
+        ],
+        "memory/T3": [
+          465,
+          512
+        ],
+        "mismatch/T1": [
+          244,
+          512
+        ],
+        "mismatch/T2": [
+          211,
+          512
+        ],
+        "mismatch/T3": [
+          275,
+          512
+        ],
+        "blank/T1": [
+          27,
+          64
+        ],
+        "blank/T2": [
+          24,
+          64
+        ],
+        "blank/T3": [
+          31,
+          64
+        ],
+        "text/T1": [
+          57,
+          64
+        ],
+        "text/T2": [
+          59,
+          64
+        ],
+        "text/T3": [
+          59,
+          64
+        ]
+      },
+      "all3": [
+        382,
+        512
+      ],
+      "parse_failures": 0,
+      "readback_sha256": "3c8a0ff5c6fc3264e90a083d7a78c579d58b1853ed2c0572b594a0b6aa7d31ae",
+      "per_preference": {
+        "education_learning_styles:0001": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "education_learning_styles:0007": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "education_learning_styles:0009": {
+          "T1": 1,
+          "all3": 0.75,
+          "T1_matched_gain": 1
+        },
+        "education_learning_styles:0030": {
+          "T1": 0.875,
+          "all3": 0.75,
+          "T1_matched_gain": 0.875
+        },
+        "entertain_games:0001": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "entertain_games:0007": {
+          "T1": 1,
+          "all3": 0.25,
+          "T1_matched_gain": 1
+        },
+        "entertain_games:0023": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 1
+        },
+        "entertain_games:0036": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "entertain_music_book:0012": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "entertain_music_book:0016": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "entertain_music_book:0038": {
+          "T1": 0.625,
+          "all3": 0.625,
+          "T1_matched_gain": 0.5
+        },
+        "entertain_music_book:0044": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0.375
+        },
+        "entertain_shows:0031": {
+          "T1": 0.375,
+          "all3": 0.25,
+          "T1_matched_gain": 0.375
+        },
+        "entertain_shows:0037": {
+          "T1": 1,
+          "all3": 0.875,
+          "T1_matched_gain": 0
+        },
+        "entertain_shows:0040": {
+          "T1": 0.5,
+          "all3": 0.5,
+          "T1_matched_gain": 0.5
+        },
+        "entertain_shows:0052": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "entertain_sports:0009": {
+          "T1": 1,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "entertain_sports:0015": {
+          "T1": 0.5,
+          "all3": 0,
+          "T1_matched_gain": 0.5
+        },
+        "entertain_sports:0045": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 1
+        },
+        "entertain_sports:0048": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "lifestyle_beauty:0002": {
+          "T1": 0.125,
+          "all3": 0.125,
+          "T1_matched_gain": -0.875
+        },
+        "lifestyle_beauty:0012": {
+          "T1": 0.75,
+          "all3": 0.75,
+          "T1_matched_gain": 0.75
+        },
+        "lifestyle_beauty:0037": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "lifestyle_beauty:0038": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "lifestyle_dietary:0017": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "lifestyle_dietary:0022": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 1
+        },
+        "lifestyle_dietary:0042": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 1
+        },
+        "lifestyle_dietary:0047": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "lifestyle_fit:0000": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0.625
+        },
+        "lifestyle_fit:0011": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "lifestyle_fit:0017": {
+          "T1": 1,
+          "all3": 0.25,
+          "T1_matched_gain": 1
+        },
+        "lifestyle_fit:0038": {
+          "T1": 1,
+          "all3": 0,
+          "T1_matched_gain": 1
+        },
+        "lifestyle_health:0030": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 1
+        },
+        "lifestyle_health:0036": {
+          "T1": 0.875,
+          "all3": 0.875,
+          "T1_matched_gain": 0.875
+        },
+        "lifestyle_health:0040": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 1
+        },
+        "lifestyle_health:0042": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0.5
+        },
+        "pet_ownership:0015": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0.125
+        },
+        "pet_ownership:0016": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "pet_ownership:0031": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "pet_ownership:0039": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 1
+        },
+        "professional_work_location_style:0000": {
+          "T1": 1,
+          "all3": 0.75,
+          "T1_matched_gain": 0
+        },
+        "professional_work_location_style:0006": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "professional_work_location_style:0034": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "professional_work_location_style:0035": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "shop_fashion:0029": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 1
+        },
+        "shop_fashion:0040": {
+          "T1": 0.25,
+          "all3": 0.125,
+          "T1_matched_gain": 0.25
+        },
+        "shop_fashion:0041": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "shop_fashion:0042": {
+          "T1": 0.125,
+          "all3": 0.125,
+          "T1_matched_gain": 0.0
+        },
+        "shop_home:0005": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 1
+        },
+        "shop_home:0016": {
+          "T1": 0.875,
+          "all3": 0.875,
+          "T1_matched_gain": -0.125
+        },
+        "shop_home:0042": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 1
+        },
+        "shop_home:0046": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "travel_activities:0004": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "travel_activities:0051": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 1
+        },
+        "travel_activities:0052": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "travel_activities:0055": {
+          "T1": 0.875,
+          "all3": 0.875,
+          "T1_matched_gain": 0.875
+        },
+        "travel_hotel:0003": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "travel_hotel:0039": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "travel_hotel:0045": {
+          "T1": 0.25,
+          "all3": 0.25,
+          "T1_matched_gain": 0.25
+        },
+        "travel_hotel:0052": {
+          "T1": 0.125,
+          "all3": 0.125,
+          "T1_matched_gain": 0.125
+        },
+        "travel_restaurant:0009": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "travel_restaurant:0030": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0.125
+        },
+        "travel_restaurant:0041": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 1
+        },
+        "travel_restaurant:0054": {
+          "T1": 1,
+          "all3": 0.625,
+          "T1_matched_gain": 0
+        }
+      }
+    },
+    "B0": {
+      "counts": {
+        "memory/T1": [
+          335,
+          512
+        ],
+        "memory/T2": [
+          343,
+          512
+        ],
+        "memory/T3": [
+          386,
+          512
+        ],
+        "mismatch/T1": [
+          228,
+          512
+        ],
+        "mismatch/T2": [
+          196,
+          512
+        ],
+        "mismatch/T3": [
+          265,
+          512
+        ],
+        "blank/T1": [
+          27,
+          64
+        ],
+        "blank/T2": [
+          24,
+          64
+        ],
+        "blank/T3": [
+          31,
+          64
+        ],
+        "text/T1": [
+          57,
+          64
+        ],
+        "text/T2": [
+          59,
+          64
+        ],
+        "text/T3": [
+          59,
+          64
+        ]
+      },
+      "all3": [
+        279,
+        512
+      ],
+      "parse_failures": 0,
+      "readback_sha256": "fa6875f5929acb720808d625614866dcea2b02feda15cab8e21d905867db3355",
+      "per_preference": {
+        "education_learning_styles:0001": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0.25
+        },
+        "education_learning_styles:0007": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "education_learning_styles:0009": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "education_learning_styles:0030": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 1
+        },
+        "entertain_games:0001": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "entertain_games:0007": {
+          "T1": 0.125,
+          "all3": 0,
+          "T1_matched_gain": 0.125
+        },
+        "entertain_games:0023": {
+          "T1": 0.75,
+          "all3": 0,
+          "T1_matched_gain": 0.75
+        },
+        "entertain_games:0036": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "entertain_music_book:0012": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "entertain_music_book:0016": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "entertain_music_book:0038": {
+          "T1": 0.5,
+          "all3": 0.5,
+          "T1_matched_gain": 0.375
+        },
+        "entertain_music_book:0044": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "entertain_shows:0031": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "entertain_shows:0037": {
+          "T1": 1,
+          "all3": 0.625,
+          "T1_matched_gain": 0
+        },
+        "entertain_shows:0040": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "entertain_shows:0052": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "entertain_sports:0009": {
+          "T1": 1,
+          "all3": 0.75,
+          "T1_matched_gain": 0
+        },
+        "entertain_sports:0015": {
+          "T1": 0.125,
+          "all3": 0,
+          "T1_matched_gain": 0.125
+        },
+        "entertain_sports:0045": {
+          "T1": 0.125,
+          "all3": 0.125,
+          "T1_matched_gain": 0.125
+        },
+        "entertain_sports:0048": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "lifestyle_beauty:0002": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 1
+        },
+        "lifestyle_beauty:0012": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "lifestyle_beauty:0037": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "lifestyle_beauty:0038": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "lifestyle_dietary:0017": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "lifestyle_dietary:0022": {
+          "T1": 1,
+          "all3": 0.875,
+          "T1_matched_gain": 1
+        },
+        "lifestyle_dietary:0042": {
+          "T1": 1,
+          "all3": 0.875,
+          "T1_matched_gain": 1
+        },
+        "lifestyle_dietary:0047": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "lifestyle_fit:0000": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "lifestyle_fit:0011": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "lifestyle_fit:0017": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "lifestyle_fit:0038": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "lifestyle_health:0030": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "lifestyle_health:0036": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "lifestyle_health:0040": {
+          "T1": 0.25,
+          "all3": 0.25,
+          "T1_matched_gain": 0.25
+        },
+        "lifestyle_health:0042": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 1
+        },
+        "pet_ownership:0015": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0.25
+        },
+        "pet_ownership:0016": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "pet_ownership:0031": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "pet_ownership:0039": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 1
+        },
+        "professional_work_location_style:0000": {
+          "T1": 1,
+          "all3": 0,
+          "T1_matched_gain": 0.375
+        },
+        "professional_work_location_style:0006": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "professional_work_location_style:0034": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "professional_work_location_style:0035": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "shop_fashion:0029": {
+          "T1": 0.75,
+          "all3": 0,
+          "T1_matched_gain": 0.75
+        },
+        "shop_fashion:0040": {
+          "T1": 0.625,
+          "all3": 0.25,
+          "T1_matched_gain": 0.625
+        },
+        "shop_fashion:0041": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "shop_fashion:0042": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": -0.5
+        },
+        "shop_home:0005": {
+          "T1": 0.5,
+          "all3": 0.5,
+          "T1_matched_gain": 0.5
+        },
+        "shop_home:0016": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "shop_home:0042": {
+          "T1": 1,
+          "all3": 0,
+          "T1_matched_gain": 1
+        },
+        "shop_home:0046": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "travel_activities:0004": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "travel_activities:0051": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "travel_activities:0052": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "travel_activities:0055": {
+          "T1": 0.125,
+          "all3": 0.125,
+          "T1_matched_gain": 0.125
+        },
+        "travel_hotel:0003": {
+          "T1": 1,
+          "all3": 0.25,
+          "T1_matched_gain": 1
+        },
+        "travel_hotel:0039": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        },
+        "travel_hotel:0045": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 1
+        },
+        "travel_hotel:0052": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "travel_restaurant:0009": {
+          "T1": 1,
+          "all3": 0.25,
+          "T1_matched_gain": 0
+        },
+        "travel_restaurant:0030": {
+          "T1": 1,
+          "all3": 0.5,
+          "T1_matched_gain": 0.25
+        },
+        "travel_restaurant:0041": {
+          "T1": 0,
+          "all3": 0,
+          "T1_matched_gain": 0
+        },
+        "travel_restaurant:0054": {
+          "T1": 1,
+          "all3": 1,
+          "T1_matched_gain": 0
+        }
+      }
+    }
+  },
+  "training": {
+    "F1": {
+      "completion": {
+        "steps": 2048,
+        "checkpoint_sha256": "7e90a8d05b10fda823e105e0534a1ef342a49b3904a7b1df077fdec65b0e5680"
+      },
+      "manifest": {
+        "arm": "B",
+        "stage": "write",
+        "steps": 2048,
+        "effective_batch": 4,
+        "split": "train",
+        "snapshot_steps": [],
+        "parent_sha256": "6c8eb92f629ccdf6932407124190d651e8231058ef6f232a0a59380370d44c8d",
+        "source_root": "None",
+        "flow": "official target/noise; source condition only",
+        "seed": 20260924,
+        "official_commit": "a6e20c8cc94027f37dd7c5a81b0b3b472aa18409",
+        "implementation_sha256": "397e21ed2ce7fe0fe650efdbba66d7f81e58ee8e836aa57ea7525e56ef8a7db4",
+        "initial_variants_sha256": "e5d15022b615cb6ec28f4e7a7c9844b0774177d2ec3649e99c36c2ce3af403be",
+        "training_variant_indices": [
+          0,
+          1
+        ],
+        "target_bank_sha256": "a6d109779856061868509777916938787ca02efcfc9e8cb465949fa1996c5217",
+        "target_distribution_arm": "F1",
+        "target_sampling": "independent SHA256 target draw; original sigma/noise schedule unchanged"
+      },
+      "draws": 8192,
+      "draws_per_preference": 128,
+      "variant_counts": {
+        "0": 4096,
+        "1": 4096
+      },
+      "observed_targets": 64,
+      "target_exposure_range": [
+        128,
+        128
+      ]
+    },
+    "F8": {
+      "completion": {
+        "steps": 2048,
+        "checkpoint_sha256": "e419026e36f2e4624b5410bbc33ca91fbc0348d0acd7e075f4e66979f1169078"
+      },
+      "manifest": {
+        "arm": "B",
+        "stage": "write",
+        "steps": 2048,
+        "effective_batch": 4,
+        "split": "train",
+        "snapshot_steps": [],
+        "parent_sha256": "6c8eb92f629ccdf6932407124190d651e8231058ef6f232a0a59380370d44c8d",
+        "source_root": "None",
+        "flow": "official target/noise; source condition only",
+        "seed": 20260924,
+        "official_commit": "a6e20c8cc94027f37dd7c5a81b0b3b472aa18409",
+        "implementation_sha256": "397e21ed2ce7fe0fe650efdbba66d7f81e58ee8e836aa57ea7525e56ef8a7db4",
+        "initial_variants_sha256": "e5d15022b615cb6ec28f4e7a7c9844b0774177d2ec3649e99c36c2ce3af403be",
+        "training_variant_indices": [
+          0,
+          1
+        ],
+        "target_bank_sha256": "9a51edd29a3e9ad8a06b857584a5547ad941fa932c79b59254dd4fc5a046a059",
+        "target_distribution_arm": "F8",
+        "target_sampling": "independent SHA256 target draw; original sigma/noise schedule unchanged"
+      },
+      "draws": 8192,
+      "draws_per_preference": 128,
+      "variant_counts": {
+        "0": 4096,
+        "1": 4096
+      },
+      "observed_targets": 508,
+      "target_exposure_range": [
+        6,
+        33
+      ]
+    },
+    "S8": {
+      "completion": {
+        "steps": 2048,
+        "checkpoint_sha256": "593839470e04b06d2843b098c8d8d30e440d5b2f85feb32dd7a55285d8af26ca"
+      },
+      "manifest": {
+        "arm": "B",
+        "stage": "write",
+        "steps": 2048,
+        "effective_batch": 4,
+        "split": "train",
+        "snapshot_steps": [],
+        "parent_sha256": "6c8eb92f629ccdf6932407124190d651e8231058ef6f232a0a59380370d44c8d",
+        "source_root": "None",
+        "flow": "official target/noise; source condition only",
+        "seed": 20260924,
+        "official_commit": "a6e20c8cc94027f37dd7c5a81b0b3b472aa18409",
+        "implementation_sha256": "397e21ed2ce7fe0fe650efdbba66d7f81e58ee8e836aa57ea7525e56ef8a7db4",
+        "initial_variants_sha256": "e5d15022b615cb6ec28f4e7a7c9844b0774177d2ec3649e99c36c2ce3af403be",
+        "training_variant_indices": [
+          0,
+          1
+        ],
+        "target_bank_sha256": "0f9eb665d865174f50d7546301fbfb9913cac693a775c78cb774ceb85c1d9e44",
+        "target_distribution_arm": "S8",
+        "target_sampling": "independent SHA256 target draw; original sigma/noise schedule unchanged"
+      },
+      "draws": 8192,
+      "draws_per_preference": 128,
+      "variant_counts": {
+        "0": 4096,
+        "1": 4096
+      },
+      "observed_targets": 510,
+      "target_exposure_range": [
+        6,
+        27
+      ]
+    }
+  },
+  "paired_bootstrap": {
+    "F1-B0/T1": {
+      "difference": 0.322265625,
+      "percentile_95": [
+        0.220703125,
+        0.42578125
+      ],
+      "unit": "preference",
+      "resamples": 10000,
+      "seed": 20260927
+    },
+    "F1-B0/all3": {
+      "difference": 0.408203125,
+      "percentile_95": [
+        0.30078125,
+        0.51953125
+      ],
+      "unit": "preference",
+      "resamples": 10000,
+      "seed": 20260927
+    },
+    "F8-F1/T1": {
+      "difference": -0.564453125,
+      "percentile_95": [
+        -0.677734375,
+        -0.44921875
+      ],
+      "unit": "preference",
+      "resamples": 10000,
+      "seed": 20260927
+    },
+    "F8-F1/all3": {
+      "difference": -0.654296875,
+      "percentile_95": [
+        -0.759765625,
+        -0.548828125
+      ],
+      "unit": "preference",
+      "resamples": 10000,
+      "seed": 20260927
+    },
+    "S8-F8/T1": {
+      "difference": 0.41796875,
+      "percentile_95": [
+        0.310546875,
+        0.529296875
+      ],
+      "unit": "preference",
+      "resamples": 10000,
+      "seed": 20260927
+    },
+    "S8-F8/all3": {
+      "difference": 0.447265625,
+      "percentile_95": [
+        0.341796875,
+        0.556640625
+      ],
+      "unit": "preference",
+      "resamples": 10000,
+      "seed": 20260927
+    },
+    "S8-F1/T1": {
+      "difference": -0.146484375,
+      "percentile_95": [
+        -0.2265625,
+        -0.076171875
+      ],
+      "unit": "preference",
+      "resamples": 10000,
+      "seed": 20260927
+    },
+    "S8-F1/all3": {
+      "difference": -0.20703125,
+      "percentile_95": [
+        -0.30078125,
+        -0.119140625
+      ],
+      "unit": "preference",
+      "resamples": 10000,
+      "seed": 20260927
+    },
+    "S8-B0/T1": {
+      "difference": 0.17578125,
+      "percentile_95": [
+        0.080078125,
+        0.275390625
+      ],
+      "unit": "preference",
+      "resamples": 10000,
+      "seed": 20260927
+    },
+    "S8-B0/all3": {
+      "difference": 0.201171875,
+      "percentile_95": [
+        0.095703125,
+        0.310546875
+      ],
+      "unit": "preference",
+      "resamples": 10000,
+      "seed": 20260927
+    },
+    "F1/T1_matched_gain": {
+      "difference": 0.583984375,
+      "percentile_95": [
+        0.46484375,
+        0.703125
+      ],
+      "unit": "preference"
+    },
+    "F8/T1_matched_gain": {
+      "difference": 0.013671875,
+      "percentile_95": [
+        -0.001953125,
+        0.033203125
+      ],
+      "unit": "preference"
+    },
+    "S8/T1_matched_gain": {
+      "difference": 0.353515625,
+      "percentile_95": [
+        0.2421875,
+        0.466796875
+      ],
+      "unit": "preference"
+    },
+    "B0/T1_matched_gain": {
+      "difference": 0.208984375,
+      "percentile_95": [
+        0.123046875,
+        0.3046875
+      ],
+      "unit": "preference"
+    }
+  },
+  "identical_preference_sigma_variant_schedule": true
+}

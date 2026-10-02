@@ -1,0 +1,17 @@
+{
+  "status": "passed",
+  "kind": "CPU preflight and synthetic validation; not model results",
+  "controller_sha256": "c5a9051c1d8426f45e017b69c960188c0eacf2c2dc507a782fc264a63783e4ce",
+  "smoke_protocol_sha256": "57ecc7aaec91b4bf32209cc2c0d4cc7f2e38bcbff8069b1d9fe5c6f4e2799c63",
+  "formal_protocol_sha256": "b43fd72a86e8a50547b359ac1ad7b0bf97bcdcbc90cb542f884206980caaae33",
+  "formal_images_per_arm": 32120,
+  "formal_readbacks_per_arm": 70080,
+  "checks": [
+    "730 histories contain exactly initial plus ten exchanges",
+    "checkpoint/data identities",
+    "expected longitudinal metric counts",
+    "conditional retention counts",
+    "paired preference bootstrap",
+    "reject missing/duplicate/wrong donor"
+  ]
+}

@@ -15,6 +15,7 @@ from scripts.experiments.prefeval_k1_variants import load_variants,apply_variant
 from scripts.eval.prefeval_rgb import load_reader, read_png, append
 from vision_memory.reader.open_answer import generate_short_answer
 from vision_memory.repro import configure_strict_cuda_determinism
+from scripts.experiments.prefeval_multitarget_bank import select_rows
 
 @torch.no_grad()
 def text_generate(reader, processor, messages, device, tokens):
@@ -31,6 +32,8 @@ def text_generate(reader, processor, messages, device, tokens):
 def main(args):
     configure_strict_cuda_determinism(0)
     rows=load_records(args.split,history_file=args.history_file)
+    if args.ids_file:
+        rows=select_rows(rows,args.ids_file)
     if args.initial_variants:
         variants=load_variants(args.initial_variants,rows)
         rows=[apply_variant(row,variants,args.initial_variant) for row in rows]
@@ -153,6 +156,7 @@ if __name__=='__main__':
     p.add_argument('--kind',choices=['teacher','student'],required=True)
     p.add_argument('--split',choices=['pilot','train','dev','official'],default='pilot')
     p.add_argument('--history-file',type=Path)
+    p.add_argument('--ids-file',type=Path)
     p.add_argument('--initial-variants',type=Path)
     p.add_argument('--initial-variant',type=int,choices=[0,1,2],default=0)
     p.add_argument('--controls',default='memory,blank,mismatch,text')

@@ -1,0 +1,241 @@
+{
+  "launch": {
+    "time_utc": "2026-09-28T09:52:59.262690+00:00",
+    "host": "prefeval-mt-eval-h200x2-20260928--9be487d35048-tphujecw4c",
+    "gpu": "0, NVIDIA H200, 0, 0\n1, NVIDIA H200, 0, 0\n",
+    "active_before": [],
+    "locks_before": {
+      "pilot64/controller.lock": "FREE",
+      "pipeline.lock": "FREE",
+      "round2/pilot64/controller.lock": "FREE",
+      "round2/recovery-20260928-0045/controller.lock": "FREE",
+      "round2/smoke/controller.lock": "FREE",
+      "round3/pilot64/controller.lock": "FREE",
+      "round3/smoke/controller.lock": "FREE",
+      "smoke/controller.lock": "FREE"
+    },
+    "controller_commit": "efe0f7606ed7582a0d4171525b9bc285f1c1d140",
+    "command": [
+      "bash",
+      "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-c8-eval730-20260928/scripts/inspire/launch_prefeval_c8_eval730.sh"
+    ],
+    "cwd": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-c8-eval730-20260928",
+    "log": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-multitarget-20260927/eval730/pipeline.log",
+    "prior_round3_results_sha256": "7ac337a8f0a5bb6f9be48e90516d26455d1ea82f7208433639db94a6209bdbd2",
+    "launcher_pid": 486332
+  },
+  "runtime": {
+    "utc": "2026-09-28T09:54:37.482932+00:00",
+    "host": "prefeval-mt-eval-h200x2-20260928--9be487d35048-tphujecw4c",
+    "gpu": "0, 100 %, 14129 MiB\n1, 100 %, 14129 MiB\n",
+    "controller": {
+      "host": "prefeval-mt-eval-h200x2-20260928--9be487d35048-tphujecw4c",
+      "pid": 486352,
+      "commit": "efe0f7606ed7582a0d4171525b9bc285f1c1d140",
+      "code": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-c8-eval730-20260928",
+      "stage": "generate-C8-V0",
+      "time_utc": "2026-09-28T09:53:02.861999+00:00"
+    },
+    "failure": false,
+    "complete": false,
+    "results": false,
+    "actual_processes": [
+      {
+        "pid": 486748,
+        "argv": [
+          "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-multitarget-round2/scripts/experiments/prefeval_k1_writer.py",
+          "rollout",
+          "--arm",
+          "B",
+          "--base",
+          "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+          "--official-source",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite",
+          "--split",
+          "train",
+          "--ids-file",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-multitarget-20260927/eval730/fixed-c8-b0-20260928/ids.json",
+          "--initial-variants",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/variants-train.json",
+          "--checkpoint",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-multitarget-20260927/round2/pilot64/C8/train/checkpoint-final.pt",
+          "--initial-variant",
+          "0",
+          "--inter-turns",
+          "0",
+          "--noise-chains",
+          "8",
+          "--noise-domain",
+          "mt8-eval",
+          "--shard-index",
+          "1",
+          "--shard-count",
+          "4",
+          "--output",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-multitarget-20260927/eval730/fixed-c8-b0-20260928/C8/eval-V0"
+        ],
+        "matches_receipt": true,
+        "lock_fds": [
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-multitarget-20260927/eval730/fixed-c8-b0-20260928/controller.lock",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-multitarget-20260927/pipeline.lock"
+        ]
+      },
+      {
+        "pid": 486747,
+        "argv": [
+          "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-multitarget-round2/scripts/experiments/prefeval_k1_writer.py",
+          "rollout",
+          "--arm",
+          "B",
+          "--base",
+          "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+          "--official-source",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite",
+          "--split",
+          "train",
+          "--ids-file",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-multitarget-20260927/eval730/fixed-c8-b0-20260928/ids.json",
+          "--initial-variants",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/variants-train.json",
+          "--checkpoint",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-multitarget-20260927/round2/pilot64/C8/train/checkpoint-final.pt",
+          "--initial-variant",
+          "0",
+          "--inter-turns",
+          "0",
+          "--noise-chains",
+          "8",
+          "--noise-domain",
+          "mt8-eval",
+          "--shard-index",
+          "0",
+          "--shard-count",
+          "4",
+          "--output",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-multitarget-20260927/eval730/fixed-c8-b0-20260928/C8/eval-V0"
+        ],
+        "matches_receipt": true,
+        "lock_fds": [
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-multitarget-20260927/eval730/fixed-c8-b0-20260928/controller.lock",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-multitarget-20260927/pipeline.lock"
+        ]
+      }
+    ],
+    "locks": {
+      "allocation-locks/dl-clear-retain-h200x4-20260914--a823c55e800a-cwprkl2mqx.lock": "FREE",
+      "eval730/fixed-c8-b0-20260928/controller.lock": "HELD",
+      "long10/fixed-c8-b0-730-20260928/controller.lock": "FREE",
+      "long10/pipeline.lock": "FREE",
+      "long10/smoke/controller.lock": "FREE",
+      "pilot64/controller.lock": "FREE",
+      "pipeline.lock": "HELD",
+      "round2/pilot64/controller.lock": "FREE",
+      "round2/recovery-20260928-0045/controller.lock": "FREE",
+      "round2/smoke/controller.lock": "FREE",
+      "round3/pilot64/controller.lock": "FREE",
+      "round3/smoke/controller.lock": "FREE",
+      "smoke/controller.lock": "FREE"
+    },
+    "all_task_commands": [
+      {
+        "pid": 486332,
+        "argv": [
+          "bash",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-c8-eval730-20260928/scripts/inspire/launch_prefeval_c8_eval730.sh"
+        ]
+      },
+      {
+        "pid": 486352,
+        "argv": [
+          "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+          "scripts/inspire/run_prefeval_c8_eval730.py",
+          "--output",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-multitarget-20260927/eval730/fixed-c8-b0-20260928"
+        ]
+      },
+      {
+        "pid": 486747,
+        "argv": [
+          "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-multitarget-round2/scripts/experiments/prefeval_k1_writer.py",
+          "rollout",
+          "--arm",
+          "B",
+          "--base",
+          "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+          "--official-source",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite",
+          "--split",
+          "train",
+          "--ids-file",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-multitarget-20260927/eval730/fixed-c8-b0-20260928/ids.json",
+          "--initial-variants",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/variants-train.json",
+          "--checkpoint",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-multitarget-20260927/round2/pilot64/C8/train/checkpoint-final.pt",
+          "--initial-variant",
+          "0",
+          "--inter-turns",
+          "0",
+          "--noise-chains",
+          "8",
+          "--noise-domain",
+          "mt8-eval",
+          "--shard-index",
+          "0",
+          "--shard-count",
+          "4",
+          "--output",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-multitarget-20260927/eval730/fixed-c8-b0-20260928/C8/eval-V0"
+        ]
+      },
+      {
+        "pid": 486748,
+        "argv": [
+          "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-multitarget-round2/scripts/experiments/prefeval_k1_writer.py",
+          "rollout",
+          "--arm",
+          "B",
+          "--base",
+          "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+          "--official-source",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite",
+          "--split",
+          "train",
+          "--ids-file",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-multitarget-20260927/eval730/fixed-c8-b0-20260928/ids.json",
+          "--initial-variants",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/variants-train.json",
+          "--checkpoint",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-multitarget-20260927/round2/pilot64/C8/train/checkpoint-final.pt",
+          "--initial-variant",
+          "0",
+          "--inter-turns",
+          "0",
+          "--noise-chains",
+          "8",
+          "--noise-domain",
+          "mt8-eval",
+          "--shard-index",
+          "1",
+          "--shard-count",
+          "4",
+          "--output",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-multitarget-20260927/eval730/fixed-c8-b0-20260928/C8/eval-V0"
+        ]
+      }
+    ],
+    "pngs": {
+      "C8/eval-V0": 10
+    },
+    "completed_chains": {
+      "C8/eval-V0": 10
+    },
+    "readbacks": {}
+  },
+  "protocol_sha256": "c670e3db2d7d54bf449999cf693d7544fb54bbc7040420b641c31484e6f641dc",
+  "status": "running_not_complete"
+}

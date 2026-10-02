@@ -1,0 +1,119 @@
+{
+  "checked_utc": "2026-09-30 04:19:40 UTC",
+  "instances": {
+    "prefeval-b-read-h200x2-20260925": {
+      "status": {
+        "success": true,
+        "data": {
+          "name": "prefeval-b-read-h200x2-20260925",
+          "status": "PENDING",
+          "project": "前沿课题探索",
+          "workspace": "分布式训练空间",
+          "compute_group": "开发区-H200-3号机房-2-cuda12.8版本",
+          "created_by": "张宸熙",
+          "image": "ngc-pytorch:25.02-cuda12.8.0-py3",
+          "resource": {
+            "gpu_count": 2,
+            "gpu_type": "H200",
+            "cpu_count": 40,
+            "memory_gib": 400
+          },
+          "priority": "4",
+          "priority_level": "NORMAL",
+          "shared_memory_gib": 128,
+          "uptime_seconds": "0",
+          "auto_stop_in_seconds": "0",
+          "created_at": "1790332711000",
+          "updated_at": "1790332711000"
+        }
+      },
+      "events": {
+        "success": true,
+        "data": {
+          "items": [
+            {
+              "time": "2026-09-30 12:06:50",
+              "message": "task preempt check failed: quota check failed: rpc quota (ApplyPodQuota): Parent&sub project total quota insufficient. Current used(parent + all children)(CPU=2169.00, Memory=24017.99GB, GPU=108.00), current request(CPU=40.00, Memory=400.00GB, GPU=2.00), quota(parent total)(CPU=-1.00, Memory=-1.00GB, GPU=108.00)"
+            },
+            {
+              "time": "2026-09-30 12:06:52",
+              "message": "Pod frontiers-research/prefeval-b-read-h200x2-20260925--dd8912853710-vfchnsenpu can possibly be assigned to qb-prod-gpu997, once resource is released and minAvailable is satisfied"
+            },
+            {
+              "time": "2026-09-30 12:07:01",
+              "message": "Pod frontiers-research/prefeval-b-read-h200x2-20260925--dd8912853710-vfchnsenpu can possibly be assigned to qb-prod-gpu2225, once resource is released and minAvailable is satisfied"
+            },
+            {
+              "time": "2026-09-30 12:08:42",
+              "message": "Pod frontiers-research/prefeval-b-read-h200x2-20260925--dd8912853710-vfchnsenpu can possibly be assigned to qb-prod-gpu997, once resource is released and minAvailable is satisfied"
+            },
+            {
+              "time": "2026-09-30 12:09:02",
+              "message": "Pod frontiers-research/prefeval-b-read-h200x2-20260925--dd8912853710-vfchnsenpu can possibly be assigned to qb-prod-gpu2225, once resource is released and minAvailable is satisfied"
+            }
+          ],
+          "shown": 5,
+          "total": 103,
+          "truncated": true
+        }
+      }
+    },
+    "prefeval-mt-eval-h200x2-20260928": {
+      "status": {
+        "success": true,
+        "data": {
+          "name": "prefeval-mt-eval-h200x2-20260928",
+          "status": "PENDING",
+          "project": "前沿课题探索",
+          "workspace": "分布式训练空间",
+          "compute_group": "开发区-H200-3号机房-2-cuda13.2版本",
+          "created_by": "张宸熙",
+          "image": "ngc-pytorch:25.02-cuda12.8.0-py3",
+          "resource": {
+            "gpu_count": 2,
+            "gpu_type": "H200",
+            "cpu_count": 40,
+            "memory_gib": 400
+          },
+          "priority": "4",
+          "priority_level": "NORMAL",
+          "shared_memory_gib": 128,
+          "uptime_seconds": "0",
+          "auto_stop_in_seconds": "0",
+          "created_at": "1790527361000",
+          "updated_at": "1790527361000"
+        }
+      },
+      "events": {
+        "success": true,
+        "data": {
+          "items": [
+            {
+              "time": "2026-09-30 07:33:02",
+              "message": "Committed notebook <redacted> as image ngc-pytorch:stopsave-prefeval-mt-eval-h200x2-20260928-dcede-20260930073227 (size: 11.24 GB), awaiting push..."
+            },
+            {
+              "time": "2026-09-30 07:33:11",
+              "message": "Notebook stopped because its CPU/GPU/MEM usage has not met the auto-recycle rules set by the manager."
+            },
+            {
+              "time": "2026-09-30 07:33:11",
+              "message": "Pushed notebook <redacted> image ngc-pytorch:stopsave-prefeval-mt-eval-h200x2-20260928-dcede-20260930073227 to registry (size: 11.24 GB), image ready for use"
+            },
+            {
+              "time": "2026-09-30 12:06:55",
+              "message": "task check failed: quota check failed: rpc quota (ApplyPodQuota): Parent&sub project total quota insufficient. Current used(parent + all children)(CPU=2169.00, Memory=24017.99GB, GPU=108.00), current request(CPU=40.00, Memory=400.00GB, GPU=2.00), quota(parent total)(CPU=-1.00, Memory=-1.00GB, GPU=108.00)"
+            },
+            {
+              "time": "2026-09-30 12:07:01",
+              "message": "Pod frontiers-research/prefeval-mt-eval-h200x2-20260928--9be487d35048-mwfotbtngp can possibly be assigned to qb-prod-gpu2347, once resource is released and minAvailable is satisfied"
+            }
+          ],
+          "shown": 5,
+          "total": 47,
+          "truncated": true
+        }
+      }
+    }
+  }
+}

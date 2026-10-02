@@ -1,0 +1,227 @@
+{
+  "utc": "2026-09-29T05:32:46.204318+00:00",
+  "host": "prefeval-mt-eval-h200x2-20260928--9be487d35048-g2xx4gn63g",
+  "gpu": "0, 0 %, 9175 MiB\n1, 0 %, 9175 MiB\n",
+  "controller": {
+    "host": "prefeval-mt-eval-h200x2-20260928--9be487d35048-g2xx4gn63g",
+    "pid": 21763,
+    "commit": "efe0f7606ed7582a0d4171525b9bc285f1c1d140",
+    "code": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-c8-eval730-20260928",
+    "stage": "read-C8-V0",
+    "time_utc": "2026-09-29T05:28:32.094342+00:00"
+  },
+  "failure": false,
+  "complete": false,
+  "results": false,
+  "actual_processes": [
+    {
+      "pid": 56424,
+      "argv": [
+        "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-multitarget-round2/scripts/experiments/prefeval_k1_evaluate.py",
+        "--kind",
+        "student",
+        "--split",
+        "train",
+        "--ids-file",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-multitarget-20260927/eval730/recovery-20260929-1325/ids.json",
+        "--reader",
+        "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+        "--initial-variants",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/variants-train.json",
+        "--initial-variant",
+        "0",
+        "--images",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-multitarget-20260927/eval730/recovery-20260929-1325/C8/eval-V0",
+        "--output",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-multitarget-20260927/eval730/recovery-20260929-1325/C8/read-V0",
+        "--families",
+        "T1,T2,T3",
+        "--tasks",
+        "mcq",
+        "--prefixes",
+        "0",
+        "--noise-chains",
+        "8",
+        "--controls",
+        "memory,mismatch,blank,text",
+        "--shard",
+        "2",
+        "--shards",
+        "4"
+      ],
+      "matches_receipt": true,
+      "lock_fds": [
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-multitarget-20260927/eval730/recovery-20260929-1325/controller.lock",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-multitarget-20260927/pipeline.lock"
+      ]
+    },
+    {
+      "pid": 56425,
+      "argv": [
+        "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-multitarget-round2/scripts/experiments/prefeval_k1_evaluate.py",
+        "--kind",
+        "student",
+        "--split",
+        "train",
+        "--ids-file",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-multitarget-20260927/eval730/recovery-20260929-1325/ids.json",
+        "--reader",
+        "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+        "--initial-variants",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/variants-train.json",
+        "--initial-variant",
+        "0",
+        "--images",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-multitarget-20260927/eval730/recovery-20260929-1325/C8/eval-V0",
+        "--output",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-multitarget-20260927/eval730/recovery-20260929-1325/C8/read-V0",
+        "--families",
+        "T1,T2,T3",
+        "--tasks",
+        "mcq",
+        "--prefixes",
+        "0",
+        "--noise-chains",
+        "8",
+        "--controls",
+        "memory,mismatch,blank,text",
+        "--shard",
+        "3",
+        "--shards",
+        "4"
+      ],
+      "matches_receipt": true,
+      "lock_fds": [
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-multitarget-20260927/eval730/recovery-20260929-1325/controller.lock",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-multitarget-20260927/pipeline.lock"
+      ]
+    }
+  ],
+  "locks": {
+    "allocation-locks/dl-clear-retain-h200x4-20260914--a823c55e800a-cwprkl2mqx.lock": "FREE",
+    "allocation-locks/prefeval-b-read-h200x2-20260925--dd8912853710-ivytbz3gqk.lock": "FREE",
+    "eval730/fixed-c8-b0-20260928/controller.lock": "FREE",
+    "eval730/recovery-20260928-1920/controller.lock": "FREE",
+    "eval730/recovery-20260929-1325/controller.lock": "HELD",
+    "long10/fixed-c8-b0-730-20260928/controller.lock": "FREE",
+    "long10/pipeline.lock": "FREE",
+    "long10/recovery-20260929-0005-2gpu/controller.lock": "FREE",
+    "long10/smoke/controller.lock": "FREE",
+    "pilot64/controller.lock": "FREE",
+    "pipeline.lock": "HELD",
+    "round2/pilot64/controller.lock": "FREE",
+    "round2/recovery-20260928-0045/controller.lock": "FREE",
+    "round2/smoke/controller.lock": "FREE",
+    "round3/pilot64/controller.lock": "FREE",
+    "round3/smoke/controller.lock": "FREE",
+    "smoke/controller.lock": "FREE"
+  },
+  "all_task_commands": [
+    {
+      "pid": 21743,
+      "argv": [
+        "bash",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-multitarget-20260927/eval730/recovery-20260929-1325/launch-recovery.sh"
+      ]
+    },
+    {
+      "pid": 21763,
+      "argv": [
+        "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-c8-eval730-20260928/scripts/inspire/run_prefeval_c8_eval730.py",
+        "--output",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-multitarget-20260927/eval730/recovery-20260929-1325"
+      ]
+    },
+    {
+      "pid": 56424,
+      "argv": [
+        "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-multitarget-round2/scripts/experiments/prefeval_k1_evaluate.py",
+        "--kind",
+        "student",
+        "--split",
+        "train",
+        "--ids-file",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-multitarget-20260927/eval730/recovery-20260929-1325/ids.json",
+        "--reader",
+        "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+        "--initial-variants",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/variants-train.json",
+        "--initial-variant",
+        "0",
+        "--images",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-multitarget-20260927/eval730/recovery-20260929-1325/C8/eval-V0",
+        "--output",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-multitarget-20260927/eval730/recovery-20260929-1325/C8/read-V0",
+        "--families",
+        "T1,T2,T3",
+        "--tasks",
+        "mcq",
+        "--prefixes",
+        "0",
+        "--noise-chains",
+        "8",
+        "--controls",
+        "memory,mismatch,blank,text",
+        "--shard",
+        "2",
+        "--shards",
+        "4"
+      ]
+    },
+    {
+      "pid": 56425,
+      "argv": [
+        "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/repos/prefeval-multitarget-round2/scripts/experiments/prefeval_k1_evaluate.py",
+        "--kind",
+        "student",
+        "--split",
+        "train",
+        "--ids-file",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-multitarget-20260927/eval730/recovery-20260929-1325/ids.json",
+        "--reader",
+        "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+        "--initial-variants",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/variants-train.json",
+        "--initial-variant",
+        "0",
+        "--images",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-multitarget-20260927/eval730/recovery-20260929-1325/C8/eval-V0",
+        "--output",
+        "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-multitarget-20260927/eval730/recovery-20260929-1325/C8/read-V0",
+        "--families",
+        "T1,T2,T3",
+        "--tasks",
+        "mcq",
+        "--prefixes",
+        "0",
+        "--noise-chains",
+        "8",
+        "--controls",
+        "memory,mismatch,blank,text",
+        "--shard",
+        "3",
+        "--shards",
+        "4"
+      ]
+    }
+  ],
+  "pngs": {
+    "C8/eval-V1": 5598,
+    "C8/eval-V0": 5840
+  },
+  "completed_chains": {
+    "C8/eval-V1": 5598,
+    "C8/eval-V0": 5840
+  },
+  "readbacks": {
+    "C8/read-V0/readback-3.jsonl": 9828,
+    "C8/read-V0/readback-2.jsonl": 9828,
+    "C8/read-V0/readback-0.jsonl": 9882,
+    "C8/read-V0/readback-1.jsonl": 9882
+  }
+}
