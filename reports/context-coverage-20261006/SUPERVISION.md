@@ -1,5 +1,19 @@
 # 每小时执行入口
 
+当前阶段（2026-10-06 07:55 CST）：PM→FM功能读回已完整核验，见ROUTE_RESULT.md；8,640新行/23,760总行、900PNG、1,080教师张量与报告重算通过，旧owner/worker退出。小幅KL变化仍未形成匹配特异性收益，默认不晋级，不重跑该阶段。
+
+后续context-fit-v1已在本任务原H200x2实例训练。controller1155936、worker1156921/1156922；独立checkout context-fit-20261006，冻结9174325fe5c2e69acdd488150837fe977350a73e。07:55两组38/40步，已读梯度有限非零、前38步draw/pid/sigma配对相同、第4步snapshot SHA及1075组实际参数更新核验通过。预检32教师latent/PNG完成，Windows/Linux各17检查通过。完整证据CONTEXT_FIT_DEPLOYMENT.md与fit-2342-evidence/。
+
+这一新轮只检验16训练历史上的上下文教师收益传递：同B730父、同128次FM更新/seed/优化器，窄/宽soft教师最终288步目标是唯一主因素。控制器自动训练128→64PNG→1536新行（合并旧2688得4224）；目标分布192份只读复用。此轮不新增dev/official评分，不能证明泛化。不得因为训练loss低、梯度非零或单seed训练效果而替换默认。
+
+下一次读本文件、DEPLOYMENT.json和ARIS tracker，再查context-fit-v1/status.json、active-owner、attempts与实际PID/cmdline/GPU。运行中不重复启动或改执行树。完成后核验全256更新/1024draw配对、最终checkpoint、64新/96旧PNG、192教师张量、完整1536/4224分母及偏好级comparison。若partial训练无complete，禁止盲目重跑native trainer；先审计resume恢复点与日志尾部，并证明旧进程停止。
+
+此前已结算3.657263426648 GPUh；此轮截至07:55暂计0.052675468193，总暂计3.709938894841。新增阶段上限1 GPUh计入原16池，失败计费，不按每个子阶段重置、不自动加步/加seed/加额度。最多2GPU、每次≤6小时；资源恢复沿用户已有授权，但先核实其他owner/预留和旧worker死亡，禁止占其他任务或空转。
+
+第六次实际触发2026-10-05T23:42:32.171Z已完成审计并推进此有界训练侧迭代。另一主线初写MCQ已全量完成并未见匹配优势，目前free运行、512端点partial；本任务不重复其free/保持，不复活已取消ARIS A64/B730，不改其他自动化。仅在实质变化/完成/故障时通知。
+
+## 先前状态（仅供溯源，以以上当前阶段为准）
+
 当前阶段（2026-10-06 06:51:54 CST）：PM→FM功能对照已在原H200x2实例运行，独立checkout context-route-functional-20261006，冻结c45ab75678b46812a5ad7a59bfcbd66eee97bcb9，output为原run根route-functional-v1。controller846942、worker849327/849328实际cmdline及两张GPU工作核验通过；首批625+615=1,240行绑定检查通过。源图片360/360、旧dev图片540、教师文件1,080均已SHA冻结，12教师张量抽查通过。结果pending，不缩分母、不重复启动。
 
 本轮8,640新行、合并23,760行；同12问题、旧只读教师缓存、dev90、2训练seed各2噪声。源代码/资源/输入/测试与首批实测见ROUTE_DEPLOYMENT.md和heartbeat-2242-evidence。Windows/Linux各13相关检查通过。旧17,808行Writer结果不重跑，不改其output或执行checkout，不改ARIS主线。

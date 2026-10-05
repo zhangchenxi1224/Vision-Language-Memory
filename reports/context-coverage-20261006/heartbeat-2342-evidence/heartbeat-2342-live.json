@@ -1,0 +1,76 @@
+{
+  "time": 1791243784.6082397,
+  "host": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+  "status": {
+    "status": "completed",
+    "time": 1791241083.5251942,
+    "new_rows": 8640,
+    "combined_rows": 23760,
+    "gpu_hours": 0.23231854524877335,
+    "campaign_gpu_hours": 3.657263426648246
+  },
+  "owner": null,
+  "controller_alive": false,
+  "attempts": [
+    {
+      "job": {
+        "name": "evaluate-1",
+        "gpu": 1,
+        "command": [
+          "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+          "scripts/experiments/prefeval_route_functional.py",
+          "--output",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/route-functional-v1",
+          "--reader",
+          "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+          "--protocol",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-route-functional-20261006/configs/experiments/context_readout_audit.json",
+          "--shard",
+          "1"
+        ]
+      },
+      "command_sha256": "987a9811344b468a428d62384fbb0d5254d23bae196200eddd3721c6a50f91fe",
+      "hostname": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+      "started": 1791240629.427811,
+      "pid": 849328,
+      "finished": 1791241054.287841,
+      "exit_code": 0,
+      "alive": false,
+      "cmdline": ""
+    },
+    {
+      "job": {
+        "name": "evaluate-0",
+        "gpu": 0,
+        "command": [
+          "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+          "scripts/experiments/prefeval_route_functional.py",
+          "--output",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/route-functional-v1",
+          "--reader",
+          "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+          "--protocol",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-route-functional-20261006/configs/experiments/context_readout_audit.json",
+          "--shard",
+          "0"
+        ]
+      },
+      "command_sha256": "8c2f1754f00f52a9649a80faeaa21ad934ddf58e206d1e4644afe5e08379dea5",
+      "hostname": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+      "started": 1791240629.42734,
+      "pid": 849327,
+      "finished": 1791241040.9140728,
+      "exit_code": 0,
+      "alive": false,
+      "cmdline": ""
+    }
+  ],
+  "gpu": "",
+  "rows": {
+    "readout-0.jsonl": 4320,
+    "readout-1.jsonl": 4320
+  },
+  "commit": "c45ab75678b46812a5ad7a59bfcbd66eee97bcb9",
+  "dirty": "",
+  "controller_log": ""
+}

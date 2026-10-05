@@ -1,6 +1,6 @@
 {
   "schema": "dreamlite.context-coverage-deployment.v1",
-  "status": "route_functional_readout_running",
+  "status": "context_fit_training_running",
   "execution_commit": "15ff2a93b5ec6222c37ec359b20cfadcabbba471",
   "notebook": "vlm-dreamlite-full-h200x2-20260720",
   "remote_checkout": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-coverage-20261006",
@@ -66,20 +66,21 @@
   "promotion": "none; no dev90 content-specific Writer gain established",
   "development_commit": "3995d2c9c111fdb7fac3002e658c4cc77e282e7a",
   "execution_tree_matches_development": true,
-  "last_live_verification_unix": 1791240714.9874785,
-  "heartbeat_received_at": "2026-10-05T22:42:31.287Z",
-  "last_full_verification_unix": 1791236671.759515,
+  "last_live_verification_unix": 1791244500.317281,
+  "heartbeat_received_at": "2026-10-05T23:42:32.171Z",
+  "last_full_verification_unix": 1791243887.6729796,
   "gpu_hours": {
     "smoke": 0.026387807660632662,
     "pilot": 1.187265353600184,
     "readout": 0.13596068448490567,
     "writer_readout_settled": 2.07533103565375,
-    "total": 3.4249448813994725,
+    "total": 3.657263426648246,
     "total_is_settled_only": true,
     "scope": "Supervisor allocated GPU process hours including attempts; excludes platform idle costs and points.",
-    "route_functional_provisional": 0.047580385075675115,
-    "total_provisional": 3.472525266475148,
-    "provisional_asof_unix": 1791240714.9874785
+    "route_functional_settled": 0.23231854524877335,
+    "context_fit_provisional": 0.052675468193160165,
+    "total_provisional": 3.709938894841406,
+    "provisional_asof_unix": 1791244500.317281
   },
   "readout_audit": {
     "status": "completed_verified",
@@ -110,25 +111,18 @@
     "gpu_processes_after_completion": []
   },
   "next_stage": {
-    "status": "supervise_existing_route_functional_controller",
-    "name": "route-functional-v1",
-    "protocol": "ROUTE_FUNCTIONAL_PLAN.md",
-    "action": "Supervise the unique route-functional-v1 controller; reuse completed upstream PNGs and old cache. Do not duplicate launch. After completion verify all 8640 new and 23760 combined rows, all 360 new PNGs, and paired targets/donors; no promotion.",
-    "dependency_evidence": "heartbeat-2242-evidence/route-launch-2242.json",
-    "dependency_observed_pngs": {
-      "20261005": 180,
-      "20261006": 180
-    },
-    "expected_new_rows": 8640,
-    "expected_combined_dev_rows": 23760,
-    "expected_new_source_pngs": 360,
-    "new_training": false,
-    "new_image_generation": false,
-    "new_teacher_generation": false,
+    "name": "context-fit-v1",
+    "status": "supervise_existing_context_fit_controller",
+    "protocol": "CONTEXT_FIT_PLAN.md",
     "max_gpu_hours": 1,
     "campaign_cap": 16,
-    "preserve_other_tasks": true,
-    "promotion": "none"
+    "new_training": true,
+    "cohort": "pilot16 training only",
+    "new_dev_or_official_scoring": false,
+    "expected_new_rows": 1536,
+    "expected_combined_rows": 4224,
+    "promotion": "none",
+    "action": "Read context-fit-v1 status, owner, attempts and real processes. No duplicate launch. Training128 per arm -> 64 PNG -> 1536 new/4224 combined rows. On completion audit all artifacts and training-side paired statistics; no new dev scoring or promotion."
   },
   "writer_readout": {
     "status": "completed_verified",
@@ -209,7 +203,7 @@
     "exact_report_recomputation": true
   },
   "route_functional": {
-    "status": "running",
+    "status": "completed_verified",
     "execution_commit": "c45ab75678b46812a5ad7a59bfcbd66eee97bcb9",
     "development_commit": "b353ecf",
     "execution_tree": "6aa56846b119d59c28e878eb52acd35367ae6b6a",
@@ -235,16 +229,13 @@
       "windows": 13,
       "linux": 13
     },
-    "scientific_results": "pending",
-    "gpu_hours_settled": 0,
-    "latest_evidence_directory": "heartbeat-2242-evidence",
-    "worker_pids": [
-      849328,
-      849327
-    ],
+    "scientific_results": "Tiny conditional KL improvements in some comparisons; no matched-vs-mismatch content-specific benefit; no promotion",
+    "gpu_hours_settled": 0.23231854524877335,
+    "latest_evidence_directory": "heartbeat-2342-evidence",
+    "worker_pids": [],
     "rows_observed": {
-      "readout-0.jsonl": 625,
-      "readout-1.jsonl": 615
+      "readout-0.jsonl": 4320,
+      "readout-1.jsonl": 4320
     },
     "partial_rows_integrity_verified": 1240,
     "sample_teacher_tensors_verified": 12,
@@ -252,9 +243,73 @@
     "verified_reused_pngs": 540,
     "verified_teacher_file_hashes": 1080,
     "inputs_sha256": "6f2b72d1e3f51262208346afbd14070b06101cb6378edd291fda680e5342e11f",
-    "latest_verification_unix": 1791240714.9874785,
-    "gpu_hours_provisional": 0.047580385075675115,
+    "latest_verification_unix": 1791243887.6729796,
     "source_checkout_clean": true,
-    "raw_archive_sha256": "ad951ee79093591c3d20d822e63a13242b06289432e7ad96475b6dfe089a5314"
+    "raw_archive_sha256": "ad951ee79093591c3d20d822e63a13242b06289432e7ad96475b6dfe089a5314",
+    "finished_unix": 1791241083.5251942,
+    "historical_worker_pids": [
+      849328,
+      849327
+    ],
+    "workers_exited": true,
+    "owner_removed": true,
+    "gpu_processes_after_completion": [],
+    "verified_new_rows": 8640,
+    "verified_combined_rows": 23760,
+    "verified_teacher_tensors": 1080,
+    "exact_report_recomputation": true,
+    "report": "ROUTE_RESULT.md",
+    "comparison": "route-comparison.json"
+  },
+  "context_fit": {
+    "status": "training",
+    "execution_commit": "9174325fe5c2e69acdd488150837fe977350a73e",
+    "development_commit": "633ce47",
+    "execution_tree": "fa3133f686ee830a30c81bfa0777373b6b208b41",
+    "execution_tree_matches_development": true,
+    "remote_checkout": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-fit-20261006",
+    "remote_output": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-fit-v1",
+    "notebook": "vlm-dreamlite-full-h200x2-20260720",
+    "controller_pid": 1155936,
+    "started_unix": 1791244403.6694798,
+    "worker_pids": [
+      1156922,
+      1156921
+    ],
+    "tests": {
+      "windows": 17,
+      "linux": 17
+    },
+    "protocol": "CONTEXT_FIT_PLAN.md",
+    "latest_evidence_directory": "fit-2342-evidence",
+    "raw_archive_sha256": "4f49c8e6c97659d4af95cd24b5f09da1a31c6fc9a41ca116b027079f8a16d4cc",
+    "latest_verification_unix": 1791244500.317281,
+    "updates_verified": {
+      "context-narrow": 38,
+      "context-diverse": 40
+    },
+    "paired_updates_verified": 38,
+    "target_latents_verified": 32,
+    "target_png_hashes_verified": 32,
+    "snapshot_step": 4,
+    "snapshot_sha256": {
+      "context-narrow": "fb05427d1d5bc780c19c4500c21a01aeaf254e34d1d92ab69969eb5f86b0652f",
+      "context-diverse": "d3dcf9ca73258538716e183df41a4c2b76ea520a48dd132c6c94eb8b45cdd91b"
+    },
+    "finite_nonzero_gradients": true,
+    "snapshot_parameter_groups_changed_each": 1075,
+    "gpu_hours_cap": 1,
+    "campaign_gpu_hours_cap": 16,
+    "gpu_hours_settled": 0,
+    "gpu_hours_provisional": 0.052675468193160165,
+    "expected_new_rows": 1536,
+    "expected_combined_rows": 4224,
+    "expected_new_pngs": 64,
+    "expected_old_pngs": 96,
+    "expected_teacher_targets": 192,
+    "cohort": "pilot16 training only",
+    "new_dev_or_official_scoring": false,
+    "scientific_results": "pending",
+    "source_checkout_clean": true
   }
 }

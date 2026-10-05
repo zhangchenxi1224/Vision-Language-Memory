@@ -1,0 +1,129 @@
+{
+  "time": 1791244500.317281,
+  "status": {
+    "status": "training",
+    "time": 1791244412.0499277,
+    "commit": "9174325fe5c2e69acdd488150837fe977350a73e"
+  },
+  "owner": {
+    "pid": 1155936,
+    "host": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+    "started": 1791244403.7308638,
+    "commit": "9174325fe5c2e69acdd488150837fe977350a73e"
+  },
+  "arms": {
+    "context-narrow": {
+      "updates_verified": 38,
+      "last_grad_norm": 0.1473982036113739,
+      "snapshot4_sha256": "fb05427d1d5bc780c19c4500c21a01aeaf254e34d1d92ab69969eb5f86b0652f",
+      "snapshot_parameter_groups": 1075,
+      "snapshot_parameter_groups_changed": 1075,
+      "manifest_sha256": "e2f0e23ce95ed3ae4ebcc4f8739fc9d8409a53b8a85d6bb7c3199aaf51f7a3ea",
+      "finite_nonzero_gradients": true
+    },
+    "context-diverse": {
+      "updates_verified": 40,
+      "last_grad_norm": 0.5413765907287598,
+      "snapshot4_sha256": "d3dcf9ca73258538716e183df41a4c2b76ea520a48dd132c6c94eb8b45cdd91b",
+      "snapshot_parameter_groups": 1075,
+      "snapshot_parameter_groups_changed": 1075,
+      "manifest_sha256": "866d4c491bda93552104f9326270ad195900fc21db9c9d21c3c1160bd19b0033",
+      "finite_nonzero_gradients": true
+    }
+  },
+  "attempts": [
+    {
+      "job": {
+        "name": "train-context-diverse",
+        "gpu": 1,
+        "command": [
+          "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+          "scripts/experiments/prefeval_k1_writer.py",
+          "train",
+          "--arm",
+          "B",
+          "--split",
+          "pilot",
+          "--ids-file",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-fit-20261006/configs/experiments/context_coverage_ids.json",
+          "--base",
+          "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+          "--official-source",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite",
+          "--checkpoint",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b730-exposure512-20260927/train/checkpoint-final.pt",
+          "--output",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-fit-v1/context-diverse/train",
+          "--teachers",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/pilot/prompt_matching/teachers",
+          "--teacher-supervision",
+          "prompt_matching",
+          "--teacher-steps",
+          "288",
+          "--steps",
+          "128",
+          "--snapshot-steps",
+          "4"
+        ]
+      },
+      "command_sha256": "acef0abb4eb030068c95eb3194967b795726d1afcbcd4293a79dcedd8a2fac9e",
+      "hostname": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+      "started": 1791244412.0534165,
+      "pid": 1156922,
+      "alive": true,
+      "cmdline": "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python scripts/experiments/prefeval_k1_writer.py train --arm B --split pilot --ids-file /inspire/ssd/project/exploration-topic/czxs26210936/repos/context-fit-20261006/configs/experiments/context_coverage_ids.json --base /inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907 --official-source /inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite --checkpoint /inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b730-exposure512-20260927/train/checkpoint-final.pt --output /inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-fit-v1/context-diverse/train --teachers /inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/pilot/prompt_matching/teachers --teacher-supervision prompt_matching --teacher-steps 288 --steps 128 --snapshot-steps 4 ",
+      "cuda_visible_devices": [
+        "CUDA_VISIBLE_DEVICES=1"
+      ]
+    },
+    {
+      "job": {
+        "name": "train-context-narrow",
+        "gpu": 0,
+        "command": [
+          "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+          "scripts/experiments/prefeval_k1_writer.py",
+          "train",
+          "--arm",
+          "B",
+          "--split",
+          "pilot",
+          "--ids-file",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-fit-20261006/configs/experiments/context_coverage_ids.json",
+          "--base",
+          "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+          "--official-source",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite",
+          "--checkpoint",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b730-exposure512-20260927/train/checkpoint-final.pt",
+          "--output",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-fit-v1/context-narrow/train",
+          "--teachers",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prompt-matching-20261005/pilot-B/prompt_matching/teachers",
+          "--teacher-supervision",
+          "prompt_matching",
+          "--teacher-steps",
+          "288",
+          "--steps",
+          "128",
+          "--snapshot-steps",
+          "4"
+        ]
+      },
+      "command_sha256": "4e399d4ff69be802c2cb6b118098cd97bdb6c116344fc8c0f1751cdc53bbe337",
+      "hostname": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+      "started": 1791244412.0527282,
+      "pid": 1156921,
+      "alive": true,
+      "cmdline": "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python scripts/experiments/prefeval_k1_writer.py train --arm B --split pilot --ids-file /inspire/ssd/project/exploration-topic/czxs26210936/repos/context-fit-20261006/configs/experiments/context_coverage_ids.json --base /inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907 --official-source /inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite --checkpoint /inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b730-exposure512-20260927/train/checkpoint-final.pt --output /inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-fit-v1/context-narrow/train --teachers /inspire/ssd/project/exploration-topic/czxs26210936/runs/prompt-matching-20261005/pilot-B/prompt_matching/teachers --teacher-supervision prompt_matching --teacher-steps 288 --steps 128 --snapshot-steps 4 ",
+      "cuda_visible_devices": [
+        "CUDA_VISIBLE_DEVICES=0"
+      ]
+    }
+  ],
+  "paired_updates_verified": 38,
+  "gpu_hours_provisional": 0.052675468193160165,
+  "gpu": "1640180, [Not Found], 38798 MiB\n1640181, [Not Found], 38798 MiB\n",
+  "commit": "9174325fe5c2e69acdd488150837fe977350a73e",
+  "dirty": ""
+}
