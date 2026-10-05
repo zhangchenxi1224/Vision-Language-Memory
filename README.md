@@ -36,6 +36,18 @@ python scripts/reporting/verify_aligned_cleanup.py
 
 截至 2026-10-02 的归档状态：B730 exposure512 已完成训练，dev 尚无稳定改善；多目标多轮及 C8 全量730评测已有结果，配对 B0 和 long10 尚未全部闭环；C/R 训练完成，完整评测仍有缺口。本次没有重新查询 GPU 实时状态。
 
+## 并行监督实验（默认仍为 hard CE）
+
+新增 [历史条件 Prompt Matching](docs/PROMPT_MATCHING.md)：`hard_ce` 保留原始答案监督；
+`history_hard` 与 `prompt_matching` 共用同一冻结 Reader 在已观察历史下生成的精确回答序列，
+分别使用 one-hot 与完整词表软分布，隔离教师来源与监督方式的影响。教师只见当前初始 exchange，
+Writer 和学生 Reader 输入边界、VAE、PNG 回读及官方 FM 保持不变。
+
+入口：`scripts/inspire/run_prompt_matching_parallel.py`；前瞻协议：
+`configs/experiments/prompt_matching_parallel.json`。先运行真实梯度 smoke，再做同预算 paired pilot。
+训练 loss 或教师图提升不触发替换；完整学生、未参与训练问题、偏好与保持评测通过后才审阅晋级。
+本节声明实现能力，不声明实验已完成或软监督优于原方案。
+
 ## 训练与生成契约
 
 ```text

@@ -16,6 +16,7 @@ import torch
 from PIL import Image
 from scripts.experiments.prefeval_k1_data import load_records, load_training_records, event_text, sha
 from scripts.experiments.prefeval_k1_teacher import save_json, atomic_save
+from scripts.experiments.prefeval_prompt_matching import validate_teacher_manifest
 from scripts.experiments.prefeval_k1_variants import load_variants,apply_variant,training_variant,select_fm_target
 from scripts.experiments.prefeval_k1_source_bank import load_bank,retention_draw,noise_namespace
 from scripts.experiments.prefeval_k1_condition_store import DiskConditions
@@ -68,8 +69,13 @@ def train(args, pipe, rows):
     args.output.mkdir(parents=True, exist_ok=True)
     targets, cache = {}, {}
     target_hashes = {}
+    teacher_binding_hashes = {}
+    supervision = getattr(args, "teacher_supervision", "hard_ce")
+    teacher_steps = getattr(args, "teacher_steps", 288)
     multi = json.loads(args.target_bank.read_text()) if args.target_bank else None
     if multi:
+        if supervision != 'hard_ce':
+            raise ValueError('History supervision requires its own single-target bank; legacy multi-target banks are not interchangeable')
         assert multi['ready'] and multi['scope'] == 'official_training_side_only'
         assert set(multi['targets']) == {r['base_pair_id'] for r in rows}
     variants=load_variants(args.initial_variants,rows) if args.initial_variants else None
@@ -116,7 +122,8 @@ def train(args, pipe, rows):
         else:
             parent = args.teachers / pid.replace(':','_')
             done = json.loads((parent / 'complete.json').read_text())
-            assert done['step'] == 288 and done['binding']['arm'] == args.arm
+            teacher_binding_hashes[pid] = validate_teacher_manifest(
+                done, arm=args.arm, supervision=supervision, steps=teacher_steps)
             assert done['latent_sha256'] == sha(parent / 'latent.pt')
             targets[pid] = torch.load(parent / 'latent.pt', map_location='cpu', weights_only=True)
             target_hashes[pid] = done['latent_sha256']
@@ -147,6 +154,9 @@ def train(args, pipe, rows):
         'flow': 'official target/noise; source condition only', 'seed': 20260924,
         'official_commit': OFFICIAL_REFERENCE_COMMIT,
         'implementation_sha256': sha(Path(__file__))}
+    if supervision != 'hard_ce' or teacher_steps != 288:
+        manifest.update(teacher_supervision=supervision, teacher_steps=teacher_steps,
+                        teacher_binding_hashes=teacher_binding_hashes)
     if args.retain_source_mode == 'initial':
         manifest['retain_source_mode'] = 'initial_student_png_for_all_distractor_positions'
     if bank is not None and not refreshed:
@@ -370,6 +380,9 @@ if __name__ == '__main__':
     for name in ['base','official-source','checkpoint','output']:
         p.add_argument('--'+name,type=Path,required=True)
     p.add_argument('--teachers',type=Path)
+    p.add_argument('--teacher-supervision', choices=['hard_ce','history_hard','prompt_matching'], default='hard_ce')
+    p.add_argument('--teacher-steps', type=int, default=288,
+                   help='Expected target optimization budget; non-288 is technical smoke only')
     p.add_argument('--target-bank',type=Path)
     p.add_argument('--ids-file',type=Path)
     p.add_argument('--sources',type=Path)
