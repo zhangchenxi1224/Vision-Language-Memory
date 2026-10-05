@@ -32,3 +32,7 @@
 不要重新启用已取消的 ARIS A64/B730 队列，不改动其他自动任务。新的每小时跟进只管理本轮作用域及已完成旧 pilot 的归档，并在启动任何后续 Writer 工作前读取 `D:/2026WorkExperience/dreamlite-aris-20261005/refine-logs/EXPERIMENT_TRACKER.md` 防止重复。
 
 文献依据：[Image Hijacks §4.3 及附录](https://arxiv.org/abs/2309.00236)。JPEG、噪声、ensemble 不在本轮训练新增项中；论文的鲁棒性测试不冒充训练增强。
+
+## 2026-10-06 首次实际跟进后的决定
+
+16历史pilot与12个新问题的只读审计已完成，详见 `../reports/context-coverage-20261006/READOUT_RESULT.md`。更丰富的问题覆盖改善教师图片的条件行为KL，硬/软监督方向一致，MCQ未改善。暂不启动另一个重复的Writer训练：先复用正在运行的ARIS共同warmup128完成端点及B730父权重，冻结新的只读评测协议，检查共享Writer上的收益传递。此比较有目标及优化路径等混杂，只能作为功能诊断，不能替代上下文覆盖的单因素因果对照。完成收据出现前保持等待，不读取活动resume，不占其他主线资源。

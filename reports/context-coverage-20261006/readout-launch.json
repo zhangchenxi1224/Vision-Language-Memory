@@ -1,0 +1,23 @@
+{
+  "pid": 3711644,
+  "hostname": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+  "command": [
+    "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+    "scripts/inspire/run_context_readout.py",
+    "--pilot",
+    "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/pilot",
+    "--reference",
+    "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prompt-matching-20261005/pilot-B",
+    "--reader",
+    "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+    "--ids-file",
+    "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-readout-20261006/configs/experiments/context_coverage_ids.json",
+    "--protocol",
+    "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-readout-20261006/configs/experiments/context_readout_audit.json",
+    "--output",
+    "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/readout-v1"
+  ],
+  "started": 1791226199.095967,
+  "commit": "5824c0dc2f971582f23358bbad7f0af47dc7eddc",
+  "linux_tests": "Running 96 items in this shard\n........................................................................ [ 75%]\n........................                                                 [100%]\n96 passed in 3.05s"
+}

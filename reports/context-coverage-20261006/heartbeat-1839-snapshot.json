@@ -1,0 +1,336 @@
+{
+  "time": 1791225616.1008258,
+  "hostname": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+  "status": {
+    "status": "completed",
+    "commit": "15ff2a93b5ec6222c37ec359b20cfadcabbba471",
+    "promotion": "requires paired report and independent Writer evidence",
+    "finished": 1791224595.7796795
+  },
+  "commit": "15ff2a93b5ec6222c37ec359b20cfadcabbba471",
+  "dirty": "",
+  "arms": {
+    "history_hard": {
+      "teachers": 16,
+      "selected": 16,
+      "readback": {
+        "readback-teachers": 320,
+        "readback-selected": 320,
+        "reference-mismatch": 80
+      }
+    },
+    "prompt_matching": {
+      "teachers": 16,
+      "selected": 16,
+      "readback": {
+        "readback-teachers": 320,
+        "readback-selected": 320,
+        "reference-mismatch": 80
+      }
+    }
+  },
+  "receipts": [
+    {
+      "name": "reference-mismatch-history_hard",
+      "command_sha256": "d21e9de99e8e45b58add9e56b8a5ac3a89bf4eb339b1c9057d572567df93f289",
+      "exit_code": 0,
+      "started": 1791224553.384107,
+      "finished": 1791224594.7955859
+    },
+    {
+      "name": "readback-history_hard-selected",
+      "command_sha256": "af5f95d6549a2bdc47569418129163945671c89832d2834a498e23595f3ba37e",
+      "exit_code": 0,
+      "started": 1791224444.0671973,
+      "finished": 1791224549.0216815
+    },
+    {
+      "name": "select-history_hard",
+      "command_sha256": "e88b4ca49b4010bb7ecb734733e9a0de8767e0298b4a8900a603469ceaf93d26",
+      "exit_code": 0,
+      "started": 1791224128.1707492,
+      "finished": 1791224338.307453
+    },
+    {
+      "name": "readback-history_hard-teachers",
+      "command_sha256": "c6a50cb9db3f96251a343cc6418424f6669f6ea1e404ea4fa5542dcd5a9df3ca",
+      "exit_code": 0,
+      "started": 1791224338.3108582,
+      "finished": 1791224443.2605197
+    },
+    {
+      "name": "teacher-prompt_matching",
+      "command_sha256": "84026aa273a39caacf91f62e125030660f142f31077af0449ca9f679d292868e",
+      "exit_code": 0,
+      "started": 1791222454.7722208,
+      "finished": 1791224128.1682181
+    },
+    {
+      "name": "select-prompt_matching",
+      "command_sha256": "9b152356ffc8480f93f81d9b24ffbb9d967e1ee0255d694925d0b6e0a3b4299e",
+      "exit_code": 0,
+      "started": 1791224128.172278,
+      "finished": 1791224338.1015458
+    },
+    {
+      "name": "readback-prompt_matching-selected",
+      "command_sha256": "e09ddca400e3fb3344d149936023050d4ba694dca9f243acdcbdc00ea57752d0",
+      "exit_code": 0,
+      "started": 1791224444.0667143,
+      "finished": 1791224553.3795428
+    },
+    {
+      "name": "teacher-history_hard",
+      "command_sha256": "181b109a1e91156a1e54946f53a02835d0cdfdfb499282ad55dfdcae61eecd3b",
+      "exit_code": 0,
+      "started": 1791222454.7715073,
+      "finished": 1791224127.8738873
+    },
+    {
+      "name": "readback-prompt_matching-teachers",
+      "command_sha256": "3d4918ac6e7eff902c99e160e2f96127049d9a895632af7ba1f994f5fa18d13f",
+      "exit_code": 0,
+      "started": 1791224338.3114564,
+      "finished": 1791224444.0637128
+    },
+    {
+      "name": "reference-mismatch-prompt_matching",
+      "command_sha256": "b12431cb55fd2fbff195555956bd07859bd958c6d125b0cb6e5593ccfc879cb1",
+      "exit_code": 0,
+      "started": 1791224553.3848155,
+      "finished": 1791224594.59503
+    }
+  ],
+  "processes": [],
+  "gpus": "0, GPU-a56f5213-6cf6-e214-b90a-c49cd41c2baa, 1 MiB, 0 %\n1, GPU-d9ac5be8-fa4a-742e-91ff-62d1ce280a1d, 1 MiB, 0 %\n",
+  "gpu_processes": "",
+  "comparison": {
+    "schema": "dreamlite.context-coverage-report.v1",
+    "ids": [
+      "education_learning_styles:0001",
+      "education_learning_styles:0007",
+      "entertain_games:0001",
+      "entertain_games:0007",
+      "entertain_music_book:0012",
+      "entertain_music_book:0016",
+      "entertain_shows:0031",
+      "entertain_shows:0037",
+      "entertain_sports:0009",
+      "entertain_sports:0015",
+      "lifestyle_beauty:0002",
+      "lifestyle_beauty:0012",
+      "lifestyle_dietary:0017",
+      "lifestyle_dietary:0022",
+      "lifestyle_fit:0000",
+      "lifestyle_fit:0011"
+    ],
+    "arms": {
+      "original/history_hard": {
+        "rows": 320,
+        "joint_o1_o2": {
+          "memory": 0.875,
+          "blank": 0.4375,
+          "mismatch": 0.375,
+          "text": 0.875
+        },
+        "memory_minus_mismatch": {
+          "mean": 0.5,
+          "ci95": [
+            0.25,
+            0.75
+          ],
+          "independent_n": 16
+        },
+        "memory_minus_blank": {
+          "mean": 0.4375,
+          "ci95": [
+            0.1875,
+            0.6875
+          ],
+          "independent_n": 16
+        },
+        "truncations": 0,
+        "parse_failures": 0
+      },
+      "diverse/history_hard/teachers": {
+        "rows": 320,
+        "joint_o1_o2": {
+          "memory": 0.875,
+          "blank": 0.4375,
+          "mismatch": 0.3125,
+          "text": 0.875
+        },
+        "memory_minus_mismatch": {
+          "mean": 0.5625,
+          "ci95": [
+            0.3125,
+            0.8125
+          ],
+          "independent_n": 16
+        },
+        "memory_minus_blank": {
+          "mean": 0.4375,
+          "ci95": [
+            0.1875,
+            0.6875
+          ],
+          "independent_n": 16
+        },
+        "truncations": 0,
+        "parse_failures": 0
+      },
+      "diverse/history_hard/selected": {
+        "rows": 320,
+        "joint_o1_o2": {
+          "memory": 0.875,
+          "blank": 0.4375,
+          "mismatch": 0.3125,
+          "text": 0.875
+        },
+        "memory_minus_mismatch": {
+          "mean": 0.5625,
+          "ci95": [
+            0.3125,
+            0.8125
+          ],
+          "independent_n": 16
+        },
+        "memory_minus_blank": {
+          "mean": 0.4375,
+          "ci95": [
+            0.1875,
+            0.6875
+          ],
+          "independent_n": 16
+        },
+        "truncations": 0,
+        "parse_failures": 0
+      },
+      "original/prompt_matching": {
+        "rows": 320,
+        "joint_o1_o2": {
+          "memory": 0.875,
+          "blank": 0.4375,
+          "mismatch": 0.5,
+          "text": 0.875
+        },
+        "memory_minus_mismatch": {
+          "mean": 0.375,
+          "ci95": [
+            0.125,
+            0.625
+          ],
+          "independent_n": 16
+        },
+        "memory_minus_blank": {
+          "mean": 0.4375,
+          "ci95": [
+            0.1875,
+            0.6875
+          ],
+          "independent_n": 16
+        },
+        "truncations": 0,
+        "parse_failures": 0
+      },
+      "diverse/prompt_matching/teachers": {
+        "rows": 320,
+        "joint_o1_o2": {
+          "memory": 0.8125,
+          "blank": 0.4375,
+          "mismatch": 0.375,
+          "text": 0.875
+        },
+        "memory_minus_mismatch": {
+          "mean": 0.4375,
+          "ci95": [
+            0.1875,
+            0.6875
+          ],
+          "independent_n": 16
+        },
+        "memory_minus_blank": {
+          "mean": 0.375,
+          "ci95": [
+            0.0625,
+            0.6875
+          ],
+          "independent_n": 16
+        },
+        "truncations": 0,
+        "parse_failures": 0
+      },
+      "diverse/prompt_matching/selected": {
+        "rows": 320,
+        "joint_o1_o2": {
+          "memory": 0.875,
+          "blank": 0.4375,
+          "mismatch": 0.3125,
+          "text": 0.875
+        },
+        "memory_minus_mismatch": {
+          "mean": 0.5625,
+          "ci95": [
+            0.3125,
+            0.8125
+          ],
+          "independent_n": 16
+        },
+        "memory_minus_blank": {
+          "mean": 0.4375,
+          "ci95": [
+            0.1875,
+            0.6875
+          ],
+          "independent_n": 16
+        },
+        "truncations": 0,
+        "parse_failures": 0
+      }
+    },
+    "contrasts": {
+      "history_hard/coverage_at_final": {
+        "mean": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "independent_n": 16
+      },
+      "history_hard/selection_vs_final": {
+        "mean": 0.0,
+        "ci95": [
+          0.0,
+          0.0
+        ],
+        "independent_n": 16
+      },
+      "prompt_matching/coverage_at_final": {
+        "mean": -0.0625,
+        "ci95": [
+          -0.1875,
+          0.0
+        ],
+        "independent_n": 16
+      },
+      "prompt_matching/selection_vs_final": {
+        "mean": 0.0625,
+        "ci95": [
+          0.0,
+          0.1875
+        ],
+        "independent_n": 16
+      },
+      "soft_minus_hard_diverse_final": {
+        "mean": -0.0625,
+        "ci95": [
+          -0.1875,
+          0.0
+        ],
+        "independent_n": 16
+      }
+    },
+    "scope": "teacher on training histories; MCQ only; no Writer/dev/retention/free-judge conclusion",
+    "promotion": "not_authorized_by_this_metric"
+  }
+}

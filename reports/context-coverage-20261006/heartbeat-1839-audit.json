@@ -1,0 +1,79 @@
+{
+  "time": 1791225728.9317582,
+  "arms": {
+    "history_hard": {
+      "selected_steps": {
+        "288": 12,
+        "144": 1,
+        "216": 3
+      },
+      "training_tokens": 125288,
+      "training_objective_by_family": {
+        "recall": 1.8133462410187349,
+        "application_mcq": 0.07752087986182025,
+        "application_open": 1.201849306972387,
+        "neutral": 0.23762849184386026
+      },
+      "validation_kl_by_family_step": {
+        "recall/72": 2.1760576479136944,
+        "application/72": 1.1633498631417751,
+        "neutral/72": 8.997255674195181e-05,
+        "recall/144": 1.8396882265806198,
+        "application/144": 1.0617453139275312,
+        "neutral/144": 8.452400904634949e-05,
+        "recall/216": 1.5930980928242207,
+        "application/216": 0.9799046535044909,
+        "neutral/216": 0.00010204249717092953,
+        "recall/288": 1.423864409327507,
+        "application/288": 0.9310767985880375,
+        "neutral/288": 9.423776195766759e-05
+      },
+      "gray_history_kl_by_family": {
+        "recall": 2.885015219449997,
+        "application": 1.2903830260038376,
+        "neutral": 7.307557620259142e-05
+      }
+    },
+    "prompt_matching": {
+      "selected_steps": {
+        "288": 11,
+        "216": 5
+      },
+      "training_tokens": 125288,
+      "training_objective_by_family": {
+        "recall": 1.9698587039407964,
+        "application_mcq": 0.08312657671125241,
+        "application_open": 1.4613643779108922,
+        "neutral": 0.33023170279105624
+      },
+      "validation_kl_by_family_step": {
+        "recall/72": 2.149550558999181,
+        "application/72": 1.1295158229768276,
+        "neutral/72": 8.78188447187983e-05,
+        "recall/144": 1.8418054766952991,
+        "application/144": 1.0387187507003546,
+        "neutral/144": 7.838317990428896e-05,
+        "recall/216": 1.5805535186082125,
+        "application/216": 0.9423791011795402,
+        "neutral/216": 6.262883709034963e-05,
+        "recall/288": 1.5062605747953057,
+        "application/288": 0.9216823894530535,
+        "neutral/288": 7.128372392839932e-05
+      },
+      "gray_history_kl_by_family": {
+        "recall": 2.885015219449997,
+        "application": 1.2903830260038376,
+        "neutral": 7.307557620259142e-05
+      }
+    }
+  },
+  "checked_pngs": 192,
+  "checked_latents": 192,
+  "paired_targets": 1057,
+  "independent_n": 16,
+  "gpu_hours": {
+    "smoke": 0.026387807660632662,
+    "pilot": 1.187265353600184
+  },
+  "comparison_reverified": true
+}

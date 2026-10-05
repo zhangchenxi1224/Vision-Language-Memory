@@ -1,0 +1,31 @@
+{
+  "time": 1791226319.3571706,
+  "hostname": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+  "status": {
+    "status": "running",
+    "commit": "5824c0dc2f971582f23358bbad7f0af47dc7eddc",
+    "prior_gpu_seconds": 0,
+    "pilot_gpu_seconds": 4274.155272960663
+  },
+  "rows": {
+    "0": 553,
+    "1": 520
+  },
+  "processes": [
+    {
+      "pid": "3711644",
+      "command": "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python scripts/inspire/run_context_readout.py --pilot /inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/pilot --reference /inspire/ssd/project/exploration-topic/czxs26210936/runs/prompt-matching-20261005/pilot-B --reader /inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct --ids-file /inspire/ssd/project/exploration-topic/czxs26210936/repos/context-readout-20261006/configs/experiments/context_coverage_ids.json --protocol /inspire/ssd/project/exploration-topic/czxs26210936/repos/context-readout-20261006/configs/experiments/context_readout_audit.json --output /inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/readout-v1 "
+    },
+    {
+      "pid": "3711661",
+      "command": "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python scripts/experiments/prefeval_context_readout.py --shard 0 --pilot /inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/pilot --reference /inspire/ssd/project/exploration-topic/czxs26210936/runs/prompt-matching-20261005/pilot-B --reader /inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct --ids-file /inspire/ssd/project/exploration-topic/czxs26210936/repos/context-readout-20261006/configs/experiments/context_coverage_ids.json --protocol /inspire/ssd/project/exploration-topic/czxs26210936/repos/context-readout-20261006/configs/experiments/context_readout_audit.json --output /inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/readout-v1 "
+    },
+    {
+      "pid": "3711662",
+      "command": "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python scripts/experiments/prefeval_context_readout.py --shard 1 --pilot /inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/pilot --reference /inspire/ssd/project/exploration-topic/czxs26210936/runs/prompt-matching-20261005/pilot-B --reader /inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct --ids-file /inspire/ssd/project/exploration-topic/czxs26210936/repos/context-readout-20261006/configs/experiments/context_coverage_ids.json --protocol /inspire/ssd/project/exploration-topic/czxs26210936/repos/context-readout-20261006/configs/experiments/context_readout_audit.json --output /inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/readout-v1 "
+    }
+  ],
+  "log_0": "`torch_dtype` is deprecated! Use `dtype` instead!\n\nLoading checkpoint shards:   0%|                         | 0/2 [00:00<?, ?it/s]\nLoading checkpoint shards:  50%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u258c        | 1/2 [00:01<00:01,  1.27s/it]\nLoading checkpoint shards: 100%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588| 2/2 [00:02<00:00,  1.03it/s]\nLoading checkpoint shards: 100%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588| 2/2 [00:02<00:00,  1.02s/it]\nThe following generation flags are not valid and may be ignored: ['temperature', 'top_p', 'top_k']. Set `TRANSFORMERS_VERBOSITY=info` for more details.\n{\"readout_complete\": \"education_learning_styles:0001\", \"shard\": 0, \"rows\": 156}\n{\"readout_complete\": \"entertain_games:0001\", \"shard\": 0, \"rows\": 312}\n{\"readout_complete\": \"entertain_music_book:0012\", \"shard\": 0, \"rows\": 468}\n",
+  "log_1": "`torch_dtype` is deprecated! Use `dtype` instead!\n\nLoading checkpoint shards:   0%|                         | 0/2 [00:00<?, ?it/s]\nLoading checkpoint shards:  50%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u258c        | 1/2 [00:01<00:01,  1.34s/it]\nLoading checkpoint shards: 100%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588| 2/2 [00:02<00:00,  1.04s/it]\nLoading checkpoint shards: 100%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588| 2/2 [00:02<00:00,  1.09s/it]\nThe following generation flags are not valid and may be ignored: ['temperature', 'top_p', 'top_k']. Set `TRANSFORMERS_VERBOSITY=info` for more details.\n{\"readout_complete\": \"education_learning_styles:0007\", \"shard\": 1, \"rows\": 156}\n{\"readout_complete\": \"entertain_games:0007\", \"shard\": 1, \"rows\": 312}\n{\"readout_complete\": \"entertain_music_book:0016\", \"shard\": 1, \"rows\": 468}\n",
+  "gpu": "0, 10008 MiB, 34 %\n1, 10360 MiB, 41 %\n"
+}

@@ -1,0 +1,229 @@
+{
+  "schema": "dreamlite.context-coverage-report.v1",
+  "ids": [
+    "education_learning_styles:0001",
+    "education_learning_styles:0007",
+    "entertain_games:0001",
+    "entertain_games:0007",
+    "entertain_music_book:0012",
+    "entertain_music_book:0016",
+    "entertain_shows:0031",
+    "entertain_shows:0037",
+    "entertain_sports:0009",
+    "entertain_sports:0015",
+    "lifestyle_beauty:0002",
+    "lifestyle_beauty:0012",
+    "lifestyle_dietary:0017",
+    "lifestyle_dietary:0022",
+    "lifestyle_fit:0000",
+    "lifestyle_fit:0011"
+  ],
+  "arms": {
+    "original/history_hard": {
+      "rows": 320,
+      "joint_o1_o2": {
+        "memory": 0.875,
+        "blank": 0.4375,
+        "mismatch": 0.375,
+        "text": 0.875
+      },
+      "memory_minus_mismatch": {
+        "mean": 0.5,
+        "ci95": [
+          0.25,
+          0.75
+        ],
+        "independent_n": 16
+      },
+      "memory_minus_blank": {
+        "mean": 0.4375,
+        "ci95": [
+          0.1875,
+          0.6875
+        ],
+        "independent_n": 16
+      },
+      "truncations": 0,
+      "parse_failures": 0
+    },
+    "diverse/history_hard/teachers": {
+      "rows": 320,
+      "joint_o1_o2": {
+        "memory": 0.875,
+        "blank": 0.4375,
+        "mismatch": 0.3125,
+        "text": 0.875
+      },
+      "memory_minus_mismatch": {
+        "mean": 0.5625,
+        "ci95": [
+          0.3125,
+          0.8125
+        ],
+        "independent_n": 16
+      },
+      "memory_minus_blank": {
+        "mean": 0.4375,
+        "ci95": [
+          0.1875,
+          0.6875
+        ],
+        "independent_n": 16
+      },
+      "truncations": 0,
+      "parse_failures": 0
+    },
+    "diverse/history_hard/selected": {
+      "rows": 320,
+      "joint_o1_o2": {
+        "memory": 0.875,
+        "blank": 0.4375,
+        "mismatch": 0.3125,
+        "text": 0.875
+      },
+      "memory_minus_mismatch": {
+        "mean": 0.5625,
+        "ci95": [
+          0.3125,
+          0.8125
+        ],
+        "independent_n": 16
+      },
+      "memory_minus_blank": {
+        "mean": 0.4375,
+        "ci95": [
+          0.1875,
+          0.6875
+        ],
+        "independent_n": 16
+      },
+      "truncations": 0,
+      "parse_failures": 0
+    },
+    "original/prompt_matching": {
+      "rows": 320,
+      "joint_o1_o2": {
+        "memory": 0.875,
+        "blank": 0.4375,
+        "mismatch": 0.5,
+        "text": 0.875
+      },
+      "memory_minus_mismatch": {
+        "mean": 0.375,
+        "ci95": [
+          0.125,
+          0.625
+        ],
+        "independent_n": 16
+      },
+      "memory_minus_blank": {
+        "mean": 0.4375,
+        "ci95": [
+          0.1875,
+          0.6875
+        ],
+        "independent_n": 16
+      },
+      "truncations": 0,
+      "parse_failures": 0
+    },
+    "diverse/prompt_matching/teachers": {
+      "rows": 320,
+      "joint_o1_o2": {
+        "memory": 0.8125,
+        "blank": 0.4375,
+        "mismatch": 0.375,
+        "text": 0.875
+      },
+      "memory_minus_mismatch": {
+        "mean": 0.4375,
+        "ci95": [
+          0.1875,
+          0.6875
+        ],
+        "independent_n": 16
+      },
+      "memory_minus_blank": {
+        "mean": 0.375,
+        "ci95": [
+          0.0625,
+          0.6875
+        ],
+        "independent_n": 16
+      },
+      "truncations": 0,
+      "parse_failures": 0
+    },
+    "diverse/prompt_matching/selected": {
+      "rows": 320,
+      "joint_o1_o2": {
+        "memory": 0.875,
+        "blank": 0.4375,
+        "mismatch": 0.3125,
+        "text": 0.875
+      },
+      "memory_minus_mismatch": {
+        "mean": 0.5625,
+        "ci95": [
+          0.3125,
+          0.8125
+        ],
+        "independent_n": 16
+      },
+      "memory_minus_blank": {
+        "mean": 0.4375,
+        "ci95": [
+          0.1875,
+          0.6875
+        ],
+        "independent_n": 16
+      },
+      "truncations": 0,
+      "parse_failures": 0
+    }
+  },
+  "contrasts": {
+    "history_hard/coverage_at_final": {
+      "mean": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "independent_n": 16
+    },
+    "history_hard/selection_vs_final": {
+      "mean": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ],
+      "independent_n": 16
+    },
+    "prompt_matching/coverage_at_final": {
+      "mean": -0.0625,
+      "ci95": [
+        -0.1875,
+        0.0
+      ],
+      "independent_n": 16
+    },
+    "prompt_matching/selection_vs_final": {
+      "mean": 0.0625,
+      "ci95": [
+        0.0,
+        0.1875
+      ],
+      "independent_n": 16
+    },
+    "soft_minus_hard_diverse_final": {
+      "mean": -0.0625,
+      "ci95": [
+        -0.1875,
+        0.0
+      ],
+      "independent_n": 16
+    }
+  },
+  "scope": "teacher on training histories; MCQ only; no Writer/dev/retention/free-judge conclusion",
+  "promotion": "not_authorized_by_this_metric"
+}

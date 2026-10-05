@@ -1,6 +1,6 @@
 {
   "schema": "dreamlite.context-coverage-deployment.v1",
-  "status": "pilot_running",
+  "status": "pilot_and_readout_completed_waiting_existing_writer_endpoints",
   "execution_commit": "15ff2a93b5ec6222c37ec359b20cfadcabbba471",
   "notebook": "vlm-dreamlite-full-h200x2-20260720",
   "remote_checkout": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-coverage-20261006",
@@ -8,7 +8,7 @@
   "automation_id": "dreamlite-2",
   "automation_status": "ACTIVE",
   "automation_interval_hours": 1,
-  "automation_trigger_verified": false,
+  "automation_trigger_verified": true,
   "windows_tests_passed": 100,
   "linux_tests": {
     "passed": 100,
@@ -24,7 +24,7 @@
     "paired_target_cache_exact_match": true
   },
   "pilot": {
-    "status": "running",
+    "status": "completed",
     "controller_pid": 3299731,
     "started_unix": 1791222454.6478722,
     "histories_per_arm": 16,
@@ -43,7 +43,13 @@
       "history_hard": 217,
       "prompt_matching": 216
     },
-    "fresh_notebook_identity_verified": true
+    "fresh_notebook_identity_verified": true,
+    "finished_unix": 1791224595.7796795,
+    "verified_pngs": 192,
+    "verified_latents": 192,
+    "paired_teacher_targets": 1057,
+    "comparison": "comparison-reverified-1839.json",
+    "complete_jobs": 10
   },
   "max_concurrent_gpus": 2,
   "smoke_gpu_hours_cap": 1,
@@ -60,5 +66,56 @@
   "promotion": "none; teacher mechanism pilot cannot authorize replacing shared Writer default",
   "development_commit": "3995d2c9c111fdb7fac3002e658c4cc77e282e7a",
   "execution_tree_matches_development": true,
-  "last_live_verification_unix": 1791222559.4191248
+  "last_live_verification_unix": 1791227027.053313,
+  "heartbeat_received_at": "2026-10-05T18:39:27.617Z",
+  "last_full_verification_unix": 1791226521.517839,
+  "gpu_hours": {
+    "smoke": 0.026387807660632662,
+    "pilot": 1.187265353600184,
+    "readout": 0.13596068448490567,
+    "total": 1.3496138457457223,
+    "scope": "Verified supervisor allocated GPU process hours including attempts; excludes platform idle costs and points."
+  },
+  "readout_audit": {
+    "status": "completed_verified",
+    "execution_commit": "5824c0dc2f971582f23358bbad7f0af47dc7eddc",
+    "development_commit": "8a43af3",
+    "notebook": "vlm-dreamlite-full-h200x2-20260720",
+    "remote_checkout": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-readout-20261006",
+    "remote_output": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/readout-v1",
+    "controller_pid": 3711644,
+    "started_unix": 1791226199.095967,
+    "expected_rows": 2496,
+    "new_queries": 12,
+    "new_training": false,
+    "gpu_hours_cap": 1.0,
+    "within_pilot_gpu_hours_cap": 16,
+    "linux_tests_passed": 96,
+    "windows_tests_passed": 96,
+    "finished_unix": 1791226449.930771,
+    "verified_rows": 2496,
+    "verified_pngs": 96,
+    "verified_teacher_targets": 192,
+    "gpu_hours": 0.13596068448490567,
+    "report": "readout-comparison.json",
+    "audit": "readout-audit.json",
+    "paired_prefixes_identical": true,
+    "source_checkout_clean": true,
+    "workers_exited": true,
+    "gpu_processes_after_completion": []
+  },
+  "next_stage": {
+    "status": "waiting_upstream_completion_receipts",
+    "action": "Read-only shared Writer functional diagnostic; reuse ARIS warmup128 and B730 parent, no duplicate training. Freeze manifests, queries, complete denominator and bounded budget before deployment.",
+    "dependency_observed_unix": 1791227027.053313,
+    "dependency_evidence": "writer-dependency-1858.json",
+    "observed_steps": {
+      "20261005": 119,
+      "20261006": 100
+    },
+    "complete_endpoints": 0,
+    "allow_reading_active_resume": false,
+    "training_authority": "ARIS workers and resources remain managed by their existing task; this task only reads completed artifacts.",
+    "scope_limit": "Not a one-factor causal estimate of context coverage; targets and optimization route also differ."
+  }
 }
