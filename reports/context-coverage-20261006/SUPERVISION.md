@@ -1,5 +1,19 @@
 # 每小时执行入口
 
+当前阶段（2026-10-06 05:52 CST）：原16历史pilot、2,496行教师审计及17,808行共享Writer功能诊断均完成，不重跑。最新报告WRITER_RESULT.md；完整comparison及05:42现场/05:44全量审计见DEPLOYMENT.json。两训练seed在dev90恢复/开放应用均未显示收益，匹配图未优于同主题错配；默认不晋级。pilot16小幅恢复改善不当作新历史泛化。text=0是自一致性检查，不是准确率。
+
+Writer两个rollout各212/212、两个readout各8,904行，全部exit0；636PNG、1,272教师张量、精确分母/共同前缀/donor全量核验，报告独立重算完全一致。controller4012735及四worker均已退出，active-owner消失，现场GPU无计算进程；执行checkout481335eb8df7efa05e41ff9cc337d2ef2670516e保持clean。不能恢复已完成控制器。Writer已结算2.075331035654 GPUh，全任务3.424944881399 GPUh（非点券账单），没有未结算活跃attempt。
+
+下一步仅按ROUTE_FUNCTIONAL_PLAN.md：复用ARIS已训练PM→FM两seed完整dev90 V0图片，与相同问题/教师缓存下的Direct和B730比较。新增8,640行、合并23,760行、新增读取360PNG、1 GPUh上限计入原16池。暂无消费者代码和部署，先实现兼容只读缓存/资产验证并冻结执行SHA；不得把规划写成正在运行。
+
+本次05:45:37检查上游seed20261005为126/180张且未验收，seed20261006尚无目录，见route-functional-dependency-2142.json。下次先读ARIS tracker并核对上游images-validated.json及全量资产；两seed就绪前不占GPU，不重复生成、不催改其owner/任务、不重做其MCQ/free/保持评测。任一源身份不符停止消费，不能修写源文件。保护official180。
+
+本次未启动新GPU工作、未恢复实例、未修改其他任务或自动化。原H200x2为首选，未来启动仍须重新检查进程、资源、owner和预留；现在的空闲快照不是未来空闲承诺。用户已有资源恢复授权，不重复请求；不能复活取消的ARIS A64/B730。每次≤6小时、最多2GPU，失败时长计账、旧worker先核实停止后再恢复，禁止空转防回收。
+
+实际第四次触发2026-10-05T21:42:00.463Z已完成审计。后续仍每小时，只在实质进展/完成/故障/需处理时通知。
+
+## 先前阶段记录（仅供溯源，以上当前状态优先）
+
 当前阶段（2026-10-06 04:42:23 CST）：原16历史pilot和2,496行教师只读审计均已完成，不重跑。共享Writer功能诊断仍在独立checkout `context-writer-readout-20261006-v2`、冻结481335eb8df7efa05e41ff9cc337d2ef2670516e运行；output为原run根`writer-readout-v1`。controller4012735保持存活，首seed worker4013220已exit0，第二seed worker64143实际cmdline/GPU均匹配。首seed212/212张PNG完成，第二seed57/212；尚无条件KL读回行，不能发布评分。现场同一hostname RUNNING，GPU0无计算进程，GPU1为本任务工作；不另启控制器占用GPU0，随后两分片读回仍需两卡。
 
 两份上游warmup128均已完整完成。B730及Direct seed20261005共424张来源PNG的完整收据、原始历史/噪声、SHA与RGB尺寸再次核验通过。新增Direct seed20261006 checkpoint85bc7285…与绑定收据相等，全部128优化步骤、512训练PNG、14,336个非零有限反传梯度复核通过；两seed模型/数据/父权重/任务/优化器等冻结科学字段一致。未读取活动resume、未修改ARIS训练。

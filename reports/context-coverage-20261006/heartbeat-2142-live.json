@@ -1,0 +1,136 @@
+{
+  "time": 1791236553.7131279,
+  "host": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+  "status": {
+    "status": "completed",
+    "rows": 17808,
+    "gpu_hours": 2.07533103565375,
+    "time": 1791236075.095009
+  },
+  "owner": null,
+  "attempts": [
+    {
+      "job": {
+        "name": "rollout-direct-20261005",
+        "gpu": 0,
+        "command": [
+          "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+          "scripts/experiments/prefeval_writer_readout.py",
+          "rollout",
+          "--endpoint",
+          "direct-20261005",
+          "--output",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/writer-readout-v1",
+          "--base",
+          "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+          "--official-source",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite"
+        ]
+      },
+      "command_sha256": "343536835c34bcb5fc47b9b40c43c2b9ed4a7e9e4170a2780c1964e561963114",
+      "hostname": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+      "started": 1791230055.1709473,
+      "pid": 4013220,
+      "finished": 1791232312.4760878,
+      "exit_code": 0,
+      "alive": false
+    },
+    {
+      "job": {
+        "name": "rollout-direct-20261006",
+        "gpu": 1,
+        "command": [
+          "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+          "scripts/experiments/prefeval_writer_readout.py",
+          "rollout",
+          "--endpoint",
+          "direct-20261006",
+          "--output",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/writer-readout-v1",
+          "--base",
+          "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+          "--official-source",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite"
+        ]
+      },
+      "command_sha256": "7ba910de80e1ebb42d0dab978b64f69dd511940f2ab184a50b9de0c755d2ffa2",
+      "hostname": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+      "started": 1791232315.6181278,
+      "pid": 64143,
+      "finished": 1791234565.527234,
+      "exit_code": 0,
+      "alive": false
+    },
+    {
+      "job": {
+        "name": "evaluate-0",
+        "gpu": 0,
+        "command": [
+          "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+          "scripts/experiments/prefeval_writer_readout.py",
+          "evaluate",
+          "--shard",
+          "0",
+          "--output",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/writer-readout-v1",
+          "--reader",
+          "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+          "--protocol",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-writer-readout-20261006-v2/configs/experiments/context_readout_audit.json"
+        ]
+      },
+      "command_sha256": "22ba721aa40f38ad2078b5a2b16293e90db22862566196b5b40692d0efff0fb8",
+      "hostname": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+      "started": 1791234567.733722,
+      "pid": 308347,
+      "finished": 1791236070.9547822,
+      "exit_code": 0,
+      "alive": false
+    },
+    {
+      "job": {
+        "name": "evaluate-1",
+        "gpu": 1,
+        "command": [
+          "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+          "scripts/experiments/prefeval_writer_readout.py",
+          "evaluate",
+          "--shard",
+          "1",
+          "--output",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/writer-readout-v1",
+          "--reader",
+          "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+          "--protocol",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-writer-readout-20261006-v2/configs/experiments/context_readout_audit.json"
+        ]
+      },
+      "command_sha256": "5fa81d6e13a25d1b2d7c218b469a1da550d9a45f18eee1499216e50e2179c026",
+      "hostname": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+      "started": 1791234567.7343757,
+      "pid": 308348,
+      "finished": 1791236028.490797,
+      "exit_code": 0,
+      "alive": false
+    }
+  ],
+  "readout_rows": {
+    "readout-0.jsonl": 8904,
+    "readout-1.jsonl": 8904
+  },
+  "png_counts": {
+    "direct-20261005": 212,
+    "direct-20261006": 212
+  },
+  "gpu": "",
+  "commit": "481335eb8df7efa05e41ff9cc337d2ef2670516e",
+  "dirty": "",
+  "gpu_hours_provisional": 2.07533103565375,
+  "log_tails": {
+    "evaluate-0.log": ": 6720}\n{\"completed\": \"shop_fashion:0033\", \"shard\": 0, \"rows\": 6888}\n{\"completed\": \"education_learning_styles:0020\", \"shard\": 0, \"rows\": 7056}\n{\"completed\": \"education_learning_styles:0026\", \"shard\": 0, \"rows\": 7224}\n{\"completed\": \"lifestyle_fit:0002\", \"shard\": 0, \"rows\": 7392}\n{\"completed\": \"lifestyle_fit:0019\", \"shard\": 0, \"rows\": 7560}\n{\"completed\": \"lifestyle_fit:0033\", \"shard\": 0, \"rows\": 7728}\n{\"completed\": \"lifestyle_health:0015\", \"shard\": 0, \"rows\": 7896}\n{\"completed\": \"lifestyle_health:0046\", \"shard\": 0, \"rows\": 8064}\n{\"completed\": \"professional_work_location_style:0009\", \"shard\": 0, \"rows\": 8232}\n{\"completed\": \"professional_work_location_style:0021\", \"shard\": 0, \"rows\": 8400}\n{\"completed\": \"professional_work_location_style:0029\", \"shard\": 0, \"rows\": 8568}\n{\"completed\": \"pet_ownership:0020\", \"shard\": 0, \"rows\": 8736}\n{\"completed\": \"pet_ownership:0027\", \"shard\": 0, \"rows\": 8904}\n",
+    "evaluate-1.log": "ws\": 6720}\n{\"completed\": \"education_learning_styles:0010\", \"shard\": 1, \"rows\": 6888}\n{\"completed\": \"education_learning_styles:0021\", \"shard\": 1, \"rows\": 7056}\n{\"completed\": \"education_learning_styles:0029\", \"shard\": 1, \"rows\": 7224}\n{\"completed\": \"lifestyle_fit:0015\", \"shard\": 1, \"rows\": 7392}\n{\"completed\": \"lifestyle_fit:0021\", \"shard\": 1, \"rows\": 7560}\n{\"completed\": \"lifestyle_health:0008\", \"shard\": 1, \"rows\": 7728}\n{\"completed\": \"lifestyle_health:0032\", \"shard\": 1, \"rows\": 7896}\n{\"completed\": \"lifestyle_health:0047\", \"shard\": 1, \"rows\": 8064}\n{\"completed\": \"professional_work_location_style:0020\", \"shard\": 1, \"rows\": 8232}\n{\"completed\": \"professional_work_location_style:0027\", \"shard\": 1, \"rows\": 8400}\n{\"completed\": \"pet_ownership:0019\", \"shard\": 1, \"rows\": 8568}\n{\"completed\": \"pet_ownership:0021\", \"shard\": 1, \"rows\": 8736}\n{\"completed\": \"pet_ownership:0038\", \"shard\": 1, \"rows\": 8904}\n",
+    "rollout-direct-20261005.log": "professional_work_location_style:0027\", \"chain\": 1, \"inter_turns\": 0}\n{\"completed\": \"professional_work_location_style:0029\", \"chain\": 0, \"inter_turns\": 0}\n{\"completed\": \"professional_work_location_style:0029\", \"chain\": 1, \"inter_turns\": 0}\n{\"completed\": \"pet_ownership:0019\", \"chain\": 0, \"inter_turns\": 0}\n{\"completed\": \"pet_ownership:0019\", \"chain\": 1, \"inter_turns\": 0}\n{\"completed\": \"pet_ownership:0020\", \"chain\": 0, \"inter_turns\": 0}\n{\"completed\": \"pet_ownership:0020\", \"chain\": 1, \"inter_turns\": 0}\n{\"completed\": \"pet_ownership:0021\", \"chain\": 0, \"inter_turns\": 0}\n{\"completed\": \"pet_ownership:0021\", \"chain\": 1, \"inter_turns\": 0}\n{\"completed\": \"pet_ownership:0027\", \"chain\": 0, \"inter_turns\": 0}\n{\"completed\": \"pet_ownership:0027\", \"chain\": 1, \"inter_turns\": 0}\n{\"completed\": \"pet_ownership:0038\", \"chain\": 0, \"inter_turns\": 0}\n{\"completed\": \"pet_ownership:0038\", \"chain\": 1, \"inter_turns\": 0}\n",
+    "rollout-direct-20261006.log": "professional_work_location_style:0027\", \"chain\": 1, \"inter_turns\": 0}\n{\"completed\": \"professional_work_location_style:0029\", \"chain\": 0, \"inter_turns\": 0}\n{\"completed\": \"professional_work_location_style:0029\", \"chain\": 1, \"inter_turns\": 0}\n{\"completed\": \"pet_ownership:0019\", \"chain\": 0, \"inter_turns\": 0}\n{\"completed\": \"pet_ownership:0019\", \"chain\": 1, \"inter_turns\": 0}\n{\"completed\": \"pet_ownership:0020\", \"chain\": 0, \"inter_turns\": 0}\n{\"completed\": \"pet_ownership:0020\", \"chain\": 1, \"inter_turns\": 0}\n{\"completed\": \"pet_ownership:0021\", \"chain\": 0, \"inter_turns\": 0}\n{\"completed\": \"pet_ownership:0021\", \"chain\": 1, \"inter_turns\": 0}\n{\"completed\": \"pet_ownership:0027\", \"chain\": 0, \"inter_turns\": 0}\n{\"completed\": \"pet_ownership:0027\", \"chain\": 1, \"inter_turns\": 0}\n{\"completed\": \"pet_ownership:0038\", \"chain\": 0, \"inter_turns\": 0}\n{\"completed\": \"pet_ownership:0038\", \"chain\": 1, \"inter_turns\": 0}\n"
+  },
+  "comparison_exists": true
+}
