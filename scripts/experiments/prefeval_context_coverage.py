@@ -52,8 +52,8 @@ def training_context(row, step, mcq):
 
 
 def context_manifest(rows, steps, mcq):
-    entries = {r['base_pair_id']: [training_context(r, s, mcq) for s in range(steps)] for r in rows}
-    return {'schema': SCHEMA, 'schedule': entries, 'validation': VALIDATION,
+    entries = {r['base_pair_id']: [list(training_context(r, s, mcq)) for s in range(steps)] for r in rows}
+    return {'schema': SCHEMA, 'schedule': entries, 'validation': [list(x) for x in VALIDATION],
             'weights_per_12_updates': {'recall': 4, 'application_mcq': 4, 'application_open': 2, 'neutral': 2},
             'teacher_history': 'initial observed exchange only',
             'selection': 'equal-family mean token KL on six disjoint validation queries; earliest tie',

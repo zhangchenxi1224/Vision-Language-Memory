@@ -38,6 +38,25 @@ def test_future_answers_and_heldout_questions_cannot_change_contexts():
     assert {q for q, _, _ in before['schedule'][row['base_pair_id']]}.isdisjoint(q for _, q in VALIDATION)
 
 
+def test_context_identity_survives_json_checkpoint_resume():
+    import json
+    manifest = context_manifest([example()], 288, MCQ)
+    assert json.loads(json.dumps(manifest)) == manifest
+
+
+def test_report_rejects_partial_denominators():
+    from scripts.reporting.context_coverage_report import summarize
+    with pytest.raises(ValueError, match='denominator'):
+        summarize({}, ['topic:1'])
+
+
+def test_paired_interval_uses_preferences_not_questions():
+    from scripts.reporting.context_coverage_report import paired_interval
+    result = paired_interval([1, 0, 0, -1])
+    assert result['independent_n'] == 4 and result['mean'] == 0
+    assert result['ci95'][0] <= 0 <= result['ci95'][1]
+
+
 def test_selection_requires_complete_denominator_and_breaks_ties_by_step():
     assert choose_checkpoint([{'step': 144, 'score': .2}, {'step': 72, 'score': .2}], [72,144])['step'] == 72
     for rows in ([{'step':72,'score':.1}], [{'step':72,'score':.1}]*2,
