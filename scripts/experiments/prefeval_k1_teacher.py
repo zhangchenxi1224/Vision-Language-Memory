@@ -57,6 +57,19 @@ def main(args):
     rows = load_training_records(args.split, args.exclude_pilot)[args.shard::args.shards]
     if args.limit:
         rows = rows[:args.limit]
+    if getattr(args, 'ids_file', None):
+        from scripts.experiments.prefeval_multitarget_bank import select_rows
+        # Select before sharding, so changing shard count cannot alter the population.
+        all_rows = select_rows(load_training_records(args.split, args.exclude_pilot), args.ids_file)
+        rows = all_rows[args.shard::args.shards]
+        if args.limit:
+            rows = rows[:args.limit]
+    context_suite = getattr(args, 'context_suite', 'original')
+    snapshot_steps = sorted(set(int(x) for x in getattr(args, 'snapshot_steps', '').split(',') if x))
+    if any(s <= 0 or s > args.steps or s % 24 for s in snapshot_steps):
+        raise ValueError('Snapshots must be positive checkpoint boundaries (multiples of 24) within budget')
+    if context_suite != 'original' and (supervision == 'hard_ce' or args.arm != 'B'):
+        raise ValueError('Diverse contexts require B format and a history teacher')
     execution_commit = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip()
     recovery_commit = args.boundary_recovery_from
     if recovery_commit:
@@ -73,6 +86,13 @@ def main(args):
         'quantization': 'uint8-equivalent RGB forward with STE backward',
         'budget_class': 'technical_smoke' if args.steps != 288 else ('registered_train730' if args.split == 'train' else 'registered_pilot')}
     binding.update(supervision_binding(args, rows))
+    if context_suite != 'original' or snapshot_steps or getattr(args, 'ids_file', None):
+        from scripts.experiments.prefeval_context_coverage import context_manifest
+        binding['context_suite'] = context_suite
+        binding['snapshot_steps'] = snapshot_steps
+        binding['ids_sha256'] = sha(args.ids_file) if args.ids_file else None
+        if context_suite != 'original':
+            binding['contexts'] = context_manifest(rows, args.steps, official_mcq(args.prefeval))
     ident = args.output / f'identity-{args.shard}.json'
     if ident.exists():
         assert json.loads(ident.read_text()) == binding, 'Resume binding differs'
@@ -129,7 +149,13 @@ def main(args):
             optimizer.zero_grad(set_to_none=True)
             pixels = oracle.image()
             quantized = pixels + (pixels.mul(255).round().div(255) - pixels).detach()
-            question, target, order = query_target(row, args.arm, step, mcq)
+            family = f'T{step % 3 + 1}'
+            if context_suite == 'original':
+                question, target, order = query_target(row, args.arm, step, mcq)
+            else:
+                from scripts.experiments.prefeval_context_coverage import training_context
+                question, family, order = training_context(row, step, mcq)
+                target = None
             diagnostics = {}
             if supervision == 'hard_ce':
                 ce = qwen3vl_target_only_ce(model=reader, processor=processor, image=quantized[0],
@@ -180,11 +206,20 @@ def main(args):
             if not torch.isfinite(oracle.latent_fp32).all():
                 raise RuntimeError('Nonfinite latent')
             record = {'pair_id': pid, 'arm': args.arm, 'step': step + 1,
-                'family': f'T{step % 3 + 1}', 'ce': float(ce.loss.detach()),
+                'family': family, 'ce': float(ce.loss.detach()),
                 'answer_tokens_with_eos': ce.target_ids.numel(), 'grad_norm': grad_norm,
                 'option_order': order, 'elapsed_seconds': time.monotonic() - started}
             record.update(diagnostics)
             append(out / 'optimization.jsonl', record)
+            if step + 1 in snapshot_steps:
+                snap = out / 'snapshots' / f'step-{step + 1:04d}'
+                snap.mkdir(parents=True, exist_ok=True)
+                with torch.no_grad():
+                    _save_image(snap / 'memory.png', oracle.image())
+                atomic_save(snap / 'latent.pt', oracle.latent_fp32.detach().cpu())
+                save_json(snap / 'snapshot.json', {'step': step + 1, 'pair_id': pid,
+                    'binding': binding, 'png_sha256': sha(snap / 'memory.png'),
+                    'latent_sha256': sha(snap / 'latent.pt')})
             if (step + 1) % 24 == 0 or step + 1 == args.steps:
                 atomic_save(checkpoint, {'latent': oracle.latent_fp32.detach(),
                     'optimizer': optimizer.state_dict(), 'step': step + 1, 'binding': binding, 'execution': execution})
@@ -214,6 +249,9 @@ if __name__ == '__main__':
     parser.add_argument('--exclude-pilot', action='store_true')
     for name in ['base', 'reader', 'prefeval', 'output']:
         parser.add_argument('--' + name, type=Path, required=True)
+    parser.add_argument('--context-suite', choices=['original', 'diverse-v1'], default='original')
+    parser.add_argument('--ids-file', type=Path)
+    parser.add_argument('--snapshot-steps', default='')
     parser.add_argument('--device', default='cuda:0')
     parser.add_argument('--steps', type=int, default=288)
     parser.add_argument('--shard', type=int, default=0)

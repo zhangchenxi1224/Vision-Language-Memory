@@ -88,7 +88,15 @@ def main(args):
                     base=args.images/source_id.replace(':','_')
                     if args.kind=='teacher':
                         done=json.loads((base/'complete.json').read_text())
-                        assert done['step']==288, 'Technical smoke is not an evaluated teacher'
+                        if getattr(args, 'selected_teacher', False):
+                            assert done['selection_schema']=='dreamlite.context-selection.v1'
+                            assert done['training_budget']==288
+                            assert sha(base/'selection.json')==done['selection_sha256']
+                            selection=json.loads((base/'selection.json').read_text())
+                            assert selection['selected']['step']==done['step']
+                            assert selection['selected']['png_sha256']==done['png_sha256']
+                        else:
+                            assert done['step']==288, 'Technical smoke is not an evaluated teacher'
                         png=base/'memory.png'
                         assert sha(png)==done['png_sha256']
                         return png
@@ -153,6 +161,7 @@ if __name__=='__main__':
     p.add_argument('--reader',type=Path,required=True)
     p.add_argument('--images',type=Path,required=True)
     p.add_argument('--output',type=Path,required=True)
+    p.add_argument('--selected-teacher', action='store_true')
     p.add_argument('--kind',choices=['teacher','student'],required=True)
     p.add_argument('--split',choices=['pilot','train','dev','official'],default='pilot')
     p.add_argument('--history-file',type=Path)
