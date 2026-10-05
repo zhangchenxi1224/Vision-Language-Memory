@@ -1,6 +1,6 @@
 {
   "schema": "dreamlite.context-coverage-deployment.v1",
-  "status": "shared_writer_functional_readout_deployed_rollout_running",
+  "status": "shared_writer_second_rollout_running",
   "execution_commit": "15ff2a93b5ec6222c37ec359b20cfadcabbba471",
   "notebook": "vlm-dreamlite-full-h200x2-20260720",
   "remote_checkout": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-coverage-20261006",
@@ -66,18 +66,19 @@
   "promotion": "none; teacher mechanism pilot cannot authorize replacing shared Writer default",
   "development_commit": "3995d2c9c111fdb7fac3002e658c4cc77e282e7a",
   "execution_tree_matches_development": true,
-  "last_live_verification_unix": 1791230384.088255,
-  "heartbeat_received_at": "2026-10-05T19:40:58.514Z",
+  "last_live_verification_unix": 1791232943.4297068,
+  "heartbeat_received_at": "2026-10-05T20:41:29.455Z",
   "last_full_verification_unix": 1791226521.517839,
   "gpu_hours": {
     "smoke": 0.026387807660632662,
     "pilot": 1.187265353600184,
     "readout": 0.13596068448490567,
-    "total": 1.3496138457457223,
+    "total": 1.9766430514388613,
     "scope": "Verified supervisor allocated GPU process hours including attempts; excludes platform idle costs and points.",
-    "writer_readout_provisional": 0.09136591878202227,
-    "total_provisional": 1.4409797645277447,
-    "total_is_settled_only": true
+    "writer_readout_provisional": 0.8014213109678693,
+    "total_provisional": 2.1510351567135917,
+    "total_is_settled_only": true,
+    "writer_readout_settled": 0.627029205693139
   },
   "readout_audit": {
     "status": "completed_verified",
@@ -118,7 +119,7 @@
     "promotion": "none"
   },
   "writer_readout": {
-    "status": "rollout_running",
+    "status": "second_rollout_running",
     "execution_commit": "481335eb8df7efa05e41ff9cc337d2ef2670516e",
     "development_commit": "535ae7a",
     "execution_tree_matches_development": true,
@@ -128,7 +129,7 @@
     "controller_pid": 4012735,
     "started_unix": 1791230050.497099,
     "worker_pids": [
-      4013220
+      64143
     ],
     "endpoint_names": [
       "b730",
@@ -144,8 +145,8 @@
     "reused_parent_pngs": 212,
     "expected_new_pngs": 424,
     "observed_new_pngs": {
-      "direct-20261005": 28,
-      "direct-20261006": 0
+      "direct-20261005": 212,
+      "direct-20261006": 57
     },
     "gpu_hours_cap": 4,
     "within_campaign_gpu_hours_cap": 16,
@@ -155,21 +156,32 @@
     },
     "ready_endpoints": [
       "b730",
-      "direct-20261005"
+      "direct-20261005",
+      "direct-20261006"
     ],
     "no_training": true,
     "no_new_mcq_run": true,
     "scientific_results": "pending",
     "protocol": "WRITER_READOUT_PLAN.md",
-    "cost_provisional_asof_unix": 1791230384.088255,
-    "gpu_hours_provisional": 0.09136591878202227,
+    "cost_provisional_asof_unix": 1791232943.4297068,
+    "gpu_hours_provisional": 0.8014213109678693,
     "preflight_fixes": [
       "Canonical object digest matches upstream receipt format; 0 GPU workers before fix.",
       "Inherited sparse checkout excluded tracked protocol Markdown. Exact HEAD blob materialized, tree unchanged; first controller exited before retry."
     ],
-    "latest_verification": "writer-live-final-1940.json",
+    "latest_verification": "heartbeat-2041-writer-live.json",
     "source_warmup_audit": "writer-source-audit.json",
     "reader_identity_preflight": "writer-reader-preflight.json",
-    "source_checkout_clean": true
+    "source_checkout_clean": true,
+    "completed_rollout_endpoints": [
+      "direct-20261005"
+    ],
+    "latest_integrity_audit": "heartbeat-2041-integrity.json",
+    "gpu_hours_settled": 0.627029205693139,
+    "second_source_checkpoint_sha256": "85bc7285d851053f1bdc5f1e1d5bd5682048fd8906db231f2694222c6de861e3",
+    "second_source_pngs_verified": 512,
+    "second_source_nonzero_finite_gradients": 14336,
+    "verified_complete_source_pngs": 424,
+    "readout_rows_observed": 0
   }
 }

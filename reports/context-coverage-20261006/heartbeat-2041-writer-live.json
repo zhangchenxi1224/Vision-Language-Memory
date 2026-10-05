@@ -1,0 +1,119 @@
+{
+  "time": 1791232943.4297068,
+  "host": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+  "status": {
+    "status": "running",
+    "commit": "481335eb8df7efa05e41ff9cc337d2ef2670516e",
+    "remaining_gpu_seconds": 14400
+  },
+  "owner": {
+    "pid": 4012735,
+    "host": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+    "started": 1791230050.585729,
+    "commit": "481335eb8df7efa05e41ff9cc337d2ef2670516e"
+  },
+  "attempts": [
+    {
+      "job": {
+        "name": "rollout-direct-20261005",
+        "gpu": 0,
+        "command": [
+          "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+          "scripts/experiments/prefeval_writer_readout.py",
+          "rollout",
+          "--endpoint",
+          "direct-20261005",
+          "--output",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/writer-readout-v1",
+          "--base",
+          "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+          "--official-source",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite"
+        ]
+      },
+      "command_sha256": "343536835c34bcb5fc47b9b40c43c2b9ed4a7e9e4170a2780c1964e561963114",
+      "hostname": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+      "started": 1791230055.1709473,
+      "pid": 4013220,
+      "finished": 1791232312.4760878,
+      "exit_code": 0,
+      "alive": false
+    },
+    {
+      "job": {
+        "name": "rollout-direct-20261006",
+        "gpu": 1,
+        "command": [
+          "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+          "scripts/experiments/prefeval_writer_readout.py",
+          "rollout",
+          "--endpoint",
+          "direct-20261006",
+          "--output",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/writer-readout-v1",
+          "--base",
+          "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+          "--official-source",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite"
+        ]
+      },
+      "command_sha256": "7ba910de80e1ebb42d0dab978b64f69dd511940f2ab184a50b9de0c755d2ffa2",
+      "hostname": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+      "started": 1791232315.6181278,
+      "pid": 64143,
+      "alive": true,
+      "cmdline": "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python scripts/experiments/prefeval_writer_readout.py rollout --endpoint direct-20261006 --output /inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/writer-readout-v1 --base /inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907 --official-source /inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite "
+    }
+  ],
+  "png_counts": {
+    "direct-20261005": 212,
+    "direct-20261006": 57
+  },
+  "verified_recent_pngs": [
+    {
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/writer-readout-v1/images/direct-20261005/dev/pet_ownership_0027/seed-0/prefix-00.png",
+      "sha256": "3d5b69027ea04d3bca52b433661555ff1b88640b32d9a77ffbf1a5e46d03c868"
+    },
+    {
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/writer-readout-v1/images/direct-20261005/dev/pet_ownership_0027/seed-1/prefix-00.png",
+      "sha256": "12d216f14b3fd39aecda907a58869a824d230accc7899491925c566f52499384"
+    },
+    {
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/writer-readout-v1/images/direct-20261005/dev/pet_ownership_0038/seed-0/prefix-00.png",
+      "sha256": "14778a79d04aaba45d665964589992e6c22fbcab80947ae5ec0370af002b4303"
+    },
+    {
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/writer-readout-v1/images/direct-20261005/dev/pet_ownership_0038/seed-1/prefix-00.png",
+      "sha256": "852e72d2c2791706dcbd50a17f7ce9503aeabfa5a71e092cf9456514477423cd"
+    },
+    {
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/writer-readout-v1/images/direct-20261006/dev/entertain_shows_0058/seed-1/prefix-00.png",
+      "sha256": "e24fea7325b11af0af4887fa8f5485d356180bacc0e617c5a6dd482f6420f1d7"
+    },
+    {
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/writer-readout-v1/images/direct-20261006/dev/travel_activities_0011/seed-0/prefix-00.png",
+      "sha256": "0d1ac8f19136056dfdc006a016a079d2c450e00fc05474bc770909a569d63d2e"
+    },
+    {
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/writer-readout-v1/images/direct-20261006/dev/travel_activities_0011/seed-1/prefix-00.png",
+      "sha256": "8f528a59678e4089ada1c0eb4f44e502bc7374c06d49a2403f5bf935d6aa5499"
+    },
+    {
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/writer-readout-v1/images/direct-20261006/dev/travel_activities_0014/seed-0/prefix-00.png",
+      "sha256": "78d4a667f3e3de27ecac5ee452a43292df0a5690e617d35fe5616172480f6ce9"
+    }
+  ],
+  "readout_rows": {},
+  "gpu": "1341075, GPU-d9ac5be8-fa4a-742e-91ff-62d1ce280a1d, 14118 MiB\n",
+  "gpu_identity": "0, GPU-a56f5213-6cf6-e214-b90a-c49cd41c2baa, 1 MiB, 143771 MiB, 0 %\n1, GPU-d9ac5be8-fa4a-742e-91ff-62d1ce280a1d, 14128 MiB, 143771 MiB, 100 %\n",
+  "commit": "481335eb8df7efa05e41ff9cc337d2ef2670516e",
+  "dirty": "",
+  "accrued_gpu_hours_provisional": 0.8014213109678693,
+  "completed_receipts": [
+    "rollout-direct-20261005.json"
+  ],
+  "log_tails": {
+    "rollout-direct-20261005.log": "\": 0}\n{\"completed\": \"pet_ownership:0019\", \"chain\": 1, \"inter_turns\": 0}\n{\"completed\": \"pet_ownership:0020\", \"chain\": 0, \"inter_turns\": 0}\n{\"completed\": \"pet_ownership:0020\", \"chain\": 1, \"inter_turns\": 0}\n{\"completed\": \"pet_ownership:0021\", \"chain\": 0, \"inter_turns\": 0}\n{\"completed\": \"pet_ownership:0021\", \"chain\": 1, \"inter_turns\": 0}\n{\"completed\": \"pet_ownership:0027\", \"chain\": 0, \"inter_turns\": 0}\n{\"completed\": \"pet_ownership:0027\", \"chain\": 1, \"inter_turns\": 0}\n{\"completed\": \"pet_ownership:0038\", \"chain\": 0, \"inter_turns\": 0}\n{\"completed\": \"pet_ownership:0038\", \"chain\": 1, \"inter_turns\": 0}\n",
+    "rollout-direct-20261006.log": "ertain_shows:0028\", \"chain\": 0, \"inter_turns\": 0}\n{\"completed\": \"entertain_shows:0028\", \"chain\": 1, \"inter_turns\": 0}\n{\"completed\": \"entertain_shows:0051\", \"chain\": 0, \"inter_turns\": 0}\n{\"completed\": \"entertain_shows:0051\", \"chain\": 1, \"inter_turns\": 0}\n{\"completed\": \"entertain_shows:0058\", \"chain\": 0, \"inter_turns\": 0}\n{\"completed\": \"entertain_shows:0058\", \"chain\": 1, \"inter_turns\": 0}\n{\"completed\": \"travel_activities:0011\", \"chain\": 0, \"inter_turns\": 0}\n{\"completed\": \"travel_activities:0011\", \"chain\": 1, \"inter_turns\": 0}\n{\"completed\": \"travel_activities:0014\", \"chain\": 0, \"inter_turns\": 0}\n"
+  }
+}

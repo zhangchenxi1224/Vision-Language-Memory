@@ -1,0 +1,40 @@
+{
+  "time": 1791233005.3136842,
+  "controller_pid": 4012735,
+  "controller_cmdline": "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python scripts/inspire/run_writer_readout.py --output /inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/writer-readout-v1 --base /inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907 --reader /inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct --official-source /inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite ",
+  "verified_readout_pngs": 424,
+  "verified_endpoints": [
+    "b730",
+    "direct-20261005"
+  ],
+  "second_source_endpoint": {
+    "checkpoint": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/runs/dreamlite-aris-20261005/mainline/seed-20261006/warmup/checkpoint-final.pt",
+    "checkpoint_sha256": "85bc7285d851053f1bdc5f1e1d5bd5682048fd8906db231f2694222c6de861e3",
+    "receipt": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/runs/dreamlite-aris-20261005/mainline/seed-20261006/warmup/complete.json",
+    "receipt_sha256": "8b1321af254b41799558245eec95851d66dfe33c3d366c38b7bd0ae096e40873"
+  },
+  "second_source_steps": 128,
+  "second_source_pngs": 512,
+  "second_source_finite_nonzero_gradients": 14336,
+  "paired_scientific_fields": [
+    "base_sha256",
+    "data_sha256",
+    "parent_sha256",
+    "sample_steps",
+    "cfg",
+    "pixels",
+    "supervision",
+    "teacher_binding",
+    "task_weights",
+    "tasks",
+    "lr",
+    "optimizer",
+    "steps",
+    "effective_batch",
+    "betas",
+    "eps",
+    "weight_decay"
+  ],
+  "new_training": false,
+  "upstream_mutated": false
+}

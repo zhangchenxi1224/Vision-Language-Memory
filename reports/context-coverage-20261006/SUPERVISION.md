@@ -1,8 +1,10 @@
 # 每小时执行入口
 
-当前阶段（2026-10-06 03:56 CST）：原16历史pilot和2,496行教师只读审计均已完成，不重跑。现在已部署共享Writer功能诊断，协议见WRITER_READOUT_PLAN.md。独立checkout `context-writer-readout-20261006-v2` 冻结481335eb8df7efa05e41ff9cc337d2ef2670516e，output在原run根`writer-readout-v1`；controller4012735、rollout child4013220已核实实际cmdline/GPU及首张真实PNG。读取DEPLOYMENT.json和远端status/attempts的最新状态，不能根据这份历史PID重复启动。
+当前阶段（2026-10-06 04:42:23 CST）：原16历史pilot和2,496行教师只读审计均已完成，不重跑。共享Writer功能诊断仍在独立checkout `context-writer-readout-20261006-v2`、冻结481335eb8df7efa05e41ff9cc337d2ef2670516e运行；output为原run根`writer-readout-v1`。controller4012735保持存活，首seed worker4013220已exit0，第二seed worker64143实际cmdline/GPU均匹配。首seed212/212张PNG完成，第二seed57/212；尚无条件KL读回行，不能发布评分。现场同一hostname RUNNING，GPU0无计算进程，GPU1为本任务工作；不另启控制器占用GPU0，随后两分片读回仍需两卡。
 
-已核实B730父权重与旧同协议212张PNG；Direct seed20261005完成128步，checkpoint a78c6f8…，独立复核全部512训练PNG及14,336个28步反传梯度。seed20261006尚未有完成收据。现控制器先生成已完成seed的212张PNG；结束后自动重查第二seed。若其未完成则写waiting_upstream并退出，不空等占卡；下次确认控制器和worker都退出、GPU无其他任务之后，使用writer-launch-retry1.json中的同一冻结命令重新启动（新launch收据，不覆盖历史）。已完成job receipt会跳过，原owner不得被并行抢占。
+两份上游warmup128均已完整完成。B730及Direct seed20261005共424张来源PNG的完整收据、原始历史/噪声、SHA与RGB尺寸再次核验通过。新增Direct seed20261006 checkpoint85bc7285…与绑定收据相等，全部128优化步骤、512训练PNG、14,336个非零有限反传梯度复核通过；两seed模型/数据/父权重/任务/优化器等冻结科学字段一致。未读取活动resume、未修改ARIS训练。
+
+原控制器已自动接续第二seed，无需恢复或重新启动。全636来源PNG就绪后自动启动两分片17,808行读回。下次先检查实际status/active-owner/attempts/PID；正在运行则只核验推进，禁止重复启动。若受限退出或故障，先核对旧worker结束与attempt结算，在原4 GPUh阶段上限内按同一冻结命令恢复，成功收据直接复用，不重生成已验收PNG。
 
 完整协议为3端点×106历史×2噪声共636来源PNG，12问题和四类控制共17,808行；新历史dev90与训练pilot16分开，两个训练seed各列，噪声先在偏好内平均。读回阶段在两seed图片齐全后自动启动，不以单seed缩分母。ARIS已登记的MCQ/V1/保持评测不由这里重复；只增加条件KL诊断，不能称为自由回答事实准确率或单因素因果比较。
 
@@ -51,3 +53,5 @@ GitHub出口曾在CPU准备机超时，改用已push的增量Git bundle，经CPU
 执行提交 `15ff2a93b5ec6222c37ec359b20cfadcabbba471` 与开发提交 `3995d2c9c111fdb7fac3002e658c4cc77e282e7a` 的完整 Git tree 相同；为离线部署把同一树锚定在已存在的a484执行基线。增量bundle关闭外部delta依赖后验证与fetch成功，远端clean，Linux100项检查通过。不得用开发分支后续报告提交覆盖执行checkout。
 
 2026-10-06 03:59:44 CST更新：首seed已完成28/212张PNG，worker仍存活；最新4PNG和冻结checkout核验通过。本阶段暂计0.091366 GPUh，连同已结算旧阶段暂计1.440980 GPUh，尚非终态成本。Reader权重、配置、教师目标与损失代码SHA均与训练manifest相符。
+
+第三次实际触发2026-10-05T20:41:29.455Z已执行；现场截至2026-10-06 04:42:23 CST，Writer阶段暂计0.801421 GPUh（其中已结算0.627029），全任务暂计2.151035 GPUh。原4/16 GPUh预算未变，没有新增训练、默认晋级或资源操作。证据为heartbeat-2041-writer-live.json与heartbeat-2041-integrity.json。
