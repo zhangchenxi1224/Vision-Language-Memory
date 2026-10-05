@@ -1,0 +1,35 @@
+{
+  "schema": "context-coverage-smoke.v1",
+  "commit": "15ff2a93b5ec6222c37ec359b20cfadcabbba471",
+  "arms": {
+    "history_hard": {
+      "steps": 24,
+      "families": [
+        "application_mcq",
+        "application_open",
+        "neutral",
+        "recall"
+      ],
+      "tokens": 609,
+      "minimum_grad_norm": 1.4459002386502107e-06,
+      "png_sha256": "81274cf7ef5b6cc59149f95630330299d470928f8cec5c98e876b239bf8c7f0f",
+      "unique_targets": 19
+    },
+    "prompt_matching": {
+      "steps": 24,
+      "families": [
+        "application_mcq",
+        "application_open",
+        "neutral",
+        "recall"
+      ],
+      "tokens": 609,
+      "minimum_grad_norm": 1.7720140021992847e-07,
+      "png_sha256": "f1a4292fe5322faa3874c450019c06ccbdb36e74a82ad31bbfa2dfa1e2e41693",
+      "unique_targets": 19
+    }
+  },
+  "time": 1791222454.5689209,
+  "paired_target_cache_exact_match": true,
+  "gpu_seconds": 94.99610757827759
+}

@@ -1,0 +1,27 @@
+{
+  "pid": 3289612,
+  "hostname": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+  "started": 1791222353.8575351,
+  "command": [
+    "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+    "scripts/inspire/run_context_coverage.py",
+    "--phase",
+    "smoke",
+    "--output",
+    "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/smoke",
+    "--max-hours",
+    "0.5",
+    "--base",
+    "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+    "--reader",
+    "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+    "--prefeval",
+    "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-coverage-20261006/third_party/prefeval_reference",
+    "--ids-file",
+    "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-coverage-20261006/configs/experiments/context_coverage_ids.json",
+    "--reference",
+    "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prompt-matching-20261005/pilot-B"
+  ],
+  "commit": "15ff2a93b5ec6222c37ec359b20cfadcabbba471",
+  "gpus": "0, NVIDIA H200, 143771 MiB\n1, NVIDIA H200, 143771 MiB\n"
+}

@@ -1,0 +1,29 @@
+{
+  "hostname": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+  "probe_pid": 3320232,
+  "gpu": "0, GPU-a56f5213-6cf6-e214-b90a-c49cd41c2baa, 17402 MiB, 49 %\n1, GPU-d9ac5be8-fa4a-742e-91ff-62d1ce280a1d, 17402 MiB, 45 %\n",
+  "owner": {
+    "hostname": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+    "pid": 3299731,
+    "started": 1791222454.6999977,
+    "commit": "15ff2a93b5ec6222c37ec359b20cfadcabbba471",
+    "output": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/pilot"
+  },
+  "processes": [
+    {
+      "pid": "3299731",
+      "cmd": "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python scripts/inspire/run_context_coverage.py --phase pilot --output /inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/pilot --max-hours 6 --base /inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907 --reader /inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct --prefeval /inspire/ssd/project/exploration-topic/czxs26210936/repos/context-coverage-20261006/third_party/prefeval_reference --ids-file /inspire/ssd/project/exploration-topic/czxs26210936/repos/context-coverage-20261006/configs/experiments/context_coverage_ids.json --reference /inspire/ssd/project/exploration-topic/czxs26210936/runs/prompt-matching-20261005/pilot-B ",
+      "cwd": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-coverage-20261006"
+    },
+    {
+      "pid": "3299748",
+      "cmd": "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python scripts/experiments/prefeval_k1_teacher.py --arm B --supervision history_hard --context-suite diverse-v1 --split pilot --ids-file /inspire/ssd/project/exploration-topic/czxs26210936/repos/context-coverage-20261006/configs/experiments/context_coverage_ids.json --shards 1 --shard 0 --base /inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907 --reader /inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct --prefeval /inspire/ssd/project/exploration-topic/czxs26210936/repos/context-coverage-20261006/third_party/prefeval_reference --output /inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/pilot/history_hard/teachers --teacher-cache /inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/pilot/targets --steps 288 --snapshot-steps 72,144,216,288 ",
+      "cwd": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-coverage-20261006"
+    },
+    {
+      "pid": "3299749",
+      "cmd": "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python scripts/experiments/prefeval_k1_teacher.py --arm B --supervision prompt_matching --context-suite diverse-v1 --split pilot --ids-file /inspire/ssd/project/exploration-topic/czxs26210936/repos/context-coverage-20261006/configs/experiments/context_coverage_ids.json --shards 1 --shard 0 --base /inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907 --reader /inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct --prefeval /inspire/ssd/project/exploration-topic/czxs26210936/repos/context-coverage-20261006/third_party/prefeval_reference --output /inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/pilot/prompt_matching/teachers --teacher-cache /inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/pilot/targets --steps 288 --snapshot-steps 72,144,216,288 ",
+      "cwd": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-coverage-20261006"
+    }
+  ]
+}
