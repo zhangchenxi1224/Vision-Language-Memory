@@ -32,9 +32,9 @@ def digest(value):
     return hashlib.sha256(json.dumps(value, sort_keys=True, ensure_ascii=False).encode()).hexdigest()
 
 
-def new_keys(ids, spec):
+def new_keys(ids, spec, endpoints=NEW_ENDPOINTS):
     return {(p, q['id'], e, c, n) for p in ids for q in spec['queries']
-            for e in NEW_ENDPOINTS for c in ('memory', 'mismatch') for n in range(2)}
+            for e in endpoints for c in ('memory', 'mismatch') for n in range(2)}
 
 
 def index_rows(rows, expected):
@@ -62,7 +62,7 @@ def read_lines(path):
     return [json.loads(s) for s in Path(path).read_text(encoding='utf-8').splitlines()]
 
 
-def load_reference(reference, spec, protocol):
+def load_reference(reference, spec, protocol, cohort='dev'):
     """Authenticate the old full run before filtering its dev rows; never write it."""
     all_rows, files, identities = [], {}, []
     for shard in range(2):
@@ -85,11 +85,11 @@ def load_reference(reference, spec, protocol):
     if identities[0]['reader'] != identities[1]['reader']:
         raise ValueError('Reference Reader mismatch')
     files[str(reference/'comparison.json')] = sha(reference/'comparison.json')
-    dev_ids = set(groups['dev'])
+    dev_ids = set(groups[cohort])
     dev = [r for r in all_rows if r['pair_id'] in dev_ids]
     table = index_rows(dev, old_keys(dev_ids, spec['queries']))
     targets = {}
-    for pid in groups['dev']:
+    for pid in groups[cohort]:
         for q in spec['queries']:
             row = table[pid,q['id'],'text','text',0]
             path = Path(row['teacher_target'])
@@ -152,12 +152,12 @@ def verify_assets(upstream=UPSTREAM):
     return dict(assets=assets, files=files)
 
 
-def validate_new_row(row, targets, assets, donors, queries):
+def validate_new_row(row, targets, assets, donors, queries, split='dev'):
     pid, qid, endpoint, control, chain = (row[k] for k in KEYS)
     t = targets[f'{pid}|{qid}']
     source = donors[pid] if control == 'mismatch' else pid
     expected_donor = donors[pid] if control == 'mismatch' else None
-    if (row['split'] != 'dev' or row['family'] != queries[qid]['family']
+    if (row['split'] != split or row['family'] != queries[qid]['family']
             or row['donor_pair_id'] != expected_donor or row['png'] != assets[f'{endpoint}|{source}|{chain}']
             or row['teacher_target'] != t['path'] or row['target_ids'] != t['target_ids']
             or row['teacher_logits_sha256'] != t['logits_sha256']):
@@ -177,20 +177,21 @@ def load_target(meta, binding, row, query, eos, pad):
     return target
 
 
-def summarize(old, new, ids, spec):
+def summarize(old, new, ids, spec, endpoints=NEW_ENDPOINTS, references=None):
     table = index_rows(old, old_keys(ids,spec['queries']))
-    table.update(index_rows(new,new_keys(ids,spec)))
+    table.update(index_rows(new,new_keys(ids,spec,endpoints)))
     for pid in ids:
         for q in spec['queries']:
             ref = table[pid,q['id'],'text','text',0]
-            for endpoint in NEW_ENDPOINTS:
+            for endpoint in endpoints:
                 for control in ('memory','mismatch'):
                     for chain in range(2):
                         r=table[pid,q['id'],endpoint,control,chain]
                         if any(r[k] != ref[k] for k in ('teacher_logits_sha256','target_ids','teacher_target')):
                             raise ValueError('Unpaired teacher distribution')
     result=dict(new_rows=len(new),reused_rows=len(old),combined_rows=len(table),independent_n=len(ids),
-        metric='Conditional teacher-prefix KL; exploratory internal dev; no default promotion',families={})
+        metric=('Conditional teacher-prefix KL; trained-history fit only; no default promotion' if references else
+                'Conditional teacher-prefix KL; exploratory internal dev; no default promotion'),families={})
     for family in ('recall','application','neutral'):
         qs=[q['id'] for q in spec['queries'] if q['family']==family]
         def values(e,c):
@@ -200,15 +201,19 @@ def summarize(old, new, ids, spec):
         blank,text=values('blank','blank'),values('text','text')
         baseline=values('b730','memory')
         f=dict(blank_kl=mean(blank),text_self_consistency_kl=mean(text),endpoints={})
-        for e in (*OLD_ENDPOINTS,*NEW_ENDPOINTS):
+        for e in (*OLD_ENDPOINTS,*endpoints):
             mem,wrong=values(e,'memory'),values(e,'mismatch')
             v=dict(memory_kl=mean(mem),mismatch_kl=mean(wrong),
                 baseline_minus_memory=paired_interval([a-b for a,b in zip(baseline,mem)]),
                 mismatch_minus_memory=paired_interval([a-b for a,b in zip(wrong,mem)]),
                 blank_minus_memory=paired_interval([a-b for a,b in zip(blank,mem)]))
-            if e in NEW_ENDPOINTS:
-                direct=values('direct-'+e.rsplit('-',1)[1],'memory')
-                v['direct_minus_memory']=paired_interval([a-b for a,b in zip(direct,mem)])
+            if e in endpoints:
+                reference=references[e] if references else 'direct-'+e.rsplit('-',1)[1]
+                direct=values(reference,'memory')
+                name='paired_reference_minus_memory' if references else 'direct_minus_memory'
+                v[name]=paired_interval([a-b for a,b in zip(direct,mem)])
+                if references:
+                    v['paired_reference']=reference
             f['endpoints'][e]=v
         result['families'][family]=f
     return result
@@ -227,6 +232,10 @@ def evaluate(args):
     spec=read(args.protocol)
     validate_protocol(spec)
     frozen=read(args.output/'inputs.json')
+    cohort=frozen.get('cohort','dev')
+    endpoints=tuple(frozen.get('endpoints',NEW_ENDPOINTS))
+    if (cohort,endpoints) not in (('dev',NEW_ENDPOINTS),('pilot',('context-narrow','context-diverse'))):
+        raise ValueError('Unregistered consumer scope')
     for p,h in {**frozen['reference']['files'],**frozen['upstream']['files']}.items():
         if sha(Path(p)) != h:
             raise ValueError('Frozen source changed')
@@ -235,7 +244,7 @@ def evaluate(args):
         teacher_max_new_tokens=512,teacher_cache=None,boundary_recovery_from=None),all_rows)
     if binding != frozen['reference']['reader']:
         raise ValueError('Reader identity changed')
-    rows=cohort_rows()['dev']
+    rows=cohort_rows()[cohort]
     donors=donor_map(rows)
     rows=rows[args.shard::2]
     assets=frozen['upstream']['assets']
@@ -248,13 +257,13 @@ def evaluate(args):
     save_once(ident,identity)
     dest=args.output/f'readout-{args.shard}.jsonl'
     completed=read_lines(dest) if dest.exists() else []
-    expected=new_keys(identity['assignment'],spec)
+    expected=new_keys(identity['assignment'],spec,endpoints)
     keys=[tuple(r[k] for k in KEYS) for r in completed]
     if len(set(keys)) != len(keys) or not set(keys) <= expected:
         raise ValueError('Duplicate or foreign partial rows')
     queries={q['id']:q for q in spec['queries']}
     for r in completed:
-        validate_new_row(r,frozen['reference']['targets'],assets,donors,queries)
+        validate_new_row(r,frozen['reference']['targets'],assets,donors,queries,cohort)
         if not math.isfinite(r['kl']):
             raise ValueError('Nonfinite partial row')
     keys=set(keys)
@@ -267,7 +276,7 @@ def evaluate(args):
                 meta=frozen['reference']['targets'][f'{pid}|{q["id"]}']
                 target=load_target(meta,binding,row,q['query'],eos,processor.tokenizer.pad_token_id)
                 teacher=target['logits'].to(args.device)
-                for endpoint in NEW_ENDPOINTS:
+                for endpoint in endpoints:
                     for control in ('memory','mismatch'):
                         for chain in range(2):
                             key=(pid,q['id'],endpoint,control,chain)
@@ -283,7 +292,7 @@ def evaluate(args):
                             if not math.isfinite(kl):
                                 raise ValueError('Nonfinite KL')
                             value=dict(zip(KEYS,key))
-                            value.update(split='dev',family=q['family'],kl=kl,png=asset,donor_pair_id=donor,
+                            value.update(split=cohort,family=q['family'],kl=kl,png=asset,donor_pair_id=donor,
                                 teacher_target=meta['path'],teacher_logits_sha256=target['logits_sha256'],target_ids=target['target_ids'])
                             append(dest,value)
                             keys.add(key)
