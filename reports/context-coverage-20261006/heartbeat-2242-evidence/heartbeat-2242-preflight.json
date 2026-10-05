@@ -1,0 +1,148 @@
+{
+  "time": 1791240198.730125,
+  "hostname": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+  "gpu": "",
+  "inventory": "0, GPU-a56f5213-6cf6-e214-b90a-c49cd41c2baa, 1 MiB, 143771 MiB\n1, GPU-d9ac5be8-fa4a-742e-91ff-62d1ce280a1d, 1 MiB, 143771 MiB\n",
+  "memory": [
+    "MemTotal:       2113127672 kB",
+    "MemFree:        1537742380 kB",
+    "MemAvailable:   1571162212 kB"
+  ],
+  "processes": "    PID    PPID ELAPSED COMMAND\n      1       0   45032 /bin/bash /etc/inspire/launch_jupyterlab.sh\n    126       1   45029 /bin/bash /etc/inspire/launch_jupyterlab.sh\n    128     126   45029 /etc/inspire/bin/python /etc/inspire/bin/jupyter-lab --n\n    129       1   45029 /bin/bash /etc/inspire/launch_jupyterlab.sh\n    131     129   45029 /etc/inspire/code-server/lib/node /etc/inspire/code-serv\n    464     131   45024 /etc/inspire/code-server/lib/node /etc/inspire/code-serv\n 816265     128       1 bash\n 816598  816265       0 bash\n 816670  816598       0 python -c import base64;exec(base64.b64decode('aW1wb3J0I\n 816676       1       0 sleep 5\n 816678  816670       0 ps -eo pid,ppid,etimes,args\n",
+  "owners": [],
+  "upstream": {
+    "20261005": {
+      "path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/runs/dreamlite-aris-20261005/route-readback-v1/pm-fm/seed-20261005/V0",
+      "pngs": 180,
+      "validated": {
+        "manifest_sha256": "2eaa5d148bac621a988c94ee0792dbc33a0f7b09df7cb60d4c3bc831b0b60743",
+        "pngs": 180
+      },
+      "manifest": {
+        "checkpoint_sha256": "d1956bd2009ebe9e39601e992a5ee53765a194d1fb20a0d8e757749a1efd41e8",
+        "split": "dev",
+        "steps": 28,
+        "cfg": 1,
+        "noise_chains": 2,
+        "inter_turns": 0,
+        "state": "only reopened uint8 RGB PNG; fresh Gaussian each write",
+        "initial_variants_sha256": "12ac93a5db22d528b10f2165d701e9c7fa2aec33920699cc2f64218d0a300dd7",
+        "initial_variant": 0
+      },
+      "checkpoint_receipt": {
+        "checkpoint_sha256": "d1956bd2009ebe9e39601e992a5ee53765a194d1fb20a0d8e757749a1efd41e8",
+        "execution": {
+          "commit": "d4a51141569e7caf6a6ba5fbd21a96afd9579478",
+          "host": "prefeval-k1-read-h200x2-20260924--ab87355e23f9-wlaaegxcl7",
+          "implementation_sha256": "c3c16ce4fec5baac3ec44626d6abc25a217fae33a2cfcd2900d15f246fda99e1",
+          "runtime": {
+            "cuda_visible_devices": "GPU-4f738315-098c-f63c-e050-6dcbeb9a2e87",
+            "determinism": {
+              "cuda_matmul_allow_tf32": false,
+              "cudnn_allow_tf32": false,
+              "cudnn_benchmark": false,
+              "cudnn_deterministic": true,
+              "deterministic_algorithms": true,
+              "deterministic_warn_only": false,
+              "environment": {
+                "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+                "MKL_NUM_THREADS": "1",
+                "OMP_NUM_THREADS": "1",
+                "PYTHONHASHSEED": "0",
+                "TOKENIZERS_PARALLELISM": "false"
+              },
+              "float32_matmul_precision": "highest",
+              "sdpa": {
+                "cudnn": false,
+                "flash": false,
+                "math": true,
+                "memory_efficient": false
+              },
+              "seed": 20261005
+            },
+            "gpu": "NVIDIA H200",
+            "versions": {
+              "cuda": "12.8",
+              "python": "3.12.3",
+              "torch": "2.7.0a0+ecf3bae40a.nv25.02",
+              "transformers": "4.57.3"
+            }
+          },
+          "source_manifest_sha256": "12fadf16c9bf272b3700cb448d15db3ee7392fa0d385a2437a0c39a83e09faf2"
+        },
+        "manifest_sha256": "b991f8da62975b3274b9c7e4dca70d4d763ae69ab1157a09bf89ebf216552428",
+        "optimization_sha256": "530e6864b5e75fd23ec8053e10af00f830dede1e8fcd3d72b6f0acc6e4bfb694",
+        "resume_sha256": "248ad2b2b7c5731e471cc817e7f9203eda1c08fd3de3138589caa76f962e9fbd",
+        "scientific_scores": "pending",
+        "status": "completed",
+        "steps": 128,
+        "targets": 512
+      }
+    },
+    "20261006": {
+      "path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/runs/dreamlite-aris-20261005/route-readback-v1/pm-fm/seed-20261006/V0",
+      "pngs": 153,
+      "validated": null,
+      "manifest": {
+        "checkpoint_sha256": "647243c2865b440fabdc8c9e69fb4b01fe89a05cb061ff33682c9c078eda2091",
+        "split": "dev",
+        "steps": 28,
+        "cfg": 1,
+        "noise_chains": 2,
+        "inter_turns": 0,
+        "state": "only reopened uint8 RGB PNG; fresh Gaussian each write",
+        "initial_variants_sha256": "12ac93a5db22d528b10f2165d701e9c7fa2aec33920699cc2f64218d0a300dd7",
+        "initial_variant": 0
+      },
+      "checkpoint_receipt": {
+        "checkpoint_sha256": "647243c2865b440fabdc8c9e69fb4b01fe89a05cb061ff33682c9c078eda2091",
+        "execution": {
+          "commit": "d4a51141569e7caf6a6ba5fbd21a96afd9579478",
+          "host": "prefeval-k1-read-h200x2-20260924--ab87355e23f9-wlaaegxcl7",
+          "implementation_sha256": "c3c16ce4fec5baac3ec44626d6abc25a217fae33a2cfcd2900d15f246fda99e1",
+          "runtime": {
+            "cuda_visible_devices": "GPU-58ce319d-a9c9-c6fd-75e0-bdff5bbf9336",
+            "determinism": {
+              "cuda_matmul_allow_tf32": false,
+              "cudnn_allow_tf32": false,
+              "cudnn_benchmark": false,
+              "cudnn_deterministic": true,
+              "deterministic_algorithms": true,
+              "deterministic_warn_only": false,
+              "environment": {
+                "CUBLAS_WORKSPACE_CONFIG": ":4096:8",
+                "MKL_NUM_THREADS": "1",
+                "OMP_NUM_THREADS": "1",
+                "PYTHONHASHSEED": "0",
+                "TOKENIZERS_PARALLELISM": "false"
+              },
+              "float32_matmul_precision": "highest",
+              "sdpa": {
+                "cudnn": false,
+                "flash": false,
+                "math": true,
+                "memory_efficient": false
+              },
+              "seed": 20261006
+            },
+            "gpu": "NVIDIA H200",
+            "versions": {
+              "cuda": "12.8",
+              "python": "3.12.3",
+              "torch": "2.7.0a0+ecf3bae40a.nv25.02",
+              "transformers": "4.57.3"
+            }
+          },
+          "source_manifest_sha256": "70165ba8d4d1c5a5617e5c07daae359d08d4b267e0fba6dfeb51cc9ea16eed42"
+        },
+        "manifest_sha256": "87c09ca6978d53435871fa31bfdb457ed2394650af4e35bbd7288d1cee8688cb",
+        "optimization_sha256": "ec822f6efd0349aee6341982fd647687d71ed678681fd8629960274bf9b575e6",
+        "resume_sha256": "34fa98941c3c8284f5e404f7cc8c547694596382f3da3ad74a76e24cbd9513b6",
+        "scientific_scores": "pending",
+        "status": "completed",
+        "steps": 128,
+        "targets": 512
+      }
+    }
+  }
+}

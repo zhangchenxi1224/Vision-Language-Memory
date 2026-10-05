@@ -1,0 +1,89 @@
+{
+  "time": 1791240714.9874785,
+  "status": {
+    "status": "running",
+    "time": 1791240629.4243104,
+    "commit": "c45ab75678b46812a5ad7a59bfcbd66eee97bcb9",
+    "previous_gpu_hours": 3.4249448813994725,
+    "remaining_gpu_seconds": 3600
+  },
+  "owner": {
+    "pid": 846942,
+    "host": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+    "started": 1791240598.9954915,
+    "commit": "c45ab75678b46812a5ad7a59bfcbd66eee97bcb9"
+  },
+  "attempts": [
+    {
+      "job": {
+        "name": "evaluate-1",
+        "gpu": 1,
+        "command": [
+          "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+          "scripts/experiments/prefeval_route_functional.py",
+          "--output",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/route-functional-v1",
+          "--reader",
+          "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+          "--protocol",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-route-functional-20261006/configs/experiments/context_readout_audit.json",
+          "--shard",
+          "1"
+        ]
+      },
+      "command_sha256": "987a9811344b468a428d62384fbb0d5254d23bae196200eddd3721c6a50f91fe",
+      "hostname": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+      "started": 1791240629.427811,
+      "pid": 849328,
+      "alive": true,
+      "cmdline": "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python scripts/experiments/prefeval_route_functional.py --output /inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/route-functional-v1 --reader /inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct --protocol /inspire/ssd/project/exploration-topic/czxs26210936/repos/context-route-functional-20261006/configs/experiments/context_readout_audit.json --shard 1 ",
+      "namespace_pid": [
+        "NSpid:\t849328"
+      ],
+      "cuda_visible_devices": "CUDA_VISIBLE_DEVICES=1"
+    },
+    {
+      "job": {
+        "name": "evaluate-0",
+        "gpu": 0,
+        "command": [
+          "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+          "scripts/experiments/prefeval_route_functional.py",
+          "--output",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/route-functional-v1",
+          "--reader",
+          "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+          "--protocol",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-route-functional-20261006/configs/experiments/context_readout_audit.json",
+          "--shard",
+          "0"
+        ]
+      },
+      "command_sha256": "8c2f1754f00f52a9649a80faeaa21ad934ddf58e206d1e4644afe5e08379dea5",
+      "hostname": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+      "started": 1791240629.42734,
+      "pid": 849327,
+      "alive": true,
+      "cmdline": "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python scripts/experiments/prefeval_route_functional.py --output /inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/route-functional-v1 --reader /inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct --protocol /inspire/ssd/project/exploration-topic/czxs26210936/repos/context-route-functional-20261006/configs/experiments/context_readout_audit.json --shard 0 ",
+      "namespace_pid": [
+        "NSpid:\t849327"
+      ],
+      "cuda_visible_devices": "CUDA_VISIBLE_DEVICES=0"
+    }
+  ],
+  "gpu": "GPU-a56f5213-6cf6-e214-b90a-c49cd41c2baa, 271084, 10320 MiB\nGPU-d9ac5be8-fa4a-742e-91ff-62d1ce280a1d, 271085, 10358 MiB\n",
+  "rows": {
+    "readout-0.jsonl": 625,
+    "readout-1.jsonl": 615
+  },
+  "partial_rows_integrity_verified": 1240,
+  "sample_teacher_tensors_verified": 12,
+  "pad_token_id": null,
+  "frozen_source_pngs": 360,
+  "reused_source_pngs": 540,
+  "reused_teacher_targets": 1080,
+  "inputs_sha256": "6f2b72d1e3f51262208346afbd14070b06101cb6378edd291fda680e5342e11f",
+  "commit": "c45ab75678b46812a5ad7a59bfcbd66eee97bcb9",
+  "dirty": "",
+  "gpu_hours_provisional": 0.047580385075675115
+}

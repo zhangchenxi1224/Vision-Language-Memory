@@ -40,3 +40,5 @@
 ## 2026-10-06 共享Writer诊断完成后的决定
 
 既有Direct128两个seed的17,808行功能读回完成，全636PNG与1,272教师分布独立核验，见 `../reports/context-coverage-20261006/WRITER_RESULT.md`。dev90恢复/开放应用未优于B730，匹配未优于同主题错配，训练侧小幅恢复变化不足以证明内容记忆或新历史泛化。保留默认。下一项有界诊断为复用已训练PM→FM的完整dev90图片，在相同12问题和教师缓存下比较路线；协议 `../reports/context-coverage-20261006/ROUTE_FUNCTIONAL_PLAN.md` 已冻结，等待另一主线完整图片，不重复其生成或评测。此时新增执行器尚未部署。
+
+2026-10-06 06:50 CST执行进展：两seed上游图片完整后，只读PM→FM功能对照已部署，详见 `../reports/context-coverage-20261006/ROUTE_DEPLOYMENT.md`。新增评测运行中，尚无完整路线评分；科学问题、缓存与预算按已登记协议不变。

@@ -1,5 +1,17 @@
 # 每小时执行入口
 
+当前阶段（2026-10-06 06:51:54 CST）：PM→FM功能对照已在原H200x2实例运行，独立checkout context-route-functional-20261006，冻结c45ab75678b46812a5ad7a59bfcbd66eee97bcb9，output为原run根route-functional-v1。controller846942、worker849327/849328实际cmdline及两张GPU工作核验通过；首批625+615=1,240行绑定检查通过。源图片360/360、旧dev图片540、教师文件1,080均已SHA冻结，12教师张量抽查通过。结果pending，不缩分母、不重复启动。
+
+本轮8,640新行、合并23,760行；同12问题、旧只读教师缓存、dev90、2训练seed各2噪声。源代码/资源/输入/测试与首批实测见ROUTE_DEPLOYMENT.md和heartbeat-2242-evidence。Windows/Linux各13相关检查通过。旧17,808行Writer结果不重跑，不改其output或执行checkout，不改ARIS主线。
+
+下一次先读DEPLOYMENT.json、ARIS tracker和route-functional-v1/status.json/active-owner/attempts，再核对实际PID/cmdline/GPU。正在运行只核验推进；完成则按ROUTE_DEPLOYMENT.md全量复核分母、PNG、教师张量、共同前缀与偏好级报告。两finished收据完整前不报路线胜负。nvidia-smi host PID与容器PID不同，使用原始进程命令、CUDA绑定、启动前空闲现场和输出证据，不把host PID当本容器kill目标。
+
+新增阶段1 GPUh上限计入原16池，attempts计费不得和receipts重复相加。已结算旧阶段3.424944881399 GPUh，新阶段截至此快照暂计0.047580385076 GPUh，全任务暂计3.472525266475 GPUh；终态前不当作最终费用。失败/中断先确认原worker停止并结算，再按冻结协议恢复；到上限不自动重置额度。
+
+原smoke、16历史pilot、教师审计、Direct Writer诊断均完成。默认不晋级；训练loss/教师KL/partial比较均不能替代新历史内容特异性及完整MCQ/free/保持证据。无其他资源或任务变更。第五次实际触发2026-10-05T22:42:31.287Z已执行，后续每小时继续，只有实质进展/完成/故障时通知。
+
+## 前次状态记录（以下仅供溯源，以当前状态为准）
+
 当前阶段（2026-10-06 05:52 CST）：原16历史pilot、2,496行教师审计及17,808行共享Writer功能诊断均完成，不重跑。最新报告WRITER_RESULT.md；完整comparison及05:42现场/05:44全量审计见DEPLOYMENT.json。两训练seed在dev90恢复/开放应用均未显示收益，匹配图未优于同主题错配；默认不晋级。pilot16小幅恢复改善不当作新历史泛化。text=0是自一致性检查，不是准确率。
 
 Writer两个rollout各212/212、两个readout各8,904行，全部exit0；636PNG、1,272教师张量、精确分母/共同前缀/donor全量核验，报告独立重算完全一致。controller4012735及四worker均已退出，active-owner消失，现场GPU无计算进程；执行checkout481335eb8df7efa05e41ff9cc337d2ef2670516e保持clean。不能恢复已完成控制器。Writer已结算2.075331035654 GPUh，全任务3.424944881399 GPUh（非点券账单），没有未结算活跃attempt。

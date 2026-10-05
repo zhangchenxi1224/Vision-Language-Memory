@@ -1,0 +1,30 @@
+{
+  "time": 1791240598.9340122,
+  "hostname": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+  "pid": 846942,
+  "command": [
+    "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+    "scripts/inspire/run_route_functional.py",
+    "--output",
+    "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/route-functional-v1",
+    "--reference",
+    "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/writer-readout-v1",
+    "--reader",
+    "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct"
+  ],
+  "commit": "c45ab75678b46812a5ad7a59bfcbd66eee97bcb9",
+  "upstream": {
+    "20261005": {
+      "manifest_sha256": "2eaa5d148bac621a988c94ee0792dbc33a0f7b09df7cb60d4c3bc831b0b60743",
+      "pngs": 180
+    },
+    "20261006": {
+      "manifest_sha256": "56cf1b40168b4577c3ca1e31bed19d7667c4fd533753f33d6400b6502801949d",
+      "pngs": 180
+    }
+  },
+  "prelaunch_gpu_processes": "",
+  "prelaunch_owners": [],
+  "new_gpu_hours_cap": 1,
+  "campaign_cap": 16
+}
