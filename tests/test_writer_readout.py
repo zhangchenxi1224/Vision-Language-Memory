@@ -62,3 +62,26 @@ def test_unsettled_cost_and_mutated_identity_rejected(tmp_path):
     save_once(ident, {'weight':'one'})
     with pytest.raises(ValueError, match='changed'):
         save_once(ident, {'weight':'two'})
+
+
+def test_upstream_manifest_uses_canonical_object_digest(tmp_path, monkeypatch):
+    import hashlib
+    import scripts.experiments.prefeval_writer_readout as module
+    folder = tmp_path/'seed-20261005'/'warmup'
+    folder.mkdir(parents=True)
+    manifest = dict(seed=20261005, stage='warmup', mode='use', steps=128,
+        parent_sha256=module.PARENT_SHA, split='train', preferences=730,
+        sample_steps=28, cfg=1.0, pixels=1024, supervision='full_vocabulary_prompt_matching')
+    (folder/'manifest.json').write_text(json.dumps(manifest,indent=2))
+    (folder/'optimization.jsonl').write_text('\n'.join(json.dumps({'step':i}) for i in range(1,129)))
+    (folder/'checkpoint-final.pt').write_bytes(b'frozen-test-checkpoint')
+    receipt = dict(status='completed', steps=128, manifest=manifest,
+        manifest_sha256=hashlib.sha256(json.dumps(manifest,sort_keys=True,ensure_ascii=False).encode()).hexdigest(),
+        optimization_sha256=module.sha(folder/'optimization.jsonl'),
+        checkpoint_sha256=module.sha(folder/'checkpoint-final.pt'))
+    (folder/'complete.json').write_text(json.dumps(receipt))
+    monkeypatch.setattr(module,'UPSTREAM',tmp_path)
+    assert module.verify_completion('direct-20261005')['checkpoint_sha256'] == receipt['checkpoint_sha256']
+    (folder/'manifest.json').write_text(json.dumps({**manifest,'seed':1}))
+    with pytest.raises(ValueError,match='Incomplete'):
+        module.verify_completion('direct-20261005')

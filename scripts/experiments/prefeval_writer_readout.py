@@ -2,6 +2,7 @@
 import argparse
 from collections import defaultdict
 import json
+import hashlib
 import math
 from pathlib import Path
 import sys
@@ -55,7 +56,7 @@ def verify_completion(endpoint):
     else:
         manifest = read(folder / 'manifest.json')
         if (done['status'] != 'completed' or done['steps'] != 128 or done['manifest'] != manifest
-                or sha(folder / 'manifest.json') != done['manifest_sha256']
+                or hashlib.sha256(json.dumps(manifest, sort_keys=True, ensure_ascii=False).encode()).hexdigest() != done['manifest_sha256']
                 or sha(folder / 'optimization.jsonl') != done['optimization_sha256']):
             raise ValueError('Incomplete upstream endpoint')
         expected = {'seed': int(endpoint.split('-')[1]), 'stage': 'warmup', 'mode': 'use',
