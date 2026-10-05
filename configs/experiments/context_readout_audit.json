@@ -1,0 +1,22 @@
+{
+  "schema": "dreamlite.context-readout-audit.v1",
+  "scope": "Exploratory follow-up registered after pilot MCQ results, before these query results. Frozen training histories and existing PNGs only; no training or checkpoint selection.",
+  "independent_n": 16,
+  "shards": 2,
+  "gpu_hours_cap": 1.0,
+  "budget_pool": "Within the existing 16 GPUh context-coverage campaign cap, not an additional training allocation",
+  "queries": [
+    {"id":"recall-1","family":"recall","query":"Write a concise profile note specifying what this user likes or dislikes and any stated conditions. Use at most two sentences."},
+    {"id":"recall-2","family":"recall","query":"Separate the user's stated preference from anything that remains unknown. Answer in at most two sentences."},
+    {"id":"recall-3","family":"recall","query":"Express the remembered preference as a short rule for an assistant. Preserve any qualifiers without inventing new ones."},
+    {"id":"recall-4","family":"recall","query":"If you could pass on only one factual note about this user's expressed preference, what would it say? Use at most two sentences."},
+    {"id":"application-1","family":"application","query":"Give a short checklist for choosing a suggestion that fits this user. Base it on the remembered preference, not invented preferences."},
+    {"id":"application-2","family":"application","query":"Give an example of advice that would conflict with this user's preference and revise it to fit. Use at most three sentences."},
+    {"id":"application-3","family":"application","query":"Explain how this user's preference should change an otherwise generic recommendation. Use at most two sentences."},
+    {"id":"application-4","family":"application","query":"Propose one concrete next action that fits the user's preference and justify the choice in one sentence."},
+    {"id":"neutral-1","family":"neutral","query":"Compute 23 times 3. Return only the number."},
+    {"id":"neutral-2","family":"neutral","query":"Translate the English word 'window' into Spanish. Return only the translated word."},
+    {"id":"neutral-3","family":"neutral","query":"Put 15, 4, 9, and 2 in ascending numerical order. Return only the numbers."},
+    {"id":"neutral-4","family":"neutral","query":"How many minutes are in two hours? Return only the number."}
+  ]
+}
