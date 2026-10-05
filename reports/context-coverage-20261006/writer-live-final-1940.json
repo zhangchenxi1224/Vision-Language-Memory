@@ -1,0 +1,64 @@
+{
+  "time": 1791230384.088255,
+  "status": {
+    "status": "running",
+    "commit": "481335eb8df7efa05e41ff9cc337d2ef2670516e",
+    "remaining_gpu_seconds": 14400
+  },
+  "png_counts": {
+    "direct-20261005": 28,
+    "direct-20261006": 0
+  },
+  "attempts": [
+    {
+      "job": {
+        "name": "rollout-direct-20261005",
+        "gpu": 0,
+        "command": [
+          "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+          "scripts/experiments/prefeval_writer_readout.py",
+          "rollout",
+          "--endpoint",
+          "direct-20261005",
+          "--output",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/writer-readout-v1",
+          "--base",
+          "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+          "--official-source",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite"
+        ]
+      },
+      "command_sha256": "343536835c34bcb5fc47b9b40c43c2b9ed4a7e9e4170a2780c1964e561963114",
+      "hostname": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+      "started": 1791230055.1709473,
+      "pid": 4013220,
+      "alive": true,
+      "cmdline": "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python scripts/experiments/prefeval_writer_readout.py rollout --endpoint direct-20261005 --output /inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/writer-readout-v1 --base /inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907 --official-source /inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite ",
+      "namespace_pid": [
+        "State:\tR (running)",
+        "NSpid:\t4013220"
+      ]
+    }
+  ],
+  "sample_verification": [
+    {
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/writer-readout-v1/images/direct-20261005/pilot/lifestyle_dietary_0017/seed-0/prefix-00.png",
+      "sha256": "859c6e726e7a3ed4b6aee49ea5059a8a97d6553f4c70d7958185c4dcc94d876d"
+    },
+    {
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/writer-readout-v1/images/direct-20261005/pilot/lifestyle_dietary_0017/seed-1/prefix-00.png",
+      "sha256": "318cb8cdf13a68ba57711ec3c1c3d7322dc38abcb963777711c2e2d39621c3cb"
+    },
+    {
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/writer-readout-v1/images/direct-20261005/pilot/lifestyle_dietary_0022/seed-0/prefix-00.png",
+      "sha256": "efd7b5048ee437cfb05015b9c66f4430dfe4af5fece3e364354810e76c48a3bf"
+    },
+    {
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/writer-readout-v1/images/direct-20261005/pilot/lifestyle_dietary_0022/seed-1/prefix-00.png",
+      "sha256": "23f47212b3959e7caed34bcb958ae1492d38941895b08795b9e675ab361f5d85"
+    }
+  ],
+  "gpu": "459799, GPU-a56f5213-6cf6-e214-b90a-c49cd41c2baa, 14118 MiB\n",
+  "accrued_gpu_hours_provisional": 0.09136591878202227,
+  "checkout_clean": true
+}

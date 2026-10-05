@@ -1,0 +1,280 @@
+{
+  "time": 1791229313.568875,
+  "host": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+  "gpu": "",
+  "runs": {
+    "20261005": {
+      "path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/runs/dreamlite-aris-20261005/mainline/seed-20261005/warmup",
+      "steps": 128,
+      "complete": {
+        "checkpoint_sha256": "a78c6f808d7fb0ecb87bcc591185cf0168f352a21d580fca9f8d175ed1e27f8c",
+        "manifest": {
+          "base_sha256": {
+            ".gitattributes": "019d31f916e3d6fb9ed369200040376aa0f395c2d412df2a22bb0664b28e4746",
+            "README.md": "f1051a6285bd9d1c8adba94634df7b6d16e641a2c5814b4f6f39073cad7f0b82",
+            "model_index.json": "1c5161bcb184ceb7c32f3610d1307030c241dbe9a4fe924e4daaceabd55455be",
+            "processor/added_tokens.json": "c0284b582e14987fbd3d5a2cb2bd139084371ed9acbae488829a1c900833c680",
+            "processor/chat_template.jinja": "3636d0f0bd6bef02654cdffdc447b79cb2cef8ab02cc75267345946291a489e4",
+            "processor/merges.txt": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5",
+            "processor/preprocessor_config.json": "93585062a80db5e8ca038efc7726a3e6411d9db948472d81d63c6303993be8c5",
+            "processor/special_tokens_map.json": "76862e765266b85aa9459767e33cbaf13970f327a0e88d1c65846c2ddd3a1ecd",
+            "processor/tokenizer.json": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+            "processor/tokenizer_config.json": "81ec7bb9530159b326c0bef1d0b6c33d392090524014ea3f0123a3c1eb9c2af5",
+            "processor/video_preprocessor_config.json": "59c5c9eb52182eb14c06ffb10ca9effd29adce5f238a95de23ca14a38dbd2cb1",
+            "processor/vocab.json": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910",
+            "scheduler/scheduler_config.json": "a20515a2393e2ed1e41a9e9fecab581cb626dc8361ee578eac8f71e8d5a9e90a",
+            "text_encoder/config.json": "79ca0168d4f0286439068ab397e610088756790a6e61dbbb8ae401e6b705f5f2",
+            "text_encoder/generation_config.json": "a12101ea177dca07e73e58c38379eac5f023e4524253df22ccfd097f6b4b6a2d",
+            "text_encoder/model.safetensors": "7de1838c87a5349b016c26a1c3f7d2bc400a3d485f95ef39a7059ffd734977a0",
+            "tokenizer/added_tokens.json": "c0284b582e14987fbd3d5a2cb2bd139084371ed9acbae488829a1c900833c680",
+            "tokenizer/chat_template.jinja": "3636d0f0bd6bef02654cdffdc447b79cb2cef8ab02cc75267345946291a489e4",
+            "tokenizer/merges.txt": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5",
+            "tokenizer/special_tokens_map.json": "76862e765266b85aa9459767e33cbaf13970f327a0e88d1c65846c2ddd3a1ecd",
+            "tokenizer/tokenizer.json": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+            "tokenizer/tokenizer_config.json": "355f2b4e5bad7b01f11ef6cb68ebc176f61b95c3276092ea225b1bea0e01e95c",
+            "tokenizer/vocab.json": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910",
+            "unet/config.json": "5bb219157837199dbe325e23e3ca0d9f8ef28b09b11e5970463b593ce526d3f2",
+            "unet/diffusion_pytorch_model.safetensors": "f983bd1710344cb44f7d12d05c0ca961984b48391dcbb095ad710609cbde3246",
+            "vae/config.json": "27fa78b2c236868031fa2108168aa9c8332d694c315c27c81f0b62677d8de6bc",
+            "vae/diffusion_pytorch_model.safetensors": "e175c3284b8514a2ecb1a70f004b0b09320decd6842e77dfebbdb5dbbdf0312b"
+          },
+          "behavior_core_sha256": "0be3dfa85132247d1ec87419c989cd4d4725c14129454494972afcfda2caba2e",
+          "betas": [
+            0.9,
+            0.999
+          ],
+          "branches": "official_three_branch_CFG_arithmetic",
+          "burn_in_distractors": [
+            0,
+            1,
+            3
+          ],
+          "cfg": 1.0,
+          "checkpoint_interval": 8,
+          "checkpoint_selection": "fixed_final_endpoint_only",
+          "clip_norm": 1.0,
+          "commit": "6e0406865043047a74ad544610fc71d6aa61a301",
+          "data_noise_namespace": "warmup:use",
+          "data_sha256": "a4bd3c3cf050779fbe8ca1473c38a61c618d8a80d00c6362764e7bd14e9e2ba9",
+          "effective_batch": 4,
+          "eps": 1e-08,
+          "frozen": [
+            "Reader",
+            "VAE",
+            "text_encoder"
+          ],
+          "gradient": "all_28_steps_nonreentrant_UNet_checkpointing; checkpointed_VAE_decode",
+          "implementation_sha256": "8fe6eddcc2aba40c1e9f3403aac85bee0834f5354cc3db21b7a95421da17b52e",
+          "interpretation": "joint_objective_and_training_state_distribution_contrast_not_single_factor_ablation",
+          "legacy_fm_weight": 0.0,
+          "lr": 1e-06,
+          "mode": "use",
+          "official_commit": "a6e20c8cc94027f37dd7c5a81b0b3b472aa18409",
+          "optimizer": "fresh_AdamW",
+          "parent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b730-exposure512-20260927/train/checkpoint-final.pt",
+          "parent_receipt_sha256": null,
+          "parent_resume_sha256": null,
+          "parent_sha256": "088c003d24cb2982571d763dd218c57f72ce80853615a09a97d8b760ae880c5b",
+          "pixels": 1024,
+          "preferences": 730,
+          "previous_rounds": "fresh_current_student_PNG_burn_in; no_grad_and_detached",
+          "quantization": "actual_PNG_save_reopen_forward; identity_STE_for_uint8_quantization_backward",
+          "reader_device": "cuda:1",
+          "sample_steps": 28,
+          "schema": "dreamlite.shared-writer-behavior.v1",
+          "scope": "training",
+          "seed": 20261005,
+          "split": "train",
+          "stage": "warmup",
+          "steps": 128,
+          "supervised_retention_positions": [
+            1,
+            2,
+            4
+          ],
+          "supervision": "full_vocabulary_prompt_matching",
+          "task_reduction": "per_token_mean_then_task_mean",
+          "task_weights": {
+            "application": 0.5,
+            "fact": 0.5
+          },
+          "tasks": {
+            "application": "T1/T2/T3 official MCQ with deterministic option permutations",
+            "fact": "What preference has the user expressed? State it briefly, including any stated conditions."
+          },
+          "teacher_binding": {
+            "continuation": "teacher_greedy_exact_token_ids_with_real_assistant_eos",
+            "loss": "full_vocab_soft_cross_entropy_temperature_squared",
+            "reader_config_sha256": {
+              "chat_template.json": "6f8a6a55027e3da5160105556cda5dd69f6423f1c32645f6730d32de7773d0c4",
+              "config.json": "edac7703329133edfc53e46ac0081835144c99d7eebf28b71c732694d435224d",
+              "model.safetensors.index.json": "58a7841d7bff2548dd91577d216274a83cf1b500bc6a534b809d6c1b1707cf2b",
+              "preprocessor_config.json": "27225450ac9c6529872ee1924fcb0962ff5634834f817040f444118116f4e516",
+              "tokenizer.json": "a5d85b6dcc535e6b93115a9ef287e6132fdbf30270da6218194ba742261173c7",
+              "tokenizer_config.json": "c2da771801886ad9ae98181793ffd3dfb7f1af30f6f7c6a4e15d7dbba52e2399"
+            },
+            "reader_objective_sha256": "f0c5b07877e02f17bb0fd201ae11e25b12687238d51a624cc063ec062de3d660",
+            "reader_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+            "reader_weights_sha256": {
+              "model-00001-of-00002.safetensors": "30a01a0556622645a3cce87b655bbbbbc1f170c196099f1b666c93202c3339a9",
+              "model-00002-of-00002.safetensors": "046296a2a387efb43b0c997d5833c789604d168834f6e0d3064bf7bb13d002a6"
+            },
+            "supervision": "prompt_matching",
+            "target_pipeline_sha256": "c81001756493bdb7ae20843f842e768cf52fa15e6befd17f8e57cfa048178cea",
+            "teacher_history_scope": "history[:2]; no future exchanges or answers",
+            "teacher_max_new_tokens": 512,
+            "teacher_reference": "uniform_128_over_255_rgb_1024",
+            "teacher_source": "same_frozen_reader_initial_observed_exchange",
+            "temperature": 1.0,
+            "training_history_sha256": "c7e2f92f2c5a30288b1c2e401d71638d620c6135df3997275a4eb87131993ed1"
+          },
+          "teacher_history": "initial_observed_exchange_only_history[:2]",
+          "teacher_max_new_tokens": 512,
+          "temperature": 1.0,
+          "trainable": "full_UNet",
+          "use_retain_ratio": "initial_only",
+          "weight_decay": 0.01,
+          "writer_device": "cuda:0"
+        },
+        "manifest_sha256": "2824f176aeb017b2b00b9c585f59465fd6fe209f57d1d3ba3d0fa0683ab542c1",
+        "optimization_sha256": "ffe24e7608ccfe62f2a8ae35069d752f29c2b8b135c70b6e519d78ddc651ec9a",
+        "resume_sha256": "b677e6ea853972780d1e5055ec2e147f3200753685e204638e4bc60ef2d3d263",
+        "status": "completed",
+        "steps": 128
+      },
+      "manifest": {
+        "base_sha256": {
+          ".gitattributes": "019d31f916e3d6fb9ed369200040376aa0f395c2d412df2a22bb0664b28e4746",
+          "README.md": "f1051a6285bd9d1c8adba94634df7b6d16e641a2c5814b4f6f39073cad7f0b82",
+          "model_index.json": "1c5161bcb184ceb7c32f3610d1307030c241dbe9a4fe924e4daaceabd55455be",
+          "processor/added_tokens.json": "c0284b582e14987fbd3d5a2cb2bd139084371ed9acbae488829a1c900833c680",
+          "processor/chat_template.jinja": "3636d0f0bd6bef02654cdffdc447b79cb2cef8ab02cc75267345946291a489e4",
+          "processor/merges.txt": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5",
+          "processor/preprocessor_config.json": "93585062a80db5e8ca038efc7726a3e6411d9db948472d81d63c6303993be8c5",
+          "processor/special_tokens_map.json": "76862e765266b85aa9459767e33cbaf13970f327a0e88d1c65846c2ddd3a1ecd",
+          "processor/tokenizer.json": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+          "processor/tokenizer_config.json": "81ec7bb9530159b326c0bef1d0b6c33d392090524014ea3f0123a3c1eb9c2af5",
+          "processor/video_preprocessor_config.json": "59c5c9eb52182eb14c06ffb10ca9effd29adce5f238a95de23ca14a38dbd2cb1",
+          "processor/vocab.json": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910",
+          "scheduler/scheduler_config.json": "a20515a2393e2ed1e41a9e9fecab581cb626dc8361ee578eac8f71e8d5a9e90a",
+          "text_encoder/config.json": "79ca0168d4f0286439068ab397e610088756790a6e61dbbb8ae401e6b705f5f2",
+          "text_encoder/generation_config.json": "a12101ea177dca07e73e58c38379eac5f023e4524253df22ccfd097f6b4b6a2d",
+          "text_encoder/model.safetensors": "7de1838c87a5349b016c26a1c3f7d2bc400a3d485f95ef39a7059ffd734977a0",
+          "tokenizer/added_tokens.json": "c0284b582e14987fbd3d5a2cb2bd139084371ed9acbae488829a1c900833c680",
+          "tokenizer/chat_template.jinja": "3636d0f0bd6bef02654cdffdc447b79cb2cef8ab02cc75267345946291a489e4",
+          "tokenizer/merges.txt": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5",
+          "tokenizer/special_tokens_map.json": "76862e765266b85aa9459767e33cbaf13970f327a0e88d1c65846c2ddd3a1ecd",
+          "tokenizer/tokenizer.json": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+          "tokenizer/tokenizer_config.json": "355f2b4e5bad7b01f11ef6cb68ebc176f61b95c3276092ea225b1bea0e01e95c",
+          "tokenizer/vocab.json": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910",
+          "unet/config.json": "5bb219157837199dbe325e23e3ca0d9f8ef28b09b11e5970463b593ce526d3f2",
+          "unet/diffusion_pytorch_model.safetensors": "f983bd1710344cb44f7d12d05c0ca961984b48391dcbb095ad710609cbde3246",
+          "vae/config.json": "27fa78b2c236868031fa2108168aa9c8332d694c315c27c81f0b62677d8de6bc",
+          "vae/diffusion_pytorch_model.safetensors": "e175c3284b8514a2ecb1a70f004b0b09320decd6842e77dfebbdb5dbbdf0312b"
+        },
+        "behavior_core_sha256": "0be3dfa85132247d1ec87419c989cd4d4725c14129454494972afcfda2caba2e",
+        "betas": [
+          0.9,
+          0.999
+        ],
+        "branches": "official_three_branch_CFG_arithmetic",
+        "burn_in_distractors": [
+          0,
+          1,
+          3
+        ],
+        "cfg": 1.0,
+        "checkpoint_interval": 8,
+        "checkpoint_selection": "fixed_final_endpoint_only",
+        "clip_norm": 1.0,
+        "commit": "6e0406865043047a74ad544610fc71d6aa61a301",
+        "data_noise_namespace": "warmup:use",
+        "data_sha256": "a4bd3c3cf050779fbe8ca1473c38a61c618d8a80d00c6362764e7bd14e9e2ba9",
+        "effective_batch": 4,
+        "eps": 1e-08,
+        "frozen": [
+          "Reader",
+          "VAE",
+          "text_encoder"
+        ],
+        "gradient": "all_28_steps_nonreentrant_UNet_checkpointing; checkpointed_VAE_decode",
+        "implementation_sha256": "8fe6eddcc2aba40c1e9f3403aac85bee0834f5354cc3db21b7a95421da17b52e",
+        "interpretation": "joint_objective_and_training_state_distribution_contrast_not_single_factor_ablation",
+        "legacy_fm_weight": 0.0,
+        "lr": 1e-06,
+        "mode": "use",
+        "official_commit": "a6e20c8cc94027f37dd7c5a81b0b3b472aa18409",
+        "optimizer": "fresh_AdamW",
+        "parent_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b730-exposure512-20260927/train/checkpoint-final.pt",
+        "parent_receipt_sha256": null,
+        "parent_resume_sha256": null,
+        "parent_sha256": "088c003d24cb2982571d763dd218c57f72ce80853615a09a97d8b760ae880c5b",
+        "pixels": 1024,
+        "preferences": 730,
+        "previous_rounds": "fresh_current_student_PNG_burn_in; no_grad_and_detached",
+        "quantization": "actual_PNG_save_reopen_forward; identity_STE_for_uint8_quantization_backward",
+        "reader_device": "cuda:1",
+        "sample_steps": 28,
+        "schema": "dreamlite.shared-writer-behavior.v1",
+        "scope": "training",
+        "seed": 20261005,
+        "split": "train",
+        "stage": "warmup",
+        "steps": 128,
+        "supervised_retention_positions": [
+          1,
+          2,
+          4
+        ],
+        "supervision": "full_vocabulary_prompt_matching",
+        "task_reduction": "per_token_mean_then_task_mean",
+        "task_weights": {
+          "application": 0.5,
+          "fact": 0.5
+        },
+        "tasks": {
+          "application": "T1/T2/T3 official MCQ with deterministic option permutations",
+          "fact": "What preference has the user expressed? State it briefly, including any stated conditions."
+        },
+        "teacher_binding": {
+          "continuation": "teacher_greedy_exact_token_ids_with_real_assistant_eos",
+          "loss": "full_vocab_soft_cross_entropy_temperature_squared",
+          "reader_config_sha256": {
+            "chat_template.json": "6f8a6a55027e3da5160105556cda5dd69f6423f1c32645f6730d32de7773d0c4",
+            "config.json": "edac7703329133edfc53e46ac0081835144c99d7eebf28b71c732694d435224d",
+            "model.safetensors.index.json": "58a7841d7bff2548dd91577d216274a83cf1b500bc6a534b809d6c1b1707cf2b",
+            "preprocessor_config.json": "27225450ac9c6529872ee1924fcb0962ff5634834f817040f444118116f4e516",
+            "tokenizer.json": "a5d85b6dcc535e6b93115a9ef287e6132fdbf30270da6218194ba742261173c7",
+            "tokenizer_config.json": "c2da771801886ad9ae98181793ffd3dfb7f1af30f6f7c6a4e15d7dbba52e2399"
+          },
+          "reader_objective_sha256": "f0c5b07877e02f17bb0fd201ae11e25b12687238d51a624cc063ec062de3d660",
+          "reader_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+          "reader_weights_sha256": {
+            "model-00001-of-00002.safetensors": "30a01a0556622645a3cce87b655bbbbbc1f170c196099f1b666c93202c3339a9",
+            "model-00002-of-00002.safetensors": "046296a2a387efb43b0c997d5833c789604d168834f6e0d3064bf7bb13d002a6"
+          },
+          "supervision": "prompt_matching",
+          "target_pipeline_sha256": "c81001756493bdb7ae20843f842e768cf52fa15e6befd17f8e57cfa048178cea",
+          "teacher_history_scope": "history[:2]; no future exchanges or answers",
+          "teacher_max_new_tokens": 512,
+          "teacher_reference": "uniform_128_over_255_rgb_1024",
+          "teacher_source": "same_frozen_reader_initial_observed_exchange",
+          "temperature": 1.0,
+          "training_history_sha256": "c7e2f92f2c5a30288b1c2e401d71638d620c6135df3997275a4eb87131993ed1"
+        },
+        "teacher_history": "initial_observed_exchange_only_history[:2]",
+        "teacher_max_new_tokens": 512,
+        "temperature": 1.0,
+        "trainable": "full_UNet",
+        "use_retain_ratio": "initial_only",
+        "weight_decay": 0.01,
+        "writer_device": "cuda:0"
+      }
+    },
+    "20261006": {
+      "path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/runs/dreamlite-aris-20261005/mainline/seed-20261006/warmup",
+      "steps": 114,
+      "complete": null
+    }
+  }
+}

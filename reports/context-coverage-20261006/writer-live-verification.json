@@ -1,0 +1,54 @@
+{
+  "time": 1791230097.0080667,
+  "host": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+  "status": {
+    "status": "running",
+    "commit": "481335eb8df7efa05e41ff9cc337d2ef2670516e",
+    "remaining_gpu_seconds": 14400
+  },
+  "controller_pid": 4012735,
+  "controller_alive": true,
+  "attempts": [
+    {
+      "job": {
+        "name": "rollout-direct-20261005",
+        "gpu": 0,
+        "command": [
+          "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+          "scripts/experiments/prefeval_writer_readout.py",
+          "rollout",
+          "--endpoint",
+          "direct-20261005",
+          "--output",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/writer-readout-v1",
+          "--base",
+          "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+          "--official-source",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite"
+        ]
+      },
+      "command_sha256": "343536835c34bcb5fc47b9b40c43c2b9ed4a7e9e4170a2780c1964e561963114",
+      "hostname": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+      "started": 1791230055.1709473,
+      "pid": 4013220,
+      "alive": true,
+      "cmdline": "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python scripts/experiments/prefeval_writer_readout.py rollout --endpoint direct-20261005 --output /inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/writer-readout-v1 --base /inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907 --official-source /inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite "
+    }
+  ],
+  "png_completed": {
+    "direct-20261005": 1,
+    "direct-20261006": 0
+  },
+  "verified_new_pngs": [
+    {
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/writer-readout-v1/images/direct-20261005/pilot/education_learning_styles_0001/seed-0/prefix-00.png",
+      "sha256": "2c558f6bd62eeec76f280851d6658ee2e168911fd8da4e1d38a466d18b0ca64d"
+    }
+  ],
+  "gpu": "459799, [Not Found], 14118 MiB\n",
+  "launch_tail": "",
+  "log_tail": {
+    "rollout-direct-20261005.log": "\nLoading pipeline components...:   0%|                    | 0/6 [00:00<?, ?it/s]\nLoading pipeline components...:  17%|\u2588\u2588          | 1/6 [00:00<00:01,  4.11it/s]\nLoading pipeline components...:  67%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588    | 4/6 [00:10<00:05,  2.85s/it]\nLoading pipeline components...:  83%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588  | 5/6 [00:12<00:02,  2.53s/it]\nLoading pipeline components...: 100%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588| 6/6 [00:12<00:00,  1.96s/it]\nLoading pipeline components...: 100%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588| 6/6 [00:12<00:00,  2.14s/it]\n/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/lib/python3.12/site-packages/diffusers/loaders/lora_pipeline.py:6850: FutureWarning: `LoraLoaderMixin` is deprecated and will be removed in version 1.0.0. LoraLoaderMixin is deprecated and this will be removed in a future version. Please use `StableDiffusionLoraLoaderMixin`, instead.\n  deprecate(\"LoraLoaderMixin\", \"1.0.0\", deprecation_message)\n{\"completed\": \"education_learning_styles:0001\", \"chain\": 0, \"inter_turns\": 0}\n"
+  },
+  "accrued_gpu_hours_provisional": 0.011621422039137946
+}

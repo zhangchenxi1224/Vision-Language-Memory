@@ -1,0 +1,72 @@
+{
+  "time": 1791229926.7053795,
+  "host": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+  "ready": {
+    "b730": {
+      "checkpoint": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b730-exposure512-20260927/train/checkpoint-final.pt",
+      "checkpoint_sha256": "088c003d24cb2982571d763dd218c57f72ce80853615a09a97d8b760ae880c5b",
+      "receipt": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b730-exposure512-20260927/train/complete.json",
+      "receipt_sha256": "fe7738b2215397852f51e36d64d39470ce36e0941e02329bf5366270fbfa55ac"
+    },
+    "direct-20261005": {
+      "checkpoint": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/runs/dreamlite-aris-20261005/mainline/seed-20261005/warmup/checkpoint-final.pt",
+      "checkpoint_sha256": "a78c6f808d7fb0ecb87bcc591185cf0168f352a21d580fca9f8d175ed1e27f8c",
+      "receipt": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/runs/dreamlite-aris-20261005/mainline/seed-20261005/warmup/complete.json",
+      "receipt_sha256": "f418cf67460d1d0c62f9cf1e79cdcf677d3bcfb621c3a060817bc45d13339349"
+    }
+  },
+  "parent_pngs_verified": 212,
+  "base_files_verified": 27,
+  "gpu_processes": "",
+  "processes": [
+    {
+      "pid": 1,
+      "cmd": "/bin/bash /etc/inspire/launch_jupyterlab.sh "
+    },
+    {
+      "pid": 126,
+      "cmd": "/bin/bash /etc/inspire/launch_jupyterlab.sh "
+    },
+    {
+      "pid": 128,
+      "cmd": "/etc/inspire/bin/python /etc/inspire/bin/jupyter-lab --no-browser --ip=0.0.0.0 --port=8088 --allow-root --LabApp.base_url=/ws-9dcc0e1f-80a4-4af2-bc2f-0e352e7b17e6/project-f277dd4c-fa6b-4908-b75c-4416a0407a3d/user-78847ee3-92d5-471f-a847-07d12aceaa97/jupyter/c1c06ec4-6491-4e5a-ace9-a3211a885fb5/daa94"
+    },
+    {
+      "pid": 129,
+      "cmd": "/bin/bash /etc/inspire/launch_jupyterlab.sh "
+    },
+    {
+      "pid": 131,
+      "cmd": "/etc/inspire/code-server/lib/node /etc/inspire/code-server --bind-addr 0.0.0.0:8082 --auth none --disable-telemetry --user-data-dir /root/.local/share/code-server/ --extensions-dir /root/.local/share/code-server/extensions /inspire/hdd/project/exploration-topic/czxs26210936 "
+    },
+    {
+      "pid": 464,
+      "cmd": "/etc/inspire/code-server/lib/node /etc/inspire/code-server/out/node/entry "
+    },
+    {
+      "pid": 4001356,
+      "cmd": "bash "
+    },
+    {
+      "pid": 4001398,
+      "cmd": "bash "
+    },
+    {
+      "pid": 4001415,
+      "cmd": "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python -c import base64;exec(base64.b64decode('ZnJvbSBwYXRobGliIGltcG9ydCBQYXRoCmltcG9ydCBzeXMsb3Msc3VicHJvY2Vzcyxqc29uLHRpbWUsc29ja2V0CnJvb3Q9UGF0aCgnL2luc3BpcmUvc3NkL3Byb2plY3QvZXhwbG9yYXRpb24tdG9waWMvY3p4czI2MjEwOTM2L3Jlc"
+    },
+    {
+      "pid": 4002799,
+      "cmd": "/bin/bash /etc/inspire/launch_jupyterlab.sh "
+    },
+    {
+      "pid": 4002804,
+      "cmd": "/bin/bash /etc/inspire/launch_jupyterlab.sh "
+    },
+    {
+      "pid": 4002805,
+      "cmd": "sort -u "
+    }
+  ],
+  "gpu": "0, GPU-a56f5213-6cf6-e214-b90a-c49cd41c2baa, 143167 MiB, 143771 MiB\n1, GPU-d9ac5be8-fa4a-742e-91ff-62d1ce280a1d, 143167 MiB, 143771 MiB\n"
+}
