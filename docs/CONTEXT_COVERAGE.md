@@ -69,3 +69,5 @@
 2026-10-06 13:17 CST：冻结final32/256的内部dev90已在新dl-context-dev-n2-1006真实生成，执行4bd2a83，控制器5841/worker29841，来源全量重算及首张PNG通过；完整读回pending。原实例及低优先级失败预检实例均停止，其他任务未改。见CONTEXT_EXPOSURE_DEV_DEPLOYMENT.md；全任务暂计6.644887/16GPUh。
 
 2026-10-06 第十二次跟进：固定final32/256内部dev90完成并全量复核，28,080行显示恢复/应用没有新历史迁移或匹配特异性，见CONTEXT_EXPOSURE_DEV_RESULT.md。累计7.373056459228GPUh。下一轮冻结CONTEXT_LAYOUT_PLAN.md，只在训练32上改变历史角色排版，固定权重、内容、噪声/读者/目标，先标准PNG严格校准后64新图与1536行；已部署独立9cf6ea7到现有专用双H200，源审计运行中。无新dev/official评分或默认晋级。
+
+2026-10-06 14:19:53 CST：排版扰动诊断标准PNG严格校准通过，新布局14/64PNG已生成并核验，完整6912行pending；固定9cf6ea7与同一实例，预算暂计7.426959/16GPUh。见CONTEXT_LAYOUT_DEPLOYMENT.md。
