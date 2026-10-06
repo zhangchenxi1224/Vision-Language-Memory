@@ -1,0 +1,60 @@
+{
+  "time": 1791251780.8052988,
+  "host": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+  "commit": "fd3ac81dec0d94eaf92248709ab671b2be5f04af",
+  "tree": "ea364409f90365255337ce592995e9d09abfd441",
+  "command": [
+    "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+    "scripts/inspire/run_context_population.py",
+    "--output",
+    "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-population32-v1",
+    "--base",
+    "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+    "--reader",
+    "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+    "--official-source",
+    "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite",
+    "--prefeval",
+    "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-coverage-20261006/third_party/prefeval_reference"
+  ],
+  "compute_before": "",
+  "gpus": "0, GPU-a56f5213-6cf6-e214-b90a-c49cd41c2baa, 143771 MiB, 1 MiB, 0 %\n1, GPU-d9ac5be8-fa4a-742e-91ff-62d1ce280a1d, 143771 MiB, 1 MiB, 0 %\n",
+  "memory": "               total        used        free      shared  buff/cache   available\nMem:         2063601      529342     1501380      131529      174526     1534258\nSwap:              0           0           0\n",
+  "processes_before": "    PID ELAPSED COMMAND\n      1   56614 /bin/bash /etc/inspire/launch_jupyterlab.sh\n    126   56611 /bin/bash /etc/inspire/launch_jupyterlab.sh\n    128   56611 /etc/inspire/bin/python /etc/inspire/bin/jupyter-lab --no-browse\n    129   56611 /bin/bash /etc/inspire/launch_jupyterlab.sh\n    131   56611 /etc/inspire/code-server/lib/node /etc/inspire/code-server --bin\n    464   56606 /etc/inspire/code-server/lib/node /etc/inspire/code-server/out/n\n1901268       2 sleep 5\n1901269       1 bash\n1901311       0 bash\n1901328       0 python -c import base64;exec(base64.b64decode('aW1wb3J0IHBhdGhsa\n1901346       0 ps -eo pid,etimes,args\n",
+  "other_owner_inventory": [
+    {
+      "path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/runs/dreamlite-aris-20261005/mainline/owner-workers/m2-20261005/owner.json",
+      "instance": "b-cr4-normal-0927",
+      "host": "b-cr4-normal-0927--5d79eca1ca6c-qa36tfl2jh"
+    },
+    {
+      "path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/runs/dreamlite-aris-20261005/mainline/owner-workers/warmup-m1-20261005/owner.json",
+      "instance": "prefeval-b-read-h200x2-20260925",
+      "host": "prefeval-b-read-h200x2-20260925--dd8912853710-qnurkw7d5w"
+    },
+    {
+      "path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/runs/dreamlite-aris-20261005/mainline/owner-workers/warmup-m1-20261006/owner.json",
+      "instance": "b-cr4-normal-0927",
+      "host": "b-cr4-normal-0927--5d79eca1ca6c-qa36tfl2jh"
+    },
+    {
+      "path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/runs/dreamlite-aris-20261005/mainline/owner-workers/m2-20261006/owner.json",
+      "instance": "prefeval-k1-read-h200x2-20260924",
+      "host": "prefeval-k1-read-h200x2-20260924--ab87355e23f9-wlaaegxcl7"
+    },
+    {
+      "path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/runs/dreamlite-aris-20261005/validation/mainline-owner-prefetch-pytest/test_fixed_identity_cannot_ove0/owner.json",
+      "instance": null,
+      "host": "registered-host"
+    }
+  ],
+  "old_worker_pids_gone": [
+    1470680,
+    1472768,
+    1472769,
+    1738992,
+    1738993
+  ],
+  "controller_pid": 1901347,
+  "launched_unix": 1791251780.8788989
+}

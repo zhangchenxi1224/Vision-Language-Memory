@@ -1,0 +1,174 @@
+{
+  "time": 1791251841.07073,
+  "status": {
+    "status": "teachers",
+    "time": 1791251786.6043248,
+    "commit": "fd3ac81dec0d94eaf92248709ab671b2be5f04af"
+  },
+  "owner": {
+    "pid": 1901347,
+    "host": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+    "started": 1791251782.746054,
+    "commit": "fd3ac81dec0d94eaf92248709ab671b2be5f04af"
+  },
+  "attempts": {
+    "teacher-1-5ff98067f3814a538f26aa15ba55a65b.json": {
+      "job": {
+        "name": "teacher-1",
+        "gpu": 1,
+        "command": [
+          "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+          "scripts/experiments/prefeval_k1_teacher.py",
+          "--arm",
+          "B",
+          "--supervision",
+          "prompt_matching",
+          "--context-suite",
+          "diverse-v1",
+          "--split",
+          "pilot",
+          "--ids-file",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-population-20261006/configs/experiments/context_population_added16_ids.json",
+          "--shards",
+          "2",
+          "--shard",
+          "1",
+          "--base",
+          "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+          "--reader",
+          "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+          "--prefeval",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-coverage-20261006/third_party/prefeval_reference",
+          "--output",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-population32-v1/new-teachers",
+          "--teacher-cache",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-population32-v1/targets",
+          "--steps",
+          "288",
+          "--snapshot-steps",
+          "72,144,216,288"
+        ]
+      },
+      "command_sha256": "a06c0d62933b115da8e34bc8989ee82247177c14ce07f7aec21a8389d2ee92e7",
+      "hostname": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+      "started": 1791251786.6077335,
+      "pid": 1902133
+    },
+    "teacher-0-986060b1987f4e0f822ff38668bd25e0.json": {
+      "job": {
+        "name": "teacher-0",
+        "gpu": 0,
+        "command": [
+          "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+          "scripts/experiments/prefeval_k1_teacher.py",
+          "--arm",
+          "B",
+          "--supervision",
+          "prompt_matching",
+          "--context-suite",
+          "diverse-v1",
+          "--split",
+          "pilot",
+          "--ids-file",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-population-20261006/configs/experiments/context_population_added16_ids.json",
+          "--shards",
+          "2",
+          "--shard",
+          "0",
+          "--base",
+          "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+          "--reader",
+          "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+          "--prefeval",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-coverage-20261006/third_party/prefeval_reference",
+          "--output",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-population32-v1/new-teachers",
+          "--teacher-cache",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-population32-v1/targets",
+          "--steps",
+          "288",
+          "--snapshot-steps",
+          "72,144,216,288"
+        ]
+      },
+      "command_sha256": "f03d679da71e1331d1c91db8f3937e1a7f50b80b40adc6b181faf8c28c523b41",
+      "hostname": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+      "started": 1791251786.6073236,
+      "pid": 1902132
+    }
+  },
+  "processes": {
+    "1901347": {
+      "alive": true,
+      "cmdline": "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python scripts/inspire/run_context_population.py --output /inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-population32-v1 --base /inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907 --reader /inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct --official-source /inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite --prefeval /inspire/ssd/project/exploration-topic/czxs26210936/repos/context-coverage-20261006/third_party/prefeval_reference ",
+      "cuda": []
+    },
+    "1902133": {
+      "alive": true,
+      "cmdline": "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python scripts/experiments/prefeval_k1_teacher.py --arm B --supervision prompt_matching --context-suite diverse-v1 --split pilot --ids-file /inspire/ssd/project/exploration-topic/czxs26210936/repos/context-population-20261006/configs/experiments/context_population_added16_ids.json --shards 2 --shard 1 --base /inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907 --reader /inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct --prefeval /inspire/ssd/project/exploration-topic/czxs26210936/repos/context-coverage-20261006/third_party/prefeval_reference --output /inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-population32-v1/new-teachers --teacher-cache /inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-population32-v1/targets --steps 288 --snapshot-steps 72,144,216,288 ",
+      "cuda": [
+        "CUDA_VISIBLE_DEVICES=1"
+      ]
+    },
+    "1902132": {
+      "alive": true,
+      "cmdline": "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python scripts/experiments/prefeval_k1_teacher.py --arm B --supervision prompt_matching --context-suite diverse-v1 --split pilot --ids-file /inspire/ssd/project/exploration-topic/czxs26210936/repos/context-population-20261006/configs/experiments/context_population_added16_ids.json --shards 2 --shard 0 --base /inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907 --reader /inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct --prefeval /inspire/ssd/project/exploration-topic/czxs26210936/repos/context-coverage-20261006/third_party/prefeval_reference --output /inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-population32-v1/new-teachers --teacher-cache /inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-population32-v1/targets --steps 288 --snapshot-steps 72,144,216,288 ",
+      "cuda": [
+        "CUDA_VISIBLE_DEVICES=0"
+      ]
+    }
+  },
+  "identities": {
+    "identity-0.json": {
+      "assignment": [
+        "education_learning_styles:0009",
+        "entertain_games:0023",
+        "entertain_music_book:0038",
+        "entertain_shows:0040",
+        "entertain_sports:0045",
+        "lifestyle_beauty:0037",
+        "lifestyle_dietary:0042",
+        "lifestyle_fit:0017"
+      ],
+      "context_suite": "diverse-v1",
+      "steps": 288,
+      "supervision": "prompt_matching",
+      "reader_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+      "sha256": "716eaa3010a272e924b75d508c2c42b294ed3419a8dcfdc2ecb5b5d683ca991f"
+    },
+    "identity-1.json": {
+      "assignment": [
+        "education_learning_styles:0030",
+        "entertain_games:0036",
+        "entertain_music_book:0044",
+        "entertain_shows:0052",
+        "entertain_sports:0048",
+        "lifestyle_beauty:0038",
+        "lifestyle_dietary:0047",
+        "lifestyle_fit:0038"
+      ],
+      "context_suite": "diverse-v1",
+      "steps": 288,
+      "supervision": "prompt_matching",
+      "reader_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+      "sha256": "3c55a871b6693b3bca018d88071d102d39a69ccfe5d64778b63e53377f6abec8"
+    }
+  },
+  "teacher_steps": {
+    "education_learning_styles_0030": 43,
+    "education_learning_styles_0009": 50
+  },
+  "complete_targets": {},
+  "finite_nonzero_observed_gradients": true,
+  "logs": {
+    "teacher-1.log": "`torch_dtype` is deprecated! Use `dtype` instead!\n\nLoading checkpoint shards:   0%|                         | 0/2 [00:00<?, ?it/s]\nLoading checkpoint shards:  50%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u258c        | 1/2 [00:01<00:01,  1.27s/it]\nLoading checkpoint shards: 100%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588| 2/2 [00:02<00:00,  1.02it/s]\nLoading checkpoint shards: 100%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588| 2/2 [00:02<00:00,  1.02s/it]\nThe following generation flags are not valid and may be ignored: ['temperature', 'top_p', 'top_k']. Set `TRANSFORMERS_VERBOSITY=info` for more details.\n{\"pair_id\": \"education_learning_styles:0030\", \"arm\": \"B\", \"step\": 24, \"family\": \"neutral\", \"ce\": 5.000022888183594, \"answer_tokens_with_eos\": 2, \"grad_norm\": 2.3349759578704834, \"option_order\": null, \"elapsed_seconds\": 24.542166801169515, \"teacher_student_kl\": 3.503476619720459, \"supervision\": \"prompt_matching\", \"objective_loss\": 3.8613288402557373, \"generated_hard_ce\": 5.000022888183594, \"item\": 1, \"items\": 8}\n",
+    "teacher-0.log": "s:  50%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u258c        | 1/2 [00:01<00:01,  1.28s/it]\nLoading checkpoint shards: 100%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588| 2/2 [00:02<00:00,  1.02it/s]\nLoading checkpoint shards: 100%|\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588| 2/2 [00:02<00:00,  1.03s/it]\nThe following generation flags are not valid and may be ignored: ['temperature', 'top_p', 'top_k']. Set `TRANSFORMERS_VERBOSITY=info` for more details.\n{\"pair_id\": \"education_learning_styles:0009\", \"arm\": \"B\", \"step\": 24, \"family\": \"neutral\", \"ce\": 2.2735366821289062, \"answer_tokens_with_eos\": 2, \"grad_norm\": 1.241511344909668, \"option_order\": null, \"elapsed_seconds\": 22.73007441498339, \"teacher_student_kl\": 1.2282047271728516, \"supervision\": \"prompt_matching\", \"objective_loss\": 1.62181556224823, \"generated_hard_ce\": 2.2735366821289062, \"item\": 1, \"items\": 8}\n{\"pair_id\": \"education_learning_styles:0009\", \"arm\": \"B\", \"step\": 48, \"family\": \"neutral\", \"ce\": 1.8284015655517578, \"answer_tokens_with_eos\": 2, \"grad_norm\": 1.8151851892471313, \"option_order\": null, \"elapsed_seconds\": 31.117336263880134, \"teacher_student_kl\": 0.9201386570930481, \"supervision\": \"prompt_matching\", \"objective_loss\": 1.3137495517730713, \"generated_hard_ce\": 1.8284015655517578, \"item\": 1, \"items\": 8}\n"
+  },
+  "gpu_compute": "268052, [Not Found], 17388 MiB\n268053, [Not Found], 17408 MiB\n",
+  "gpus": "0, GPU-a56f5213-6cf6-e214-b90a-c49cd41c2baa, 143771 MiB, 17398 MiB, 41 %\n1, GPU-d9ac5be8-fa4a-742e-91ff-62d1ce280a1d, 143771 MiB, 17418 MiB, 43 %\n",
+  "gpu_hours_provisional": 0.030257334113121034,
+  "gpu_hours_settled": 0.0,
+  "campaign_gpu_hours_provisional": 5.3673186440600285,
+  "campaign_gpu_hours_settled": 5.3370613099469075,
+  "source_clean": true
+}

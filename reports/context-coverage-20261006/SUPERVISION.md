@@ -1,5 +1,23 @@
 # 每小时执行入口
 
+当前进度以此条为准（2026-10-06 09:58:59 CST）：context-dev-v1完成且全量核验为阴性；报告CONTEXT_DEV_RESULT.md。训练侧阳性不能延伸为泛化结论，默认保留。新context-population32-v1已经在原H200x2运行：同8主题、每主题2→4，共16→32历史，唯一主因素为覆盖范围。
+
+冻结执行fd3ac81dec0d94eaf92248709ab671b2be5f04af，独立checkout context-population-20261006，开发20f9305同treeea364409f90365255337ce592995e9d09abfd441。controller1901347，两教师worker1902132/1902133分别CUDA0/1，实际进程/GPU核对。最初两历史已到288、另两到35/33步；全部已读梯度有限非零，4份resume张量有限，8组72/144/216/288快照latent/PNG哈希通过。完整population-0143-evidence/和population-checkpoints-0143.json，source clean，Windows/Linux各24检查通过。
+
+下一次先读本文件、DEPLOYMENT.json、ARIS tracker，然后检查context-population32-v1/status、active-owner、attempts、实际PID命令/GPU。运行中不重复启动或改执行树。控制器补齐新增16软教师288最终目标→全量验证32bank→从共同B730训练Writer32 nativeFM128→核验128连续非零有限更新、512draw、32ID各16次及最终权重，然后以ready_for_frozen_readout退出；它不自动评分，不把权重就绪当科研完成。
+
+下一阶段读回已在CONTEXT_POPULATION_PLAN.md预先冻结，但消费者尚未实现/部署：原16/新增16两个分层，各两Writer两noise、匹配/分层内同主题错配/灰图/文本，3840总行（1152旧、2688新）；新增96/总128PNG，旧192目标只读复用、新192目标在独立cache生成。先核验所有目标/模型/日志，复用16 Writer已完成权重/图片和对应行，再实现/冻结新的消费者。保留原16 donor以便复用，新增16各主题2条单独互换。不得用新结果改分层/问题/128更新，不新增dev/official评分，不直接替换main默认。
+
+本轮目标/训练阶段上限1.5GPUh；整个包含随后读回的阶段总上限3GPUh，均计入原16池，不因子阶段或恢复重置。此前结算5.337061309947；09:58:59本阶段暂计0.084781107969，总暂计5.421842417916GPUh。最多2GPU，单次≤6h；attempt只计一次，原始平台空闲/点券未归因。控制器阶段预算函数只提供1.5上限，后续消费者须明确从3总额扣本轮全部attempt再算余额，不能直接重跑此控制器来评分。
+
+原smoke/pilot/teacher/Writer/route/fit/dev全部完成且退出，不复跑。旧目标bank、prompt-matching/pilot-B只读，其他ARIS实例owner仍保留；其free预算问题由原任务处理，不改变其自动化或复活取消队列。每次恢复先证明旧worker停止、归档owner、精确结算并审计resume/日志尾部；当前控制器明确拒绝未经审计的partial native日志重跑，不从零伪称续训。不空转保活。
+
+第八次实际触发2026-10-06T01:43:34.081Z已执行。仅实质进展/完成/故障/需用户处理时通知。
+
+## 先前状态（以下仅供溯源）
+
+# 每小时执行入口
+
 当前进度（2026-10-06 09:52 CST）：context-dev-v1已完整结束并独立审计，见CONTEXT_DEV_RESULT.md。8,640新/23,760总行、900PNG、1080目标张量、256源更新/1024draw与最终权重/报告重算通过。4任务exit0、全部PID退出、owner删除，两GPU空闲。宽组未保留训练外收益，恢复KL较窄组退化，应用/匹配特异性均未建立；默认不晋级。结算dev1.295367960334，全任务5.337061309947GPUh。
 
 输入CPU诊断106/106历史完整保留，见writer-conditioning-audit-0143.json；不据此声称语义编码正确。新轮context-population32-v1按CONTEXT_POPULATION_PLAN.md：同8主题覆盖16→32，原16目标及Writer16只读复用，补16软教师288最终目标，Writer32同父同128步，从共同B730开始。先制作/训练上限1.5GPUh，整个含后续冻结读回上限3GPUh，均在16总池。当前准备未部署；新控制器只到ready_for_frozen_readout即退出，不能把权重就绪称科学完成。
