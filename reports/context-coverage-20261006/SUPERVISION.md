@@ -1,5 +1,7 @@
 # 每小时执行入口
 
+当前进度以此条为准：2026-10-06 07:59 CST追加核验：两组均完整128更新、各512draw；全256梯度更新有限非零，两组draw/pid/sigma配对一致。两最终checkpoint SHA重新核对通过，训练worker均exit0并退出，控制器已自动启动两个PNG生成worker。当前各8/32张真实PNG哈希通过，共16/64，尚无训练侧读回分数。见fit-progress-after-train.json。训练部分结算0.130255297157 GPUh，本阶段含活动生成暂计0.190926038557；全任务已结算3.787518723806、暂计3.848189465205 GPUh。1 GPUh阶段上限不变。
+
 当前阶段（2026-10-06 07:55 CST）：PM→FM功能读回已完整核验，见ROUTE_RESULT.md；8,640新行/23,760总行、900PNG、1,080教师张量与报告重算通过，旧owner/worker退出。小幅KL变化仍未形成匹配特异性收益，默认不晋级，不重跑该阶段。
 
 后续context-fit-v1已在本任务原H200x2实例训练。controller1155936、worker1156921/1156922；独立checkout context-fit-20261006，冻结9174325fe5c2e69acdd488150837fe977350a73e。07:55两组38/40步，已读梯度有限非零、前38步draw/pid/sigma配对相同、第4步snapshot SHA及1075组实际参数更新核验通过。预检32教师latent/PNG完成，Windows/Linux各17检查通过。完整证据CONTEXT_FIT_DEPLOYMENT.md与fit-2342-evidence/。
