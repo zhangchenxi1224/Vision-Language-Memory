@@ -1,5 +1,21 @@
 # 每小时执行入口
 
+2026-10-06 11:04:25 CST：context-population-readout-v1已在原H200x2真实运行。独立checkout context-population-readout-20261006，执行cb045675baccff3b0b00002f2865ee77b89da4a4、开发00bc27f8ce07e3b2bc528b1218657ccaa1444037，同treea5c248903ca397f1e63684d008b7a0f524381d60，源码clean。Windows/Linux各28检查通过。controller2261869，Writer16 worker2265344/CUDA0、Writer32 worker2265345/CUDA1，每卡约14GiB。首批4/32与4/64新PNG的RGB1024、历史、噪声、收据及SHA通过。新增读回0/2688，效果pending。
+
+源目标/训练全部完成：32教师、新增4608教师更新、Writer128更新/512draw/每ID16次，Writer32最终bffc31bc526c8955675ba4d76c0a85ede2b47522db8d410bc15ee8f7c70ae051。新增64组中间PNG/latent快照哈希通过，旧4PID退出，无旧owner，不重跑源训练。
+
+新控制器自动96新PNG→2688新行，复用1152旧行得3840总行；192旧+192新教师分布。原/新增各16分层、分层内同主题donor、偏好级配对区间；不能池化成泛化。所有权重固定final128，无新dev/official评分或选择，默认不晋级。完成后用冻结cb04567中的run_context_population_readout.report全量独立重算，验收128PNG/384张量、共同prefix和完整分母。旧源/cache/图片只读，运行中不改执行树。
+
+结算全任务5.874805550178 GPUh，其中目标/训练0.537744240231；新读回暂计0.041299844649，总暂计5.916105394827/16。population整个迭代3GPUh包含目标/训练及所有读回attempt，失败/恢复也扣除。最多2GPU、每次≤6h。失联先证明旧worker停止，再归档owner、结算、审计partial身份后恢复，禁止空转保活。
+
+资源预检5个owner均属于其他实例/测试fixture，本host无其他计算/预留，内存足够。早先CPU预检长目录扫描未启动GPU；最终v2完成元数据清查后只启动一次。随后v3被非空输出guard拒绝，prelaunch-error-0244.json是保护记录，不是当前controller失败，不能据此重启。现场与全部诊断population-readout-0244-evidence/，归档SHA34318464ae0bb6a17a6220d9f0a230d1b853b7d58bcfc390950d943dd4b6dca9。
+
+下一次先读DEPLOYMENT.json和ARIS tracker，再检查context-population-readout-v1的status/owner/attempts及真实PID/cmdline/GPU；运行中不重复启动。其他ARIS资源/费用/自动化不动，不复活取消队列。第九次触发2026-10-06T02:44:04.925Z已执行；每小时继续，仅实质变化/完成/故障/需用户处理时通知。
+
+## 先前状态（仅供溯源）
+
+# 每小时执行入口
+
 当前context-population32-v1目标/训练已完成并独立验收（audit-0244）。32目标及1203来源文件、新增4608教师更新、Writer128更新/512draw/每ID16次通过，最终权重bffc31bc526c8955675ba4d76c0a85ede2b47522db8d410bc15ee8f7c70ae051。旧controller/3worker退出，无owner，原H200x2空闲现场已核验。科学读回仍pending，不能将训练完成当实验完成。
 
 已实现预注册3840行分层消费者scripts/inspire/run_context_population_readout.py，Windows28检查通过。新输出context-population-readout-v1，独立checkout context-population-readout-20261006；以随后实际部署条目为准，当前尚未启动。保持CONTEXT_POPULATION_PLAN.md原/新增各16、两Writer、2noise、四控制，1152旧+2688新；无新dev/official评分。源报告和192缓存只读，不改旧执行树。

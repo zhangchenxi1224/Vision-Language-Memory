@@ -1,0 +1,85 @@
+{
+  "time": 1791255745.1173978,
+  "host": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+  "commit": "cb045675baccff3b0b00002f2865ee77b89da4a4",
+  "tree": "a5c248903ca397f1e63684d008b7a0f524381d60",
+  "command": [
+    "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+    "scripts/inspire/run_context_population_readout.py",
+    "run",
+    "--output",
+    "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-population-readout-v1",
+    "--base",
+    "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+    "--reader",
+    "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+    "--official-source",
+    "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite",
+    "--prefeval",
+    "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-coverage-20261006/third_party/prefeval_reference"
+  ],
+  "compute_before": "",
+  "gpus": "0, GPU-a56f5213-6cf6-e214-b90a-c49cd41c2baa, 143771 MiB, 1 MiB, 143167 MiB, 0 %\n1, GPU-d9ac5be8-fa4a-742e-91ff-62d1ce280a1d, 143771 MiB, 1 MiB, 143167 MiB, 0 %\n",
+  "memory": "               total        used        free      shared  buff/cache   available\nMem:         2063601      529298     1501210      131533      174745     1534302\nSwap:              0           0           0\n",
+  "processes_before": "    PID ELAPSED COMMAND\n      1   60578 /bin/bash /etc/inspire/launch_jupyterlab.sh\n    126   60575 /bin/bash /etc/inspire/launch_jupyterlab.sh\n    128   60575 /etc/inspire/bin/python /etc/inspire/bin/jupyter-lab --no-browse\n    129   60575 /bin/bash /etc/inspire/launch_jupyterlab.sh\n    131   60575 /etc/inspire/code-server/lib/node /etc/inspire/code-server --bin\n    464   60570 /etc/inspire/code-server/lib/node /etc/inspire/code-server/out/n\n2255970      73 timeout 120s python -u /inspire/ssd/project/exploration-topic/cz\n2255971      73 python -u /inspire/ssd/project/exploration-topic/czxs26210936/la\n2261845       2 sleep 5\n2261853       0 ps -eo pid,etimes,args",
+  "other_owner_inventory": [
+    {
+      "path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/runs/dreamlite-aris-20261005/mainline/owner-workers/m2-20261005/owner.json",
+      "instance": "b-cr4-normal-0927",
+      "host": "b-cr4-normal-0927--5d79eca1ca6c-qa36tfl2jh"
+    },
+    {
+      "path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/runs/dreamlite-aris-20261005/mainline/owner-workers/warmup-m1-20261005/owner.json",
+      "instance": "prefeval-b-read-h200x2-20260925",
+      "host": "prefeval-b-read-h200x2-20260925--dd8912853710-qnurkw7d5w"
+    },
+    {
+      "path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/runs/dreamlite-aris-20261005/mainline/owner-workers/warmup-m1-20261006/owner.json",
+      "instance": "b-cr4-normal-0927",
+      "host": "b-cr4-normal-0927--5d79eca1ca6c-qa36tfl2jh"
+    },
+    {
+      "path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/runs/dreamlite-aris-20261005/mainline/owner-workers/m2-20261006/owner.json",
+      "instance": "prefeval-k1-read-h200x2-20260924",
+      "host": "prefeval-k1-read-h200x2-20260924--ab87355e23f9-wlaaegxcl7"
+    },
+    {
+      "path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/runs/dreamlite-aris-20261005/validation/mainline-owner-prefetch-pytest/test_fixed_identity_cannot_ove0/owner.json",
+      "instance": null,
+      "host": "registered-host"
+    }
+  ],
+  "owner_scan_pruned_artifact_directories": [
+    ".git",
+    ".venv",
+    "__pycache__",
+    "bank",
+    "cache",
+    "checkpoints",
+    "code",
+    "data",
+    "envs",
+    "images",
+    "logs",
+    "models",
+    "new-teachers",
+    "node_modules",
+    "repos",
+    "rollouts",
+    "site-packages",
+    "snapshots",
+    "targets",
+    "teacher-cache",
+    "teachers",
+    "third_party"
+  ],
+  "old_pids_absent": [
+    1901347,
+    1902132,
+    1902133,
+    2023120
+  ],
+  "tests_linux": 28,
+  "tests_windows": 28,
+  "prior_connection_failure": "No completion marker; independent followup proved empty output/no worker before this retry"
+}
