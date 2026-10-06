@@ -1,6 +1,6 @@
 {
   "schema": "dreamlite.context-coverage-deployment.v1",
-  "status": "context_dev_prepared",
+  "status": "context_dev_rollout_running",
   "execution_commit": "15ff2a93b5ec6222c37ec359b20cfadcabbba471",
   "notebook": "vlm-dreamlite-full-h200x2-20260720",
   "remote_checkout": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-coverage-20261006",
@@ -66,7 +66,7 @@
   "promotion": "none; no dev90 content-specific Writer gain established",
   "development_commit": "3995d2c9c111fdb7fac3002e658c4cc77e282e7a",
   "execution_tree_matches_development": true,
-  "last_live_verification_unix": 1791247684.4513085,
+  "last_live_verification_unix": 1791248138.8073003,
   "heartbeat_received_at": "2026-10-06T00:42:33.130Z",
   "last_full_verification_unix": 1791247684.4513085,
   "gpu_hours": {
@@ -79,9 +79,11 @@
     "scope": "Supervisor allocated GPU process hours including attempts; excludes platform idle costs and points.",
     "route_functional_settled": 0.23231854524877335,
     "context_fit_provisional": 0.3844299229648378,
-    "total_provisional": 4.041693349613084,
-    "provisional_asof_unix": 1791247684.4513085,
-    "context_fit_settled": 0.3844299229648378
+    "total_provisional": 4.089402743710412,
+    "provisional_asof_unix": 1791248138.8073003,
+    "context_fit_settled": 0.3844299229648378,
+    "context_dev_settled": 0.0,
+    "context_dev_provisional": 0.04770939409732819
   },
   "readout_audit": {
     "status": "completed_verified",
@@ -113,7 +115,7 @@
   },
   "next_stage": {
     "name": "context-dev-v1",
-    "status": "prepared_not_deployed",
+    "status": "supervise_existing_context_dev_controller",
     "protocol": "CONTEXT_DEV_PLAN.md",
     "max_gpu_hours": 2,
     "campaign_cap": 16,
@@ -122,7 +124,7 @@
     "expected_new_rows": 8640,
     "expected_combined_rows": 23760,
     "promotion": "none",
-    "action": "Freeze and deploy a new checkout; consume both fixed final fit weights, generate360 PNG, reuse1080 teacher targets and15120 old rows. Do not repeat fit or train/select checkpoints."
+    "action": "Read context-dev-v1/status,active-owner,attempts and real processes first; do not relaunch running workers. Frozen final checkpoints ->360PNG ->8640new/23760combined rows; audit1080cached tensors and complete paired n90 report. No new training, default promotion or official data."
   },
   "writer_readout": {
     "status": "completed_verified",
@@ -337,5 +339,51 @@
     "owner_removed": true,
     "report": "CONTEXT_FIT_RESULT.md",
     "comparison": "fit-comparison.json"
+  },
+  "context_dev": {
+    "status": "rollout",
+    "execution_commit": "06e05bb5d4f058422a1f18770122e071400c4213",
+    "development_commit": "72c03f790923a9d9895820e15c8aa432424d5e5e",
+    "execution_tree": "4b3b9b650faba212a683b57b2d86ff90ded90fb5",
+    "execution_tree_matches_development": true,
+    "remote_checkout": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-dev-20261006",
+    "remote_output": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-dev-v1",
+    "notebook": "vlm-dreamlite-full-h200x2-20260720",
+    "controller_pid": 1470680,
+    "started_unix": 1791248029.2203925,
+    "worker_pids": [
+      1472769,
+      1472768
+    ],
+    "tests": {
+      "windows": 21,
+      "linux": 21
+    },
+    "protocol": "CONTEXT_DEV_PLAN.md",
+    "source_scope": "fixed final context-fit-v1 weights; no training or selection",
+    "cohort": "internal dev90 previously research-exposed",
+    "new_official_scoring": false,
+    "expected_new_pngs": 360,
+    "expected_old_pngs": 540,
+    "expected_teacher_targets": 1080,
+    "expected_new_rows": 8640,
+    "expected_combined_rows": 23760,
+    "pngs_verified": {
+      "context-narrow": 6,
+      "context-diverse": 6
+    },
+    "latest_evidence_directory": "dev-0042-evidence",
+    "raw_archive_sha256": "5c4e3b0cc99a39779ed0de7598e0029a84f50d7a26f07c066c3b877cc8ad2665",
+    "latest_verification_unix": 1791248138.8073003,
+    "gpu_hours_cap": 2,
+    "campaign_gpu_hours_cap": 16,
+    "gpu_hours_settled": 0.0,
+    "gpu_hours_provisional": 0.04770939409732819,
+    "source_checkout_clean": true,
+    "final_checkpoint_sha256": {
+      "context-narrow": "30c8e1d85287dedff159324eb7ea00bda68d6df3cde6064172a9b9294113b9c0",
+      "context-diverse": "b2527682b9560ea29c4c9bbaa5f67b361a3fd8057de3026d15c81bf27ad6ecea"
+    },
+    "scientific_results": "pending"
   }
 }

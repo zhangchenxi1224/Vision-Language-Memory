@@ -1,5 +1,21 @@
 # 每小时执行入口
 
+当前进度以此条为准（2026-10-06 08:55:38 CST）：训练侧context-fit-v1已完成并全量审计，见CONTEXT_FIT_RESULT.md；宽上下文在16已训练历史的恢复/应用及匹配特异性上有正收益。新阶段context-dev-v1已启动，按CONTEXT_DEV_PLAN.md只读复用两128步最终权重，检验内部dev90，不能以训练侧结论替代泛化。
+
+原H200x2实例，独立checkout context-dev-20261006，冻结06e05bb5d4f058422a1f18770122e071400c4213（开发72c03f7同tree4b3b9b650faba212a683b57b2d86ff90ded90fb5）。controller1470680；两实际rollout worker1472768/1472769，CUDA_VISIBLE_DEVICES0/1。两卡各约14GiB、实际工作；原fit全部worker退出，启动前无计算进程/本任务owner或其他同host任务预留。首批各6/180PNG，共12/360，完整SHA/历史/noise/最终权重绑定通过。见CONTEXT_DEV_DEPLOYMENT.md、dev-0042-evidence/。
+
+下一次先读DEPLOYMENT.json、ARIS tracker及context-dev-v1的status/active-owner/attempts/实际PID命令GPU。控制器自动360PNG→8640新读回，旧15120行合并23760；1080教师分布只读复用，缺失禁止生成；完整验收360新/540旧PNG、1080目标张量、全部tuple/共同prefix/donor及偏好级n90的comparison。指标按恢复/应用/中性分别呈现匹配、同主题错配、灰图、文本。源码独立重算需使用新06e05的run_context_dev.report；旧fit核验仍用9174325，不拿新source哈希否定旧身份。
+
+不重复启动，不修改活动执行树，不改ARIS其他任务/自动化；原prompt-matching/pilot-B和所有已完成源输出只读。此轮不新训练、不挑第4步快照、不接触official180。dev90曾被以往研究观察，仅探索性；单seed结果不晋级默认，不能称黑盒迁移或自由生成准确率。原smoke/pilot/teacher/Writer/route/fit均完成，不复跑。
+
+截至08:55:38本阶段暂计0.047709394097 GPUh；此前全结算4.041693349613，总暂计4.089402743710/16，未终态不称最终账单。新阶段2 GPUh总上限，生成/读回/失败共用且不重置，最多2GPU，单次≤6h。attempt计一次，不与receipts双计；失联先证明旧进程停止、保留原命令/模型/数据/随机状态、归档owner及结算后才能恢复。没有自动扩预算或空转保活。
+
+第七次实际触发2026-10-06T00:42:33.130Z已核验fit并推进既定有界dev对照。其他ARIS free仍在自己的资源/预算内，本轮读取其tracker确认没有同一权重的重复实验，没有介入。每小时继续，只有实质进展、完成、故障或需用户处理时通知。
+
+## 先前状态（以下仅供溯源，以以上为准）
+
+# 每小时执行入口
+
 当前阶段（2026-10-06 08:52 CST）：context-fit-v1完成并全量独立核验，见CONTEXT_FIT_RESULT.md。宽上下文在已训练16历史的恢复/应用与匹配特异性均有正收益；不能当新历史泛化。256梯度更新、1024draw、64新/96旧PNG、192教师张量、1536/4224完整行和报告重算通过，六worker退出，原owner消失。结算本阶段0.384429922965，全任务4.041693349613 GPUh。
 
 下一阶段冻结CONTEXT_DEV_PLAN.md：两已有128步最终权重在内部dev90的固定对照，不新训练、不挑选快照、不触碰official180，不重复ARIS free/保持。新增360PNG、8640行，复用1080教师目标、540旧PNG与15120旧行；总23760，偏好级n90。阶段上限2 GPUh计入16总池，最多2GPU，旧fit只读。当前仅准备，尚未部署；下一条部署记录优先。
