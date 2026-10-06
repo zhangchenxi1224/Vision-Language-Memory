@@ -44,3 +44,6 @@
 2026-10-06 06:50 CST执行进展：两seed上游图片完整后，只读PM→FM功能对照已部署，详见 `../reports/context-coverage-20261006/ROUTE_DEPLOYMENT.md`。新增评测运行中，尚无完整路线评分；科学问题、缓存与预算按已登记协议不变。
 
 2026-10-06 07:55 CST：PM→FM读回全量完成，见 `../reports/context-coverage-20261006/ROUTE_RESULT.md`，微小KL变化未建立内容特异性。已按 `../reports/context-coverage-20261006/CONTEXT_FIT_PLAN.md` 部署仅训练侧16历史的窄/宽教师传递对照；同父权重、128更新，单seed，不新增dev评分。当前梯度/检查点验证只证明实际训练进行，完整读回结果pending。
+
+
+2026-10-06 08:52 CST：同父/同128步的窄宽上下文共享Writer训练侧gate已完成，恢复与应用存在正配对改进和匹配特异性，见CONTEXT_FIT_RESULT.md。冻结下一步context-dev-v1评估已完成最终权重；保护official180，单seed内部dev仅探索性，不晋级默认。全任务结算4.041693349613 GPUh，新阶段上限2。

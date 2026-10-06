@@ -177,7 +177,7 @@ def load_target(meta, binding, row, query, eos, pad):
     return target
 
 
-def summarize(old, new, ids, spec, endpoints=NEW_ENDPOINTS, references=None):
+def summarize(old, new, ids, spec, endpoints=NEW_ENDPOINTS, references=None, *, cohort=None):
     table = index_rows(old, old_keys(ids,spec['queries']))
     table.update(index_rows(new,new_keys(ids,spec,endpoints)))
     for pid in ids:
@@ -190,7 +190,7 @@ def summarize(old, new, ids, spec, endpoints=NEW_ENDPOINTS, references=None):
                         if any(r[k] != ref[k] for k in ('teacher_logits_sha256','target_ids','teacher_target')):
                             raise ValueError('Unpaired teacher distribution')
     result=dict(new_rows=len(new),reused_rows=len(old),combined_rows=len(table),independent_n=len(ids),
-        metric=('Conditional teacher-prefix KL; trained-history fit only; no default promotion' if references else
+        metric=('Conditional teacher-prefix KL; trained-history fit only; no default promotion' if references and cohort != 'dev' else
                 'Conditional teacher-prefix KL; exploratory internal dev; no default promotion'),families={})
     for family in ('recall','application','neutral'):
         qs=[q['id'] for q in spec['queries'] if q['family']==family]
@@ -234,7 +234,8 @@ def evaluate(args):
     frozen=read(args.output/'inputs.json')
     cohort=frozen.get('cohort','dev')
     endpoints=tuple(frozen.get('endpoints',NEW_ENDPOINTS))
-    if (cohort,endpoints) not in (('dev',NEW_ENDPOINTS),('pilot',('context-narrow','context-diverse'))):
+    if (cohort,endpoints) not in (('dev',NEW_ENDPOINTS),('pilot',('context-narrow','context-diverse')),
+                                ('dev',('context-narrow','context-diverse'))):
         raise ValueError('Unregistered consumer scope')
     for p,h in {**frozen['reference']['files'],**frozen['upstream']['files']}.items():
         if sha(Path(p)) != h:

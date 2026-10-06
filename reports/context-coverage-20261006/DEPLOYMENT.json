@@ -1,6 +1,6 @@
 {
   "schema": "dreamlite.context-coverage-deployment.v1",
-  "status": "context_fit_rollout_running",
+  "status": "context_dev_prepared",
   "execution_commit": "15ff2a93b5ec6222c37ec359b20cfadcabbba471",
   "notebook": "vlm-dreamlite-full-h200x2-20260720",
   "remote_checkout": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-coverage-20261006",
@@ -66,22 +66,22 @@
   "promotion": "none; no dev90 content-specific Writer gain established",
   "development_commit": "3995d2c9c111fdb7fac3002e658c4cc77e282e7a",
   "execution_tree_matches_development": true,
-  "last_live_verification_unix": 1791244754.034782,
-  "heartbeat_received_at": "2026-10-05T23:42:32.171Z",
-  "last_full_verification_unix": 1791243887.6729796,
+  "last_live_verification_unix": 1791247684.4513085,
+  "heartbeat_received_at": "2026-10-06T00:42:33.130Z",
+  "last_full_verification_unix": 1791247684.4513085,
   "gpu_hours": {
     "smoke": 0.026387807660632662,
     "pilot": 1.187265353600184,
     "readout": 0.13596068448490567,
     "writer_readout_settled": 2.07533103565375,
-    "total": 3.7875187238057455,
+    "total": 4.041693349613084,
     "total_is_settled_only": true,
     "scope": "Supervisor allocated GPU process hours including attempts; excludes platform idle costs and points.",
     "route_functional_settled": 0.23231854524877335,
-    "context_fit_provisional": 0.19092603855662876,
-    "total_provisional": 3.8481894652048747,
-    "provisional_asof_unix": 1791244754.034782,
-    "context_fit_settled": 0.13025529715749953
+    "context_fit_provisional": 0.3844299229648378,
+    "total_provisional": 4.041693349613084,
+    "provisional_asof_unix": 1791247684.4513085,
+    "context_fit_settled": 0.3844299229648378
   },
   "readout_audit": {
     "status": "completed_verified",
@@ -112,18 +112,17 @@
     "gpu_processes_after_completion": []
   },
   "next_stage": {
-    "name": "context-fit-v1",
-    "status": "supervise_existing_context_fit_controller",
-    "protocol": "CONTEXT_FIT_PLAN.md",
-    "max_gpu_hours": 1,
+    "name": "context-dev-v1",
+    "status": "prepared_not_deployed",
+    "protocol": "CONTEXT_DEV_PLAN.md",
+    "max_gpu_hours": 2,
     "campaign_cap": 16,
-    "new_training": true,
-    "cohort": "pilot16 training only",
-    "new_dev_or_official_scoring": false,
-    "expected_new_rows": 1536,
-    "expected_combined_rows": 4224,
+    "new_training": false,
+    "cohort": "internal dev90 previously research-exposed",
+    "expected_new_rows": 8640,
+    "expected_combined_rows": 23760,
     "promotion": "none",
-    "action": "Read context-fit-v1 status, owner, attempts and real processes. No duplicate launch. Training128 per arm -> 64 PNG -> 1536 new/4224 combined rows. On completion audit all artifacts and training-side paired statistics; no new dev scoring or promotion."
+    "action": "Freeze and deploy a new checkout; consume both fixed final fit weights, generate360 PNG, reuse1080 teacher targets and15120 old rows. Do not repeat fit or train/select checkpoints."
   },
   "writer_readout": {
     "status": "completed_verified",
@@ -263,7 +262,7 @@
     "comparison": "route-comparison.json"
   },
   "context_fit": {
-    "status": "rollout",
+    "status": "completed_verified",
     "execution_commit": "9174325fe5c2e69acdd488150837fe977350a73e",
     "development_commit": "633ce47",
     "execution_tree": "fa3133f686ee830a30c81bfa0777373b6b208b41",
@@ -273,18 +272,15 @@
     "notebook": "vlm-dreamlite-full-h200x2-20260720",
     "controller_pid": 1155936,
     "started_unix": 1791244403.6694798,
-    "worker_pids": [
-      1190246,
-      1190243
-    ],
+    "worker_pids": [],
     "tests": {
       "windows": 17,
       "linux": 17
     },
     "protocol": "CONTEXT_FIT_PLAN.md",
-    "latest_evidence_directory": "fit-2342-evidence",
-    "raw_archive_sha256": "4f49c8e6c97659d4af95cd24b5f09da1a31c6fc9a41ca116b027079f8a16d4cc",
-    "latest_verification_unix": 1791244754.034782,
+    "latest_evidence_directory": "heartbeat-0042-evidence",
+    "raw_archive_sha256": "498b59c56eeffe553eadda12f92ea563836c03253b3860ebb3c56cda0baef032",
+    "latest_verification_unix": 1791247684.4513085,
     "updates_verified": {
       "context-narrow": 128,
       "context-diverse": 128
@@ -301,8 +297,8 @@
     "snapshot_parameter_groups_changed_each": 1075,
     "gpu_hours_cap": 1,
     "campaign_gpu_hours_cap": 16,
-    "gpu_hours_settled": 0.13025529715749953,
-    "gpu_hours_provisional": 0.19092603855662876,
+    "gpu_hours_settled": 0.3844299229648378,
+    "gpu_hours_provisional": 0.3844299229648378,
     "expected_new_rows": 1536,
     "expected_combined_rows": 4224,
     "expected_new_pngs": 64,
@@ -310,16 +306,36 @@
     "expected_teacher_targets": 192,
     "cohort": "pilot16 training only",
     "new_dev_or_official_scoring": false,
-    "scientific_results": "pending",
+    "scientific_results": "Positive trained-history recall/application transfer and matched-vs-mismatch benefit; single seed, no new-history claim",
     "source_checkout_clean": true,
     "final_checkpoint_sha256": {
       "context-narrow": "30c8e1d85287dedff159324eb7ea00bda68d6df3cde6064172a9b9294113b9c0",
       "context-diverse": "b2527682b9560ea29c4c9bbaa5f67b361a3fd8057de3026d15c81bf27ad6ecea"
     },
     "pngs_observed": {
-      "context-narrow": 8,
-      "context-diverse": 8
+      "context-narrow": 32,
+      "context-diverse": 32
     },
-    "latest_progress": "fit-progress-after-train.json"
+    "latest_progress": "fit-progress-after-train.json",
+    "finished_unix": 1791245129.871455,
+    "historical_worker_pids": [
+      1155936,
+      1156921,
+      1156922,
+      1190243,
+      1190246,
+      1242437,
+      1242438
+    ],
+    "verified_new_pngs": 64,
+    "verified_old_pngs": 96,
+    "verified_teacher_tensors": 192,
+    "verified_new_rows": 1536,
+    "verified_combined_rows": 4224,
+    "exact_report_recomputation": true,
+    "workers_exited": true,
+    "owner_removed": true,
+    "report": "CONTEXT_FIT_RESULT.md",
+    "comparison": "fit-comparison.json"
   }
 }
