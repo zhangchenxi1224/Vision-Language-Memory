@@ -63,3 +63,7 @@
 2026-10-06 12:00 CST：固定32历史更新128→256对照已部署独立cc3dffc，实际续训171/256，43新增梯度有效，Adam/RNG/权重和原128日志完整复用。完整5376行读回pending；新1.5GPUh上限，全任务暂计6.340538/16。见CONTEXT_EXPOSURE_DEPLOYMENT.md，训练侧结果不晋级默认。
 
 2026-10-06 12:03 CST：固定32历史256更新全部完成且验收，resume/final与1024draw连续性通过；开始64PNG生成及后续固定读回，结果pending。见exposure-post-training-0345.json，任务暂计6.396397GPUh。
+
+2026-10-06 第十一次跟进：固定32历史256步的5376行全量核验完成，两分层训练侧恢复/应用均恢复匹配特异性；报告CONTEXT_EXPOSURE_RESULT.md。累计6.632105855743GPUh。冻结CONTEXT_EXPOSURE_DEV_PLAN.md，仅评估final256的内部dev90，复用旧权重/对照，不重新训练或选择，official180和默认不变。新同镜像H200x2资源已申请；实际部署状态以DEPLOYMENT与SUPERVISION最新条目为准。
+
+2026-10-06 13:17 CST：冻结final32/256的内部dev90已在新dl-context-dev-n2-1006真实生成，执行4bd2a83，控制器5841/worker29841，来源全量重算及首张PNG通过；完整读回pending。原实例及低优先级失败预检实例均停止，其他任务未改。见CONTEXT_EXPOSURE_DEV_DEPLOYMENT.md；全任务暂计6.644887/16GPUh。

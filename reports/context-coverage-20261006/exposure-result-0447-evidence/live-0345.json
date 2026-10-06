@@ -1,0 +1,78 @@
+{
+  "time": 1791259207.4486315,
+  "status": {
+    "status": "training",
+    "time": 1791259115.589601,
+    "commit": "cc3dffc864ccedc1ef354012e638190055299726"
+  },
+  "owner": {
+    "pid": 2556692,
+    "host": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+    "started": 1791259032.8865285,
+    "commit": "cc3dffc864ccedc1ef354012e638190055299726"
+  },
+  "processes": [
+    {
+      "pid": 2556692,
+      "cmdline": "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python scripts/inspire/run_context_exposure.py run --output /inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-exposure-v1 --base /inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907 --reader /inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct --official-source /inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite ",
+      "cuda": []
+    },
+    {
+      "pid": 2563906,
+      "cmdline": "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python scripts/experiments/prefeval_k1_writer.py train --arm B --split pilot --ids-file /inspire/ssd/project/exploration-topic/czxs26210936/repos/context-exposure-20261006/configs/experiments/context_population32_ids.json --base /inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907 --official-source /inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite --checkpoint /inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b730-exposure512-20260927/train/checkpoint-final.pt --output /inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-exposure-v1/train --teachers /inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-population32-v1/bank --teacher-supervision prompt_matching --teacher-steps 288 --steps 256 ",
+      "cuda": [
+        "CUDA_VISIBLE_DEVICES=0"
+      ]
+    }
+  ],
+  "attempts": [
+    {
+      "job": {
+        "name": "train",
+        "gpu": 0,
+        "command": [
+          "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+          "scripts/experiments/prefeval_k1_writer.py",
+          "train",
+          "--arm",
+          "B",
+          "--split",
+          "pilot",
+          "--ids-file",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-exposure-20261006/configs/experiments/context_population32_ids.json",
+          "--base",
+          "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+          "--official-source",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite",
+          "--checkpoint",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b730-exposure512-20260927/train/checkpoint-final.pt",
+          "--output",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-exposure-v1/train",
+          "--teachers",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-population32-v1/bank",
+          "--teacher-supervision",
+          "prompt_matching",
+          "--teacher-steps",
+          "288",
+          "--steps",
+          "256"
+        ]
+      },
+      "command_sha256": "7c0eb2e61dccf95ecec993d216830ab1b9812bec9d3bdb3fa10e22cff901d20b",
+      "hostname": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+      "started": 1791259115.5924296,
+      "pid": 2563906
+    }
+  ],
+  "source_resume_sha256": "0f2fb4b15ffea8e1843610f8d62ce191e6b695c08aaa7d89df12b64b526af057",
+  "initial_resume_sha256": "429644068938c9c6ac93a5d4b04657063459bdd0bb7ff5ab3641aa55b6eb063d",
+  "exact_optimizer_rng_parameter_continuity": true,
+  "old128_log_prefix_exact": true,
+  "last_step": 171,
+  "new_finite_nonzero_gradient_updates": 43,
+  "gpu_hours_provisional": 0.025515611635314094,
+  "campaign_gpu_hours_provisional": 6.340538028213714,
+  "source_clean": true,
+  "gpu": "0, 39774 MiB, 100 %\n1, 4 MiB, 0 %",
+  "compute": "2992171, [Not Found], 39764 MiB"
+}

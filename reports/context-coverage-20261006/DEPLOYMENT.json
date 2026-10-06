@@ -1,6 +1,6 @@
 {
   "schema": "dreamlite.context-coverage-deployment.v1",
-  "status": "exposure256_rollout_running",
+  "status": "exposure_dev_rollout_running",
   "execution_commit": "15ff2a93b5ec6222c37ec359b20cfadcabbba471",
   "notebook": "vlm-dreamlite-full-h200x2-20260720",
   "remote_checkout": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-coverage-20261006",
@@ -66,21 +66,21 @@
   "promotion": "none; no dev90 content-specific Writer gain established",
   "development_commit": "3995d2c9c111fdb7fac3002e658c4cc77e282e7a",
   "execution_tree_matches_development": true,
-  "last_live_verification_unix": 1791259416.846899,
-  "heartbeat_received_at": "2026-10-06T03:45:35.985Z",
-  "last_full_verification_unix": 1791258475.9313383,
+  "last_live_verification_unix": 1791263823.4428546,
+  "heartbeat_received_at": "2026-10-06T04:47:06.915Z",
+  "last_full_verification_unix": 1791262909.208821,
   "gpu_hours": {
     "smoke": 0.026387807660632662,
     "pilot": 1.187265353600184,
     "readout": 0.13596068448490567,
     "writer_readout_settled": 2.07533103565375,
-    "total": 6.381929367250867,
+    "total": 6.632105855743091,
     "total_is_settled_only": true,
     "scope": "Supervisor allocated GPU process hours including attempts; excludes platform idle costs and points.",
     "route_functional_settled": 0.23231854524877335,
     "context_fit_provisional": 0.3844299229648378,
-    "total_provisional": 6.396396583186256,
-    "provisional_asof_unix": 1791259416.846899,
+    "total_provisional": 6.644887201454905,
+    "provisional_asof_unix": 1791263823.4428546,
     "context_fit_settled": 0.3844299229648378,
     "context_dev_settled": 1.2953679603338242,
     "context_dev_provisional": 1.2953679603338242,
@@ -88,8 +88,10 @@
     "population32_provisional": 0.5377442402309841,
     "population_readout_settled": 0.4402168664005068,
     "population_readout_provisional": 0.4402168664005068,
-    "exposure256_settled": 0.06690695067246755,
-    "exposure256_provisional": 0.08137416660785675
+    "exposure256_settled": 0.3170834391646915,
+    "exposure256_provisional": 0.3170834391646915,
+    "exposure_dev_settled": 0,
+    "exposure_dev_provisional": 0.012781345711814033
   },
   "readout_audit": {
     "status": "completed_verified",
@@ -120,13 +122,12 @@
     "gpu_processes_after_completion": []
   },
   "next_stage": {
-    "name": "context-population32-v1",
-    "status": "supervise_existing_population_controller",
-    "protocol": "CONTEXT_POPULATION_PLAN.md",
-    "phase_cap_gpu_hours": 1.5,
-    "total_stage_cap_gpu_hours": 3,
+    "name": "context-exposure-dev-v1",
+    "status": "supervise_existing_controller",
+    "protocol": "CONTEXT_EXPOSURE_DEV_PLAN.md",
+    "gpu_hours_cap": 2,
     "campaign_cap": 16,
-    "action": "Read population status/owner/attempts and real PID/GPU; do not duplicate launch. Controller supplements16 diverse288 targets, validates32 bank, trainsWriter32 nativeFM128 fromB730, then exits ready_for_frozen_readout. Audit all gradients/targets/final weights before implementing frozen3840-row readout within3GPUh total. No dev/official/promotion.",
+    "action": "Supervise frozen final32/256 internal dev90 readout; no training or endpoint selection; do not repeat exposure training",
     "promotion": "none"
   },
   "writer_readout": {
@@ -531,7 +532,7 @@
     "comparison": "population-comparison.json"
   },
   "exposure256": {
-    "status": "rollout",
+    "status": "completed_verified",
     "protocol": "CONTEXT_EXPOSURE_PLAN.md",
     "factor": "fixed32 nativeFM updates128->256; exact optimizer/RNG continuation",
     "gpu_hours_cap": 1.5,
@@ -548,27 +549,25 @@
     "remote_output": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-exposure-v1",
     "notebook": "vlm-dreamlite-full-h200x2-20260720",
     "controller_pid": 2556692,
-    "worker_pids": [
-      2593861
-    ],
+    "worker_pids": [],
     "started_unix": 1791259031.1055646,
-    "latest_verification_unix": 1791259416.846899,
+    "latest_verification_unix": 1791262909.208821,
     "tests": {
       "windows": 36,
       "linux": 36
     },
-    "latest_evidence_directory": "exposure-0345-evidence",
-    "raw_archive_sha256": "e0c8de976564361541f266fd80a55d2cf7791e640893ec80bb6fa23f009b34a4",
+    "latest_evidence_directory": "exposure-result-0447-evidence",
+    "raw_archive_sha256": "99851a3add8f9e8c3e4297bb4e9d861341196141176001e01d8e01b3987620f5",
     "source_checkout_clean": true,
     "last_step": 256,
     "new_finite_nonzero_gradient_updates": 128,
     "exact_optimizer_rng_parameter_continuity": true,
     "old128_log_prefix_exact": true,
     "initial_resume_sha256": "429644068938c9c6ac93a5d4b04657063459bdd0bb7ff5ab3641aa55b6eb063d",
-    "gpu_hours_settled": 0.06690695067246755,
-    "gpu_hours_provisional": 0.08137416660785675,
+    "gpu_hours_settled": 0.3170834391646915,
+    "gpu_hours_provisional": 0.3170834391646915,
     "deployment": "CONTEXT_EXPOSURE_DEPLOYMENT.md",
-    "scientific_results": "pending256 endpoint and full paired readout",
+    "scientific_results": "Fixed32 updates128->256 restore trained-history recall/application specificity in both strata; no dev/generalization claim",
     "historical_train_pid": 2563906,
     "training_audit": {
       "total_updates": 256,
@@ -581,6 +580,58 @@
       "resume_sha256": "8f5bd84c06c91611a3a38aee7967b05ceaba136e8f331dfca7b74c5f1636e5f3"
     },
     "final_checkpoint_sha256": "5aaffb9983f2c16b176790237109502fc02516dda8a3e5c0ee9ecedba5f036a8",
-    "latest_post_training_evidence": "exposure-post-training-0345.json"
+    "latest_post_training_evidence": "exposure-post-training-0345.json",
+    "finished_unix": 1791260232.10087,
+    "verified_total_rows": 5376,
+    "verified_new_rows": 1536,
+    "verified_total_pngs": 192,
+    "verified_teacher_tensors": 384,
+    "exact_report_recomputation": true,
+    "owner_removed": true,
+    "workers_exited": true,
+    "report": "CONTEXT_EXPOSURE_RESULT.md",
+    "comparison": "exposure-comparison.json"
+  },
+  "exposure_dev": {
+    "status": "rollout",
+    "execution_commit": "4bd2a8331af5142247e6ebb9794c1a2cb3df2fe0",
+    "development_commit": "27261ca8d22ff37218b4ff1b5ba0876f82a8d7c6",
+    "execution_tree": "945aceb6065a4353e2c2c960df24cfa62e5b8540",
+    "execution_tree_matches_development": true,
+    "remote_checkout": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-exposure-dev-20261006",
+    "remote_output": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-exposure-dev-v1",
+    "notebook": "dl-context-dev-n2-1006",
+    "protocol": "CONTEXT_EXPOSURE_DEV_PLAN.md",
+    "tests": {
+      "windows": 29,
+      "linux": 29
+    },
+    "gpu_hours_cap": 2,
+    "campaign_gpu_hours_cap": 16,
+    "expected_new_rows": 4320,
+    "expected_total_rows": 28080,
+    "expected_new_pngs": 180,
+    "expected_total_pngs": 1080,
+    "expected_teacher_targets": 1080,
+    "checkpoint_sha256": "5aaffb9983f2c16b176790237109502fc02516dda8a3e5c0ee9ecedba5f036a8",
+    "new_training": false,
+    "new_official_scoring": false,
+    "source_notebook_status": "STOPPED",
+    "resource_recovery": "Original notebook STOPPED. Low-priority dl-context-dev-h2-1006 preempted then metadata traversal blocked before any GPU job; stopped and empty prelaunch archived. Normal-priority dl-context-dev-n2-1006 created with same image and2H200,120min timer. Full CPU owner inventory and target-side immediate hashes agree on5 foreign/fixture owners; target GPUs idle before launch.",
+    "controller_pid": 5841,
+    "worker_pids": [
+      29841
+    ],
+    "started_unix": 1791263480.7690082,
+    "latest_verification_unix": 1791263823.4428546,
+    "latest_evidence_directory": "exposure-dev-0447-evidence",
+    "raw_archive_sha256": "ed5c413b755cc52a34ee2c3c6f50038fa5b15cc38e72a323057d8f429d5a4357",
+    "gpu_hours_settled": 0,
+    "gpu_hours_provisional": 0.012781345711814033,
+    "source_checkout_clean": true,
+    "pngs_verified": 1,
+    "deployment": "CONTEXT_EXPOSURE_DEV_DEPLOYMENT.md",
+    "latest_rollout_evidence": "exposure-dev-rollout-0447.json",
+    "source_audit_complete": true
   }
 }

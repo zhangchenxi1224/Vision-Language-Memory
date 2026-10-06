@@ -1,3 +1,27 @@
+# 最新运行状态补充
+
+2026-10-06 13:17:03 CST：新dev90控制器5841已完成旧曝光和dev报告的来源重算，进入实际rollout。worker29841 CUDA_VISIBLE_DEVICES=0，实际GPU0约14GiB/100%，GPU1保留后续双分片读回；首张1/180 PNG的完整收据、uint8 RGB1024和SHA核验通过。实例dl-context-dev-n2-1006，执行4bd2a83，输出context-exposure-dev-v1。新增4320行评分尚未开始，不提前下dev结论。证据exposure-dev-rollout-0447.json。
+
+已结算全任务6.632105855743GPUh；新dev活跃生成暂计0.012781345712，全任务暂计6.644887201455/16（13:17:03采样）。新阶段2GPUh上限、最多2GPU、实例120分钟平台停止计时和共用控制器deadline不变。不要依据下方较早source_audit状态重复启动。下一小时按DEPLOYMENT中的新实例/owner/attempt检查，完成后固定4bd2a83 report重算全部28080行；停止时先证旧worker停止再归档owner/结算/恢复。
+
+# 每小时执行入口（最新）
+
+2026-10-06 第十一次跟进：固定32历史128→256曝光对照已经完成并通过全量独立复核，见CONTEXT_EXPOSURE_RESULT.md / exposure-comparison.json。5376行、192PNG、384教师张量、Adam/RNG/日志连续性通过；原/新增各16恢复与应用均有正匹配特异性，但不证明新历史泛化。全任务结算6.632105855743/16 GPUh；曝光阶段0.317083439165。旧controller与四worker exit0、owner删除，不重跑训练。
+
+后续按CONTEXT_EXPOSURE_DEV_PLAN.md固定final256（SHA5aaffb9983f2c16b176790237109502fc02516dda8a3e5c0ee9ecedba5f036a8），仅内部dev90功能诊断，复用旧context-dev权重与对照、1080旧教师分布；新增180PNG/4320行，总1080PNG/28080行。n90偏好配对，恢复/应用/中性分别给匹配、同主题错配、灰图、文本，主要对比16/128宽组与32/256。同每历史曝光但总计算不同，不冒称计算匹配覆盖效应；dev已研究暴露，official180保持封存，默认不晋级。
+
+原vlm-dreamlite-full-h200x2-20260720已停止，恢复排队因原组无卡而取消；第一次新建dl-context-dev-h2-1006先抢占后节点元数据预检阻塞，未启动controller/worker、0新GPU进程小时，已停止。失败元数据目录exposure-dev-prelaunch-aborted-0447保留，前景重复预检被非空输出guard拒绝，没有重复计算。不要根据该历史错误复活它。
+
+当前唯一资源dl-context-dev-n2-1006（开发区-H200-3号机房-2-cuda12.8版本，priority4，2H200/40CPU/400GiB，官方ngc-pytorch25.02/CUDA12.8镜像，120分钟平台停止计时）。独立checkout context-exposure-dev-20261006，执行4bd2a8331af5142247e6ebb9794c1a2cb3df2fe0，开发27261ca8d22ff37218b4ff1b5ba0876f82a8d7c6，同tree945aceb6065a4353e2c2c960df24cfa62e5b8540，Windows/Linux各29检查通过。controller5841已启动，host dl-context-dev-n2-1006--04a62f93b2ff-l335qh6pof；实际GPU阶段以DEPLOYMENT.json与后续现场证据为准。
+
+新output仅context-coverage-20261006/context-exposure-dev-v1。新阶段上限2GPUh，仍在原16池，生成/两分片评分/失败共用；最多2GPU，每次≤6h。源exposure与dev在启动前精确重算，不修改旧消费者源码。CPU完整owner清查resource-owners-0447.json及新实例启动前即时定点复读均为5旧owner（其他ARIS实例或测试fixture），GPU/内存/进程预检无冲突。新实例没有其他任务预留，其他自动化/ARIS预算不动。
+
+下次读DEPLOYMENT和ARIS tracker后，优先检查新实例与新output，不重新启动旧曝光训练。检查实际controller/attempt PID/cmdline/CUDA、日志、PNG完整性、source/inputs绑定、完整4320新行及账单。完成用冻结4bd2a83的run_context_exposure_dev.report全量重算，验证新180与旧900PNG、1080教师张量和28080行；所有比较保持偏好级n90。阴性回训练侧机制诊断，不加步或在dev挑快照。
+
+如果实例再停止/抢占：先平台确认旧pod/worker停止，保留原attempt开始/结束计费；活动owner必须归档而非覆盖。新controller只在无未结算attempt、无其他owner/GPU且同冻结代码/模型/数据下恢复。只读评分和PNG可在核验partial身份后续接，不清空旧行。禁止重复启动、杀其他任务、重置预算或空转保活。若新节点无法调度，每小时再查，不同时排队多个双卡实例。仅实质变化/完成/故障或需用户处理时通知。
+
+## 先前状态（仅供溯源）
+
 # 最新进度补充
 
 2026-10-06 12:03:36 CST最新核验：256更新已全部完成并通过控制器全量训练审计，新增128步、总1024draw、32ID各32次，旧128前缀一致、所有梯度有限非零、resume/final状态一致；最终checkpoint SHA5aaffb9983f2c16b176790237109502fc02516dda8a3e5c0ee9ecedba5f036a8现场重算通过。训练worker2563906已退出，controller2556692保持运行，rollout worker2593861实际GPU0约14GiB，进入64PNG生成；评分仍pending。不要重跑训练。证据exposure-post-training-0345.json。新增训练结算0.066906950672GPUh，新轮含活动生成暂计0.081374166608，全任务已结算6.381929367251、暂计6.396396583186/16。下一次监督以此较新状态为准，后续读回/预算/恢复协议不变。
