@@ -59,3 +59,5 @@
 2026-10-06 11:04 CST：原/新增16分层读回已部署独立cb04567，双GPU实际worker及首批8/96新PNG核验通过，完整3840行结果pending。目标/训练结算0.537744240231，总暂计5.916105394827/16GPUh。见CONTEXT_POPULATION_READOUT_DEPLOYMENT.md；不新评dev/official、不改默认。
 
 2026-10-06 第十次跟进：population完整3840行阴性，原16收益退化、新增16无匹配特异性；报告CONTEXT_POPULATION_RESULT.md。全任务结算6.315022416578GPUh。冻结CONTEXT_EXPOSURE_PLAN.md，仅32历史更新128→256以检验曝光不足；完整Adam/RNG续接原128，目标/数据/评测固定，不触碰dev/official或默认。当前准备待部署。
+
+2026-10-06 12:00 CST：固定32历史更新128→256对照已部署独立cc3dffc，实际续训171/256，43新增梯度有效，Adam/RNG/权重和原128日志完整复用。完整5376行读回pending；新1.5GPUh上限，全任务暂计6.340538/16。见CONTEXT_EXPOSURE_DEPLOYMENT.md，训练侧结果不晋级默认。

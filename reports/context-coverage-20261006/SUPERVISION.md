@@ -1,5 +1,21 @@
 # 每小时执行入口
 
+当前以此条为准（2026-10-06 12:00 CST）：population覆盖16→32的3840行实验已完整核验为阴性，见CONTEXT_POPULATION_RESULT.md；默认不晋级。后续context-exposure-v1已真实训练到171/256，新增43更新梯度有限非零，原128日志字节前缀、1075参数/Adam/RNG完整续接核验通过，科学读回pending。
+
+独立checkout context-exposure-20261006，执行cc3dffc864ccedc1ef354012e638190055299726、开发01b39a8c0622a585a7293bd7d54bf53ff1aac0a1，同tree3c8dc0d7562f4d8e28b329fdf51ae9010ab51f55。Windows/Linux各36检查通过，执行源码clean。controller2556692、train worker2563906，CUDA0实际约39GiB；GPU1暂无任务但后续两分片读回需双卡，不额外插任务。旧population controller及4worker均退出，预检无本host其他计算/预留/owner，未动ARIS其他资源。
+
+按CONTEXT_EXPOSURE_PLAN.md，唯一因素为同32目标累计更新128→256；不重制目标、不重算前128、不重置优化器。控制器完成256后核验总1024draw、32ID各32次、全256连续有限梯度与resume/final一致，再生成64新PNG、两分片各768读回，复用旧3840行合并5376；所有384教师缓存只读，不得缺失时生成。原/新增各n16分层、匹配/分层内同主题错配/灰图/文本全保留，固定final256，不新评分dev/official。
+
+下次先读DEPLOYMENT.json及ARIS tracker，再查context-exposure-v1/status、active-owner、attempts/receipts、真实PID/cmdline/GPU、优化日志/检查点与PNG。运行中不重复启动或修改执行树。完整后用冻结cc3dffc的run_context_exposure.report全量重算（同时验证旧population报告），核验192总PNG、384教师张量、5376精确分母与分层偏好级区间。旧population结果和所有父权重只读。
+
+此前全结算6.315022416578GPUh，新曝光阶段暂计0.025515611635，总暂计6.340538028214（采集时点12:00:07）。本新迭代上限1.5GPUh计入原16池，训练/生成/读回/失败共用；最多2GPU、单次≤6h，禁止重启重置/空转。若部分训练中断，先证明旧worker停止、结算与归档owner，核验resume128/256及未提交日志尾部；当前控制器拒绝未经审计的partial直接重跑。
+
+现场与恢复证据exposure-0345-evidence/，归档SHAe0c8de976564361541f266fd80a55d2cf7791e640893ec80bb6fa23f009b34a4，部署说明CONTEXT_EXPOSURE_DEPLOYMENT.md。第十次触发2026-10-06T03:45:35.985Z已执行，每小时继续，仅实质变化/完成/故障/需用户处理时通知。不要改其他自动任务或复活取消的ARIS A64/B730。
+
+## 先前状态（仅供溯源）
+
+# 每小时执行入口
+
 当前population16→32实验全量完成且独立核验（2026-10-06 11:47:55 CST）。3840行、128PNG、384教师张量、源模型/梯度/哈希及report重算通过；controller/4worker退出、owner消失、两GPU空闲。原16恢复/应用明显下降，新增16虽小幅KL改善但未建立匹配特异性，默认不晋级。详见CONTEXT_POPULATION_RESULT.md与population-result-0345-evidence/。全任务结算6.315022416578GPUh。
 
 已冻结CONTEXT_EXPOSURE_PLAN.md：32历史/目标不变、更新128→256，每历史16→32draw。复用完整resume128的Adam/RNG/cursor，仅新manifest登记steps256，原始源只读；新增执行129–256而不重跑128。新context-exposure-v1上限1.5GPUh计入16池，新增64PNG/1536行、复用3840行合并5376，原/新增各n16分层，同12问题/controls/noise，384教师分布只读，不新dev/official评分、不选端点。

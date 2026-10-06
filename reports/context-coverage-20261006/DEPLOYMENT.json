@@ -1,6 +1,6 @@
 {
   "schema": "dreamlite.context-coverage-deployment.v1",
-  "status": "population_completed_exposure_prepared",
+  "status": "exposure256_training_running",
   "execution_commit": "15ff2a93b5ec6222c37ec359b20cfadcabbba471",
   "notebook": "vlm-dreamlite-full-h200x2-20260720",
   "remote_checkout": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-coverage-20261006",
@@ -66,7 +66,7 @@
   "promotion": "none; no dev90 content-specific Writer gain established",
   "development_commit": "3995d2c9c111fdb7fac3002e658c4cc77e282e7a",
   "execution_tree_matches_development": true,
-  "last_live_verification_unix": 1791258475.9313383,
+  "last_live_verification_unix": 1791259207.4486315,
   "heartbeat_received_at": "2026-10-06T03:45:35.985Z",
   "last_full_verification_unix": 1791258475.9313383,
   "gpu_hours": {
@@ -79,15 +79,17 @@
     "scope": "Supervisor allocated GPU process hours including attempts; excludes platform idle costs and points.",
     "route_functional_settled": 0.23231854524877335,
     "context_fit_provisional": 0.3844299229648378,
-    "total_provisional": 6.315022416578399,
-    "provisional_asof_unix": 1791258475.9313383,
+    "total_provisional": 6.340538028213714,
+    "provisional_asof_unix": 1791259207.4486315,
     "context_fit_settled": 0.3844299229648378,
     "context_dev_settled": 1.2953679603338242,
     "context_dev_provisional": 1.2953679603338242,
     "population32_settled": 0.5377442402309841,
     "population32_provisional": 0.5377442402309841,
     "population_readout_settled": 0.4402168664005068,
-    "population_readout_provisional": 0.4402168664005068
+    "population_readout_provisional": 0.4402168664005068,
+    "exposure256_settled": 0,
+    "exposure256_provisional": 0.025515611635314094
   },
   "readout_audit": {
     "status": "completed_verified",
@@ -529,7 +531,7 @@
     "comparison": "population-comparison.json"
   },
   "exposure256": {
-    "status": "prepared_not_deployed",
+    "status": "training",
     "protocol": "CONTEXT_EXPOSURE_PLAN.md",
     "factor": "fixed32 nativeFM updates128->256; exact optimizer/RNG continuation",
     "gpu_hours_cap": 1.5,
@@ -537,6 +539,35 @@
     "source_resume_sha256": "0f2fb4b15ffea8e1843610f8d62ce191e6b695c08aaa7d89df12b64b526af057",
     "new_dev_or_official_scoring": false,
     "expected_new_rows": 1536,
-    "expected_total_rows": 5376
+    "expected_total_rows": 5376,
+    "execution_commit": "cc3dffc864ccedc1ef354012e638190055299726",
+    "development_commit": "01b39a8c0622a585a7293bd7d54bf53ff1aac0a1",
+    "execution_tree": "3c8dc0d7562f4d8e28b329fdf51ae9010ab51f55",
+    "execution_tree_matches_development": true,
+    "remote_checkout": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-exposure-20261006",
+    "remote_output": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-exposure-v1",
+    "notebook": "vlm-dreamlite-full-h200x2-20260720",
+    "controller_pid": 2556692,
+    "worker_pids": [
+      2563906
+    ],
+    "started_unix": 1791259031.1055646,
+    "latest_verification_unix": 1791259207.4486315,
+    "tests": {
+      "windows": 36,
+      "linux": 36
+    },
+    "latest_evidence_directory": "exposure-0345-evidence",
+    "raw_archive_sha256": "e0c8de976564361541f266fd80a55d2cf7791e640893ec80bb6fa23f009b34a4",
+    "source_checkout_clean": true,
+    "last_step": 171,
+    "new_finite_nonzero_gradient_updates": 43,
+    "exact_optimizer_rng_parameter_continuity": true,
+    "old128_log_prefix_exact": true,
+    "initial_resume_sha256": "429644068938c9c6ac93a5d4b04657063459bdd0bb7ff5ab3641aa55b6eb063d",
+    "gpu_hours_settled": 0,
+    "gpu_hours_provisional": 0.025515611635314094,
+    "deployment": "CONTEXT_EXPOSURE_DEPLOYMENT.md",
+    "scientific_results": "pending256 endpoint and full paired readout"
   }
 }
