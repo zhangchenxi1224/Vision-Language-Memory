@@ -71,3 +71,7 @@
 2026-10-06 第十二次跟进：固定final32/256内部dev90完成并全量复核，28,080行显示恢复/应用没有新历史迁移或匹配特异性，见CONTEXT_EXPOSURE_DEV_RESULT.md。累计7.373056459228GPUh。下一轮冻结CONTEXT_LAYOUT_PLAN.md，只在训练32上改变历史角色排版，固定权重、内容、噪声/读者/目标，先标准PNG严格校准后64新图与1536行；已部署独立9cf6ea7到现有专用双H200，源审计运行中。无新dev/official评分或默认晋级。
 
 2026-10-06 14:19:53 CST：排版扰动诊断标准PNG严格校准通过，新布局14/64PNG已生成并核验，完整6912行pending；固定9cf6ea7与同一实例，预算暂计7.426959/16GPUh。见CONTEXT_LAYOUT_DEPLOYMENT.md。
+
+2026-10-06 第十三次跟进：角色排版诊断全量阳性（脆弱性），四个恢复/应用分层均匹配恶化且特异性下降，见CONTEXT_LAYOUT_RESULT.md；累计7.655850706829GPUh。冻结同预算两臂布局增强与未训练XML格式评测，见CONTEXT_LAYOUT_AUG_PLAN.md。首次部署只在CPU源审计发现绝对路径绑定，尚无新GPU attempt，独立修复后再部署。
+
+2026-10-06 15:17 CST：独立844dda1修复冻结报告路径绑定，38项Windows/Linux检查通过，controller55309于恢复后的专用双H200启动。先真实native两步等价校准后两臂同预算续训；三格式消费者已实现但等待完整权重。见CONTEXT_LAYOUT_AUG_DEPLOYMENT.md，累计7.655851/16GPUh，无增强结论。

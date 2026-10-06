@@ -1,3 +1,25 @@
+# 最新执行入口：2026-10-06 15:17:23 CST
+
+绝对路径兼容问题已修复并用独立v2冻结；Windows/Linux38项通过。新控制器55309已经启动，当前source_audit；无新的GPU训练评分结论。执行844dda1819168b551882577a2946548dc8602f2f，开发14c097248b7e416e7079b7b227f10f4a60a1cbd9，同treea8aba6633edbe3c99d133f262f839b6947c300c3；独立checkout context-layout-aug-20261006-v2，output仍为新的context-layout-aug-v1。首次0GPU失败目录已在确认controller2438退出/owner撤销/attempts为空后归档至context-layout-aug-prelaunch-failed-0650，旧checkout未改。父layout报告现在在其原9cf6ea7执行目录复算；本轮plan用稳定output路径绑定，不能随意搬迁/补写旧报告来“修复”哈希。
+
+当前实例dl-context-dev-n2-1006，恢复到qb-prod-gpu800，官方25.02/CUDA12.8，两H200，约17:05 CST自动停止。原full-h200x2尝试恢复后因资源不足已取消/STOPPED；最多只有当前2GPU。5个其他owner已fresh复读无冲突，实际GPU空闲/内存足够。执行上限训练0.75GPUh、整轮3、任务16；已结算7.655850706829。先native两步与新控制臂并行，再新增强臂两步，精确比较参数/Adam/RNG/梯度轨迹，通过才两臂258→384。校准及失败均计费，原生参考两步不作科学端点。
+
+训练到ready_for_frozen_readout即退出并释放owner。下一步消费者已实现于同844dda1冻结树的run_context_layout_aug_readout.py，独立output context-layout-aug-readout-v1，尚未启动。它必须等两臂完整384/native-parity/training-audit通过，且实际worker退出后部署。按同一CONTEXT_LAYOUT_AUG_PLAN.md：384PNG、9216新增+6912复用=16128行，三格式canonical/markdown/XML，384教师只读；训练预算和失败计入读回/整轮上限，不重新发3GPUh。消费者最长2.25GPUh且train+readout≤3，仍在原16池。
+
+下次检查真实PID/cmdline/CUDA、native-parity、optimization连续性、resume/final SHA、完整读回分母及费用。训练中不变更执行树或manifest；partial checkpoint/日志尾必须审计后恢复，禁止盲目重启。优先保护XML不进训练cache、dev/official未评、不挑checkpoint、不晋级默认。父权重/32教师/历史内容/数据身份固定。详细结果与方案见CONTEXT_LAYOUT_RESULT.md、CONTEXT_LAYOUT_AUG_PLAN.md、DEPLOYMENT.json。
+
+## 先前状态（仅供溯源）
+
+# 当前状态更新（第十三次跟进，部署修复中）
+
+context-layout-v1全6912行完成且14:55:39独立精确重算通过。保留全部历史内容、仅变角色排版，原/新增各16的恢复/应用均匹配KL变差且特异性下降；报告CONTEXT_LAYOUT_RESULT.md。256读回PNG+1校准、384教师张量、源256梯度/权重/Adam-RNG均核验。旧controller378758和3worker全部退出、owner消失。结算0.282794247601，全任务7.655850706829/16GPUh。
+
+下一轮CONTEXT_LAYOUT_AUG_PLAN.md已冻结：两臂同resume256各加128步到384，唯一区别是canonical-only vs均衡canonical/markdown；384新PNG/9216新读回/16128合并，额外XML格式训练未见，原/新增各n16，dev90/official180不动。训练阶段0.75GPUh、读回2.25、整轮3，全部在原16池，失败/原生两步校准计入。先原生与新两臂257–258真实参数/Adam/RNG精确等价，才继续。
+
+旧n2已完成且距自动停止仅8分钟，安全退出/释放后优先尝试原full-h200x2，因资源不足取消并确认STOPPED；n2恢复到qb-prod-gpu800，原官方镜像/2H200/120分钟计时。首次f0716ee部署的controller2438在CPU源审计失败：旧报告绑定原checkout绝对路径，当前新tree缺旧报告路径。0个GPU attempt、无训练/新图片；owner已删除，不算新GPU成本。旧执行树未改。正在独立v2冻结修复（父报告回原冻结目录复算、训练身份用稳定输出plan），仅归档这个0GPU失败输出后启动；以DEPLOYMENT最新状态为准，不能把“脚本存在”当成已训练。
+
+## 先前状态（仅供溯源）
+
 # 最新现场状态：2026-10-06 14:19:53 CST
 
 context-layout-v1已通过旧产物源审计，并进入真实GPU生成。标准格式校准PNG与旧标准SHA精确一致（6354dde11868bb5acd5071c518768736931eb7e7732ddaaf4ddd0642519694f4），新布局14/64PNG的完整收据、历史内容/噪声、RGB1024与哈希核验通过。controller378758/rollout398060的实际cmdline与CUDA0通过，GPU0约14GiB，GPU1留待双分片读回。冻结9cf6ea7源码clean；新评分尚未开始。证据layout-0548-evidence/，归档SHAa57281deed02d5f06d74aaf2e55ae5e7e75f9b1ae24b970263a321b18a1288b7。

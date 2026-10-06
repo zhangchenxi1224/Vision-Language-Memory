@@ -1,0 +1,140 @@
+{
+  "checked_at": 1791267593.9054377,
+  "status": {
+    "status": "rollout",
+    "time": 1791267399.854853,
+    "commit": "9cf6ea72da0e4b17b3e0bf27232d55ae74db6c17"
+  },
+  "controller_pid": 378758,
+  "processes": {
+    "378758": {
+      "command": "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python scripts/inspire/run_context_layout.py run --output /inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-layout-v1 --base /inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907 --reader /inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct --official-source /inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite ",
+      "cuda": []
+    },
+    "398060": {
+      "command": "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python /inspire/ssd/project/exploration-topic/czxs26210936/repos/context-layout-20261006/scripts/inspire/run_context_layout.py rollout --output /inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-layout-v1 --base /inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907 --reader /inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct --official-source /inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite ",
+      "cuda": [
+        "CUDA_VISIBLE_DEVICES=0"
+      ]
+    }
+  },
+  "source_clean": true,
+  "commit": "9cf6ea72da0e4b17b3e0bf27232d55ae74db6c17",
+  "parity": {
+    "pair_id": "education_learning_styles:0001",
+    "chain": 0,
+    "source": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-exposure-v1/images/education_learning_styles_0001/seed-0/prefix-00.png",
+    "sha256": "6354dde11868bb5acd5071c518768736931eb7e7732ddaaf4ddd0642519694f4",
+    "write": {
+      "position": 0,
+      "source_png_sha256": null,
+      "output_png_sha256": "6354dde11868bb5acd5071c518768736931eb7e7732ddaaf4ddd0642519694f4",
+      "noise_seed": 6976872257973134014,
+      "event": "user: I find flashcards ineffective and prefer storytelling and narrative-based approaches for memorization.\nassistant:  That's completely understandable! Different learning styles work for different people, and it's great that you've found an approach that works well for you.\n\nStorytelling and narrative-based approaches can be very effective for memorization because they engage the brain in a different way than flashcards or other rote memorization techniques. By creating a story or narrative around the information you're trying to memorize, you're creating a mental framework that helps you remember the information more easily.\n\nHere are a few tips for using storytelling and narrative-based approaches for memorization:\n\n1. Make it personal: Try to create a story or narrative that is meaningful and relevant to you. This will help you engage with the material on a deeper level and make it more memorable.\n2. Use vivid imagery: Visualize the story in your mind as you're creating it. Use vivid, colorful images to help you remember the details.\n3. Practice retrieval: Once you've created a story or narrative, practice retrieving the information from memory. Try to recall the story in as much detail as possible, without looking at your notes.\n4. Make it interactive"
+    },
+    "binding": {
+      "checkpoint_sha256": "5aaffb9983f2c16b176790237109502fc02516dda8a3e5c0ee9ecedba5f036a8",
+      "split": "pilot",
+      "steps": 28,
+      "cfg": 1,
+      "noise_chains": 2,
+      "inter_turns": 0,
+      "state": "only reopened uint8 RGB PNG; fresh Gaussian each write",
+      "layout": "markdown-role-headings-v1",
+      "source_sha256": "40bddab69ad51d5f0aa99c6473f142cc496d5cf10bff3acafcdbc58febaa1dfc",
+      "plan_sha256": "5c433c26d7a623b2ec9bd12ef1be3c4989a88db04fe9f16574819c51028e660c"
+    }
+  },
+  "verified_new_pngs": [
+    {
+      "pair_id": "education_learning_styles:0001",
+      "chain": 0,
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-layout-v1/images/education_learning_styles_0001/seed-0/prefix-00.png",
+      "sha256": "f89370888ee3d386c20578b78855f628c39da6c033b623cfb40f0115e4c4cafc"
+    },
+    {
+      "pair_id": "education_learning_styles:0001",
+      "chain": 1,
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-layout-v1/images/education_learning_styles_0001/seed-1/prefix-00.png",
+      "sha256": "875ce553d281fdec8e856dfbc5efbf9749da8ed7944ad6562ea168be81f47c71"
+    },
+    {
+      "pair_id": "education_learning_styles:0007",
+      "chain": 0,
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-layout-v1/images/education_learning_styles_0007/seed-0/prefix-00.png",
+      "sha256": "c98a97b130d65ec06476b3d440fc49a3bcfabb4f83c669912812a897d836579d"
+    },
+    {
+      "pair_id": "education_learning_styles:0007",
+      "chain": 1,
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-layout-v1/images/education_learning_styles_0007/seed-1/prefix-00.png",
+      "sha256": "3b68f875f621f8ae993933bd6359436666b4e9eb5ec2c4ae4f70c05df00c11aa"
+    },
+    {
+      "pair_id": "education_learning_styles:0009",
+      "chain": 0,
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-layout-v1/images/education_learning_styles_0009/seed-0/prefix-00.png",
+      "sha256": "9df499bf021c833ee11235c52c1632b312107091680a858420f9a5fd5ed0f657"
+    },
+    {
+      "pair_id": "education_learning_styles:0009",
+      "chain": 1,
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-layout-v1/images/education_learning_styles_0009/seed-1/prefix-00.png",
+      "sha256": "04f14a2dab856fa047d8c4b4c366a340c736245cc3da9e4280e46a6901bef114"
+    },
+    {
+      "pair_id": "education_learning_styles:0030",
+      "chain": 0,
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-layout-v1/images/education_learning_styles_0030/seed-0/prefix-00.png",
+      "sha256": "090ef6c8f720bdd2a7d46b3a7179cc79c6dfb08ef64f58186585fb11bfbb07f1"
+    },
+    {
+      "pair_id": "education_learning_styles:0030",
+      "chain": 1,
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-layout-v1/images/education_learning_styles_0030/seed-1/prefix-00.png",
+      "sha256": "48927c5b6b86c653c6d4aeca1a29b4d5aa39ca1967a6b342029c2cbf45cfe5c2"
+    },
+    {
+      "pair_id": "entertain_games:0001",
+      "chain": 0,
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-layout-v1/images/entertain_games_0001/seed-0/prefix-00.png",
+      "sha256": "f010a94fe2d7a82fe2dac091349d81c89a31d61b72eb476012bef88d9ec12919"
+    },
+    {
+      "pair_id": "entertain_games:0001",
+      "chain": 1,
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-layout-v1/images/entertain_games_0001/seed-1/prefix-00.png",
+      "sha256": "7b1e38e0acd7fdf0d45625b6cd0d0bae6a55e81af147e6daf2d78c0455ef9cbc"
+    },
+    {
+      "pair_id": "entertain_games:0007",
+      "chain": 0,
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-layout-v1/images/entertain_games_0007/seed-0/prefix-00.png",
+      "sha256": "4457d4b5df11ff70b150539bfa935d2ab3d7018a497243c8fd8a7e6ddd1e73f6"
+    },
+    {
+      "pair_id": "entertain_games:0007",
+      "chain": 1,
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-layout-v1/images/entertain_games_0007/seed-1/prefix-00.png",
+      "sha256": "9b3ed7816cc185e975227e7febf45394d4a5421419528cc2e6fcadd8ff884c02"
+    },
+    {
+      "pair_id": "entertain_games:0023",
+      "chain": 0,
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-layout-v1/images/entertain_games_0023/seed-0/prefix-00.png",
+      "sha256": "af3dc69e9ad6c453d2e5edb3fe131f39240e9ba9af0413afcfeb4eda0979389a"
+    },
+    {
+      "pair_id": "entertain_games:0023",
+      "chain": 1,
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-layout-v1/images/entertain_games_0023/seed-1/prefix-00.png",
+      "sha256": "4e3a0a5b9a5a593c00bfbc5cc0651b37c1e7318fd4ea4416bfe3d752c3767574"
+    }
+  ],
+  "phase_gpu_hours_provisional": 0.05390252225928836,
+  "campaign_gpu_hours_settled": 7.373056459228198,
+  "campaign_gpu_hours_provisional": 7.426958981487486,
+  "gpu": "0, GPU-4f738315-098c-f63c-e050-6dcbeb9a2e87, 14128 MiB, 100 %\n1, GPU-58ce319d-a9c9-c6fd-75e0-bdff5bbf9336, 1 MiB, 0 %",
+  "gpu_processes": "398060, /inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python, 14118 MiB",
+  "gradients": "No new training; frozen256 source audit verified before rollout"
+}

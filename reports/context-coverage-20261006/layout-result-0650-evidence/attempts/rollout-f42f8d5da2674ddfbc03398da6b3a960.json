@@ -1,0 +1,25 @@
+{
+  "job": {
+    "name": "rollout",
+    "gpu": 0,
+    "command": [
+      "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+      "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-layout-20261006/scripts/inspire/run_context_layout.py",
+      "rollout",
+      "--output",
+      "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-layout-v1",
+      "--base",
+      "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+      "--reader",
+      "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+      "--official-source",
+      "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite"
+    ]
+  },
+  "command_sha256": "a066f31e911f4b0f2d1c6b7fbb1f4f8a9648775558994220560d36b90b360ea0",
+  "hostname": "dl-context-dev-n2-1006--04a62f93b2ff-l335qh6pof",
+  "started": 1791267399.8563576,
+  "pid": 398060,
+  "finished": 1791268126.1634321,
+  "exit_code": 0
+}

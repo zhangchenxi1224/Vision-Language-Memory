@@ -1,0 +1,23 @@
+{
+  "job": {
+    "name": "evaluate-0",
+    "gpu": 0,
+    "command": [
+      "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+      "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-layout-20261006/scripts/inspire/run_context_layout.py",
+      "evaluate",
+      "--output",
+      "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-layout-v1",
+      "--reader",
+      "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+      "--shard",
+      "0"
+    ]
+  },
+  "command_sha256": "d0eeb911b32b3e939f3b9f647a763c99af0dd51585d4099f95d68af83e045433",
+  "hostname": "dl-context-dev-n2-1006--04a62f93b2ff-l335qh6pof",
+  "started": 1791268130.421185,
+  "pid": 477379,
+  "finished": 1791268276.725607,
+  "exit_code": 0
+}
