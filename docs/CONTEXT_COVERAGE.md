@@ -61,3 +61,5 @@
 2026-10-06 第十次跟进：population完整3840行阴性，原16收益退化、新增16无匹配特异性；报告CONTEXT_POPULATION_RESULT.md。全任务结算6.315022416578GPUh。冻结CONTEXT_EXPOSURE_PLAN.md，仅32历史更新128→256以检验曝光不足；完整Adam/RNG续接原128，目标/数据/评测固定，不触碰dev/official或默认。当前准备待部署。
 
 2026-10-06 12:00 CST：固定32历史更新128→256对照已部署独立cc3dffc，实际续训171/256，43新增梯度有效，Adam/RNG/权重和原128日志完整复用。完整5376行读回pending；新1.5GPUh上限，全任务暂计6.340538/16。见CONTEXT_EXPOSURE_DEPLOYMENT.md，训练侧结果不晋级默认。
+
+2026-10-06 12:03 CST：固定32历史256更新全部完成且验收，resume/final与1024draw连续性通过；开始64PNG生成及后续固定读回，结果pending。见exposure-post-training-0345.json，任务暂计6.396397GPUh。

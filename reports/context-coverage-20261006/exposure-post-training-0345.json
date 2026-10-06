@@ -1,0 +1,103 @@
+{
+  "time": 1791259415.3422673,
+  "status": {
+    "status": "rollout",
+    "time": 1791259364.7621503,
+    "commit": "cc3dffc864ccedc1ef354012e638190055299726"
+  },
+  "training": {
+    "total_updates": 256,
+    "new_updates": 128,
+    "total_draws": 1024,
+    "draws_per_history": 32,
+    "prefix_exact": true,
+    "finite_nonzero_gradients": true,
+    "checkpoint_sha256": "5aaffb9983f2c16b176790237109502fc02516dda8a3e5c0ee9ecedba5f036a8",
+    "resume_sha256": "8f5bd84c06c91611a3a38aee7967b05ceaba136e8f331dfca7b74c5f1636e5f3"
+  },
+  "attempts": [
+    {
+      "job": {
+        "name": "train",
+        "gpu": 0,
+        "command": [
+          "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+          "scripts/experiments/prefeval_k1_writer.py",
+          "train",
+          "--arm",
+          "B",
+          "--split",
+          "pilot",
+          "--ids-file",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-exposure-20261006/configs/experiments/context_population32_ids.json",
+          "--base",
+          "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+          "--official-source",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite",
+          "--checkpoint",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b730-exposure512-20260927/train/checkpoint-final.pt",
+          "--output",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-exposure-v1/train",
+          "--teachers",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-population32-v1/bank",
+          "--teacher-supervision",
+          "prompt_matching",
+          "--teacher-steps",
+          "288",
+          "--steps",
+          "256"
+        ]
+      },
+      "command_sha256": "7c0eb2e61dccf95ecec993d216830ab1b9812bec9d3bdb3fa10e22cff901d20b",
+      "hostname": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+      "started": 1791259115.5924296,
+      "pid": 2563906,
+      "finished": 1791259356.457452,
+      "exit_code": 0
+    },
+    {
+      "job": {
+        "name": "rollout",
+        "gpu": 0,
+        "command": [
+          "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+          "scripts/experiments/prefeval_k1_writer.py",
+          "rollout",
+          "--arm",
+          "B",
+          "--split",
+          "pilot",
+          "--ids-file",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-exposure-20261006/configs/experiments/context_population32_ids.json",
+          "--base",
+          "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+          "--official-source",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite",
+          "--checkpoint",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-exposure-v1/train/checkpoint-final.pt",
+          "--output",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-exposure-v1/images",
+          "--inter-turns",
+          "0",
+          "--noise-chains",
+          "2"
+        ]
+      },
+      "command_sha256": "aa87249962184ab5ed9fdbad36bab0aeb546fd11de81c18e80bf1482778699ed",
+      "hostname": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+      "started": 1791259364.7649217,
+      "pid": 2593861
+    }
+  ],
+  "source_train_pid_absent": true,
+  "processes": [
+    {
+      "pid": 2593861,
+      "cmdline": "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python scripts/experiments/prefeval_k1_writer.py rollout --arm B --split pilot --ids-file /inspire/ssd/project/exploration-topic/czxs26210936/repos/context-exposure-20261006/configs/experiments/context_population32_ids.json --base /inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907 --official-source /inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite --checkpoint /inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-exposure-v1/train/checkpoint-final.pt --output /inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-exposure-v1/images --inter-turns 0 --noise-chains 2 "
+    }
+  ],
+  "cost_asof": 1791259416.846899,
+  "settled_gpu_hours": 0.06690695067246755,
+  "provisional_gpu_hours": 0.08137416660785675,
+  "gpu": "3094479, [Not Found], 14118 MiB"
+}
