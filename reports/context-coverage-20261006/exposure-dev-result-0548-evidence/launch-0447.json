@@ -1,0 +1,81 @@
+{
+  "time": 1791263480.7622116,
+  "host": "dl-context-dev-n2-1006--04a62f93b2ff-l335qh6pof",
+  "commit": "4bd2a8331af5142247e6ebb9794c1a2cb3df2fe0",
+  "tree": "945aceb6065a4353e2c2c960df24cfa62e5b8540",
+  "command": [
+    "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+    "scripts/inspire/run_context_exposure_dev.py",
+    "run",
+    "--output",
+    "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-exposure-dev-v1",
+    "--base",
+    "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+    "--reader",
+    "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+    "--official-source",
+    "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite"
+  ],
+  "compute_before": "",
+  "gpus": "0, GPU-4f738315-098c-f63c-e050-6dcbeb9a2e87, 143771 MiB, 1 MiB, 143167 MiB, 0 %\n1, GPU-58ce319d-a9c9-c6fd-75e0-bdff5bbf9336, 143771 MiB, 1 MiB, 143167 MiB, 0 %\n",
+  "memory": "               total        used        free      shared  buff/cache   available\nMem:         2063865      189753     1679484       51947      255759     1874111\nSwap:              0           0           0\n",
+  "processes_before": "    PID ELAPSED COMMAND\n      1      81 /bin/bash /etc/inspire/launch_jupyterlab.sh\n    293      76 /bin/bash /etc/inspire/launch_jupyterlab.sh\n    295      76 /etc/inspire/bin/python /etc/inspire/bin/jupyter-lab --no-browse\n    296      76 /bin/bash /etc/inspire/launch_jupyterlab.sh\n    298      76 /etc/inspire/code-server/lib/node /etc/inspire/code-server --bin\n    316      75 /etc/inspire/code-server/lib/node /etc/inspire/code-server/out/n\n   5757       2 sleep 5\n   5758       0 bash\n   5800       0 bash\n   5817       0 /inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-\n   5825       0 ps -eo pid,etimes,args",
+  "other_owner_inventory": [
+    {
+      "path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/runs/dreamlite-aris-20261005/mainline/owner-workers/m2-20261005/owner.json",
+      "sha256": "4112b68d30ae681eddf5855b67eba2a533afff692d56e874488e1e9e89f03781",
+      "host": "b-cr4-normal-0927--5d79eca1ca6c-qa36tfl2jh",
+      "instance": "b-cr4-normal-0927"
+    },
+    {
+      "path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/runs/dreamlite-aris-20261005/mainline/owner-workers/m2-20261006/owner.json",
+      "sha256": "fd4cf40e61f7a7d9af91eaf9f589dd2fa439b6d2c165e993130654f0608e72d8",
+      "host": "prefeval-k1-read-h200x2-20260924--ab87355e23f9-wlaaegxcl7",
+      "instance": "prefeval-k1-read-h200x2-20260924"
+    },
+    {
+      "path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/runs/dreamlite-aris-20261005/mainline/owner-workers/warmup-m1-20261005/owner.json",
+      "sha256": "dfc6470060247f4798bd026133bb39f9d85ab24d8307696f1504c4b531e8d2d8",
+      "host": "prefeval-b-read-h200x2-20260925--dd8912853710-qnurkw7d5w",
+      "instance": "prefeval-b-read-h200x2-20260925"
+    },
+    {
+      "path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/runs/dreamlite-aris-20261005/mainline/owner-workers/warmup-m1-20261006/owner.json",
+      "sha256": "ba1e34226b6a568e076a6572a6275cb5b3edd9a737b07cdf69fd0ffbc33efe93",
+      "host": "b-cr4-normal-0927--5d79eca1ca6c-qa36tfl2jh",
+      "instance": "b-cr4-normal-0927"
+    },
+    {
+      "path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/runs/dreamlite-aris-20261005/validation/mainline-owner-prefetch-pytest/test_fixed_identity_cannot_ove0/owner.json",
+      "sha256": "9bf3d5dbefa267663e21f09fb5388715142d9b8310abfaa595a87324f7f0da2d",
+      "host": "registered-host",
+      "instance": null
+    }
+  ],
+  "owner_scan_pruned_artifact_directories": [],
+  "old_pids_on_stopped_original_host": [
+    2556692,
+    2563906,
+    2593861,
+    2678014,
+    2678015
+  ],
+  "owner_inventory_checked_at": 1791263466.127067,
+  "tests_linux": 29,
+  "tests_windows": 29,
+  "linux_preflight": {
+    "exit_code": 0,
+    "output": "Running 29 items in this shard\n.............................                                            [100%]\n29 passed in 20.10s\n",
+    "started": 1791262802.991518,
+    "finished": 1791262824.855773,
+    "tests": [
+      "tests/test_context_exposure_dev.py",
+      "tests/test_context_exposure.py",
+      "tests/test_context_dev.py",
+      "tests/test_context_population_readout.py"
+    ],
+    "source": "4bd2a8331af5142247e6ebb9794c1a2cb3df2fe0"
+  },
+  "controller_pid": 5841,
+  "launched_unix": 1791263480.7690082
+}

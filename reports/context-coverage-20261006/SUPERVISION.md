@@ -1,3 +1,17 @@
+# 每小时执行入口（2026-10-06 第十二次跟进）
+
+固定32历史/256步的dev90已全量完成且独立精确重算：28,080行、1080PNG、1080教师张量身份通过；恢复/应用无正匹配特异性或优于16/128宽组的证据。详见CONTEXT_EXPOSURE_DEV_RESULT.md、exposure-dev-comparison.json。控制器5841与worker29841/243465/243466及独立审计336439均退出，owner删除，不重跑dev或挑更早权重。结算本阶段0.740950603485、全任务7.373056459228/16 GPUh，官方180及默认不动。
+
+下一轮固定训练32的角色布局诊断已按CONTEXT_LAYOUT_PLAN.md冻结并启动。唯一因素为角色标题/分隔换行；每条user/assistant内容及顺序保留，区别于ARIS把assistant改为简短ack的变体。固定final256，同2噪声/原生28步/CFG1，同384旧教师，原16/新增16分层。先一张标准格式PNG精确哈希校准，再64新布局PNG和1536新增读回；加5376只读旧行，总6912。原生prefeval_k1_writer与旧消费者源码未改。新阶段1GPUh（校准、生成、读回、失败共用），仍在原16池。
+
+当前独立checkout context-layout-20261006，执行9cf6ea72da0e4b17b3e0bf27232d55ae74db6c17，开发87d65b0，同tree5a0f5331c0da3959a7a174609687fbcd94f9f898。Windows/Linux26项检查通过。唯一实例dl-context-dev-n2-1006仍为原官方25.02/CUDA12.8镜像2H200，120分钟平台停止计时未延长；本轮14:12:38 CST控制器378758真实启动，14:14仍source_audit，无GPU worker。以DEPLOYMENT及随后现场更新为准。5个其他owner即时复读无本host冲突，实际两GPU空闲且每卡>120GiB可用；其他任务均未修改。
+
+下次优先检查context-layout-v1/status、active-owner、attempts/receipts、实际cmdline/CUDA、校准parity、真实PNG/写入事件哈希与完整6912行。canonical PNG哈希不一致必须停止保留证据，不降格近似继续。完成在冻结9cf6ea7独立重算run_context_layout.report，核验原/新匹配、同主题错配、灰图、文本与两个n16配对区间；只有“匹配恶化且特异性下降”同格成立才支持本扰动脆弱性，不显著不等价。无新dev/official或训练，不晋级默认。
+
+实例停止时遵循已有授权恢复/找无冲突资源；先证旧controller/worker停止，结算未终attempt，归档owner，保持冻结代码/模型/数据/种子与校准标准；不能直接重复launch或重置预算。当前新控制器拒绝未结算attempt，partial PNG/评分仅验证身份后续接；中断训练并非本轮情况。最大2GPU、每次≤6h，不空转保活。不改ARIS及其他自动化，不复活取消A64/B730。下一次先读最新ARIS tracker；仅实质进展/完成/故障/需用户处理时通知。
+
+## 先前状态（仅供溯源）
+
 # 最新运行状态补充
 
 2026-10-06 13:17:03 CST：新dev90控制器5841已完成旧曝光和dev报告的来源重算，进入实际rollout。worker29841 CUDA_VISIBLE_DEVICES=0，实际GPU0约14GiB/100%，GPU1保留后续双分片读回；首张1/180 PNG的完整收据、uint8 RGB1024和SHA核验通过。实例dl-context-dev-n2-1006，执行4bd2a83，输出context-exposure-dev-v1。新增4320行评分尚未开始，不提前下dev结论。证据exposure-dev-rollout-0447.json。

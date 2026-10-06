@@ -1,0 +1,71 @@
+{
+  "checked_at": 1791263823.4428546,
+  "status": {
+    "status": "rollout",
+    "time": 1791263777.4285142,
+    "commit": "4bd2a8331af5142247e6ebb9794c1a2cb3df2fe0"
+  },
+  "owner": {
+    "pid": 5841,
+    "host": "dl-context-dev-n2-1006--04a62f93b2ff-l335qh6pof",
+    "started": 1791263484.5295973,
+    "commit": "4bd2a8331af5142247e6ebb9794c1a2cb3df2fe0"
+  },
+  "processes": {
+    "5841": {
+      "command": "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python scripts/inspire/run_context_exposure_dev.py run --output /inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-exposure-dev-v1 --base /inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907 --reader /inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct --official-source /inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite ",
+      "cuda": []
+    },
+    "29841": {
+      "command": "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python scripts/experiments/prefeval_k1_writer.py rollout --arm B --split dev --base /inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907 --official-source /inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite --checkpoint /inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-exposure-v1/train/checkpoint-final.pt --output /inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-exposure-dev-v1/images --inter-turns 0 --noise-chains 2 ",
+      "cuda": [
+        "CUDA_VISIBLE_DEVICES=0"
+      ]
+    }
+  },
+  "attempts": [
+    {
+      "job": {
+        "name": "rollout",
+        "gpu": 0,
+        "command": [
+          "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+          "scripts/experiments/prefeval_k1_writer.py",
+          "rollout",
+          "--arm",
+          "B",
+          "--split",
+          "dev",
+          "--base",
+          "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+          "--official-source",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite",
+          "--checkpoint",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-exposure-v1/train/checkpoint-final.pt",
+          "--output",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-exposure-dev-v1/images",
+          "--inter-turns",
+          "0",
+          "--noise-chains",
+          "2"
+        ]
+      },
+      "command_sha256": "3a7e50046c49aad2dc89f9f3ef416db6eee5b3fde921022e780ed96090b4267f",
+      "hostname": "dl-context-dev-n2-1006--04a62f93b2ff-l335qh6pof",
+      "started": 1791263777.43001,
+      "pid": 29841
+    }
+  ],
+  "gpu": "29841, /inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python, 14118 MiB",
+  "gpus": "0, GPU-4f738315-098c-f63c-e050-6dcbeb9a2e87, 14128 MiB, 100 %\n1, GPU-58ce319d-a9c9-c6fd-75e0-bdff5bbf9336, 1 MiB, 0 %",
+  "pngs_verified": 1,
+  "png_assets": [
+    {
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-exposure-dev-v1/images/entertain_games_0006/seed-0/prefix-00.png",
+      "sha256": "1cd38a3e2c7c1bfbd14102efa72d82797f02336b0df68f5b779d7794d1a0a60b"
+    }
+  ],
+  "source_audit_complete": true,
+  "gpu_hours_provisional": 0.012781345711814033,
+  "campaign_gpu_hours_provisional": 6.644887201454905
+}

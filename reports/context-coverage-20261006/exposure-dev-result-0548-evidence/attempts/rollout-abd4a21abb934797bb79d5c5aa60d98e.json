@@ -1,0 +1,33 @@
+{
+  "job": {
+    "name": "rollout",
+    "gpu": 0,
+    "command": [
+      "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+      "scripts/experiments/prefeval_k1_writer.py",
+      "rollout",
+      "--arm",
+      "B",
+      "--split",
+      "dev",
+      "--base",
+      "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+      "--official-source",
+      "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite",
+      "--checkpoint",
+      "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-exposure-v1/train/checkpoint-final.pt",
+      "--output",
+      "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-exposure-dev-v1/images",
+      "--inter-turns",
+      "0",
+      "--noise-chains",
+      "2"
+    ]
+  },
+  "command_sha256": "3a7e50046c49aad2dc89f9f3ef416db6eee5b3fde921022e780ed96090b4267f",
+  "hostname": "dl-context-dev-n2-1006--04a62f93b2ff-l335qh6pof",
+  "started": 1791263777.43001,
+  "pid": 29841,
+  "finished": 1791265724.5542154,
+  "exit_code": 0
+}
