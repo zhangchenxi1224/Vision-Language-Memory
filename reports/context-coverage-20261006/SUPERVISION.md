@@ -1,5 +1,15 @@
 # 每小时执行入口
 
+当前进度（2026-10-06 09:52 CST）：context-dev-v1已完整结束并独立审计，见CONTEXT_DEV_RESULT.md。8,640新/23,760总行、900PNG、1080目标张量、256源更新/1024draw与最终权重/报告重算通过。4任务exit0、全部PID退出、owner删除，两GPU空闲。宽组未保留训练外收益，恢复KL较窄组退化，应用/匹配特异性均未建立；默认不晋级。结算dev1.295367960334，全任务5.337061309947GPUh。
+
+输入CPU诊断106/106历史完整保留，见writer-conditioning-audit-0143.json；不据此声称语义编码正确。新轮context-population32-v1按CONTEXT_POPULATION_PLAN.md：同8主题覆盖16→32，原16目标及Writer16只读复用，补16软教师288最终目标，Writer32同父同128步，从共同B730开始。先制作/训练上限1.5GPUh，整个含后续冻结读回上限3GPUh，均在16总池。当前准备未部署；新控制器只到ready_for_frozen_readout即退出，不能把权重就绪称科学完成。
+
+后续读回方案已冻结，原/新增各16独立分层，两Writer两noise，匹配/分层内同主题错配/灰图/文本；3840总行，其中1152旧行只读复用，2688新行；新96/总128PNG，复用192/新增192教师分布。不新增dev/official，不根据结果更换ID/主题/seed/128步。完成训练后先独立核验目标/日志/权重，再实现并冻结读回消费者，限3GPUh阶段剩余预算，不自动续费。
+
+## 先前状态（仅供溯源）
+
+# 每小时执行入口
+
 当前进度以此条为准（2026-10-06 08:55:38 CST）：训练侧context-fit-v1已完成并全量审计，见CONTEXT_FIT_RESULT.md；宽上下文在16已训练历史的恢复/应用及匹配特异性上有正收益。新阶段context-dev-v1已启动，按CONTEXT_DEV_PLAN.md只读复用两128步最终权重，检验内部dev90，不能以训练侧结论替代泛化。
 
 原H200x2实例，独立checkout context-dev-20261006，冻结06e05bb5d4f058422a1f18770122e071400c4213（开发72c03f7同tree4b3b9b650faba212a683b57b2d86ff90ded90fb5）。controller1470680；两实际rollout worker1472768/1472769，CUDA_VISIBLE_DEVICES0/1。两卡各约14GiB、实际工作；原fit全部worker退出，启动前无计算进程/本任务owner或其他同host任务预留。首批各6/180PNG，共12/360，完整SHA/历史/noise/最终权重绑定通过。见CONTEXT_DEV_DEPLOYMENT.md、dev-0042-evidence/。

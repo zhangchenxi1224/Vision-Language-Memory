@@ -49,3 +49,5 @@
 2026-10-06 08:52 CST：同父/同128步的窄宽上下文共享Writer训练侧gate已完成，恢复与应用存在正配对改进和匹配特异性，见CONTEXT_FIT_RESULT.md。冻结下一步context-dev-v1评估已完成最终权重；保护official180，单seed内部dev仅探索性，不晋级默认。全任务结算4.041693349613 GPUh，新阶段上限2。
 
 2026-10-06 08:55 CST：context-dev-v1固定权重诊断已部署原双H200，执行06e05bb；首批12/360PNG完整性通过，dev结果pending。见CONTEXT_DEV_DEPLOYMENT.md。
+
+2026-10-06 09:52 CST：固定权重dev90完整阴性，训练侧收益未延伸，详见CONTEXT_DEV_RESULT.md；不晋级、不继续dev搜索。新冻结同8主题16→32历史覆盖训练侧对照CONTEXT_POPULATION_PLAN.md，先复用旧16并补16教师，再同父FM128。此时未部署，原阶段全部退出，累计5.337061309947GPUh。

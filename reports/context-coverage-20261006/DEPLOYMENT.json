@@ -1,6 +1,6 @@
 {
   "schema": "dreamlite.context-coverage-deployment.v1",
-  "status": "context_dev_rollout_running",
+  "status": "context_dev_completed_population_prepared",
   "execution_commit": "15ff2a93b5ec6222c37ec359b20cfadcabbba471",
   "notebook": "vlm-dreamlite-full-h200x2-20260720",
   "remote_checkout": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-coverage-20261006",
@@ -66,24 +66,24 @@
   "promotion": "none; no dev90 content-specific Writer gain established",
   "development_commit": "3995d2c9c111fdb7fac3002e658c4cc77e282e7a",
   "execution_tree_matches_development": true,
-  "last_live_verification_unix": 1791248138.8073003,
-  "heartbeat_received_at": "2026-10-06T00:42:33.130Z",
-  "last_full_verification_unix": 1791247684.4513085,
+  "last_live_verification_unix": 1791251173.540483,
+  "heartbeat_received_at": "2026-10-06T01:43:34.081Z",
+  "last_full_verification_unix": 1791251173.540483,
   "gpu_hours": {
     "smoke": 0.026387807660632662,
     "pilot": 1.187265353600184,
     "readout": 0.13596068448490567,
     "writer_readout_settled": 2.07533103565375,
-    "total": 4.041693349613084,
+    "total": 5.3370613099469075,
     "total_is_settled_only": true,
     "scope": "Supervisor allocated GPU process hours including attempts; excludes platform idle costs and points.",
     "route_functional_settled": 0.23231854524877335,
     "context_fit_provisional": 0.3844299229648378,
-    "total_provisional": 4.089402743710412,
-    "provisional_asof_unix": 1791248138.8073003,
+    "total_provisional": 5.3370613099469075,
+    "provisional_asof_unix": 1791251173.540483,
     "context_fit_settled": 0.3844299229648378,
-    "context_dev_settled": 0.0,
-    "context_dev_provisional": 0.04770939409732819
+    "context_dev_settled": 1.2953679603338242,
+    "context_dev_provisional": 1.2953679603338242
   },
   "readout_audit": {
     "status": "completed_verified",
@@ -114,17 +114,14 @@
     "gpu_processes_after_completion": []
   },
   "next_stage": {
-    "name": "context-dev-v1",
-    "status": "supervise_existing_context_dev_controller",
-    "protocol": "CONTEXT_DEV_PLAN.md",
-    "max_gpu_hours": 2,
+    "name": "context-population32-v1",
+    "status": "prepared_not_deployed",
+    "protocol": "CONTEXT_POPULATION_PLAN.md",
+    "phase_cap_gpu_hours": 1.5,
+    "total_stage_cap_gpu_hours": 3,
     "campaign_cap": 16,
-    "new_training": false,
-    "cohort": "internal dev90 previously research-exposed",
-    "expected_new_rows": 8640,
-    "expected_combined_rows": 23760,
-    "promotion": "none",
-    "action": "Read context-dev-v1/status,active-owner,attempts and real processes first; do not relaunch running workers. Frozen final checkpoints ->360PNG ->8640new/23760combined rows; audit1080cached tensors and complete paired n90 report. No new training, default promotion or official data."
+    "action": "After source/input audit, supplement16 diverse288 teacher targets within the original8 topics; reuse16 old targets, train sharedWriter32 nativeFM128 from B730. No dev/official scoring. Stop at verified weight readiness pending frozen readout.",
+    "promotion": "none"
   },
   "writer_readout": {
     "status": "completed_verified",
@@ -341,7 +338,7 @@
     "comparison": "fit-comparison.json"
   },
   "context_dev": {
-    "status": "rollout",
+    "status": "completed_verified",
     "execution_commit": "06e05bb5d4f058422a1f18770122e071400c4213",
     "development_commit": "72c03f790923a9d9895820e15c8aa432424d5e5e",
     "execution_tree": "4b3b9b650faba212a683b57b2d86ff90ded90fb5",
@@ -351,10 +348,7 @@
     "notebook": "vlm-dreamlite-full-h200x2-20260720",
     "controller_pid": 1470680,
     "started_unix": 1791248029.2203925,
-    "worker_pids": [
-      1472769,
-      1472768
-    ],
+    "worker_pids": [],
     "tests": {
       "windows": 21,
       "linux": 21
@@ -369,21 +363,39 @@
     "expected_new_rows": 8640,
     "expected_combined_rows": 23760,
     "pngs_verified": {
-      "context-narrow": 6,
-      "context-diverse": 6
+      "context-narrow": 180,
+      "context-diverse": 180
     },
-    "latest_evidence_directory": "dev-0042-evidence",
-    "raw_archive_sha256": "5c4e3b0cc99a39779ed0de7598e0029a84f50d7a26f07c066c3b877cc8ad2665",
-    "latest_verification_unix": 1791248138.8073003,
+    "latest_evidence_directory": "heartbeat-0143-evidence",
+    "raw_archive_sha256": "03a568f9c2d6f5e37060ea03e25b7f44696715e848f0765e6834e819b4ee5938",
+    "latest_verification_unix": 1791251173.540483,
     "gpu_hours_cap": 2,
     "campaign_gpu_hours_cap": 16,
-    "gpu_hours_settled": 0.0,
-    "gpu_hours_provisional": 0.04770939409732819,
+    "gpu_hours_settled": 1.2953679603338242,
+    "gpu_hours_provisional": 1.2953679603338242,
     "source_checkout_clean": true,
     "final_checkpoint_sha256": {
       "context-narrow": "30c8e1d85287dedff159324eb7ea00bda68d6df3cde6064172a9b9294113b9c0",
       "context-diverse": "b2527682b9560ea29c4c9bbaa5f67b361a3fd8057de3026d15c81bf27ad6ecea"
     },
-    "scientific_results": "pending"
+    "scientific_results": "No transfer on internal dev90: diverse recall worsens versus narrow; application benefit not established, no matched specificity. No promotion.",
+    "finished_unix": 1791250431.7426186,
+    "historical_worker_pids": [
+      1470680,
+      1472768,
+      1472769,
+      1738992,
+      1738993
+    ],
+    "verified_new_rows": 8640,
+    "verified_combined_rows": 23760,
+    "verified_new_pngs": 360,
+    "verified_old_pngs": 540,
+    "verified_teacher_tensors": 1080,
+    "exact_report_recomputation": true,
+    "owner_removed": true,
+    "workers_exited": true,
+    "report": "CONTEXT_DEV_RESULT.md",
+    "comparison": "dev-comparison.json"
   }
 }

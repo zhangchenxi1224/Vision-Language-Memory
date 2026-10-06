@@ -1,0 +1,258 @@
+{
+  "time": 1791251173.540483,
+  "source_commit": "06e05bb5d4f058422a1f18770122e071400c4213",
+  "source_clean": true,
+  "comparison_exact": true,
+  "new_rows": 8640,
+  "combined_rows": 23760,
+  "independent_n": 90,
+  "new_pngs": 360,
+  "old_pngs": 540,
+  "teacher_tensors": 1080,
+  "source_training_updates_verified": 256,
+  "source_paired_draws_verified": 1024,
+  "owner_absent": true,
+  "worker_pids_gone": [
+    1470680,
+    1472768,
+    1472769,
+    1738992,
+    1738993
+  ],
+  "gpu_processes": [],
+  "gpu_hours": 1.2953679603338242,
+  "previous_gpu_hours": 4.041693349613084,
+  "campaign_gpu_hours": 5.3370613099469075,
+  "attempts": {
+    "rollout-context-diverse-0da07b7f39164688a8f10c19e4834260.json": {
+      "job": {
+        "name": "rollout-context-diverse",
+        "gpu": 1,
+        "command": [
+          "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+          "scripts/experiments/prefeval_k1_writer.py",
+          "rollout",
+          "--arm",
+          "B",
+          "--split",
+          "dev",
+          "--base",
+          "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+          "--official-source",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite",
+          "--checkpoint",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-fit-v1/context-diverse/train/checkpoint-final.pt",
+          "--output",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-dev-v1/context-diverse/images",
+          "--inter-turns",
+          "0",
+          "--noise-chains",
+          "2"
+        ]
+      },
+      "command_sha256": "c1837ec66d2dc68737f95492f41d6f81361dbf391f56797a7ce8d5320caa4374",
+      "hostname": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+      "started": 1791248052.9307008,
+      "pid": 1472769,
+      "finished": 1791249968.1504803,
+      "exit_code": 0
+    },
+    "evaluate-0-b485259f0a68416f83bd5be931e4143e.json": {
+      "job": {
+        "name": "evaluate-0",
+        "gpu": 0,
+        "command": [
+          "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+          "scripts/experiments/prefeval_route_functional.py",
+          "--output",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-dev-v1",
+          "--reader",
+          "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+          "--protocol",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-dev-20261006/configs/experiments/context_readout_audit.json",
+          "--shard",
+          "0"
+        ]
+      },
+      "command_sha256": "7163cd400047b1289dafc86d683695084aff000f55ba3d56fc703d6e0f435712",
+      "hostname": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+      "started": 1791249978.1144533,
+      "pid": 1738993,
+      "finished": 1791250392.9352634,
+      "exit_code": 0
+    },
+    "rollout-context-narrow-003861bb1a3643e49a374c7e5a4c5850.json": {
+      "job": {
+        "name": "rollout-context-narrow",
+        "gpu": 0,
+        "command": [
+          "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+          "scripts/experiments/prefeval_k1_writer.py",
+          "rollout",
+          "--arm",
+          "B",
+          "--split",
+          "dev",
+          "--base",
+          "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+          "--official-source",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite",
+          "--checkpoint",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-fit-v1/context-narrow/train/checkpoint-final.pt",
+          "--output",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-dev-v1/context-narrow/images",
+          "--inter-turns",
+          "0",
+          "--noise-chains",
+          "2"
+        ]
+      },
+      "command_sha256": "5e7a7952599c6d257b0e5d8d4f3ec9cdd19def35b7df0666e02927f0e6861467",
+      "hostname": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+      "started": 1791248052.9300811,
+      "pid": 1472768,
+      "finished": 1791249966.0727155,
+      "exit_code": 0
+    },
+    "evaluate-1-cd70eae821fb4fe294861cc348553a82.json": {
+      "job": {
+        "name": "evaluate-1",
+        "gpu": 1,
+        "command": [
+          "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+          "scripts/experiments/prefeval_route_functional.py",
+          "--output",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-dev-v1",
+          "--reader",
+          "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+          "--protocol",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-dev-20261006/configs/experiments/context_readout_audit.json",
+          "--shard",
+          "1"
+        ]
+      },
+      "command_sha256": "f954b64549ebcf89c712ea55d3f56dce247f4af0cc827d68a74ffc6516cdbe47",
+      "hostname": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+      "started": 1791249978.1139085,
+      "pid": 1738992,
+      "finished": 1791250398.2553418,
+      "exit_code": 0
+    }
+  },
+  "receipts": {
+    "rollout-context-diverse.json": {
+      "job": {
+        "name": "rollout-context-diverse",
+        "gpu": 1,
+        "command": [
+          "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+          "scripts/experiments/prefeval_k1_writer.py",
+          "rollout",
+          "--arm",
+          "B",
+          "--split",
+          "dev",
+          "--base",
+          "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+          "--official-source",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite",
+          "--checkpoint",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-fit-v1/context-diverse/train/checkpoint-final.pt",
+          "--output",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-dev-v1/context-diverse/images",
+          "--inter-turns",
+          "0",
+          "--noise-chains",
+          "2"
+        ]
+      },
+      "command_sha256": "c1837ec66d2dc68737f95492f41d6f81361dbf391f56797a7ce8d5320caa4374",
+      "hostname": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+      "started": 1791248052.9307008,
+      "pid": 1472769,
+      "finished": 1791249968.1504803,
+      "exit_code": 0
+    },
+    "evaluate-0.json": {
+      "job": {
+        "name": "evaluate-0",
+        "gpu": 0,
+        "command": [
+          "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+          "scripts/experiments/prefeval_route_functional.py",
+          "--output",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-dev-v1",
+          "--reader",
+          "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+          "--protocol",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-dev-20261006/configs/experiments/context_readout_audit.json",
+          "--shard",
+          "0"
+        ]
+      },
+      "command_sha256": "7163cd400047b1289dafc86d683695084aff000f55ba3d56fc703d6e0f435712",
+      "hostname": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+      "started": 1791249978.1144533,
+      "pid": 1738993,
+      "finished": 1791250392.9352634,
+      "exit_code": 0
+    },
+    "rollout-context-narrow.json": {
+      "job": {
+        "name": "rollout-context-narrow",
+        "gpu": 0,
+        "command": [
+          "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+          "scripts/experiments/prefeval_k1_writer.py",
+          "rollout",
+          "--arm",
+          "B",
+          "--split",
+          "dev",
+          "--base",
+          "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+          "--official-source",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite",
+          "--checkpoint",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-fit-v1/context-narrow/train/checkpoint-final.pt",
+          "--output",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-dev-v1/context-narrow/images",
+          "--inter-turns",
+          "0",
+          "--noise-chains",
+          "2"
+        ]
+      },
+      "command_sha256": "5e7a7952599c6d257b0e5d8d4f3ec9cdd19def35b7df0666e02927f0e6861467",
+      "hostname": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+      "started": 1791248052.9300811,
+      "pid": 1472768,
+      "finished": 1791249966.0727155,
+      "exit_code": 0
+    },
+    "evaluate-1.json": {
+      "job": {
+        "name": "evaluate-1",
+        "gpu": 1,
+        "command": [
+          "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+          "scripts/experiments/prefeval_route_functional.py",
+          "--output",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-dev-v1",
+          "--reader",
+          "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+          "--protocol",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-dev-20261006/configs/experiments/context_readout_audit.json",
+          "--shard",
+          "1"
+        ]
+      },
+      "command_sha256": "f954b64549ebcf89c712ea55d3f56dce247f4af0cc827d68a74ffc6516cdbe47",
+      "hostname": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+      "started": 1791249978.1139085,
+      "pid": 1738992,
+      "finished": 1791250398.2553418,
+      "exit_code": 0
+    }
+  }
+}
