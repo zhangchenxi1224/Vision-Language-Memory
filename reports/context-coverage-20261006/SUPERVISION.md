@@ -1,3 +1,5 @@
+2026-10-06 15:44 CST：两臂迁移后step288原子写入成功；从同一打开文件计算SHA并完整torch.load验证resume/Adam/cursor均288，见layout-aug-checkpoint-write-0650.json。已越过原SSD故障点，继续固定384，不修改协议。
+
 2026-10-06 15:42:57 CST 实际续训确认：两臂均277/384，CUDA0/1 worker189888/189889的PID/cmdline/环境与GPU进程一致，各约38GiB。连续日志与有限非零梯度通过；全任务暂计7.822156585190GPUh，内含已结算7.773129298223。最新证据layout-aug-live-training-0650.json。下方source_audit为恢复早期快照，不能据此重复启动。
 
 # 最新执行入口：2026-10-06 15:40 CST
