@@ -75,3 +75,5 @@
 2026-10-06 第十三次跟进：角色排版诊断全量阳性（脆弱性），四个恢复/应用分层均匹配恶化且特异性下降，见CONTEXT_LAYOUT_RESULT.md；累计7.655850706829GPUh。冻结同预算两臂布局增强与未训练XML格式评测，见CONTEXT_LAYOUT_AUG_PLAN.md。首次部署只在CPU源审计发现绝对路径绑定，尚无新GPU attempt，独立修复后再部署。
 
 2026-10-06 15:17 CST：独立844dda1修复冻结报告路径绑定，38项Windows/Linux检查通过，controller55309于恢复后的专用双H200启动。先真实native两步等价校准后两臂同预算续训；三格式消费者已实现但等待完整权重。见CONTEXT_LAYOUT_AUG_DEPLOYMENT.md，累计7.655851/16GPUh，无增强结论。
+
+2026-10-06 15:40 CST：真实原生两步精确等价已通过。共享SSD满导致两臂step288保存失败，已校验迁移自身检查点至QB、归档未提交尾并保持完整状态恢复258；controller164144重新审计后续训。已计费7.773129/16GPUh，内含失败0.059778；完整读回受有界衔接门控，尚无增强有效性结论。见SUPERVISION.md及layout-aug-recovery-0650-evidence。

@@ -1,0 +1,330 @@
+{
+  "started": 1791272011.9639034,
+  "phase": "ready_to_resume",
+  "host": "dl-context-dev-n2-1006--04a62f93b2ff-cmudy6lf6t",
+  "destination": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/checkpoint-store/layout-aug-v1",
+  "failed_status": {
+    "status": "failed",
+    "time": 1791271598.8908253,
+    "error": "canonical-384 failed; attempt preserved"
+  },
+  "attempts": [
+    {
+      "job": {
+        "name": "augmented-384",
+        "gpu": 1,
+        "command": [
+          "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-layout-aug-20261006-v2/scripts/inspire/run_context_layout_aug.py",
+          "train",
+          "--output",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-layout-aug-v1",
+          "--base",
+          "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+          "--reader",
+          "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+          "--official-source",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite",
+          "--arm",
+          "augmented",
+          "--stop-step",
+          "384"
+        ]
+      },
+      "command_sha256": "e61e30cb8c1da439d12c782070b58cb1804f21bb74b4218b9cd58d10a2e77814",
+      "hostname": "dl-context-dev-n2-1006--04a62f93b2ff-cmudy6lf6t",
+      "started": 1791271491.1359515,
+      "pid": 98398,
+      "finished": 1791271598.7899184,
+      "exit_code": 1
+    },
+    {
+      "job": {
+        "name": "native-258",
+        "gpu": 0,
+        "command": [
+          "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+          "scripts/experiments/prefeval_k1_writer.py",
+          "train",
+          "--arm",
+          "B",
+          "--split",
+          "pilot",
+          "--ids-file",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-layout-aug-20261006-v2/configs/experiments/context_population32_ids.json",
+          "--base",
+          "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+          "--official-source",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite",
+          "--checkpoint",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b730-exposure512-20260927/train/checkpoint-final.pt",
+          "--output",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-layout-aug-v1/native",
+          "--teachers",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-population32-v1/bank",
+          "--teacher-supervision",
+          "prompt_matching",
+          "--teacher-steps",
+          "288",
+          "--steps",
+          "258"
+        ]
+      },
+      "command_sha256": "fc713307c62198fa0d62e3566645759a58df62371d08121541891e0dc12f44a8",
+      "hostname": "dl-context-dev-n2-1006--04a62f93b2ff-cmudy6lf6t",
+      "started": 1791271318.9129262,
+      "pid": 78260,
+      "finished": 1791271380.254837,
+      "exit_code": 0
+    },
+    {
+      "job": {
+        "name": "augmented-258",
+        "gpu": 0,
+        "command": [
+          "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-layout-aug-20261006-v2/scripts/inspire/run_context_layout_aug.py",
+          "train",
+          "--output",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-layout-aug-v1",
+          "--base",
+          "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+          "--reader",
+          "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+          "--official-source",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite",
+          "--arm",
+          "augmented",
+          "--stop-step",
+          "258"
+        ]
+      },
+      "command_sha256": "cb13c75afcebc8fc1be03879c23dc95cefd5f1568914c118b5e474dd93903c12",
+      "hostname": "dl-context-dev-n2-1006--04a62f93b2ff-cmudy6lf6t",
+      "started": 1791271392.0212255,
+      "pid": 87916,
+      "finished": 1791271464.5746386,
+      "exit_code": 0
+    },
+    {
+      "job": {
+        "name": "canonical-258",
+        "gpu": 1,
+        "command": [
+          "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-layout-aug-20261006-v2/scripts/inspire/run_context_layout_aug.py",
+          "train",
+          "--output",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-layout-aug-v1",
+          "--base",
+          "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+          "--reader",
+          "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+          "--official-source",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite",
+          "--arm",
+          "canonical",
+          "--stop-step",
+          "258"
+        ]
+      },
+      "command_sha256": "94f254ee12bcd0bdf0b79441fb1aa04507cfa8438c4696c5df7dea00d31a0db4",
+      "hostname": "dl-context-dev-n2-1006--04a62f93b2ff-cmudy6lf6t",
+      "started": 1791271318.9133573,
+      "pid": 78261,
+      "finished": 1791271392.0192716,
+      "exit_code": 0
+    },
+    {
+      "job": {
+        "name": "canonical-384",
+        "gpu": 0,
+        "command": [
+          "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-layout-aug-20261006-v2/scripts/inspire/run_context_layout_aug.py",
+          "train",
+          "--output",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-layout-aug-v1",
+          "--base",
+          "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+          "--reader",
+          "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+          "--official-source",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite",
+          "--arm",
+          "canonical",
+          "--stop-step",
+          "384"
+        ]
+      },
+      "command_sha256": "e44e3bf5a8d85394a7ae2915bf95b6f5844ca528bc063ecc6cae11860b13b629",
+      "hostname": "dl-context-dev-n2-1006--04a62f93b2ff-cmudy6lf6t",
+      "started": 1791271491.1355236,
+      "pid": 98397,
+      "finished": 1791271598.6832473,
+      "exit_code": 1
+    }
+  ],
+  "failed_gpu_hours": 0.059778247409396704,
+  "stage_gpu_hours_before": 0.11727859139442444,
+  "source_disk": {
+    "total": 109951162777600,
+    "used": 109950976131072,
+    "free": 186646528
+  },
+  "destination_disk": {
+    "total": 3779302981632,
+    "used": 1571528683520,
+    "free": 2015719723008
+  },
+  "parity": {
+    "native_resume_sha256": "978a3cc34b23731eace40e1487f7210b04e4eea5187fcfeaa487ce3ffa4c7dc9",
+    "steps": [
+      257,
+      258
+    ],
+    "arms": {
+      "canonical": {
+        "resume_step258_sha256": "d6741cb7d8c3e54a747f491854ebfb97957a2966a6ebe9bdb3f3991acc47a359",
+        "exact_parameters_optimizer_rng": true
+      },
+      "augmented": {
+        "resume_step258_sha256": "b8d475792fc52601051cc10692667a106fdae3ef9a1a33f7508c71b1d6a5305f",
+        "exact_parameters_optimizer_rng": true
+      }
+    }
+  },
+  "copies": {
+    "native": {
+      "source": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-layout-aug-v1/native",
+      "destination": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/checkpoint-store/layout-aug-v1/native",
+      "files": {
+        "checkpoint-final.pt": {
+          "size": 1560251755,
+          "sha256": "b0dd7cbe4f124aa46a54774756fe6bd3d5e3ab32ab8471ff16173882f5637b81"
+        },
+        "optimization.jsonl": {
+          "size": 136781,
+          "sha256": "dd6a35a48fbab5ff1e78f6c65836757d49433f87e64a39c64b44fb22bd650699"
+        },
+        "complete.json": {
+          "size": 110,
+          "sha256": "ea43315fb74f20d62cac0bb707a1a33526502070b96008c7e7a428c485f66ee2"
+        },
+        "resume-initial256.pt": {
+          "size": 4680938582,
+          "sha256": "3ab4574b3c997ebdbeb60f0e87f5daf38cc08d516eb5350eadc66407205fff96"
+        },
+        "migration.json": {
+          "size": 14492,
+          "sha256": "3793e8840ca8d4ef60f3830a9f8d646fc18362b053f82ba8494f8e416da82492"
+        },
+        "resume.pt": {
+          "size": 4680921296,
+          "sha256": "978a3cc34b23731eace40e1487f7210b04e4eea5187fcfeaa487ce3ffa4c7dc9"
+        },
+        "manifest.json": {
+          "size": 6872,
+          "sha256": "36130d3bdfa8e476944d9adaa08adf50bf04a1ecf160f829a23e1984f1740307"
+        }
+      },
+      "verified": 1791272084.5423899,
+      "linked": 1791272085.5119061
+    },
+    "canonical": {
+      "source": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-layout-aug-v1/canonical",
+      "destination": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/checkpoint-store/layout-aug-v1/canonical",
+      "files": {
+        "resume-step258.pt": {
+          "size": 4680921680,
+          "sha256": "d6741cb7d8c3e54a747f491854ebfb97957a2966a6ebe9bdb3f3991acc47a359"
+        },
+        "optimization.jsonl": {
+          "size": 154413,
+          "sha256": "a4a6bd82152bf22d3a289e804616321e2bc510bd5a4bc05b67f5f3c51b8bcde9"
+        },
+        "resume.pt.tmp": {
+          "size": 455081984,
+          "sha256": "f079f7a7b8d79a171969c59f2f7ccb080bfcbd82e605c6594476d7cbf2e43249"
+        },
+        "resume-initial256.pt": {
+          "size": 4680938966,
+          "sha256": "838389b883070fb8ac5b603345578500f56ee9ca75d651546ab403a6229a0f84"
+        },
+        "migration.json": {
+          "size": 14854,
+          "sha256": "ce0c49c5686737fb1d5d51d6b07b175d4f2fdb2ab868d1f3b99d106a8138d30b"
+        },
+        "resume.pt": {
+          "size": 4680921680,
+          "sha256": "d6741cb7d8c3e54a747f491854ebfb97957a2966a6ebe9bdb3f3991acc47a359"
+        },
+        "manifest.json": {
+          "size": 7224,
+          "sha256": "31c2b3e6a8b06cfb764a73cca8354b797c9fd133b8ec495c20edd43de967108d"
+        }
+      },
+      "verified": 1791272120.7932048,
+      "linked": 1791272122.099878,
+      "rollback": {
+        "to_step": 258,
+        "archived_rows": 30,
+        "complete_original_log_sha256": "a4a6bd82152bf22d3a289e804616321e2bc510bd5a4bc05b67f5f3c51b8bcde9",
+        "working_prefix_sha256": "a0a34f0cc5ff6e7e717b34f31511777962149a3045efaed1d50ac99e76a5f238"
+      }
+    },
+    "augmented": {
+      "source": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-layout-aug-v1/augmented",
+      "destination": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/checkpoint-store/layout-aug-v1/augmented",
+      "files": {
+        "resume-step258.pt": {
+          "size": 4680921744,
+          "sha256": "b8d475792fc52601051cc10692667a106fdae3ef9a1a33f7508c71b1d6a5305f"
+        },
+        "optimization.jsonl": {
+          "size": 154380,
+          "sha256": "ec501b785c5e9f77c27c49948ff27ea0f881c161c959c148986b59b1e78f6e04"
+        },
+        "resume.pt.tmp": {
+          "size": 318767104,
+          "sha256": "d02de5554ecb482003036c8976ccc20c33ce42c7b37613adfc5ab37df20fc2e5"
+        },
+        "resume-initial256.pt": {
+          "size": 4680939030,
+          "sha256": "45371a86341328cf68da46753d26d8132376baf70522a3a40ac6eee22433db93"
+        },
+        "migration.json": {
+          "size": 14885,
+          "sha256": "e485d3fbe459370a8bb05ebc7ab53d59532c3169ebeaeacd247ac80daedcec76"
+        },
+        "resume.pt": {
+          "size": 4680921744,
+          "sha256": "b8d475792fc52601051cc10692667a106fdae3ef9a1a33f7508c71b1d6a5305f"
+        },
+        "manifest.json": {
+          "size": 7255,
+          "sha256": "091e693283b99736083579ab4502e55d3d68d252d59dcbf7f98117e3551aa709"
+        }
+      },
+      "verified": 1791272157.0543976,
+      "linked": 1791272158.355696,
+      "rollback": {
+        "to_step": 258,
+        "archived_rows": 30,
+        "complete_original_log_sha256": "ec501b785c5e9f77c27c49948ff27ea0f881c161c959c148986b59b1e78f6e04",
+        "working_prefix_sha256": "bc2a3bb50fcf5442bb3cbf7c172360a7799e063668f016ba3fa06cd75bcc4f51"
+      }
+    }
+  },
+  "finished": 1791272192.359638,
+  "source_disk_after": {
+    "total": 109951162777600,
+    "used": 109847552983040,
+    "free": 103609794560
+  },
+  "destination_disk_after": {
+    "total": 1125899906842624,
+    "used": 1125341015834624,
+    "free": 558891008000
+  }
+}

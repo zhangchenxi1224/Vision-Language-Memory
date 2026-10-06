@@ -1,0 +1,25 @@
+Loading pipeline components...:   0%|                    | 0/6 [00:00<?, ?it/s]Loading pipeline components...:  17%|██          | 1/6 [00:00<00:01,  2.88it/s]Loading pipeline components...:  67%|████████    | 4/6 [00:10<00:05,  2.83s/it]Loading pipeline components...:  83%|██████████  | 5/6 [00:11<00:02,  2.41s/it]Loading pipeline components...: 100%|████████████| 6/6 [00:12<00:00,  1.94s/it]Loading pipeline components...: 100%|████████████| 6/6 [00:12<00:00,  2.11s/it]
+/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/lib/python3.12/site-packages/diffusers/loaders/lora_pipeline.py:6850: FutureWarning: `LoraLoaderMixin` is deprecated and will be removed in version 1.0.0. LoraLoaderMixin is deprecated and this will be removed in a future version. Please use `StableDiffusionLoraLoaderMixin`, instead.
+  deprecate("LoraLoaderMixin", "1.0.0", deprecation_message)
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/dist-packages/torch/serialization.py", line 939, in save
+    _save(
+  File "/usr/local/lib/python3.12/dist-packages/torch/serialization.py", line 1226, in _save
+    zip_file.write_record(name, storage, num_bytes)
+RuntimeError: [enforce fail at inline_container.cc:815] . PytorchStreamWriter failed writing file data/1445: file write failed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-layout-aug-20261006-v2/scripts/inspire/run_context_layout_aug.py", line 262, in <module>
+    args=parser.parse_args();(main if args.phase=='run' else train)(args)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-layout-aug-20261006-v2/scripts/inspire/run_context_layout_aug.py", line 155, in train
+    save_training_checkpoint(dest/'resume.pt',trainable_module=pipe.unet,optimizer=optimizer,epoch=0,
+  File "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-layout-aug-20261006-v2/src/vision_memory/training/checkpoint.py", line 74, in save_training_checkpoint
+    torch.save(payload, temporary)
+  File "/usr/local/lib/python3.12/dist-packages/torch/serialization.py", line 938, in save
+    with _open_zipfile_writer(f) as opened_zipfile:
+  File "/usr/local/lib/python3.12/dist-packages/torch/serialization.py", line 779, in __exit__
+    self.file_like.write_end_of_file()
+RuntimeError: [enforce fail at inline_container.cc:626] . unexpected pos 318298944 vs 318298836

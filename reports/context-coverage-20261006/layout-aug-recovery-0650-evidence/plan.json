@@ -1,0 +1,27 @@
+{
+  "commit": "844dda1819168b551882577a2946548dc8602f2f",
+  "plan_sha256": "c6c311f45c927d843b07d962a1a6a1dbf6144c1d9f3987618e3ef570ce0b002f",
+  "ids_sha256": "fd5a4b355b4e078d7b272e7d20b0ebeaa6bf1c3d498b18ca59480de3a27244bd",
+  "implementation_sha256": "f66ba53a690185c00fd4a27854fef5a7f9c943e18a13bf48eed04790f6ee855b",
+  "source_resume_sha256": "8f5bd84c06c91611a3a38aee7967b05ceaba136e8f331dfca7b74c5f1636e5f3",
+  "base": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+  "reader": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+  "official_source": "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite",
+  "train_gpu_hours_cap": 0.75,
+  "iteration_gpu_hours_cap": 3,
+  "campaign_gpu_hours_cap": 16,
+  "steps": 384,
+  "new_steps": 128,
+  "arms": [
+    "canonical",
+    "augmented"
+  ],
+  "readout_new_pngs": 384,
+  "readout_new_rows": 9216,
+  "readout_combined_rows": 16128,
+  "readout_formats": [
+    "canonical",
+    "markdown",
+    "xml"
+  ]
+}

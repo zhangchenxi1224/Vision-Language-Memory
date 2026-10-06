@@ -1,0 +1,39 @@
+{
+  "job": {
+    "name": "native-258",
+    "gpu": 0,
+    "command": [
+      "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+      "scripts/experiments/prefeval_k1_writer.py",
+      "train",
+      "--arm",
+      "B",
+      "--split",
+      "pilot",
+      "--ids-file",
+      "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-layout-aug-20261006-v2/configs/experiments/context_population32_ids.json",
+      "--base",
+      "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+      "--official-source",
+      "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite",
+      "--checkpoint",
+      "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b730-exposure512-20260927/train/checkpoint-final.pt",
+      "--output",
+      "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-layout-aug-v1/native",
+      "--teachers",
+      "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-population32-v1/bank",
+      "--teacher-supervision",
+      "prompt_matching",
+      "--teacher-steps",
+      "288",
+      "--steps",
+      "258"
+    ]
+  },
+  "command_sha256": "fc713307c62198fa0d62e3566645759a58df62371d08121541891e0dc12f44a8",
+  "hostname": "dl-context-dev-n2-1006--04a62f93b2ff-cmudy6lf6t",
+  "started": 1791271318.9129262,
+  "pid": 78260,
+  "finished": 1791271380.254837,
+  "exit_code": 0
+}

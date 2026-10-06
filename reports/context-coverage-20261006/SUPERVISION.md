@@ -1,3 +1,17 @@
+2026-10-06 15:42:57 CST 实际续训确认：两臂均277/384，CUDA0/1 worker189888/189889的PID/cmdline/环境与GPU进程一致，各约38GiB。连续日志与有限非零梯度通过；全任务暂计7.822156585190GPUh，内含已结算7.773129298223。最新证据layout-aug-live-training-0650.json。下方source_audit为恢复早期快照，不能据此重复启动。
+
+# 最新执行入口：2026-10-06 15:40 CST
+
+真实GPU原生257–258校准已通过：两臂参数、Adam、RNG、梯度/MSE/抽样轨迹与原生精确一致。随后两臂均在step288原子保存因共享SSD满而失败，controller55309与所有5个worker实际退出、owner消失。完整resume仍为258且SHA和固定parity快照相同；失败不是数值或科学效果结论。
+
+仅将本轮native/canonical/augmented目录全部复制到QB的runs/context-coverage-20261006/checkpoint-store/layout-aug-v1，逐文件大小与SHA相等后才替换自身SSD目录为链接，旧pilot/其他任务没有修改。失败resume.pt.tmp与259–288日志完整归档，两臂工作日志恢复258，完整Adam/RNG保持。完整恢复证据layout-aug-recovery-0650-evidence/，压缩包SHA602d217daf818198c32ee555ca81d90bc9c1c519ce686058005f00ecd771b017。不要把这30行失败尾当成有效训练步数或再次覆盖档案。
+
+15:36:54 controller164144已按同844dda1冻结命令重新启动；15:39:51真实cmdline存活，处于source_audit，两GPU暂为空，校验后将跳过已完成native/两臂258收据，只恢复258→384。当前已结算7.773129298223/16GPUh（本轮0.117278591394，内含失败0.059778247409）。GPUh按GPU worker进程墙钟计，平台闲置点券/CPU复制审计未包含；后续attempt继续累计，不能重置0.75训练/3整轮/16全任务预算。
+
+同实例dl-context-dev-n2-1006，约17:05 CST自动停止。一个无GPU的有界衔接进程173891等待完整training-audit/ready_for_frozen_readout、旧worker退出、owner消失，重新扫描资源预留并核验GPU后，才调用已冻结消费者；最晚16:00未就绪则结束，不盲启。状态见本轮readout-handoff-0650.json，先核对它，禁止另起重复读回。新读回图片也落独立QB目录，三格式384PNG/9216新行/16128总行，代码和协议不变，读回尚未启动/尚无增强结果。消费者仍按失败在内的原预算扣费。若后续训练或衔接失败，先证明停止并保存证据，再恢复；不得改正在运行的冻结代码。
+
+## 先前状态（仅供溯源）
+
 # 最新执行入口：2026-10-06 15:17:23 CST
 
 绝对路径兼容问题已修复并用独立v2冻结；Windows/Linux38项通过。新控制器55309已经启动，当前source_audit；无新的GPU训练评分结论。执行844dda1819168b551882577a2946548dc8602f2f，开发14c097248b7e416e7079b7b227f10f4a60a1cbd9，同treea8aba6633edbe3c99d133f262f839b6947c300c3；独立checkout context-layout-aug-20261006-v2，output仍为新的context-layout-aug-v1。首次0GPU失败目录已在确认controller2438退出/owner撤销/attempts为空后归档至context-layout-aug-prelaunch-failed-0650，旧checkout未改。父layout报告现在在其原9cf6ea7执行目录复算；本轮plan用稳定output路径绑定，不能随意搬迁/补写旧报告来“修复”哈希。

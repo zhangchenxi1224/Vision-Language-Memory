@@ -1,6 +1,6 @@
 {
   "schema": "dreamlite.context-coverage-deployment.v1",
-  "status": "layout_aug_source_audit_running",
+  "status": "layout_aug_training_recovered_running",
   "execution_commit": "15ff2a93b5ec6222c37ec359b20cfadcabbba471",
   "notebook": "vlm-dreamlite-full-h200x2-20260720",
   "remote_checkout": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-coverage-20261006",
@@ -709,17 +709,16 @@
     "scientific_results": "Both strata recall/application show higher matched KL and reduced specificity under content-preserving role-layout shift; no new-history claim"
   },
   "layout_aug": {
-    "status": "source_audit",
+    "status": "training",
     "protocol": "CONTEXT_LAYOUT_AUG_PLAN.md",
     "execution_commit_failed": "f0716ee1e052fbe09e643f9da734017776f32b19",
-    "new_gpu_attempts": 0,
-    "gpu_hours_settled": 0,
+    "new_gpu_attempts": 7,
+    "gpu_hours_settled": 0.11727859139442444,
     "train_gpu_hours_cap": 0.75,
     "readout_gpu_hours_cap": 2.25,
     "iteration_gpu_hours_cap": 3,
     "campaign_gpu_hours_cap": 16,
     "notebook": "dl-context-dev-n2-1006",
-    "failure": "Old report absolute checkout identity must be audited from its original frozen tree; no GPU jobs started",
     "old_controller_pid": 2438,
     "old_controller_exited": true,
     "source_audit_error_time": 1791270490.1569538,
@@ -739,17 +738,39 @@
     "execution_tree_matches_development": true,
     "remote_checkout": "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-layout-aug-20261006-v2",
     "remote_output": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-layout-aug-v1",
-    "controller_pid": 55309,
+    "controller_pid": 164144,
     "started_unix": 1791271043.1170468,
     "tests": {
       "windows": 38,
       "linux": 38
     },
-    "worker_pids": [],
-    "gpu_hours_provisional": 0,
+    "worker_pids": [
+      189889,
+      189888
+    ],
+    "gpu_hours_provisional": 0.1663058783610662,
     "failed_cpu_output_archive": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-layout-aug-prelaunch-failed-0650",
     "readout_implementation": "scripts/inspire/run_context_layout_aug_readout.py",
-    "readout_status": "implemented_tested_not_started",
-    "deployment": "CONTEXT_LAYOUT_AUG_DEPLOYMENT.md"
-  }
+    "readout_status": "gated_handoff_waiting_for_training",
+    "deployment": "CONTEXT_LAYOUT_AUG_DEPLOYMENT.md",
+    "prior_controller_pid": 55309,
+    "native_parity_verified": true,
+    "source_audit_complete_before_storage_failure": true,
+    "latest_verification_unix": 1791272577.2960515,
+    "storage_failure": "Shared SSD full at first post-parity step288 atomic save; both old workers exited; durable step258 intact",
+    "failure_gpu_hours": 0.059778247409396704,
+    "recovery": "All own arm files copied and SHA-verified on QB; only verified own SSD duplicates replaced by directory symlinks. Failed step259-288 logs and temporary files preserved; resume/Adam/RNG and working log restored to258. Same frozen code restarted.",
+    "checkpoint_store": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/checkpoint-store/layout-aug-v1",
+    "latest_evidence_directory": "layout-aug-recovery-0650-evidence",
+    "raw_archive_sha256": "602d217daf818198c32ee555ca81d90bc9c1c519ce686058005f00ecd771b017",
+    "readout_handoff_pid": 173891,
+    "readout_handoff_deadline_unix": 1791273600,
+    "initial_cpu_failure": "Old report absolute checkout identity must be audited from its original frozen tree; no GPU jobs started",
+    "live_training_evidence": "layout-aug-live-training-0650.json",
+    "last_verified_logged_steps": {
+      "canonical": 277,
+      "augmented": 277
+    }
+  },
+  "campaign_gpu_hours_provisional": 7.822156585190031
 }

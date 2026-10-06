@@ -1,0 +1,103 @@
+{
+  "time": 1791272577.2960515,
+  "status": {
+    "status": "training",
+    "time": 1791272489.045182,
+    "commit": "844dda1819168b551882577a2946548dc8602f2f"
+  },
+  "active_attempts": [
+    {
+      "job": {
+        "name": "augmented-384",
+        "gpu": 1,
+        "command": [
+          "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-layout-aug-20261006-v2/scripts/inspire/run_context_layout_aug.py",
+          "train",
+          "--output",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-layout-aug-v1",
+          "--base",
+          "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+          "--reader",
+          "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+          "--official-source",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite",
+          "--arm",
+          "augmented",
+          "--stop-step",
+          "384"
+        ]
+      },
+      "command_sha256": "e61e30cb8c1da439d12c782070b58cb1804f21bb74b4218b9cd58d10a2e77814",
+      "hostname": "dl-context-dev-n2-1006--04a62f93b2ff-cmudy6lf6t",
+      "started": 1791272489.0471537,
+      "pid": 189889
+    },
+    {
+      "job": {
+        "name": "canonical-384",
+        "gpu": 0,
+        "command": [
+          "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-layout-aug-20261006-v2/scripts/inspire/run_context_layout_aug.py",
+          "train",
+          "--output",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-layout-aug-v1",
+          "--base",
+          "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+          "--reader",
+          "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+          "--official-source",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite",
+          "--arm",
+          "canonical",
+          "--stop-step",
+          "384"
+        ]
+      },
+      "command_sha256": "e44e3bf5a8d85394a7ae2915bf95b6f5844ca528bc063ecc6cae11860b13b629",
+      "hostname": "dl-context-dev-n2-1006--04a62f93b2ff-cmudy6lf6t",
+      "started": 1791272489.0467162,
+      "pid": 189888
+    }
+  ],
+  "budget": {
+    "stage_provisional": 0.1663058783610662,
+    "campaign_provisional": 7.822156585190031,
+    "settled_campaign": 7.77312929822339
+  },
+  "processes": {
+    "189889": {
+      "cmdline": "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python /inspire/ssd/project/exploration-topic/czxs26210936/repos/context-layout-aug-20261006-v2/scripts/inspire/run_context_layout_aug.py train --output /inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-layout-aug-v1 --base /inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907 --reader /inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct --official-source /inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite --arm augmented --stop-step 384 ",
+      "cuda": [
+        "CUDA_VISIBLE_DEVICES=1"
+      ]
+    },
+    "189888": {
+      "cmdline": "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python /inspire/ssd/project/exploration-topic/czxs26210936/repos/context-layout-aug-20261006-v2/scripts/inspire/run_context_layout_aug.py train --output /inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-layout-aug-v1 --base /inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907 --reader /inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct --official-source /inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite --arm canonical --stop-step 384 ",
+      "cuda": [
+        "CUDA_VISIBLE_DEVICES=0"
+      ]
+    }
+  },
+  "arms": {
+    "canonical": {
+      "step": 277,
+      "gradient": 0.7424395084381104,
+      "checkpoint_bytes": 4680921680
+    },
+    "augmented": {
+      "step": 277,
+      "gradient": 2.1164727210998535,
+      "checkpoint_bytes": 4680921744
+    }
+  },
+  "gpu": "189888, /inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python, 38896 MiB\n189889, /inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python, 38896 MiB\n",
+  "handoff": {
+    "pid": 173891,
+    "started": 1791272317.018055,
+    "deadline": 1791273600,
+    "phase": "waiting_for_training",
+    "host": "dl-context-dev-n2-1006--04a62f93b2ff-cmudy6lf6t"
+  }
+}

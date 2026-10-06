@@ -1,0 +1,21 @@
+Traceback (most recent call last):
+  File "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-layout-aug-20261006-v2/scripts/inspire/run_context_layout_aug.py", line 262, in <module>
+    args=parser.parse_args();(main if args.phase=='run' else train)(args)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-layout-aug-20261006-v2/scripts/inspire/run_context_layout_aug.py", line 249, in main
+    group(jobs(args,'full'));save_once(args.output/'training-audit.json',{arm:verify_training(args.output,arm) for arm in ARMS})
+    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-layout-aug-20261006-v2/scripts/inspire/run_context_layout_aug.py", line 244, in group
+    for f in [pool.submit(execute,j,args.output,deadline) for j in items]:f.result()
+                                                                          ^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 456, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/usr/lib/python3.12/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-layout-aug-20261006-v2/scripts/inspire/run_writer_readout.py", line 74, in execute
+    raise RuntimeError(job['name'] + ' failed; attempt preserved')
+RuntimeError: canonical-384 failed; attempt preserved

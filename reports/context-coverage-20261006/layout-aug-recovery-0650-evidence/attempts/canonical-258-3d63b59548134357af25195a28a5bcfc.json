@@ -1,0 +1,29 @@
+{
+  "job": {
+    "name": "canonical-258",
+    "gpu": 1,
+    "command": [
+      "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+      "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-layout-aug-20261006-v2/scripts/inspire/run_context_layout_aug.py",
+      "train",
+      "--output",
+      "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-layout-aug-v1",
+      "--base",
+      "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+      "--reader",
+      "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+      "--official-source",
+      "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite",
+      "--arm",
+      "canonical",
+      "--stop-step",
+      "258"
+    ]
+  },
+  "command_sha256": "94f254ee12bcd0bdf0b79441fb1aa04507cfa8438c4696c5df7dea00d31a0db4",
+  "hostname": "dl-context-dev-n2-1006--04a62f93b2ff-cmudy6lf6t",
+  "started": 1791271318.9133573,
+  "pid": 78261,
+  "finished": 1791271392.0192716,
+  "exit_code": 0
+}
