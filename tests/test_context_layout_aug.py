@@ -90,3 +90,24 @@ def test_attempt_budget_and_job_cursors(tmp_path,monkeypatch):
     assert [j['gpu'] for j in jobs]==[0,1]
     assert all(j['command'][-2:]==['--stop-step','384'] for j in jobs)
     assert m.jobs(args,'probe')[0]['command'][-2:]==['--steps','258']
+
+
+def test_parent_audit_uses_original_checkout_and_stable_source_paths(monkeypatch):
+    calls=[]
+    monkeypatch.setattr(m.subprocess,'check_output',lambda *args,**kwargs:'9cf6ea72da0e4b17b3e0bf27232d55ae74db6c17\n')
+    monkeypatch.setattr(m.subprocess,'run',lambda *args,**kwargs:calls.append((args,kwargs)))
+    def checksum(path):
+        if path==m.SOURCE/'resume.pt':return m.RESUME_SHA
+        if path==m.SOURCE/'checkpoint-final.pt':return m.l.CHECKPOINT_SHA
+        return 'stable-content'
+    monkeypatch.setattr(m,'sha',checksum)
+    def read(path):
+        if path==m.PREVIOUS/'status.json':return {'status':'completed'}
+        if path==m.PREVIOUS/'audit-0650.json':return {'exact_report_recomputation':True}
+        if path==m.OUTPUT/'plan.json':return dict(plan_sha256='stable-content',ids_sha256='stable-content',implementation_sha256='stable-content')
+        raise AssertionError(path)
+    monkeypatch.setattr(m,'read',read)
+    files=m.verify_source()
+    assert len(calls)==1 and calls[0][1]['cwd']==m.LAYOUT_REPO
+    assert str(m.OUTPUT/'plan.json') in files
+    assert str(m.PLAN) not in files and str(m.p.ALL_IDS) not in files

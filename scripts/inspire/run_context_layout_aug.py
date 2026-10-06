@@ -24,6 +24,8 @@ SOURCE=l.SOURCE/'train'
 RESUME_SHA='8f5bd84c06c91611a3a38aee7967b05ceaba136e8f331dfca7b74c5f1636e5f3'
 PLAN=ROOT/'reports/context-coverage-20261006/CONTEXT_LAYOUT_AUG_PLAN.md'
 ARMS=('canonical','augmented')
+LAYOUT_REPO=ROOT.parent/'context-layout-20261006'
+OUTPUT=RUN/'context-layout-aug-v1'
 
 
 def training_layout(cycle,arm):
@@ -70,9 +72,16 @@ def budget(output):
 def verify_source():
     if read(PREVIOUS/'status.json')['status']!='completed' or not read(PREVIOUS/'audit-0650.json')['exact_report_recomputation']:
         raise ValueError('Require audited completed layout result')
-    l.report(PREVIOUS)
+    # Absolute input paths are part of old report identities. Recompute with
+    # that report's immutable checkout, never rebind its globals to this tree.
+    if subprocess.check_output(['git','rev-parse','HEAD'],cwd=LAYOUT_REPO,text=True).strip()!='9cf6ea72da0e4b17b3e0bf27232d55ae74db6c17':raise ValueError('Wrong frozen layout checkout')
+    if sha(LAYOUT_REPO/'scripts/inspire/run_context_layout.py')!=sha(ROOT/'scripts/inspire/run_context_layout.py'):raise ValueError('Incompatible parent consumer')
+    code="from pathlib import Path; from scripts.inspire import run_context_layout as m; m.report(Path("+repr(str(PREVIOUS))+"))"
+    subprocess.run([sys.executable,'-c',code],cwd=LAYOUT_REPO,check=True)
     if sha(SOURCE/'resume.pt')!=RESUME_SHA or sha(SOURCE/'checkpoint-final.pt')!=l.CHECKPOINT_SHA:raise ValueError('Source weights changed')
-    return {str(path):sha(path) for path in (SOURCE/'resume.pt',SOURCE/'checkpoint-final.pt',SOURCE/'manifest.json',SOURCE/'optimization.jsonl',PREVIOUS/'audit-0650.json',PREVIOUS/'comparison.json',PLAN,p.ALL_IDS)}
+    plan=read(OUTPUT/'plan.json')
+    if plan['plan_sha256']!=sha(PLAN) or plan['ids_sha256']!=sha(p.ALL_IDS) or plan['implementation_sha256']!=sha(Path(__file__)):raise ValueError('Training protocol/code changed')
+    return {str(path):sha(path) for path in (SOURCE/'resume.pt',SOURCE/'checkpoint-final.pt',SOURCE/'manifest.json',SOURCE/'optimization.jsonl',PREVIOUS/'audit-0650.json',PREVIOUS/'comparison.json',OUTPUT/'plan.json')}
 
 
 def prepare(output):
@@ -220,7 +229,7 @@ def main(args):
         commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
         write_json(claim/'owner.json',dict(pid=os.getpid(),host=socket.gethostname(),started=time.time(),commit=commit))
         for name in ('attempts','receipts','logs'):(args.output/name).mkdir(exist_ok=True)
-        save_once(args.output/'plan.json',dict(commit=commit,plan_sha256=sha(PLAN),source_resume_sha256=RESUME_SHA,base=str(args.base),reader=str(args.reader),official_source=str(args.official_source),train_gpu_hours_cap=.75,iteration_gpu_hours_cap=3,campaign_gpu_hours_cap=16,steps=384,new_steps=128,arms=list(ARMS),readout_new_pngs=384,readout_new_rows=9216,readout_combined_rows=16128,readout_formats=['canonical','markdown','xml']))
+        save_once(args.output/'plan.json',dict(commit=commit,plan_sha256=sha(PLAN),ids_sha256=sha(p.ALL_IDS),implementation_sha256=sha(Path(__file__)),source_resume_sha256=RESUME_SHA,base=str(args.base),reader=str(args.reader),official_source=str(args.official_source),train_gpu_hours_cap=.75,iteration_gpu_hours_cap=3,campaign_gpu_hours_cap=16,steps=384,new_steps=128,arms=list(ARMS),readout_new_pngs=384,readout_new_rows=9216,readout_combined_rows=16128,readout_formats=['canonical','markdown','xml']))
         write_json(args.output/'status.json',dict(status='source_audit',time=time.time(),commit=commit))
         save_once(args.output/'source.json',verify_source());save_once(args.output/'initials.json',prepare(args.output))
         if subprocess.check_output(['nvidia-smi','--query-compute-apps=pid','--format=csv,noheader'],text=True).strip():raise ValueError('GPU occupied')
