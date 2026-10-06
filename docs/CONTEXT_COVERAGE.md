@@ -53,3 +53,5 @@
 2026-10-06 09:52 CST：固定权重dev90完整阴性，训练侧收益未延伸，详见CONTEXT_DEV_RESULT.md；不晋级、不继续dev搜索。新冻结同8主题16→32历史覆盖训练侧对照CONTEXT_POPULATION_PLAN.md，先复用旧16并补16教师，再同父FM128。此时未部署，原阶段全部退出，累计5.337061309947GPUh。
 
 2026-10-06 09:59 CST：同主题覆盖扩展已部署独立fd3ac81，先新增16教师目标和Writer32训练，至ready_for_frozen_readout退出；原/新增16分层评测随后按冻结协议实施。首批梯度/恢复checkpoint/8对快照通过，无新科学评分。详见CONTEXT_POPULATION_DEPLOYMENT.md。
+
+2026-10-06 第九次跟进：新增16教师及Writer32完整结束，来源/梯度/最终权重全量复核；结算全任务5.874805550178GPUh。按原CONTEXT_POPULATION_PLAN.md实现分层3840行消费者，等待Linux预检及独立部署，结果pending。见CONTEXT_POPULATION_READOUT_DEPLOYMENT.md。

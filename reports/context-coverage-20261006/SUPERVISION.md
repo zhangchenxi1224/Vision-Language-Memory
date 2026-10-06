@@ -1,5 +1,15 @@
 # 每小时执行入口
 
+当前context-population32-v1目标/训练已完成并独立验收（audit-0244）。32目标及1203来源文件、新增4608教师更新、Writer128更新/512draw/每ID16次通过，最终权重bffc31bc526c8955675ba4d76c0a85ede2b47522db8d410bc15ee8f7c70ae051。旧controller/3worker退出，无owner，原H200x2空闲现场已核验。科学读回仍pending，不能将训练完成当实验完成。
+
+已实现预注册3840行分层消费者scripts/inspire/run_context_population_readout.py，Windows28检查通过。新输出context-population-readout-v1，独立checkout context-population-readout-20261006；以随后实际部署条目为准，当前尚未启动。保持CONTEXT_POPULATION_PLAN.md原/新增各16、两Writer、2noise、四控制，1152旧+2688新；无新dev/official评分。源报告和192缓存只读，不改旧执行树。
+
+population目标/训练结算0.537744240231 GPUh，前阶段5.337061309947，全任务5.874805550178。population总3池剩2.462255759769供读回，失败/恢复累计扣除。最多2GPU、单次6h、16总池不变。ARIS其他任务资源/预算不动，不复活取消队列。下一次按新输出status/attempts/owner、实际PID/GPU与完整分母核验，运行中不重复启动。
+
+## 先前状态（仅供溯源）
+
+# 每小时执行入口
+
 当前进度以此条为准（2026-10-06 09:58:59 CST）：context-dev-v1完成且全量核验为阴性；报告CONTEXT_DEV_RESULT.md。训练侧阳性不能延伸为泛化结论，默认保留。新context-population32-v1已经在原H200x2运行：同8主题、每主题2→4，共16→32历史，唯一主因素为覆盖范围。
 
 冻结执行fd3ac81dec0d94eaf92248709ab671b2be5f04af，独立checkout context-population-20261006，开发20f9305同treeea364409f90365255337ce592995e9d09abfd441。controller1901347，两教师worker1902132/1902133分别CUDA0/1，实际进程/GPU核对。最初两历史已到288、另两到35/33步；全部已读梯度有限非零，4份resume张量有限，8组72/144/216/288快照latent/PNG哈希通过。完整population-0143-evidence/和population-checkpoints-0143.json，source clean，Windows/Linux各24检查通过。

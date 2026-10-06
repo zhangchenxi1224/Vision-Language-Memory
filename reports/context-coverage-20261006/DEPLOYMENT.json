@@ -401,7 +401,7 @@
     "comparison": "dev-comparison.json"
   },
   "population32": {
-    "status": "teachers",
+    "status": "ready_for_frozen_readout_verified",
     "execution_commit": "fd3ac81dec0d94eaf92248709ab671b2be5f04af",
     "development_commit": "20f9305100518b557eb89006a2595fe980b90e66",
     "execution_tree": "ea364409f90365255337ce592995e9d09abfd441",
@@ -410,10 +410,7 @@
     "remote_output": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-population32-v1",
     "notebook": "vlm-dreamlite-full-h200x2-20260720",
     "controller_pid": 1901347,
-    "worker_pids": [
-      1902133,
-      1902132
-    ],
+    "worker_pids": [],
     "started_unix": 1791251780.8788989,
     "tests": {
       "windows": 24,
@@ -434,10 +431,10 @@
     "expected_total_pngs": 128,
     "cohort": "same8topics,original16 and added16 training-side strata",
     "new_dev_or_official_scoring": false,
-    "latest_evidence_directory": "population-0143-evidence",
-    "raw_archive_sha256": "de83e7a8ecbb84b08a655365722ab7df12c524fd97d252caddcd8cc845fc8b41",
+    "latest_evidence_directory": "population-complete-0244-evidence",
+    "raw_archive_sha256": "24bfc8d70b905dd9138567a1a349d0b77fe545ad62b2165f287531bdc98da4c0",
     "latest_checkpoint_audit": "population-checkpoints-0143.json",
-    "latest_verification_unix": 1791251939.213523,
+    "latest_verification_unix": 1791254922.5574949,
     "observed_steps": {
       "entertain_games_0036": 33,
       "education_learning_styles_0030": 288,
@@ -447,8 +444,20 @@
     "verified_snapshot_pairs": 8,
     "finite_nonzero_observed_gradients": true,
     "source_checkout_clean": true,
-    "gpu_hours_settled": 0,
-    "gpu_hours_provisional": 0.08478110796875424,
-    "scientific_results": "pending; first phase ends at weight readiness, not experiment completion"
+    "gpu_hours_settled": 0.5377442402309841,
+    "gpu_hours_provisional": 0.5377442402309841,
+    "scientific_results": "pending frozen stratified functional readout; completed weights are not quality evidence",
+    "historical_pids": [
+      1901347,
+      1902132,
+      1902133,
+      2023120
+    ],
+    "finished_unix": 1791252903.6985824,
+    "new_teacher_updates_verified": 4608,
+    "teacher_targets_verified": 32,
+    "bank_files_verified": 1203,
+    "final_checkpoint_sha256": "bffc31bc526c8955675ba4d76c0a85ede2b47522db8d410bc15ee8f7c70ae051",
+    "writer_draws_per_preference": 16
   }
 }
