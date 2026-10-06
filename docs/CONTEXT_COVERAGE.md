@@ -57,3 +57,5 @@
 2026-10-06 第九次跟进：新增16教师及Writer32完整结束，来源/梯度/最终权重全量复核；结算全任务5.874805550178GPUh。按原CONTEXT_POPULATION_PLAN.md实现分层3840行消费者，等待Linux预检及独立部署，结果pending。见CONTEXT_POPULATION_READOUT_DEPLOYMENT.md。
 
 2026-10-06 11:04 CST：原/新增16分层读回已部署独立cb04567，双GPU实际worker及首批8/96新PNG核验通过，完整3840行结果pending。目标/训练结算0.537744240231，总暂计5.916105394827/16GPUh。见CONTEXT_POPULATION_READOUT_DEPLOYMENT.md；不新评dev/official、不改默认。
+
+2026-10-06 第十次跟进：population完整3840行阴性，原16收益退化、新增16无匹配特异性；报告CONTEXT_POPULATION_RESULT.md。全任务结算6.315022416578GPUh。冻结CONTEXT_EXPOSURE_PLAN.md，仅32历史更新128→256以检验曝光不足；完整Adam/RNG续接原128，目标/数据/评测固定，不触碰dev/official或默认。当前准备待部署。

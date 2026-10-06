@@ -1,0 +1,344 @@
+{
+  "combined_rows": 3840,
+  "reused_rows": 1152,
+  "new_rows": 2688,
+  "metric": "Conditional teacher-prefix KL; trained-history strata; no dev/generalization or promotion claim",
+  "strata": {
+    "original16": {
+      "independent_n": 16,
+      "rows": 1920,
+      "families": {
+        "recall": {
+          "blank_kl": 2.8990884721279144,
+          "text_self_consistency_kl": 0.0,
+          "endpoints": {
+            "writer16": {
+              "memory_kl": 1.7838170784525573,
+              "mismatch_kl": 2.3448040448129177,
+              "mismatch_minus_memory": {
+                "mean": 0.5609869663603604,
+                "ci95": [
+                  0.4007159895263612,
+                  0.7192615931853652
+                ],
+                "independent_n": 16
+              },
+              "blank_minus_memory": {
+                "mean": 1.115271393675357,
+                "ci95": [
+                  0.9898579847067595,
+                  1.245245486497879
+                ],
+                "independent_n": 16
+              }
+            },
+            "writer32": {
+              "memory_kl": 2.6960911229252815,
+              "mismatch_kl": 2.692507523111999,
+              "mismatch_minus_memory": {
+                "mean": -0.0035835998132824898,
+                "ci95": [
+                  -0.07742535322904587,
+                  0.07162918243557215
+                ],
+                "independent_n": 16
+              },
+              "blank_minus_memory": {
+                "mean": 0.2029973492026329,
+                "ci95": [
+                  0.12909513153135777,
+                  0.268053718842566
+                ],
+                "independent_n": 16
+              }
+            }
+          },
+          "writer16_minus_writer32": {
+            "mean": -0.9122740444727242,
+            "ci95": [
+              -1.0414380803704262,
+              -0.7783484561368823
+            ],
+            "independent_n": 16
+          }
+        },
+        "application": {
+          "blank_kl": 2.0197434928268194,
+          "text_self_consistency_kl": 0.0,
+          "endpoints": {
+            "writer16": {
+              "memory_kl": 1.4976563295349479,
+              "mismatch_kl": 1.7293358403258026,
+              "mismatch_minus_memory": {
+                "mean": 0.2316795107908547,
+                "ci95": [
+                  0.11512136366218328,
+                  0.3359032925218344
+                ],
+                "independent_n": 16
+              },
+              "blank_minus_memory": {
+                "mean": 0.5220871632918715,
+                "ci95": [
+                  0.4222906273789704,
+                  0.633173746522516
+                ],
+                "independent_n": 16
+              }
+            },
+            "writer32": {
+              "memory_kl": 2.0349022168666124,
+              "mismatch_kl": 2.0372327929362655,
+              "mismatch_minus_memory": {
+                "mean": 0.002330576069653034,
+                "ci95": [
+                  -0.022341951727867126,
+                  0.029351775534451008
+                ],
+                "independent_n": 16
+              },
+              "blank_minus_memory": {
+                "mean": -0.015158724039793015,
+                "ci95": [
+                  -0.047790223732590675,
+                  0.01532085333019495
+                ],
+                "independent_n": 16
+              }
+            }
+          },
+          "writer16_minus_writer32": {
+            "mean": -0.5372458873316646,
+            "ci95": [
+              -0.6436342475935817,
+              -0.44311512308195233
+            ],
+            "independent_n": 16
+          }
+        },
+        "neutral": {
+          "blank_kl": 0.018784827346924014,
+          "text_self_consistency_kl": 0.0,
+          "endpoints": {
+            "writer16": {
+              "memory_kl": 0.016135027585304045,
+              "mismatch_kl": 0.016204837299780752,
+              "mismatch_minus_memory": {
+                "mean": 6.980971447670663e-05,
+                "ci95": [
+                  -0.02233066772009442,
+                  0.019565276242380872
+                ],
+                "independent_n": 16
+              },
+              "blank_minus_memory": {
+                "mean": 0.002649799761619969,
+                "ci95": [
+                  -0.014324146051594124,
+                  0.014056053472589505
+                ],
+                "independent_n": 16
+              }
+            },
+            "writer32": {
+              "memory_kl": 0.005943309964932907,
+              "mismatch_kl": 0.006453762062182788,
+              "mismatch_minus_memory": {
+                "mean": 0.0005104520972498802,
+                "ci95": [
+                  -0.0014184070425547323,
+                  0.0027553132973011443
+                ],
+                "independent_n": 16
+              },
+              "blank_minus_memory": {
+                "mean": 0.012841517381991107,
+                "ci95": [
+                  0.00820123332409468,
+                  0.017003588632032503
+                ],
+                "independent_n": 16
+              }
+            }
+          },
+          "writer16_minus_writer32": {
+            "mean": 0.010191717620371138,
+            "ci95": [
+              7.551868194947877e-05,
+              0.02710647453517309
+            ],
+            "independent_n": 16
+          }
+        }
+      }
+    },
+    "added16": {
+      "independent_n": 16,
+      "rows": 1920,
+      "families": {
+        "recall": {
+          "blank_kl": 3.112975863739848,
+          "text_self_consistency_kl": 0.0,
+          "endpoints": {
+            "writer16": {
+              "memory_kl": 2.957382866181433,
+              "mismatch_kl": 2.9584071608260274,
+              "mismatch_minus_memory": {
+                "mean": 0.0010242946445941925,
+                "ci95": [
+                  -0.01246675755828619,
+                  0.015195424668490887
+                ],
+                "independent_n": 16
+              },
+              "blank_minus_memory": {
+                "mean": 0.15559299755841494,
+                "ci95": [
+                  0.0925510860979557,
+                  0.23230652697384357
+                ],
+                "independent_n": 16
+              }
+            },
+            "writer32": {
+              "memory_kl": 2.87064251024276,
+              "mismatch_kl": 2.900129744783044,
+              "mismatch_minus_memory": {
+                "mean": 0.02948723454028368,
+                "ci95": [
+                  -0.019745193421840668,
+                  0.08768142573535442
+                ],
+                "independent_n": 16
+              },
+              "blank_minus_memory": {
+                "mean": 0.24233335349708796,
+                "ci95": [
+                  0.17158442176878452,
+                  0.3156998008489609
+                ],
+                "independent_n": 16
+              }
+            }
+          },
+          "writer16_minus_writer32": {
+            "mean": 0.08674035593867302,
+            "ci95": [
+              0.03882136940956116,
+              0.14005121868103743
+            ],
+            "independent_n": 16
+          }
+        },
+        "application": {
+          "blank_kl": 2.2945452416315675,
+          "text_self_consistency_kl": 0.0,
+          "endpoints": {
+            "writer16": {
+              "memory_kl": 2.2956445212475955,
+              "mismatch_kl": 2.292135062161833,
+              "mismatch_minus_memory": {
+                "mean": -0.0035094590857625008,
+                "ci95": [
+                  -0.013908814638853073,
+                  0.006286674179136753
+                ],
+                "independent_n": 16
+              },
+              "blank_minus_memory": {
+                "mean": -0.0010992796160280704,
+                "ci95": [
+                  -0.024167374707758427,
+                  0.022299679927527905
+                ],
+                "independent_n": 16
+              }
+            },
+            "writer32": {
+              "memory_kl": 2.254035863094032,
+              "mismatch_kl": 2.2510253423824906,
+              "mismatch_minus_memory": {
+                "mean": -0.003010520711541176,
+                "ci95": [
+                  -0.031552175991237164,
+                  0.0249904440715909
+                ],
+                "independent_n": 16
+              },
+              "blank_minus_memory": {
+                "mean": 0.04050937853753567,
+                "ci95": [
+                  0.008523805998265743,
+                  0.07104786485433578
+                ],
+                "independent_n": 16
+              }
+            }
+          },
+          "writer16_minus_writer32": {
+            "mean": 0.04160865815356374,
+            "ci95": [
+              0.017511052545160055,
+              0.06731142429634929
+            ],
+            "independent_n": 16
+          }
+        },
+        "neutral": {
+          "blank_kl": 0.020246575779052447,
+          "text_self_consistency_kl": 0.0,
+          "endpoints": {
+            "writer16": {
+              "memory_kl": 0.005450133387488929,
+              "mismatch_kl": 0.005892609378177704,
+              "mismatch_minus_memory": {
+                "mean": 0.0004424759906887744,
+                "ci95": [
+                  -0.0003739512235539696,
+                  0.0013775404373311062
+                ],
+                "independent_n": 16
+              },
+              "blank_minus_memory": {
+                "mean": 0.014796442391563518,
+                "ci95": [
+                  0.008159681906001495,
+                  0.02023491841808702
+                ],
+                "independent_n": 16
+              }
+            },
+            "writer32": {
+              "memory_kl": 0.0045682763678855315,
+              "mismatch_kl": 0.0044621999089913406,
+              "mismatch_minus_memory": {
+                "mean": -0.00010607645889419096,
+                "ci95": [
+                  -0.0015563980031850048,
+                  0.0013057090005420243
+                ],
+                "independent_n": 16
+              },
+              "blank_minus_memory": {
+                "mean": 0.015678299411166916,
+                "ci95": [
+                  0.01030405661433387,
+                  0.019983631656696497
+                ],
+                "independent_n": 16
+              }
+            }
+          },
+          "writer16_minus_writer32": {
+            "mean": 0.0008818570196033977,
+            "ci95": [
+              -0.0008420524931571282,
+              0.002638643903151699
+            ],
+            "independent_n": 16
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "job": {
+    "name": "rollout-writer32",
+    "gpu": 1,
+    "command": [
+      "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+      "scripts/experiments/prefeval_k1_writer.py",
+      "rollout",
+      "--arm",
+      "B",
+      "--split",
+      "pilot",
+      "--ids-file",
+      "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-population-readout-20261006/configs/experiments/context_population32_ids.json",
+      "--base",
+      "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+      "--official-source",
+      "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite",
+      "--checkpoint",
+      "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-population32-v1/writer32/checkpoint-final.pt",
+      "--output",
+      "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-population-readout-v1/writer32/images",
+      "--inter-turns",
+      "0",
+      "--noise-chains",
+      "2"
+    ]
+  },
+  "command_sha256": "4d4482558ef7283da7ac40d020b23f338ecfbb551d18c8a4b17685c1a1385e15",
+  "hostname": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+  "started": 1791255791.483045,
+  "pid": 2265345,
+  "finished": 1791256494.3693285,
+  "exit_code": 0
+}

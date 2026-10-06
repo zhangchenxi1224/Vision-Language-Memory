@@ -1,0 +1,124 @@
+{
+  "time": 1791255865.8228765,
+  "status": {
+    "status": "rollout",
+    "time": 1791255791.479624,
+    "commit": "cb045675baccff3b0b00002f2865ee77b89da4a4"
+  },
+  "owner": {
+    "pid": 2261869,
+    "host": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+    "started": 1791255747.042724,
+    "commit": "cb045675baccff3b0b00002f2865ee77b89da4a4"
+  },
+  "processes": [
+    {
+      "pid": 2261869,
+      "cmdline": "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python scripts/inspire/run_context_population_readout.py run --output /inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-population-readout-v1 --base /inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907 --reader /inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct --official-source /inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite --prefeval /inspire/ssd/project/exploration-topic/czxs26210936/repos/context-coverage-20261006/third_party/prefeval_reference ",
+      "cuda": []
+    },
+    {
+      "pid": 2265345,
+      "cmdline": "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python scripts/experiments/prefeval_k1_writer.py rollout --arm B --split pilot --ids-file /inspire/ssd/project/exploration-topic/czxs26210936/repos/context-population-readout-20261006/configs/experiments/context_population32_ids.json --base /inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907 --official-source /inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite --checkpoint /inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-population32-v1/writer32/checkpoint-final.pt --output /inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-population-readout-v1/writer32/images --inter-turns 0 --noise-chains 2 ",
+      "cuda": [
+        "CUDA_VISIBLE_DEVICES=1"
+      ]
+    },
+    {
+      "pid": 2265344,
+      "cmdline": "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python scripts/experiments/prefeval_k1_writer.py rollout --arm B --split pilot --ids-file /inspire/ssd/project/exploration-topic/czxs26210936/repos/context-population-readout-20261006/configs/experiments/context_population_added16_ids.json --base /inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907 --official-source /inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite --checkpoint /inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-fit-v1/context-diverse/train/checkpoint-final.pt --output /inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-population-readout-v1/writer16/images --inter-turns 0 --noise-chains 2 ",
+      "cuda": [
+        "CUDA_VISIBLE_DEVICES=0"
+      ]
+    }
+  ],
+  "attempts": [
+    {
+      "job": {
+        "name": "rollout-writer32",
+        "gpu": 1,
+        "command": [
+          "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+          "scripts/experiments/prefeval_k1_writer.py",
+          "rollout",
+          "--arm",
+          "B",
+          "--split",
+          "pilot",
+          "--ids-file",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-population-readout-20261006/configs/experiments/context_population32_ids.json",
+          "--base",
+          "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+          "--official-source",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite",
+          "--checkpoint",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-population32-v1/writer32/checkpoint-final.pt",
+          "--output",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-population-readout-v1/writer32/images",
+          "--inter-turns",
+          "0",
+          "--noise-chains",
+          "2"
+        ]
+      },
+      "command_sha256": "4d4482558ef7283da7ac40d020b23f338ecfbb551d18c8a4b17685c1a1385e15",
+      "hostname": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+      "started": 1791255791.483045,
+      "pid": 2265345
+    },
+    {
+      "job": {
+        "name": "rollout-writer16",
+        "gpu": 0,
+        "command": [
+          "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+          "scripts/experiments/prefeval_k1_writer.py",
+          "rollout",
+          "--arm",
+          "B",
+          "--split",
+          "pilot",
+          "--ids-file",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-population-readout-20261006/configs/experiments/context_population_added16_ids.json",
+          "--base",
+          "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+          "--official-source",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/Vision-Language-Memory/third_party/DreamLite",
+          "--checkpoint",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-fit-v1/context-diverse/train/checkpoint-final.pt",
+          "--output",
+          "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-population-readout-v1/writer16/images",
+          "--inter-turns",
+          "0",
+          "--noise-chains",
+          "2"
+        ]
+      },
+      "command_sha256": "6733f95cbca85be9fe0d1f6fba05300aa7cadc399d3516105a07ad90910cda29",
+      "hostname": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+      "started": 1791255791.483267,
+      "pid": 2265344
+    }
+  ],
+  "images_verified": {
+    "writer16": 4,
+    "writer32": 4
+  },
+  "png_hashes": {
+    "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-population-readout-v1/writer16/images/education_learning_styles_0030/seed-1/prefix-00.png": "999a660d875c1397b4e090e2fd8fbdcec186a1f56cbb1c393ce19f5efc817eaa",
+    "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-population-readout-v1/writer16/images/education_learning_styles_0030/seed-0/prefix-00.png": "33818557af3e42fd6e63a9e29e12586ae12917f3692d141915cfdfd8bdbf09eb",
+    "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-population-readout-v1/writer16/images/education_learning_styles_0009/seed-1/prefix-00.png": "38cfad20587fa133f2bfd91cefc635a8fd6de21e7d9090235145fcd90fd0099a",
+    "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-population-readout-v1/writer16/images/education_learning_styles_0009/seed-0/prefix-00.png": "83adb17992d39d130c7f93a9de84b1bfff8381ac41f31119270e47555294e2d4",
+    "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-population-readout-v1/writer32/images/education_learning_styles_0007/seed-1/prefix-00.png": "9a6c4fc9c66b8491c43c67030655b93d8adef9bba759d2356db1cd80959ff788",
+    "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-population-readout-v1/writer32/images/education_learning_styles_0007/seed-0/prefix-00.png": "41a0c99e63b622a5e5ba9f560d4080fd82771d6663c494d6e7d7ca86a926bd03",
+    "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-population-readout-v1/writer32/images/education_learning_styles_0001/seed-1/prefix-00.png": "e5b1fe740e2b36c5de33631e122df0c0e078984d0666b0628470e72db2c717fb",
+    "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-population-readout-v1/writer32/images/education_learning_styles_0001/seed-0/prefix-00.png": "cf3d6ae48a1f06f16103801f2138ea99bf364d54d1d39ed62e200b174e63f72e"
+  },
+  "gpu_hours_provisional": 0.041299844649102954,
+  "iteration_gpu_hours_provisional": 0.5790440848800871,
+  "campaign_gpu_hours_provisional": 5.916105394826995,
+  "source_clean": true,
+  "gpu": "0, GPU-a56f5213-6cf6-e214-b90a-c49cd41c2baa, 14128 MiB, 100 %\n1, GPU-d9ac5be8-fa4a-742e-91ff-62d1ce280a1d, 14128 MiB, 100 %",
+  "compute": "1756562, [Not Found], 14118 MiB\n1756563, [Not Found], 14118 MiB",
+  "readout_rows": 0
+}

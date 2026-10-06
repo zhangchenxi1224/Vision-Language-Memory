@@ -1,5 +1,15 @@
 # 每小时执行入口
 
+当前population16→32实验全量完成且独立核验（2026-10-06 11:47:55 CST）。3840行、128PNG、384教师张量、源模型/梯度/哈希及report重算通过；controller/4worker退出、owner消失、两GPU空闲。原16恢复/应用明显下降，新增16虽小幅KL改善但未建立匹配特异性，默认不晋级。详见CONTEXT_POPULATION_RESULT.md与population-result-0345-evidence/。全任务结算6.315022416578GPUh。
+
+已冻结CONTEXT_EXPOSURE_PLAN.md：32历史/目标不变、更新128→256，每历史16→32draw。复用完整resume128的Adam/RNG/cursor，仅新manifest登记steps256，原始源只读；新增执行129–256而不重跑128。新context-exposure-v1上限1.5GPUh计入16池，新增64PNG/1536行、复用3840行合并5376，原/新增各n16分层，同12问题/controls/noise，384教师分布只读，不新dev/official评分、不选端点。
+
+本条时新消费者已实现，本地相关36检查（包括真实Adam/RNG断点恢复与连续训练逐张量一致）通过，尚未远端部署；后续实际部署条目优先。只管理本轮独立checkout/output，运行中不改源、不重复启动；不改其他ARIS任务/预算待批/自动化，不复活取消队列。先核验PID/owner/资源，再部署。每次≤6h、最多2GPU、失败计费，若部分训练中断须审计resume与日志尾部后恢复。
+
+## 先前状态（仅供溯源）
+
+# 每小时执行入口
+
 2026-10-06 11:04:25 CST：context-population-readout-v1已在原H200x2真实运行。独立checkout context-population-readout-20261006，执行cb045675baccff3b0b00002f2865ee77b89da4a4、开发00bc27f8ce07e3b2bc528b1218657ccaa1444037，同treea5c248903ca397f1e63684d008b7a0f524381d60，源码clean。Windows/Linux各28检查通过。controller2261869，Writer16 worker2265344/CUDA0、Writer32 worker2265345/CUDA1，每卡约14GiB。首批4/32与4/64新PNG的RGB1024、历史、噪声、收据及SHA通过。新增读回0/2688，效果pending。
 
 源目标/训练全部完成：32教师、新增4608教师更新、Writer128更新/512draw/每ID16次，Writer32最终bffc31bc526c8955675ba4d76c0a85ede2b47522db8d410bc15ee8f7c70ae051。新增64组中间PNG/latent快照哈希通过，旧4PID退出，无旧owner，不重跑源训练。

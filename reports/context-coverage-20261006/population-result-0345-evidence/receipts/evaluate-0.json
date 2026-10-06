@@ -1,0 +1,23 @@
+{
+  "job": {
+    "name": "evaluate-0",
+    "gpu": 0,
+    "command": [
+      "/inspire/ssd/project/exploration-topic/czxs26210936/envs/vlm-r3-ngc2502/bin/python",
+      "/inspire/ssd/project/exploration-topic/czxs26210936/repos/context-population-readout-20261006/scripts/inspire/run_context_population_readout.py",
+      "evaluate",
+      "--output",
+      "/inspire/ssd/project/exploration-topic/czxs26210936/runs/context-coverage-20261006/context-population-readout-v1",
+      "--reader",
+      "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+      "--shard",
+      "0"
+    ]
+  },
+  "command_sha256": "3492a6d643bd038308299740d778961b7b191c51626bbaa2bf4ac9fe77253f45",
+  "hostname": "vlm-dreamlite-full-h200x2-20260720--a3211a885fb5-ndtscccsw6",
+  "started": 1791256500.0854294,
+  "pid": 2353518,
+  "finished": 1791256760.2277932,
+  "exit_code": 0
+}
