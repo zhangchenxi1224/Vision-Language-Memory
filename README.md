@@ -2,6 +2,8 @@
 
 当前主线：**官方 PrefEval 输入与任务 → 视觉教师目标 → DreamLite 官方 target–noise flow matching → 实际 RGB 写入与读取 → 内容泛化和连续保持。**
 
+2026-10-08 用户决定恢复**选择题硬监督（B臂）**：教师以官方正确选项为硬标签，保留已有T1/T2/T3问法与选项位置轮换；随后用官方target–noise FM训练共享Writer。10月5日至8日的Prompt Matching、Direct/PM→FM、上下文覆盖及后续曝光/排版实验全部撤回，不作为当前训练或结果依据。执行代码恢复到引入这些实验之前的`6d9fea6`基线，既有9月硬监督数据、权重及结果继续保留。
+
 2026-10-02 已完成远端收敛：开发分支仅保留 `main`，31 个旧分支均先保留归档标签再删除引用。历史恢复、PR 收尾与 Release 核验见[部署记录](docs/REMOTE_CONSOLIDATION_20261002.md)；Git 体积与后续迁移方案见[历史瘦身评估](docs/HISTORY_SIZE_ASSESSMENT_20261002.md)。
 
 教师可读性、共享 Writer 单次写入、未见偏好泛化和连续保持分别报告。训练完成不代表评测完成；教师分数不能替代学生分数。
@@ -35,18 +37,6 @@ python scripts/reporting/verify_aligned_cleanup.py
 ```
 
 截至 2026-10-02 的归档状态：B730 exposure512 已完成训练，dev 尚无稳定改善；多目标多轮及 C8 全量730评测已有结果，配对 B0 和 long10 尚未全部闭环；C/R 训练完成，完整评测仍有缺口。本次没有重新查询 GPU 实时状态。
-
-## 并行监督实验（默认仍为 hard CE）
-
-新增 [历史条件 Prompt Matching](docs/PROMPT_MATCHING.md)：`hard_ce` 保留原始答案监督；
-`history_hard` 与 `prompt_matching` 共用同一冻结 Reader 在已观察历史下生成的精确回答序列，
-分别使用 one-hot 与完整词表软分布，隔离教师来源与监督方式的影响。教师只见当前初始 exchange，
-Writer 和学生 Reader 输入边界、VAE、PNG 回读及官方 FM 保持不变。
-
-入口：`scripts/inspire/run_prompt_matching_parallel.py`；前瞻协议：
-`configs/experiments/prompt_matching_parallel.json`。先运行真实梯度 smoke，再做同预算 paired pilot。
-训练 loss 或教师图提升不触发替换；完整学生、未参与训练问题、偏好与保持评测通过后才审阅晋级。
-本节声明实现能力，不声明实验已完成或软监督优于原方案。
 
 ## 训练与生成契约
 

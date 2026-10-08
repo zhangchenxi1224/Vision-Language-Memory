@@ -1,74 +1,14 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-05",
+  "updated_at": "2026-10-02",
   "selection_rule": "Select current_performance only, then verify each run's protocol, lineage, denominator and completion receipt. Do not recursively aggregate all reports.",
   "default_role": "current_performance",
   "families": [
-    {
-      "id": "prefeval-k1",
-      "role": "current_performance",
-      "path": "reports/prefeval-k1-l0-l2-20260924",
-      "dimensions": [
-        "teacher_or_writer",
-        "A_or_B",
-        "split",
-        "question_form",
-        "checkpoint",
-        "budget",
-        "chain_length",
-        "judge"
-      ],
-      "scope": "K1, A/B targets, exposure512 and C/I/R; project adaptations; mixed completion states"
-    },
-    {
-      "id": "prefeval-multitarget",
-      "role": "current_performance",
-      "path": "reports/prefeval-multitarget-20260927",
-      "dimensions": [
-        "target_bank",
-        "sample_ids",
-        "draw_distribution",
-        "budget",
-        "checkpoint",
-        "chain_length",
-        "paired_baseline"
-      ],
-      "scope": "F1/F8/S8 and subsequent C8 runs; paired B0 and long10 not all complete"
-    },
-    {
-      "id": "prefeval-official-inputs",
-      "role": "protocol_and_data",
-      "path": "reports/prefeval-official-alignment-20260923",
-      "upstream_commit": "50795054b5ff5f418d2b768a331d71e480f93331",
-      "scope": "Official input construction, provenance and two-stage FM route; not a performance reproduction"
-    },
-    {
-      "id": "dreamlite-alignment-provenance",
-      "role": "engineering_provenance",
-      "path": "reports/official-alignment-results-20260913",
-      "upstream_commit": "a6e20c8cc94027f37dd7c5a81b0b3b472aa18409",
-      "scope": "Mixed transition-era controls, banks, initialization and test fixtures; excluded from current performance tables"
-    },
-    {
-      "id": "prompt-matching-parallel",
-      "role": "engineering_provenance",
-      "path": "reports/prompt-matching-20261005",
-      "dimensions": [
-        "supervision",
-        "format_arm",
-        "teacher_or_writer",
-        "split",
-        "budget",
-        "chain_length"
-      ],
-      "scope": "New parallel-supervision implementation, completed GPU technical smoke and active pilot launch; no quality or promotion claim. Completed performance evidence must be registered explicitly."
-    }
+    {"id": "prefeval-k1", "role": "current_performance", "path": "reports/prefeval-k1-l0-l2-20260924", "dimensions": ["teacher_or_writer", "A_or_B", "split", "question_form", "checkpoint", "budget", "chain_length", "judge"], "scope": "K1, A/B targets, exposure512 and C/I/R; project adaptations; mixed completion states"},
+    {"id": "prefeval-multitarget", "role": "current_performance", "path": "reports/prefeval-multitarget-20260927", "dimensions": ["target_bank", "sample_ids", "draw_distribution", "budget", "checkpoint", "chain_length", "paired_baseline"], "scope": "F1/F8/S8 and subsequent C8 runs; paired B0 and long10 not all complete"},
+    {"id": "prefeval-official-inputs", "role": "protocol_and_data", "path": "reports/prefeval-official-alignment-20260923", "upstream_commit": "50795054b5ff5f418d2b768a331d71e480f93331", "scope": "Official input construction, provenance and two-stage FM route; not a performance reproduction"},
+    {"id": "dreamlite-alignment-provenance", "role": "engineering_provenance", "path": "reports/official-alignment-results-20260913", "upstream_commit": "a6e20c8cc94027f37dd7c5a81b0b3b472aa18409", "scope": "Mixed transition-era controls, banks, initialization and test fixtures; excluded from current performance tables"}
   ],
   "retired_manifest": "docs/alignment-cleanup-manifest.json",
-  "cautions": [
-    "Directory eligibility does not declare every run complete or comparable.",
-    "Aligned negative results remain; no score-based selection.",
-    "Original untracked/external artifacts are not erased.",
-    "Qwen text controls require task/split/metric equivalence, not DreamLite training."
-  ]
+  "cautions": ["Directory eligibility does not declare every run complete or comparable.", "Aligned negative results remain; no score-based selection.", "Original untracked/external artifacts are not erased.", "Qwen text controls require task/split/metric equivalence, not DreamLite training."]
 }
