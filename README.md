@@ -28,6 +28,7 @@
 | PrefEval 官方输入 | [对齐说明](reports/prefeval-official-alignment-20260923/ALIGNMENT.md)、[FM 路线](reports/prefeval-official-alignment-20260923/FM_ROUTE_CORRECTION.md) | 协议与数据；不是官方论文模型性能复现 |
 | K1 / A-B 教师 / FM / 保持 / 曝光量 | [K1 目录](reports/prefeval-k1-l0-l2-20260924/) | 按 split、teacher/student、预算、链长和 Judge 分开报告 |
 | 多目标与 C8 | [多目标目录](reports/prefeval-multitarget-20260927/) | 各轮、配对 baseline、样本数和链长分开报告 |
+| U-Net 初始化与学习率 | [冻结方案](reports/prefeval-unet-init-ablation-20261009/PLAN.md) | P-L/P-H/R-L/R-H 四组 2×2 对照；固定硬监督教师与 B730 输入，部署状态和结果另行核验 |
 
 机器可读入口为 [experiments/registry.json](experiments/registry.json)。默认分析只使用 `current_performance` 目录，再核对每次 run 的协议、分母和完成回执。禁止递归汇总全部 `reports/`；目录准入不代表每个计划都已完成或所有分数均可比较。
 
