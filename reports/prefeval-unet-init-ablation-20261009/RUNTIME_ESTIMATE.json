@@ -1,0 +1,51 @@
+{
+  "scope": "one paired training seed, four H200 arms, all 20 fixed evaluations",
+  "estimate_type": "historical throughput extrapolation plus planning allowance; not a confidence interval",
+  "excludes": ["queue wait", "preemption", "failure and retry cost", "three-seed replication"],
+  "historical_training": {
+    "evidence_archive": "reports/prefeval-k1-l0-l2-20260924/evidence/b730-final-20260926-0420/raw.tar.gz",
+    "updates": 23360,
+    "run_segments": 3,
+    "loop_seconds": 36279.27,
+    "within_segment_mean_seconds_per_update": 1.5530166,
+    "within_segment_median_seconds_per_update": 1.52343,
+    "method": "Sum elapsed training time within each run segment; the seconds counter resets on resume.",
+    "one_observed_startup_cache_seconds": 451
+  },
+  "historical_evaluation": {
+    "archives": [
+      "reports/prefeval-k1-l0-l2-20260924/evidence/b730-exposure512-baseline23360-20260927/raw.tar.gz",
+      "reports/prefeval-k1-l0-l2-20260924/evidence/b730-exposure512-step93440-train-final-20260929/raw.tar.gz"
+    ],
+    "complete_rollout_seconds_per_png": [7.8607, 10.6961, 10.1809],
+    "complete_readback_seconds_per_call": [0.47799, 0.46660, 0.47016],
+    "coverage_validation": "Full train730 jobs: 1460 generated PNGs and 4380 historical T1 readback records per measured receipt; resumed partial receipts excluded.",
+    "limitations": [
+      "Historical readback has one sixth text-only controls, versus three forty-thirds here; higher image fraction can increase Reader cost.",
+      "Historical MCQ generations were 7 tokens each; random-init image effects on output length have not yet been measured.",
+      "Shared storage and repeated model loading add variable overhead."
+    ]
+  },
+  "registered_workload": {
+    "formal_updates_per_arm": 23360,
+    "formal_updates_total": 93440,
+    "initial_precheck_updates_per_arm": 128,
+    "train_dev_endpoints": 16,
+    "official_final_endpoints": 4,
+    "preference_endpoint_instances": 7280,
+    "pngs_per_instance": 2,
+    "reads_per_instance": 43,
+    "total_pngs": 14560,
+    "total_reader_calls": 313040
+  },
+  "planning_ranges": {
+    "per_arm_training_with_precheck_and_audit_hours": [11, 14],
+    "evaluation_gpu_hours_before_variable_loading_cost": [73, 90],
+    "four_gpu_training_then_one_gpu_eval_wall_hours": [84, 104],
+    "four_gpu_training_then_four_gpu_eval_wall_hours": [30, 38],
+    "four_gpu_training_then_eight_gpu_endpoint_eval_wall_hours": [21, 28]
+  },
+  "recommendation": "Start the four single-GPU training arms immediately. Use the same four GPUs for evaluation afterward. An additional four H200s can shorten evaluation wall time if they become available soon, but eight-GPU/cross-instance dispatch is not part of the current four-GPU controller.",
+  "resource_efficiency": "Four cards match four training arms. Additional training DDP would change the execution design and is not required. Whole-endpoint evaluation has four large final train tasks and four official tasks, so additional GPUs do not provide linear total-runtime scaling.",
+  "future_calibration": "Update from the independent prechecks and first 128 formal updates without changing the scientific protocol."
+}

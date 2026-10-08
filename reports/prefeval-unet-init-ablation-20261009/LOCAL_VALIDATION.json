@@ -6,9 +6,10 @@
   "test_runs": [
     {
       "files": ["tests/test_prefeval_k1_init_ablation.py", "tests/test_prefeval_unet_init_evaluate.py", "tests/test_prefeval_unet_init_controller.py"],
-      "passed": 38,
+      "passed": 43,
       "failed": 0,
-      "seconds": 18.84
+      "seconds": 18.60,
+      "includes": "Four-GPU evaluation pool concurrency, failure cancellation, fixed scientific commands, stage barrier, and resume revalidation."
     },
     {
       "files": ["tests/test_prefeval_k1_data.py", "tests/test_native_base_training_alignment.py", "tests/test_writer_initialization.py"],

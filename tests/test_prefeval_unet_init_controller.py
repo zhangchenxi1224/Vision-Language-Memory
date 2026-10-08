@@ -7,6 +7,7 @@ import io
 import json
 from pathlib import Path
 import tempfile
+import threading
 import unittest
 from unittest.mock import Mock, patch
 
@@ -23,6 +24,14 @@ def config(root):
         '--reader', str(root / 'reader'), '--official-source', str(root / 'official'),
         '--parent-checkpoint', str(root / 'parent.pt'), '--teachers', str(root / 'teachers'),
         '--train-variants', str(root / 'train-variants.json'), '--dev-variants', str(root / 'dev-variants.json')]))
+
+
+def mock_runner():
+    runner = Mock()
+    runner.stop = threading.Event()
+    runner.terminate.side_effect = runner.stop.set
+    runner.wait_for_shutdown.side_effect = runner.stop.set
+    return runner
 
 
 def outcome(args, arm, rate, attempt=None):
@@ -52,22 +61,42 @@ class ControllerProtocolTests(unittest.TestCase):
         self.assertEqual(len(result['official_evaluations_after_train_dev']), 4)
         self.assertEqual(result['protocol']['training']['total_formal_updates'], 93440)
         self.assertEqual({r['gpu'] for r in result['prechecks']}, {'0', '1', '2', '3'})
+        self.assertEqual(result['resources']['evaluation_gpus'], ['0', '1', '2', '3'])
+        self.assertEqual(result['resources']['evaluation_workers'], 4)
+        self.assertEqual(result['resources']['max_simultaneous_gpus'], 4)
+        self.assertFalse(result['resources']['training_evaluation_overlap'])
+        self.assertEqual([j['split'] for j in result['evaluations']], ['train'] * 8 + ['dev'] * 8)
         for job in result['official_evaluations_after_train_dev']:
             self.assertEqual(job['step'], 23360)
             self.assertIn('--history-file', job['command'])
             self.assertNotIn('--initial-variants', job['command'])
+            self.assertEqual(job['eligible_gpus'], ['0', '1', '2', '3'])
+            self.assertNotIn('gpu', job)  # Assigned only when a dedicated GPU worker dequeues it.
 
-    def test_evaluation_reuses_a_training_gpu_only_after_four_distinct_training_lanes(self):
+    def test_evaluation_pool_reuses_training_gpus_and_accepts_legacy_single_gpu(self):
         with tempfile.TemporaryDirectory() as directory:
             args = config(Path(directory))
+            self.assertEqual(args.eval_gpus, ('0', '1', '2', '3'))
             self.assertEqual(args.eval_gpu, '0')
-            self.assertIn(args.eval_gpu, args.gpus)
             controller.configure(args)
-            args.eval_gpu = 'not-a-gpu'
+            args.eval_gpus = ('not-a-gpu',)
             with self.assertRaisesRegex(controller.ProtocolError, 'numeric GPU'):
                 controller.configure(args)
+        single = controller.configure(controller.parser().parse_args(['--eval-gpu', '2']))
+        self.assertEqual(single.eval_gpus, ('2',))
+        self.assertEqual(single.eval_gpu, '2')
+        subset = controller.configure(controller.parser().parse_args(['--eval-gpus', '3,1']))
+        self.assertEqual(subset.eval_gpus, ('3', '1'))
+        self.assertEqual(subset.eval_gpu, '3')
+        with self.assertRaisesRegex(controller.ProtocolError, 'reuse'):
+            controller.configure(controller.parser().parse_args(['--eval-gpus', '0,4']))
+        with self.assertRaisesRegex(controller.ProtocolError, 'numeric GPU'):
+            controller.configure(controller.parser().parse_args(['--eval-gpu', 'invalid']))
         with self.assertRaises(Exception):
             controller.parse_gpus('0,0,1,2')
+        for invalid in ('0,0', '', 'x', '0,1,2,3,4'):
+            with self.assertRaises(Exception):
+                controller.parse_eval_gpus(invalid)
 
     def test_formal_fresh_commands_reference_successful_precheck_without_continuation(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -94,6 +123,9 @@ class ControllerProtocolTests(unittest.TestCase):
             self.assertEqual(controller.register(args, {'source': 'same'}), identity)
             with self.assertRaisesRegex(controller.ProtocolError, 'identity changed'):
                 controller.register(args, {'source': 'changed'})
+            args.eval_gpus = ('0',)
+            with self.assertRaisesRegex(controller.ProtocolError, 'identity changed'):
+                controller.register(args, {'source': 'same'})
 
     def test_joint_fallback_occurs_once_and_official_is_after_main_evaluations(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -106,14 +138,15 @@ class ControllerProtocolTests(unittest.TestCase):
                                      'failure': {'step': 7, 'reason': 'nonfinite_fm_loss'}}
                 return result
             def evaluate(_args, _runner, job):
+                self.assertEqual(calls[-1][2], None, 'All formal training finishes before any evaluation')
                 order.append(job['split']); return {'label': job['label'], 'complete': {}}
             def history(*_):
-                self.assertEqual(order, ['train', 'dev'] * 8)
+                self.assertEqual(sorted(order), ['dev'] * 8 + ['train'] * 8)
                 return {'sha256': 'history'}
             with patch.object(controller, 'parallel_training', side_effect=train), \
                  patch.object(controller, 'evaluate_job', side_effect=evaluate), \
                  patch.object(controller, 'freeze_official_history', side_effect=history):
-                result = controller.execute(args, Mock(), 'identity')
+                result = controller.execute(args, mock_runner(), 'identity')
             self.assertEqual([x[2] for x in calls], [0, 1, None])
             self.assertEqual(calls[1][0], controller.HIGH_ARMS)
             for _, rates, _ in calls[1:]:
@@ -200,6 +233,118 @@ class ControllerProtocolTests(unittest.TestCase):
             controller.save(root / 'numeric-failure.json', {'reason': 'nonfinite_fm_loss'})
             with self.assertRaisesRegex(controller.ProtocolError, 'Unrecognized numeric'):
                 controller.numeric_failure(root)
+
+
+class EvaluationPoolTests(unittest.TestCase):
+    def test_four_dedicated_gpu_workers_share_train_first_queue(self):
+        with tempfile.TemporaryDirectory() as directory:
+            args = config(Path(directory)); runner = mock_runner()
+            jobs = list(reversed(list(controller.evaluation_jobs(args))))
+            original = copy.deepcopy(jobs)
+            first_wave = threading.Barrier(4)
+            faster_worker_progress = threading.Event()
+            mutex = threading.Lock()
+            active, visits, dispatched, finished = set(), {}, [], []
+            peak = 0
+
+            class TracedQueue(controller.queue.Queue):
+                def get_nowait(self):
+                    job = super().get_nowait()
+                    dispatched.append(job['split'])
+                    return job
+
+            def evaluate(_args, _runner, job):
+                nonlocal peak
+                gpu = job['gpu']
+                with mutex:
+                    self.assertNotIn(gpu, active, 'Two endpoint jobs must never share a GPU')
+                    active.add(gpu); peak = max(peak, len(active))
+                    visits[gpu] = visits.get(gpu, 0) + 1
+                    first = visits[gpu] == 1
+                if first:
+                    first_wave.wait(timeout=5)
+                if gpu == '0' and first:
+                    self.assertTrue(faster_worker_progress.wait(5), 'Other GPU workers must drain the shared queue')
+                with mutex:
+                    if gpu != '0' and visits[gpu] >= 2:
+                        faster_worker_progress.set()
+                    active.remove(gpu); finished.append(job['label'])
+                return {'label': job['label'], 'complete': {}}
+
+            with patch.object(controller, 'evaluate_job', side_effect=evaluate), \
+                 patch.object(controller.queue, 'Queue', TracedQueue):
+                result = controller.evaluation_pool(args, runner, 'identity', jobs, phase='evaluation')
+            self.assertEqual(peak, 4)
+            self.assertEqual(set(visits), set(args.eval_gpus))
+            self.assertEqual(dispatched, ['train'] * 8 + ['dev'] * 8)
+            self.assertEqual((len(finished), len(set(finished))), (16, 16))
+            self.assertEqual(set(finished), {j['label'] for j in jobs})
+            ordered = sorted(jobs, key=lambda j: j['split'] != 'train')
+            self.assertEqual([r['label'] for r in result], [j['label'] for j in ordered])
+            self.assertEqual(jobs, original, 'Dispatch must not mutate immutable commands or outputs')
+            status = controller.read_json(args.run_root / 'status.json')
+            self.assertEqual((status['completed'], status['pending'], status['active']), (16, 0, {}))
+            runner.wait_for_shutdown.assert_not_called()
+
+    def test_official_jobs_run_on_four_gpus_after_one_frozen_history(self):
+        with tempfile.TemporaryDirectory() as directory:
+            args = config(Path(directory)); runner = mock_runner()
+            jobs = list(controller.evaluation_jobs(args, official=True))
+            barrier = threading.Barrier(4)
+            def evaluate(_args, _runner, job):
+                command = job['command']
+                self.assertEqual(command[command.index('--history-file') + 1], str(args.run_root / 'official-history.json'))
+                self.assertEqual(job['step'], 23360)
+                barrier.wait(timeout=5)
+                return {'label': job['label'], 'complete': {}}
+            with patch.object(controller, 'evaluate_job', side_effect=evaluate):
+                result = controller.evaluation_pool(args, runner, 'identity', jobs, phase='official_final_only')
+            self.assertEqual(len(result), 4)
+
+    def test_worker_failure_stops_peers_and_does_not_dequeue_more_jobs(self):
+        with tempfile.TemporaryDirectory() as directory:
+            args = config(Path(directory)); runner = mock_runner()
+            barrier = threading.Barrier(4)
+            calls = []
+            def evaluate(_args, _runner, job):
+                calls.append(job['label'])
+                barrier.wait(timeout=5)
+                if job['gpu'] == '0':
+                    raise RuntimeError('simulated primary failure')
+                self.assertTrue(runner.stop.wait(5), 'Running peers must receive cancellation')
+                raise controller.ProtocolError('peer stopped')
+            with patch.object(controller, 'evaluate_job', side_effect=evaluate):
+                with self.assertRaisesRegex(RuntimeError, 'simulated primary failure'):
+                    controller.evaluation_pool(args, runner, 'identity', controller.evaluation_jobs(args), phase='evaluation')
+            self.assertEqual(len(calls), 4)
+            self.assertTrue(runner.stop.is_set())
+            runner.wait_for_shutdown.assert_called_once()
+
+    def test_resume_reenters_each_evaluator_and_single_gpu_keeps_commands_unchanged(self):
+        with tempfile.TemporaryDirectory() as directory:
+            args = config(Path(directory)); args.resume = True
+            original = list(controller.evaluation_jobs(args))
+            args.eval_gpus = ('2',); args.eval_gpu = '2'
+            jobs = list(controller.evaluation_jobs(args))
+            self.assertEqual([j['command'] for j in jobs], [j['command'] for j in original])
+            self.assertEqual([j['output'] for j in jobs], [j['output'] for j in original])
+            seen = []
+            def evaluate(_args, _runner, job):
+                self.assertEqual(job['gpu'], '2')
+                seen.append(job['label'])
+                return {'label': job['label'], 'complete': {}}
+            with patch.object(controller, 'evaluate_job', side_effect=evaluate):
+                for _ in range(2):
+                    controller.evaluation_pool(args, mock_runner(), 'identity', jobs, phase='evaluation')
+            self.assertEqual(seen, [j['label'] for j in jobs] * 2)
+
+    def test_stopped_pool_cannot_report_success(self):
+        with tempfile.TemporaryDirectory() as directory:
+            args = config(Path(directory)); runner = mock_runner(); runner.stop.set()
+            with patch.object(controller, 'evaluate_job') as evaluate:
+                with self.assertRaisesRegex(controller.ProtocolError, 'stopped before all jobs'):
+                    controller.evaluation_pool(args, runner, 'identity', controller.evaluation_jobs(args), phase='evaluation')
+            evaluate.assert_not_called()
 
 
 class DrawAuditTests(unittest.TestCase):

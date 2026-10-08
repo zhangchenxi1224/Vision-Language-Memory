@@ -1,7 +1,8 @@
 """Preregistered B730 parent/random U-Net comparison; never optimizes teachers.
 
 Four independent GPUs run the parent/random by low/high-LR factorial design.
-After all training finishes, evaluation reuses one GPU. Plan mode has no side effects.
+After all training finishes, a dedicated worker on each GPU shares an evaluation queue.
+Plan mode has no side effects.
 Only explicit numeric precheck failures permit one joint high-LR reduction.
 """
 from __future__ import annotations
@@ -16,6 +17,7 @@ import json
 import math
 import os
 from pathlib import Path
+import queue
 import signal
 import socket
 import subprocess
@@ -89,6 +91,13 @@ def parse_gpus(value):
     return result
 
 
+def parse_eval_gpus(value):
+    result = tuple(x.strip() for x in value.split(','))
+    if not 1 <= len(result) <= 4 or len(set(result)) != len(result) or any(not x.isdecimal() for x in result):
+        raise argparse.ArgumentTypeError('--eval-gpus requires one to four distinct numeric GPU IDs, e.g. 0,1,2,3')
+    return result
+
+
 def parser():
     p = argparse.ArgumentParser(description=__doc__)
     defaults = {
@@ -109,7 +118,11 @@ def parser():
     p.add_argument('--evaluator', type=Path)
     p.add_argument('--benchmark-ack', type=Path)
     p.add_argument('--gpus', type=parse_gpus, default=('0', '1', '2', '3'))
-    p.add_argument('--eval-gpu', default='0')
+    evaluation = p.add_mutually_exclusive_group()
+    evaluation.add_argument('--eval-gpus', type=parse_eval_gpus,
+                            help='Evaluation workers after training; defaults to all four --gpus (0,1,2,3).')
+    evaluation.add_argument('--eval-gpu', dest='legacy_eval_gpu',
+                            help='Compatibility alias for a single evaluation worker.')
     mode = p.add_mutually_exclusive_group()
     mode.add_argument('--plan-only', action='store_true')
     mode.add_argument('--preflight-only', action='store_true')
@@ -126,8 +139,15 @@ def configure(args):
     args.writer = args.writer or args.repo / 'scripts/experiments/prefeval_k1_writer.py'
     args.evaluator = args.evaluator or args.repo / 'scripts/experiments/prefeval_unet_init_evaluate.py'
     args.benchmark_ack = args.benchmark_ack or args.repo / 'scripts/experiments/prefeval_k1_benchmark_ack.py'
-    require(str(args.eval_gpu).isdecimal(), '--eval-gpu must be a numeric GPU ID')
-    require(str(args.eval_gpu) in args.gpus, 'Evaluation must reuse one of the four training GPUs after training')
+    if args.legacy_eval_gpu is not None:
+        require(str(args.legacy_eval_gpu).isdecimal(), '--eval-gpu must be a numeric GPU ID')
+        args.eval_gpus = (str(args.legacy_eval_gpu),)
+    elif args.eval_gpus is None:
+        args.eval_gpus = tuple(args.gpus)
+    require(1 <= len(args.eval_gpus) <= 4 and len(set(args.eval_gpus)) == len(args.eval_gpus) and
+            all(str(gpu).isdecimal() for gpu in args.eval_gpus), 'Evaluation requires distinct numeric GPU IDs')
+    require(set(args.eval_gpus) <= set(args.gpus), 'Evaluation must reuse the four training GPUs after training')
+    args.eval_gpu = args.eval_gpus[0]  # One coordinator generates the shared official history.
     return args
 
 
@@ -158,7 +178,7 @@ def protocol():
                      'cost': 'logged separately from 23360 formal updates'},
         'evaluation': {'steps': [EARLY, STEPS], 'splits': ['train', 'dev'], 'train_dev_runs': 16, 'total_runs': 20,
                        'initial_variant': 1, 'noise_chains': 2,
-                       'schedule': 'sequential after all four training jobs finish; reuse evaluation GPU (default GPU0)',
+                       'schedule': 'after all four training jobs finish; one worker per evaluation GPU shares a train-first queue; no overlap with training',
                        'official180': {'runs': 4, 'step': STEPS, 'after': 'all 16 train/dev evaluations complete',
                                        'history': 'one frozen tested-Reader acknowledgment per explicit preference',
                                        'ack_system_prompt': 'You are a helpful assistant.', 'ack_max_new_tokens': 300,
@@ -196,9 +216,9 @@ def checkpoint(args, arm, step):
 
 
 def evaluation_jobs(args, *, official=False):
-    for arm in ARMS:
-        for step in ((STEPS,) if official else (EARLY, STEPS)):
-            for split in (('official',) if official else ('train', 'dev')):
+    for split in (('official',) if official else ('train', 'dev')):
+        for arm in ARMS:
+            for step in ((STEPS,) if official else (EARLY, STEPS)):
                 label = f'{arm}-step-{step:06d}-{split}'
                 output = args.run_root / 'evaluation' / label
                 command = [args.python, args.evaluator, '--checkpoint', checkpoint(args, arm, step),
@@ -207,12 +227,16 @@ def evaluation_jobs(args, *, official=False):
                            '--device', 'cuda:0', '--noise-chains', '2', '--initial-variant', '1']
                 command += (['--history-file', args.run_root / 'official-history.json'] if official else
                             ['--initial-variants', args.train_variants if split == 'train' else args.dev_variants])
-                yield {'label': label, 'arm': arm, 'step': step, 'split': split, 'gpu': str(args.eval_gpu),
+                yield {'label': label, 'arm': arm, 'step': step, 'split': split, 'eligible_gpus': list(args.eval_gpus),
                        'output': str(output), 'command': [str(x) for x in command]}
 
 
 def plan(args):
     result = {'protocol': protocol(), 'prechecks': [], 'fallback_prechecks': [], 'formal_alternatives': {},
+              'resources': {'training_gpus': list(args.gpus), 'evaluation_gpus': list(args.eval_gpus),
+                            'evaluation_workers': len(args.eval_gpus), 'official_history_gpu': args.eval_gpu,
+                            'training_evaluation_overlap': False, 'max_simultaneous_gpus': len(args.gpus),
+                            'evaluation_dispatch': 'one dedicated worker per GPU; shared queue, train before dev; GPU assigned when dequeued'},
               'evaluations': list(evaluation_jobs(args)), 'official_history': ack_command(args),
               'official_evaluations_after_train_dev': list(evaluation_jobs(args, official=True))}
     for arm, gpu in zip(ARMS, args.gpus):
@@ -403,8 +427,9 @@ class Runner:
 
 
 def register(args, binding):
-    identity = {'schema': 'prefeval-unet-init-controller-2x2/v2', 'run_root': str(args.run_root.resolve()),
-                'gpus': list(args.gpus), 'eval_gpu': str(args.eval_gpu), 'repo': str(args.repo.resolve()),
+    identity = {'schema': 'prefeval-unet-init-controller-2x2/v3', 'run_root': str(args.run_root.resolve()),
+                'gpus': list(args.gpus), 'eval_gpus': list(args.eval_gpus),
+                'official_history_gpu': args.eval_gpu, 'repo': str(args.repo.resolve()),
                 'protocol': protocol(), 'inputs': binding}
     path = args.run_root / 'identity.json'
     if path.exists():
@@ -656,6 +681,68 @@ def evaluate_job(args, runner, job):
     return {'label': job['label'], 'complete': file_binding(output / 'complete.json')}
 
 
+def evaluation_pool(args, runner, identity, jobs, *, phase):
+    """A GPU belongs to one worker for the whole phase, including receipt validation.
+
+    A resumed job still enters the evaluator, which revalidates its immutable binding
+    and complete artifacts before returning. Only dispatch order changes between runs.
+    """
+    jobs = sorted(jobs, key=lambda job: {'train': 0, 'dev': 1, 'official': 2}[job['split']])
+    require(len({job['label'] for job in jobs}) == len(jobs), 'Duplicate evaluation jobs')
+    pending = queue.Queue()
+    for job in jobs:
+        pending.put(job)
+    cancelled, state_lock = threading.Event(), threading.Lock()
+    results, active, first_failure = {}, {}, []
+
+    def progress():
+        save(args.run_root / 'status.json', {'phase': phase, 'identity': identity,
+             'eval_gpus': list(args.eval_gpus), 'total': len(jobs), 'completed': len(results),
+             'pending': pending.qsize(), 'active': dict(active)})
+
+    def worker(gpu):
+        try:
+            while True:
+                with state_lock:
+                    if cancelled.is_set() or runner.stop.is_set():
+                        return
+                    try:
+                        job = pending.get_nowait()
+                    except queue.Empty:
+                        return
+                    active[gpu] = job['label']
+                    progress()
+                result = evaluate_job(args, runner, {**job, 'gpu': gpu})
+                with state_lock:
+                    results[job['label']] = result
+                    del active[gpu]
+                    progress()
+        except BaseException as exc:
+            with state_lock:
+                if not first_failure:
+                    first_failure.append(exc)
+                cancelled.set()
+            # Stop subprocess admission before another worker can launch another job.
+            runner.terminate()
+            raise
+
+    progress()
+    with concurrent.futures.ThreadPoolExecutor(max_workers=len(args.eval_gpus)) as pool:
+        try:
+            futures = [pool.submit(worker, gpu) for gpu in args.eval_gpus]
+            for future in concurrent.futures.as_completed(futures):
+                future.result()
+        except BaseException:
+            cancelled.set()
+            # Kill child process groups before waiting for the other worker threads.
+            runner.wait_for_shutdown()
+            if first_failure:
+                raise first_failure[0]
+            raise
+    require(len(results) == len(jobs), 'Evaluation pool stopped before all jobs completed')
+    return [results[job['label']] for job in jobs]
+
+
 def execute(args, runner, identity):
     lock_path = args.run_root / 'lr-lock.json'
     if lock_path.exists():
@@ -710,16 +797,12 @@ def execute(args, runner, identity):
         require(result['first_128_draw_signature'] == lock['precheck_draw_signature'], f'Formal draw/noise prefix differs from precheck: {arm}')
     save(args.run_root / 'training-consistency.json', {'identity': identity, 'shared_training_identity': shared,
                                                       'groups': formal, 'rates': rates})
-    evaluations = []
-    for job in evaluation_jobs(args):
-        save(args.run_root / 'status.json', {'phase': 'evaluation', 'identity': identity, 'job': job['label']})
-        evaluations.append(evaluate_job(args, runner, job))
+    evaluations = evaluation_pool(args, runner, identity, evaluation_jobs(args), phase='evaluation')
     require(len(evaluations) == 16, 'Incomplete registered evaluation coverage')
     save(args.run_root / 'status.json', {'phase': 'official_history', 'identity': identity})
     history = freeze_official_history(args, runner, identity)
-    for job in evaluation_jobs(args, official=True):
-        save(args.run_root / 'status.json', {'phase': 'official_final_only', 'identity': identity, 'job': job['label']})
-        evaluations.append(evaluate_job(args, runner, job))
+    evaluations.extend(evaluation_pool(args, runner, identity, evaluation_jobs(args, official=True),
+                                       phase='official_final_only'))
     require(len(evaluations) == 20, 'Incomplete fixed-endpoint evaluation coverage')
     result = {'identity': identity, 'rates': rates, 'formal_updates_per_arm': STEPS,
               'total_formal_updates': len(ARMS) * STEPS,
