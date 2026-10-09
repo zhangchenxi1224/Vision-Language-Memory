@@ -172,7 +172,7 @@ def build(augmentation, output=DEFAULT_DATA):
     }
     validate(result)
     output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(json.dumps(result, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    output.write_text(json.dumps(result, ensure_ascii=False, indent=2) + '\n', encoding='utf-8', newline='\n')
     receipt = {'status': 'complete_structure_source_identity_and_author_semantics_checked',
                'runtime_data_sha256': sha(output), 'counts': COUNTS,
                'checks': ['source file SHA256 matched augmentation manifest', '730 original W0/T1 exact',
@@ -180,7 +180,7 @@ def build(augmentation, output=DEFAULT_DATA):
                           'all Wstar/Tstar differ from train wordings', '16 opposite labels reordered consistently',
                           'train/dev/official ID isolation', 'fixed Understood. for all splits'],
                'limitations': result['metadata']['review']}
-    output.with_name('runtime_data.validation.json').write_text(json.dumps(receipt, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    output.with_name('runtime_data.validation.json').write_text(json.dumps(receipt, ensure_ascii=False, indent=2) + '\n', encoding='utf-8', newline='\n')
     return receipt
 
 
