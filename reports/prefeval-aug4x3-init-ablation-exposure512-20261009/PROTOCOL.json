@@ -1,0 +1,264 @@
+{
+  "schema_version": 1,
+  "protocol_id": "prefeval-aug4x3-init-lr-exposure512-20261009",
+  "protocol_revision": 3,
+  "status": "deployment_frozen_gpu_preflight_pending",
+  "user_revision": "只保留四组完整增强实验；每条偏好累计曝光32、64、128、256、512次时检查。取消D0、D1两个数据消融组。P-L/P-H改用DreamLite原始预训练U-Net，不再使用4f任务训练权重，不增加4f对照组。",
+  "scope": "首次写入；同一增强数据和共同教师目标下，研究DreamLite原始U-Net预训练、学习率及累计训练预算。",
+  "dataset": {
+    "dataset_id": "prefeval-train730-user4-question3-20261008",
+    "local_root": "C:/Users/Expedition/codex_work/prefeval-augmentation-4x3-20261008",
+    "manifest_sha256": "447941bd2d2f10dfd649d545d6b32c52f374eac6d9f2bc66b3b2001513bdf106",
+    "semantic_preferences": 730,
+    "user_forms": [
+      "W0",
+      "W1",
+      "W2",
+      "W3"
+    ],
+    "teacher_question_forms": [
+      "T1",
+      "T2",
+      "T3"
+    ],
+    "writer_user_rows": 2920,
+    "teacher_question_rows": 2190,
+    "logical_pairs": 8760,
+    "assistant_acknowledgment": "Understood.",
+    "acknowledgment_policy": "四组训练和核心评价均使用同一固定确认语；偏好信息仅由用户表述提供。",
+    "split_unit": "semantic_preference_group",
+    "known_source_ambiguities": 14,
+    "known_train_official_content_overlap_pairs": 3,
+    "runtime_data": "data/runtime_data.json",
+    "runtime_data_sha256": "b94ca86cb8053c438c47be71b6f414969585c9498e35c8354d5b2c3522fa473f",
+    "evaluation_text_review": "data/semantic_review.json"
+  },
+  "teacher": {
+    "bank_count": 1,
+    "targets_per_bank": 730,
+    "target_policy": "每条偏好的新T1-T3共同优化一个latent；W0-W3共用该目标；四组共用冻结教师库。",
+    "supervision": "hard_multiple_choice_answer_cross_entropy",
+    "steps_per_target": 288,
+    "question_forms": 3,
+    "correct_option_positions": 4,
+    "updates_per_question_position_pair": 24,
+    "reuse_old_question_bank": false,
+    "filter_preferences_by_teacher_score": false,
+    "acceptance": "全部730保留；真实PNG重新读取，T1-T3和四个选项位置下匹配图正确率必须高于空图与错配图，才放行Writer。独立T*仅作后续诊断，不用于目标筛选。",
+    "bank_generation_and_acceptance_status": "pending"
+  },
+  "arms": [
+    {
+      "id": "P-L",
+      "unet_init": "same_original_dreamlite_pretrained_unet",
+      "learning_rate": 5e-05
+    },
+    {
+      "id": "P-H",
+      "unet_init": "same_original_dreamlite_pretrained_unet",
+      "learning_rate": 0.0005
+    },
+    {
+      "id": "R-L",
+      "unet_init": "standard_random_same_architecture_and_config",
+      "learning_rate": 5e-05
+    },
+    {
+      "id": "R-H",
+      "unet_init": "standard_random_same_architecture_and_config",
+      "learning_rate": 0.0005
+    }
+  ],
+  "initialization_source": {
+    "pretrained_display_name": "DreamLite 官方发布的原始预训练 U-Net 权重（Base）",
+    "pretrained_repo_id": "carlofkl/DreamLite-base",
+    "pretrained_revision": "a9a0f151ffd99d3c37f3fd0472f5e8f1b31215aa",
+    "registered_remote_model_dir": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/DreamLite-base-a9a0f15-20260907",
+    "unet_relative_path": "unet/diffusion_pytorch_model.safetensors",
+    "unet_config_relative_path": "unet/config.json",
+    "unet_config_sha256_from_archived_verification": "5bb219157837199dbe325e23e3ca0d9f8ef28b09b11e5970463b593ce526d3f2",
+    "unet_file_sha256_from_archived_verification": "f983bd1710344cb44f7d12d05c0ca961984b48391dcbb095ad710609cbde3246",
+    "archived_verification_record": "reports/official-alignment-results-20260913/base/train/runtime.json",
+    "live_file_and_loaded_state_verification_status": "35 model files fully hashed on both GPU hosts; loaded-state audit queued",
+    "task_trained_checkpoint_allowed": false,
+    "random_initialization_scope": "unet_only_same_official_architecture_and_config",
+    "state_identity_policy": "P-L/P-H加载同一原始U-Net参数，R-L/R-H共享同一标准随机初始状态；记录配置、原始文件及加载后参数哈希，确认未被任务训练检查点覆盖。",
+    "model_asset_seal_sha256": "1fcdf946bd73790033cc92781256f92a354462f29d5556f6c56dc48815eefa2b"
+  },
+  "training": {
+    "trainable_module": "unet",
+    "frozen_modules": [
+      "vae",
+      "text_encoder",
+      "reader"
+    ],
+    "writer_supervision": "existing_flow_matching",
+    "effective_batch": 4,
+    "optimizer": "AdamW",
+    "optimizer_betas": [
+      0.9,
+      0.999
+    ],
+    "optimizer_epsilon": 1e-08,
+    "weight_decay": 0.0001,
+    "gradient_clip_norm": 1.0,
+    "precision": "float32",
+    "learning_rate_schedule": "constant_after_common_precheck_rule",
+    "training_seed": 20260924,
+    "random_init_seed": 20261009,
+    "conditioning_seed": 0,
+    "paired_training_seeds_in_initial_run": 1,
+    "steps_per_group": 93440,
+    "draws_per_group": 373760,
+    "exposures_per_preference": 512,
+    "exposures_per_user_form": 128,
+    "total_formal_optimizer_steps_all_four_groups": 373760,
+    "total_formal_draws_all_four_groups": 1495040,
+    "sampling": "每完整730次draw均覆盖每条偏好一次；每条偏好的四种用户表述均衡轮换，四组使用相同偏好与表述顺序。",
+    "paired_randomness": [
+      "semantic_preference_order",
+      "user_form_order",
+      "sigma_draws",
+      "noise_draws"
+    ],
+    "trajectory_policy": "每组连续训练到93440步；五个检查点是同一轨迹的累计预算，不重启优化器、不将五档预算相加。",
+    "initialization_policy": "P-L/P-H共享同一DreamLite原始预训练U-Net；R-L/R-H共享同一标准随机初始U-Net；四组均不加载4f任务权重，各组使用全新优化器。",
+    "continue_from_old_data_runs": false,
+    "checkpoint_save_policy": "五个检查点均保存不可变推理权重和可恢复的完整训练状态；恢复保留优化器、累计步数与数据游标。"
+  },
+  "checkpoints": [
+    {
+      "exposures_per_preference": 32,
+      "optimizer_step": 5840,
+      "cumulative_draws": 23360,
+      "exposures_per_user_form": 8
+    },
+    {
+      "exposures_per_preference": 64,
+      "optimizer_step": 11680,
+      "cumulative_draws": 46720,
+      "exposures_per_user_form": 16
+    },
+    {
+      "exposures_per_preference": 128,
+      "optimizer_step": 23360,
+      "cumulative_draws": 93440,
+      "exposures_per_user_form": 32
+    },
+    {
+      "exposures_per_preference": 256,
+      "optimizer_step": 46720,
+      "cumulative_draws": 186880,
+      "exposures_per_user_form": 64
+    },
+    {
+      "exposures_per_preference": 512,
+      "optimizer_step": 93440,
+      "cumulative_draws": 373760,
+      "exposures_per_user_form": 128
+    }
+  ],
+  "precheck": {
+    "independent_steps_per_group": 128,
+    "cost_included_in_formal_steps": false,
+    "formal_training_restarts_from_registered_initial_state": true,
+    "high_learning_rate_fallback": "若P-H或R-H出现明确NaN/Inf，两组共同改为1.5e-4，重新初始化并重新数值预检一次。不得根据评价准确率触发回退。",
+    "other_failure_policy": "停止并诊断；不单独修改某组学习率。"
+  },
+  "evaluation": {
+    "development_checkpoint_steps": [
+      5840,
+      11680,
+      23360,
+      46720,
+      93440
+    ],
+    "primary_endpoint_step": 93440,
+    "checkpoint_selection_by_test_score": false,
+    "development_sets": [
+      "train730_canonical_fit",
+      "fixed_topic_stratified_train96_expression_diagnostics",
+      "dev90"
+    ],
+    "heldout_expression_policy": "另行冻结评价专用W*和T*，不进入教师优化或Writer训练；训练过的W0-W3/T1-T3不称未见表述。",
+    "core_controls": [
+      "matched_png",
+      "mismatched_png",
+      "blank_image",
+      "option_position_rotation"
+    ],
+    "additional_diagnostics": [
+      "opposite_preference_pairs_with_verified_answer_changes",
+      "reader_with_original_preference_as_text"
+    ],
+    "png_roundtrip_required": true,
+    "inference_steps": 28,
+    "cfg": 1,
+    "generation_seeds": [
+      0,
+      1
+    ],
+    "official180": "协议冻结后仅评价93440步固定终点；报告180条全量和177条排除已知重复内容后的敏感性结果。",
+    "pretraining_exposure_caveat": "不继承本项目历史任务训练，但DreamLite、文本编码器与Reader的原始预训练数据暴露未逐条核清；dev称本轮未训练，不称严格从未见过。",
+    "statistical_unit": "semantic_preference_group",
+    "preference_paired_confidence_intervals": true,
+    "evaluation_only_texts_and_exact_task_manifest_status": "frozen: diagnostics96 and opposite16; runtime_data_sha256 bound",
+    "blank_and_text_control_seeds": [
+      0
+    ],
+    "correct_option_positions": [
+      0,
+      1,
+      2,
+      3
+    ]
+  },
+  "interpretation": {
+    "supported_comparisons": [
+      "P-L_vs_R-L",
+      "P-H_vs_R-H",
+      "P-H_vs_P-L",
+      "R-H_vs_R-L",
+      "init_by_learning_rate_interaction",
+      "within_arm_training_budget_trajectory"
+    ],
+    "augmentation_causal_effect_identifiable": false,
+    "augmentation_caveat": "四组都使用相同完整增强；没有原数据对照，因此不能单独量化增强相对原数据的因果收益。",
+    "pretraining_caveat": "比较指定DreamLite原始U-Net预训练权重相对标准随机初始化，在当前数据、教师、共同学习率和有限预算下的收益；冻结组件相同，不能解释为整个系统从零训练或推广到所有预训练。",
+    "seed_caveat": "一个配对训练种子仅作方向性证据；正式稳定性结论需补充配对训练种子，不在本协议中自动启动。"
+  },
+  "planned_h200_allocation": {
+    "host0": "prefeval-b-cr-h200x4-20260926",
+    "host1": "prefeval-k1-h200x4-high-20260924",
+    "teacher_phase": "each host GPUs0-3, eight fixed shards",
+    "condition_cache_phase": "each host GPUs0-3, eight fixed shards",
+    "teacher_readback_phase": "each host GPUs0-3, 24 fixed shards shared equally",
+    "writer_phase": {
+      "host0": {
+        "GPU0": "P-L",
+        "GPU1": "R-H",
+        "GPU2-3": "asynchronous checkpoint evaluation"
+      },
+      "host1": {
+        "GPU0": "P-H",
+        "GPU1": "R-L",
+        "GPU2-3": "asynchronous checkpoint evaluation"
+      }
+    },
+    "final_evaluation_phase": "each host GPUs0-3; all shards have fixed balanced host ownership; official180 only after all four formal arms finish",
+    "checkpoint_trigger": "immutable ready marker and checksums; evaluation can run before training ends"
+  },
+  "deployment": {
+    "launched": false,
+    "old_experiment_terminated": true,
+    "old_artifacts_preserved": true,
+    "independent_entrypoint": "scripts/inspire/run_prefeval_aug4_balanced.py",
+    "run_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-aug4x3-official-init-20261009",
+    "required_before_formal_training": [
+      "730 new teacher targets and PNG control acceptance",
+      "2920 frozen writer conditions",
+      "four 128-step numeric prechecks and paired identity comparison"
+    ],
+    "resume_policy": "explicit host ownership reconciliation; no automatic lease stealing; retain optimizer and data cursor"
+  }
+}
