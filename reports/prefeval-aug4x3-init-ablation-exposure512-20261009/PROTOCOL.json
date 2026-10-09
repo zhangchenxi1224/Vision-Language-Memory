@@ -2,7 +2,7 @@
   "schema_version": 1,
   "protocol_id": "prefeval-aug4x3-init-lr-exposure512-20261009",
   "protocol_revision": 3,
-  "status": "deployment_frozen_gpu_preflight_pending",
+  "status": "deployed_teacher_optimization_running",
   "user_revision": "只保留四组完整增强实验；每条偏好累计曝光32、64、128、256、512次时检查。取消D0、D1两个数据消融组。P-L/P-H改用DreamLite原始预训练U-Net，不再使用4f任务训练权重，不增加4f对照组。",
   "scope": "首次写入；同一增强数据和共同教师目标下，研究DreamLite原始U-Net预训练、学习率及累计训练预算。",
   "dataset": {
@@ -45,7 +45,7 @@
     "reuse_old_question_bank": false,
     "filter_preferences_by_teacher_score": false,
     "acceptance": "全部730保留；真实PNG重新读取，T1-T3和四个选项位置下匹配图正确率必须高于空图与错配图，才放行Writer。独立T*仅作后续诊断，不用于目标筛选。",
-    "bank_generation_and_acceptance_status": "pending"
+    "bank_generation_and_acceptance_status": "generation_running; full-bank PNG acceptance pending"
   },
   "arms": [
     {
@@ -79,7 +79,7 @@
     "unet_config_sha256_from_archived_verification": "5bb219157837199dbe325e23e3ca0d9f8ef28b09b11e5970463b593ce526d3f2",
     "unet_file_sha256_from_archived_verification": "f983bd1710344cb44f7d12d05c0ca961984b48391dcbb095ad710609cbde3246",
     "archived_verification_record": "reports/official-alignment-results-20260913/base/train/runtime.json",
-    "live_file_and_loaded_state_verification_status": "35 model files fully hashed on both GPU hosts; loaded-state audit queued",
+    "live_file_and_loaded_state_verification_status": "35 asset files fully hashed on both hosts; four actual GPU initialization audits passed; P/P and R/R states identical across hosts, P/R differ",
     "task_trained_checkpoint_allowed": false,
     "random_initialization_scope": "unet_only_same_official_architecture_and_config",
     "state_identity_policy": "P-L/P-H加载同一原始U-Net参数，R-L/R-H共享同一标准随机初始状态；记录配置、原始文件及加载后参数哈希，确认未被任务训练检查点覆盖。",
@@ -249,7 +249,7 @@
     "checkpoint_trigger": "immutable ready marker and checksums; evaluation can run before training ends"
   },
   "deployment": {
-    "launched": false,
+    "launched": true,
     "old_experiment_terminated": true,
     "old_artifacts_preserved": true,
     "independent_entrypoint": "scripts/inspire/run_prefeval_aug4_balanced.py",
@@ -259,6 +259,8 @@
       "2920 frozen writer conditions",
       "four 128-step numeric prechecks and paired identity comparison"
     ],
-    "resume_policy": "explicit host ownership reconciliation; no automatic lease stealing; retain optimizer and data cursor"
+    "resume_policy": "explicit host ownership reconciliation; no automatic lease stealing; retain optimizer and data cursor",
+    "receipt": "DEPLOYMENT.json",
+    "execution_commit": "b8d82be660db7ba0a14bcba68057e8cafccb186e"
   }
 }
