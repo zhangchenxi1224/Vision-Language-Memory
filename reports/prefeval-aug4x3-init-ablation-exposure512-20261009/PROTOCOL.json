@@ -2,7 +2,7 @@
   "schema_version": 1,
   "protocol_id": "prefeval-aug4x3-init-lr-exposure512-20261009",
   "protocol_revision": 3,
-  "status": "deployed_teacher_optimization_running",
+  "status": "four_writers_running_after_host_recovery_20261010",
   "user_revision": "只保留四组完整增强实验；每条偏好累计曝光32、64、128、256、512次时检查。取消D0、D1两个数据消融组。P-L/P-H改用DreamLite原始预训练U-Net，不再使用4f任务训练权重，不增加4f对照组。",
   "scope": "首次写入；同一增强数据和共同教师目标下，研究DreamLite原始U-Net预训练、学习率及累计训练预算。",
   "dataset": {
@@ -45,7 +45,7 @@
     "reuse_old_question_bank": false,
     "filter_preferences_by_teacher_score": false,
     "acceptance": "全部730保留；真实PNG重新读取，T1-T3和四个选项位置下匹配图正确率必须高于空图与错配图，才放行Writer。独立T*仅作后续诊断，不用于目标筛选。",
-    "bank_generation_and_acceptance_status": "generation_running; full-bank PNG acceptance pending"
+    "bank_generation_and_acceptance_status": "730 targets complete; full-bank PNG acceptance passed, matched accuracy 8706/8760"
   },
   "arms": [
     {
@@ -261,6 +261,7 @@
     ],
     "resume_policy": "explicit host ownership reconciliation; no automatic lease stealing; retain optimizer and data cursor",
     "receipt": "DEPLOYMENT.json",
+    "latest_recovery_receipt": "RECOVERY-20261010.json",
     "execution_commit": "b8d82be660db7ba0a14bcba68057e8cafccb186e"
   }
 }

@@ -1,0 +1,234 @@
+{
+  "schema": "prefeval-aug4-host-recovery/v1",
+  "observed_at": "2026-10-10T11:39:30.861820+08:00",
+  "status": "all_four_writers_resumed_and_advancing",
+  "platform_cycle": {
+    "old_high_end": "2026-10-10T03:28:38+08:00",
+    "new_high_start": "2026-10-10T11:22:53+08:00"
+  },
+  "old_host": "prefeval-k1-h200x4-high-20260924--506d5fcf84c1-w6q5npbzuu",
+  "new_host": "prefeval-k1-h200x4-high-20260924--506d5fcf84c1-2y3nmie4wb",
+  "code_commit": "b8d82be660db7ba0a14bcba68057e8cafccb186e",
+  "data_sha256": "28cb15e49979970d6b3277db1dca198f9f6fd5b7c82bedbd217b627cb0e905e7",
+  "teacher": {
+    "completed": 730,
+    "acceptance_passed": true,
+    "scores": {
+      "memory": 0.9938356164383562,
+      "mismatch": 0.42682648401826484,
+      "blank": 0.4071917808219178,
+      "text": 0.9512557077625571
+    },
+    "teacher_questions_and_rotations_per_control": 8760,
+    "not_student_accuracy": true
+  },
+  "paired_prechecks": {
+    "fallback": false,
+    "high_learning_rate": 0.0005,
+    "reason": "all_four_prechecks_passed",
+    "time": 1791572811.8957274
+  },
+  "resumed_from_steps": {
+    "P-L": 18176,
+    "R-H": 18176,
+    "P-H": 640,
+    "R-L": 640
+  },
+  "preserved_state": [
+    "UNet",
+    "AdamW",
+    "RNG",
+    "draw cursor",
+    "exposure counts",
+    "teacher bank",
+    "condition cache",
+    "published snapshots",
+    "completed evaluation tasks"
+  ],
+  "verification": {
+    "new_gpu_pretrained_and_random_initial_states_match_original": true,
+    "host_identity_changed_only_hosts_1": true,
+    "old_host_reconciled_explicitly": true,
+    "surviving_controller_and_children_stopped_before_rebinding": true,
+    "same_original_execution_checkout_and_configuration": true,
+    "all_four_have_new_updates_after_resume": true,
+    "all_four_have_saved_new_rolling_checkpoints": true
+  },
+  "arms": {
+    "P-L": {
+      "step": 18491,
+      "target": 93440,
+      "percent": 19.79,
+      "resume_mtime": 1791603480.7171993,
+      "published_snapshots": [
+        "checkpoint-step-005840.ready.json",
+        "checkpoint-step-011680.ready.json"
+      ]
+    },
+    "P-H": {
+      "step": 964,
+      "target": 93440,
+      "percent": 1.03,
+      "resume_mtime": 1791603468.99129,
+      "published_snapshots": []
+    },
+    "R-L": {
+      "step": 960,
+      "target": 93440,
+      "percent": 1.03,
+      "resume_mtime": 1791603474.2549875,
+      "published_snapshots": []
+    },
+    "R-H": {
+      "step": 18486,
+      "target": 93440,
+      "percent": 19.78,
+      "resume_mtime": 1791603488.0026019,
+      "published_snapshots": [
+        "checkpoint-step-005840.ready.json",
+        "checkpoint-step-011680.ready.json"
+      ]
+    }
+  },
+  "hosts": {
+    "0": {
+      "time": 1791603567.9153018,
+      "host": "prefeval-b-cr-h200x4-20260926--c1325f0297e5-t5ogfjyaok",
+      "pid": 3275592,
+      "active": {
+        "0": "formal-P-L",
+        "1": "formal-R-H"
+      },
+      "completed": 78,
+      "total": 736
+    },
+    "1": {
+      "time": 1791603570.2573683,
+      "host": "prefeval-k1-h200x4-high-20260924--506d5fcf84c1-2y3nmie4wb",
+      "pid": 31216,
+      "active": {
+        "0": "formal-P-H",
+        "1": "formal-R-L",
+        "2": "generate-P-L-005840-train-1",
+        "3": "generate-P-L-005840-train-3"
+      },
+      "completed": 22,
+      "total": 736
+    }
+  },
+  "gpu_observations": {
+    "primary": {
+      "host": "prefeval-b-cr-h200x4-20260926--c1325f0297e5-t5ogfjyaok",
+      "time": 1791603570.8618205,
+      "gpu": "0, 37774 MiB, 100 %\n1, 37774 MiB, 100 %\n2, 1 MiB, 0 %\n3, 1 MiB, 0 %\n"
+    },
+    "extra": {
+      "host": "prefeval-k1-h200x4-high-20260924--506d5fcf84c1-2y3nmie4wb",
+      "time": 1791603567.4301486,
+      "gpu": "0, 37979 MiB, 84 %\n1, 37979 MiB, 97 %\n2, 14129 MiB, 0 %\n3, 14129 MiB, 100 %\n"
+    }
+  },
+  "evaluation": {
+    "completed_tasks_including_setup": 100,
+    "generated_pngs": {
+      "count": 3398,
+      "bytes": 4406699924
+    },
+    "completed_summaries": 0,
+    "backlog": "replacement host filling missing odd image-generation shards; reader shards wait for complete donor image set"
+  },
+  "storage": {
+    "free_bytes": {
+      "ssd": 189785964544,
+      "qb": 266392829952
+    },
+    "archive": {
+      "status": "completed",
+      "started": 1791603331.0374897,
+      "finished": 1791603546.15209,
+      "space_before": [
+        {
+          "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-aug4x3-official-init-20261009",
+          "total": 109951162777600,
+          "used": 109805012254720,
+          "free": 146150522880
+        },
+        {
+          "path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/runs/prefeval-aug4x3-official-init-20261009-archive",
+          "total": 1125899906842624,
+          "used": 1125589780004864,
+          "free": 310126837760
+        }
+      ],
+      "space_after": [
+        {
+          "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-aug4x3-official-init-20261009",
+          "total": 109951162777600,
+          "used": 109761372618752,
+          "free": 189790158848
+        },
+        {
+          "path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/runs/prefeval-aug4x3-official-init-20261009-archive",
+          "total": 1125899906842624,
+          "used": 1125633509818368,
+          "free": 266397024256
+        }
+      ],
+      "space_current": [
+        {
+          "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-aug4x3-official-init-20261009",
+          "total": 109951162777600,
+          "used": 109761372618752,
+          "free": 189790158848
+        },
+        {
+          "path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/runs/prefeval-aug4x3-official-init-20261009-archive",
+          "total": 1125899906842624,
+          "used": 1125633509818368,
+          "free": 266397024256
+        }
+      ],
+      "completed_paths": 20
+    },
+    "archive_scope": "completed precheck payloads and four published historical full snapshots; original paths retained as verified symlinks; no active state or inference weights moved"
+  },
+  "remote_evidence_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-aug4x3-official-init-20261009-deployment/recovery-20261010-prefeval-k1-h200x4-high-20260924--506d5fcf84c1-2y3nmie4wb",
+  "remaining_time_note": "approximately two days from recovery, conditional on measured throughput and evaluation backlog; not a deadline guarantee",
+  "replay_verification": {
+    "time": 1791603453.0478628,
+    "results": {
+      "P-L": {
+        "compared_updates": 48,
+        "first_step": 18177,
+        "last_step": 18224,
+        "paired_draws_sigma_noise_equal": true,
+        "max_replayed_draw_mse_difference": 0,
+        "old_tail_file": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-aug4x3-official-init-20261009/formal/P-L/optimization-uncommitted-1791603062778403995.jsonl"
+      },
+      "P-H": {
+        "compared_updates": 101,
+        "first_step": 641,
+        "last_step": 741,
+        "paired_draws_sigma_noise_equal": true,
+        "max_replayed_draw_mse_difference": 0,
+        "old_tail_file": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-aug4x3-official-init-20261009/formal/P-H/optimization-uncommitted-1791603063422061132.jsonl"
+      },
+      "R-L": {
+        "compared_updates": 98,
+        "first_step": 641,
+        "last_step": 738,
+        "paired_draws_sigma_noise_equal": true,
+        "max_replayed_draw_mse_difference": 0,
+        "old_tail_file": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-aug4x3-official-init-20261009/formal/R-L/optimization-uncommitted-1791603062775245388.jsonl"
+      },
+      "R-H": {
+        "compared_updates": 30,
+        "first_step": 18177,
+        "last_step": 18206,
+        "paired_draws_sigma_noise_equal": true,
+        "max_replayed_draw_mse_difference": 0,
+        "old_tail_file": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-aug4x3-official-init-20261009/formal/R-H/optimization-uncommitted-1791603065457444806.jsonl"
+      }
+    }
+  }
+}
