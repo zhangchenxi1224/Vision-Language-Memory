@@ -1,0 +1,90 @@
+{
+  "stage": "four_parallel_numeric_prechecks_running_condition_cache",
+  "frozen_execution_commit": "d1cf0b181aaa983745b34b290e491fda806e866b",
+  "branch": "codex/unet-init-ablation-20261009",
+  "notebook": "prefeval-b-cr-h200x4-20260926",
+  "host": "prefeval-b-cr-h200x4-20260926--c1325f0297e5-5pcplqki3j",
+  "controller_pid": 200049,
+  "controller_started_unix": 1791481031.8826103,
+  "controller_started_utc": "2026-10-08T17:37:11.882610+00:00",
+  "remote_repo": "/inspire/ssd/project/exploration-topic/czxs26210936/code/unet-init-ablation-sparse-20261009",
+  "run_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-unet-init-ablation-20261009",
+  "deployment_receipts": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-unet-init-ablation-20261009-deployment",
+  "training_gpus": {
+    "P-L": "0",
+    "P-H": "1",
+    "R-L": "2",
+    "R-H": "3"
+  },
+  "evaluation_gpus": [
+    "0",
+    "1",
+    "2",
+    "3"
+  ],
+  "initial_remote_validation": {
+    "test_count": 38,
+    "tests_passed": true,
+    "preflight_passed": true,
+    "teachers": 730,
+    "train_preferences": 730,
+    "dev_preferences": 90,
+    "preflight_seconds": 34.89875316619873
+  },
+  "final_remote_validation": {
+    "required_before_launch": true,
+    "test_count": 43,
+    "tests_passed": true,
+    "critical_sparse_dependencies_exist": true,
+    "tracked_worktree_clean": true,
+    "all_four_gpus_idle_before_launch": true,
+    "elapsed_seconds": 6.818781137466431
+  },
+  "new_gpu_resources_allocated": false,
+  "training_completed": false,
+  "evaluation_completed": false,
+  "eight_gpu_evaluation_implemented": false,
+  "operation_notes": [
+    "The controller independently repeats preflight against the final frozen execution commit before registering the run.",
+    "Formal training starts only after all four numerical prechecks pass, including the predeclared joint high-LR fallback if triggered.",
+    "Do not update the running remote checkout; its code hashes are bound into the registered run.",
+    "Runtime ranges in RUNTIME_ESTIMATE.json exclude queue wait and failure/retry cost."
+  ],
+  "live_observation": {
+    "phase": "precheck",
+    "attempt": 0,
+    "all_four_precheck_processes_started": true,
+    "first_precheck_launch_unix": 1791481060.7997239,
+    "formal_training_started": false,
+    "prechecks_passed": false,
+    "errors_seen": false,
+    "observed_unix": 1791481142.2124949,
+    "model_loading_completed": true,
+    "precheck_pids": {
+      "P-L": 202647,
+      "P-H": 202646,
+      "R-L": 202649,
+      "R-H": 202648
+    },
+    "condition_cache_progress": {
+      "P-L": 33,
+      "P-H": 33,
+      "R-L": 48,
+      "R-H": 48
+    },
+    "condition_cache_total_per_arm": 730,
+    "gpu_memory_mib": [
+      14120,
+      14120,
+      14122,
+      14122
+    ],
+    "gpu_utilization_percent": [
+      79,
+      83,
+      83,
+      82
+    ]
+  },
+  "registered_identity": "9d59eaa47d3fa4c34e6c104536601c910ca0dc2b1b5bff78a0e8a622709db816"
+}

@@ -1,9 +1,10 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-02",
+  "updated_at": "2026-10-09",
   "selection_rule": "Select current_performance only, then verify each run's protocol, lineage, denominator and completion receipt. Do not recursively aggregate all reports.",
   "default_role": "current_performance",
   "families": [
+    {"id": "prefeval-unet-init-ablation", "role": "protocol_and_data", "path": "reports/prefeval-unet-init-ablation-20261009", "scope": "Prospective P-L/P-H/R-L/R-H 2x2 initialization and learning-rate comparison; fixed B730 hard-MCQ teacher bank and inputs; plan/deployment evidence is not a completed performance result"},
     {"id": "prefeval-k1", "role": "current_performance", "path": "reports/prefeval-k1-l0-l2-20260924", "dimensions": ["teacher_or_writer", "A_or_B", "split", "question_form", "checkpoint", "budget", "chain_length", "judge"], "scope": "K1, A/B targets, exposure512 and C/I/R; project adaptations; mixed completion states"},
     {"id": "prefeval-multitarget", "role": "current_performance", "path": "reports/prefeval-multitarget-20260927", "dimensions": ["target_bank", "sample_ids", "draw_distribution", "budget", "checkpoint", "chain_length", "paired_baseline"], "scope": "F1/F8/S8 and subsequent C8 runs; paired B0 and long10 not all complete"},
     {"id": "prefeval-official-inputs", "role": "protocol_and_data", "path": "reports/prefeval-official-alignment-20260923", "upstream_commit": "50795054b5ff5f418d2b768a331d71e480f93331", "scope": "Official input construction, provenance and two-stage FM route; not a performance reproduction"},

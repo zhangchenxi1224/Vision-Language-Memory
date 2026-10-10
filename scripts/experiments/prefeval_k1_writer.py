@@ -33,6 +33,8 @@ from vision_memory.dreamlite.latent_codec import decode_model_latents_unit_inter
 from vision_memory.training.latent_bank_unet import official_flow_bridge, predict_velocity, stable_seed, OFFICIAL_REFERENCE_COMMIT
 from vision_memory.training.checkpoint import save_training_checkpoint, load_training_checkpoint, load_trainable_weights
 from vision_memory.repro import configure_strict_cuda_determinism
+from vision_memory.repro import canonical_tensor_sha256
+from scripts.experiments import prefeval_k1_init_ablation as init_control
 
 def load_pipe(args):
     commit = subprocess.check_output(['git','rev-parse','HEAD'], cwd=args.official_source, text=True).strip()
@@ -43,8 +45,9 @@ def load_pipe(args):
     pipe = DreamLitePipelineLoRA.from_pretrained(args.base, local_files_only=True, torch_dtype=torch.float32).to(args.device)
     for module in [pipe.unet, pipe.vae, pipe.text_encoder]:
         module.eval().requires_grad_(False)
-    pipe.unet.requires_grad_(True)
-    load_trainable_weights(args.checkpoint, trainable_module=pipe.unet)
+    init_control.initialize_unet(pipe, args, load_trainable_weights)
+    if args.mode == 'train' and init_control.enabled(args):
+        args.initialization_manifest = init_control.initialization_manifest(pipe, args)
     pipe.set_progress_bar_config(disable=True)
     return pipe
 
@@ -65,6 +68,8 @@ def train(args, pipe, rows):
     assert all(0 < step <= args.steps for step in args.snapshot_steps)
     if args.stage == 'retain':
         assert args.sources is not None
+    if args.fresh_start:
+        init_control.ensure_fresh_output(args.output)
     args.output.mkdir(parents=True, exist_ok=True)
     targets, cache = {}, {}
     target_hashes = {}
@@ -102,10 +107,15 @@ def train(args, pipe, rows):
             'dtype': 'float32', 'official_commit': OFFICIAL_REFERENCE_COMMIT})
 
     def add_condition(key, path, text):
+        def encode():
+            # Keyed condition RNG is independent of random U-Net initialization and cache hits.
+            seed = (stable_seed(args.conditioning_seed, 'condition:' + json.dumps(key), 0)
+                    if args.conditioning_seed is not None else None)
+            return init_control.seeded_factory(lambda: cache_condition(pipe, path, text, args.device), seed)
         if bank is not None:
-            cache.ensure(key, lambda: cache_condition(pipe, path, text, args.device))
+            cache.ensure(key, encode)
         else:
-            cache[key] = cache_condition(pipe, path, text, args.device)
+            cache[key] = encode()
     for i, row in enumerate(rows):
         pid = row['base_pair_id']
         if multi:
@@ -144,7 +154,7 @@ def train(args, pipe, rows):
     manifest = {'arm': args.arm, 'stage': args.stage, 'steps': args.steps, 'effective_batch': 4,
         'split': args.split, 'snapshot_steps': sorted(set(args.snapshot_steps)),
         'parent_sha256': sha(args.checkpoint), 'targets': target_hashes, 'source_root': str(args.sources),
-        'flow': 'official target/noise; source condition only', 'seed': 20260924,
+        'flow': 'official target/noise; source condition only', 'seed': args.train_seed,
         'official_commit': OFFICIAL_REFERENCE_COMMIT,
         'implementation_sha256': sha(Path(__file__))}
     if args.retain_source_mode == 'initial':
@@ -174,20 +184,95 @@ def train(args, pipe, rows):
     if multi:
         manifest.update(target_bank_sha256=sha(args.target_bank), target_distribution_arm=multi['arm'],
                         target_sampling='independent SHA256 target draw; original sigma/noise schedule unchanged')
+    controlled = init_control.enabled(args)
+    condition_hashes = None
+    if controlled:
+        if bank is not None:
+            raise ValueError('Initialization ablation diagnostics require the write-stage condition dictionary')
+        condition_hashes = init_control.conditions_manifest(cache)
+        manifest.update(args.initialization_manifest)
+        manifest.update(learning_rate=args.learning_rate, unet_init=args.unet_init,
+                        train_seed=args.train_seed, init_seed=args.init_seed,
+                        conditioning_seed=args.conditioning_seed, audit_updates=args.audit_updates,
+                        fm_probe_interval=args.fm_probe_interval, fm_probe_count=args.fm_probe_count,
+                        fm_probe_seed=args.fm_probe_seed,
+                        runtime=init_control.runtime_manifest(args.device),
+                        init_control_sha256=sha(ROOT/'scripts/experiments/prefeval_k1_init_ablation.py'))
+        manifest['shared_training_identity'] = init_control.shared_identity(
+            rows, target_hashes, condition_hashes, args, sha(args.initial_variants) if variants else None)
+        if args.expected_init_audit:
+            manifest['expected_init_audit_sha256'] = init_control.expected_init_audit(manifest, args.expected_init_audit)
+        previous_manifest = args.output/'manifest.json'
+        if previous_manifest.exists() and json.loads(previous_manifest.read_text()) != manifest:
+            raise RuntimeError('Existing ablation output is bound to different training inputs or controls')
+        save_json(args.output/'condition-hashes.json', condition_hashes)
     save_json(args.output / 'manifest.json', manifest)
     predictor = DifferentiableDreamLiteMobileSampler.from_pipeline(pipe, checkpoint_unet=False)
-    optimizer = torch.optim.AdamW(pipe.unet.parameters(), lr=5e-5, betas=(.9,.999), eps=1e-8, weight_decay=1e-4)
+    optimizer = torch.optim.AdamW(pipe.unet.parameters(), lr=args.learning_rate, betas=(.9,.999), eps=1e-8, weight_decay=1e-4)
+    audit = init_control.UpdateAudit(pipe.unet) if args.audit_updates else None
     checkpoint = args.output / 'resume.pt'
     first = 0
     saved = {'trainer_state': {}}
     if checkpoint.exists():
+        if args.fresh_start:
+            raise RuntimeError('fresh-start cannot load an optimizer checkpoint')
         saved = load_training_checkpoint(checkpoint, trainable_module=pipe.unet, optimizer=optimizer, expected_manifest=manifest)
         first = saved['optimizer_step']
+    elif controlled:
+        if optimizer.state:
+            raise RuntimeError('A new ablation run must have a fresh empty optimizer')
+        save_json(args.output/'initial-state.json', {**args.initialization_manifest,
+            'optimizer_state_entries': len(optimizer.state), 'optimizer_step': 0,
+            'fresh_optimizer': True, 'learning_rate': args.learning_rate})
+    if controlled and not refreshed:
+        # Replay only the unsaved tail after a hard interruption, with no duplicate log steps.
+        archive_uncommitted_tail(args.output/'optimization.jsonl', first)
+        init_control.archive_probe_tail(args.output/'fm-probe.jsonl', first)
+        if first in args.snapshot_steps:
+            recovered_snapshot = args.output/f'checkpoint-step-{first:06d}.pt'
+            if not recovered_snapshot.exists():
+                # A prior writer may have committed resume before its same-step snapshot.
+                # The currently loaded parameters are exactly at first, before any new update.
+                save_inference_checkpoint(recovered_snapshot, pipe, first, manifest)
     if refreshed:
         validate_resume(first, args.refresh_round, saved['trainer_state'], sha(refresh_root/'bank.json'))
         archive_uncommitted_tail(args.output/'optimization.jsonl', first)
     started = time.monotonic()
     n = len(rows)
+    fixed_probe_ids = init_control.probe_ids(rows, args.fm_probe_count, args.fm_probe_seed)
+
+    @torch.no_grad()
+    def fm_probe(step):
+        if not args.fm_probe_interval:
+            return
+        measurements = []
+        # Even if a future model has stochastic inference, this probe cannot perturb training RNG.
+        with init_control.isolated_rng(args.fm_probe_seed):
+            for index, pid in enumerate(fixed_probe_ids):
+                variant = index % 2 if variants else 0
+                c = cache[pid, 'V1' if variant else 0]
+                source = c['source'].to(args.device)
+                k = target_index(pid, index, len(targets[pid])) if multi else None
+                target = (targets[pid][k] if multi else targets[pid]).to(args.device)
+                sigma_seed = stable_seed(args.fm_probe_seed, 'fm-probe-sigma', index)
+                sigma = float(torch.rand((), generator=torch.Generator().manual_seed(sigma_seed)))
+                noise_seed = stable_seed(args.fm_probe_seed, 'fm-probe-noise', index)
+                noise = torch.randn(target.shape, device=args.device, dtype=target.dtype,
+                    generator=torch.Generator(device=args.device).manual_seed(noise_seed))
+                state, velocity = official_flow_bridge(noise, target, sigma)
+                pred = predict_velocity(predictor, state, source, sigma, c['embeds'].to(args.device),
+                                        c['mask'].to(args.device), integer_timestep=True)
+                loss = (pred.float()-velocity.float()).square().mean()
+                if not torch.isfinite(loss):
+                    raise init_control.NumericFailure('nonfinite_fixed_train_probe', step=step,
+                                                      details={'pair_id': pid})
+                measurements.append({'pair_id': pid, 'initial_variant': variant, 'sigma': sigma,
+                                     'noise_seed': noise_seed, 'mse': float(loss)})
+        append(args.output/'fm-probe.jsonl', {'step': step, 'scope': 'fixed_train_FM_diagnostic_no_update',
+            'mse': sum(x['mse'] for x in measurements)/len(measurements), 'draws': measurements})
+
+    if first == 0:
+        fm_probe(0)
     for step in range(first, stop if refreshed else args.steps):
         optimizer.zero_grad(set_to_none=True)
         values = []
@@ -196,7 +281,7 @@ def train(args, pipe, rows):
             # Retain stage alternates initial/retain draws; each lane balances preference independently.
             lane_draw = draw//2 if args.stage == 'retain' else draw
             cycle, offset = divmod(lane_draw,n)
-            order = torch.randperm(n, generator=torch.Generator().manual_seed(stable_seed(20260924,'order',cycle))).tolist()
+            order = torch.randperm(n, generator=torch.Generator().manual_seed(stable_seed(args.train_seed,'order',cycle))).tolist()
             row = rows[order[offset]]
             pid = row['base_pair_id']
             position = 1 + cycle % 10 if args.stage == 'retain' and draw % 2 else 0
@@ -214,17 +299,23 @@ def train(args, pipe, rows):
             k = target_index(pid, draw, len(targets[pid])) if multi else None
             endpoint = targets[pid][k] if multi else targets[pid]
             target = select_fm_target(endpoint.to(args.device),source.detach(),position,args.retain_target_mode=='source')
-            rng = torch.Generator().manual_seed(stable_seed(20260924,'sigma',draw))
+            rng = torch.Generator().manual_seed(stable_seed(args.train_seed,'sigma',draw))
             sigma = float(torch.rand((),generator=rng))
-            generator = torch.Generator(device=args.device).manual_seed(stable_seed(20260924,'noise',draw))
+            noise_seed = stable_seed(args.train_seed,'noise',draw)
+            generator = torch.Generator(device=args.device).manual_seed(noise_seed)
             noise = torch.randn(target.shape, generator=generator, device=args.device, dtype=target.dtype)
             state, velocity = official_flow_bridge(noise,target,sigma)
             pred = predict_velocity(predictor,state,source,sigma,c['embeds'].to(args.device),c['mask'].to(args.device),integer_timestep=True)
             loss = (pred.float()-velocity.float()).square().mean()
             if not torch.isfinite(loss):
-                raise RuntimeError('Nonfinite FM loss')
+                raise init_control.NumericFailure('nonfinite_fm_loss', step=step+1,
+                                                  details={'draw': draw, 'pair_id': pid})
             (loss/4).backward()
             values.append({'pair_id':pid,'position':position,'sigma':sigma,'mse':float(loss.detach())})
+            if controlled:
+                values[-1].update(draw=draw, noise_seed=noise_seed)
+                if args.audit_updates:
+                    values[-1]['noise_sha256'] = canonical_tensor_sha256(noise)
             if multi:
                 values[-1]['target_index'] = k
             if variants:
@@ -233,17 +324,27 @@ def train(args, pipe, rows):
                 values[-1]['source_index']=source_index
             if refreshed:
                 values[-1]['source_round']=args.refresh_round if position else None
-        norm = torch.nn.utils.clip_grad_norm_(pipe.unet.parameters(),1.,error_if_nonfinite=True)
+        norm = init_control.clip_gradients(pipe.unet.parameters(), step+1)
+        before = audit.capture() if audit else None
         optimizer.step()
-        append(args.output/'optimization.jsonl', {'step':step+1,'draws':values,'grad_norm':float(norm),'seconds':time.monotonic()-started})
+        metrics = {'step':step+1,'draws':values,'grad_norm':float(norm),'seconds':time.monotonic()-started}
+        if audit:
+            metrics['update_audit'] = audit.after_step(before, optimizer, step+1)
+            init_control.assert_frozen(pipe)
+        append(args.output/'optimization.jsonl', metrics)
+        if args.fm_probe_interval and ((step+1)%args.fm_probe_interval == 0 or step+1 == args.steps):
+            fm_probe(step+1)
         if (step+1)%32==0:
             print(json.dumps({'step':step+1,'mse':sum(x['mse'] for x in values)/4,'seconds':time.monotonic()-started}),flush=True)
+        if controlled and step+1 in args.snapshot_steps:
+            # Commit required endpoints before advancing the durable recovery cursor.
+            save_inference_checkpoint(args.output/f'checkpoint-step-{step+1:06d}.pt', pipe, step+1, manifest)
         if (step+1)%128==0 or step+1==args.steps or (refreshed and step+1==stop):
             save_training_checkpoint(checkpoint,trainable_module=pipe.unet,optimizer=optimizer,epoch=0,
                 episode_cursor=(step+1)*4,optimizer_step=step+1,manifest=manifest,
                 trainer_state={'refresh_round':args.refresh_round,
                     'source_bank_sha256':sha(refresh_root/'bank.json')} if refreshed else None)
-        if step+1 in args.snapshot_steps:
+        if not controlled and step+1 in args.snapshot_steps:
             save_inference_checkpoint(args.output/f'checkpoint-step-{step+1:06d}.pt', pipe, step+1, manifest)
     if refreshed:
         endpoint=args.output/f'checkpoint-step-{stop:06d}.pt'
@@ -256,7 +357,13 @@ def train(args, pipe, rows):
             return
     # A compact inference checkpoint excludes optimizer; resumes keep the separate complete checkpoint.
     save_inference_checkpoint(args.output/'checkpoint-final.pt', pipe, args.steps, manifest)
-    save_json(args.output/'complete.json',{'steps':args.steps,'checkpoint_sha256':sha(args.output/'checkpoint-final.pt')})
+    complete = {'steps':args.steps,'checkpoint_sha256':sha(args.output/'checkpoint-final.pt')}
+    if controlled:
+        init_control.verify_frozen(pipe, manifest['frozen_module_hashes'])
+        complete.update(initial_state_sha256=manifest['initial_state_sha256'],
+                        final_state_sha256=init_control.model_hash(pipe.unet), frozen_verified=True,
+                        shared_training_identity=manifest['shared_training_identity'])
+    save_json(args.output/'complete.json', complete)
 
 
 def save_inference_checkpoint(path, pipe, step, manifest):
@@ -330,6 +437,7 @@ def rollout(args, pipe, rows):
             print(json.dumps({'completed':pid,'chain':chain,'inter_turns':args.inter_turns}),flush=True)
 
 def main(args):
+    init_control.validate_args(args)
     configure_strict_cuda_determinism(0)
     if args.retain_source_mode != 'recursive':
         assert args.mode == 'train' and args.stage == 'retain'
@@ -354,10 +462,15 @@ def main(args):
         assert (args.noise_domain.startswith('refresh-') and args.shard_count == 2) or args.noise_domain.startswith('mt8-')
         assert args.shard_index in range(args.shard_count)
         rows = rows[args.shard_index::args.shard_count]
-    pipe = load_pipe(args)
     if args.mode == 'train':
-        train(args,pipe,rows)
+        try:
+            pipe = load_pipe(args)
+            train(args,pipe,rows)
+        except init_control.NumericFailure as failure:
+            init_control.write_numeric_failure(args.output, failure)
+            raise
     else:
+        pipe = load_pipe(args)
         rollout(args,pipe,rows)
 
 if __name__ == '__main__':
@@ -388,4 +501,15 @@ if __name__ == '__main__':
     p.add_argument('--noise-chains',type=int,default=2)
     p.add_argument('--noise-domain',choices=['eval','source-bank','refresh-0','refresh-1','refresh-2','refresh-3','mt8-teacher','mt8-eval'],default='eval')
     p.add_argument('--limit',type=int,default=0)
+    p.add_argument('--unet-init',choices=['parent','random'],default='parent')
+    p.add_argument('--learning-rate',type=float,default=5e-5)
+    p.add_argument('--train-seed',type=int,default=20260924)
+    p.add_argument('--init-seed',type=int,default=20261009)
+    p.add_argument('--conditioning-seed',type=int,default=None)
+    p.add_argument('--fresh-start',action='store_true')
+    p.add_argument('--audit-updates',action='store_true')
+    p.add_argument('--fm-probe-interval',type=int,default=0)
+    p.add_argument('--fm-probe-count',type=int,default=32)
+    p.add_argument('--fm-probe-seed',type=int,default=20261009)
+    p.add_argument('--expected-init-audit',type=Path)
     main(p.parse_args())

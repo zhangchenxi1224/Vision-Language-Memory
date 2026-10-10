@@ -1,0 +1,35 @@
+{
+  "stage": "four_arm_code_before_gpu_precheck",
+  "python": "D:/st_python/python.exe",
+  "torch": "2.11.0+cpu",
+  "environment": {"PYTHONPATH": "src;."},
+  "test_runs": [
+    {
+      "files": ["tests/test_prefeval_k1_init_ablation.py", "tests/test_prefeval_unet_init_evaluate.py", "tests/test_prefeval_unet_init_controller.py"],
+      "passed": 43,
+      "failed": 0,
+      "seconds": 18.60,
+      "includes": "Four-GPU evaluation pool concurrency, failure cancellation, fixed scientific commands, stage barrier, and resume revalidation."
+    },
+    {
+      "files": ["tests/test_prefeval_k1_data.py", "tests/test_native_base_training_alignment.py", "tests/test_writer_initialization.py"],
+      "passed": 15,
+      "failed": 0,
+      "seconds": 30.88
+    }
+  ],
+  "independent_review": {
+    "unresolved_P1_P2": 0,
+    "fixed_issue": "A restart between the step-2048 resume save and inference snapshot could omit the early checkpoint. Controlled runs now save the snapshot first and repair an absent snapshot from exactly that restored step before continuing; an interrupted-training equivalence test covers this."
+  },
+  "diff_check": "passed",
+  "historical_cleanup_checker": {
+    "passed": false,
+    "message": "Scientific runtime changed during cleanup: prefeval_k1_writer.py and prefeval_k1_position_probe.py",
+    "disposition": "This checker compares runtime with the historical cleanup freeze. This new experiment deliberately adds opt-in runtime controls; the historical cleanup baseline was not rewritten to hide the difference."
+  },
+  "limitations": [
+    "The first local test invocation omitted PYTHONPATH and failed collection; the recorded successful compatibility run used the explicit environment above.",
+    "Local CPU tests do not validate the full DreamLite from_config model, H200 numerical behavior, or Reader output. Those require the separately recorded remote preflight and numerical checks."
+  ]
+}

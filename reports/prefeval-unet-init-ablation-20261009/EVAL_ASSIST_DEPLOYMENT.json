@@ -1,0 +1,113 @@
+{
+  "stage": "eight_H200s_active_training_and_early_evaluation_overlap",
+  "observed_beijing": "2026-10-09T09:33:52.765876+08:00",
+  "user_authorization": "Use the newly started prefeval-k1-h200x4-high-20260924 instance to run in parallel and maximize experiment efficiency.",
+  "frozen_training_execution_commit": "d1cf0b181aaa983745b34b290e491fda806e866b",
+  "helper_execution_commit": "3e5caaa08b22a3dc3fce003168ab246f21eaaa92",
+  "registered_identity": "9d59eaa47d3fa4c34e6c104536601c910ca0dc2b1b5bff78a0e8a622709db816",
+  "frozen_repo": "/inspire/ssd/project/exploration-topic/czxs26210936/code/unet-init-ablation-sparse-20261009",
+  "helper_repo": "/inspire/ssd/project/exploration-topic/czxs26210936/code/unet-init-eval-assist-20261009",
+  "run_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-unet-init-ablation-20261009",
+  "assist_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-unet-init-ablation-20261009-eval-assist",
+  "deployment_evidence": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-unet-init-ablation-20261009-eval-assist-deployment",
+  "original_controller": {
+    "pid": 200049,
+    "start_token": "1025129924",
+    "state": "T",
+    "reason": "Only orchestration is held so the independent helpers can schedule evaluations; all four Writer processes continue.",
+    "automatic_release_condition": "All 16 train/dev endpoints validated and both helper hosts confirm all helper GPU children exited. Original controller then audits training/evaluation and runs official180."
+  },
+  "instances": [
+    {
+      "notebook": "prefeval-b-cr-h200x4-20260926",
+      "host": "prefeval-b-cr-h200x4-20260926--c1325f0297e5-5pcplqki3j",
+      "gpus": 4,
+      "coordinator_pid": 2158372,
+      "guard_pid": 2165265,
+      "current_work": "Four unchanged formal training arms; joins evaluation pool only after all four Writers finish and exit.",
+      "gpu_utilization_at_093242_percent": [
+        97,
+        100,
+        100,
+        100
+      ]
+    },
+    {
+      "notebook": "prefeval-k1-h200x4-high-20260924",
+      "host": "prefeval-k1-h200x4-high-20260924--506d5fcf84c1-w6q5npbzuu",
+      "gpus": 4,
+      "worker_pid": 148119,
+      "guard_pid": 150164,
+      "current_work": "All four step-2048 train730 evaluations",
+      "gpu_utilization_at_093256_percent": [
+        100,
+        100,
+        100,
+        100
+      ],
+      "assignments_at_launch": {
+        "0": "P-H-step-002048-train",
+        "1": "P-L-step-002048-train",
+        "2": "R-L-step-002048-train",
+        "3": "R-H-step-002048-train"
+      }
+    }
+  ],
+  "observed_training_steps": {
+    "P-L": 14985,
+    "P-H": 15001,
+    "R-L": 15067,
+    "R-H": 15016
+  },
+  "training_continues_evidence": {
+    "previous_observation_beijing": "2026-10-09T09:32:42+08:00",
+    "previous_steps": {
+      "P-L": 14951,
+      "P-H": 14966,
+      "R-L": 15027,
+      "R-H": 14976
+    },
+    "all_four_increased_while_controller_held": true
+  },
+  "actual_generated_early_pngs": {
+    "P-L": 6,
+    "P-H": 6,
+    "R-L": 6,
+    "R-H": 6
+  },
+  "abort_record_present": false,
+  "validation": {
+    "local_tests_passed": 13,
+    "local_linux_test_skipped": 1,
+    "remote_linux_tests_passed": 14,
+    "remote_linux_tests_seconds": 2.5,
+    "full_helper_validation_seconds": 41.270029067993164,
+    "all_four_real_2048_checkpoints_validated": true,
+    "both_instances_frozen_inputs_match": true,
+    "shared_flock_provides_cross_host_exclusion": false,
+    "atomic_mkdir_race_rounds": 32,
+    "exactly_one_owner_each_round": true,
+    "independent_linux_process_tests": [
+      "Parent-only SIGSTOP leaves Writer child output and completion progressing.",
+      "Cleanup finds orphan evaluator process groups and leaves unmarked processes alone.",
+      "SIGTERM-ignoring child is confirmed killed before drained acknowledgment.",
+      "Guard waits for explicit extra-host drained acknowledgment before resuming original controller."
+    ]
+  },
+  "scientific_protocol_changed": false,
+  "scheduling_change": "Allow already frozen early checkpoints to be evaluated concurrently with training on separate GPUs; use eight workers for remaining train/dev evaluation after training.",
+  "official_evaluation_owner": "Original controller; unchanged single history generation followed by four official final endpoints.",
+  "operator_notes": [
+    "Read assist_root alongside the original status.json; a T state of the original controller is expected during this scheduling phase.",
+    "Do not manually SIGCONT the original controller while helper GPU processes are active; shared filesystem flock did not protect across instances.",
+    "Neither running code checkout was modified during execution.",
+    "A missing remote heartbeat is not proof of task exit; failure recovery waits for both host drain acknowledgments."
+  ],
+  "runtime_projection": {
+    "complete_results_beijing_window": [
+      "2026-10-10T00:00:00+08:00",
+      "2026-10-10T04:00:00+08:00"
+    ],
+    "basis": "Historical endpoint throughput plus current approximately 14:00 training completion estimate; early generation has just started, so this is a provisional projection, not measured full-evaluation runtime."
+  }
+}

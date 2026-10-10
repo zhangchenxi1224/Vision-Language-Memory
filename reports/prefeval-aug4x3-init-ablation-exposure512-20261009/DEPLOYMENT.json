@@ -1,0 +1,456 @@
+{
+  "schema": "prefeval-aug4-balanced-deployment/v1",
+  "observed_at": "2026-10-09T23:57:03.136207+08:00",
+  "status": "teacher_optimization_running_on_eight_h200",
+  "execution_commit": "b8d82be660db7ba0a14bcba68057e8cafccb186e",
+  "data_sha256": "28cb15e49979970d6b3277db1dca198f9f6fd5b7c82bedbd217b627cb0e905e7",
+  "model_asset_seal_sha256": "1fcdf946bd73790033cc92781256f92a354462f29d5556f6c56dc48815eefa2b",
+  "old_experiment_terminated": true,
+  "old_artifacts_preserved": true,
+  "run_root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-aug4x3-official-init-20261009",
+  "execution_repo": "/inspire/ssd/project/exploration-topic/czxs26210936/code/aug4x3-official-init-20261009",
+  "remote_evidence": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-aug4x3-official-init-20261009-deployment",
+  "tests": {
+    "local_passed": 58,
+    "remote_passed": 58,
+    "lint": "passed",
+    "actual_gpu_init_audits": 4,
+    "paired_pretrained_state_equal": true,
+    "paired_random_state_equal": true,
+    "pretrained_random_states_differ": true
+  },
+  "initial_state_sha256": {
+    "pretrained": "7a15d9e4b5241f36d5ad9dbf05578b77f55d54a49b6ee781180e6aa03d2617cc2",
+    "random": "87780d88c54191d1f333aa057a2c26aa331139a20eceed03f9625ef7ed33e64c"
+  },
+  "unet_parameter_count": 389968388,
+  "hosts": {
+    "0": {
+      "time": 1791561419.9950793,
+      "host": "prefeval-b-cr-h200x4-20260926--c1325f0297e5-t5ogfjyaok",
+      "pid": 219500,
+      "active": {
+        "0": "teacher-0",
+        "1": "teacher-2",
+        "2": "teacher-4",
+        "3": "teacher-6"
+      },
+      "completed": 0,
+      "total": 734
+    },
+    "1": {
+      "time": 1791561422.7580917,
+      "host": "prefeval-k1-h200x4-high-20260924--506d5fcf84c1-w6q5npbzuu",
+      "pid": 2485999,
+      "active": {
+        "0": "teacher-1",
+        "1": "teacher-3",
+        "2": "teacher-5",
+        "3": "teacher-7"
+      },
+      "completed": 0,
+      "total": 734
+    }
+  },
+  "observations": [
+    {
+      "time": 1791561423.136207,
+      "host": "prefeval-b-cr-h200x4-20260926--c1325f0297e5-t5ogfjyaok",
+      "hosts": {
+        "0": {
+          "time": 1791561419.9950793,
+          "host": "prefeval-b-cr-h200x4-20260926--c1325f0297e5-t5ogfjyaok",
+          "pid": 219500,
+          "active": {
+            "0": "teacher-0",
+            "1": "teacher-2",
+            "2": "teacher-4",
+            "3": "teacher-6"
+          },
+          "completed": 0,
+          "total": 734
+        },
+        "1": {
+          "time": 1791561422.7580917,
+          "host": "prefeval-k1-h200x4-high-20260924--506d5fcf84c1-w6q5npbzuu",
+          "pid": 2485999,
+          "active": {
+            "0": "teacher-1",
+            "1": "teacher-3",
+            "2": "teacher-5",
+            "3": "teacher-7"
+          },
+          "completed": 0,
+          "total": 734
+        }
+      },
+      "teacher_progress": {
+        "0": {
+          "total": 92,
+          "completed": 1,
+          "latest": {
+            "pair_id": "entertain_games:0009",
+            "step": 30,
+            "family": "T3",
+            "ce": 3.814697265625e-06,
+            "grad_norm": 2.405168561381288e-05,
+            "option_order": [
+              2,
+              0,
+              3,
+              1
+            ],
+            "elapsed_seconds": 9.867369725950994
+          },
+          "log_tail": "tain_games:0000\", \"step\": 264, \"family\": \"T3\", \"ce\": 0.0, \"grad_norm\": 8.774569550951128e-07, \"option_order\": [2, 3, 1, 0], \"elapsed_seconds\": 87.03188440599479, \"item\": 1, \"items\": 92}\n{\"pair_id\": \"entertain_games:0000\", \"step\": 288, \"family\": \"T3\", \"ce\": 0.0, \"grad_norm\": 9.880003517537261e-07, \"option_order\": [2, 3, 1, 0], \"elapsed_seconds\": 94.84731504402589, \"item\": 1, \"items\": 92}\n{\"completed\": \"entertain_games:0000\"}\n{\"pair_id\": \"entertain_games:0009\", \"step\": 24, \"family\": \"T3\", \"ce\": 2.1798271063744323e-06, \"grad_norm\": 7.497270871681394e-06, \"option_order\": [2, 1, 3, 0], \"elapsed_seconds\": 7.903560386039317, \"item\": 2, \"items\": 92}\n"
+        },
+        "1": {
+          "total": 92,
+          "completed": 1,
+          "latest": {
+            "pair_id": "entertain_games:0011",
+            "step": 114,
+            "family": "T3",
+            "ce": 5.449567765936081e-07,
+            "grad_norm": 8.902670174393279e-07,
+            "option_order": [
+              2,
+              0,
+              1,
+              3
+            ],
+            "elapsed_seconds": 37.04988791397773
+          },
+          "log_tail": "ain_games:0011\", \"step\": 48, \"family\": \"T3\", \"ce\": 1.6348703866242431e-06, \"grad_norm\": 1.875589646260778e-06, \"option_order\": [3, 2, 1, 0], \"elapsed_seconds\": 15.626094177132472, \"item\": 2, \"items\": 92}\n{\"pair_id\": \"entertain_games:0011\", \"step\": 72, \"family\": \"T3\", \"ce\": 1.6348703866242431e-06, \"grad_norm\": 1.2332850474194856e-06, \"option_order\": [3, 2, 1, 0], \"elapsed_seconds\": 23.373860268155113, \"item\": 2, \"items\": 92}\n{\"pair_id\": \"entertain_games:0011\", \"step\": 96, \"family\": \"T3\", \"ce\": 1.0899135531872162e-06, \"grad_norm\": 9.939587926055538e-07, \"option_order\": [3, 1, 2, 0], \"elapsed_seconds\": 31.13046328513883, \"item\": 2, \"items\": 92}\n"
+        },
+        "2": {
+          "total": 91,
+          "completed": 1,
+          "latest": {
+            "pair_id": "entertain_games:0012",
+            "step": 25,
+            "family": "T1",
+            "ce": 0.0033242362551391125,
+            "grad_norm": 0.11500570178031921,
+            "option_order": [
+              0,
+              3,
+              2,
+              1
+            ],
+            "elapsed_seconds": 8.28919172193855
+          },
+          "log_tail": "mily\": \"T3\", \"ce\": 3.814697265625e-06, \"grad_norm\": 5.783034794148989e-06, \"option_order\": [3, 1, 2, 0], \"elapsed_seconds\": 88.21726613596547, \"item\": 1, \"items\": 91}\n{\"pair_id\": \"entertain_games:0002\", \"step\": 288, \"family\": \"T3\", \"ce\": 2.7247838261246216e-06, \"grad_norm\": 6.824105639680056e-06, \"option_order\": [2, 1, 3, 0], \"elapsed_seconds\": 96.20412281295285, \"item\": 1, \"items\": 91}\n{\"completed\": \"entertain_games:0002\"}\n{\"pair_id\": \"entertain_games:0012\", \"step\": 24, \"family\": \"T3\", \"ce\": 4.359654212748865e-06, \"grad_norm\": 6.916384882060811e-05, \"option_order\": [2, 3, 1, 0], \"elapsed_seconds\": 7.9497267049737275, \"item\": 2, \"items\": 91}\n"
+        },
+        "3": {
+          "total": 91,
+          "completed": 1,
+          "latest": {
+            "pair_id": "entertain_games:0013",
+            "step": 93,
+            "family": "T3",
+            "ce": 3.814697265625e-06,
+            "grad_norm": 1.0695226592360996e-05,
+            "option_order": [
+              1,
+              2,
+              0,
+              3
+            ],
+            "elapsed_seconds": 31.97200761293061
+          },
+          "log_tail": "pair_id\": \"entertain_games:0013\", \"step\": 24, \"family\": \"T3\", \"ce\": 0.4448277950286865, \"grad_norm\": 0.7269588708877563, \"option_order\": [3, 1, 2, 0], \"elapsed_seconds\": 8.219749133102596, \"item\": 2, \"items\": 91}\n{\"pair_id\": \"entertain_games:0013\", \"step\": 48, \"family\": \"T3\", \"ce\": 1.5716946125030518, \"grad_norm\": 0.8351245522499084, \"option_order\": [1, 3, 2, 0], \"elapsed_seconds\": 16.41364158107899, \"item\": 2, \"items\": 91}\n{\"pair_id\": \"entertain_games:0013\", \"step\": 72, \"family\": \"T3\", \"ce\": 5.177089406060986e-05, \"grad_norm\": 0.0007600956596434116, \"option_order\": [2, 3, 1, 0], \"elapsed_seconds\": 24.693980131996796, \"item\": 2, \"items\": 91}\n"
+        },
+        "4": {
+          "total": 91,
+          "completed": 1,
+          "latest": {
+            "pair_id": "entertain_games:0014",
+            "step": 33,
+            "family": "T3",
+            "ce": 0.00010572161409072578,
+            "grad_norm": 0.0021301156375557184,
+            "option_order": [
+              2,
+              3,
+              0,
+              1
+            ],
+            "elapsed_seconds": 10.710215234896168
+          },
+          "log_tail": "\"family\": \"T3\", \"ce\": 3.2697407732484862e-06, \"grad_norm\": 1.091711783374194e-05, \"option_order\": [3, 2, 1, 0], \"elapsed_seconds\": 86.18712782696821, \"item\": 1, \"items\": 91}\n{\"pair_id\": \"entertain_games:0004\", \"step\": 288, \"family\": \"T3\", \"ce\": 3.2697407732484862e-06, \"grad_norm\": 0.00012408132897689939, \"option_order\": [2, 3, 1, 0], \"elapsed_seconds\": 93.9179766610032, \"item\": 1, \"items\": 91}\n{\"completed\": \"entertain_games:0004\"}\n{\"pair_id\": \"entertain_games:0014\", \"step\": 24, \"family\": \"T3\", \"ce\": 0.2730364203453064, \"grad_norm\": 1.756722331047058, \"option_order\": [3, 2, 1, 0], \"elapsed_seconds\": 7.7991643759887666, \"item\": 2, \"items\": 91}\n"
+        },
+        "5": {
+          "total": 91,
+          "completed": 1,
+          "latest": {
+            "pair_id": "entertain_games:0015",
+            "step": 114,
+            "family": "T3",
+            "ce": 2.7247838261246216e-06,
+            "grad_norm": 2.3740385586279444e-06,
+            "option_order": [
+              1,
+              0,
+              3,
+              2
+            ],
+            "elapsed_seconds": 37.157639666926116
+          },
+          "log_tail": "entertain_games:0015\", \"step\": 48, \"family\": \"T3\", \"ce\": 0.0028713771607726812, \"grad_norm\": 0.029718369245529175, \"option_order\": [2, 3, 1, 0], \"elapsed_seconds\": 15.749126059003174, \"item\": 2, \"items\": 91}\n{\"pair_id\": \"entertain_games:0015\", \"step\": 72, \"family\": \"T3\", \"ce\": 0.00038146975566633046, \"grad_norm\": 0.0022302139550447464, \"option_order\": [1, 3, 2, 0], \"elapsed_seconds\": 23.465350195067003, \"item\": 2, \"items\": 91}\n{\"pair_id\": \"entertain_games:0015\", \"step\": 96, \"family\": \"T3\", \"ce\": 6.4849853515625e-05, \"grad_norm\": 0.0003469308721832931, \"option_order\": [3, 1, 2, 0], \"elapsed_seconds\": 31.26715242303908, \"item\": 2, \"items\": 91}\n"
+        },
+        "6": {
+          "total": 91,
+          "completed": 1,
+          "latest": {
+            "pair_id": "entertain_games:0016",
+            "step": 29,
+            "family": "T2",
+            "ce": 9.264264917874243e-06,
+            "grad_norm": 8.469450403936207e-05,
+            "option_order": [
+              1,
+              0,
+              2,
+              3
+            ],
+            "elapsed_seconds": 9.482113700010814
+          },
+          "log_tail": "mily\": \"T3\", \"ce\": 1.2261527444934472e-05, \"grad_norm\": 0.00011178659769939259, \"option_order\": [1, 3, 2, 0], \"elapsed_seconds\": 87.4597193490481, \"item\": 1, \"items\": 91}\n{\"pair_id\": \"entertain_games:0007\", \"step\": 288, \"family\": \"T3\", \"ce\": 3.814697265625e-06, \"grad_norm\": 3.5421478514763294e-06, \"option_order\": [3, 1, 2, 0], \"elapsed_seconds\": 95.27209740900435, \"item\": 1, \"items\": 91}\n{\"completed\": \"entertain_games:0007\"}\n{\"pair_id\": \"entertain_games:0016\", \"step\": 24, \"family\": \"T3\", \"ce\": 9.700230293674394e-05, \"grad_norm\": 0.0035299418959766626, \"option_order\": [3, 1, 2, 0], \"elapsed_seconds\": 7.830892376019619, \"item\": 2, \"items\": 91}\n"
+        },
+        "7": {
+          "total": 91,
+          "completed": 1,
+          "latest": {
+            "pair_id": "entertain_games:0017",
+            "step": 113,
+            "family": "T2",
+            "ce": 3.814697265625e-06,
+            "grad_norm": 8.534077642252669e-05,
+            "option_order": [
+              3,
+              0,
+              2,
+              1
+            ],
+            "elapsed_seconds": 36.62508191005327
+          },
+          "log_tail": "rtain_games:0017\", \"step\": 48, \"family\": \"T3\", \"ce\": 2.7247838261246216e-06, \"grad_norm\": 1.0741961204985273e-06, \"option_order\": [2, 3, 1, 0], \"elapsed_seconds\": 15.613891615998, \"item\": 2, \"items\": 91}\n{\"pair_id\": \"entertain_games:0017\", \"step\": 72, \"family\": \"T3\", \"ce\": 2.7247838261246216e-06, \"grad_norm\": 1.2420216535247164e-06, \"option_order\": [3, 1, 2, 0], \"elapsed_seconds\": 23.31723087397404, \"item\": 2, \"items\": 91}\n{\"pair_id\": \"entertain_games:0017\", \"step\": 96, \"family\": \"T3\", \"ce\": 2.7247838261246216e-06, \"grad_norm\": 8.689069659340021e-07, \"option_order\": [1, 3, 2, 0], \"elapsed_seconds\": 31.037213589064777, \"item\": 2, \"items\": 91}\n"
+        }
+      },
+      "errors": [],
+      "gpu": "0, 13908 MiB, 39 %\n1, 13928 MiB, 31 %\n2, 16014 MiB, 36 %\n3, 16034 MiB, 33 %\n",
+      "old_processes": []
+    },
+    {
+      "time": 1791561414.6341023,
+      "host": "prefeval-k1-h200x4-high-20260924--506d5fcf84c1-w6q5npbzuu",
+      "hosts": {
+        "0": {
+          "time": 1791561413.6538033,
+          "host": "prefeval-b-cr-h200x4-20260926--c1325f0297e5-t5ogfjyaok",
+          "pid": 219500,
+          "active": {
+            "0": "teacher-0",
+            "1": "teacher-2",
+            "2": "teacher-4",
+            "3": "teacher-6"
+          },
+          "completed": 0,
+          "total": 734
+        },
+        "1": {
+          "time": 1791561413.333433,
+          "host": "prefeval-k1-h200x4-high-20260924--506d5fcf84c1-w6q5npbzuu",
+          "pid": 2485999,
+          "active": {
+            "0": "teacher-1",
+            "1": "teacher-3",
+            "2": "teacher-5",
+            "3": "teacher-7"
+          },
+          "completed": 0,
+          "total": 734
+        }
+      },
+      "teacher_progress": {
+        "0": {
+          "total": 92,
+          "completed": 1,
+          "latest": {
+            "pair_id": "entertain_games:0009",
+            "step": 4,
+            "family": "T1",
+            "ce": 3.9236889278981835e-05,
+            "grad_norm": 0.00083277648082003,
+            "option_order": [
+              1,
+              0,
+              3,
+              2
+            ],
+            "elapsed_seconds": 1.4012959169922397
+          },
+          "log_tail": "tain_games:0000\", \"step\": 240, \"family\": \"T3\", \"ce\": 5.449567765936081e-07, \"grad_norm\": 1.284398763345962e-06, \"option_order\": [1, 2, 3, 0], \"elapsed_seconds\": 79.21805270703044, \"item\": 1, \"items\": 92}\n{\"pair_id\": \"entertain_games:0000\", \"step\": 264, \"family\": \"T3\", \"ce\": 0.0, \"grad_norm\": 8.774569550951128e-07, \"option_order\": [2, 3, 1, 0], \"elapsed_seconds\": 87.03188440599479, \"item\": 1, \"items\": 92}\n{\"pair_id\": \"entertain_games:0000\", \"step\": 288, \"family\": \"T3\", \"ce\": 0.0, \"grad_norm\": 9.880003517537261e-07, \"option_order\": [2, 3, 1, 0], \"elapsed_seconds\": 94.84731504402589, \"item\": 1, \"items\": 92}\n{\"completed\": \"entertain_games:0000\"}\n"
+        },
+        "1": {
+          "total": 92,
+          "completed": 1,
+          "latest": {
+            "pair_id": "entertain_games:0011",
+            "step": 88,
+            "family": "T1",
+            "ce": 1.0899135531872162e-06,
+            "grad_norm": 1.533808244857937e-06,
+            "option_order": [
+              2,
+              0,
+              1,
+              3
+            ],
+            "elapsed_seconds": 28.552307923091576
+          },
+          "log_tail": "in_games:0011\", \"step\": 24, \"family\": \"T3\", \"ce\": 2.1798271063744323e-06, \"grad_norm\": 1.0256698033117573e-06, \"option_order\": [1, 2, 3, 0], \"elapsed_seconds\": 7.913999443175271, \"item\": 2, \"items\": 92}\n{\"pair_id\": \"entertain_games:0011\", \"step\": 48, \"family\": \"T3\", \"ce\": 1.6348703866242431e-06, \"grad_norm\": 1.875589646260778e-06, \"option_order\": [3, 2, 1, 0], \"elapsed_seconds\": 15.626094177132472, \"item\": 2, \"items\": 92}\n{\"pair_id\": \"entertain_games:0011\", \"step\": 72, \"family\": \"T3\", \"ce\": 1.6348703866242431e-06, \"grad_norm\": 1.2332850474194856e-06, \"option_order\": [3, 2, 1, 0], \"elapsed_seconds\": 23.373860268155113, \"item\": 2, \"items\": 92}\n"
+        },
+        "2": {
+          "total": 91,
+          "completed": 1,
+          "latest": {
+            "pair_id": "entertain_games:0002",
+            "step": 288,
+            "family": "T3",
+            "ce": 2.7247838261246216e-06,
+            "grad_norm": 6.824105639680056e-06,
+            "option_order": [
+              2,
+              1,
+              3,
+              0
+            ],
+            "elapsed_seconds": 96.20412281295285
+          },
+          "log_tail": "ly\": \"T3\", \"ce\": 3.2697407732484862e-06, \"grad_norm\": 1.2683079148700926e-05, \"option_order\": [2, 1, 3, 0], \"elapsed_seconds\": 80.28859371691942, \"item\": 1, \"items\": 91}\n{\"pair_id\": \"entertain_games:0002\", \"step\": 264, \"family\": \"T3\", \"ce\": 3.814697265625e-06, \"grad_norm\": 5.783034794148989e-06, \"option_order\": [3, 1, 2, 0], \"elapsed_seconds\": 88.21726613596547, \"item\": 1, \"items\": 91}\n{\"pair_id\": \"entertain_games:0002\", \"step\": 288, \"family\": \"T3\", \"ce\": 2.7247838261246216e-06, \"grad_norm\": 6.824105639680056e-06, \"option_order\": [2, 1, 3, 0], \"elapsed_seconds\": 96.20412281295285, \"item\": 1, \"items\": 91}\n{\"completed\": \"entertain_games:0002\"}\n"
+        },
+        "3": {
+          "total": 91,
+          "completed": 1,
+          "latest": {
+            "pair_id": "entertain_games:0013",
+            "step": 68,
+            "family": "T2",
+            "ce": 0.0005168914794921875,
+            "grad_norm": 0.010957506485283375,
+            "option_order": [
+              3,
+              2,
+              0,
+              1
+            ],
+            "elapsed_seconds": 23.316890697926283
+          },
+          "log_tail": "\": 288, \"family\": \"T3\", \"ce\": 2.1798271063744323e-06, \"grad_norm\": 5.475883426697692e-06, \"option_order\": [2, 3, 1, 0], \"elapsed_seconds\": 99.34480359894224, \"item\": 1, \"items\": 91}\n{\"completed\": \"entertain_games:0003\"}\n{\"pair_id\": \"entertain_games:0013\", \"step\": 24, \"family\": \"T3\", \"ce\": 0.4448277950286865, \"grad_norm\": 0.7269588708877563, \"option_order\": [3, 1, 2, 0], \"elapsed_seconds\": 8.219749133102596, \"item\": 2, \"items\": 91}\n{\"pair_id\": \"entertain_games:0013\", \"step\": 48, \"family\": \"T3\", \"ce\": 1.5716946125030518, \"grad_norm\": 0.8351245522499084, \"option_order\": [1, 3, 2, 0], \"elapsed_seconds\": 16.41364158107899, \"item\": 2, \"items\": 91}\n"
+        },
+        "4": {
+          "total": 91,
+          "completed": 1,
+          "latest": {
+            "pair_id": "entertain_games:0014",
+            "step": 7,
+            "family": "T1",
+            "ce": 0.0012375968508422375,
+            "grad_norm": 0.03176525607705116,
+            "option_order": [
+              2,
+              1,
+              0,
+              3
+            ],
+            "elapsed_seconds": 2.317426989902742
+          },
+          "log_tail": " \"T3\", \"ce\": 3.2697407732484862e-06, \"grad_norm\": 1.9022301785298623e-05, \"option_order\": [3, 1, 2, 0], \"elapsed_seconds\": 78.47430729598273, \"item\": 1, \"items\": 91}\n{\"pair_id\": \"entertain_games:0004\", \"step\": 264, \"family\": \"T3\", \"ce\": 3.2697407732484862e-06, \"grad_norm\": 1.091711783374194e-05, \"option_order\": [3, 2, 1, 0], \"elapsed_seconds\": 86.18712782696821, \"item\": 1, \"items\": 91}\n{\"pair_id\": \"entertain_games:0004\", \"step\": 288, \"family\": \"T3\", \"ce\": 3.2697407732484862e-06, \"grad_norm\": 0.00012408132897689939, \"option_order\": [2, 3, 1, 0], \"elapsed_seconds\": 93.9179766610032, \"item\": 1, \"items\": 91}\n{\"completed\": \"entertain_games:0004\"}\n"
+        },
+        "5": {
+          "total": 91,
+          "completed": 1,
+          "latest": {
+            "pair_id": "entertain_games:0015",
+            "step": 87,
+            "family": "T3",
+            "ce": 3.2697407732484862e-06,
+            "grad_norm": 2.1093399027449777e-06,
+            "option_order": [
+              0,
+              2,
+              3,
+              1
+            ],
+            "elapsed_seconds": 28.379428968997672
+          },
+          "log_tail": "\": \"entertain_games:0015\", \"step\": 24, \"family\": \"T3\", \"ce\": 0.10458210855722427, \"grad_norm\": 3.9384799003601074, \"option_order\": [3, 1, 2, 0], \"elapsed_seconds\": 8.08025462506339, \"item\": 2, \"items\": 91}\n{\"pair_id\": \"entertain_games:0015\", \"step\": 48, \"family\": \"T3\", \"ce\": 0.0028713771607726812, \"grad_norm\": 0.029718369245529175, \"option_order\": [2, 3, 1, 0], \"elapsed_seconds\": 15.749126059003174, \"item\": 2, \"items\": 91}\n{\"pair_id\": \"entertain_games:0015\", \"step\": 72, \"family\": \"T3\", \"ce\": 0.00038146975566633046, \"grad_norm\": 0.0022302139550447464, \"option_order\": [1, 3, 2, 0], \"elapsed_seconds\": 23.465350195067003, \"item\": 2, \"items\": 91}\n"
+        },
+        "6": {
+          "total": 91,
+          "completed": 1,
+          "latest": {
+            "pair_id": "entertain_games:0016",
+            "step": 3,
+            "family": "T3",
+            "ce": 2.035743236541748,
+            "grad_norm": 10.426716804504395,
+            "option_order": [
+              0,
+              3,
+              1,
+              2
+            ],
+            "elapsed_seconds": 1.0178264540154487
+          },
+          "log_tail": "family\": \"T3\", \"ce\": 3.814697265625e-06, \"grad_norm\": 3.941137947549578e-06, \"option_order\": [3, 1, 2, 0], \"elapsed_seconds\": 79.71266229299363, \"item\": 1, \"items\": 91}\n{\"pair_id\": \"entertain_games:0007\", \"step\": 264, \"family\": \"T3\", \"ce\": 1.2261527444934472e-05, \"grad_norm\": 0.00011178659769939259, \"option_order\": [1, 3, 2, 0], \"elapsed_seconds\": 87.4597193490481, \"item\": 1, \"items\": 91}\n{\"pair_id\": \"entertain_games:0007\", \"step\": 288, \"family\": \"T3\", \"ce\": 3.814697265625e-06, \"grad_norm\": 3.5421478514763294e-06, \"option_order\": [3, 1, 2, 0], \"elapsed_seconds\": 95.27209740900435, \"item\": 1, \"items\": 91}\n{\"completed\": \"entertain_games:0007\"}\n"
+        },
+        "7": {
+          "total": 91,
+          "completed": 1,
+          "latest": {
+            "pair_id": "entertain_games:0017",
+            "step": 87,
+            "family": "T3",
+            "ce": 3.2697407732484862e-06,
+            "grad_norm": 1.6042098422985873e-06,
+            "option_order": [
+              0,
+              3,
+              2,
+              1
+            ],
+            "elapsed_seconds": 28.144168162951246
+          },
+          "log_tail": "tertain_games:0017\", \"step\": 24, \"family\": \"T3\", \"ce\": 8.174351933121216e-06, \"grad_norm\": 6.264190596994013e-05, \"option_order\": [3, 2, 1, 0], \"elapsed_seconds\": 7.960127833066508, \"item\": 2, \"items\": 91}\n{\"pair_id\": \"entertain_games:0017\", \"step\": 48, \"family\": \"T3\", \"ce\": 2.7247838261246216e-06, \"grad_norm\": 1.0741961204985273e-06, \"option_order\": [2, 3, 1, 0], \"elapsed_seconds\": 15.613891615998, \"item\": 2, \"items\": 91}\n{\"pair_id\": \"entertain_games:0017\", \"step\": 72, \"family\": \"T3\", \"ce\": 2.7247838261246216e-06, \"grad_norm\": 1.2420216535247164e-06, \"option_order\": [3, 1, 2, 0], \"elapsed_seconds\": 23.31723087397404, \"item\": 2, \"items\": 91}\n"
+        }
+      },
+      "errors": [],
+      "gpu": "0, 13933 MiB, 31 %\n1, 15991 MiB, 29 %\n2, 15955 MiB, 32 %\n3, 16091 MiB, 33 %\n",
+      "old_processes": []
+    }
+  ],
+  "formal_writer_training_status": "queued; requires teacher PNG acceptance, condition cache, and all four independent 128-step prechecks",
+  "future_allocation": {
+    "host0": {
+      "GPU0": "P-L",
+      "GPU1": "R-H",
+      "GPU2-3": "checkpoint evaluation"
+    },
+    "host1": {
+      "GPU0": "P-H",
+      "GPU1": "R-L",
+      "GPU2-3": "checkpoint evaluation"
+    }
+  },
+  "checkpoint_steps": [
+    5840,
+    11680,
+    23360,
+    46720,
+    93440
+  ],
+  "automation": "persistent two-host controllers; no new Codex heartbeat created"
+}
