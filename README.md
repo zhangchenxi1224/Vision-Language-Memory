@@ -2,7 +2,9 @@
 
 当前主线：**官方 PrefEval 输入与任务 → 视觉教师目标 → DreamLite 官方 target–noise flow matching → 实际 RGB 写入与读取 → 内容泛化和连续保持。**
 
-2026-10-08 用户决定恢复**选择题硬监督（B臂）**：教师以官方正确选项为硬标签，保留已有T1/T2/T3问法与选项位置轮换；随后用官方target–noise FM训练共享Writer。10月5日至8日的Prompt Matching、Direct/PM→FM、上下文覆盖及后续曝光/排版实验全部撤回，不作为当前训练或结果依据。执行代码恢复到引入这些实验之前的`6d9fea6`基线，既有9月硬监督数据、权重及结果继续保留。
+**当前四组基线**以[增强实验方案](reports/prefeval-aug4x3-init-ablation-exposure512-20261009/PLAN.md)和[机器可读协议](reports/prefeval-aug4x3-init-ablation-exposure512-20261009/PROTOCOL.json)为准：P-L/P-H 从官方 `carlofkl/DreamLite-base` 原始预训练 U-Net 开始，R-L/R-H 使用同架构标准随机初始化；采用 W0–W3 × T1–T3 增强，学习率为 `5e-5` / `5e-4`，effective batch=4，每组 93,440 步，在 32/64/128/256/512 次曝光处检查。`4f` 任务权重不属于当前初始化来源。
+
+历史路线调整：2026-10-08 用户决定恢复**选择题硬监督（B臂）**，当时将执行代码恢复到引入下述实验之前的 `6d9fea6` 基线。10月5日至8日的Prompt Matching、Direct/PM→FM、上下文覆盖及后续曝光/排版实验全部撤回，不作为当前训练或结果依据；既有9月硬监督数据、权重及结果继续保留。当前四组的增强问法、初始化和预算采用上述新协议。
 
 2026-10-02 已完成远端收敛：开发分支仅保留 `main`，31 个旧分支均先保留归档标签再删除引用。历史恢复、PR 收尾与 Release 核验见[部署记录](docs/REMOTE_CONSOLIDATION_20261002.md)；Git 体积与后续迁移方案见[历史瘦身评估](docs/HISTORY_SIZE_ASSESSMENT_20261002.md)。
 
@@ -32,8 +34,11 @@
 
 机器可读入口为 [experiments/registry.json](experiments/registry.json)。默认分析只使用 `current_performance` 目录，再核对每次 run 的协议、分母和完成回执。禁止递归汇总全部 `reports/`；目录准入不代表每个计划都已完成或所有分数均可比较。
 
+当前四组注册项 ID 为 `prefeval-aug4x3-init-ablation-exposure512`，其中 `plan`、`protocol` 和 `entrypoints` 分别提供方案、配置与实现位置。两实例 8 卡控制器为 [run_prefeval_aug4_balanced.py](scripts/inspire/run_prefeval_aug4_balanced.py)，Writer 为 [prefeval_aug4_writer.py](scripts/experiments/prefeval_aug4_writer.py)；旧 `run_prefeval_unet_init_ablation.py` 及其评测辅助器只保留作历史实现，不是当前运行入口。已有实验的跨实例续训须使用该次部署核验的迁移入口与所有权记录，不能直接另启控制器。
+
 ```bash
 python scripts/reporting/list_current_experiments.py
+python scripts/reporting/list_current_experiments.py --role protocol_and_data
 python scripts/reporting/verify_aligned_cleanup.py
 ```
 
