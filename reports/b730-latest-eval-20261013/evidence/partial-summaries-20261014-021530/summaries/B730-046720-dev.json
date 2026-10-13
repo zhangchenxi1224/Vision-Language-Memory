@@ -1,0 +1,1457 @@
+{
+  "schema": "b730-latest-eval-summary/v1",
+  "status": "verified_complete",
+  "split": "dev",
+  "kind": "student",
+  "checkpoint": {
+    "checkpoint_sha256": "abeccff2fccca65c7ba574e7a5ab8574c56c20bc4d5f024fe67eba238cd8f576",
+    "optimizer_step": 46720,
+    "training_origin": "legacy_B730_4f_task_initialized",
+    "original_manifest_sha256": "8bfc932c7986925593ec30e07cc739ed9bb0013ae621731b471b34d01f320823",
+    "legacy_inventory_sha256": "fdd859e1aa8dcdc22335fcb32a0022a7fe591a41326e88860354a1e9edf8a52a",
+    "legacy_adapter_sha256": "c59d178ee4459cc5334204ef43825e60431df08eaeba3b694cbfe85c1574c829"
+  },
+  "data_sha256": "28cb15e49979970d6b3277db1dca198f9f6fd5b7c82bedbd217b627cb0e905e7",
+  "source_sets": {
+    "new_b730": {
+      "root": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/runs/b730-latest-eval-20261013/evaluation/B730-046720-dev",
+      "binding": {
+        "schema": "prefeval-aug4-evaluation/v1",
+        "data_sha256": "28cb15e49979970d6b3277db1dca198f9f6fd5b7c82bedbd217b627cb0e905e7",
+        "asset_seal_sha256": "1fcdf946bd73790033cc92781256f92a354462f29d5556f6c56dc48815eefa2b",
+        "evaluation_source_sha256": "512ea05943ad4b1b2fd111ab2b72f3c87f79ba5b4c5f126040bc4488a6ac6dc0",
+        "kind": "student",
+        "split": "dev",
+        "checkpoint": {
+          "checkpoint_sha256": "abeccff2fccca65c7ba574e7a5ab8574c56c20bc4d5f024fe67eba238cd8f576",
+          "optimizer_step": 46720,
+          "training_origin": "legacy_B730_4f_task_initialized",
+          "original_manifest_sha256": "8bfc932c7986925593ec30e07cc739ed9bb0013ae621731b471b34d01f320823",
+          "legacy_inventory_sha256": "fdd859e1aa8dcdc22335fcb32a0022a7fe591a41326e88860354a1e9edf8a52a",
+          "legacy_adapter_sha256": "c59d178ee4459cc5334204ef43825e60431df08eaeba3b694cbfe85c1574c829"
+        },
+        "seeds": [
+          0,
+          1
+        ],
+        "controls": [
+          "memory",
+          "mismatch"
+        ],
+        "suites": [
+          [
+            "W0",
+            "T1"
+          ]
+        ],
+        "correct_positions": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "shards": 4,
+        "mismatch_protocol": "next sorted same-topic id excluding identical normalized W0; semantic near-duplicates not fully excluded",
+        "reader": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+        "canonical_images": null,
+        "mcq_source_sha256": "b3088007724a5c4e21af80ed0220fa796e9f7473007ce9a7df4612eb7cd8f8ac"
+      },
+      "source_receipts": [
+        {
+          "shard": 0,
+          "identity_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/runs/b730-latest-eval-20261013/evaluation/B730-046720-dev/identity-0.json",
+          "identity_sha256": "3887dcf828569118662d3c72a08c27904977724055c1528eb473156f7201b420",
+          "receipt_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/runs/b730-latest-eval-20261013/evaluation/B730-046720-dev/read-finished-0.json",
+          "receipt_sha256": "b390296654260242b926431551cd190e0103a0e45f4adb7b0201cf59245d1319",
+          "readback_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/runs/b730-latest-eval-20261013/evaluation/B730-046720-dev/readback-0.jsonl",
+          "readback_sha256": "2561decfb77b79acdd7c735a5d4d8f1ccd4a6dcff2adce9cdae95e09dca60c14",
+          "items": 368
+        },
+        {
+          "shard": 1,
+          "identity_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/runs/b730-latest-eval-20261013/evaluation/B730-046720-dev/identity-1.json",
+          "identity_sha256": "7ac181fc2358ee20f78ea077085cac9ade1d98d368ccceb0f147de9329f245f9",
+          "receipt_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/runs/b730-latest-eval-20261013/evaluation/B730-046720-dev/read-finished-1.json",
+          "receipt_sha256": "4667009a84ee18bf2ff24d20bfbf52eda6ebed6673af7835e8a79a6af1633246",
+          "readback_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/runs/b730-latest-eval-20261013/evaluation/B730-046720-dev/readback-1.jsonl",
+          "readback_sha256": "f36169362abc52ea97aaf0129ffac53242f1e489324ef9b0d29661c59529e677",
+          "items": 368
+        },
+        {
+          "shard": 2,
+          "identity_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/runs/b730-latest-eval-20261013/evaluation/B730-046720-dev/identity-2.json",
+          "identity_sha256": "e2f9d8e1ba79236aa6fcdd298a7ce9a55e4029a5e529bffda546ed4ad5ab2237",
+          "receipt_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/runs/b730-latest-eval-20261013/evaluation/B730-046720-dev/read-finished-2.json",
+          "receipt_sha256": "077ed145e6e1555cc9873c1ef11afc8dfb131199c5a96ecbc65df1f54c40e865",
+          "readback_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/runs/b730-latest-eval-20261013/evaluation/B730-046720-dev/readback-2.jsonl",
+          "readback_sha256": "b1f38e95759dc4501100c46081e8e09510d405a6c63a7e63a2b64757cdb14dc0",
+          "items": 352
+        },
+        {
+          "shard": 3,
+          "identity_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/runs/b730-latest-eval-20261013/evaluation/B730-046720-dev/identity-3.json",
+          "identity_sha256": "da7833bbe273fce87b84f2a040830aecf6d6f2f17ae280da210d17b40d9ff160",
+          "receipt_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/runs/b730-latest-eval-20261013/evaluation/B730-046720-dev/read-finished-3.json",
+          "receipt_sha256": "b351d76a7e0945243bd217cf82dd9e7ba46ad6bbcc1c133f2a45bd9e2b944322",
+          "readback_path": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/runs/b730-latest-eval-20261013/evaluation/B730-046720-dev/readback-3.jsonl",
+          "readback_sha256": "f7b945683d33d66efb2760bd4327f8de42e355a6cb9faab0b2c6d7cdef948b44",
+          "items": 352
+        }
+      ],
+      "selected_controls": [
+        "memory",
+        "mismatch"
+      ],
+      "selected_rows": 1440,
+      "selected_row_keys_sha256": "17f5627a21892ddc66087856a54612dc9f84f780f8d47a50f1679aad7cb48989"
+    },
+    "reused_aug4": {
+      "root": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-aug4x3-official-init-20261009/evaluation/P-L-093440-dev",
+      "binding": {
+        "schema": "prefeval-aug4-evaluation/v1",
+        "data_sha256": "28cb15e49979970d6b3277db1dca198f9f6fd5b7c82bedbd217b627cb0e905e7",
+        "asset_seal_sha256": "1fcdf946bd73790033cc92781256f92a354462f29d5556f6c56dc48815eefa2b",
+        "evaluation_source_sha256": "512ea05943ad4b1b2fd111ab2b72f3c87f79ba5b4c5f126040bc4488a6ac6dc0",
+        "kind": "student",
+        "split": "dev",
+        "checkpoint": {
+          "checkpoint_sha256": "9f998651990cb2db86067e3259c755f74f3fdb247e60aa609ba9c7dd183a8ac2",
+          "optimizer_step": 93440
+        },
+        "seeds": [
+          0,
+          1
+        ],
+        "controls": [
+          "memory",
+          "mismatch",
+          "blank",
+          "text"
+        ],
+        "suites": [
+          [
+            "W0",
+            "T1"
+          ]
+        ],
+        "correct_positions": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "shards": 4,
+        "mismatch_protocol": "next sorted same-topic id excluding identical normalized W0; semantic near-duplicates not fully excluded",
+        "reader": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+        "canonical_images": null,
+        "mcq_source_sha256": "b3088007724a5c4e21af80ed0220fa796e9f7473007ce9a7df4612eb7cd8f8ac"
+      },
+      "source_receipts": [
+        {
+          "shard": 0,
+          "identity_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-aug4x3-official-init-20261009/evaluation/P-L-093440-dev/identity-0.json",
+          "identity_sha256": "a83c3d4c9c6a0bb5ac1bfb40644b54aa91671e20639b8df96afc31f6cae993b5",
+          "receipt_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-aug4x3-official-init-20261009/evaluation/P-L-093440-dev/read-finished-0.json",
+          "receipt_sha256": "87198b59195dbaf8068cebea2b20991b8822a3750612f03ccb8850aa956b6737",
+          "readback_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-aug4x3-official-init-20261009/evaluation/P-L-093440-dev/readback-0.jsonl",
+          "readback_sha256": "83a2a5caf2869b7a08ad23e499e94f04217464f56d28b7148f4dfeeb6dbd26ea",
+          "items": 552
+        },
+        {
+          "shard": 1,
+          "identity_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-aug4x3-official-init-20261009/evaluation/P-L-093440-dev/identity-1.json",
+          "identity_sha256": "09e34ed3c9a78a6a542f71651027230d8b284ac4be65d958ae838e18529f1f1e",
+          "receipt_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-aug4x3-official-init-20261009/evaluation/P-L-093440-dev/read-finished-1.json",
+          "receipt_sha256": "b67ba37519472514787d9ccd09a21a54cd76b8051cd58a10597fad1a10de443e",
+          "readback_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-aug4x3-official-init-20261009/evaluation/P-L-093440-dev/readback-1.jsonl",
+          "readback_sha256": "c5c538c5fe93854bae7707ac2441487e6dc95943835c66e1350813ed465a4476",
+          "items": 552
+        },
+        {
+          "shard": 2,
+          "identity_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-aug4x3-official-init-20261009/evaluation/P-L-093440-dev/identity-2.json",
+          "identity_sha256": "67adb71e886a285f2640388212fc3228c97f192f3d2efc018bdf9768879fa66b",
+          "receipt_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-aug4x3-official-init-20261009/evaluation/P-L-093440-dev/read-finished-2.json",
+          "receipt_sha256": "3c3091904fa68c1a80178cd1b332af1e4d2ecabab0633e58ed1ded5dea3c475e",
+          "readback_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-aug4x3-official-init-20261009/evaluation/P-L-093440-dev/readback-2.jsonl",
+          "readback_sha256": "6b8dda39276d1f079a79bb282ea4419f4bbc0e713e69421e62eaff772b2107d4",
+          "items": 528
+        },
+        {
+          "shard": 3,
+          "identity_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-aug4x3-official-init-20261009/evaluation/P-L-093440-dev/identity-3.json",
+          "identity_sha256": "2b553734d9e74e62e18cb0cb736ac6a698671f8e2ab004666352bce49e6ca9ab",
+          "receipt_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-aug4x3-official-init-20261009/evaluation/P-L-093440-dev/read-finished-3.json",
+          "receipt_sha256": "04c42a40ac0d421e9be0202e70efd7f941493772f3c991280940ce18113dc62c",
+          "readback_path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-aug4x3-official-init-20261009/evaluation/P-L-093440-dev/readback-3.jsonl",
+          "readback_sha256": "e8e7fa486ac2c72b575aeee723eb0dd1bb274eff0479c7cee9b881ba90636432",
+          "items": 528
+        }
+      ],
+      "selected_controls": [
+        "blank",
+        "text"
+      ],
+      "selected_rows": 720,
+      "selected_row_keys_sha256": "0717b63928b7fe7106ff46a28a13506cc552bc75cd8c932e8f42774c511a2f48"
+    }
+  },
+  "new_gpu_readback_rows": 1440,
+  "reused_control_row_references": 720,
+  "control_reuse_policy": "Only Writer/checkpoint-independent blank and text rows are reused. Original AUG4 bindings and row bytes remain unchanged. These are source references, not new B730 inferences.",
+  "compatibility_verified_fields": [
+    "schema",
+    "data_sha256",
+    "asset_seal_sha256",
+    "evaluation_source_sha256",
+    "kind",
+    "split",
+    "seeds",
+    "suites",
+    "correct_positions",
+    "reader",
+    "mcq_source_sha256",
+    "mismatch_protocol"
+  ],
+  "compatibility_detail": "Queries/options/parser recomputed from exact frozen data; text writer family and acknowledgment fixed by pinned evaluator; blank PNG bytes and constant-gray pixels verified; Reader path and asset seal agree.",
+  "summarizer_source_sha256": "1b554a51a47452a9b0edddcc8c0f719b054547ae1bf497bc40252b6492efc9d5",
+  "frozen_summarizer_source_sha256": "b296022c22fa8692a644aec060dc28340ca8aee0809b4675e39c820dd4eb9013",
+  "mcq_source_verification": {
+    "raw_sha256": "b3088007724a5c4e21af80ed0220fa796e9f7473007ce9a7df4612eb7cd8f8ac",
+    "canonical_lf_sha256": "b3088007724a5c4e21af80ed0220fa796e9f7473007ce9a7df4612eb7cd8f8ac",
+    "line_ending": "LF"
+  },
+  "controls": {
+    "blank": {
+      "correct": 154,
+      "total": 360,
+      "rate": 0.42777777777777776,
+      "parse_failures": 0,
+      "preference_count": 90,
+      "preference_mean_rate": 0.42777777777777776
+    },
+    "memory": {
+      "correct": 295,
+      "total": 720,
+      "rate": 0.4097222222222222,
+      "parse_failures": 0,
+      "preference_count": 90,
+      "preference_mean_rate": 0.4097222222222222
+    },
+    "mismatch": {
+      "correct": 301,
+      "total": 720,
+      "rate": 0.41805555555555557,
+      "parse_failures": 0,
+      "preference_count": 90,
+      "preference_mean_rate": 0.41805555555555557
+    },
+    "text": {
+      "correct": 342,
+      "total": 360,
+      "rate": 0.95,
+      "parse_failures": 0,
+      "preference_count": 90,
+      "preference_mean_rate": 0.95
+    }
+  },
+  "paired_memory_gain": {
+    "mismatch": {
+      "preference_count": 90,
+      "mean": -0.008333333333333333,
+      "ci95": [
+        -0.020833333333333332,
+        0.002777777777777778
+      ],
+      "method": "preference-group paired percentile bootstrap",
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20261009,
+      "difference_percentage_points": -0.8333333333333334,
+      "ci95_percentage_points": [
+        -2.083333333333333,
+        0.2777777777777778
+      ],
+      "comparison": "memory minus mismatch"
+    },
+    "blank": {
+      "preference_count": 90,
+      "mean": -0.018055555555555554,
+      "ci95": [
+        -0.03888888888888889,
+        0.0
+      ],
+      "method": "preference-group paired percentile bootstrap",
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20261009,
+      "difference_percentage_points": -1.8055555555555554,
+      "ci95_percentage_points": [
+        -3.888888888888889,
+        0.0
+      ],
+      "comparison": "memory minus blank"
+    }
+  },
+  "preference_control_rates": {
+    "education_learning_styles:0010": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "education_learning_styles:0020": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "education_learning_styles:0021": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "education_learning_styles:0026": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "education_learning_styles:0029": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "entertain_games:0006": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "entertain_games:0010": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "entertain_games:0020": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "entertain_games:0027": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "entertain_games:0030": {
+      "blank": 0.75,
+      "memory": 0.75,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "entertain_games:0042": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "entertain_music_book:0002": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "entertain_music_book:0006": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "entertain_music_book:0024": {
+      "blank": 0.75,
+      "memory": 0.75,
+      "mismatch": 0.75,
+      "text": 1.0
+    },
+    "entertain_music_book:0029": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "entertain_music_book:0043": {
+      "blank": 0.25,
+      "memory": 0.25,
+      "mismatch": 0.25,
+      "text": 1.0
+    },
+    "entertain_shows:0002": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "entertain_shows:0023": {
+      "blank": 0.25,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "entertain_shows:0028": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 0.0
+    },
+    "entertain_shows:0051": {
+      "blank": 0.25,
+      "memory": 0.25,
+      "mismatch": 0.25,
+      "text": 1.0
+    },
+    "entertain_shows:0058": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "entertain_sports:0018": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 0.75
+    },
+    "entertain_sports:0019": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 0.75
+    },
+    "entertain_sports:0022": {
+      "blank": 0.25,
+      "memory": 0.125,
+      "mismatch": 0.25,
+      "text": 0.75
+    },
+    "entertain_sports:0023": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 0.0
+    },
+    "entertain_sports:0037": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 0.75
+    },
+    "lifestyle_beauty:0001": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "lifestyle_beauty:0007": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "lifestyle_beauty:0009": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "lifestyle_beauty:0014": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "lifestyle_beauty:0015": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 0.75
+    },
+    "lifestyle_beauty:0016": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "lifestyle_beauty:0020": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "lifestyle_beauty:0021": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "lifestyle_beauty:0023": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "lifestyle_beauty:0024": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 0.75
+    },
+    "lifestyle_beauty:0028": {
+      "blank": 0.75,
+      "memory": 0.75,
+      "mismatch": 0.625,
+      "text": 1.0
+    },
+    "lifestyle_beauty:0032": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "lifestyle_dietary:0013": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "lifestyle_dietary:0025": {
+      "blank": 0.5,
+      "memory": 0.625,
+      "mismatch": 0.625,
+      "text": 1.0
+    },
+    "lifestyle_dietary:0026": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "lifestyle_dietary:0031": {
+      "blank": 0.5,
+      "memory": 0.5,
+      "mismatch": 0.5,
+      "text": 1.0
+    },
+    "lifestyle_dietary:0038": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 0.75
+    },
+    "lifestyle_dietary:0050": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "lifestyle_fit:0002": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "lifestyle_fit:0015": {
+      "blank": 0.5,
+      "memory": 0.5,
+      "mismatch": 0.5,
+      "text": 1.0
+    },
+    "lifestyle_fit:0019": {
+      "blank": 0.5,
+      "memory": 0.25,
+      "mismatch": 0.5,
+      "text": 1.0
+    },
+    "lifestyle_fit:0021": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "lifestyle_fit:0033": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "lifestyle_health:0008": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 0.75
+    },
+    "lifestyle_health:0015": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "lifestyle_health:0032": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "lifestyle_health:0046": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "lifestyle_health:0047": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "pet_ownership:0019": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "pet_ownership:0020": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "pet_ownership:0021": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 0.5
+    },
+    "pet_ownership:0027": {
+      "blank": 1.0,
+      "memory": 0.875,
+      "mismatch": 0.75,
+      "text": 1.0
+    },
+    "pet_ownership:0038": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "professional_work_location_style:0009": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "professional_work_location_style:0020": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "professional_work_location_style:0021": {
+      "blank": 0.75,
+      "memory": 0.5,
+      "mismatch": 0.5,
+      "text": 1.0
+    },
+    "professional_work_location_style:0027": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "professional_work_location_style:0029": {
+      "blank": 0.75,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "shop_fashion:0002": {
+      "blank": 0.5,
+      "memory": 0.5,
+      "mismatch": 0.5,
+      "text": 1.0
+    },
+    "shop_fashion:0009": {
+      "blank": 0.75,
+      "memory": 0.75,
+      "mismatch": 0.75,
+      "text": 1.0
+    },
+    "shop_fashion:0025": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "shop_fashion:0032": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "shop_fashion:0033": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "shop_home:0018": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "shop_home:0026": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "shop_home:0028": {
+      "blank": 0.5,
+      "memory": 0.0,
+      "mismatch": 0.125,
+      "text": 1.0
+    },
+    "shop_home:0050": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "shop_home:0052": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "shop_home:0053": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "travel_activities:0011": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "travel_activities:0014": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "travel_activities:0023": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "travel_activities:0033": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "travel_activities:0035": {
+      "blank": 0.75,
+      "memory": 0.5,
+      "mismatch": 0.625,
+      "text": 1.0
+    },
+    "travel_hotel:0024": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "travel_hotel:0027": {
+      "blank": 0.25,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "travel_hotel:0042": {
+      "blank": 0.75,
+      "memory": 1.0,
+      "mismatch": 0.875,
+      "text": 1.0
+    },
+    "travel_hotel:0044": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "travel_hotel:0049": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "travel_restaurant:0008": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "travel_restaurant:0017": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "travel_restaurant:0044": {
+      "blank": 0.25,
+      "memory": 0.0,
+      "mismatch": 0.25,
+      "text": 1.0
+    },
+    "travel_restaurant:0053": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "travel_restaurant:0055": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    }
+  },
+  "suites": {
+    "W0/T1": {
+      "controls": {
+        "blank": {
+          "correct": 154,
+          "total": 360,
+          "rate": 0.42777777777777776,
+          "parse_failures": 0,
+          "preference_count": 90,
+          "preference_mean_rate": 0.42777777777777776
+        },
+        "memory": {
+          "correct": 295,
+          "total": 720,
+          "rate": 0.4097222222222222,
+          "parse_failures": 0,
+          "preference_count": 90,
+          "preference_mean_rate": 0.4097222222222222
+        },
+        "mismatch": {
+          "correct": 301,
+          "total": 720,
+          "rate": 0.41805555555555557,
+          "parse_failures": 0,
+          "preference_count": 90,
+          "preference_mean_rate": 0.41805555555555557
+        },
+        "text": {
+          "correct": 342,
+          "total": 360,
+          "rate": 0.95,
+          "parse_failures": 0,
+          "preference_count": 90,
+          "preference_mean_rate": 0.95
+        }
+      },
+      "paired_memory_gain": {
+        "mismatch": {
+          "preference_count": 90,
+          "mean": -0.008333333333333333,
+          "ci95": [
+            -0.020833333333333332,
+            0.002777777777777778
+          ],
+          "method": "preference-group paired percentile bootstrap",
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20261009,
+          "difference_percentage_points": -0.8333333333333334,
+          "ci95_percentage_points": [
+            -2.083333333333333,
+            0.2777777777777778
+          ],
+          "comparison": "memory minus mismatch"
+        },
+        "blank": {
+          "preference_count": 90,
+          "mean": -0.018055555555555554,
+          "ci95": [
+            -0.03888888888888889,
+            0.0
+          ],
+          "method": "preference-group paired percentile bootstrap",
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20261009,
+          "difference_percentage_points": -1.8055555555555554,
+          "ci95_percentage_points": [
+            -3.888888888888889,
+            0.0
+          ],
+          "comparison": "memory minus blank"
+        }
+      },
+      "preference_control_rates": {
+        "education_learning_styles:0010": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "education_learning_styles:0020": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "education_learning_styles:0021": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "education_learning_styles:0026": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "education_learning_styles:0029": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "entertain_games:0006": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "entertain_games:0010": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "entertain_games:0020": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "entertain_games:0027": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "entertain_games:0030": {
+          "blank": 0.75,
+          "memory": 0.75,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "entertain_games:0042": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "entertain_music_book:0002": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "entertain_music_book:0006": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "entertain_music_book:0024": {
+          "blank": 0.75,
+          "memory": 0.75,
+          "mismatch": 0.75,
+          "text": 1.0
+        },
+        "entertain_music_book:0029": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "entertain_music_book:0043": {
+          "blank": 0.25,
+          "memory": 0.25,
+          "mismatch": 0.25,
+          "text": 1.0
+        },
+        "entertain_shows:0002": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "entertain_shows:0023": {
+          "blank": 0.25,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "entertain_shows:0028": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 0.0
+        },
+        "entertain_shows:0051": {
+          "blank": 0.25,
+          "memory": 0.25,
+          "mismatch": 0.25,
+          "text": 1.0
+        },
+        "entertain_shows:0058": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "entertain_sports:0018": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 0.75
+        },
+        "entertain_sports:0019": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 0.75
+        },
+        "entertain_sports:0022": {
+          "blank": 0.25,
+          "memory": 0.125,
+          "mismatch": 0.25,
+          "text": 0.75
+        },
+        "entertain_sports:0023": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 0.0
+        },
+        "entertain_sports:0037": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 0.75
+        },
+        "lifestyle_beauty:0001": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "lifestyle_beauty:0007": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "lifestyle_beauty:0009": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "lifestyle_beauty:0014": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "lifestyle_beauty:0015": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 0.75
+        },
+        "lifestyle_beauty:0016": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "lifestyle_beauty:0020": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "lifestyle_beauty:0021": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "lifestyle_beauty:0023": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "lifestyle_beauty:0024": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 0.75
+        },
+        "lifestyle_beauty:0028": {
+          "blank": 0.75,
+          "memory": 0.75,
+          "mismatch": 0.625,
+          "text": 1.0
+        },
+        "lifestyle_beauty:0032": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "lifestyle_dietary:0013": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "lifestyle_dietary:0025": {
+          "blank": 0.5,
+          "memory": 0.625,
+          "mismatch": 0.625,
+          "text": 1.0
+        },
+        "lifestyle_dietary:0026": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "lifestyle_dietary:0031": {
+          "blank": 0.5,
+          "memory": 0.5,
+          "mismatch": 0.5,
+          "text": 1.0
+        },
+        "lifestyle_dietary:0038": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 0.75
+        },
+        "lifestyle_dietary:0050": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "lifestyle_fit:0002": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "lifestyle_fit:0015": {
+          "blank": 0.5,
+          "memory": 0.5,
+          "mismatch": 0.5,
+          "text": 1.0
+        },
+        "lifestyle_fit:0019": {
+          "blank": 0.5,
+          "memory": 0.25,
+          "mismatch": 0.5,
+          "text": 1.0
+        },
+        "lifestyle_fit:0021": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "lifestyle_fit:0033": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "lifestyle_health:0008": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 0.75
+        },
+        "lifestyle_health:0015": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "lifestyle_health:0032": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "lifestyle_health:0046": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "lifestyle_health:0047": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "pet_ownership:0019": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "pet_ownership:0020": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "pet_ownership:0021": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 0.5
+        },
+        "pet_ownership:0027": {
+          "blank": 1.0,
+          "memory": 0.875,
+          "mismatch": 0.75,
+          "text": 1.0
+        },
+        "pet_ownership:0038": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "professional_work_location_style:0009": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "professional_work_location_style:0020": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "professional_work_location_style:0021": {
+          "blank": 0.75,
+          "memory": 0.5,
+          "mismatch": 0.5,
+          "text": 1.0
+        },
+        "professional_work_location_style:0027": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "professional_work_location_style:0029": {
+          "blank": 0.75,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "shop_fashion:0002": {
+          "blank": 0.5,
+          "memory": 0.5,
+          "mismatch": 0.5,
+          "text": 1.0
+        },
+        "shop_fashion:0009": {
+          "blank": 0.75,
+          "memory": 0.75,
+          "mismatch": 0.75,
+          "text": 1.0
+        },
+        "shop_fashion:0025": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_fashion:0032": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_fashion:0033": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "shop_home:0018": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "shop_home:0026": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "shop_home:0028": {
+          "blank": 0.5,
+          "memory": 0.0,
+          "mismatch": 0.125,
+          "text": 1.0
+        },
+        "shop_home:0050": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "shop_home:0052": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "shop_home:0053": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "travel_activities:0011": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "travel_activities:0014": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "travel_activities:0023": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "travel_activities:0033": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "travel_activities:0035": {
+          "blank": 0.75,
+          "memory": 0.5,
+          "mismatch": 0.625,
+          "text": 1.0
+        },
+        "travel_hotel:0024": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "travel_hotel:0027": {
+          "blank": 0.25,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "travel_hotel:0042": {
+          "blank": 0.75,
+          "memory": 1.0,
+          "mismatch": 0.875,
+          "text": 1.0
+        },
+        "travel_hotel:0044": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "travel_hotel:0049": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "travel_restaurant:0008": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "travel_restaurant:0017": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "travel_restaurant:0044": {
+          "blank": 0.25,
+          "memory": 0.0,
+          "mismatch": 0.25,
+          "text": 1.0
+        },
+        "travel_restaurant:0053": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "travel_restaurant:0055": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        }
+      }
+    }
+  },
+  "measurement_count": 2160,
+  "preference_count": 90,
+  "statistical_unit": "base_pair_id; average seeds, positions and applicable suites within preference first",
+  "interval_scope": "preference sampling uncertainty for one training seed; no between-training-seed inference",
+  "score_policy": "unchanged upstream extract_choice; parse failures count as incorrect and remain in denominators"
+}

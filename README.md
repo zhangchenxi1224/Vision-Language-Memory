@@ -4,7 +4,11 @@
 
 **当前四组基线**以[增强实验方案](reports/prefeval-aug4x3-init-ablation-exposure512-20261009/PLAN.md)和[机器可读协议](reports/prefeval-aug4x3-init-ablation-exposure512-20261009/PROTOCOL.json)为准：P-L/P-H 从官方 `carlofkl/DreamLite-base` 原始预训练 U-Net 开始，R-L/R-H 使用同架构标准随机初始化；采用 W0–W3 × T1–T3 增强，学习率为 `5e-5` / `5e-4`，effective batch=4，每组 93,440 步，在 32/64/128/256/512 次曝光处检查。`4f` 任务权重不属于当前初始化来源。
 
-**2026-10-13：本轮训练、全部规定评测与归档已完成。** 四组各93,440步，1,472/1,472任务，84份原始学生汇总及556,800行回读；official180和去重177均已完成，监控与资源已收尾。
+**2026-10-14：新增旧 B730 在最新统一协议下的补测阶段结果。** 固定93,440步终点五个split已全部核验；本次发布快照为12/17份主汇总，完整多checkpoint补测尚未全部归档。同一96条已训练内容上，B730原表达/原提问为93.62%，未见写入表达47.40%，未见提问91.15%，二者同时变化48.05%；AUG4 P-L的未见写入表达为72.27%。B730的dev90和official177匹配−错配分别为−0.69、−0.07个百分点，尚无明确未见内容收益。模型间初始化和训练体系不同，不能单独归因于增强。
+
+[B730补测入口](reports/b730-latest-eval-20261013/README.md) · [终点五模型对比](reports/b730-latest-eval-20261013/evidence/partial-summaries-20261014-021530/ENDPOINT-COMPARISON.md) · [已核验checkpoint明细](reports/b730-latest-eval-20261013/CHECKPOINTS-PARTIAL-20261014.md) · [进度及范围](reports/b730-latest-eval-20261013/PROGRESS-20261014.md) · [证据与离线复算](reports/b730-latest-eval-20261013/EVIDENCE-20261014.md)
+
+**2026-10-13：AUG4四组训练、全部规定评测与归档已完成。** 四组各93,440步，1,472/1,472任务，84份原始学生汇总及556,800行回读；official180和去重177均已完成，该实验的监控与资源已收尾。上述B730补测是后续独立评测任务。
 
 | 终点组别 | Train 匹配 / 错配 | Dev 匹配 / 错配 | Official180 匹配 / 错配 | Official177 匹配 / 错配 |
 |---|---:|---:|---:|---:|
@@ -42,6 +46,7 @@
 | --- | --- | --- |
 | PrefEval 官方输入 | [对齐说明](reports/prefeval-official-alignment-20260923/ALIGNMENT.md)、[FM 路线](reports/prefeval-official-alignment-20260923/FM_ROUTE_CORRECTION.md) | 协议与数据；不是官方论文模型性能复现 |
 | K1 / A-B 教师 / FM / 保持 / 曝光量 | [K1 目录](reports/prefeval-k1-l0-l2-20260924/) | 按 split、teacher/student、预算、链长和 Judge 分开报告 |
+| B730 最新统一协议补测 | [阶段结果、协议及证据](reports/b730-latest-eval-20261013/README.md) | 原B730固定权重；未见写入/提问与未见内容分开；93440终点已核验，多checkpoint阶段快照12/17 |
 | 多目标与 C8 | [多目标目录](reports/prefeval-multitarget-20260927/) | 各轮、配对 baseline、样本数和链长分开报告 |
 | U-Net 初始化、学习率与曝光量 | [完成结果与证据](reports/prefeval-aug4x3-init-ablation-exposure512-20261009/README.md) | P-L/P-H/R-L/R-H四组W0–W3 × T1–T3；各93,440步及全部规定评测完成；新旧协议差异单独列明 |
 
@@ -53,6 +58,7 @@
 python scripts/reporting/list_current_experiments.py
 python scripts/reporting/list_current_experiments.py --role protocol_and_data
 python scripts/reporting/build_prefeval_aug4_publication.py --check
+python scripts/reporting/build_b730_supplement_publication.py --check
 ```
 
 其他实验族的历史状态（2026-10-02）：B730 exposure512已完成训练，dev尚无稳定改善；多目标多轮及C8全量730评测已有结果，配对B0和long10尚未全部闭环；C/R训练完成，完整评测仍有缺口。上述历史范围与本轮aug4x3的完成状态分开报告。历史清理回归工具 `verify_aligned_cleanup.py` 针对当时快照，不是本轮结果验收入口。

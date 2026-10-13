@@ -1,0 +1,4690 @@
+{
+  "schema": "prefeval-aug4-summary/v1",
+  "status": "verified_complete",
+  "split": "official",
+  "kind": "student",
+  "binding": {
+    "schema": "prefeval-aug4-evaluation/v1",
+    "data_sha256": "28cb15e49979970d6b3277db1dca198f9f6fd5b7c82bedbd217b627cb0e905e7",
+    "asset_seal_sha256": "1fcdf946bd73790033cc92781256f92a354462f29d5556f6c56dc48815eefa2b",
+    "evaluation_source_sha256": "512ea05943ad4b1b2fd111ab2b72f3c87f79ba5b4c5f126040bc4488a6ac6dc0",
+    "kind": "student",
+    "split": "official",
+    "checkpoint": {
+      "checkpoint_sha256": "9f998651990cb2db86067e3259c755f74f3fdb247e60aa609ba9c7dd183a8ac2",
+      "optimizer_step": 93440
+    },
+    "seeds": [
+      0,
+      1
+    ],
+    "controls": [
+      "memory",
+      "mismatch",
+      "blank",
+      "text"
+    ],
+    "suites": [
+      [
+        "W0",
+        "T1"
+      ]
+    ],
+    "correct_positions": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "shards": 8,
+    "mismatch_protocol": "next sorted same-topic id excluding identical normalized W0; semantic near-duplicates not fully excluded",
+    "reader": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+    "canonical_images": null,
+    "mcq_source_sha256": "b3088007724a5c4e21af80ed0220fa796e9f7473007ce9a7df4612eb7cd8f8ac"
+  },
+  "source_receipts": [
+    {
+      "shard": 0,
+      "receipt_sha256": "a64220fd93e1e4551704742994e4b55a7ea20ca7a7fce62aa93394b47d7a0518",
+      "readback_sha256": "1238808ebe60cd13b8bcfb8a694e0474dad1b3bb6c8df316cc410d7247fc22a0",
+      "items": 552
+    },
+    {
+      "shard": 1,
+      "receipt_sha256": "ce99568765fcc923581ef684a4df9140bc9c7b2b45b4e645acea86d29636baa4",
+      "readback_sha256": "49a273324708f02991a47cd45082ad08826548ca68f95844b523525b72e34f48",
+      "items": 552
+    },
+    {
+      "shard": 2,
+      "receipt_sha256": "7d3b9e3ea9b6b44d40f3d8658c903be06bfea7d9a8352416c7397edbc020b6f5",
+      "readback_sha256": "0b29ec278de92fdd02b955fc085debe31185bd68f78177cb29cc359224db1b5c",
+      "items": 552
+    },
+    {
+      "shard": 3,
+      "receipt_sha256": "c6957aca611e300eefaab5a305b8c0d4312509a77bc0670fde8b374843f0cd7d",
+      "readback_sha256": "2f5952e1c4f5856a527d187b4093219cf4d2cdeb86ecb78c115d72627b843176",
+      "items": 552
+    },
+    {
+      "shard": 4,
+      "receipt_sha256": "f8aa65b916cfbcda0b93b08693bcb0230324f0825b10466f875a46d7e6596553",
+      "readback_sha256": "9a70ec62e5d36a069b42fe285d459e134dee23dd68d5e00ea27e4618cc79eea7",
+      "items": 528
+    },
+    {
+      "shard": 5,
+      "receipt_sha256": "08496c9d483405af9d7ccb35770f823fddccdcc4fd09d725338b04821820ed01",
+      "readback_sha256": "b17298e2604cd929a6def6d121324c18bcc3f951495849a81e9179c2b7deac45",
+      "items": 528
+    },
+    {
+      "shard": 6,
+      "receipt_sha256": "e7fd85d80a9a7f22694b6d7857ade6440927756d1a8b2ad1fd22731919d2cab0",
+      "readback_sha256": "db240b1a4e667f9311ab1bf7d90dc14984d700e963b05f8e5da4bb91eeafd03a",
+      "items": 528
+    },
+    {
+      "shard": 7,
+      "receipt_sha256": "d6bebb91b695a7204ae65d77ddd51300b2e094565da974fb3deaed70984dc4cb",
+      "readback_sha256": "d3a244ba0359a8cabf2d1362a88018f340859e9d8f6d9aa61ed8421298fe66e2",
+      "items": 528
+    }
+  ],
+  "summarizer_source_sha256": "b296022c22fa8692a644aec060dc28340ca8aee0809b4675e39c820dd4eb9013",
+  "controls": {
+    "blank": {
+      "correct": 250,
+      "total": 720,
+      "rate": 0.3472222222222222,
+      "parse_failures": 0,
+      "preference_count": 180,
+      "preference_mean_rate": 0.3472222222222222
+    },
+    "memory": {
+      "correct": 511,
+      "total": 1440,
+      "rate": 0.3548611111111111,
+      "parse_failures": 0,
+      "preference_count": 180,
+      "preference_mean_rate": 0.3548611111111111
+    },
+    "mismatch": {
+      "correct": 500,
+      "total": 1440,
+      "rate": 0.3472222222222222,
+      "parse_failures": 0,
+      "preference_count": 180,
+      "preference_mean_rate": 0.3472222222222222
+    },
+    "text": {
+      "correct": 666,
+      "total": 720,
+      "rate": 0.925,
+      "parse_failures": 0,
+      "preference_count": 180,
+      "preference_mean_rate": 0.925
+    }
+  },
+  "paired_memory_gain": {
+    "mismatch": {
+      "preference_count": 180,
+      "mean": 0.007638888888888889,
+      "ci95": [
+        -0.0020833333333333333,
+        0.019444444444444445
+      ],
+      "method": "preference-group paired percentile bootstrap",
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20261009,
+      "difference_percentage_points": 0.7638888888888888,
+      "ci95_percentage_points": [
+        -0.20833333333333334,
+        1.9444444444444444
+      ],
+      "comparison": "memory minus mismatch"
+    },
+    "blank": {
+      "preference_count": 180,
+      "mean": 0.007638888888888889,
+      "ci95": [
+        -0.008333333333333333,
+        0.025
+      ],
+      "method": "preference-group paired percentile bootstrap",
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20261009,
+      "difference_percentage_points": 0.7638888888888888,
+      "ci95_percentage_points": [
+        -0.8333333333333334,
+        2.5
+      ],
+      "comparison": "memory minus blank"
+    }
+  },
+  "preference_control_rates": {
+    "education_resources:0000": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "education_resources:0001": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "education_resources:0002": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "education_resources:0003": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "education_resources:0004": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "education_resources:0005": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 0.875,
+      "text": 1.0
+    },
+    "education_resources:0006": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "education_resources:0007": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "education_resources:0008": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "education_resources:0009": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "education_resources:0010": {
+      "blank": 0.5,
+      "memory": 0.5,
+      "mismatch": 0.5,
+      "text": 1.0
+    },
+    "education_resources:0011": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "education_resources:0012": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "education_resources:0013": {
+      "blank": 0.25,
+      "memory": 0.25,
+      "mismatch": 0.25,
+      "text": 1.0
+    },
+    "education_resources:0014": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "education_resources:0015": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "education_resources:0016": {
+      "blank": 0.75,
+      "memory": 0.75,
+      "mismatch": 0.75,
+      "text": 1.0
+    },
+    "education_resources:0017": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "education_resources:0018": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "education_resources:0019": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "education_resources:0020": {
+      "blank": 0.5,
+      "memory": 0.5,
+      "mismatch": 0.5,
+      "text": 1.0
+    },
+    "education_resources:0021": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "education_resources:0022": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "education_resources:0023": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "education_resources:0024": {
+      "blank": 0.75,
+      "memory": 0.75,
+      "mismatch": 0.75,
+      "text": 1.0
+    },
+    "education_resources:0025": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "education_resources:0026": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "education_resources:0027": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "education_resources:0028": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "education_resources:0029": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "education_resources:0030": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "education_resources:0031": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "education_resources:0032": {
+      "blank": 0.75,
+      "memory": 0.75,
+      "mismatch": 0.75,
+      "text": 1.0
+    },
+    "education_resources:0033": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "education_resources:0034": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 0.75
+    },
+    "education_resources:0035": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "education_resources:0036": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "education_resources:0037": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "education_resources:0038": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "education_resources:0039": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "education_resources:0040": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 0.25
+    },
+    "education_resources:0041": {
+      "blank": 0.25,
+      "memory": 0.0,
+      "mismatch": 0.125,
+      "text": 1.0
+    },
+    "education_resources:0042": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "education_resources:0043": {
+      "blank": 0.75,
+      "memory": 1.0,
+      "mismatch": 0.75,
+      "text": 1.0
+    },
+    "education_resources:0044": {
+      "blank": 0.0,
+      "memory": 0.125,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "education_resources:0045": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "education_resources:0046": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "education_resources:0047": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "education_resources:0048": {
+      "blank": 0.25,
+      "memory": 0.25,
+      "mismatch": 0.25,
+      "text": 1.0
+    },
+    "education_resources:0049": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "education_resources:0050": {
+      "blank": 0.0,
+      "memory": 0.75,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "education_resources:0051": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 0.75
+    },
+    "education_resources:0052": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "education_resources:0053": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "shop_motors:0000": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "shop_motors:0001": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "shop_motors:0002": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "shop_motors:0003": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 0.0
+    },
+    "shop_motors:0004": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "shop_motors:0005": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "shop_motors:0006": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "shop_motors:0007": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "shop_motors:0008": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "shop_motors:0009": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "shop_motors:0010": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "shop_motors:0011": {
+      "blank": 0.25,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "shop_motors:0012": {
+      "blank": 0.5,
+      "memory": 0.5,
+      "mismatch": 0.5,
+      "text": 1.0
+    },
+    "shop_motors:0013": {
+      "blank": 0.75,
+      "memory": 0.75,
+      "mismatch": 0.75,
+      "text": 1.0
+    },
+    "shop_motors:0014": {
+      "blank": 0.75,
+      "memory": 0.75,
+      "mismatch": 0.75,
+      "text": 1.0
+    },
+    "shop_motors:0015": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "shop_motors:0016": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "shop_motors:0017": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 0.25
+    },
+    "shop_motors:0018": {
+      "blank": 0.25,
+      "memory": 0.0,
+      "mismatch": 0.25,
+      "text": 0.75
+    },
+    "shop_motors:0019": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "shop_motors:0020": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "shop_motors:0021": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "shop_motors:0022": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "shop_motors:0023": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "shop_motors:0024": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "shop_motors:0025": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "shop_motors:0026": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "shop_motors:0027": {
+      "blank": 0.5,
+      "memory": 0.75,
+      "mismatch": 0.75,
+      "text": 1.0
+    },
+    "shop_motors:0028": {
+      "blank": 0.5,
+      "memory": 0.25,
+      "mismatch": 0.25,
+      "text": 1.0
+    },
+    "shop_motors:0029": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "shop_motors:0030": {
+      "blank": 0.25,
+      "memory": 0.0,
+      "mismatch": 0.25,
+      "text": 1.0
+    },
+    "shop_motors:0031": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "shop_motors:0032": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "shop_motors:0033": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "shop_motors:0034": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "shop_motors:0035": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "shop_motors:0036": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "shop_motors:0037": {
+      "blank": 0.25,
+      "memory": 0.5,
+      "mismatch": 0.625,
+      "text": 1.0
+    },
+    "shop_motors:0038": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "shop_motors:0039": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "shop_motors:0040": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "shop_motors:0041": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "shop_motors:0042": {
+      "blank": 0.75,
+      "memory": 0.75,
+      "mismatch": 0.75,
+      "text": 1.0
+    },
+    "shop_motors:0043": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "shop_motors:0044": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "shop_technology:0000": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 0.75
+    },
+    "shop_technology:0001": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "shop_technology:0002": {
+      "blank": 0.0,
+      "memory": 0.25,
+      "mismatch": 0.25,
+      "text": 1.0
+    },
+    "shop_technology:0003": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "shop_technology:0004": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "shop_technology:0005": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "shop_technology:0006": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "shop_technology:0007": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "shop_technology:0008": {
+      "blank": 0.25,
+      "memory": 0.5,
+      "mismatch": 0.5,
+      "text": 1.0
+    },
+    "shop_technology:0009": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "shop_technology:0010": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "shop_technology:0011": {
+      "blank": 0.75,
+      "memory": 0.5,
+      "mismatch": 0.5,
+      "text": 1.0
+    },
+    "shop_technology:0012": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "shop_technology:0013": {
+      "blank": 0.75,
+      "memory": 0.75,
+      "mismatch": 0.75,
+      "text": 1.0
+    },
+    "shop_technology:0014": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "shop_technology:0015": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "shop_technology:0016": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "shop_technology:0017": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 0.25
+    },
+    "shop_technology:0018": {
+      "blank": 0.5,
+      "memory": 0.5,
+      "mismatch": 0.5,
+      "text": 0.5
+    },
+    "shop_technology:0019": {
+      "blank": 0.25,
+      "memory": 0.25,
+      "mismatch": 0.25,
+      "text": 0.5
+    },
+    "shop_technology:0020": {
+      "blank": 0.25,
+      "memory": 0.25,
+      "mismatch": 0.25,
+      "text": 1.0
+    },
+    "shop_technology:0021": {
+      "blank": 0.75,
+      "memory": 0.75,
+      "mismatch": 0.75,
+      "text": 1.0
+    },
+    "shop_technology:0022": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "shop_technology:0023": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "shop_technology:0024": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "shop_technology:0025": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "shop_technology:0026": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "shop_technology:0027": {
+      "blank": 0.5,
+      "memory": 0.625,
+      "mismatch": 0.625,
+      "text": 1.0
+    },
+    "shop_technology:0028": {
+      "blank": 0.25,
+      "memory": 1.0,
+      "mismatch": 0.75,
+      "text": 1.0
+    },
+    "shop_technology:0029": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "shop_technology:0030": {
+      "blank": 0.75,
+      "memory": 0.875,
+      "mismatch": 0.75,
+      "text": 1.0
+    },
+    "shop_technology:0031": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "shop_technology:0032": {
+      "blank": 0.0,
+      "memory": 0.25,
+      "mismatch": 0.25,
+      "text": 1.0
+    },
+    "shop_technology:0033": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "shop_technology:0034": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "travel_transportation:0000": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "travel_transportation:0001": {
+      "blank": 0.25,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 0.0
+    },
+    "travel_transportation:0002": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "travel_transportation:0003": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "travel_transportation:0004": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 0.5
+    },
+    "travel_transportation:0005": {
+      "blank": 0.0,
+      "memory": 0.375,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "travel_transportation:0006": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "travel_transportation:0007": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 0.5
+    },
+    "travel_transportation:0008": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 0.0
+    },
+    "travel_transportation:0009": {
+      "blank": 0.25,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "travel_transportation:0010": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 0.0
+    },
+    "travel_transportation:0011": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 0.0
+    },
+    "travel_transportation:0012": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "travel_transportation:0013": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "travel_transportation:0014": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "travel_transportation:0015": {
+      "blank": 0.5,
+      "memory": 0.5,
+      "mismatch": 0.5,
+      "text": 1.0
+    },
+    "travel_transportation:0016": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "travel_transportation:0017": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "travel_transportation:0018": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "travel_transportation:0019": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "travel_transportation:0020": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "travel_transportation:0021": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 0.5
+    },
+    "travel_transportation:0022": {
+      "blank": 0.5,
+      "memory": 0.5,
+      "mismatch": 0.5,
+      "text": 1.0
+    },
+    "travel_transportation:0023": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 0.75
+    },
+    "travel_transportation:0024": {
+      "blank": 1.0,
+      "memory": 0.75,
+      "mismatch": 0.75,
+      "text": 1.0
+    },
+    "travel_transportation:0025": {
+      "blank": 0.75,
+      "memory": 0.75,
+      "mismatch": 0.75,
+      "text": 1.0
+    },
+    "travel_transportation:0026": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "travel_transportation:0027": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "travel_transportation:0028": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "travel_transportation:0029": {
+      "blank": 0.0,
+      "memory": 0.125,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "travel_transportation:0030": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "travel_transportation:0031": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 0.0
+    },
+    "travel_transportation:0032": {
+      "blank": 0.5,
+      "memory": 0.5,
+      "mismatch": 0.5,
+      "text": 1.0
+    },
+    "travel_transportation:0033": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 0.0
+    },
+    "travel_transportation:0034": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "travel_transportation:0035": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "travel_transportation:0036": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "travel_transportation:0037": {
+      "blank": 0.75,
+      "memory": 0.75,
+      "mismatch": 0.75,
+      "text": 1.0
+    },
+    "travel_transportation:0038": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "travel_transportation:0039": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "travel_transportation:0040": {
+      "blank": 0.75,
+      "memory": 0.75,
+      "mismatch": 0.75,
+      "text": 1.0
+    },
+    "travel_transportation:0041": {
+      "blank": 0.75,
+      "memory": 0.5,
+      "mismatch": 0.5,
+      "text": 1.0
+    },
+    "travel_transportation:0042": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "travel_transportation:0043": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "travel_transportation:0044": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 0.5
+    },
+    "travel_transportation:0045": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    }
+  },
+  "suites": {
+    "W0/T1": {
+      "controls": {
+        "blank": {
+          "correct": 250,
+          "total": 720,
+          "rate": 0.3472222222222222,
+          "parse_failures": 0,
+          "preference_count": 180,
+          "preference_mean_rate": 0.3472222222222222
+        },
+        "memory": {
+          "correct": 511,
+          "total": 1440,
+          "rate": 0.3548611111111111,
+          "parse_failures": 0,
+          "preference_count": 180,
+          "preference_mean_rate": 0.3548611111111111
+        },
+        "mismatch": {
+          "correct": 500,
+          "total": 1440,
+          "rate": 0.3472222222222222,
+          "parse_failures": 0,
+          "preference_count": 180,
+          "preference_mean_rate": 0.3472222222222222
+        },
+        "text": {
+          "correct": 666,
+          "total": 720,
+          "rate": 0.925,
+          "parse_failures": 0,
+          "preference_count": 180,
+          "preference_mean_rate": 0.925
+        }
+      },
+      "paired_memory_gain": {
+        "mismatch": {
+          "preference_count": 180,
+          "mean": 0.007638888888888889,
+          "ci95": [
+            -0.0020833333333333333,
+            0.019444444444444445
+          ],
+          "method": "preference-group paired percentile bootstrap",
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20261009,
+          "difference_percentage_points": 0.7638888888888888,
+          "ci95_percentage_points": [
+            -0.20833333333333334,
+            1.9444444444444444
+          ],
+          "comparison": "memory minus mismatch"
+        },
+        "blank": {
+          "preference_count": 180,
+          "mean": 0.007638888888888889,
+          "ci95": [
+            -0.008333333333333333,
+            0.025
+          ],
+          "method": "preference-group paired percentile bootstrap",
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20261009,
+          "difference_percentage_points": 0.7638888888888888,
+          "ci95_percentage_points": [
+            -0.8333333333333334,
+            2.5
+          ],
+          "comparison": "memory minus blank"
+        }
+      },
+      "preference_control_rates": {
+        "education_resources:0000": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "education_resources:0001": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "education_resources:0002": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "education_resources:0003": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "education_resources:0004": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "education_resources:0005": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 0.875,
+          "text": 1.0
+        },
+        "education_resources:0006": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "education_resources:0007": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "education_resources:0008": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "education_resources:0009": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "education_resources:0010": {
+          "blank": 0.5,
+          "memory": 0.5,
+          "mismatch": 0.5,
+          "text": 1.0
+        },
+        "education_resources:0011": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "education_resources:0012": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "education_resources:0013": {
+          "blank": 0.25,
+          "memory": 0.25,
+          "mismatch": 0.25,
+          "text": 1.0
+        },
+        "education_resources:0014": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "education_resources:0015": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "education_resources:0016": {
+          "blank": 0.75,
+          "memory": 0.75,
+          "mismatch": 0.75,
+          "text": 1.0
+        },
+        "education_resources:0017": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "education_resources:0018": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "education_resources:0019": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "education_resources:0020": {
+          "blank": 0.5,
+          "memory": 0.5,
+          "mismatch": 0.5,
+          "text": 1.0
+        },
+        "education_resources:0021": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "education_resources:0022": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "education_resources:0023": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "education_resources:0024": {
+          "blank": 0.75,
+          "memory": 0.75,
+          "mismatch": 0.75,
+          "text": 1.0
+        },
+        "education_resources:0025": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "education_resources:0026": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "education_resources:0027": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "education_resources:0028": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "education_resources:0029": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "education_resources:0030": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "education_resources:0031": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "education_resources:0032": {
+          "blank": 0.75,
+          "memory": 0.75,
+          "mismatch": 0.75,
+          "text": 1.0
+        },
+        "education_resources:0033": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "education_resources:0034": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 0.75
+        },
+        "education_resources:0035": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "education_resources:0036": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "education_resources:0037": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "education_resources:0038": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "education_resources:0039": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "education_resources:0040": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 0.25
+        },
+        "education_resources:0041": {
+          "blank": 0.25,
+          "memory": 0.0,
+          "mismatch": 0.125,
+          "text": 1.0
+        },
+        "education_resources:0042": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "education_resources:0043": {
+          "blank": 0.75,
+          "memory": 1.0,
+          "mismatch": 0.75,
+          "text": 1.0
+        },
+        "education_resources:0044": {
+          "blank": 0.0,
+          "memory": 0.125,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "education_resources:0045": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "education_resources:0046": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "education_resources:0047": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "education_resources:0048": {
+          "blank": 0.25,
+          "memory": 0.25,
+          "mismatch": 0.25,
+          "text": 1.0
+        },
+        "education_resources:0049": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "education_resources:0050": {
+          "blank": 0.0,
+          "memory": 0.75,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "education_resources:0051": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 0.75
+        },
+        "education_resources:0052": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "education_resources:0053": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_motors:0000": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_motors:0001": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_motors:0002": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_motors:0003": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 0.0
+        },
+        "shop_motors:0004": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_motors:0005": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "shop_motors:0006": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_motors:0007": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_motors:0008": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_motors:0009": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_motors:0010": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_motors:0011": {
+          "blank": 0.25,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_motors:0012": {
+          "blank": 0.5,
+          "memory": 0.5,
+          "mismatch": 0.5,
+          "text": 1.0
+        },
+        "shop_motors:0013": {
+          "blank": 0.75,
+          "memory": 0.75,
+          "mismatch": 0.75,
+          "text": 1.0
+        },
+        "shop_motors:0014": {
+          "blank": 0.75,
+          "memory": 0.75,
+          "mismatch": 0.75,
+          "text": 1.0
+        },
+        "shop_motors:0015": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_motors:0016": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_motors:0017": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 0.25
+        },
+        "shop_motors:0018": {
+          "blank": 0.25,
+          "memory": 0.0,
+          "mismatch": 0.25,
+          "text": 0.75
+        },
+        "shop_motors:0019": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "shop_motors:0020": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_motors:0021": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "shop_motors:0022": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_motors:0023": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "shop_motors:0024": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "shop_motors:0025": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_motors:0026": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "shop_motors:0027": {
+          "blank": 0.5,
+          "memory": 0.75,
+          "mismatch": 0.75,
+          "text": 1.0
+        },
+        "shop_motors:0028": {
+          "blank": 0.5,
+          "memory": 0.25,
+          "mismatch": 0.25,
+          "text": 1.0
+        },
+        "shop_motors:0029": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_motors:0030": {
+          "blank": 0.25,
+          "memory": 0.0,
+          "mismatch": 0.25,
+          "text": 1.0
+        },
+        "shop_motors:0031": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "shop_motors:0032": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_motors:0033": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_motors:0034": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_motors:0035": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_motors:0036": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_motors:0037": {
+          "blank": 0.25,
+          "memory": 0.5,
+          "mismatch": 0.625,
+          "text": 1.0
+        },
+        "shop_motors:0038": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_motors:0039": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_motors:0040": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "shop_motors:0041": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "shop_motors:0042": {
+          "blank": 0.75,
+          "memory": 0.75,
+          "mismatch": 0.75,
+          "text": 1.0
+        },
+        "shop_motors:0043": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_motors:0044": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_technology:0000": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 0.75
+        },
+        "shop_technology:0001": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_technology:0002": {
+          "blank": 0.0,
+          "memory": 0.25,
+          "mismatch": 0.25,
+          "text": 1.0
+        },
+        "shop_technology:0003": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_technology:0004": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_technology:0005": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "shop_technology:0006": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_technology:0007": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_technology:0008": {
+          "blank": 0.25,
+          "memory": 0.5,
+          "mismatch": 0.5,
+          "text": 1.0
+        },
+        "shop_technology:0009": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_technology:0010": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_technology:0011": {
+          "blank": 0.75,
+          "memory": 0.5,
+          "mismatch": 0.5,
+          "text": 1.0
+        },
+        "shop_technology:0012": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_technology:0013": {
+          "blank": 0.75,
+          "memory": 0.75,
+          "mismatch": 0.75,
+          "text": 1.0
+        },
+        "shop_technology:0014": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_technology:0015": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_technology:0016": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_technology:0017": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 0.25
+        },
+        "shop_technology:0018": {
+          "blank": 0.5,
+          "memory": 0.5,
+          "mismatch": 0.5,
+          "text": 0.5
+        },
+        "shop_technology:0019": {
+          "blank": 0.25,
+          "memory": 0.25,
+          "mismatch": 0.25,
+          "text": 0.5
+        },
+        "shop_technology:0020": {
+          "blank": 0.25,
+          "memory": 0.25,
+          "mismatch": 0.25,
+          "text": 1.0
+        },
+        "shop_technology:0021": {
+          "blank": 0.75,
+          "memory": 0.75,
+          "mismatch": 0.75,
+          "text": 1.0
+        },
+        "shop_technology:0022": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_technology:0023": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_technology:0024": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_technology:0025": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_technology:0026": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_technology:0027": {
+          "blank": 0.5,
+          "memory": 0.625,
+          "mismatch": 0.625,
+          "text": 1.0
+        },
+        "shop_technology:0028": {
+          "blank": 0.25,
+          "memory": 1.0,
+          "mismatch": 0.75,
+          "text": 1.0
+        },
+        "shop_technology:0029": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_technology:0030": {
+          "blank": 0.75,
+          "memory": 0.875,
+          "mismatch": 0.75,
+          "text": 1.0
+        },
+        "shop_technology:0031": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "shop_technology:0032": {
+          "blank": 0.0,
+          "memory": 0.25,
+          "mismatch": 0.25,
+          "text": 1.0
+        },
+        "shop_technology:0033": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_technology:0034": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "travel_transportation:0000": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "travel_transportation:0001": {
+          "blank": 0.25,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 0.0
+        },
+        "travel_transportation:0002": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "travel_transportation:0003": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "travel_transportation:0004": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 0.5
+        },
+        "travel_transportation:0005": {
+          "blank": 0.0,
+          "memory": 0.375,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "travel_transportation:0006": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "travel_transportation:0007": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 0.5
+        },
+        "travel_transportation:0008": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 0.0
+        },
+        "travel_transportation:0009": {
+          "blank": 0.25,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "travel_transportation:0010": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 0.0
+        },
+        "travel_transportation:0011": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 0.0
+        },
+        "travel_transportation:0012": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "travel_transportation:0013": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "travel_transportation:0014": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "travel_transportation:0015": {
+          "blank": 0.5,
+          "memory": 0.5,
+          "mismatch": 0.5,
+          "text": 1.0
+        },
+        "travel_transportation:0016": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "travel_transportation:0017": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "travel_transportation:0018": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "travel_transportation:0019": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "travel_transportation:0020": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "travel_transportation:0021": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 0.5
+        },
+        "travel_transportation:0022": {
+          "blank": 0.5,
+          "memory": 0.5,
+          "mismatch": 0.5,
+          "text": 1.0
+        },
+        "travel_transportation:0023": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 0.75
+        },
+        "travel_transportation:0024": {
+          "blank": 1.0,
+          "memory": 0.75,
+          "mismatch": 0.75,
+          "text": 1.0
+        },
+        "travel_transportation:0025": {
+          "blank": 0.75,
+          "memory": 0.75,
+          "mismatch": 0.75,
+          "text": 1.0
+        },
+        "travel_transportation:0026": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "travel_transportation:0027": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "travel_transportation:0028": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "travel_transportation:0029": {
+          "blank": 0.0,
+          "memory": 0.125,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "travel_transportation:0030": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "travel_transportation:0031": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 0.0
+        },
+        "travel_transportation:0032": {
+          "blank": 0.5,
+          "memory": 0.5,
+          "mismatch": 0.5,
+          "text": 1.0
+        },
+        "travel_transportation:0033": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 0.0
+        },
+        "travel_transportation:0034": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "travel_transportation:0035": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "travel_transportation:0036": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "travel_transportation:0037": {
+          "blank": 0.75,
+          "memory": 0.75,
+          "mismatch": 0.75,
+          "text": 1.0
+        },
+        "travel_transportation:0038": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "travel_transportation:0039": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "travel_transportation:0040": {
+          "blank": 0.75,
+          "memory": 0.75,
+          "mismatch": 0.75,
+          "text": 1.0
+        },
+        "travel_transportation:0041": {
+          "blank": 0.75,
+          "memory": 0.5,
+          "mismatch": 0.5,
+          "text": 1.0
+        },
+        "travel_transportation:0042": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "travel_transportation:0043": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "travel_transportation:0044": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 0.5
+        },
+        "travel_transportation:0045": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        }
+      }
+    }
+  },
+  "measurement_count": 4320,
+  "preference_count": 180,
+  "statistical_unit": "base_pair_id; average seeds, positions and applicable question suites within preference first",
+  "interval_scope": "preference sampling uncertainty for this paired training seed, not between-training-seed uncertainty",
+  "score_policy": "unchanged upstream extract_choice; parse failures count as incorrect and remain in denominators",
+  "official177": {
+    "excluded_preference_ids": [
+      "education_resources:0043",
+      "education_resources:0044",
+      "education_resources:0050"
+    ],
+    "controls": {
+      "blank": {
+        "correct": 247,
+        "total": 708,
+        "rate": 0.3488700564971751,
+        "parse_failures": 0,
+        "preference_count": 177,
+        "preference_mean_rate": 0.3488700564971751
+      },
+      "memory": {
+        "correct": 496,
+        "total": 1416,
+        "rate": 0.3502824858757062,
+        "parse_failures": 0,
+        "preference_count": 177,
+        "preference_mean_rate": 0.3502824858757062
+      },
+      "mismatch": {
+        "correct": 494,
+        "total": 1416,
+        "rate": 0.3488700564971751,
+        "parse_failures": 0,
+        "preference_count": 177,
+        "preference_mean_rate": 0.3488700564971751
+      },
+      "text": {
+        "correct": 654,
+        "total": 708,
+        "rate": 0.923728813559322,
+        "parse_failures": 0,
+        "preference_count": 177,
+        "preference_mean_rate": 0.923728813559322
+      }
+    },
+    "paired_memory_gain": {
+      "mismatch": {
+        "preference_count": 177,
+        "mean": 0.0014124293785310734,
+        "ci95": [
+          -0.005649717514124294,
+          0.009180790960451978
+        ],
+        "method": "preference-group paired percentile bootstrap",
+        "bootstrap_samples": 10000,
+        "bootstrap_seed": 20261009,
+        "difference_percentage_points": 0.14124293785310735,
+        "ci95_percentage_points": [
+          -0.5649717514124294,
+          0.9180790960451978
+        ],
+        "comparison": "memory minus mismatch"
+      },
+      "blank": {
+        "preference_count": 177,
+        "mean": 0.0014124293785310734,
+        "ci95": [
+          -0.012005649717514125,
+          0.016242937853107344
+        ],
+        "method": "preference-group paired percentile bootstrap",
+        "bootstrap_samples": 10000,
+        "bootstrap_seed": 20261009,
+        "difference_percentage_points": 0.14124293785310735,
+        "ci95_percentage_points": [
+          -1.2005649717514124,
+          1.6242937853107344
+        ],
+        "comparison": "memory minus blank"
+      }
+    },
+    "preference_control_rates": {
+      "education_resources:0000": {
+        "blank": 1.0,
+        "memory": 1.0,
+        "mismatch": 1.0,
+        "text": 1.0
+      },
+      "education_resources:0001": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "education_resources:0002": {
+        "blank": 1.0,
+        "memory": 1.0,
+        "mismatch": 1.0,
+        "text": 1.0
+      },
+      "education_resources:0003": {
+        "blank": 1.0,
+        "memory": 1.0,
+        "mismatch": 1.0,
+        "text": 1.0
+      },
+      "education_resources:0004": {
+        "blank": 1.0,
+        "memory": 1.0,
+        "mismatch": 1.0,
+        "text": 1.0
+      },
+      "education_resources:0005": {
+        "blank": 1.0,
+        "memory": 1.0,
+        "mismatch": 0.875,
+        "text": 1.0
+      },
+      "education_resources:0006": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "education_resources:0007": {
+        "blank": 1.0,
+        "memory": 1.0,
+        "mismatch": 1.0,
+        "text": 1.0
+      },
+      "education_resources:0008": {
+        "blank": 1.0,
+        "memory": 1.0,
+        "mismatch": 1.0,
+        "text": 1.0
+      },
+      "education_resources:0009": {
+        "blank": 1.0,
+        "memory": 1.0,
+        "mismatch": 1.0,
+        "text": 1.0
+      },
+      "education_resources:0010": {
+        "blank": 0.5,
+        "memory": 0.5,
+        "mismatch": 0.5,
+        "text": 1.0
+      },
+      "education_resources:0011": {
+        "blank": 1.0,
+        "memory": 1.0,
+        "mismatch": 1.0,
+        "text": 1.0
+      },
+      "education_resources:0012": {
+        "blank": 1.0,
+        "memory": 1.0,
+        "mismatch": 1.0,
+        "text": 1.0
+      },
+      "education_resources:0013": {
+        "blank": 0.25,
+        "memory": 0.25,
+        "mismatch": 0.25,
+        "text": 1.0
+      },
+      "education_resources:0014": {
+        "blank": 1.0,
+        "memory": 1.0,
+        "mismatch": 1.0,
+        "text": 1.0
+      },
+      "education_resources:0015": {
+        "blank": 1.0,
+        "memory": 1.0,
+        "mismatch": 1.0,
+        "text": 1.0
+      },
+      "education_resources:0016": {
+        "blank": 0.75,
+        "memory": 0.75,
+        "mismatch": 0.75,
+        "text": 1.0
+      },
+      "education_resources:0017": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "education_resources:0018": {
+        "blank": 1.0,
+        "memory": 1.0,
+        "mismatch": 1.0,
+        "text": 1.0
+      },
+      "education_resources:0019": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "education_resources:0020": {
+        "blank": 0.5,
+        "memory": 0.5,
+        "mismatch": 0.5,
+        "text": 1.0
+      },
+      "education_resources:0021": {
+        "blank": 1.0,
+        "memory": 1.0,
+        "mismatch": 1.0,
+        "text": 1.0
+      },
+      "education_resources:0022": {
+        "blank": 1.0,
+        "memory": 1.0,
+        "mismatch": 1.0,
+        "text": 1.0
+      },
+      "education_resources:0023": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "education_resources:0024": {
+        "blank": 0.75,
+        "memory": 0.75,
+        "mismatch": 0.75,
+        "text": 1.0
+      },
+      "education_resources:0025": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "education_resources:0026": {
+        "blank": 1.0,
+        "memory": 1.0,
+        "mismatch": 1.0,
+        "text": 1.0
+      },
+      "education_resources:0027": {
+        "blank": 1.0,
+        "memory": 1.0,
+        "mismatch": 1.0,
+        "text": 1.0
+      },
+      "education_resources:0028": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "education_resources:0029": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "education_resources:0030": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "education_resources:0031": {
+        "blank": 1.0,
+        "memory": 1.0,
+        "mismatch": 1.0,
+        "text": 1.0
+      },
+      "education_resources:0032": {
+        "blank": 0.75,
+        "memory": 0.75,
+        "mismatch": 0.75,
+        "text": 1.0
+      },
+      "education_resources:0033": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "education_resources:0034": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 0.75
+      },
+      "education_resources:0035": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "education_resources:0036": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "education_resources:0037": {
+        "blank": 1.0,
+        "memory": 1.0,
+        "mismatch": 1.0,
+        "text": 1.0
+      },
+      "education_resources:0038": {
+        "blank": 1.0,
+        "memory": 1.0,
+        "mismatch": 1.0,
+        "text": 1.0
+      },
+      "education_resources:0039": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "education_resources:0040": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 0.25
+      },
+      "education_resources:0041": {
+        "blank": 0.25,
+        "memory": 0.0,
+        "mismatch": 0.125,
+        "text": 1.0
+      },
+      "education_resources:0042": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "education_resources:0045": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "education_resources:0046": {
+        "blank": 1.0,
+        "memory": 1.0,
+        "mismatch": 1.0,
+        "text": 1.0
+      },
+      "education_resources:0047": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "education_resources:0048": {
+        "blank": 0.25,
+        "memory": 0.25,
+        "mismatch": 0.25,
+        "text": 1.0
+      },
+      "education_resources:0049": {
+        "blank": 1.0,
+        "memory": 1.0,
+        "mismatch": 1.0,
+        "text": 1.0
+      },
+      "education_resources:0051": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 0.75
+      },
+      "education_resources:0052": {
+        "blank": 1.0,
+        "memory": 1.0,
+        "mismatch": 1.0,
+        "text": 1.0
+      },
+      "education_resources:0053": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "shop_motors:0000": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "shop_motors:0001": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "shop_motors:0002": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "shop_motors:0003": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 0.0
+      },
+      "shop_motors:0004": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "shop_motors:0005": {
+        "blank": 1.0,
+        "memory": 1.0,
+        "mismatch": 1.0,
+        "text": 1.0
+      },
+      "shop_motors:0006": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "shop_motors:0007": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "shop_motors:0008": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "shop_motors:0009": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "shop_motors:0010": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "shop_motors:0011": {
+        "blank": 0.25,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "shop_motors:0012": {
+        "blank": 0.5,
+        "memory": 0.5,
+        "mismatch": 0.5,
+        "text": 1.0
+      },
+      "shop_motors:0013": {
+        "blank": 0.75,
+        "memory": 0.75,
+        "mismatch": 0.75,
+        "text": 1.0
+      },
+      "shop_motors:0014": {
+        "blank": 0.75,
+        "memory": 0.75,
+        "mismatch": 0.75,
+        "text": 1.0
+      },
+      "shop_motors:0015": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "shop_motors:0016": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "shop_motors:0017": {
+        "blank": 1.0,
+        "memory": 1.0,
+        "mismatch": 1.0,
+        "text": 0.25
+      },
+      "shop_motors:0018": {
+        "blank": 0.25,
+        "memory": 0.0,
+        "mismatch": 0.25,
+        "text": 0.75
+      },
+      "shop_motors:0019": {
+        "blank": 1.0,
+        "memory": 1.0,
+        "mismatch": 1.0,
+        "text": 1.0
+      },
+      "shop_motors:0020": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "shop_motors:0021": {
+        "blank": 1.0,
+        "memory": 1.0,
+        "mismatch": 1.0,
+        "text": 1.0
+      },
+      "shop_motors:0022": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "shop_motors:0023": {
+        "blank": 1.0,
+        "memory": 1.0,
+        "mismatch": 1.0,
+        "text": 1.0
+      },
+      "shop_motors:0024": {
+        "blank": 1.0,
+        "memory": 1.0,
+        "mismatch": 1.0,
+        "text": 1.0
+      },
+      "shop_motors:0025": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "shop_motors:0026": {
+        "blank": 1.0,
+        "memory": 1.0,
+        "mismatch": 1.0,
+        "text": 1.0
+      },
+      "shop_motors:0027": {
+        "blank": 0.5,
+        "memory": 0.75,
+        "mismatch": 0.75,
+        "text": 1.0
+      },
+      "shop_motors:0028": {
+        "blank": 0.5,
+        "memory": 0.25,
+        "mismatch": 0.25,
+        "text": 1.0
+      },
+      "shop_motors:0029": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "shop_motors:0030": {
+        "blank": 0.25,
+        "memory": 0.0,
+        "mismatch": 0.25,
+        "text": 1.0
+      },
+      "shop_motors:0031": {
+        "blank": 1.0,
+        "memory": 1.0,
+        "mismatch": 1.0,
+        "text": 1.0
+      },
+      "shop_motors:0032": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "shop_motors:0033": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "shop_motors:0034": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "shop_motors:0035": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "shop_motors:0036": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "shop_motors:0037": {
+        "blank": 0.25,
+        "memory": 0.5,
+        "mismatch": 0.625,
+        "text": 1.0
+      },
+      "shop_motors:0038": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "shop_motors:0039": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "shop_motors:0040": {
+        "blank": 1.0,
+        "memory": 1.0,
+        "mismatch": 1.0,
+        "text": 1.0
+      },
+      "shop_motors:0041": {
+        "blank": 1.0,
+        "memory": 1.0,
+        "mismatch": 1.0,
+        "text": 1.0
+      },
+      "shop_motors:0042": {
+        "blank": 0.75,
+        "memory": 0.75,
+        "mismatch": 0.75,
+        "text": 1.0
+      },
+      "shop_motors:0043": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "shop_motors:0044": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "shop_technology:0000": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 0.75
+      },
+      "shop_technology:0001": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "shop_technology:0002": {
+        "blank": 0.0,
+        "memory": 0.25,
+        "mismatch": 0.25,
+        "text": 1.0
+      },
+      "shop_technology:0003": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "shop_technology:0004": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "shop_technology:0005": {
+        "blank": 1.0,
+        "memory": 1.0,
+        "mismatch": 1.0,
+        "text": 1.0
+      },
+      "shop_technology:0006": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "shop_technology:0007": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "shop_technology:0008": {
+        "blank": 0.25,
+        "memory": 0.5,
+        "mismatch": 0.5,
+        "text": 1.0
+      },
+      "shop_technology:0009": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "shop_technology:0010": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "shop_technology:0011": {
+        "blank": 0.75,
+        "memory": 0.5,
+        "mismatch": 0.5,
+        "text": 1.0
+      },
+      "shop_technology:0012": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "shop_technology:0013": {
+        "blank": 0.75,
+        "memory": 0.75,
+        "mismatch": 0.75,
+        "text": 1.0
+      },
+      "shop_technology:0014": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "shop_technology:0015": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "shop_technology:0016": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "shop_technology:0017": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 0.25
+      },
+      "shop_technology:0018": {
+        "blank": 0.5,
+        "memory": 0.5,
+        "mismatch": 0.5,
+        "text": 0.5
+      },
+      "shop_technology:0019": {
+        "blank": 0.25,
+        "memory": 0.25,
+        "mismatch": 0.25,
+        "text": 0.5
+      },
+      "shop_technology:0020": {
+        "blank": 0.25,
+        "memory": 0.25,
+        "mismatch": 0.25,
+        "text": 1.0
+      },
+      "shop_technology:0021": {
+        "blank": 0.75,
+        "memory": 0.75,
+        "mismatch": 0.75,
+        "text": 1.0
+      },
+      "shop_technology:0022": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "shop_technology:0023": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "shop_technology:0024": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "shop_technology:0025": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "shop_technology:0026": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "shop_technology:0027": {
+        "blank": 0.5,
+        "memory": 0.625,
+        "mismatch": 0.625,
+        "text": 1.0
+      },
+      "shop_technology:0028": {
+        "blank": 0.25,
+        "memory": 1.0,
+        "mismatch": 0.75,
+        "text": 1.0
+      },
+      "shop_technology:0029": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "shop_technology:0030": {
+        "blank": 0.75,
+        "memory": 0.875,
+        "mismatch": 0.75,
+        "text": 1.0
+      },
+      "shop_technology:0031": {
+        "blank": 1.0,
+        "memory": 1.0,
+        "mismatch": 1.0,
+        "text": 1.0
+      },
+      "shop_technology:0032": {
+        "blank": 0.0,
+        "memory": 0.25,
+        "mismatch": 0.25,
+        "text": 1.0
+      },
+      "shop_technology:0033": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "shop_technology:0034": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "travel_transportation:0000": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "travel_transportation:0001": {
+        "blank": 0.25,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 0.0
+      },
+      "travel_transportation:0002": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "travel_transportation:0003": {
+        "blank": 1.0,
+        "memory": 1.0,
+        "mismatch": 1.0,
+        "text": 1.0
+      },
+      "travel_transportation:0004": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 0.5
+      },
+      "travel_transportation:0005": {
+        "blank": 0.0,
+        "memory": 0.375,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "travel_transportation:0006": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "travel_transportation:0007": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 0.5
+      },
+      "travel_transportation:0008": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 0.0
+      },
+      "travel_transportation:0009": {
+        "blank": 0.25,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "travel_transportation:0010": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 0.0
+      },
+      "travel_transportation:0011": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 0.0
+      },
+      "travel_transportation:0012": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "travel_transportation:0013": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "travel_transportation:0014": {
+        "blank": 1.0,
+        "memory": 1.0,
+        "mismatch": 1.0,
+        "text": 1.0
+      },
+      "travel_transportation:0015": {
+        "blank": 0.5,
+        "memory": 0.5,
+        "mismatch": 0.5,
+        "text": 1.0
+      },
+      "travel_transportation:0016": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "travel_transportation:0017": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "travel_transportation:0018": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "travel_transportation:0019": {
+        "blank": 1.0,
+        "memory": 1.0,
+        "mismatch": 1.0,
+        "text": 1.0
+      },
+      "travel_transportation:0020": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "travel_transportation:0021": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 0.5
+      },
+      "travel_transportation:0022": {
+        "blank": 0.5,
+        "memory": 0.5,
+        "mismatch": 0.5,
+        "text": 1.0
+      },
+      "travel_transportation:0023": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 0.75
+      },
+      "travel_transportation:0024": {
+        "blank": 1.0,
+        "memory": 0.75,
+        "mismatch": 0.75,
+        "text": 1.0
+      },
+      "travel_transportation:0025": {
+        "blank": 0.75,
+        "memory": 0.75,
+        "mismatch": 0.75,
+        "text": 1.0
+      },
+      "travel_transportation:0026": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "travel_transportation:0027": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "travel_transportation:0028": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "travel_transportation:0029": {
+        "blank": 0.0,
+        "memory": 0.125,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "travel_transportation:0030": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "travel_transportation:0031": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 0.0
+      },
+      "travel_transportation:0032": {
+        "blank": 0.5,
+        "memory": 0.5,
+        "mismatch": 0.5,
+        "text": 1.0
+      },
+      "travel_transportation:0033": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 0.0
+      },
+      "travel_transportation:0034": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "travel_transportation:0035": {
+        "blank": 1.0,
+        "memory": 1.0,
+        "mismatch": 1.0,
+        "text": 1.0
+      },
+      "travel_transportation:0036": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "travel_transportation:0037": {
+        "blank": 0.75,
+        "memory": 0.75,
+        "mismatch": 0.75,
+        "text": 1.0
+      },
+      "travel_transportation:0038": {
+        "blank": 1.0,
+        "memory": 1.0,
+        "mismatch": 1.0,
+        "text": 1.0
+      },
+      "travel_transportation:0039": {
+        "blank": 1.0,
+        "memory": 1.0,
+        "mismatch": 1.0,
+        "text": 1.0
+      },
+      "travel_transportation:0040": {
+        "blank": 0.75,
+        "memory": 0.75,
+        "mismatch": 0.75,
+        "text": 1.0
+      },
+      "travel_transportation:0041": {
+        "blank": 0.75,
+        "memory": 0.5,
+        "mismatch": 0.5,
+        "text": 1.0
+      },
+      "travel_transportation:0042": {
+        "blank": 1.0,
+        "memory": 1.0,
+        "mismatch": 1.0,
+        "text": 1.0
+      },
+      "travel_transportation:0043": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      },
+      "travel_transportation:0044": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 0.5
+      },
+      "travel_transportation:0045": {
+        "blank": 0.0,
+        "memory": 0.0,
+        "mismatch": 0.0,
+        "text": 1.0
+      }
+    },
+    "suites": {
+      "W0/T1": {
+        "controls": {
+          "blank": {
+            "correct": 247,
+            "total": 708,
+            "rate": 0.3488700564971751,
+            "parse_failures": 0,
+            "preference_count": 177,
+            "preference_mean_rate": 0.3488700564971751
+          },
+          "memory": {
+            "correct": 496,
+            "total": 1416,
+            "rate": 0.3502824858757062,
+            "parse_failures": 0,
+            "preference_count": 177,
+            "preference_mean_rate": 0.3502824858757062
+          },
+          "mismatch": {
+            "correct": 494,
+            "total": 1416,
+            "rate": 0.3488700564971751,
+            "parse_failures": 0,
+            "preference_count": 177,
+            "preference_mean_rate": 0.3488700564971751
+          },
+          "text": {
+            "correct": 654,
+            "total": 708,
+            "rate": 0.923728813559322,
+            "parse_failures": 0,
+            "preference_count": 177,
+            "preference_mean_rate": 0.923728813559322
+          }
+        },
+        "paired_memory_gain": {
+          "mismatch": {
+            "preference_count": 177,
+            "mean": 0.0014124293785310734,
+            "ci95": [
+              -0.005649717514124294,
+              0.009180790960451978
+            ],
+            "method": "preference-group paired percentile bootstrap",
+            "bootstrap_samples": 10000,
+            "bootstrap_seed": 20261009,
+            "difference_percentage_points": 0.14124293785310735,
+            "ci95_percentage_points": [
+              -0.5649717514124294,
+              0.9180790960451978
+            ],
+            "comparison": "memory minus mismatch"
+          },
+          "blank": {
+            "preference_count": 177,
+            "mean": 0.0014124293785310734,
+            "ci95": [
+              -0.012005649717514125,
+              0.016242937853107344
+            ],
+            "method": "preference-group paired percentile bootstrap",
+            "bootstrap_samples": 10000,
+            "bootstrap_seed": 20261009,
+            "difference_percentage_points": 0.14124293785310735,
+            "ci95_percentage_points": [
+              -1.2005649717514124,
+              1.6242937853107344
+            ],
+            "comparison": "memory minus blank"
+          }
+        },
+        "preference_control_rates": {
+          "education_resources:0000": {
+            "blank": 1.0,
+            "memory": 1.0,
+            "mismatch": 1.0,
+            "text": 1.0
+          },
+          "education_resources:0001": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "education_resources:0002": {
+            "blank": 1.0,
+            "memory": 1.0,
+            "mismatch": 1.0,
+            "text": 1.0
+          },
+          "education_resources:0003": {
+            "blank": 1.0,
+            "memory": 1.0,
+            "mismatch": 1.0,
+            "text": 1.0
+          },
+          "education_resources:0004": {
+            "blank": 1.0,
+            "memory": 1.0,
+            "mismatch": 1.0,
+            "text": 1.0
+          },
+          "education_resources:0005": {
+            "blank": 1.0,
+            "memory": 1.0,
+            "mismatch": 0.875,
+            "text": 1.0
+          },
+          "education_resources:0006": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "education_resources:0007": {
+            "blank": 1.0,
+            "memory": 1.0,
+            "mismatch": 1.0,
+            "text": 1.0
+          },
+          "education_resources:0008": {
+            "blank": 1.0,
+            "memory": 1.0,
+            "mismatch": 1.0,
+            "text": 1.0
+          },
+          "education_resources:0009": {
+            "blank": 1.0,
+            "memory": 1.0,
+            "mismatch": 1.0,
+            "text": 1.0
+          },
+          "education_resources:0010": {
+            "blank": 0.5,
+            "memory": 0.5,
+            "mismatch": 0.5,
+            "text": 1.0
+          },
+          "education_resources:0011": {
+            "blank": 1.0,
+            "memory": 1.0,
+            "mismatch": 1.0,
+            "text": 1.0
+          },
+          "education_resources:0012": {
+            "blank": 1.0,
+            "memory": 1.0,
+            "mismatch": 1.0,
+            "text": 1.0
+          },
+          "education_resources:0013": {
+            "blank": 0.25,
+            "memory": 0.25,
+            "mismatch": 0.25,
+            "text": 1.0
+          },
+          "education_resources:0014": {
+            "blank": 1.0,
+            "memory": 1.0,
+            "mismatch": 1.0,
+            "text": 1.0
+          },
+          "education_resources:0015": {
+            "blank": 1.0,
+            "memory": 1.0,
+            "mismatch": 1.0,
+            "text": 1.0
+          },
+          "education_resources:0016": {
+            "blank": 0.75,
+            "memory": 0.75,
+            "mismatch": 0.75,
+            "text": 1.0
+          },
+          "education_resources:0017": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "education_resources:0018": {
+            "blank": 1.0,
+            "memory": 1.0,
+            "mismatch": 1.0,
+            "text": 1.0
+          },
+          "education_resources:0019": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "education_resources:0020": {
+            "blank": 0.5,
+            "memory": 0.5,
+            "mismatch": 0.5,
+            "text": 1.0
+          },
+          "education_resources:0021": {
+            "blank": 1.0,
+            "memory": 1.0,
+            "mismatch": 1.0,
+            "text": 1.0
+          },
+          "education_resources:0022": {
+            "blank": 1.0,
+            "memory": 1.0,
+            "mismatch": 1.0,
+            "text": 1.0
+          },
+          "education_resources:0023": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "education_resources:0024": {
+            "blank": 0.75,
+            "memory": 0.75,
+            "mismatch": 0.75,
+            "text": 1.0
+          },
+          "education_resources:0025": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "education_resources:0026": {
+            "blank": 1.0,
+            "memory": 1.0,
+            "mismatch": 1.0,
+            "text": 1.0
+          },
+          "education_resources:0027": {
+            "blank": 1.0,
+            "memory": 1.0,
+            "mismatch": 1.0,
+            "text": 1.0
+          },
+          "education_resources:0028": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "education_resources:0029": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "education_resources:0030": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "education_resources:0031": {
+            "blank": 1.0,
+            "memory": 1.0,
+            "mismatch": 1.0,
+            "text": 1.0
+          },
+          "education_resources:0032": {
+            "blank": 0.75,
+            "memory": 0.75,
+            "mismatch": 0.75,
+            "text": 1.0
+          },
+          "education_resources:0033": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "education_resources:0034": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 0.75
+          },
+          "education_resources:0035": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "education_resources:0036": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "education_resources:0037": {
+            "blank": 1.0,
+            "memory": 1.0,
+            "mismatch": 1.0,
+            "text": 1.0
+          },
+          "education_resources:0038": {
+            "blank": 1.0,
+            "memory": 1.0,
+            "mismatch": 1.0,
+            "text": 1.0
+          },
+          "education_resources:0039": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "education_resources:0040": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 0.25
+          },
+          "education_resources:0041": {
+            "blank": 0.25,
+            "memory": 0.0,
+            "mismatch": 0.125,
+            "text": 1.0
+          },
+          "education_resources:0042": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "education_resources:0045": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "education_resources:0046": {
+            "blank": 1.0,
+            "memory": 1.0,
+            "mismatch": 1.0,
+            "text": 1.0
+          },
+          "education_resources:0047": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "education_resources:0048": {
+            "blank": 0.25,
+            "memory": 0.25,
+            "mismatch": 0.25,
+            "text": 1.0
+          },
+          "education_resources:0049": {
+            "blank": 1.0,
+            "memory": 1.0,
+            "mismatch": 1.0,
+            "text": 1.0
+          },
+          "education_resources:0051": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 0.75
+          },
+          "education_resources:0052": {
+            "blank": 1.0,
+            "memory": 1.0,
+            "mismatch": 1.0,
+            "text": 1.0
+          },
+          "education_resources:0053": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "shop_motors:0000": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "shop_motors:0001": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "shop_motors:0002": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "shop_motors:0003": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 0.0
+          },
+          "shop_motors:0004": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "shop_motors:0005": {
+            "blank": 1.0,
+            "memory": 1.0,
+            "mismatch": 1.0,
+            "text": 1.0
+          },
+          "shop_motors:0006": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "shop_motors:0007": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "shop_motors:0008": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "shop_motors:0009": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "shop_motors:0010": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "shop_motors:0011": {
+            "blank": 0.25,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "shop_motors:0012": {
+            "blank": 0.5,
+            "memory": 0.5,
+            "mismatch": 0.5,
+            "text": 1.0
+          },
+          "shop_motors:0013": {
+            "blank": 0.75,
+            "memory": 0.75,
+            "mismatch": 0.75,
+            "text": 1.0
+          },
+          "shop_motors:0014": {
+            "blank": 0.75,
+            "memory": 0.75,
+            "mismatch": 0.75,
+            "text": 1.0
+          },
+          "shop_motors:0015": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "shop_motors:0016": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "shop_motors:0017": {
+            "blank": 1.0,
+            "memory": 1.0,
+            "mismatch": 1.0,
+            "text": 0.25
+          },
+          "shop_motors:0018": {
+            "blank": 0.25,
+            "memory": 0.0,
+            "mismatch": 0.25,
+            "text": 0.75
+          },
+          "shop_motors:0019": {
+            "blank": 1.0,
+            "memory": 1.0,
+            "mismatch": 1.0,
+            "text": 1.0
+          },
+          "shop_motors:0020": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "shop_motors:0021": {
+            "blank": 1.0,
+            "memory": 1.0,
+            "mismatch": 1.0,
+            "text": 1.0
+          },
+          "shop_motors:0022": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "shop_motors:0023": {
+            "blank": 1.0,
+            "memory": 1.0,
+            "mismatch": 1.0,
+            "text": 1.0
+          },
+          "shop_motors:0024": {
+            "blank": 1.0,
+            "memory": 1.0,
+            "mismatch": 1.0,
+            "text": 1.0
+          },
+          "shop_motors:0025": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "shop_motors:0026": {
+            "blank": 1.0,
+            "memory": 1.0,
+            "mismatch": 1.0,
+            "text": 1.0
+          },
+          "shop_motors:0027": {
+            "blank": 0.5,
+            "memory": 0.75,
+            "mismatch": 0.75,
+            "text": 1.0
+          },
+          "shop_motors:0028": {
+            "blank": 0.5,
+            "memory": 0.25,
+            "mismatch": 0.25,
+            "text": 1.0
+          },
+          "shop_motors:0029": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "shop_motors:0030": {
+            "blank": 0.25,
+            "memory": 0.0,
+            "mismatch": 0.25,
+            "text": 1.0
+          },
+          "shop_motors:0031": {
+            "blank": 1.0,
+            "memory": 1.0,
+            "mismatch": 1.0,
+            "text": 1.0
+          },
+          "shop_motors:0032": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "shop_motors:0033": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "shop_motors:0034": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "shop_motors:0035": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "shop_motors:0036": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "shop_motors:0037": {
+            "blank": 0.25,
+            "memory": 0.5,
+            "mismatch": 0.625,
+            "text": 1.0
+          },
+          "shop_motors:0038": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "shop_motors:0039": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "shop_motors:0040": {
+            "blank": 1.0,
+            "memory": 1.0,
+            "mismatch": 1.0,
+            "text": 1.0
+          },
+          "shop_motors:0041": {
+            "blank": 1.0,
+            "memory": 1.0,
+            "mismatch": 1.0,
+            "text": 1.0
+          },
+          "shop_motors:0042": {
+            "blank": 0.75,
+            "memory": 0.75,
+            "mismatch": 0.75,
+            "text": 1.0
+          },
+          "shop_motors:0043": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "shop_motors:0044": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "shop_technology:0000": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 0.75
+          },
+          "shop_technology:0001": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "shop_technology:0002": {
+            "blank": 0.0,
+            "memory": 0.25,
+            "mismatch": 0.25,
+            "text": 1.0
+          },
+          "shop_technology:0003": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "shop_technology:0004": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "shop_technology:0005": {
+            "blank": 1.0,
+            "memory": 1.0,
+            "mismatch": 1.0,
+            "text": 1.0
+          },
+          "shop_technology:0006": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "shop_technology:0007": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "shop_technology:0008": {
+            "blank": 0.25,
+            "memory": 0.5,
+            "mismatch": 0.5,
+            "text": 1.0
+          },
+          "shop_technology:0009": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "shop_technology:0010": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "shop_technology:0011": {
+            "blank": 0.75,
+            "memory": 0.5,
+            "mismatch": 0.5,
+            "text": 1.0
+          },
+          "shop_technology:0012": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "shop_technology:0013": {
+            "blank": 0.75,
+            "memory": 0.75,
+            "mismatch": 0.75,
+            "text": 1.0
+          },
+          "shop_technology:0014": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "shop_technology:0015": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "shop_technology:0016": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "shop_technology:0017": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 0.25
+          },
+          "shop_technology:0018": {
+            "blank": 0.5,
+            "memory": 0.5,
+            "mismatch": 0.5,
+            "text": 0.5
+          },
+          "shop_technology:0019": {
+            "blank": 0.25,
+            "memory": 0.25,
+            "mismatch": 0.25,
+            "text": 0.5
+          },
+          "shop_technology:0020": {
+            "blank": 0.25,
+            "memory": 0.25,
+            "mismatch": 0.25,
+            "text": 1.0
+          },
+          "shop_technology:0021": {
+            "blank": 0.75,
+            "memory": 0.75,
+            "mismatch": 0.75,
+            "text": 1.0
+          },
+          "shop_technology:0022": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "shop_technology:0023": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "shop_technology:0024": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "shop_technology:0025": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "shop_technology:0026": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "shop_technology:0027": {
+            "blank": 0.5,
+            "memory": 0.625,
+            "mismatch": 0.625,
+            "text": 1.0
+          },
+          "shop_technology:0028": {
+            "blank": 0.25,
+            "memory": 1.0,
+            "mismatch": 0.75,
+            "text": 1.0
+          },
+          "shop_technology:0029": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "shop_technology:0030": {
+            "blank": 0.75,
+            "memory": 0.875,
+            "mismatch": 0.75,
+            "text": 1.0
+          },
+          "shop_technology:0031": {
+            "blank": 1.0,
+            "memory": 1.0,
+            "mismatch": 1.0,
+            "text": 1.0
+          },
+          "shop_technology:0032": {
+            "blank": 0.0,
+            "memory": 0.25,
+            "mismatch": 0.25,
+            "text": 1.0
+          },
+          "shop_technology:0033": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "shop_technology:0034": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "travel_transportation:0000": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "travel_transportation:0001": {
+            "blank": 0.25,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 0.0
+          },
+          "travel_transportation:0002": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "travel_transportation:0003": {
+            "blank": 1.0,
+            "memory": 1.0,
+            "mismatch": 1.0,
+            "text": 1.0
+          },
+          "travel_transportation:0004": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 0.5
+          },
+          "travel_transportation:0005": {
+            "blank": 0.0,
+            "memory": 0.375,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "travel_transportation:0006": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "travel_transportation:0007": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 0.5
+          },
+          "travel_transportation:0008": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 0.0
+          },
+          "travel_transportation:0009": {
+            "blank": 0.25,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "travel_transportation:0010": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 0.0
+          },
+          "travel_transportation:0011": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 0.0
+          },
+          "travel_transportation:0012": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "travel_transportation:0013": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "travel_transportation:0014": {
+            "blank": 1.0,
+            "memory": 1.0,
+            "mismatch": 1.0,
+            "text": 1.0
+          },
+          "travel_transportation:0015": {
+            "blank": 0.5,
+            "memory": 0.5,
+            "mismatch": 0.5,
+            "text": 1.0
+          },
+          "travel_transportation:0016": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "travel_transportation:0017": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "travel_transportation:0018": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "travel_transportation:0019": {
+            "blank": 1.0,
+            "memory": 1.0,
+            "mismatch": 1.0,
+            "text": 1.0
+          },
+          "travel_transportation:0020": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "travel_transportation:0021": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 0.5
+          },
+          "travel_transportation:0022": {
+            "blank": 0.5,
+            "memory": 0.5,
+            "mismatch": 0.5,
+            "text": 1.0
+          },
+          "travel_transportation:0023": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 0.75
+          },
+          "travel_transportation:0024": {
+            "blank": 1.0,
+            "memory": 0.75,
+            "mismatch": 0.75,
+            "text": 1.0
+          },
+          "travel_transportation:0025": {
+            "blank": 0.75,
+            "memory": 0.75,
+            "mismatch": 0.75,
+            "text": 1.0
+          },
+          "travel_transportation:0026": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "travel_transportation:0027": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "travel_transportation:0028": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "travel_transportation:0029": {
+            "blank": 0.0,
+            "memory": 0.125,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "travel_transportation:0030": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "travel_transportation:0031": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 0.0
+          },
+          "travel_transportation:0032": {
+            "blank": 0.5,
+            "memory": 0.5,
+            "mismatch": 0.5,
+            "text": 1.0
+          },
+          "travel_transportation:0033": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 0.0
+          },
+          "travel_transportation:0034": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "travel_transportation:0035": {
+            "blank": 1.0,
+            "memory": 1.0,
+            "mismatch": 1.0,
+            "text": 1.0
+          },
+          "travel_transportation:0036": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "travel_transportation:0037": {
+            "blank": 0.75,
+            "memory": 0.75,
+            "mismatch": 0.75,
+            "text": 1.0
+          },
+          "travel_transportation:0038": {
+            "blank": 1.0,
+            "memory": 1.0,
+            "mismatch": 1.0,
+            "text": 1.0
+          },
+          "travel_transportation:0039": {
+            "blank": 1.0,
+            "memory": 1.0,
+            "mismatch": 1.0,
+            "text": 1.0
+          },
+          "travel_transportation:0040": {
+            "blank": 0.75,
+            "memory": 0.75,
+            "mismatch": 0.75,
+            "text": 1.0
+          },
+          "travel_transportation:0041": {
+            "blank": 0.75,
+            "memory": 0.5,
+            "mismatch": 0.5,
+            "text": 1.0
+          },
+          "travel_transportation:0042": {
+            "blank": 1.0,
+            "memory": 1.0,
+            "mismatch": 1.0,
+            "text": 1.0
+          },
+          "travel_transportation:0043": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          },
+          "travel_transportation:0044": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 0.5
+          },
+          "travel_transportation:0045": {
+            "blank": 0.0,
+            "memory": 0.0,
+            "mismatch": 0.0,
+            "text": 1.0
+          }
+        }
+      }
+    },
+    "measurement_count": 4248,
+    "preference_count": 177
+  }
+}

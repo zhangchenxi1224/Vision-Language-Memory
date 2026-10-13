@@ -5,6 +5,8 @@
 | 目录 | 角色 |
 | --- | --- |
 | `prefeval-k1-l0-l2-20260924/` | 当前K1、teacher/student、FM、曝光量与保持；各run分别报告 |
+| [b730-latest-eval-20261013/](b730-latest-eval-20261013/README.md) | B730固定权重在最新统一协议下补测；93440终点完成，2026-10-14发布12/17主汇总阶段快照；与历史V0/V1分开 |
+| [prefeval-aug4x3-init-ablation-exposure512-20261009/](prefeval-aug4x3-init-ablation-exposure512-20261009/README.md) | 已完成AUG4四组、全checkpoint和official180/177；同协议B730比较由补测目录提供 |
 | `prefeval-multitarget-20260927/` | 当前多目标；各轮、配对baseline、链长分别报告 |
 | `prefeval-official-alignment-20260923/` | 协议依据、固定数据导出与路线决策 |
 | `official-alignment-results-20260913/`及`official-*` | 转折期工程审计、配对控制、初始化/bank依赖；非当前PrefEval baseline |

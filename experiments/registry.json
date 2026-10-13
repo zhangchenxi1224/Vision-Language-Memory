@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-10-13",
+  "updated_at": "2026-10-14",
   "selection_rule": "Select current_performance only, then verify each run's protocol, lineage, denominator and completion receipt. Do not recursively aggregate all reports.",
   "default_role": "current_performance",
   "families": [
@@ -26,6 +26,28 @@
       "evidence": "reports/prefeval-aug4x3-init-ablation-exposure512-20261009/PUBLICATION-MANIFEST.json",
       "all_checkpoints": "reports/prefeval-aug4x3-init-ablation-exposure512-20261009/ALL-CHECKPOINTS-20261013.csv",
       "comparison": "reports/prefeval-aug4x3-init-ablation-exposure512-20261009/B730-COMPARISON-20261013.md"
+    },
+    {
+      "id": "prefeval-b730-latest-eval-supplement",
+      "role": "current_performance",
+      "path": "reports/b730-latest-eval-20261013",
+      "status": "partial_results_verified",
+      "snapshot_at": "2026-10-14T02:15:30+08:00",
+      "protocol": "reports/b730-latest-eval-20261013/PROTOCOL.json",
+      "results": "reports/b730-latest-eval-20261013/README.md",
+      "progress": "reports/b730-latest-eval-20261013/PROGRESS-20261014.md",
+      "evidence": "reports/b730-latest-eval-20261013/PUBLICATION-MANIFEST.json",
+      "all_checkpoints": "reports/b730-latest-eval-20261013/CHECKPOINTS-PARTIAL-20261014.csv",
+      "comparison": "reports/b730-latest-eval-20261013/evidence/partial-summaries-20261014-021530/ENDPOINT-COMPARISON.json",
+      "entrypoints": {
+        "table_verification": "scripts/reporting/build_b730_supplement_publication.py",
+        "offline_source_rescoring": "scripts/reporting/verify_b730_supplement_publication.py"
+      },
+      "resume_policy": "Read-only publication tools. Keep the existing healthy runtime owner; do not replay historical launchers or rerun completed evaluation. Runtime recovery is governed by the current private runbook.",
+      "scope": "Old B730 fixed checkpoints on the latest Understood/seed/Reader/answer-position protocol. Fixed93440 endpoint complete; published snapshot12/17 main summaries. Trained-content wording diagnostics and unseen-content tests separate. HistoricalV0/V1 scores remain separate; cross-model comparison is not a causal augmentation ablation.",
+      "verified_main_summaries": 12,
+      "required_main_summaries": 17,
+      "full_experiment_complete": false
     },
     {
       "id": "prefeval-k1",

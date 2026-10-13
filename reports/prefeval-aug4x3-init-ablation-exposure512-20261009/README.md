@@ -9,6 +9,7 @@
 | 最终指标、置信区间、限制 | [最终报告](FINAL-REPORT-20261013.md) |
 | 本次每组每个 checkpoint 的匹配/错配、blank/text、诊断展开 | [完整表格](ALL-CHECKPOINTS-20261013.md) · [完整计数 CSV](ALL-CHECKPOINTS-20261013.csv) |
 | 与旧全量 B730 比较、旧全部 checkpoint/问题族/控制 | [历史比较表](B730-COMPARISON-20261013.md) · [旧计数 CSV](B730-ALL-CHECKPOINTS-20261013.csv) |
+| 旧B730在最新统一协议下的新增补测 | [2026-10-14阶段结果](../b730-latest-eval-20261013/README.md) · [固定终点同协议对比](../b730-latest-eval-20261013/evidence/partial-summaries-20261014-021530/ENDPOINT-COMPARISON.md)；历史V0/V1结果仍保留 |
 | 总分结构的结论与机制分析 | [分析](ANALYSIS-20261013.md) |
 | 完成情况、迁移及资源收尾 | [实验进度](PROGRESS-20261013.md) |
 | 原始回读、冻结代码、数据、模型/图像指纹、验证命令 | [证据与复算](EVIDENCE-20261013.md) |

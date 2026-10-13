@@ -1,0 +1,50 @@
+{
+  "schema": "b730-github-publication-verification/v1",
+  "verified_at_cst": "2026-10-14T02:52:50.181889+08:00",
+  "scope": "Frozen partial snapshot, not full supplement completion",
+  "full_experiment_complete": false,
+  "checks": {
+    "new_checkpoint_table_byte_exact_rebuild": {
+      "main_summaries": 12,
+      "control_rows": 76,
+      "passed": true
+    },
+    "existing_aug4_and_historical_b730_table_rebuild": {
+      "current_rows": 592,
+      "old_rows": 392,
+      "passed": true
+    },
+    "local_source_cpu_rescore": {
+      "main_summaries": 12,
+      "new_readback_rows": 52224,
+      "logical_rows": 78336,
+      "exact_match": true
+    },
+    "freshly_extracted_release_cpu_rescore": {
+      "main_summaries": 12,
+      "new_readback_rows": 52224,
+      "logical_rows": 78336,
+      "exact_match": true
+    },
+    "archive_reopened_and_all_members_hashed": {
+      "members": 510,
+      "passed": true
+    },
+    "gpu_work_performed_for_publication": false,
+    "local_markdown_links": {
+      "checked": 107,
+      "passed": true
+    }
+  },
+  "asset": {
+    "asset": "b730-latest-eval-partial-scientific-evidence-20261014.tar.gz",
+    "asset_bytes": 7796786,
+    "asset_sha256": "bc872646ca1607f0316ee653ba6333507d582a01691a3e99282b95abd117f8df"
+  },
+  "commands": [
+    "python scripts/reporting/build_b730_supplement_publication.py --check",
+    "python scripts/reporting/build_prefeval_aug4_publication.py --check",
+    "python scripts/reporting/verify_b730_supplement_publication.py --snapshot <extracted-release-snapshot>",
+    "python scripts/reporting/list_current_experiments.py"
+  ]
+}

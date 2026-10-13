@@ -1,0 +1,136 @@
+{
+  "schema": "b730-latest-evaluation-protocol/v1",
+  "created_at": "2026-10-13T23:04:18.372951+08:00",
+  "status": "running",
+  "authorization": "2026-10-13 user requests B730 supplement on latest unseen-expression/question evaluation, using available dreamlite-new-h200x8-20261009 with parallel GPU scheduling",
+  "notebook": "dreamlite-new-h200x8-20261009",
+  "training_performed": false,
+  "checkpoints": [
+    {
+      "step": 23360,
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b-mcq-20260925/robust730/train/checkpoint-final.pt",
+      "sha256": "6c8eb92f629ccdf6932407124190d651e8231058ef6f232a0a59380370d44c8d",
+      "original_manifest_sha256": "df279c59e9784da0dd2e7a589bc6608d3e303f26e6f23fa6839fd891605eecc4"
+    },
+    {
+      "step": 46720,
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b730-exposure512-20260927/train/checkpoint-step-046720.pt",
+      "sha256": "abeccff2fccca65c7ba574e7a5ab8574c56c20bc4d5f024fe67eba238cd8f576",
+      "original_manifest_sha256": "8bfc932c7986925593ec30e07cc739ed9bb0013ae621731b471b34d01f320823"
+    },
+    {
+      "step": 70080,
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b730-exposure512-20260927/train/checkpoint-step-070080.pt",
+      "sha256": "774bcc6740bac2b145a1ac16545eb91ba8ccf511835c88ff0ea9dc55d9333ff6",
+      "original_manifest_sha256": "8bfc932c7986925593ec30e07cc739ed9bb0013ae621731b471b34d01f320823"
+    },
+    {
+      "step": 93440,
+      "path": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-b730-exposure512-20260927/train/checkpoint-final.pt",
+      "sha256": "088c003d24cb2982571d763dd218c57f72ce80853615a09a97d8b760ae880c5b",
+      "original_manifest_sha256": "8bfc932c7986925593ec30e07cc739ed9bb0013ae621731b471b34d01f320823"
+    }
+  ],
+  "data_sha256": "28cb15e49979970d6b3277db1dca198f9f6fd5b7c82bedbd217b627cb0e905e7",
+  "asset_seal_sha256": "1fcdf946bd73790033cc92781256f92a354462f29d5556f6c56dc48815eefa2b",
+  "evaluation_source_sha256": "512ea05943ad4b1b2fd111ab2b72f3c87f79ba5b4c5f126040bc4488a6ac6dc0",
+  "matrix": {
+    "train": {
+      "contents": 730,
+      "suites": [
+        "W0/T1"
+      ],
+      "shards": 24
+    },
+    "dev": {
+      "contents": 90,
+      "suites": [
+        "W0/T1"
+      ],
+      "shards": 4
+    },
+    "diagnostics": {
+      "contents": 96,
+      "suites": [
+        "Wstar/T1",
+        "W0/Tstar",
+        "Wstar/Tstar"
+      ],
+      "shards": 4
+    },
+    "opposites": {
+      "contents": 16,
+      "suites": [
+        "W0/T1"
+      ],
+      "shards": 2
+    },
+    "official": {
+      "contents": 180,
+      "suites": [
+        "W0/T1"
+      ],
+      "shards": 8,
+      "steps": [
+        93440
+      ],
+      "deduplicated_sensitivity": 177
+    }
+  },
+  "inference": {
+    "steps": 28,
+    "cfg": 1.0,
+    "seeds": [
+      0,
+      1
+    ],
+    "answer_positions": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "acknowledgment": "Understood.",
+    "controls": [
+      "memory",
+      "mismatch",
+      "blank",
+      "text"
+    ],
+    "reader_max_tokens": 32,
+    "reader_sampling": "greedy",
+    "legacy_training_identity": "B730, 4f task initialized, not official Base initialized"
+  },
+  "budgets": {
+    "new_pngs": 7816,
+    "new_memory_mismatch_rows": 74816,
+    "reused_control_references": 37408,
+    "unique_reused_control_rows": 10432,
+    "logical_readbacks": 112224,
+    "primary_summary_sets": 17,
+    "gpu_tasks": 288
+  },
+  "comparability": [
+    "Latest W0/Understood is not exact legacy V0/V1 replay; acknowledgment distribution shift is explicit.",
+    "All 730 train IDs match legacy targets; diagnostics96 are trained contents, Wstar and Tstar are new wordings.",
+    "dev90 is untrained content; official177 excludes 3 disclosed content/query overlaps.",
+    "Completed AUG4 blank/text controls may be referenced only after exact source/receipt/query/options/Reader/blank-image validation; original bindings preserved.",
+    "Historical B730 PNGs and model-specific AUG4 PNGs not reused."
+  ],
+  "scheduling": {
+    "gpus": 8,
+    "generation_workers_per_gpu": 1,
+    "reader_workers_per_gpu_max": 2,
+    "queue": "single unified dependency queue; idle GPUs first; no permanent checkpoint or stage binding",
+    "exclusive_claim": "atomic per-task claim and POSIX controller lock; no timeout takeover"
+  },
+  "storage": {
+    "output": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/runs/b730-latest-eval-20261013",
+    "conservative_png_budget_gb": 25,
+    "startup_ssd_free_gb": 8,
+    "startup_qb_free_gb": 100,
+    "runtime_ssd_floor_gb": 5,
+    "runtime_qb_floor_gb": 50
+  },
+  "current_runtime": "CURRENT.json"
+}
