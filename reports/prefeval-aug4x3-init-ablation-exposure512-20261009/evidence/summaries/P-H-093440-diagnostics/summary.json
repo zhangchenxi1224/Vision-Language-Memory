@@ -1,0 +1,2685 @@
+{
+  "schema": "prefeval-aug4-summary/v1",
+  "status": "verified_complete",
+  "split": "diagnostics",
+  "kind": "student",
+  "binding": {
+    "schema": "prefeval-aug4-evaluation/v1",
+    "data_sha256": "28cb15e49979970d6b3277db1dca198f9f6fd5b7c82bedbd217b627cb0e905e7",
+    "asset_seal_sha256": "1fcdf946bd73790033cc92781256f92a354462f29d5556f6c56dc48815eefa2b",
+    "evaluation_source_sha256": "512ea05943ad4b1b2fd111ab2b72f3c87f79ba5b4c5f126040bc4488a6ac6dc0",
+    "kind": "student",
+    "split": "diagnostics",
+    "checkpoint": {
+      "checkpoint_sha256": "2a2444b2982a1530683591bb5509aa0ea292007b9f2ad3742db57694312e15d3",
+      "optimizer_step": 93440
+    },
+    "seeds": [
+      0,
+      1
+    ],
+    "controls": [
+      "memory",
+      "mismatch",
+      "blank",
+      "text"
+    ],
+    "suites": [
+      [
+        "Wstar",
+        "T1"
+      ],
+      [
+        "W0",
+        "Tstar"
+      ],
+      [
+        "Wstar",
+        "Tstar"
+      ]
+    ],
+    "correct_positions": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "shards": 4,
+    "mismatch_protocol": "next sorted same-topic id excluding identical normalized W0; semantic near-duplicates not fully excluded",
+    "reader": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+    "canonical_images": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-aug4x3-official-init-20261009/evaluation/P-H-093440-train/images",
+    "mcq_source_sha256": "b3088007724a5c4e21af80ed0220fa796e9f7473007ce9a7df4612eb7cd8f8ac"
+  },
+  "source_receipts": [
+    {
+      "shard": 0,
+      "receipt_sha256": "1dbf35771a8a874110d6a8c4fd87b044a89d6ee90969057f077b8a6cace894c9",
+      "readback_sha256": "ab55ba755d42207bd4878b2ce4a76b7f5a435b3a3abfb1207cc0c585572308f9",
+      "items": 1728
+    },
+    {
+      "shard": 1,
+      "receipt_sha256": "4b3143be0b63dd2c3038abb447ca6dc439d8ac3910f36b7ef263cdabacc83391",
+      "readback_sha256": "74063ff82395b9846c258cb1408b40cdc26a29e9d27ef9f1b101355e8308a5f3",
+      "items": 1728
+    },
+    {
+      "shard": 2,
+      "receipt_sha256": "dd1c50460c9aa59a46c7623822f305ae4416bebdc4da157160e3cc9aed921b5d",
+      "readback_sha256": "a4d2462207e770db92ac0fbc5ebc9ed4d8cad139461291a09a18913d9a85ef34",
+      "items": 1728
+    },
+    {
+      "shard": 3,
+      "receipt_sha256": "14ec43cbb1c232858853088f4231bbef035f8730edee6ad50f67613f0e507d91",
+      "readback_sha256": "634fcbbf773fae58db5f8609a1716331460c349c0be49bb6ea3379594caeabf2",
+      "items": 1728
+    }
+  ],
+  "summarizer_source_sha256": "b296022c22fa8692a644aec060dc28340ca8aee0809b4675e39c820dd4eb9013",
+  "controls": {
+    "blank": {
+      "correct": 563,
+      "total": 1152,
+      "rate": 0.4887152777777778,
+      "parse_failures": 0,
+      "preference_count": 96,
+      "preference_mean_rate": 0.48871527777777773
+    },
+    "memory": {
+      "correct": 1085,
+      "total": 2304,
+      "rate": 0.4709201388888889,
+      "parse_failures": 0,
+      "preference_count": 96,
+      "preference_mean_rate": 0.4709201388888889
+    },
+    "mismatch": {
+      "correct": 1093,
+      "total": 2304,
+      "rate": 0.4743923611111111,
+      "parse_failures": 0,
+      "preference_count": 96,
+      "preference_mean_rate": 0.4743923611111111
+    },
+    "text": {
+      "correct": 1076,
+      "total": 1152,
+      "rate": 0.9340277777777778,
+      "parse_failures": 0,
+      "preference_count": 96,
+      "preference_mean_rate": 0.9340277777777778
+    }
+  },
+  "paired_memory_gain": {
+    "mismatch": {
+      "preference_count": 96,
+      "mean": -0.0034722222222222225,
+      "ci95": [
+        -0.014756944444444448,
+        0.006510416666666664
+      ],
+      "method": "preference-group paired percentile bootstrap",
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20261009,
+      "difference_percentage_points": -0.34722222222222227,
+      "ci95_percentage_points": [
+        -1.4756944444444446,
+        0.6510416666666664
+      ],
+      "comparison": "memory minus mismatch"
+    },
+    "blank": {
+      "preference_count": 96,
+      "mean": -0.01779513888888889,
+      "ci95": [
+        -0.03993055555555555,
+        0.0034722222222222238
+      ],
+      "method": "preference-group paired percentile bootstrap",
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20261009,
+      "difference_percentage_points": -1.779513888888889,
+      "ci95_percentage_points": [
+        -3.9930555555555554,
+        0.3472222222222224
+      ],
+      "comparison": "memory minus blank"
+    }
+  },
+  "preference_control_rates": {
+    "education_learning_styles:0000": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "education_learning_styles:0001": {
+      "blank": 0.6666666666666666,
+      "memory": 0.5,
+      "mismatch": 0.625,
+      "text": 1.0
+    },
+    "education_learning_styles:0005": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "education_learning_styles:0017": {
+      "blank": 0.3333333333333333,
+      "memory": 0.3333333333333333,
+      "mismatch": 0.2916666666666667,
+      "text": 1.0
+    },
+    "education_learning_styles:0023": {
+      "blank": 0.08333333333333333,
+      "memory": 0.08333333333333333,
+      "mismatch": 0.08333333333333333,
+      "text": 1.0
+    },
+    "education_learning_styles:0030": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 0.75
+    },
+    "entertain_games:0008": {
+      "blank": 0.0,
+      "memory": 0.3333333333333333,
+      "mismatch": 0.3333333333333333,
+      "text": 0.3333333333333333
+    },
+    "entertain_games:0017": {
+      "blank": 0.4166666666666667,
+      "memory": 0.125,
+      "mismatch": 0.25,
+      "text": 1.0
+    },
+    "entertain_games:0031": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "entertain_games:0032": {
+      "blank": 0.5833333333333334,
+      "memory": 0.5,
+      "mismatch": 0.5,
+      "text": 1.0
+    },
+    "entertain_games:0033": {
+      "blank": 0.5833333333333334,
+      "memory": 0.75,
+      "mismatch": 0.625,
+      "text": 0.8333333333333334
+    },
+    "entertain_games:0045": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "entertain_music_book:0000": {
+      "blank": 0.9166666666666666,
+      "memory": 0.5833333333333334,
+      "mismatch": 0.5833333333333334,
+      "text": 1.0
+    },
+    "entertain_music_book:0004": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 0.75
+    },
+    "entertain_music_book:0016": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "entertain_music_book:0031": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "entertain_music_book:0038": {
+      "blank": 0.9166666666666666,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "entertain_music_book:0049": {
+      "blank": 0.75,
+      "memory": 0.5833333333333334,
+      "mismatch": 0.9166666666666666,
+      "text": 1.0
+    },
+    "entertain_shows:0016": {
+      "blank": 0.5,
+      "memory": 0.5,
+      "mismatch": 0.5,
+      "text": 0.75
+    },
+    "entertain_shows:0020": {
+      "blank": 0.08333333333333333,
+      "memory": 0.16666666666666666,
+      "mismatch": 0.16666666666666666,
+      "text": 1.0
+    },
+    "entertain_shows:0025": {
+      "blank": 0.5,
+      "memory": 0.4166666666666667,
+      "mismatch": 0.5833333333333334,
+      "text": 1.0
+    },
+    "entertain_shows:0030": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 0.9166666666666666,
+      "text": 1.0
+    },
+    "entertain_shows:0036": {
+      "blank": 0.16666666666666666,
+      "memory": 0.25,
+      "mismatch": 0.25,
+      "text": 1.0
+    },
+    "entertain_shows:0059": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "entertain_sports:0014": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "entertain_sports:0032": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "entertain_sports:0034": {
+      "blank": 0.16666666666666666,
+      "memory": 0.20833333333333334,
+      "mismatch": 0.25,
+      "text": 1.0
+    },
+    "entertain_sports:0041": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "entertain_sports:0044": {
+      "blank": 0.16666666666666666,
+      "memory": 0.25,
+      "mismatch": 0.25,
+      "text": 1.0
+    },
+    "entertain_sports:0049": {
+      "blank": 1.0,
+      "memory": 0.9583333333333334,
+      "mismatch": 0.9583333333333334,
+      "text": 1.0
+    },
+    "lifestyle_beauty:0003": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "lifestyle_beauty:0018": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "lifestyle_beauty:0036": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "lifestyle_beauty:0039": {
+      "blank": 0.3333333333333333,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 0.75
+    },
+    "lifestyle_beauty:0041": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "lifestyle_beauty:0047": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "lifestyle_dietary:0003": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 0.25
+    },
+    "lifestyle_dietary:0006": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 0.75
+    },
+    "lifestyle_dietary:0007": {
+      "blank": 0.25,
+      "memory": 0.16666666666666666,
+      "mismatch": 0.16666666666666666,
+      "text": 1.0
+    },
+    "lifestyle_dietary:0010": {
+      "blank": 0.5833333333333334,
+      "memory": 0.4166666666666667,
+      "mismatch": 0.4166666666666667,
+      "text": 1.0
+    },
+    "lifestyle_dietary:0017": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 0.5833333333333334
+    },
+    "lifestyle_dietary:0037": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "lifestyle_fit:0005": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "lifestyle_fit:0010": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "lifestyle_fit:0017": {
+      "blank": 0.25,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "lifestyle_fit:0034": {
+      "blank": 0.9166666666666666,
+      "memory": 0.875,
+      "mismatch": 0.7916666666666666,
+      "text": 1.0
+    },
+    "lifestyle_fit:0042": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "lifestyle_fit:0048": {
+      "blank": 0.9166666666666666,
+      "memory": 0.9166666666666666,
+      "mismatch": 0.9166666666666666,
+      "text": 1.0
+    },
+    "lifestyle_health:0001": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "lifestyle_health:0005": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "lifestyle_health:0014": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "lifestyle_health:0016": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "lifestyle_health:0021": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "lifestyle_health:0041": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "pet_ownership:0005": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "pet_ownership:0007": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "pet_ownership:0010": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "pet_ownership:0028": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 0.4166666666666667
+    },
+    "pet_ownership:0029": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "pet_ownership:0031": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "professional_work_location_style:0004": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "professional_work_location_style:0013": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "professional_work_location_style:0016": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "professional_work_location_style:0019": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "professional_work_location_style:0025": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "professional_work_location_style:0031": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "shop_fashion:0003": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "shop_fashion:0007": {
+      "blank": 1.0,
+      "memory": 0.625,
+      "mismatch": 0.625,
+      "text": 1.0
+    },
+    "shop_fashion:0018": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "shop_fashion:0040": {
+      "blank": 0.08333333333333333,
+      "memory": 0.08333333333333333,
+      "mismatch": 0.08333333333333333,
+      "text": 1.0
+    },
+    "shop_fashion:0042": {
+      "blank": 0.8333333333333334,
+      "memory": 0.6666666666666666,
+      "mismatch": 0.8333333333333334,
+      "text": 1.0
+    },
+    "shop_fashion:0050": {
+      "blank": 0.25,
+      "memory": 0.3333333333333333,
+      "mismatch": 0.2916666666666667,
+      "text": 1.0
+    },
+    "shop_home:0012": {
+      "blank": 0.8333333333333334,
+      "memory": 0.6666666666666666,
+      "mismatch": 0.6666666666666666,
+      "text": 1.0
+    },
+    "shop_home:0013": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "shop_home:0035": {
+      "blank": 0.5,
+      "memory": 0.9166666666666666,
+      "mismatch": 0.9583333333333334,
+      "text": 1.0
+    },
+    "shop_home:0040": {
+      "blank": 0.0,
+      "memory": 0.08333333333333333,
+      "mismatch": 0.08333333333333333,
+      "text": 1.0
+    },
+    "shop_home:0045": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "shop_home:0048": {
+      "blank": 0.5,
+      "memory": 0.25,
+      "mismatch": 0.25,
+      "text": 1.0
+    },
+    "travel_activities:0006": {
+      "blank": 0.6666666666666666,
+      "memory": 0.6666666666666666,
+      "mismatch": 0.6666666666666666,
+      "text": 0.8333333333333334
+    },
+    "travel_activities:0027": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 0.4166666666666667
+    },
+    "travel_activities:0030": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "travel_activities:0037": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "travel_activities:0045": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "travel_activities:0048": {
+      "blank": 0.8333333333333334,
+      "memory": 0.75,
+      "mismatch": 0.5833333333333334,
+      "text": 0.9166666666666666
+    },
+    "travel_hotel:0005": {
+      "blank": 0.25,
+      "memory": 0.4166666666666667,
+      "mismatch": 0.3333333333333333,
+      "text": 1.0
+    },
+    "travel_hotel:0009": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "travel_hotel:0012": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 0.9166666666666666
+    },
+    "travel_hotel:0022": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "travel_hotel:0043": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 0.75
+    },
+    "travel_hotel:0047": {
+      "blank": 0.16666666666666666,
+      "memory": 0.16666666666666666,
+      "mismatch": 0.16666666666666666,
+      "text": 0.8333333333333334
+    },
+    "travel_restaurant:0001": {
+      "blank": 0.16666666666666666,
+      "memory": 0.041666666666666664,
+      "mismatch": 0.08333333333333333,
+      "text": 0.5
+    },
+    "travel_restaurant:0006": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "travel_restaurant:0009": {
+      "blank": 0.9166666666666666,
+      "memory": 0.8333333333333334,
+      "mismatch": 0.7916666666666666,
+      "text": 1.0
+    },
+    "travel_restaurant:0024": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 0.3333333333333333
+    },
+    "travel_restaurant:0029": {
+      "blank": 0.8333333333333334,
+      "memory": 0.7916666666666666,
+      "mismatch": 0.75,
+      "text": 1.0
+    },
+    "travel_restaurant:0033": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    }
+  },
+  "suites": {
+    "W0/Tstar": {
+      "controls": {
+        "blank": {
+          "correct": 191,
+          "total": 384,
+          "rate": 0.4973958333333333,
+          "parse_failures": 0,
+          "preference_count": 96,
+          "preference_mean_rate": 0.4973958333333333
+        },
+        "memory": {
+          "correct": 360,
+          "total": 768,
+          "rate": 0.46875,
+          "parse_failures": 0,
+          "preference_count": 96,
+          "preference_mean_rate": 0.46875
+        },
+        "mismatch": {
+          "correct": 364,
+          "total": 768,
+          "rate": 0.4739583333333333,
+          "parse_failures": 0,
+          "preference_count": 96,
+          "preference_mean_rate": 0.4739583333333333
+        },
+        "text": {
+          "correct": 367,
+          "total": 384,
+          "rate": 0.9557291666666666,
+          "parse_failures": 0,
+          "preference_count": 96,
+          "preference_mean_rate": 0.9557291666666666
+        }
+      },
+      "paired_memory_gain": {
+        "mismatch": {
+          "preference_count": 96,
+          "mean": -0.005208333333333333,
+          "ci95": [
+            -0.020833333333333332,
+            0.0078125
+          ],
+          "method": "preference-group paired percentile bootstrap",
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20261009,
+          "difference_percentage_points": -0.5208333333333333,
+          "ci95_percentage_points": [
+            -2.083333333333333,
+            0.78125
+          ],
+          "comparison": "memory minus mismatch"
+        },
+        "blank": {
+          "preference_count": 96,
+          "mean": -0.028645833333333332,
+          "ci95": [
+            -0.05859375,
+            0.0
+          ],
+          "method": "preference-group paired percentile bootstrap",
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20261009,
+          "difference_percentage_points": -2.864583333333333,
+          "ci95_percentage_points": [
+            -5.859375,
+            0.0
+          ],
+          "comparison": "memory minus blank"
+        }
+      },
+      "preference_control_rates": {
+        "education_learning_styles:0000": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "education_learning_styles:0001": {
+          "blank": 0.5,
+          "memory": 0.25,
+          "mismatch": 0.375,
+          "text": 1.0
+        },
+        "education_learning_styles:0005": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "education_learning_styles:0017": {
+          "blank": 0.5,
+          "memory": 0.375,
+          "mismatch": 0.375,
+          "text": 1.0
+        },
+        "education_learning_styles:0023": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "education_learning_styles:0030": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 0.75
+        },
+        "entertain_games:0008": {
+          "blank": 0.0,
+          "memory": 0.5,
+          "mismatch": 0.5,
+          "text": 1.0
+        },
+        "entertain_games:0017": {
+          "blank": 0.5,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "entertain_games:0031": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "entertain_games:0032": {
+          "blank": 0.5,
+          "memory": 0.5,
+          "mismatch": 0.5,
+          "text": 1.0
+        },
+        "entertain_games:0033": {
+          "blank": 0.5,
+          "memory": 0.75,
+          "mismatch": 0.75,
+          "text": 1.0
+        },
+        "entertain_games:0045": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "entertain_music_book:0000": {
+          "blank": 1.0,
+          "memory": 0.5,
+          "mismatch": 0.5,
+          "text": 1.0
+        },
+        "entertain_music_book:0004": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "entertain_music_book:0016": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "entertain_music_book:0031": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "entertain_music_book:0038": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "entertain_music_book:0049": {
+          "blank": 0.75,
+          "memory": 0.5,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "entertain_shows:0016": {
+          "blank": 0.5,
+          "memory": 0.5,
+          "mismatch": 0.5,
+          "text": 0.75
+        },
+        "entertain_shows:0020": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "entertain_shows:0025": {
+          "blank": 0.75,
+          "memory": 0.5,
+          "mismatch": 0.625,
+          "text": 1.0
+        },
+        "entertain_shows:0030": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 0.875,
+          "text": 1.0
+        },
+        "entertain_shows:0036": {
+          "blank": 0.25,
+          "memory": 0.25,
+          "mismatch": 0.25,
+          "text": 1.0
+        },
+        "entertain_shows:0059": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "entertain_sports:0014": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "entertain_sports:0032": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "entertain_sports:0034": {
+          "blank": 0.25,
+          "memory": 0.375,
+          "mismatch": 0.375,
+          "text": 1.0
+        },
+        "entertain_sports:0041": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "entertain_sports:0044": {
+          "blank": 0.25,
+          "memory": 0.25,
+          "mismatch": 0.25,
+          "text": 1.0
+        },
+        "entertain_sports:0049": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "lifestyle_beauty:0003": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "lifestyle_beauty:0018": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "lifestyle_beauty:0036": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "lifestyle_beauty:0039": {
+          "blank": 0.25,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 0.75
+        },
+        "lifestyle_beauty:0041": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "lifestyle_beauty:0047": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "lifestyle_dietary:0003": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 0.75
+        },
+        "lifestyle_dietary:0006": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "lifestyle_dietary:0007": {
+          "blank": 0.25,
+          "memory": 0.25,
+          "mismatch": 0.25,
+          "text": 1.0
+        },
+        "lifestyle_dietary:0010": {
+          "blank": 0.5,
+          "memory": 0.25,
+          "mismatch": 0.25,
+          "text": 1.0
+        },
+        "lifestyle_dietary:0017": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 0.5
+        },
+        "lifestyle_dietary:0037": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "lifestyle_fit:0005": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "lifestyle_fit:0010": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "lifestyle_fit:0017": {
+          "blank": 0.25,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "lifestyle_fit:0034": {
+          "blank": 1.0,
+          "memory": 0.875,
+          "mismatch": 0.75,
+          "text": 1.0
+        },
+        "lifestyle_fit:0042": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "lifestyle_fit:0048": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "lifestyle_health:0001": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "lifestyle_health:0005": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "lifestyle_health:0014": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "lifestyle_health:0016": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "lifestyle_health:0021": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "lifestyle_health:0041": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "pet_ownership:0005": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "pet_ownership:0007": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "pet_ownership:0010": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "pet_ownership:0028": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 0.0
+        },
+        "pet_ownership:0029": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "pet_ownership:0031": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "professional_work_location_style:0004": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "professional_work_location_style:0013": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "professional_work_location_style:0016": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "professional_work_location_style:0019": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "professional_work_location_style:0025": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "professional_work_location_style:0031": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_fashion:0003": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "shop_fashion:0007": {
+          "blank": 1.0,
+          "memory": 0.5,
+          "mismatch": 0.5,
+          "text": 1.0
+        },
+        "shop_fashion:0018": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_fashion:0040": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_fashion:0042": {
+          "blank": 0.75,
+          "memory": 0.5,
+          "mismatch": 0.75,
+          "text": 1.0
+        },
+        "shop_fashion:0050": {
+          "blank": 0.25,
+          "memory": 0.25,
+          "mismatch": 0.25,
+          "text": 1.0
+        },
+        "shop_home:0012": {
+          "blank": 0.75,
+          "memory": 0.5,
+          "mismatch": 0.5,
+          "text": 1.0
+        },
+        "shop_home:0013": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_home:0035": {
+          "blank": 0.5,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "shop_home:0040": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_home:0045": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "shop_home:0048": {
+          "blank": 0.75,
+          "memory": 0.375,
+          "mismatch": 0.375,
+          "text": 1.0
+        },
+        "travel_activities:0006": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 0.75
+        },
+        "travel_activities:0027": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 0.5
+        },
+        "travel_activities:0030": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "travel_activities:0037": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "travel_activities:0045": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "travel_activities:0048": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 0.75,
+          "text": 1.0
+        },
+        "travel_hotel:0005": {
+          "blank": 0.25,
+          "memory": 0.5,
+          "mismatch": 0.375,
+          "text": 1.0
+        },
+        "travel_hotel:0009": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "travel_hotel:0012": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "travel_hotel:0022": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "travel_hotel:0043": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 0.5
+        },
+        "travel_hotel:0047": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "travel_restaurant:0001": {
+          "blank": 0.25,
+          "memory": 0.0,
+          "mismatch": 0.125,
+          "text": 0.5
+        },
+        "travel_restaurant:0006": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "travel_restaurant:0009": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "travel_restaurant:0024": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "travel_restaurant:0029": {
+          "blank": 0.75,
+          "memory": 0.75,
+          "mismatch": 0.75,
+          "text": 1.0
+        },
+        "travel_restaurant:0033": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        }
+      }
+    },
+    "Wstar/T1": {
+      "controls": {
+        "blank": {
+          "correct": 181,
+          "total": 384,
+          "rate": 0.4713541666666667,
+          "parse_failures": 0,
+          "preference_count": 96,
+          "preference_mean_rate": 0.4713541666666667
+        },
+        "memory": {
+          "correct": 361,
+          "total": 768,
+          "rate": 0.4700520833333333,
+          "parse_failures": 0,
+          "preference_count": 96,
+          "preference_mean_rate": 0.4700520833333333
+        },
+        "mismatch": {
+          "correct": 362,
+          "total": 768,
+          "rate": 0.4713541666666667,
+          "parse_failures": 0,
+          "preference_count": 96,
+          "preference_mean_rate": 0.4713541666666667
+        },
+        "text": {
+          "correct": 358,
+          "total": 384,
+          "rate": 0.9322916666666666,
+          "parse_failures": 0,
+          "preference_count": 96,
+          "preference_mean_rate": 0.9322916666666666
+        }
+      },
+      "paired_memory_gain": {
+        "mismatch": {
+          "preference_count": 96,
+          "mean": -0.0013020833333333333,
+          "ci95": [
+            -0.01171875,
+            0.009114583333333334
+          ],
+          "method": "preference-group paired percentile bootstrap",
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20261009,
+          "difference_percentage_points": -0.13020833333333331,
+          "ci95_percentage_points": [
+            -1.171875,
+            0.9114583333333334
+          ],
+          "comparison": "memory minus mismatch"
+        },
+        "blank": {
+          "preference_count": 96,
+          "mean": -0.0013020833333333333,
+          "ci95": [
+            -0.0234375,
+            0.01953125
+          ],
+          "method": "preference-group paired percentile bootstrap",
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20261009,
+          "difference_percentage_points": -0.13020833333333331,
+          "ci95_percentage_points": [
+            -2.34375,
+            1.953125
+          ],
+          "comparison": "memory minus blank"
+        }
+      },
+      "preference_control_rates": {
+        "education_learning_styles:0000": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "education_learning_styles:0001": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "education_learning_styles:0005": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "education_learning_styles:0017": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "education_learning_styles:0023": {
+          "blank": 0.25,
+          "memory": 0.25,
+          "mismatch": 0.25,
+          "text": 1.0
+        },
+        "education_learning_styles:0030": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 0.75
+        },
+        "entertain_games:0008": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 0.0
+        },
+        "entertain_games:0017": {
+          "blank": 0.25,
+          "memory": 0.375,
+          "mismatch": 0.75,
+          "text": 1.0
+        },
+        "entertain_games:0031": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "entertain_games:0032": {
+          "blank": 0.75,
+          "memory": 0.5,
+          "mismatch": 0.5,
+          "text": 1.0
+        },
+        "entertain_games:0033": {
+          "blank": 0.75,
+          "memory": 0.75,
+          "mismatch": 0.5,
+          "text": 0.75
+        },
+        "entertain_games:0045": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "entertain_music_book:0000": {
+          "blank": 0.75,
+          "memory": 0.75,
+          "mismatch": 0.75,
+          "text": 1.0
+        },
+        "entertain_music_book:0004": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 0.5
+        },
+        "entertain_music_book:0016": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "entertain_music_book:0031": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "entertain_music_book:0038": {
+          "blank": 0.75,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "entertain_music_book:0049": {
+          "blank": 0.75,
+          "memory": 0.75,
+          "mismatch": 0.75,
+          "text": 1.0
+        },
+        "entertain_shows:0016": {
+          "blank": 0.5,
+          "memory": 0.5,
+          "mismatch": 0.5,
+          "text": 0.75
+        },
+        "entertain_shows:0020": {
+          "blank": 0.25,
+          "memory": 0.5,
+          "mismatch": 0.5,
+          "text": 1.0
+        },
+        "entertain_shows:0025": {
+          "blank": 0.0,
+          "memory": 0.25,
+          "mismatch": 0.375,
+          "text": 1.0
+        },
+        "entertain_shows:0030": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "entertain_shows:0036": {
+          "blank": 0.0,
+          "memory": 0.25,
+          "mismatch": 0.25,
+          "text": 1.0
+        },
+        "entertain_shows:0059": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "entertain_sports:0014": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "entertain_sports:0032": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "entertain_sports:0034": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "entertain_sports:0041": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "entertain_sports:0044": {
+          "blank": 0.0,
+          "memory": 0.25,
+          "mismatch": 0.25,
+          "text": 1.0
+        },
+        "entertain_sports:0049": {
+          "blank": 1.0,
+          "memory": 0.875,
+          "mismatch": 0.875,
+          "text": 1.0
+        },
+        "lifestyle_beauty:0003": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "lifestyle_beauty:0018": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "lifestyle_beauty:0036": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "lifestyle_beauty:0039": {
+          "blank": 0.5,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 0.75
+        },
+        "lifestyle_beauty:0041": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "lifestyle_beauty:0047": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "lifestyle_dietary:0003": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 0.0
+        },
+        "lifestyle_dietary:0006": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 0.75
+        },
+        "lifestyle_dietary:0007": {
+          "blank": 0.25,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "lifestyle_dietary:0010": {
+          "blank": 0.75,
+          "memory": 0.75,
+          "mismatch": 0.75,
+          "text": 1.0
+        },
+        "lifestyle_dietary:0017": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 0.75
+        },
+        "lifestyle_dietary:0037": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "lifestyle_fit:0005": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "lifestyle_fit:0010": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "lifestyle_fit:0017": {
+          "blank": 0.25,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "lifestyle_fit:0034": {
+          "blank": 0.75,
+          "memory": 0.75,
+          "mismatch": 0.75,
+          "text": 1.0
+        },
+        "lifestyle_fit:0042": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "lifestyle_fit:0048": {
+          "blank": 0.75,
+          "memory": 0.75,
+          "mismatch": 0.75,
+          "text": 1.0
+        },
+        "lifestyle_health:0001": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "lifestyle_health:0005": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "lifestyle_health:0014": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "lifestyle_health:0016": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "lifestyle_health:0021": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "lifestyle_health:0041": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "pet_ownership:0005": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "pet_ownership:0007": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "pet_ownership:0010": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "pet_ownership:0028": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "pet_ownership:0029": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "pet_ownership:0031": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "professional_work_location_style:0004": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "professional_work_location_style:0013": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "professional_work_location_style:0016": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "professional_work_location_style:0019": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "professional_work_location_style:0025": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "professional_work_location_style:0031": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_fashion:0003": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "shop_fashion:0007": {
+          "blank": 1.0,
+          "memory": 0.75,
+          "mismatch": 0.75,
+          "text": 1.0
+        },
+        "shop_fashion:0018": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_fashion:0040": {
+          "blank": 0.25,
+          "memory": 0.25,
+          "mismatch": 0.25,
+          "text": 1.0
+        },
+        "shop_fashion:0042": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "shop_fashion:0050": {
+          "blank": 0.25,
+          "memory": 0.5,
+          "mismatch": 0.375,
+          "text": 1.0
+        },
+        "shop_home:0012": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "shop_home:0013": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_home:0035": {
+          "blank": 0.5,
+          "memory": 0.75,
+          "mismatch": 0.875,
+          "text": 1.0
+        },
+        "shop_home:0040": {
+          "blank": 0.0,
+          "memory": 0.25,
+          "mismatch": 0.25,
+          "text": 1.0
+        },
+        "shop_home:0045": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "shop_home:0048": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "travel_activities:0006": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "travel_activities:0027": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 0.5
+        },
+        "travel_activities:0030": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "travel_activities:0037": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "travel_activities:0045": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "travel_activities:0048": {
+          "blank": 0.5,
+          "memory": 0.25,
+          "mismatch": 0.25,
+          "text": 1.0
+        },
+        "travel_hotel:0005": {
+          "blank": 0.25,
+          "memory": 0.25,
+          "mismatch": 0.25,
+          "text": 1.0
+        },
+        "travel_hotel:0009": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "travel_hotel:0012": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 0.75
+        },
+        "travel_hotel:0022": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "travel_hotel:0043": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 0.75
+        },
+        "travel_hotel:0047": {
+          "blank": 0.5,
+          "memory": 0.5,
+          "mismatch": 0.5,
+          "text": 0.75
+        },
+        "travel_restaurant:0001": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 0.75
+        },
+        "travel_restaurant:0006": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "travel_restaurant:0009": {
+          "blank": 0.75,
+          "memory": 0.5,
+          "mismatch": 0.5,
+          "text": 1.0
+        },
+        "travel_restaurant:0024": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 0.0
+        },
+        "travel_restaurant:0029": {
+          "blank": 1.0,
+          "memory": 0.875,
+          "mismatch": 0.75,
+          "text": 1.0
+        },
+        "travel_restaurant:0033": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        }
+      }
+    },
+    "Wstar/Tstar": {
+      "controls": {
+        "blank": {
+          "correct": 191,
+          "total": 384,
+          "rate": 0.4973958333333333,
+          "parse_failures": 0,
+          "preference_count": 96,
+          "preference_mean_rate": 0.4973958333333333
+        },
+        "memory": {
+          "correct": 364,
+          "total": 768,
+          "rate": 0.4739583333333333,
+          "parse_failures": 0,
+          "preference_count": 96,
+          "preference_mean_rate": 0.4739583333333333
+        },
+        "mismatch": {
+          "correct": 367,
+          "total": 768,
+          "rate": 0.4778645833333333,
+          "parse_failures": 0,
+          "preference_count": 96,
+          "preference_mean_rate": 0.4778645833333333
+        },
+        "text": {
+          "correct": 351,
+          "total": 384,
+          "rate": 0.9140625,
+          "parse_failures": 0,
+          "preference_count": 96,
+          "preference_mean_rate": 0.9140625
+        }
+      },
+      "paired_memory_gain": {
+        "mismatch": {
+          "preference_count": 96,
+          "mean": -0.00390625,
+          "ci95": [
+            -0.020833333333333332,
+            0.010416666666666666
+          ],
+          "method": "preference-group paired percentile bootstrap",
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20261009,
+          "difference_percentage_points": -0.390625,
+          "ci95_percentage_points": [
+            -2.083333333333333,
+            1.0416666666666665
+          ],
+          "comparison": "memory minus mismatch"
+        },
+        "blank": {
+          "preference_count": 96,
+          "mean": -0.0234375,
+          "ci95": [
+            -0.052083333333333336,
+            0.00390625
+          ],
+          "method": "preference-group paired percentile bootstrap",
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20261009,
+          "difference_percentage_points": -2.34375,
+          "ci95_percentage_points": [
+            -5.208333333333334,
+            0.390625
+          ],
+          "comparison": "memory minus blank"
+        }
+      },
+      "preference_control_rates": {
+        "education_learning_styles:0000": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "education_learning_styles:0001": {
+          "blank": 0.5,
+          "memory": 0.25,
+          "mismatch": 0.5,
+          "text": 1.0
+        },
+        "education_learning_styles:0005": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "education_learning_styles:0017": {
+          "blank": 0.5,
+          "memory": 0.625,
+          "mismatch": 0.5,
+          "text": 1.0
+        },
+        "education_learning_styles:0023": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "education_learning_styles:0030": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 0.75
+        },
+        "entertain_games:0008": {
+          "blank": 0.0,
+          "memory": 0.5,
+          "mismatch": 0.5,
+          "text": 0.0
+        },
+        "entertain_games:0017": {
+          "blank": 0.5,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "entertain_games:0031": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "entertain_games:0032": {
+          "blank": 0.5,
+          "memory": 0.5,
+          "mismatch": 0.5,
+          "text": 1.0
+        },
+        "entertain_games:0033": {
+          "blank": 0.5,
+          "memory": 0.75,
+          "mismatch": 0.625,
+          "text": 0.75
+        },
+        "entertain_games:0045": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "entertain_music_book:0000": {
+          "blank": 1.0,
+          "memory": 0.5,
+          "mismatch": 0.5,
+          "text": 1.0
+        },
+        "entertain_music_book:0004": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 0.75
+        },
+        "entertain_music_book:0016": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "entertain_music_book:0031": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "entertain_music_book:0038": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "entertain_music_book:0049": {
+          "blank": 0.75,
+          "memory": 0.5,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "entertain_shows:0016": {
+          "blank": 0.5,
+          "memory": 0.5,
+          "mismatch": 0.5,
+          "text": 0.75
+        },
+        "entertain_shows:0020": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "entertain_shows:0025": {
+          "blank": 0.75,
+          "memory": 0.5,
+          "mismatch": 0.75,
+          "text": 1.0
+        },
+        "entertain_shows:0030": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 0.875,
+          "text": 1.0
+        },
+        "entertain_shows:0036": {
+          "blank": 0.25,
+          "memory": 0.25,
+          "mismatch": 0.25,
+          "text": 1.0
+        },
+        "entertain_shows:0059": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "entertain_sports:0014": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "entertain_sports:0032": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "entertain_sports:0034": {
+          "blank": 0.25,
+          "memory": 0.25,
+          "mismatch": 0.375,
+          "text": 1.0
+        },
+        "entertain_sports:0041": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "entertain_sports:0044": {
+          "blank": 0.25,
+          "memory": 0.25,
+          "mismatch": 0.25,
+          "text": 1.0
+        },
+        "entertain_sports:0049": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "lifestyle_beauty:0003": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "lifestyle_beauty:0018": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "lifestyle_beauty:0036": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "lifestyle_beauty:0039": {
+          "blank": 0.25,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 0.75
+        },
+        "lifestyle_beauty:0041": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "lifestyle_beauty:0047": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "lifestyle_dietary:0003": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 0.0
+        },
+        "lifestyle_dietary:0006": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 0.5
+        },
+        "lifestyle_dietary:0007": {
+          "blank": 0.25,
+          "memory": 0.25,
+          "mismatch": 0.25,
+          "text": 1.0
+        },
+        "lifestyle_dietary:0010": {
+          "blank": 0.5,
+          "memory": 0.25,
+          "mismatch": 0.25,
+          "text": 1.0
+        },
+        "lifestyle_dietary:0017": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 0.5
+        },
+        "lifestyle_dietary:0037": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "lifestyle_fit:0005": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "lifestyle_fit:0010": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "lifestyle_fit:0017": {
+          "blank": 0.25,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "lifestyle_fit:0034": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 0.875,
+          "text": 1.0
+        },
+        "lifestyle_fit:0042": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "lifestyle_fit:0048": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "lifestyle_health:0001": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "lifestyle_health:0005": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "lifestyle_health:0014": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "lifestyle_health:0016": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "lifestyle_health:0021": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "lifestyle_health:0041": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "pet_ownership:0005": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "pet_ownership:0007": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "pet_ownership:0010": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "pet_ownership:0028": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 0.25
+        },
+        "pet_ownership:0029": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "pet_ownership:0031": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "professional_work_location_style:0004": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "professional_work_location_style:0013": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "professional_work_location_style:0016": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "professional_work_location_style:0019": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "professional_work_location_style:0025": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "professional_work_location_style:0031": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_fashion:0003": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "shop_fashion:0007": {
+          "blank": 1.0,
+          "memory": 0.625,
+          "mismatch": 0.625,
+          "text": 1.0
+        },
+        "shop_fashion:0018": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_fashion:0040": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_fashion:0042": {
+          "blank": 0.75,
+          "memory": 0.5,
+          "mismatch": 0.75,
+          "text": 1.0
+        },
+        "shop_fashion:0050": {
+          "blank": 0.25,
+          "memory": 0.25,
+          "mismatch": 0.25,
+          "text": 1.0
+        },
+        "shop_home:0012": {
+          "blank": 0.75,
+          "memory": 0.5,
+          "mismatch": 0.5,
+          "text": 1.0
+        },
+        "shop_home:0013": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_home:0035": {
+          "blank": 0.5,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "shop_home:0040": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_home:0045": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "shop_home:0048": {
+          "blank": 0.75,
+          "memory": 0.375,
+          "mismatch": 0.375,
+          "text": 1.0
+        },
+        "travel_activities:0006": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 0.75
+        },
+        "travel_activities:0027": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 0.25
+        },
+        "travel_activities:0030": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "travel_activities:0037": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "travel_activities:0045": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "travel_activities:0048": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 0.75,
+          "text": 0.75
+        },
+        "travel_hotel:0005": {
+          "blank": 0.25,
+          "memory": 0.5,
+          "mismatch": 0.375,
+          "text": 1.0
+        },
+        "travel_hotel:0009": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "travel_hotel:0012": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "travel_hotel:0022": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "travel_hotel:0043": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "travel_hotel:0047": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 0.75
+        },
+        "travel_restaurant:0001": {
+          "blank": 0.25,
+          "memory": 0.125,
+          "mismatch": 0.125,
+          "text": 0.25
+        },
+        "travel_restaurant:0006": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "travel_restaurant:0009": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 0.875,
+          "text": 1.0
+        },
+        "travel_restaurant:0024": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 0.0
+        },
+        "travel_restaurant:0029": {
+          "blank": 0.75,
+          "memory": 0.75,
+          "mismatch": 0.75,
+          "text": 1.0
+        },
+        "travel_restaurant:0033": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        }
+      }
+    }
+  },
+  "measurement_count": 6912,
+  "preference_count": 96,
+  "statistical_unit": "base_pair_id; average seeds, positions and applicable question suites within preference first",
+  "interval_scope": "preference sampling uncertainty for this paired training seed, not between-training-seed uncertainty",
+  "score_policy": "unchanged upstream extract_choice; parse failures count as incorrect and remain in denominators"
+}

@@ -2,7 +2,7 @@
   "schema_version": 1,
   "protocol_id": "prefeval-aug4x3-init-lr-exposure512-20261009",
   "protocol_revision": 3,
-  "status": "four_writers_running_after_host_recovery_20261010",
+  "status": "completed_training_evaluation_and_archival_20261013",
   "user_revision": "只保留四组完整增强实验；每条偏好累计曝光32、64、128、256、512次时检查。取消D0、D1两个数据消融组。P-L/P-H改用DreamLite原始预训练U-Net，不再使用4f任务训练权重，不增加4f对照组。",
   "scope": "首次写入；同一增强数据和共同教师目标下，研究DreamLite原始U-Net预训练、学习率及累计训练预算。",
   "dataset": {
@@ -261,7 +261,41 @@
     ],
     "resume_policy": "explicit host ownership reconciliation; no automatic lease stealing; retain optimizer and data cursor",
     "receipt": "DEPLOYMENT.json",
-    "latest_recovery_receipt": "RECOVERY-20261010.json",
-    "execution_commit": "b8d82be660db7ba0a14bcba68057e8cafccb186e"
+    "latest_recovery_receipt": "evidence/audit/final-completion-audit.json",
+    "execution_commit": "b8d82be660db7ba0a14bcba68057e8cafccb186e",
+    "final_runtime": "mixed16-20261013-r4; pooled-eval-20261013; frozen supplementary source in scientific Release asset"
+  },
+  "operational_followup": {
+    "heartbeat_id": "prefeval-h200",
+    "interval_minutes": 30,
+    "runbook": "PROGRESS-20261013.md",
+    "priority": [
+      "distributed16",
+      "mixed16",
+      "eight_gpu",
+      "four_gpu"
+    ],
+    "start_first_ready": false,
+    "preserve_global_batch": 4,
+    "sixteen_gpu_layout": {
+      "training_gpus_per_arm": 2,
+      "evaluation_gpus_per_arm": 2,
+      "training_total": 8,
+      "evaluation_total": 8
+    },
+    "gpu_speedup_verified": false,
+    "status": "completed_monitor_removed",
+    "historical_only": true
+  },
+  "completion": {
+    "date": "2026-10-13",
+    "optimizer_steps_per_arm": 93440,
+    "task_count": 1472,
+    "student_summary_count": 84,
+    "student_readback_rows": 556800,
+    "official180_and_177": "completed",
+    "report": "FINAL-REPORT-20261013.md",
+    "evidence": "PUBLICATION-MANIFEST.json",
+    "resume_authorized": false
   }
 }

@@ -1,0 +1,494 @@
+{
+  "schema": "prefeval-aug4-summary/v1",
+  "status": "verified_complete",
+  "split": "opposites",
+  "kind": "student",
+  "binding": {
+    "schema": "prefeval-aug4-evaluation/v1",
+    "data_sha256": "28cb15e49979970d6b3277db1dca198f9f6fd5b7c82bedbd217b627cb0e905e7",
+    "asset_seal_sha256": "1fcdf946bd73790033cc92781256f92a354462f29d5556f6c56dc48815eefa2b",
+    "evaluation_source_sha256": "512ea05943ad4b1b2fd111ab2b72f3c87f79ba5b4c5f126040bc4488a6ac6dc0",
+    "kind": "student",
+    "split": "opposites",
+    "checkpoint": {
+      "checkpoint_sha256": "3a401ac9a0fc4dc3288ef68d5d6956635019eaa0213c3961b746e41c5ea83af2",
+      "optimizer_step": 23360
+    },
+    "seeds": [
+      0,
+      1
+    ],
+    "controls": [
+      "memory",
+      "mismatch",
+      "blank",
+      "text"
+    ],
+    "suites": [
+      [
+        "W0",
+        "T1"
+      ]
+    ],
+    "correct_positions": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "shards": 2,
+    "mismatch_protocol": "counterfactual origin train PNG",
+    "reader": "/inspire/qb-ilm/project/exploration-topic/czxs26210936/models/vision-language-memory/Qwen3-VL-4B-Instruct",
+    "canonical_images": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-aug4x3-official-init-20261009/evaluation/P-L-023360-train/images",
+    "mcq_source_sha256": "b3088007724a5c4e21af80ed0220fa796e9f7473007ce9a7df4612eb7cd8f8ac"
+  },
+  "source_receipts": [
+    {
+      "shard": 0,
+      "receipt_sha256": "5b79714355c641241c94284ac00241501af9aab5f22c894434f4fa307fe9f73d",
+      "readback_sha256": "2cb491f2eb01cb8f8bf11e492c557450ed1e55da5b229b3a7dbe0d07b55c4f14",
+      "items": 192
+    },
+    {
+      "shard": 1,
+      "receipt_sha256": "7a2972fea0f511597bc1ccd1f7545986bd6714c92ea040c7b972747683b85b32",
+      "readback_sha256": "2c5a660b75b7cf0d5deb4921106b3059dec5e3ddef20eb35e910ef1ef6423457",
+      "items": 192
+    }
+  ],
+  "summarizer_source_sha256": "b296022c22fa8692a644aec060dc28340ca8aee0809b4675e39c820dd4eb9013",
+  "controls": {
+    "blank": {
+      "correct": 24,
+      "total": 64,
+      "rate": 0.375,
+      "parse_failures": 0,
+      "preference_count": 16,
+      "preference_mean_rate": 0.375
+    },
+    "memory": {
+      "correct": 43,
+      "total": 128,
+      "rate": 0.3359375,
+      "parse_failures": 0,
+      "preference_count": 16,
+      "preference_mean_rate": 0.3359375
+    },
+    "mismatch": {
+      "correct": 35,
+      "total": 128,
+      "rate": 0.2734375,
+      "parse_failures": 0,
+      "preference_count": 16,
+      "preference_mean_rate": 0.2734375
+    },
+    "text": {
+      "correct": 64,
+      "total": 64,
+      "rate": 1.0,
+      "parse_failures": 0,
+      "preference_count": 16,
+      "preference_mean_rate": 1.0
+    }
+  },
+  "paired_memory_gain": {
+    "mismatch": {
+      "preference_count": 16,
+      "mean": 0.0625,
+      "ci95": [
+        0.015625,
+        0.125
+      ],
+      "method": "preference-group paired percentile bootstrap",
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20261009,
+      "difference_percentage_points": 6.25,
+      "ci95_percentage_points": [
+        1.5625,
+        12.5
+      ],
+      "comparison": "memory minus mismatch"
+    },
+    "blank": {
+      "preference_count": 16,
+      "mean": -0.0390625,
+      "ci95": [
+        -0.125,
+        0.03125
+      ],
+      "method": "preference-group paired percentile bootstrap",
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20261009,
+      "difference_percentage_points": -3.90625,
+      "ci95_percentage_points": [
+        -12.5,
+        3.125
+      ],
+      "comparison": "memory minus blank"
+    }
+  },
+  "preference_control_rates": {
+    "education_learning_styles:0023::opposite": {
+      "blank": 1.0,
+      "memory": 0.75,
+      "mismatch": 0.5,
+      "text": 1.0
+    },
+    "entertain_games:0008::opposite": {
+      "blank": 1.0,
+      "memory": 0.875,
+      "mismatch": 0.75,
+      "text": 1.0
+    },
+    "entertain_music_book:0031::opposite": {
+      "blank": 0.75,
+      "memory": 1.0,
+      "mismatch": 0.625,
+      "text": 1.0
+    },
+    "entertain_shows:0036::opposite": {
+      "blank": 0.5,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "entertain_sports:0041::opposite": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "lifestyle_beauty:0003::opposite": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "lifestyle_dietary:0007::opposite": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "lifestyle_fit:0010::opposite": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "lifestyle_health:0005::opposite": {
+      "blank": 1.0,
+      "memory": 1.0,
+      "mismatch": 1.0,
+      "text": 1.0
+    },
+    "pet_ownership:0010::opposite": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "professional_work_location_style:0013::opposite": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "shop_fashion:0042::opposite": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "shop_home:0012::opposite": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "travel_activities:0030::opposite": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    },
+    "travel_hotel:0047::opposite": {
+      "blank": 0.75,
+      "memory": 0.75,
+      "mismatch": 0.5,
+      "text": 1.0
+    },
+    "travel_restaurant:0029::opposite": {
+      "blank": 0.0,
+      "memory": 0.0,
+      "mismatch": 0.0,
+      "text": 1.0
+    }
+  },
+  "suites": {
+    "W0/T1": {
+      "controls": {
+        "blank": {
+          "correct": 24,
+          "total": 64,
+          "rate": 0.375,
+          "parse_failures": 0,
+          "preference_count": 16,
+          "preference_mean_rate": 0.375
+        },
+        "memory": {
+          "correct": 43,
+          "total": 128,
+          "rate": 0.3359375,
+          "parse_failures": 0,
+          "preference_count": 16,
+          "preference_mean_rate": 0.3359375
+        },
+        "mismatch": {
+          "correct": 35,
+          "total": 128,
+          "rate": 0.2734375,
+          "parse_failures": 0,
+          "preference_count": 16,
+          "preference_mean_rate": 0.2734375
+        },
+        "text": {
+          "correct": 64,
+          "total": 64,
+          "rate": 1.0,
+          "parse_failures": 0,
+          "preference_count": 16,
+          "preference_mean_rate": 1.0
+        }
+      },
+      "paired_memory_gain": {
+        "mismatch": {
+          "preference_count": 16,
+          "mean": 0.0625,
+          "ci95": [
+            0.015625,
+            0.125
+          ],
+          "method": "preference-group paired percentile bootstrap",
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20261009,
+          "difference_percentage_points": 6.25,
+          "ci95_percentage_points": [
+            1.5625,
+            12.5
+          ],
+          "comparison": "memory minus mismatch"
+        },
+        "blank": {
+          "preference_count": 16,
+          "mean": -0.0390625,
+          "ci95": [
+            -0.125,
+            0.03125
+          ],
+          "method": "preference-group paired percentile bootstrap",
+          "bootstrap_samples": 10000,
+          "bootstrap_seed": 20261009,
+          "difference_percentage_points": -3.90625,
+          "ci95_percentage_points": [
+            -12.5,
+            3.125
+          ],
+          "comparison": "memory minus blank"
+        }
+      },
+      "preference_control_rates": {
+        "education_learning_styles:0023::opposite": {
+          "blank": 1.0,
+          "memory": 0.75,
+          "mismatch": 0.5,
+          "text": 1.0
+        },
+        "entertain_games:0008::opposite": {
+          "blank": 1.0,
+          "memory": 0.875,
+          "mismatch": 0.75,
+          "text": 1.0
+        },
+        "entertain_music_book:0031::opposite": {
+          "blank": 0.75,
+          "memory": 1.0,
+          "mismatch": 0.625,
+          "text": 1.0
+        },
+        "entertain_shows:0036::opposite": {
+          "blank": 0.5,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "entertain_sports:0041::opposite": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "lifestyle_beauty:0003::opposite": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "lifestyle_dietary:0007::opposite": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "lifestyle_fit:0010::opposite": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "lifestyle_health:0005::opposite": {
+          "blank": 1.0,
+          "memory": 1.0,
+          "mismatch": 1.0,
+          "text": 1.0
+        },
+        "pet_ownership:0010::opposite": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "professional_work_location_style:0013::opposite": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_fashion:0042::opposite": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "shop_home:0012::opposite": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "travel_activities:0030::opposite": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        },
+        "travel_hotel:0047::opposite": {
+          "blank": 0.75,
+          "memory": 0.75,
+          "mismatch": 0.5,
+          "text": 1.0
+        },
+        "travel_restaurant:0029::opposite": {
+          "blank": 0.0,
+          "memory": 0.0,
+          "mismatch": 0.0,
+          "text": 1.0
+        }
+      }
+    }
+  },
+  "measurement_count": 384,
+  "preference_count": 16,
+  "statistical_unit": "base_pair_id; average seeds, positions and applicable question suites within preference first",
+  "interval_scope": "preference sampling uncertainty for this paired training seed, not between-training-seed uncertainty",
+  "score_policy": "unchanged upstream extract_choice; parse failures count as incorrect and remain in denominators",
+  "counterfactual_diagnostic": {
+    "scope": "counterfactual preferences with disambiguating additions; not a minimal-negation causal experiment",
+    "mismatch_meaning": "the corresponding original-preference PNG read under the counterfactual answer label",
+    "changed_preference_accuracy": 0.3359375,
+    "memory_gain_over_original_png": {
+      "preference_count": 16,
+      "mean": 0.0625,
+      "ci95": [
+        0.015625,
+        0.125
+      ],
+      "method": "preference-group paired percentile bootstrap",
+      "bootstrap_samples": 10000,
+      "bootstrap_seed": 20261009,
+      "difference_percentage_points": 6.25,
+      "ci95_percentage_points": [
+        1.5625,
+        12.5
+      ],
+      "comparison": "memory minus mismatch"
+    },
+    "original_pairs": {
+      "education_learning_styles:0023::opposite": {
+        "origin_id": "education_learning_styles:0023",
+        "new_correct_option_original_index": 1
+      },
+      "entertain_games:0008::opposite": {
+        "origin_id": "entertain_games:0008",
+        "new_correct_option_original_index": 1
+      },
+      "entertain_music_book:0031::opposite": {
+        "origin_id": "entertain_music_book:0031",
+        "new_correct_option_original_index": 1
+      },
+      "entertain_shows:0036::opposite": {
+        "origin_id": "entertain_shows:0036",
+        "new_correct_option_original_index": 2
+      },
+      "entertain_sports:0041::opposite": {
+        "origin_id": "entertain_sports:0041",
+        "new_correct_option_original_index": 1
+      },
+      "lifestyle_beauty:0003::opposite": {
+        "origin_id": "lifestyle_beauty:0003",
+        "new_correct_option_original_index": 2
+      },
+      "lifestyle_dietary:0007::opposite": {
+        "origin_id": "lifestyle_dietary:0007",
+        "new_correct_option_original_index": 3
+      },
+      "lifestyle_fit:0010::opposite": {
+        "origin_id": "lifestyle_fit:0010",
+        "new_correct_option_original_index": 1
+      },
+      "lifestyle_health:0005::opposite": {
+        "origin_id": "lifestyle_health:0005",
+        "new_correct_option_original_index": 1
+      },
+      "pet_ownership:0010::opposite": {
+        "origin_id": "pet_ownership:0010",
+        "new_correct_option_original_index": 1
+      },
+      "professional_work_location_style:0013::opposite": {
+        "origin_id": "professional_work_location_style:0013",
+        "new_correct_option_original_index": 1
+      },
+      "shop_fashion:0042::opposite": {
+        "origin_id": "shop_fashion:0042",
+        "new_correct_option_original_index": 1
+      },
+      "shop_home:0012::opposite": {
+        "origin_id": "shop_home:0012",
+        "new_correct_option_original_index": 1
+      },
+      "travel_activities:0030::opposite": {
+        "origin_id": "travel_activities:0030",
+        "new_correct_option_original_index": 1
+      },
+      "travel_hotel:0047::opposite": {
+        "origin_id": "travel_hotel:0047",
+        "new_correct_option_original_index": 2
+      },
+      "travel_restaurant:0029::opposite": {
+        "origin_id": "travel_restaurant:0029",
+        "new_correct_option_original_index": 1
+      }
+    },
+    "limitation": "does not on its own measure joint success on both original and counterfactual inputs"
+  }
+}

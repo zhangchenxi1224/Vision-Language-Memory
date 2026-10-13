@@ -4,6 +4,19 @@
 
 **当前四组基线**以[增强实验方案](reports/prefeval-aug4x3-init-ablation-exposure512-20261009/PLAN.md)和[机器可读协议](reports/prefeval-aug4x3-init-ablation-exposure512-20261009/PROTOCOL.json)为准：P-L/P-H 从官方 `carlofkl/DreamLite-base` 原始预训练 U-Net 开始，R-L/R-H 使用同架构标准随机初始化；采用 W0–W3 × T1–T3 增强，学习率为 `5e-5` / `5e-4`，effective batch=4，每组 93,440 步，在 32/64/128/256/512 次曝光处检查。`4f` 任务权重不属于当前初始化来源。
 
+**2026-10-13：本轮训练、全部规定评测与归档已完成。** 四组各93,440步，1,472/1,472任务，84份原始学生汇总及556,800行回读；official180和去重177均已完成，监控与资源已收尾。
+
+| 终点组别 | Train 匹配 / 错配 | Dev 匹配 / 错配 | Official180 匹配 / 错配 | Official177 匹配 / 错配 |
+|---|---:|---:|---:|---:|
+| P-L | 90.26 / 41.39 | 44.31 / 40.97 | 35.49 / 34.72 | 35.03 / 34.89 |
+| P-H | 40.34 / 40.38 | 40.97 / 40.69 | 34.72 / 35.21 | 34.89 / 35.38 |
+| R-L | 81.80 / 41.28 | 42.36 / 41.39 | 35.21 / 35.14 | 34.46 / 35.31 |
+| R-H | 40.58 / 40.58 | 40.97 / 40.56 | 35.07 / 35.07 | 35.24 / 35.24 |
+
+单位为%。低学习率组在已训练内容上有明确匹配记忆优势；P-L在本轮有限预算内学习更快。四组dev、official180/177均没有正向且95%区间排除零的匹配−错配收益，尚未证明可靠的新内容泛化。单个配对训练种子与偏好级区间不代表跨训练种子稳定性。
+
+[最终报告](reports/prefeval-aug4x3-init-ablation-exposure512-20261009/FINAL-REPORT-20261013.md) · [全checkpoint与控制分母](reports/prefeval-aug4x3-init-ablation-exposure512-20261009/ALL-CHECKPOINTS-20261013.md) · [旧B730全量比较](reports/prefeval-aug4x3-init-ablation-exposure512-20261009/B730-COMPARISON-20261013.md) · [第一性原理分析](reports/prefeval-aug4x3-init-ablation-exposure512-20261009/ANALYSIS-20261013.md) · [完成进度](reports/prefeval-aug4x3-init-ablation-exposure512-20261009/PROGRESS-20261013.md) · [证据及CPU复算](reports/prefeval-aug4x3-init-ablation-exposure512-20261009/EVIDENCE-20261013.md)
+
 历史路线调整：2026-10-08 用户决定恢复**选择题硬监督（B臂）**，当时将执行代码恢复到引入下述实验之前的 `6d9fea6` 基线。10月5日至8日的Prompt Matching、Direct/PM→FM、上下文覆盖及后续曝光/排版实验全部撤回，不作为当前训练或结果依据；既有9月硬监督数据、权重及结果继续保留。当前四组的增强问法、初始化和预算采用上述新协议。
 
 2026-10-02 已完成远端收敛：开发分支仅保留 `main`，31 个旧分支均先保留归档标签再删除引用。历史恢复、PR 收尾与 Release 核验见[部署记录](docs/REMOTE_CONSOLIDATION_20261002.md)；Git 体积与后续迁移方案见[历史瘦身评估](docs/HISTORY_SIZE_ASSESSMENT_20261002.md)。
@@ -30,19 +43,19 @@
 | PrefEval 官方输入 | [对齐说明](reports/prefeval-official-alignment-20260923/ALIGNMENT.md)、[FM 路线](reports/prefeval-official-alignment-20260923/FM_ROUTE_CORRECTION.md) | 协议与数据；不是官方论文模型性能复现 |
 | K1 / A-B 教师 / FM / 保持 / 曝光量 | [K1 目录](reports/prefeval-k1-l0-l2-20260924/) | 按 split、teacher/student、预算、链长和 Judge 分开报告 |
 | 多目标与 C8 | [多目标目录](reports/prefeval-multitarget-20260927/) | 各轮、配对 baseline、样本数和链长分开报告 |
-| U-Net 初始化、学习率与曝光量 | [当前冻结方案](reports/prefeval-aug4x3-init-ablation-exposure512-20261009/PLAN.md) | 官方 DreamLite Base 预训练与标准随机初始化的 P-L/P-H/R-L/R-H 四组对照；W0–W3 × T1–T3 增强，每组 93,440 步；部署状态和结果另行核验 |
+| U-Net 初始化、学习率与曝光量 | [完成结果与证据](reports/prefeval-aug4x3-init-ablation-exposure512-20261009/README.md) | P-L/P-H/R-L/R-H四组W0–W3 × T1–T3；各93,440步及全部规定评测完成；新旧协议差异单独列明 |
 
 机器可读入口为 [experiments/registry.json](experiments/registry.json)。默认分析只使用 `current_performance` 目录，再核对每次 run 的协议、分母和完成回执。禁止递归汇总全部 `reports/`；目录准入不代表每个计划都已完成或所有分数均可比较。
 
-当前四组注册项 ID 为 `prefeval-aug4x3-init-ablation-exposure512`，其中 `plan`、`protocol` 和 `entrypoints` 分别提供方案、配置与实现位置。两实例 8 卡控制器为 [run_prefeval_aug4_balanced.py](scripts/inspire/run_prefeval_aug4_balanced.py)，Writer 为 [prefeval_aug4_writer.py](scripts/experiments/prefeval_aug4_writer.py)；旧 `run_prefeval_unet_init_ablation.py` 及其评测辅助器只保留作历史实现，不是当前运行入口。已有实验的跨实例续训须使用该次部署核验的迁移入口与所有权记录，不能直接另启控制器。
+当前四组注册项 ID 为 `prefeval-aug4x3-init-ablation-exposure512`，其中 `plan`、`protocol`、`results`、`progress` 和 `evidence` 提供方案、配置、完成结果与验证入口。源代码中的 [run_prefeval_aug4_balanced.py](scripts/inspire/run_prefeval_aug4_balanced.py) 是初始8卡控制器；最终执行使用正式交接的r4混合16卡与共享评测池，冻结补充源码位于[科学证据Release](https://github.com/zhangchenxi1224/Vision-Language-Memory/releases/tag/prefeval-aug4x3-final-20261013)。本轮已经完成，不应运行历史恢复入口或另启控制器。
 
 ```bash
 python scripts/reporting/list_current_experiments.py
 python scripts/reporting/list_current_experiments.py --role protocol_and_data
-python scripts/reporting/verify_aligned_cleanup.py
+python scripts/reporting/build_prefeval_aug4_publication.py --check
 ```
 
-截至 2026-10-02 的归档状态：B730 exposure512 已完成训练，dev 尚无稳定改善；多目标多轮及 C8 全量730评测已有结果，配对 B0 和 long10 尚未全部闭环；C/R 训练完成，完整评测仍有缺口。本次没有重新查询 GPU 实时状态。
+其他实验族的历史状态（2026-10-02）：B730 exposure512已完成训练，dev尚无稳定改善；多目标多轮及C8全量730评测已有结果，配对B0和long10尚未全部闭环；C/R训练完成，完整评测仍有缺口。上述历史范围与本轮aug4x3的完成状态分开报告。历史清理回归工具 `verify_aligned_cleanup.py` 针对当时快照，不是本轮结果验收入口。
 
 ## 训练与生成契约
 

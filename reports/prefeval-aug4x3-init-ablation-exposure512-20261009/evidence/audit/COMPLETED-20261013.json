@@ -1,0 +1,43 @@
+{
+  "schema": "prefeval-experiment-complete/v1",
+  "status": "completed_and_archived",
+  "verified_at": "2026-10-13T05:28:21.036070+08:00",
+  "experiment_finished_at": "2026-10-13T05:06:53+08:00",
+  "completed_tasks": 1472,
+  "student_summaries": 84,
+  "verified_student_readback_rows": 556800,
+  "training_steps": {
+    "P-L": 93440,
+    "P-H": 93440,
+    "R-L": 93440,
+    "R-H": 93440
+  },
+  "official180_complete": true,
+  "official177_complete": true,
+  "active_gpu_instances": 0,
+  "queued_gpu_candidates": 0,
+  "final_owner": {
+    "owner_job_id": "prefeval-aug4-mixed16-h200x8-job-20261013-r4",
+    "session_dir": "/inspire/ssd/project/exploration-topic/czxs26210936/runs/prefeval-aug4x3-official-init-20261009-deployment/job-migrations/prefeval-aug4-mixed16-h200x8-job-20261013-r4-a7ce65df228b45b7",
+    "time": 1791827940.4222062,
+    "host_names": [
+      "job-5bd6a2d2-2e1b-49df-bb0d-6a93e8b1f6ae-worker-0",
+      "dreamlite-new-h200x8-20261009--8554f31068bb-pewnbwpknh"
+    ]
+  },
+  "artifact_receipt": "final-archive-20261013/FINAL-ARCHIVE.json",
+  "report": "FINAL-REPORT-20261013.md",
+  "report_sha256": "92389f9dd67e917cd15d4abe67b0e720350e8d3b5513544633305a10ab93928f",
+  "metrics": "FINAL-METRICS-20261013.csv",
+  "metrics_sha256": "0f1119c294d947d6ed37854bd35540f2f5e75752c3b3b7837b53606697b3af8a",
+  "resource_cleanup": "mixed16-20261013-r4/completion-resource-cleanup.json",
+  "queue_snapshot": "queue-snapshots/QUEUE-20261013-052248-495cba95.json",
+  "automatic_restart_allowed": false,
+  "heartbeat_shutdown": {
+    "status": "deleted",
+    "id": "prefeval-h200",
+    "verified_at": "2026-10-13T05:29:07.621717+08:00",
+    "reason": "all training and required evaluation completed; archives verified; no further monitoring needed",
+    "tool_receipt": "final-archive-20261013/automation-delete-tool-result.json"
+  }
+}
